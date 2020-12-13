@@ -1,8 +1,13 @@
-# cl-webinjector
-### David Botton <david@botton.com
 
-Communication framework for using a browser as a stateful GUI
 
-## License BSD 3-Clause License
+# CLOG - The Common Lisp Omnificent GUI
 
+## David Botton <david@botton.com>
+
+### License BSD 3-Clause License
+
+####
+The Common Lisp Omnificient GUI, CLOG for short, uses web technology
+to produce graphical user interfaces for applications locally or
+remotely.
 
