@@ -1,0 +1,27 @@
+(defpackage #:test-clog
+  (:use #:cl)
+  (:export test-connect on-connect))
+
+(in-package :test-clog)
+
+(defun on-connect (id)
+  (format t "Connection ~A is valid? ~A~%" id (clog-connection:validp id))
+  ;; (clog:execute-script id "alert('test1');")
+  (dotimes (n 10)
+    (clog-connection:cwrite id "<b>connection-write</b>")
+    (clog-connection:cwriteln id "<i>connection-writeln</i>")
+    (sleep .2))
+  (clog-connection:cwrite id "<hr>simulate network interupt")
+  (clog-connection:cclose id)
+  (sleep .2)
+  (clog-connection:cwrite id "<br><b>reconnected</b>")
+  (sleep .2)
+  (clog-connection:cwrite id "<br><b>shutting down connection</b>")
+  (clog-connection:shutdown id))
+
+(defun test-connect ()
+  (print "Init connection")
+  (clog:initialize #'on-connect :boot-file "/debug.html")
+  (print "Open browser")
+  (clog:open-browser)
+)
