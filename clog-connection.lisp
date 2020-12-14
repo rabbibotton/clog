@@ -11,6 +11,7 @@
 ;; Exports - clog-connection
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+
 (mgl-pax:define-package :clog-connection
   (:documentation "The Common List Omnificent GUI - Connection")
   (:use #:cl #:mgl-pax))
@@ -22,31 +23,41 @@
 
   "CLOG connections"
   
-  (message        function)
-  (execute-script function)
-  (validp         function)
-  (cclose         function)
-  (shutdown       function)
-  (cwrite         function)
-  (cwriteln       function))
+  (execute  function)
+  (query    function)
+  (validp   function)
+  (cclose   function)
+  (shutdown function)
+  (cwrite   function)
+  (cwriteln function))
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Implemetation - clog-connection
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 
 ;;;;;;;;;;;;;
-;; message ;;
+;; execute ;;
 ;;;;;;;;;;;;;
 
-(defun message (connection-id message)
-  "Send MESSAGE to CONNECTION-ID."
+(defun execute (connection-id message)
+  "Execute SCRIPT on CONNECTION-ID, disregard return value."
   (let ((con (clog::get-connection connection-id)))
     (when con
       (websocket-driver:send con message))))
 
-;;;;;;;;;;;;;;;;;;;;
-;; execute-script ;;
-;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;
+;; query ;;
+;;;;;;;;;;;
 
-(defun execute-script (connection-id script)
-  "Execute SCRIPT on CONNECTION-ID, disregard return value."
-  (message connection-id script))
+(defun query (connection-id script)
+  "Execute SCRIPT on CONNECTION-ID, return value."
+  (let ((uid (clog::generate-connection-id)))
+    (clog::store-query uid nil)
+    (execute connection-id
+	     (format nil "ws.send (\"~A:\"+eval(\"~A\"));" uid script))
+    (clog::wait-for-answer uid)))
 
 ;;;;;;;;;;;;
 ;; validp ;;
@@ -65,7 +76,7 @@
 (defun cclose (connection-id)
   "Close connection to CONNECTION-ID. The boot file may try to reistablish
  connectivity."
-  (execute-script connection-id "ws.close()"))
+  (execute connection-id "ws.close()"))
 
 ;;;;;;;;;;;;;;
 ;; shutdown ;;
@@ -74,7 +85,7 @@
 (defun shutdown (connection-id)
   "Shutdown connection to CONNECTION-ID. The boot file may not try to
 reistablish connectivity."
-  (execute-script connection-id "Shutdown_ws(event.reason='user')"))
+  (execute connection-id "Shutdown_ws(event.reason='user')"))
 
 ;;;;;;;;;;;;
 ;; cwrite ;;
@@ -82,7 +93,7 @@ reistablish connectivity."
 
 (defun cwrite (connection-id text)
   "Write TEXT raw to document object of CONNECTION-ID with out new line."
-  (message connection-id (format nil "document.write('~A');" text)))
+  (execute connection-id (format nil "document.write('~A');" text)))
 
 ;;;;;;;;;;;;;;
 ;; cwriteln ;;
@@ -90,4 +101,4 @@ reistablish connectivity."
 
 (defun cwriteln (connection-id text)
   "Write TEXT raw to document object of CONNECTION-ID with new line."
-  (message connection-id (format nil "document.writeln('~A');" text)))
+  (execute connection-id (format nil "document.writeln('~A');" text)))

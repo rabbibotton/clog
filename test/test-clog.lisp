@@ -1,10 +1,10 @@
 (defpackage #:test-clog
   (:use #:cl)
-  (:export test-connect on-connect))
+  (:export test-connect on-connect1 on-connect2))
 
 (in-package :test-clog)
 
-(defun on-connect (id)
+(defun on-connect1 (id)
   (format t "Connection ~A is valid? ~A~%" id (clog-connection:validp id))
   ;; (clog:execute-script id "alert('test1');")
   (dotimes (n 10)
@@ -19,9 +19,13 @@
   (clog-connection:cwrite id "<br><b>shutting down connection</b>")
   (clog-connection:shutdown id))
 
+(defun on-connect2 (id)
+  (clog-connection:cwrite id "<b>Query Result : </b>")
+  (clog-connection:cwrite id (clog-connection:query id "navigator.appVersion")))
+
 (defun test-connect ()
   (print "Init connection")
-  (clog:initialize #'on-connect :boot-file "/debug.html")
+  (clog:initialize #'on-connect2 :boot-file "/debug.html")
   (print "Open browser")
   (clog:open-browser)
 )

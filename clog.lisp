@@ -59,11 +59,14 @@ application."
 (defvar *connection-lock* (bordeaux-threads:make-lock)
   "Protect the connection hash tables")
 
+(defvar *queries* (make-hash-table) "Waiting queries")
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; generate-connection-id ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defun generate-connection-id ()
+  "Generate unique ids for use in connections and sripts. (Private)"
   (incf *new-id*))
 
 ;;;;;;;;;;;;;;;;;;;;
@@ -102,9 +105,35 @@ application."
 ;; handle-message ;;
 ;;;;;;;;;;;;;;;;;;;;
 
+(defvar *queries-lock* (bordeaux-threads:make-lock))
+(defvar *queries-sems* (make-hash-table))
+
+(defun store-query (id answer)
+  (bordeaux-threads:with-lock-held (*queries-lock*)
+    (setf (gethash id *queries-sems*) (bordeaux-threads:make-semaphore))
+    (setf (gethash id *queries*) answer)))
+
+(defun wait-for-answer (id)
+  (bordeaux-threads:wait-on-semaphore (gethash id *queries-sems*) :timeout 3)
+  (let ((answer (gethash id *queries*)))
+    (bordeaux-threads:with-lock-held (*queries-lock*)
+      (remhash id *queries*)
+      (remhash id *queries-sems*))
+    answer))
+
 (defun handle-message (connection message)
-  (let ((id (gethash connection *connections*)))
-    (format t "msg: ~A sent ~A - ~A~%" id message connection)))
+  (let ((id (gethash connection *connections*))
+	(ml (ppcre:split ":" message :limit 2)))
+    (cond ((equal (car ml) "0")
+	   (when *verbose-output*
+	     (format t "~A Ping ~A~%" id (car ml))))
+	  (t
+	   (when *verbose-output*
+	     (format t "~A ~A = ~A~%" id (car ml) (cadr ml)))
+	   (bordeaux-threads:with-lock-held (*queries-lock*)
+	     (setf (gethash (parse-integer (car ml)) *queries*) (cadr ml)))
+	   (bordeaux-threads:signal-semaphore
+	    (gethash (parse-integer (car ml)) *queries-sems*))))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; handle-close-connection ;;
@@ -156,9 +185,7 @@ application."
   "Inititalze CLOG on a socket using HOST and PORT to serve BOOT-FILE as 
 the default route to establish web-socket connections and static files
 located at STATIC-ROOT."
-
-  (set-on-connect on-connect-handler)
-  
+  (set-on-connect on-connect-handler)  
   (setf *app*
 	(lack:builder
 	 (:static :path (lambda (path)
@@ -168,14 +195,11 @@ located at STATIC-ROOT."
 		  :root static-root)
 	 (lambda (env)
 	   (clog-server env))))
-  
   (setf *client-handler* (clack:clackup *app* :address host :port port))
-
   (when *verbose-output*
-    (progn
-      (format t "HTTP listening on : ~A:~A~%" host port)
-      (format t "HTML Root         : ~A~%"    static-root)
-      (format t "Boot file default : ~A~%"    boot-file))))
+    (format t "HTTP listening on : ~A:~A~%" host port)
+    (format t "HTML Root         : ~A~%"    static-root)
+    (format t "Boot file default : ~A~%"    boot-file)))
 
 ;;;;;;;;;;;;;;
 ;; shutdown ;;
