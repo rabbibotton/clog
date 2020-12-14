@@ -58,8 +58,12 @@ application."
 
 (defvar *connection-lock* (bordeaux-threads:make-lock)
   "Protect the connection hash tables")
+(defvar *queries-lock*    (bordeaux-threads:make-lock)
+  "Protect query hash tables")
 
-(defvar *queries* (make-hash-table) "Waiting queries")
+(defvar *queries*        (make-hash-table) "Query ID to Answers")
+(defvar *queries-sems*   (make-hash-table) "Query ID to semiphores")
+(defvar *query-time-out* 3 "Number of seconds to timeout waiting for a query")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; generate-connection-id ;;
@@ -76,6 +80,31 @@ application."
 (defun get-connection (connection-id)
   "Return the connection associated with CONNECITION-ID. (Private)"
   (gethash connection-id *connection-ids*))
+
+;;;;;;;;;;;;;;;;
+;; prep-query ;;
+;;;;;;;;;;;;;;;;
+
+(defun prep-query (id default-answer)
+  "Setup up a query to be received from a script identified by ID an returning
+with DEFAULT-ANSWER in case of a time out. (Private)"
+  (bordeaux-threads:with-lock-held (*queries-lock*)
+    (setf (gethash id *queries-sems*) (bordeaux-threads:make-semaphore))
+    (setf (gethash id *queries*) default-answer)))
+
+;;;;;;;;;;;;;;;;;;;;;
+;; wait-for-answer ;;
+;;;;;;;;;;;;;;;;;;;;;
+
+(defun wait-for-answer (id &key (timeout *query-time-out*))
+  "Block after prep-query and sending the query script with ID and TIMEOUT with
+the default answer. (Private)"
+  (bordeaux-threads:wait-on-semaphore (gethash id *queries-sems*) :timeout timeout)
+  (let ((answer (gethash id *queries*)))
+    (bordeaux-threads:with-lock-held (*queries-lock*)
+      (remhash id *queries*)
+      (remhash id *queries-sems*))
+    answer))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; handle-new-connection ;;
@@ -104,22 +133,6 @@ application."
 ;;;;;;;;;;;;;;;;;;;;
 ;; handle-message ;;
 ;;;;;;;;;;;;;;;;;;;;
-
-(defvar *queries-lock* (bordeaux-threads:make-lock))
-(defvar *queries-sems* (make-hash-table))
-
-(defun store-query (id answer)
-  (bordeaux-threads:with-lock-held (*queries-lock*)
-    (setf (gethash id *queries-sems*) (bordeaux-threads:make-semaphore))
-    (setf (gethash id *queries*) answer)))
-
-(defun wait-for-answer (id)
-  (bordeaux-threads:wait-on-semaphore (gethash id *queries-sems*) :timeout 3)
-  (let ((answer (gethash id *queries*)))
-    (bordeaux-threads:with-lock-held (*queries-lock*)
-      (remhash id *queries*)
-      (remhash id *queries-sems*))
-    answer))
 
 (defun handle-message (connection message)
   (let ((id (gethash connection *connections*))

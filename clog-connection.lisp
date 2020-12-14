@@ -54,7 +54,7 @@
 (defun query (connection-id script)
   "Execute SCRIPT on CONNECTION-ID, return value."
   (let ((uid (clog::generate-connection-id)))
-    (clog::store-query uid nil)
+    (clog::prep-query uid nil)
     (execute connection-id
 	     (format nil "ws.send (\"~A:\"+eval(\"~A\"));" uid script))
     (clog::wait-for-answer uid)))
