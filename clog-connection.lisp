@@ -28,8 +28,9 @@
   (validp   function)
   (cclose   function)
   (shutdown function)
-  (cwrite   function)
-  (cwriteln function))
+  (put      function)
+  (put-line function)
+  (new-line function))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -56,7 +57,9 @@
   (let ((uid (clog::generate-connection-id)))
     (clog::prep-query uid nil)
     (execute connection-id
-	     (format nil "ws.send (\"~A:\"+eval(\"~A\"));" uid script))
+	     (format nil "ws.send (\"~A:\"+eval(\"~A\"));"
+		     uid
+		     (clog:escape-string script)))
     (clog::wait-for-answer uid)))
 
 ;;;;;;;;;;;;
@@ -87,18 +90,26 @@
 reistablish connectivity."
   (execute connection-id "Shutdown_ws(event.reason='user')"))
 
-;;;;;;;;;;;;
-;; cwrite ;;
-;;;;;;;;;;;;
+;;;;;;;;;
+;; put ;;
+;;;;;;;;;
 
-(defun cwrite (connection-id text)
-  "Write TEXT raw to document object of CONNECTION-ID with out new line."
-  (execute connection-id (format nil "document.write('~A');" text)))
+(defun put (connection-id text)
+  "Write TEXT to document object of CONNECTION-ID with out new line."
+  (execute connection-id (format nil "document.write('~A');" (clog:escape-string text))))
 
 ;;;;;;;;;;;;;;
-;; cwriteln ;;
+;; put-line ;;
 ;;;;;;;;;;;;;;
 
-(defun cwriteln (connection-id text)
-  "Write TEXT raw to document object of CONNECTION-ID with new line."
-  (execute connection-id (format nil "document.writeln('~A');" text)))
+(defun put-line (connection-id text)
+  "Write TEXT to document object of CONNECTION-ID with new line and HTML <br />."
+  (execute connection-id (format nil "document.writeln('~A<br />');" (clog:escape-string text))))
+
+;;;;;;;;;;;;;;
+;; new-line ;;
+;;;;;;;;;;;;;;
+
+(defun new-line (connection-id)
+  "Write a new line raw to document object of CONNECTION-ID with a <br />."
+  (execute connection-id (format nil "document.writeln('<br />');")))

@@ -38,8 +38,9 @@ application."
   (set-on-connect  function)
   
   "CLOG utilities"
-  
-  (open-browser function))
+
+  (escape-string function)  
+  (open-browser  function))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Implementation - clog
@@ -234,6 +235,19 @@ located at STATIC-ROOT."
 (defun set-on-connect (on-connect-handler)
   "Change the ON-CONNECTION-HANDLER set during Initialize."
   (setf *on-connect-handler* on-connect-handler))
+
+;;;;;;;;;;;;;;;;;;;
+;; escape-string ;;
+;;;;;;;;;;;;;;;;;;;
+
+(defun escape-string (str)
+  "Escape STR for sending to browser script."
+  (let ((res))
+    (setf res (ppcre:regex-replace-all "\\x22" str "\\x22"))
+    (setf res (ppcre:regex-replace-all "\\x27" res "\\x27"))
+    (setf res (ppcre:regex-replace-all "\\x0A" res "\\x0A"))
+    (setf res (ppcre:regex-replace-all "\\x0D" res "\\x0D"))
+    res))
 
 ;;;;;;;;;;;;;;;;;;
 ;; open-browser ;;
