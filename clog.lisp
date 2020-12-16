@@ -37,7 +37,7 @@ application."
   (shutdown        function)
   (set-on-connect  function)  
 
-  (clog class)
+  (clog-obj class)
   
   "CLOG Low Level bindings"
 
@@ -53,7 +53,7 @@ application."
   (open-browser  function))
 
 
-(defclass clog ()
+(defclass clog-obj ()
   ((connection-id
     :accessor connection-id
     :initarg :connection-id)
@@ -96,18 +96,19 @@ located at STATIC-ROOT."
 ;; attach ;;
 ;;;;;;;;;;;;
 
-(defun attach (connection-id id)
-  "Create a new clog object and attach an existing element with HTML-ID on
-CONNECTION-ID to it. The HTML-ID must be unique."
-  (make-instance 'clog :connection-id connection-id :html-id id))
+(defun attach (connection-id html-id)
+  "Create a new clog-obj and attach an existing element with HTML-ID on
+CONNECTION-ID to it and then return it. The HTML-ID must be unique."
+  (make-instance 'clog :connection-id connection-id :html-id html-id))
 
 ;;;;;;;;;;;;;;;;;;;;;;
 ;; create-with-html ;;
 ;;;;;;;;;;;;;;;;;;;;;;
 
 (defun create-with-html (connection-id html)
-  "Create a new clog object and attach it to HTML on CONNECTION-ID. There must be
-a single outer block that will be set to an internal id"
+  "Create a new clog-obj and attach it to HTML on CONNECTION-ID. There must be
+a single outer block that will be set to an internal id. The returned clog-obj
+requires placement or will not be visible, ie. place-after, etc"
   (let ((web-id (cc:generate-id)))
     (cc:execute
      connection-id (format nil "clog['~A']=$(\"~A\"); clog['~A'].first().prop('id','~A');"
@@ -118,19 +119,21 @@ a single outer block that will be set to an internal id"
 ;; place-after ;;
 ;;;;;;;;;;;;;;;;;
 
-(defun place-after (parent child)
-  (let ((jq (if parent
-		(format nil "$(clog['~A'])" (html-id parent))
+(defun place-after (obj next-obj)
+  "Places NEXT-OBJ after OBJ in DOM"
+  (let ((jq (if obj
+		(format nil "$(clog['~A'])" (html-id obj))
 		(format nil "$('body')"))))
-    (cc:execute (connection-id child)
-		(format nil "~A.after(clog['~A'])" jq (html-id child))))
-  child)
+    (cc:execute (connection-id next-obj)
+		(format nil "~A.after(clog['~A'])" jq (html-id next-obj))))
+  next-obj)
 
 ;;;;;;;;;;;;;;;
 ;; alert-box ;;
 ;;;;;;;;;;;;;;;
 
-(defun alert-box (id message)
+(defun alert-box (connection-id message)
+  "Create an alert box on CONNECTION-ID with MESSAGE"
   (cc:execute
    id (format nil "alert('~A');" (cc:escape-string message))))
 
