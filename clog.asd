@@ -11,5 +11,5 @@
 		       #:bordeaux-threads #:trivial-open-browser
 		       #:lack-middleware-static #:lack-middleware-session
                        #:mgl-pax)
-  :components ((:file "clog")
-	       (:file "clog-connection")))
+  :components ((:file "clog-connection")
+	       (:file "clog")))
