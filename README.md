@@ -10,6 +10,14 @@ The Common Lisp Omnificient GUI, CLOG for short, uses web technology
 to produce graphical user interfaces for applications locally or
 remotely, ie as web applications.
 
+
+To load this package and use the tests:
+
+1. cd to the CLOG dir (the dir should be one used by QuickLisp lime ~/common-lisp)
+2. Start emacs/slime or your common lisp repl in that directory.
+3. In the REPL run (ql:quickload :clog)
+4. Then (load "~/common-lisp/clog/test/test-clog.lisp) (clog-test:test)
+
 Status:
 
 - Connection methods
