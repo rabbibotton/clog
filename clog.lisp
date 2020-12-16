@@ -33,10 +33,11 @@ application."
 
   "CLOG Startup and Shutdown"
 
-  (initialize      function)
-  (shutdown        function)
-  (set-on-connect  function)  
+  (initialize function)
+  (shutdown   function)
 
+  "CLOG objects"
+  
   (clog-obj class)
   
   "CLOG Low Level bindings"
@@ -47,10 +48,8 @@ application."
   
   "CLOG utilities"
 
-  (alert-box function)
-  
-  (escape-string function)  
-  (open-browser  function))
+  (alert-box    function)
+  (open-browser function))
 
 
 (defclass clog-obj ()
