@@ -57,7 +57,7 @@ script."
 (defvar *client-handler*     nil "Clack 'handler' for socket traffic")
 (defvar *on-connect-handler* nil "New connection event handler.")
 
-(defvar *new-id* 0 "Connection IDs")
+(defvar *new-id* 0 "Last issued connection or script IDs")
 
 (defvar *connections*    (make-hash-table) "Connections to IDs")
 (defvar *connection-ids* (make-hash-table) "IDs to connections")
@@ -77,6 +77,7 @@ script."
 
 (defun generate-id ()
   "Generate unique ids for use in connections and sripts."
+  ;; needs mutex or atomic
   (incf *new-id*))
 
 ;;;;;;;;;;;;;;;;;;;;
