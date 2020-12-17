@@ -1,16 +1,19 @@
 (defpackage #:test-clog
   (:use #:cl #:clog)
-  (:export test on-connect))
+  (:export test))
 
 (in-package :test-clog)
 
-(defun on-connect (id)
-  (place-after
-   (place-after nil (create-with-html id "<button>test</botton>"))
-   (create-with-html id "<H2>Cool!</H2>")))
+(defvar *last-obj*)
+
+(defun on-new-window (win)
+  (create-child win "<button>test</botton>")
+  (create-child win "<H2>Cool!</H2>")
+  (setf *last-obj* (create-child win "<button>a</button>")))
 
 (defun test ()
   (print "Init connection")
-  (initialize #'on-connect :boot-file "/debug.html")
+  (initialize #'on-new-window :boot-file "/debug.html")
+  (print "Connection set")
   (print "Open browser")
   (open-browser))

@@ -39,18 +39,22 @@ application."
   "CLOG objects"
   
   (clog-obj class)
+  (create-child generic-function)
   
   "CLOG Low Level bindings"
 
   (attach           function)
   (create-with-html function)
-  (place-after      function)
-  
+    
   "CLOG utilities"
 
   (alert-box    function)
   (open-browser function))
 
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Implementation - clog
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defclass clog-obj ()
   ((connection-id
@@ -58,17 +62,95 @@ application."
     :initarg :connection-id)
    (html-id
     :accessor html-id
-    :initarg :html-id)))
+    :initarg :html-id))
+  (:documentation "CLOG objects (clog-obj) encapsulate the connection between
+lisp and the HTML DOM element."))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Implementation - clog
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;
+;; script-id ;;
+;;;;;;;;;;;;;;;
+
+(defmethod script-id ((obj clog-obj))
+  "Return the script id for OBJ based on the html-id set during attachment. (Private)"
+  (if (eql (html-id obj) 0)
+      "'body'"
+      (format nil "clog['~A']" (html-id obj))))
+
+;;;;;;;;;;;;
+;; jquery ;;
+;;;;;;;;;;;;
+
+(defmethod jquery ((obj clog-obj))
+  "Return the jquery accessor for OBJ. (Private)"
+  (format nil "$(~A)" (script-id obj)))
+
+;;;;;;;;;;;;;;;;;;;;
+;; jquery-execute ;;
+;;;;;;;;;;;;;;;;;;;;
+
+(defmethod jquery-execute ((obj clog-obj) method)
+  "Execute the jquery METHOD on OBJ. (Private)"
+  (cc:execute (connection-id obj)
+	      (format nil "~A.~A" (jquery obj) method)))
+
+;;;;;;;;;;;;;;;;;;
+;; jquery-query ;;
+;;;;;;;;;;;;;;;;;;
+
+(defmethod jquery-query ((obj clog-obj) method)
+  "Execute the jquery METHOD on OBJ and return result. (Private)"
+  (cc:query (connection-id obj)
+	    (format nil "~A.~A" (jquery obj) method)))
+
+;;;;;;;;;;;;;;;;;;
+;; create-child ;;
+;;;;;;;;;;;;;;;;;;
+
+(defmethod create-child ((obj clog-obj) html &key (auto-place t))
+  "Create HTML element as child of OBJ and if AUTO-PLACE place-inside-bottom-of OBJ."
+  (let ((child (create-with-html (connection-id obj) html)))
+    (if auto-place
+	(place-inside-bottom-of obj child)
+	child)))
+
+;;;;;;;;;;;;;;;;;
+;; place-after ;;
+;;;;;;;;;;;;;;;;;
+
+(defmethod place-after ((obj clog-obj) next-obj)
+  "Places NEXT-OBJ after OBJ in DOM"
+  (jquery-execute obj (format nil "after(~A)" (script-id next-obj)))
+  next-obj)
+
+(defmethod place-before ((obj clog-obj) next-obj)
+  "Places NEXT-OBJ before OBJ in DOM"
+  (jquery-execute obj (format nil "before(~A)" (script-id next-obj)))
+  next-obj)
+
+(defmethod place-inside-top-of ((obj clog-obj) next-obj)
+  "Places NEXT-OBJ inside top of OBJ in DOM"
+  (jquery-execute obj (format nil "prepend(~A)" (script-id next-obj)))
+  next-obj)
+
+(defmethod place-inside-bottom-of ((obj clog-obj) next-obj)
+  "Places NEXT-OBJ inside bottom of OBJ in DOM"
+  (jquery-execute obj (format nil "append(~A)" (script-id next-obj)))
+  next-obj)
+
 
 ;;;;;;;;;;;;;;;;
 ;; initialize ;;
 ;;;;;;;;;;;;;;;;
 
-(defun initialize (on-connect-handler
+(defvar *on-new-window* nil "Store the on-new-window handler")
+
+(defun on-connect (id)
+  (when cc:*verbose-output*
+    (format t "Start new window handler on connection-id - ~A" id))
+  (let ((body (attach id 0)))
+    (funcall *on-new-window* body)))
+    
+(defun initialize (on-new-window
 		   &key
 		     (host           "0.0.0.0")
 		     (port           8080)
@@ -77,7 +159,9 @@ application."
   "Inititalze CLOG on a socket using HOST and PORT to serve BOOT-FILE as 
 the default route to establish web-socket connections and static files
 located at STATIC-ROOT."
-  (cc:initialize on-connect-handler
+  (setf *on-new-window* on-new-window)
+  
+  (cc:initialize #'on-connect
 		 :host host
 		 :port port
 		 :boot-file boot-file
@@ -110,22 +194,10 @@ a single outer block that will be set to an internal id. The returned clog-obj
 requires placement or will not be visible, ie. place-after, etc"
   (let ((web-id (cc:generate-id)))
     (cc:execute
-     connection-id (format nil "clog['~A']=$(\"~A\"); clog['~A'].first().prop('id','~A');"
-			   web-id html web-id web-id))
+     connection-id
+     (format nil "clog['~A']=$(\"~A\"); clog['~A'].first().prop('id','~A');"
+	     web-id html web-id web-id))
     (attach connection-id web-id)))
-
-;;;;;;;;;;;;;;;;;
-;; place-after ;;
-;;;;;;;;;;;;;;;;;
-
-(defun place-after (obj next-obj)
-  "Places NEXT-OBJ after OBJ in DOM"
-  (let ((jq (if obj
-		(format nil "$(clog['~A'])" (html-id obj))
-		(format nil "$('body')"))))
-    (cc:execute (connection-id next-obj)
-		(format nil "~A.after(clog['~A'])" jq (html-id next-obj))))
-  next-obj)
 
 ;;;;;;;;;;;;;;;
 ;; alert-box ;;
