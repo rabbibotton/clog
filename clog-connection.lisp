@@ -66,6 +66,8 @@ script."
   "Protect the connection hash tables")
 (defvar *queries-lock*    (bordeaux-threads:make-lock)
   "Protect query hash tables")
+(defvar *id-lock*         (bordeaux-threads:make-lock)
+  "Protect new-id variable.")
 
 (defvar *queries*        (make-hash-table) "Query ID to Answers")
 (defvar *queries-sems*   (make-hash-table) "Query ID to semiphores")
@@ -78,7 +80,7 @@ script."
 (defun generate-id ()
   "Generate unique ids for use in connections and sripts."
   ;; needs mutex or atomic
-  (incf *new-id*))
+  (bordeaux-threads:with-lock-held (*id-lock*) (incf *new-id*)))
 
 ;;;;;;;;;;;;;;;;;;;;
 ;; get-connection ;;
