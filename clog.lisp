@@ -98,7 +98,7 @@ located at STATIC-ROOT."
 (defun attach (connection-id html-id)
   "Create a new clog-obj and attach an existing element with HTML-ID on
 CONNECTION-ID to it and then return it. The HTML-ID must be unique."
-  (make-instance 'clog :connection-id connection-id :html-id html-id))
+  (make-instance 'clog-obj :connection-id connection-id :html-id html-id))
 
 ;;;;;;;;;;;;;;;;;;;;;;
 ;; create-with-html ;;
