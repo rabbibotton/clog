@@ -27,7 +27,7 @@ script."
   (*verbose-output* variable)
 
   (initialize      function)
-  (shutdown        function)
+  (shutdown-clog   function)
   (set-on-connect  function)
 
   "CLOG system utilities"
@@ -44,6 +44,7 @@ script."
   (put         function)
   (put-line    function)
   (new-line    function)
+  (alert-box   function)
   (generate-id function))
 
 
@@ -223,11 +224,11 @@ located at STATIC-ROOT."
     (format t "HTML Root         : ~A~%"    static-root)
     (format t "Boot file default : ~A~%"    boot-file)))
 
-;;;;;;;;;;;;;;
-;; shutdown ;;
-;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;
+;; shutdown-clog ;;
+;;;;;;;;;;;;;;;;;;;
 
-(defun shutdown ()
+(defun shutdown-clog ()
   "Shutdown CLOG."
   (clack:stop *client-handler*)
   (bordeaux-threads:with-lock-held (*connection-lock*)
@@ -315,15 +316,18 @@ reistablish connectivity."
 
 (defun put (connection-id text)
   "Write TEXT to document object of CONNECTION-ID with out new line."
-  (execute connection-id (format nil "document.write('~A');" (escape-string text))))
+  (execute connection-id
+	   (format nil "document.write('~A');" (escape-string text))))
 
 ;;;;;;;;;;;;;;
 ;; put-line ;;
 ;;;;;;;;;;;;;;
 
 (defun put-line (connection-id text)
-  "Write TEXT to document object of CONNECTION-ID with new line and HTML <br />."
-  (execute connection-id (format nil "document.writeln('~A<br />');" (escape-string text))))
+  "Write TEXT to document object of CONNECTION-ID with new line and
+HTML <br />."
+  (execute connection-id
+	   (format nil "document.writeln('~A<br />');" (escape-string text))))
 
 ;;;;;;;;;;;;;;
 ;; new-line ;;
@@ -332,3 +336,12 @@ reistablish connectivity."
 (defun new-line (connection-id)
   "Write a new line raw to document object of CONNECTION-ID with a <br />."
   (execute connection-id (format nil "document.writeln('<br />');")))
+
+;;;;;;;;;;;;;;;
+;; alert-box ;;
+;;;;;;;;;;;;;;;
+
+(defun alert-box (connection-id message)
+  "Create an alert box on CONNECTION-ID with MESSAGE"
+  (execute connection-id (format nil "alert('~A');" (escape-string message))))
+

@@ -41,14 +41,13 @@ application."
   (clog-obj class)
   (create-child generic-function)
   
-  "CLOG Low Level bindings"
+  "CLOG Low Level binding functions"
 
   (attach           function)
   (create-with-html function)
     
   "CLOG utilities"
 
-  (alert-box    function)
   (open-browser function))
 
 
@@ -58,10 +57,10 @@ application."
 
 (defclass clog-obj ()
   ((connection-id
-    :accessor connection-id
+    :reader connection-id
     :initarg :connection-id)
    (html-id
-    :accessor html-id
+    :reader html-id
     :initarg :html-id))
   (:documentation "CLOG objects (clog-obj) encapsulate the connection between
 lisp and the HTML DOM element."))
@@ -173,7 +172,7 @@ located at STATIC-ROOT."
 
 (defun shutdown ()
   "Shutdown CLOG."
-  (cc:shutdown))
+  (cc:shutdown-clog))
 
 ;;;;;;;;;;;;
 ;; attach ;;
@@ -198,15 +197,6 @@ requires placement or will not be visible, ie. place-after, etc"
      (format nil "clog['~A']=$(\"~A\"); clog['~A'].first().prop('id','~A');"
 	     web-id html web-id web-id))
     (attach connection-id web-id)))
-
-;;;;;;;;;;;;;;;
-;; alert-box ;;
-;;;;;;;;;;;;;;;
-
-(defun alert-box (connection-id message)
-  "Create an alert box on CONNECTION-ID with MESSAGE"
-  (cc:execute
-   id (format nil "alert('~A');" (cc:escape-string message))))
 
 ;;;;;;;;;;;;;;;;;;
 ;; open-browser ;;
