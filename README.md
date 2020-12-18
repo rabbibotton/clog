@@ -47,7 +47,7 @@ Status:
 
 - Connection methods
   - Websockets - Done
-  - AJAX/HTML - to do (In 2021 are there browsers supporting Websockets?)
+  - AJAX/HTML - to do (In 2021 are there browsers not supporting Websockets?)
   - Long Poll - to do (Needed for websites for webcrawlers and firewalls) 
   - Direct API access to native browser components - to do
 

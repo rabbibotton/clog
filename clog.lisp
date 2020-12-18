@@ -111,7 +111,7 @@ lisp and the HTML DOM element."))
 
 (export 'create-child)
 (defmethod create-child ((obj clog-obj) html &key (auto-place t))
-  "Create HTML element as child of OBJ and if AUTO-PLACE place-inside-bottom-of OBJ."
+  "Create HTML element as child of OBJ and if :AUTO-PLACE place-inside-bottom-of OBJ."
   (let ((child (create-with-html (connection-id obj) html)))
     (if auto-place
 	(place-inside-bottom-of obj child)
