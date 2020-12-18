@@ -45,14 +45,18 @@ application."
 
 
 (defsection @clog-objs (:title "CLOG Objects")
-  "CLOG Obj"
+  "CLOG-Obj"
   (clog-obj class)
 
-  "CLOG Obj - Low Level Creation"
+  "CLOG-Obj - General"
+  (property     generic-function)
+  (set-property generic-function)
+  
+  "CLOG-Obj - Low Level Creation"
   (create-child    generic-function)
   (attach-as-child generic-function)
 
-  "CLOG Obj - Placement"
+  "CLOG-Obj - Placement"
   (place-after            generic-function)
   (place-before           generic-function)
   (place-inside-top-of    generic-function)
@@ -120,6 +124,26 @@ result. (Private)"))
 (defmethod jquery-query ((obj clog-obj) method)
   (cc:query (connection-id obj)
 	    (format nil "~A.~A" (jquery obj) method)))
+
+;;;;;;;;;;;;;;
+;; property ;;
+;;;;;;;;;;;;;;
+
+(defgeneric property (clog-obj property-name)
+  (:documentation "Return PROPERTY-NAME's value for CLOG-OBJ"))
+
+(defmethod property ((obj clog-obj) property-name)
+  (jquery-query obj (format nil "prop('~A')" property-name)))
+
+;;;;;;;;;;;;;;;;;;
+;; set-property ;;
+;;;;;;;;;;;;;;;;;;
+
+(defgeneric set-property (clog-obj property-name value)
+  (:documentation "Set PROPERTY-NAME to VALUE for CLOG-OBJ"))
+
+(defmethod set-property ((obj clog-obj) property-name value)
+  (jquery-execute obj (format nil "prop('~A','~A')" property-name value)))
 
 ;;;;;;;;;;;;;;;;;;
 ;; create-child ;;
