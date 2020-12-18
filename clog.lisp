@@ -32,24 +32,28 @@ application."
 (defsection @clog-top-level (:title "CLOG Top level")
 
   "CLOG Startup and Shutdown"
-
   (initialize function)
   (shutdown   function)
 
-  "CLOG objects"
-  
+  "CLOG Obj"
   (clog-obj class)
-  (create-child generic-function)
+
+  "CLOG Obj - Creation Methods"
+  (create-child (method () (clog-obj t)))
+
+  "CLOG Obj - Placement Methods"
+  (place-after            (method () (clog-obj t)))
+  (place-before           (method () (clog-obj t)))
+  (place-inside-top-of    (method () (clog-obj t)))
+  (place-inside-bottom-of (method () (clog-obj t)))
+
   
   "CLOG Low Level binding functions"
-
   (attach           function)
   (create-with-html function)
     
   "CLOG utilities"
-
   (open-browser function))
-
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Implementation - clog
@@ -105,6 +109,7 @@ lisp and the HTML DOM element."))
 ;; create-child ;;
 ;;;;;;;;;;;;;;;;;;
 
+(export 'create-child)
 (defmethod create-child ((obj clog-obj) html &key (auto-place t))
   "Create HTML element as child of OBJ and if AUTO-PLACE place-inside-bottom-of OBJ."
   (let ((child (create-with-html (connection-id obj) html)))
@@ -116,21 +121,37 @@ lisp and the HTML DOM element."))
 ;; place-after ;;
 ;;;;;;;;;;;;;;;;;
 
+(export 'place-after)
 (defmethod place-after ((obj clog-obj) next-obj)
   "Places NEXT-OBJ after OBJ in DOM"
   (jquery-execute obj (format nil "after(~A)" (script-id next-obj)))
   next-obj)
 
+;;;;;;;;;;;;;;;;;;
+;; place-before ;;
+;;;;;;;;;;;;;;;;;;
+
+(export 'place-before)
 (defmethod place-before ((obj clog-obj) next-obj)
   "Places NEXT-OBJ before OBJ in DOM"
   (jquery-execute obj (format nil "before(~A)" (script-id next-obj)))
   next-obj)
 
+;;;;;;;;;;;;;;;;;;;;;;;;;
+;; place-inside-top-of ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(export 'place-inside-top-of)
 (defmethod place-inside-top-of ((obj clog-obj) next-obj)
   "Places NEXT-OBJ inside top of OBJ in DOM"
   (jquery-execute obj (format nil "prepend(~A)" (script-id next-obj)))
   next-obj)
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; ploace-inside-bottom-of ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(export 'place-inside-bottom-of)
 (defmethod place-inside-bottom-of ((obj clog-obj) next-obj)
   "Places NEXT-OBJ inside bottom of OBJ in DOM"
   (jquery-execute obj (format nil "append(~A)" (script-id next-obj)))
