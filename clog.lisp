@@ -27,28 +27,15 @@ application."
 
   (clog asdf:system)
 
-  (@clog-top-level section))
+  (@clog-system section)
+  (@clog-objs section))
 
-(defsection @clog-top-level (:title "CLOG Top level")
+(defsection @clog-system (:title "CLOG System")
 
   "CLOG Startup and Shutdown"
   (initialize function)
   (shutdown   function)
 
-  "CLOG Obj"
-  (clog-obj class)
-
-  "CLOG Obj - Low Level Creation Methods"
-  (create-child (method () (clog-obj t)))
-  (attach-as-child (method () (clog-obj t)))
-
-  "CLOG Obj - Placement Methods"
-  (place-after            (method () (clog-obj t)))
-  (place-before           (method () (clog-obj t)))
-  (place-inside-top-of    (method () (clog-obj t)))
-  (place-inside-bottom-of (method () (clog-obj t)))
-
-  
   "CLOG Low Level binding functions"
   (attach           function)
   (create-with-html function)
@@ -56,8 +43,25 @@ application."
   "CLOG utilities"
   (open-browser function))
 
+
+(defsection @clog-objs (:title "CLOG Objects")
+  "CLOG Obj"
+  (clog-obj class)
+
+  "CLOG Obj - Low Level Creation"
+  (create-child    generic-function)
+  (attach-as-child generic-function)
+
+  "CLOG Obj - Placement"
+  (place-after            generic-function)
+  (place-before           generic-function)
+  (place-inside-top-of    generic-function)
+  (place-inside-bottom-of generic-function))
+  
+
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Implementation - clog
+;; Implementation - clog-obj
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defclass clog-obj ()
@@ -74,8 +78,11 @@ lisp and the HTML DOM element."))
 ;; script-id ;;
 ;;;;;;;;;;;;;;;
 
+(defgeneric script-id (clog-obj)
+  (:documentation "Return the script id for OBJ based on the html-id set
+during attachment. (Private)"))
+
 (defmethod script-id ((obj clog-obj))
-  "Return the script id for OBJ based on the html-id set during attachment. (Private)"
   (if (eql (html-id obj) 0)
       "'body'"
       (format nil "clog['~A']" (html-id obj))))
@@ -84,16 +91,21 @@ lisp and the HTML DOM element."))
 ;; jquery ;;
 ;;;;;;;;;;;;
 
+(defgeneric jquery (clog-obj)
+  (:documentation "Return the jquery accessor for OBJ. (Private)"))
+
 (defmethod jquery ((obj clog-obj))
-  "Return the jquery accessor for OBJ. (Private)"
   (format nil "$(~A)" (script-id obj)))
 
 ;;;;;;;;;;;;;;;;;;;;
 ;; jquery-execute ;;
 ;;;;;;;;;;;;;;;;;;;;
 
+(defgeneric jquery-execute (clog-obj method)
+  (:documentation "Execute the jquery METHOD on OBJ. Result is
+dicarded. (Private)"))
+
 (defmethod jquery-execute ((obj clog-obj) method)
-  "Execute the jquery METHOD on OBJ. (Private)"
   (cc:execute (connection-id obj)
 	      (format nil "~A.~A" (jquery obj) method)))
 
@@ -101,8 +113,11 @@ lisp and the HTML DOM element."))
 ;; jquery-query ;;
 ;;;;;;;;;;;;;;;;;;
 
+(defgeneric jquery-query (clog-obj method)
+  (:documentation "Execute the jquery METHOD on OBJ and return
+result. (Private)"))
+
 (defmethod jquery-query ((obj clog-obj) method)
-  "Execute the jquery METHOD on OBJ and return result. (Private)"
   (cc:query (connection-id obj)
 	    (format nil "~A.~A" (jquery obj) method)))
 
@@ -110,10 +125,11 @@ lisp and the HTML DOM element."))
 ;; create-child ;;
 ;;;;;;;;;;;;;;;;;;
 
-(export 'create-child)
+(defgeneric create-child (clog-obj html &key auto-place)
+  (:documentation "Create a new CLOG-OBJ from HTML element as child of OBJ and if :AUTO-PLACE (default t)
+place-inside-bottom-of OBJ"))
+
 (defmethod create-child ((obj clog-obj) html &key (auto-place t))
-  "Create a new clog-obj from HTML element as child of OBJ and if :AUTO-PLACE
-place-inside-bottom-of OBJ."
   (let ((child (create-with-html (connection-id obj) html)))
     (if auto-place
 	(place-inside-bottom-of obj child)
@@ -123,10 +139,11 @@ place-inside-bottom-of OBJ."
 ;; attach-as-child ;;
 ;;;;;;;;;;;;;;;;;;;;;
 
-(export 'attach-as-child)
+(defgeneric attach-as-child (clog-obj html-id)
+  (:documentation "Create a new CLOG-OBJ and attach an existing element with HTML-ID. The
+HTML-ID must be unique."))
+
 (defmethod attach-as-child ((obj clog-obj) html-id)
-  "Create a new clog-obj and attach an existing element with HTML-ID. The
-HTML-ID must be unique."
   (cc:execute (connection-id obj) (format nil "clog['~A']=$('#~A')" html-id html-id))
   (make-instance 'clog-obj :connection-id (connection-id obj) :html-id html-id))
 
@@ -134,9 +151,10 @@ HTML-ID must be unique."
 ;; place-after ;;
 ;;;;;;;;;;;;;;;;;
 
-(export 'place-after)
+(defgeneric place-after (clog-obj next-obj)
+  (:documentation "Places NEXT-OBJ after CLOG-OBJ in DOM"))
+
 (defmethod place-after ((obj clog-obj) next-obj)
-  "Places NEXT-OBJ after OBJ in DOM"
   (jquery-execute obj (format nil "after(~A)" (script-id next-obj)))
   next-obj)
 
@@ -144,9 +162,10 @@ HTML-ID must be unique."
 ;; place-before ;;
 ;;;;;;;;;;;;;;;;;;
 
-(export 'place-before)
+(defgeneric place-before (clog-obj next-obj)
+  (:documentation "Places NEXT-OBJ before CLOG-OBJ in DOM"))
+
 (defmethod place-before ((obj clog-obj) next-obj)
-  "Places NEXT-OBJ before OBJ in DOM"
   (jquery-execute obj (format nil "before(~A)" (script-id next-obj)))
   next-obj)
 
@@ -154,22 +173,28 @@ HTML-ID must be unique."
 ;; place-inside-top-of ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(export 'place-inside-top-of)
+(defgeneric place-inside-top-of (clog-obj next-obj)
+  (:documentation "Places NEXT-OBJ inside top of CLOG-OBJ in DOM"))
+
 (defmethod place-inside-top-of ((obj clog-obj) next-obj)
-  "Places NEXT-OBJ inside top of OBJ in DOM"
   (jquery-execute obj (format nil "prepend(~A)" (script-id next-obj)))
   next-obj)
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; ploace-inside-bottom-of ;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; place-inside-bottom-of ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(export 'place-inside-bottom-of)
+(defgeneric place-inside-bottom-of (clog-obj next-obj)
+  (:documentation "Places NEXT-OBJ inside bottom of CLOG-OBJ in DOM"))
+
 (defmethod place-inside-bottom-of ((obj clog-obj) next-obj)
-  "Places NEXT-OBJ inside bottom of OBJ in DOM"
   (jquery-execute obj (format nil "append(~A)" (script-id next-obj)))
   next-obj)
 
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Implementation - clog
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;;;;;;;;;;;;;;;;
 ;; initialize ;;

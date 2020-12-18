@@ -18,6 +18,11 @@ To load this package and use the tests:
 3. In the REPL run (ql:quickload :clog)
 4. Then (load "~/common-lisp/clog/test/test-clog.lisp) (clog-test:test)
 
+Documentation for CLOG in markdown can be generated with
+
+(describe clog:@CLOG-MANUAL)
+
+
 Sample CLOG app with code base so far:
 
 ``` 
