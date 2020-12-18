@@ -50,7 +50,13 @@ application."
 
   "CLOG-Obj - General"
   (property     generic-function)
-  (set-property generic-function)
+;;  ((setf property) generic-function)
+
+  (style        generic-function)
+;;  (set-style generic-function)
+  
+  (attribute     generic-function)
+;;  (set-attribute generic-function)
   
   "CLOG-Obj - Low Level Creation"
   (create-child    generic-function)
@@ -62,7 +68,6 @@ application."
   (place-inside-top-of    generic-function)
   (place-inside-bottom-of generic-function))
   
-
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Implementation - clog-obj
@@ -77,6 +82,15 @@ application."
     :initarg :html-id))
   (:documentation "CLOG objects (clog-obj) encapsulate the connection between
 lisp and the HTML DOM element."))
+
+;;;;;;;;;;;;;;;;;;;
+;; make-clog-obj ;;
+;;;;;;;;;;;;;;;;;;;
+
+(defun make-clog-obj (connection-id html-id)
+  "Construct a new clog-obj. (Private)"
+  (make-instance 'clog-obj :connection-id connection-id
+			   :html-id html-id))
 
 ;;;;;;;;;;;;;;;
 ;; script-id ;;
@@ -135,15 +149,43 @@ result. (Private)"))
 (defmethod property ((obj clog-obj) property-name)
   (jquery-query obj (format nil "prop('~A')" property-name)))
 
-;;;;;;;;;;;;;;;;;;
-;; set-property ;;
-;;;;;;;;;;;;;;;;;;
+;; (defgeneric (setf property) (value obj property-name)
+;;  (:documentation "Set PROPERTY-NAME to VALUE for CLOG-OBJ"))
 
-(defgeneric set-property (clog-obj property-name value)
-  (:documentation "Set PROPERTY-NAME to VALUE for CLOG-OBJ"))
-
-(defmethod set-property ((obj clog-obj) property-name value)
+(defmethod (setf property) (value (obj clog-obj) property-name)
   (jquery-execute obj (format nil "prop('~A','~A')" property-name value)))
+
+;;;;;;;;;;;
+;; style ;;
+;;;;;;;;;;;
+
+(defgeneric style (clog-obj style-name)
+  (:documentation "Return STYLE-NAME's value for CLOG-OBJ"))
+
+(defmethod style ((obj clog-obj) style-name )
+  (jquery-query obj (format nil "css('~A')" style-name)))
+
+;;(defgeneric set-style (clog-obj style-name value)
+;;  (:documentation "Set STYLE-NAME to VALUE for CLOG-OBJ"))
+
+(defmethod (setf style) (value (obj clog-obj) style-name)
+  (jquery-execute obj (format nil "css('~A','~A')" style-name value)))
+
+;;;;;;;;;;;;;;;
+;; attribute ;;
+;;;;;;;;;;;;;;;
+
+(defgeneric attribute (clog-obj attribute-name)
+  (:documentation "Return ATTRIBUTE-NAME's value for CLOG-OBJ"))
+
+(defmethod attribute ((obj clog-obj) attribute-name)
+  (jquery-query obj (format nil "attr('~A')" attribute-name)))
+
+;;(defgeneric set-attribute (clog-obj attribute-name value)
+;;  (:documentation "Set ATTRIBUTE-NAME to VALUE for CLOG-OBJ"))
+
+(defmethod (setf attribute) (value (obj clog-obj) attribute-name)
+  (jquery-execute obj (format nil "attr('~A','~A')" attribute-name value)))
 
 ;;;;;;;;;;;;;;;;;;
 ;; create-child ;;
@@ -169,7 +211,7 @@ HTML-ID must be unique."))
 
 (defmethod attach-as-child ((obj clog-obj) html-id)
   (cc:execute (connection-id obj) (format nil "clog['~A']=$('#~A')" html-id html-id))
-  (make-instance 'clog-obj :connection-id (connection-id obj) :html-id html-id))
+  (make-clog-obj (connection-id obj) html-id))
 
 ;;;;;;;;;;;;;;;;;
 ;; place-after ;;
@@ -229,7 +271,7 @@ HTML-ID must be unique."))
 (defun on-connect (id)
   (when cc:*verbose-output*
     (format t "Start new window handler on connection-id - ~A" id))
-  (let ((body (make-instance 'clog-obj :connection-id id :html-id 0)))
+  (let ((body (make-clog-obj id 0)))
     (funcall *on-new-window* body)))
     
 (defun initialize (on-new-window
@@ -265,7 +307,7 @@ located at STATIC-ROOT."
   "Create a new clog-obj and attach an existing element with HTML-ID on
 CONNECTION-ID to it and then return it. The HTML-ID must be unique."
   (cc:execute connection-id (format nil "clog['~A']=$('#~A')" html-id html-id))
-  (make-instance 'clog-obj :connection-id connection-id :html-id html-id))
+  (make-clog-obj connection-id html-id))
 
 ;;;;;;;;;;;;;;;;;;;;;;
 ;; create-with-html ;;
@@ -280,7 +322,7 @@ requires placement or will not be visible, ie. place-after, etc"
      connection-id
      (format nil "clog['~A']=$(\"~A\"); clog['~A'].first().prop('id','~A')"
 	     web-id html web-id web-id))
-    (make-instance 'clog-obj :connection-id connection-id :html-id web-id)))
+    (make-clog-obj connection-id web-id)))
 
 ;;;;;;;;;;;;;;;;;;
 ;; open-browser ;;
