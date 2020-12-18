@@ -38,8 +38,9 @@ application."
   "CLOG Obj"
   (clog-obj class)
 
-  "CLOG Obj - Creation Methods"
+  "CLOG Obj - Low Level Creation Methods"
   (create-child (method () (clog-obj t)))
+  (attach-as-child (method () (clog-obj t)))
 
   "CLOG Obj - Placement Methods"
   (place-after            (method () (clog-obj t)))
@@ -111,11 +112,23 @@ lisp and the HTML DOM element."))
 
 (export 'create-child)
 (defmethod create-child ((obj clog-obj) html &key (auto-place t))
-  "Create HTML element as child of OBJ and if :AUTO-PLACE place-inside-bottom-of OBJ."
+  "Create a new clog-obj from HTML element as child of OBJ and if :AUTO-PLACE
+place-inside-bottom-of OBJ."
   (let ((child (create-with-html (connection-id obj) html)))
     (if auto-place
 	(place-inside-bottom-of obj child)
 	child)))
+
+;;;;;;;;;;;;;;;;;;;;;
+;; attach-as-child ;;
+;;;;;;;;;;;;;;;;;;;;;
+
+(export 'attach-as-child)
+(defmethod attach-as-child ((obj clog-obj) html-id)
+  "Create a new clog-obj and attach an existing element with HTML-ID. The
+HTML-ID must be unique."
+  (cc:execute (connection-id obj) (format nil "clog['~A']=$('#~A')" html-id html-id))
+  (make-instance 'clog-obj :connection-id (connection-id obj) :html-id html-id))
 
 ;;;;;;;;;;;;;;;;;
 ;; place-after ;;
@@ -167,7 +180,7 @@ lisp and the HTML DOM element."))
 (defun on-connect (id)
   (when cc:*verbose-output*
     (format t "Start new window handler on connection-id - ~A" id))
-  (let ((body (attach id 0)))
+  (let ((body (make-instance 'clog-obj :connection-id id :html-id 0)))
     (funcall *on-new-window* body)))
     
 (defun initialize (on-new-window
@@ -202,6 +215,7 @@ located at STATIC-ROOT."
 (defun attach (connection-id html-id)
   "Create a new clog-obj and attach an existing element with HTML-ID on
 CONNECTION-ID to it and then return it. The HTML-ID must be unique."
+  (cc:execute connection-id (format nil "clog['~A']=$('#~A')" html-id html-id))
   (make-instance 'clog-obj :connection-id connection-id :html-id html-id))
 
 ;;;;;;;;;;;;;;;;;;;;;;
@@ -215,9 +229,9 @@ requires placement or will not be visible, ie. place-after, etc"
   (let ((web-id (cc:generate-id)))
     (cc:execute
      connection-id
-     (format nil "clog['~A']=$(\"~A\"); clog['~A'].first().prop('id','~A');"
+     (format nil "clog['~A']=$(\"~A\"); clog['~A'].first().prop('id','~A')"
 	     web-id html web-id web-id))
-    (attach connection-id web-id)))
+    (make-instance 'clog-obj :connection-id connection-id :html-id web-id)))
 
 ;;;;;;;;;;;;;;;;;;
 ;; open-browser ;;
