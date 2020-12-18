@@ -18,6 +18,31 @@ To load this package and use the tests:
 3. In the REPL run (ql:quickload :clog)
 4. Then (load "~/common-lisp/clog/test/test-clog.lisp) (clog-test:test)
 
+Sample CLOG app with code base so far:
+
+``` 
+(defpackage #:test-clog
+  (:use #:cl #:clog)
+  (:export test))
+
+(in-package :test-clog)
+
+(defvar *last-obj*)
+
+(defun on-new-window (win)
+  (create-child win "<button>test</botton>")
+  (create-child win "<H2>Cool!</H2>")
+  (setf *last-obj* (create-child win "<button>a</button>")))
+
+(defun test ()
+  (print "Init connection")
+  (initialize #'on-new-window :boot-file "/debug.html")
+  (print "Connection set")
+  (print "Open browser")
+  (open-browser))
+```
+
+
 Status:
 
 - Connection methods
