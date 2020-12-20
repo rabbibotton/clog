@@ -49,14 +49,14 @@ application."
   (clog-obj class)
 
   "CLOG-Obj - General"
-  (property     generic-function)
+  (property      generic-function)
 ;;  ((setf property) generic-function)
 
   (style        generic-function)
-;;  (set-style generic-function)
+;;  (setf  style generic-function)
   
   (attribute     generic-function)
-;;  (set-attribute generic-function)
+;;  (setf attribute generic-function)
   
   "CLOG-Obj - Low Level Creation"
   (create-child    generic-function)
@@ -149,8 +149,8 @@ result. (Private)"))
 (defmethod property ((obj clog-obj) property-name)
   (jquery-query obj (format nil "prop('~A')" property-name)))
 
-;; (defgeneric (setf property) (value obj property-name)
-;;  (:documentation "Set PROPERTY-NAME to VALUE for CLOG-OBJ"))
+(defgeneric (setf property) (value obj property-name)
+  (:documentation "Setf PROPERTY-NAME to VALUE for CLOG-OBJ"))
 
 (defmethod (setf property) (value (obj clog-obj) property-name)
   (jquery-execute obj (format nil "prop('~A','~A')" property-name value)))
@@ -165,8 +165,8 @@ result. (Private)"))
 (defmethod style ((obj clog-obj) style-name )
   (jquery-query obj (format nil "css('~A')" style-name)))
 
-;;(defgeneric set-style (clog-obj style-name value)
-;;  (:documentation "Set STYLE-NAME to VALUE for CLOG-OBJ"))
+(defgeneric (setf style) (value clog-obj style-name)
+  (:documentation "Setf STYLE-NAME to VALUE for CLOG-OBJ"))
 
 (defmethod (setf style) (value (obj clog-obj) style-name)
   (jquery-execute obj (format nil "css('~A','~A')" style-name value)))
@@ -181,8 +181,8 @@ result. (Private)"))
 (defmethod attribute ((obj clog-obj) attribute-name)
   (jquery-query obj (format nil "attr('~A')" attribute-name)))
 
-;;(defgeneric set-attribute (clog-obj attribute-name value)
-;;  (:documentation "Set ATTRIBUTE-NAME to VALUE for CLOG-OBJ"))
+(defgeneric (setf attribute) (value clog-obj attribute-name)
+  (:documentation "Seft ATTRIBUTE-NAME to VALUE for CLOG-OBJ"))
 
 (defmethod (setf attribute) (value (obj clog-obj) attribute-name)
   (jquery-execute obj (format nil "attr('~A','~A')" attribute-name value)))
