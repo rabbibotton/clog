@@ -14,7 +14,9 @@
     (setf (property tmp "draggable") "true")
     (when (equal (property tmp "draggable")
 		 (setf (property tmp "innerHTML") "<h2>I am draggable</h2>")))
-    (create-child win "<button>test</botton>")
+    (setf tmp (create-child win "<button>test</botton>"))
+    (setf (width tmp) 300)
+    (setf (height tmp) 50)
     (create-child win "<H2>Cool!</H2>")
     (setf *last-obj* (create-child win "<button>a</button>"))))
 

@@ -48,19 +48,22 @@ application."
   "CLOG-Obj"
   (clog-obj class)
 
-  "CLOG-Obj - General"
-  (property      generic-function)
-;;  ((setf property) generic-function)
+  "CLOG-Obj - General Properties"
+  (property  generic-function)
+  (style     generic-function)
+  (attribute generic-function)
+  
+  (height generic-function)
+  (width  generic-function)
 
-  (style        generic-function)
-;;  (setf  style generic-function)
+  "CLOG-Obj - General Methods"
+  (focus  generic-function)
+  (blur   generic-function)
   
-  (attribute     generic-function)
-;;  (setf attribute generic-function)
-  
-  "CLOG-Obj - Low Level Creation"
+  "CLOG-Obj - Low Level"
   (create-child    generic-function)
   (attach-as-child generic-function)
+  (validp          generic-function)
 
   "CLOG-Obj - Placement"
   (place-after            generic-function)
@@ -82,6 +85,12 @@ application."
     :initarg :html-id))
   (:documentation "CLOG objects (clog-obj) encapsulate the connection between
 lisp and the HTML DOM element."))
+
+(defgeneric connection-id (clog-obj)
+  (:documentation "Reader for connection-id slot. (Private)"))
+
+(defgeneric html-id (clog-obj)
+  (:documentation "Reader for html-id slot. (Private)"))
 
 ;;;;;;;;;;;;;;;;;;;
 ;; make-clog-obj ;;
@@ -144,7 +153,7 @@ result. (Private)"))
 ;;;;;;;;;;;;;;
 
 (defgeneric property (clog-obj property-name)
-  (:documentation "Return PROPERTY-NAME's value for CLOG-OBJ"))
+  (:documentation "get/set html property. (eg. draggable)"))
 
 (defmethod property ((obj clog-obj) property-name)
   (jquery-query obj (format nil "prop('~A')" property-name)))
@@ -160,7 +169,7 @@ result. (Private)"))
 ;;;;;;;;;;;
 
 (defgeneric style (clog-obj style-name)
-  (:documentation "Return STYLE-NAME's value for CLOG-OBJ"))
+  (:documentation "get/set html css style."))
 
 (defmethod style ((obj clog-obj) style-name )
   (jquery-query obj (format nil "css('~A')" style-name)))
@@ -176,16 +185,68 @@ result. (Private)"))
 ;;;;;;;;;;;;;;;
 
 (defgeneric attribute (clog-obj attribute-name)
-  (:documentation "Return ATTRIBUTE-NAME's value for CLOG-OBJ"))
+  (:documentation "get/set html attribute. (eg. src on img tag)"))
 
 (defmethod attribute ((obj clog-obj) attribute-name)
   (jquery-query obj (format nil "attr('~A')" attribute-name)))
 
 (defgeneric (setf attribute) (value clog-obj attribute-name)
-  (:documentation "Seft ATTRIBUTE-NAME to VALUE for CLOG-OBJ"))
+  (:documentation "Setf ATTRIBUTE-NAME to VALUE for CLOG-OBJ"))
 
 (defmethod (setf attribute) (value (obj clog-obj) attribute-name)
   (jquery-execute obj (format nil "attr('~A','~A')" attribute-name value)))
+
+;;;;;;;;;;;;
+;; height ;;
+;;;;;;;;;;;;
+
+(defgeneric height (clog-obj)
+  (:documentation "get/set html height in pixels."))
+
+(defmethod height ((obj clog-obj))
+  (jquery-query obj "height()"))
+
+(defgeneric (setf height) (value clog-obj)
+  (:documentation "Setf height VALUE for CLOG-OBJ"))
+
+(defmethod (setf height) (value (obj clog-obj))
+  (jquery-execute obj (format nil "height('~A')" value)))
+
+;;;;;;;;;;;
+;; width ;;
+;;;;;;;;;;;
+
+(defgeneric width (clog-obj)
+  (:documentation "get/set html width in pixels."))
+
+(defmethod width ((obj clog-obj))
+  (jquery-query obj "width()"))
+
+(defgeneric (setf width) (value clog-obj)
+  (:documentation "Setf width VALUE for CLOG-OBJ"))
+
+(defmethod (setf width) (value (obj clog-obj))
+  (jquery-execute obj (format nil "width('~A')" value)))
+
+;;;;;;;;;;;
+;; focus ;;
+;;;;;;;;;;;
+
+(defgeneric focus (clog-obj)
+  (:documentation "Focus on CLOG-OBJ"))
+
+(defmethod focus ((obj clog-obj))
+  (jquery-execute obj "focus()"))
+
+;;;;;;;;;;
+;; blur ;;
+;;;;;;;;;;
+
+(defgeneric blur (clog-obj)
+  (:documentation "Remove focus from CLOG-OBJ"))
+
+(defmethod focus ((obj clog-obj))
+  (jquery-execute "blur()"))
 
 ;;;;;;;;;;;;;;;;;;
 ;; create-child ;;
@@ -212,6 +273,17 @@ HTML-ID must be unique."))
 (defmethod attach-as-child ((obj clog-obj) html-id)
   (cc:execute (connection-id obj) (format nil "clog['~A']=$('#~A')" html-id html-id))
   (make-clog-obj (connection-id obj) html-id))
+
+
+;;;;;;;;;;;;
+;; validp ;;
+;;;;;;;;;;;;
+
+(defgeneric validp (clog-obj)
+  (:documentation "Returns true of connection is valid on this CLOG-OBJ."))
+
+(defmethod validp ((obj clog-obj))
+  (cc:validp (connection-id obj)))
 
 ;;;;;;;;;;;;;;;;;
 ;; place-after ;;
