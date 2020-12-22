@@ -19,7 +19,13 @@
     (setf (width tmp) 300)
     (setf (height tmp) 50)
     (create-child win (format nil "<H2>~A</H2>" (gethash "connection-id" (connection-data win))))
-    (setf *last-obj* (create-child win "<button>a</button>"))))
+    (setf *last-obj* (create-child win "<button>********</button>"))
+    (set-on-mouse-enter *last-obj*
+			(lambda ()
+			  (setf (property *last-obj* "innerHTML") "Inside")))
+    (set-on-mouse-leave *last-obj*
+			(lambda ()
+			  (setf (property *last-obj* "innerHTML") "Outside")))))
 
 (defun test ()
   (print "Init connection")

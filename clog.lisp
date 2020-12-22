@@ -73,8 +73,38 @@ application."
   (validp          generic-function)
 
   "CLOG-Obj - Event Handling"
-  (set-on-click  generic-function))
-  
+  (set-on-focus              generic-function)
+  (set-on-blur               generic-function)
+  (set-on-chang              generic-function)
+  (set-on-focus-in           generic-function)
+  (set-on-focus-out          generic-function)
+  (set-on-reset              generic-function)
+  (set-on-search             generic-function)
+  (set-on-select             generic-function)
+  (set-on-submit             generic-function)
+  (set-on-select             generic-function)
+  (set-on-context-menu       generic-function)
+  (set-on-click              generic-function)
+  (set-on-double-click       generic-function)
+  (set-on-mouse-click        generic-function)
+  (set-on-mouse-double-click generic-function)
+  (set-on-mouse-right-click  generic-function)
+  (set-on-mouse-enter        generic-function)
+  (set-on-mouse-leave        generic-function)
+  (set-on-mouse-over         generic-function)
+  (set-on-mouse-out          generic-function)
+  (set-on-mouse-down         generic-function) 
+  (set-on-mouse-up           generic-function)
+  (set-on-mouse-move         generic-function)
+  (set-on-character          generic-function)
+  (set-on-key-down           generic-function)
+  (set-on-key-up             generic-function)
+  (set-on-key-press          generic-function)
+  (set-on-copy               generic-function)
+  (set-on-cut                generic-function)
+  (set-on-paste              generic-function))
+;; need to add drag and drop events
+;; lookup new touch events
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Implementation - clog-obj
@@ -157,6 +187,34 @@ result. (Private)"))
 (defmethod jquery-query ((obj clog-obj) method)
   (cc:query (connection-id obj)
 	    (format nil "~A.~A" (jquery obj) method)))
+
+;;;;;;;;;;;;;;;;;;;;;;;
+;; bind-event-script ;;
+;;;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric bind-event-script (clog-obj event call-back)
+  (:documentation "Create the code client side for call backs. (Private)"))
+
+(defmethod bind-event-script ((obj clog-obj) event call-back)
+  (jquery-execute
+   obj (format nil "on('~A',function (e, data){~A})" event call-back)))
+
+(defmethod unbind-event-script ((obj clog-obj) event)
+  (jquery-execute obj (format nil "off(~A)" event)))
+			      
+(defgeneric set-event (clog-obj event handler)
+  (:documentation "Create the hood for incoming events. (Private)"))
+
+(defmethod set-event ((obj clog-obj) event handler)
+  ;; meeds mutex
+  (let ((hook (format nil "~A:~A" (html-id obj) event)))
+    (cond (handler
+	   (bind-event-script obj event
+			      (format nil "ws.send('E:~A-')" hook))
+	   (setf (gethash hook (connection-data obj)) handler))
+	  (t
+	   (unbind-event-script obj event)
+	   (remhash hook (connection-data obj))))))
 
 ;;;;;;;;;;;;;;
 ;; property ;;
@@ -356,29 +414,446 @@ clog-obj that will persist regardless of thread."))
   next-obj)
 
 ;;;;;;;;;;;;;;;;;;
+;; set-on-focus ;;
+;;;;;;;;;;;;;;;;;;
+
+(defgeneric set-on-focus (clog-obj on-focus-handler)
+  (:documentation "Set the ON-FOCUS-HANDLER for CLOG-OBJ. If ON-FOCUS-HANDLER
+is nil unbind the event."))
+
+(defmethod set-on-focus ((obj clog-obj) on-focus-handler)
+  (let ((on-focus on-focus-handler))      
+    (set-event obj "focus"
+	       (lambda (data)
+		 (declare (ignore data)) ; event has no data to decode
+		 (funcall on-focus)))))
+
+;;;;;;;;;;;;;;;;;
+;; set-on-blur ;;
+;;;;;;;;;;;;;;;;;
+
+(defgeneric set-on-blur (clog-obj on-blur-handler)
+  (:documentation "Set the ON-BLUR-HANDLER for CLOG-OBJ. If ON-BLUR-HANDLER
+is nil unbind the event."))
+
+(defmethod set-on-blur ((obj clog-obj) on-blur-handler)
+  (let ((on-blur on-blur-handler))      
+    (set-event obj "blur"
+	       (lambda (data)
+		 (declare (ignore data)) ; event has no data to decode
+		 (funcall on-blur)))))
+
+;;;;;;;;;;;;;;;;;;;
+;; set-on-change ;;
+;;;;;;;;;;;;;;;;;;;
+
+(defgeneric set-on-change (clog-obj on-change-handler)
+  (:documentation "Set the ON-CHANGE-HANDLER for CLOG-OBJ. If ON-CHANGE-HANDLER
+is nil unbind the event."))
+
+(defmethod set-on-change ((obj clog-obj) on-change-handler)
+  (let ((on-change on-change-handler))      
+    (set-event obj "change"
+	       (lambda (data)
+		 (declare (ignore data)) ; event has no data to decode
+		 (funcall on-change)))))
+
+;;;;;;;;;;;;;;;;;;;;;
+;; set-on-focus-in ;;
+;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric set-on-focus-in (clog-obj on-focus-in-handler)
+  (:documentation "Set the ON-FOCUS-IN-HANDLER for CLOG-OBJ. If
+ON-FOCUS-IN-HANDLER is nil unbind the event."))
+
+(defmethod set-on-focus-in ((obj clog-obj) on-focus-in-handler)
+  (let ((on-focus-in on-focus-in-handler))      
+    (set-event obj "focusin"
+	       (lambda (data)
+		 (declare (ignore data)) ; event has no data to decode
+		 (funcall on-focus-in)))))
+
+;;;;;;;;;;;;;;;;;;;;;;
+;; set-on-focus-out ;;
+;;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric set-on-focus-out (clog-obj on-focus-out-handler)
+  (:documentation "Set the ON-FOCUS-OUT-HANDLER for CLOG-OBJ.
+If ON-FOCUS-OUT-HANDLER is nil unbind the event."))
+
+(defmethod set-on-focus-out ((obj clog-obj) on-focus-out-handler)
+  (let ((on-focus-out on-focus-out-handler))      
+    (set-event obj "focusout"
+	       (lambda (data)
+		 (declare (ignore data)) ; event has no data to decode
+		 (funcall on-focus-out)))))
+
+;;;;;;;;;;;;;;;;;;
+;; set-on-reset ;;
+;;;;;;;;;;;;;;;;;;
+
+(defgeneric set-on-reset (clog-obj on-reset-handler)
+  (:documentation "Set the ON-RESET-HANDLER for CLOG-OBJ. If ON-RESET-HANDLER
+is nil unbind the event."))
+
+(defmethod set-on-reset ((obj clog-obj) on-reset-handler)
+  (let ((on-reset on-reset-handler))      
+    (set-event obj "reset"
+	       (lambda (data)
+		 (declare (ignore data)) ; event has no data to decode
+		 (funcall on-reset)))))
+
+;;;;;;;;;;;;;;;;;;;
+;; set-on-search ;;
+;;;;;;;;;;;;;;;;;;;
+
+(defgeneric set-on-search (clog-obj on-search-handler)
+  (:documentation "Set the ON-SEARCH-HANDLER for CLOG-OBJ. If ON-SEARCH-HANDLER
+is nil unbind the event."))
+
+(defmethod set-on-search ((obj clog-obj) on-search-handler)
+  (let ((on-search on-search-handler))      
+    (set-event obj "search"
+	       (lambda (data)
+		 (declare (ignore data)) ; event has no data to decode
+		 (funcall on-search)))))
+
+;;;;;;;;;;;;;;;;;;;
+;; set-on-select ;;
+;;;;;;;;;;;;;;;;;;;
+
+(defgeneric set-on-select (clog-obj on-select-handler)
+  (:documentation "Set the ON-SELECT-HANDLER for CLOG-OBJ. If ON-SELECT-HANDLER
+is nil unbind the event."))
+
+(defmethod set-on-select ((obj clog-obj) on-select-handler)
+  (let ((on-select on-select-handler))      
+    (set-event obj "select"
+	       (lambda (data)
+		 (declare (ignore data)) ; event has no data to decode
+		 (funcall on-select)))))
+
+;;;;;;;;;;;;;;;;;;;
+;; set-on-submit ;;
+;;;;;;;;;;;;;;;;;;;
+
+(defgeneric set-on-submit (clog-obj on-submit-handler)
+  (:documentation "Set the ON-SUBMIT-HANDLER for CLOG-OBJ. If ON-SUBMIT-HANDLER
+is nil unbind the event."))
+
+(defmethod set-on-submit ((obj clog-obj) on-submit-handler)
+  (let ((on-submit on-submit-handler))      
+    (set-event obj "submit"
+	       (lambda (data)
+		 (declare (ignore data)) ; event has no data to decode
+		 (funcall on-submit)))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;
+;; set-on-context-menu ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric set-on-context-menu (clog-obj on-context-menu-handler)
+  (:documentation "Set the ON-CONTEXT-MENU-HANDLER for CLOG-OBJ. If
+ON-CONTEXT-MENU-HANDLER is nil unbind the event. Setting
+on-mouse-right-click will replace this handler."))
+
+(defmethod set-on-context-menu ((obj clog-obj) on-context-menu-handler)
+  (let ((on-context-menu on-context-menu-handler))      
+    (set-event obj "contextmenu"
+	       (lambda (data)
+		 (declare (ignore data)) ; event has no data to decode
+		 (funcall on-context-menu)))))
+
+;;;;;;;;;;;;;;;;;;
 ;; set-on-click ;;
 ;;;;;;;;;;;;;;;;;;
 
-(defmethod bind-event-script ((obj clog-obj) event call-back)
-  (jquery-execute
-   obj (format nil "on('~A',function (e, data){~A})" event call-back)))
-
-(defmethod set-event ((obj clog-obj) event handler)
-  ;; meeds mutex
-  (let ((hook (format nil "~A:~A" (html-id obj) event)))
-    (cond (handler
-	   (bind-event-script obj event
-			      (format nil "ws.send('E:~A-')" hook))
-	   (setf (gethash hook (connection-data obj)) handler))
-	  (t
-	   (remhash hook (connection-data obj))))))
-
 (defgeneric set-on-click (clog-obj on-click-handler)
   (:documentation "Set the ON-CLICK-HANDLER for CLOG-OBJ. If ON-CLICK-HANDLER
-is nil unbind the event."))
+is nil unbind the event. Setting this event will replace an on-mouse click if
+set."))
 
 (defmethod set-on-click ((obj clog-obj) on-click-handler)
-  (set-event obj "click" on-click-handler))
+  (let ((on-click on-click-handler))      
+    (set-event obj "click"
+	       (lambda (data)
+		 (declare (ignore data)) ; event has no data to decode
+		 (funcall on-click)))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;
+;; set-on-double-click ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric set-on-double-click (clog-obj on-double-click-handler)
+  (:documentation "Set the ON-DOUBLE-CLICK-HANDLER for CLOG-OBJ. If
+ON-DOUBLE-CLICK-HANDLER is nil unbind the event. Setting the
+on-mouse-double-click event will replace this handler."))
+
+(defmethod set-on-double-click ((obj clog-obj) on-double-click-handler)
+  (let ((on-double-click on-double-click-handler))      
+    (set-event obj "dblclick"
+	       (lambda (data)
+		 (declare (ignore data)) ; event has no data to decode
+		 (funcall on-double-click)))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;
+;; set-on-mouse-click ;;
+;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric set-on-mouse-click (clog-obj on-mouse-click-handler)
+  (:documentation "Set the ON-MOUSE-CLICK-HANDLER for CLOG-OBJ. If
+ON-MOUSE-CLICK-HANDLER is nil unbind the event. Setting this event will replace
+on an on-click event."))
+
+(defmethod set-on-mouse-click ((obj clog-obj) on-mouse-click-handler)
+  (let ((on-mouse-click on-mouse-click-handler))      
+    (set-event obj "click"
+	       (lambda (data)
+		 (declare (ignore data)) ; needs decode and to set mouse event
+		 (funcall on-mouse-click)))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; set-on-mouse-double-click ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric set-on-mouse-double-click (clog-obj on-mouse-double-click-handler)
+  (:documentation "Set the ON-MOUSE-DOUBLE-CLICK-HANDLER for CLOG-OBJ. If
+ON-MOUSE-DOUBLE-CLICK-HANDLER is nil unbind the event. Setting this event will
+replace on an on-context-menu event."))
+
+(defmethod set-on-mouse-double-click ((obj clog-obj) on-mouse-double-click-handler)
+  (let ((on-mouse-double-click on-mouse-double-click-handler))      
+    (set-event obj "dblclick"
+	       (lambda (data)
+		 (declare (ignore data)) ; needs decode and to set mouse event
+		 (funcall on-mouse-double-click)))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; set-on-mouse-right-click ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric set-on-mouse-right-click (clog-obj on-mouse-right-click-handler)
+  (:documentation "Set the ON-MOUSE-RIGHT-CLICK-HANDLER for CLOG-OBJ. If
+ON-MOUSE-RIGHT-CLICK-HANDLER is nil unbind the event. Setting this event will
+replace on an on-context-menu event."))
+
+(defmethod set-on-mouse-right-click ((obj clog-obj) on-mouse-right-click-handler)
+  (let ((on-mouse-right-click on-mouse-right-click-handler))      
+    (set-event obj "contextmenu"
+	       (lambda (data)
+		 (declare (ignore data)) ; needs decode and to set mouse event
+		 (funcall on-mouse-right-click)))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;
+;; set-on-mouse-enter ;;
+;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric set-on-mouse-enter (clog-obj on-mouse-enter-handler)
+  (:documentation "Set the ON-MOUSE-ENTER-HANDLER for CLOG-OBJ. If ON-MOUSE-ENTER-HANDLER
+is nil unbind the event."))
+
+(defmethod set-on-mouse-enter ((obj clog-obj) on-mouse-enter-handler)
+  (let ((on-mouse-enter on-mouse-enter-handler))      
+    (set-event obj "mouseenter"
+	       (lambda (data)
+		 (declare (ignore data)) ; event has no data to decode
+		 (funcall on-mouse-enter)))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;
+;; set-on-mouse-leave ;;
+;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric set-on-mouse-leave (clog-obj on-mouse-leave-handler)
+  (:documentation "Set the ON-MOUSE-LEAVE-HANDLER for CLOG-OBJ. If ON-MOUSE-LEAVE-HANDLER
+is nil unbind the event."))
+
+(defmethod set-on-mouse-leave ((obj clog-obj) on-mouse-leave-handler)
+  (let ((on-mouse-leave on-mouse-leave-handler))      
+    (set-event obj "mouseleave"
+	       (lambda (data)
+		 (declare (ignore data)) ; event has no data to decode
+		 (funcall on-mouse-leave)))))
+
+;;;;;;;;;;;;;;;;;;;;;;;
+;; set-on-mouse-over ;;
+;;;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric set-on-mouse-over (clog-obj on-mouse-over-handler)
+  (:documentation "Set the ON-MOUSE-OVER-HANDLER for CLOG-OBJ. If ON-MOUSE-OVER-HANDLER
+is nil unbind the event."))
+
+(defmethod set-on-mouse-over ((obj clog-obj) on-mouse-over-handler)
+  (let ((on-mouse-over on-mouse-over-handler))      
+    (set-event obj "mouseover"
+	       (lambda (data)
+		 (declare (ignore data)) ; event has no data to decode
+		 (funcall on-mouse-over)))))
+
+;;;;;;;;;;;;;;;;;;;;;;
+;; set-on-mouse-out ;;
+;;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric set-on-mouse-out (clog-obj on-mouse-out-handler)
+  (:documentation "Set the ON-MOUSE-OUT-HANDLER for CLOG-OBJ. If ON-MOUSE-OUT-HANDLER
+is nil unbind the event."))
+
+(defmethod set-on-mouse-out ((obj clog-obj) on-mouse-out-handler)
+  (let ((on-mouse-out on-mouse-out-handler))      
+    (set-event obj "mouseout"
+	       (lambda (data)
+		 (declare (ignore data)) ; event has no data to decode
+		 (funcall on-mouse-out)))))
+
+;;;;;;;;;;;;;;;;;;;;;;;
+;; set-on-mouse-down ;;
+;;;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric set-on-mouse-down (clog-obj on-mouse-down-handler)
+  (:documentation "Set the ON-MOUSE-DOWN-HANDLER for CLOG-OBJ. If
+ON-MOUSE-DOWN-HANDLER is nil unbind the event."))
+
+(defmethod set-on-mouse-down ((obj clog-obj) on-mouse-down-handler)
+  (let ((on-mouse-down on-mouse-down-handler))      
+    (set-event obj "mousedown"
+	       (lambda (data)
+		 (declare (ignore data)) ; needs decode and to set mouse event
+		 (funcall on-mouse-down)))))
+
+;;;;;;;;;;;;;;;;;;;;;
+;; set-on-mouse-up ;;
+;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric set-on-mouse-up (clog-obj on-mouse-up-handler)
+  (:documentation "Set the ON-MOUSE-UP-HANDLER for CLOG-OBJ. If
+ON-MOUSE-UP-HANDLER is nil unbind the event."))
+
+(defmethod set-on-mouse-up ((obj clog-obj) on-mouse-up-handler)
+  (let ((on-mouse-up on-mouse-up-handler))      
+    (set-event obj "mouseup"
+	       (lambda (data)
+		 (declare (ignore data)) ; needs decode and to set mouse event
+		 (funcall on-mouse-up)))))
+
+;;;;;;;;;;;;;;;;;;;;;;;
+;; set-on-mouse-move ;;
+;;;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric set-on-mouse-move (clog-obj on-mouse-move-handler)
+  (:documentation "Set the ON-MOUSE-MOVE-HANDLER for CLOG-OBJ. If
+ON-MOUSE-MOVE-HANDLER is nil unbind the event."))
+
+(defmethod set-on-mouse-move ((obj clog-obj) on-mouse-move-handler)
+  (let ((on-mouse-move on-mouse-move-handler))      
+    (set-event obj "mousemove"
+	       (lambda (data)
+		 (declare (ignore data)) ; needs decode and to set mouse event
+		 (funcall on-mouse-move)))))
+
+;;;;;;;;;;;;;;;;;;;;;;
+;; set-on-character ;;
+;;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric set-on-character (clog-obj on-character-handler)
+  (:documentation "Set the ON-CHARACTER-HANDLER for CLOG-OBJ. If
+ON-CHARACTER-HANDLER is nil unbind the event. Setting this event
+will replace a on-key-press"))
+
+(defmethod set-on-character ((obj clog-obj) on-character-handler)
+  (let ((on-character on-character-handler))      
+    (set-event obj "keypress"
+	       (lambda (data)
+		 (declare (ignore data)) ; need to decode keys and set key event
+		 (funcall on-character)))))
+
+;;;;;;;;;;;;;;;;;;;;;
+;; set-on-key-down ;;
+;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric set-on-key-down (clog-obj on-key-down-handler)
+  (:documentation "Set the ON-KEY-DOWN-HANDLER for CLOG-OBJ. If
+ON-KEY-DOWN-HANDLER is nil unbind the event."))
+
+(defmethod set-on-key-down ((obj clog-obj) on-key-down-handler)
+  (let ((on-key-down on-key-down-handler))      
+    (set-event obj "keydown"
+	       (lambda (data)
+		 (declare (ignore data)) ; needs key decode and event
+		 (funcall on-key-down)))))
+
+;;;;;;;;;;;;;;;;;;;
+;; set-on-key-up ;;
+;;;;;;;;;;;;;;;;;;;
+
+(defgeneric set-on-key-up (clog-obj on-key-up-handler)
+  (:documentation "Set the ON-KEY-UP-HANDLER for CLOG-OBJ. If
+ON-KEY-UP-HANDLER is nil unbind the event."))
+
+(defmethod set-on-key-up ((obj clog-obj) on-key-up-handler)
+  (let ((on-key-up on-key-up-handler))      
+    (set-event obj "keyup"
+	       (lambda (data)
+		 (declare (ignore data)) ; needs key decode and event
+		 (funcall on-key-up)))))
+
+;;;;;;;;;;;;;;;;;;;;;;
+;; set-on-key-press ;;
+;;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric set-on-key-press (clog-obj on-key-press-handler)
+  (:documentation "Set the ON-KEY-PRESS-HANDLER for CLOG-OBJ. If
+ON-KEY-PRESS-HANDLER is nil unbind the event."))
+
+(defmethod set-on-key-press ((obj clog-obj) on-key-press-handler)
+  (let ((on-key-press on-key-press-handler))      
+    (set-event obj "keypress"
+	       (lambda (data)
+		 (declare (ignore data)) ; needs key decode and event
+		 (funcall on-key-press)))))
+
+;;;;;;;;;;;;;;;;;
+;; set-on-copy ;;
+;;;;;;;;;;;;;;;;;
+
+(defgeneric set-on-copy (clog-obj on-copy-handler)
+  (:documentation "Set the ON-COPY-HANDLER for CLOG-OBJ. If ON-COPY-HANDLER
+is nil unbind the event."))
+
+(defmethod set-on-copy ((obj clog-obj) on-copy-handler)
+  (let ((on-copy on-copy-handler))      
+    (set-event obj "copy"
+	       (lambda (data)
+		 (declare (ignore data)) ; event has no data to decode
+		 (funcall on-copy)))))
+
+;;;;;;;;;;;;;;;;
+;; set-on-cut ;;
+;;;;;;;;;;;;;;;;
+
+(defgeneric set-on-cut (clog-obj on-cut-handler)
+  (:documentation "Set the ON-CUT-HANDLER for CLOG-OBJ. If ON-CUT-HANDLER
+is nil unbind the event."))
+
+(defmethod set-on-cut ((obj clog-obj) on-cut-handler)
+  (let ((on-cut on-cut-handler))      
+    (set-event obj "cut"
+	       (lambda (data)
+		 (declare (ignore data)) ; event has no data to decode
+		 (funcall on-cut)))))
+
+;;;;;;;;;;;;;;;;;;
+;; set-on-paste ;;
+;;;;;;;;;;;;;;;;;;
+
+(defgeneric set-on-paste (clog-obj on-paste-handler)
+  (:documentation "Set the ON-PASTE-HANDLER for CLOG-OBJ. If ON-PASTE-HANDLER
+is nil unbind the event."))
+
+(defmethod set-on-paste ((obj clog-obj) on-paste-handler)
+  (let ((on-paste on-paste-handler))      
+    (set-event obj "paste"
+	       (lambda (data)
+		 (declare (ignore data)) ; event has no data to decode
+		 (funcall on-paste)))))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

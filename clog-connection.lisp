@@ -169,7 +169,7 @@ the default answer. (Private)"
 	     (when *verbose-output*
 	       (format t "Channel ~A Hook ~A Data ~A~%"
 		       id (first em) (second em)))
-	     (funcall (gethash (first em) (get-connection-data id)))))
+	     (funcall (gethash (first em) (get-connection-data id)) (second em))))
 	  (t
 	   (when *verbose-output*
 	     (format t "~A ~A = ~A~%" id (first ml) (second ml)))
@@ -188,7 +188,7 @@ the default answer. (Private)"
       (when *verbose-output*
 	(format t "Connection id ~A has closed. ~A~%" id connection))
       (bordeaux-threads:with-lock-held (*connection-lock*)
-	(remhash id *connection-data*) ;; reconnects would lose data?
+	(remhash id *connection-data*)
 	(remhash id *connection-ids*)
 	(remhash connection *connections*)))))
 
