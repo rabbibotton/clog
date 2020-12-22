@@ -15,9 +15,10 @@
     (when (equal (property tmp "draggable")
 		 (setf (property tmp "innerHTML") "<h2>I am draggable</h2>")))
     (setf tmp (create-child win "<button>test</botton>"))
+    (set-on-click tmp (lambda () (clog-connection:alert-box (clog::connection-id win) "clicked")))
     (setf (width tmp) 300)
     (setf (height tmp) 50)
-    (create-child win "<H2>Cool!</H2>")
+    (create-child win (format nil "<H2>~A</H2>" (gethash "connection-id" (connection-data win))))
     (setf *last-obj* (create-child win "<button>a</button>"))))
 
 (defun test ()

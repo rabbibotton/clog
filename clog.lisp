@@ -49,27 +49,31 @@ application."
   (clog-obj class)
 
   "CLOG-Obj - General Properties"
-  (property  generic-function)
-  (style     generic-function)
-  (attribute generic-function)
+  (property      generic-function)
+  (style         generic-function)
+  (attribute     generic-function)
   
-  (height generic-function)
-  (width  generic-function)
+  (height     generic-function)
+  (width      generic-function)
 
   "CLOG-Obj - General Methods"
   (focus  generic-function)
   (blur   generic-function)
   
-  "CLOG-Obj - Low Level"
-  (create-child    generic-function)
-  (attach-as-child generic-function)
-  (validp          generic-function)
-
   "CLOG-Obj - Placement"
   (place-after            generic-function)
   (place-before           generic-function)
   (place-inside-top-of    generic-function)
-  (place-inside-bottom-of generic-function))
+  (place-inside-bottom-of generic-function)
+
+  "CLOG-Obj - Low Level"
+  (create-child    generic-function)
+  (attach-as-child generic-function)
+  (connection-data generic-function)
+  (validp          generic-function)
+
+  "CLOG-Obj - Event Handling"
+  (set-on-click  generic-function))
   
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -82,7 +86,10 @@ application."
     :initarg :connection-id)
    (html-id
     :reader html-id
-    :initarg :html-id))
+    :initarg :html-id)
+   (event-handlers
+    :accessor event-handlers
+    :initform (make-hash-table :test #'equal)))
   (:documentation "CLOG objects (clog-obj) encapsulate the connection between
 lisp and the HTML DOM element."))
 
@@ -91,6 +98,9 @@ lisp and the HTML DOM element."))
 
 (defgeneric html-id (clog-obj)
   (:documentation "Reader for html-id slot. (Private)"))
+
+(defgeneric event-handlers (clog-obj)
+  (:documentation "Reader/writer for even-handler hash. (Private)"))
 
 ;;;;;;;;;;;;;;;;;;;
 ;; make-clog-obj ;;
@@ -153,80 +163,85 @@ result. (Private)"))
 ;;;;;;;;;;;;;;
 
 (defgeneric property (clog-obj property-name)
-  (:documentation "get/set html property. (eg. draggable)"))
+  (:documentation "Get/Setf html property. (eg. draggable)"))
 
 (defmethod property ((obj clog-obj) property-name)
   (jquery-query obj (format nil "prop('~A')" property-name)))
 
-(defgeneric (setf property) (value obj property-name)
-  (:documentation "Setf PROPERTY-NAME to VALUE for CLOG-OBJ"))
+(defgeneric set-property (clog-obj property-name value)
+  (:documentation "Set html property."))
 
-(defmethod (setf property) (value (obj clog-obj) property-name)
+(defmethod set-property ((obj clog-obj) property-name value)
   (jquery-execute obj (format nil "prop('~A','~A')" property-name value)))
+(defsetf property set-property)
 
 ;;;;;;;;;;;
 ;; style ;;
 ;;;;;;;;;;;
 
 (defgeneric style (clog-obj style-name)
-  (:documentation "get/set html css style."))
+  (:documentation "Get/Setf css style."))
 
-(defmethod style ((obj clog-obj) style-name )
+(defmethod style ((obj clog-obj) style-name)
   (jquery-query obj (format nil "css('~A')" style-name)))
 
-(defgeneric (setf style) (value clog-obj style-name)
-  (:documentation "Setf STYLE-NAME to VALUE for CLOG-OBJ"))
+(defgeneric set-style (clog-obj style-name value)
+  (:documentation "Set css style."))
 
-(defmethod (setf style) (value (obj clog-obj) style-name)
+(defmethod set-style ((obj clog-obj) style-name value)
   (jquery-execute obj (format nil "css('~A','~A')" style-name value)))
+(defsetf style set-style)
 
 ;;;;;;;;;;;;;;;
 ;; attribute ;;
 ;;;;;;;;;;;;;;;
 
 (defgeneric attribute (clog-obj attribute-name)
-  (:documentation "get/set html attribute. (eg. src on img tag)"))
+  (:documentation "Get/Setf html tag attribute. (eg. src on img tag)"))
 
 (defmethod attribute ((obj clog-obj) attribute-name)
   (jquery-query obj (format nil "attr('~A')" attribute-name)))
 
-(defgeneric (setf attribute) (value clog-obj attribute-name)
-  (:documentation "Setf ATTRIBUTE-NAME to VALUE for CLOG-OBJ"))
+(defgeneric set-attribute (clog-obj attribute-name value)
+  (:documentation "Set html tag attribute."))
 
-(defmethod (setf attribute) (value (obj clog-obj) attribute-name)
+(defmethod set-attribute ((obj clog-obj) attribute-name value)
   (jquery-execute obj (format nil "attr('~A','~A')" attribute-name value)))
+(defsetf attribute set-attribute)
 
 ;;;;;;;;;;;;
 ;; height ;;
 ;;;;;;;;;;;;
 
 (defgeneric height (clog-obj)
-  (:documentation "get/set html height in pixels."))
+  (:documentation "Get/Setf html height in pixels."))
 
 (defmethod height ((obj clog-obj))
   (jquery-query obj "height()"))
 
-(defgeneric (setf height) (value clog-obj)
-  (:documentation "Setf height VALUE for CLOG-OBJ"))
+(defgeneric set-height (clog-obj value)
+  (:documentation "Set height VALUE for CLOG-OBJ"))
 
-(defmethod (setf height) (value (obj clog-obj))
+(defmethod set-height ((obj clog-obj) value)
   (jquery-execute obj (format nil "height('~A')" value)))
+(defsetf height set-height)
 
 ;;;;;;;;;;;
 ;; width ;;
 ;;;;;;;;;;;
 
 (defgeneric width (clog-obj)
-  (:documentation "get/set html width in pixels."))
+  (:documentation "Get/Setf html width in pixels."))
 
 (defmethod width ((obj clog-obj))
   (jquery-query obj "width()"))
 
-(defgeneric (setf width) (value clog-obj)
-  (:documentation "Setf width VALUE for CLOG-OBJ"))
+(defgeneric set-width (clog-obj value)
+  (:documentation "Set width VALUE for CLOG-OBJ"))
 
-(defmethod (setf width) (value (obj clog-obj))
+(defmethod set-width ((obj clog-obj) value)
   (jquery-execute obj (format nil "width('~A')" value)))
+(defsetf width set-width)
 
 ;;;;;;;;;;;
 ;; focus ;;
@@ -285,6 +300,17 @@ HTML-ID must be unique."))
 (defmethod validp ((obj clog-obj))
   (cc:validp (connection-id obj)))
 
+;;;;;;;;;;;;;;;;;;;;;
+;; connection-data ;;
+;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric connection-data (clog-obj)
+  (:documentation "Get connection-data that is associated with
+clog-obj that will persist regardless of thread."))
+
+(defmethod connection-data ((obj clog-obj))
+  (cc:get-connection-data (connection-id obj)))
+
 ;;;;;;;;;;;;;;;;;
 ;; place-after ;;
 ;;;;;;;;;;;;;;;;;
@@ -328,6 +354,31 @@ HTML-ID must be unique."))
 (defmethod place-inside-bottom-of ((obj clog-obj) next-obj)
   (jquery-execute obj (format nil "append(~A)" (script-id next-obj)))
   next-obj)
+
+;;;;;;;;;;;;;;;;;;
+;; set-on-click ;;
+;;;;;;;;;;;;;;;;;;
+
+(defmethod bind-event-script ((obj clog-obj) event call-back)
+  (jquery-execute
+   obj (format nil "on('~A',function (e, data){~A})" event call-back)))
+
+(defmethod set-event ((obj clog-obj) event handler)
+  ;; meeds mutex
+  (let ((hook (format nil "~A:~A" (html-id obj) event)))
+    (cond (handler
+	   (bind-event-script obj event
+			      (format nil "ws.send('E:~A-')" hook))
+	   (setf (gethash hook (connection-data obj)) handler))
+	  (t
+	   (remhash hook (connection-data obj))))))
+
+(defgeneric set-on-click (clog-obj on-click-handler)
+  (:documentation "Set the ON-CLICK-HANDLER for CLOG-OBJ. If ON-CLICK-HANDLER
+is nil unbind the event."))
+
+(defmethod set-on-click ((obj clog-obj) on-click-handler)
+  (set-event obj "click" on-click-handler))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

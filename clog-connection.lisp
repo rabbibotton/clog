@@ -26,9 +26,10 @@ script."
 
   (*verbose-output* variable)
 
-  (initialize      function)
-  (shutdown-clog   function)
-  (set-on-connect  function)
+  (initialize          function)
+  (shutdown-clog       function)
+  (set-on-connect      function)
+  (get-connection-data function)
 
   "CLOG system utilities"
   
@@ -60,8 +61,9 @@ script."
 
 (defvar *new-id* 0 "Last issued connection or script IDs")
 
-(defvar *connections*    (make-hash-table) "Connections to IDs")
-(defvar *connection-ids* (make-hash-table) "IDs to connections")
+(defvar *connections*     (make-hash-table) "Connections to IDs")
+(defvar *connection-ids*  (make-hash-table) "IDs to connections")
+(defvar *connection-data* (make-hash-table) "Connection based data")
 
 (defvar *connection-lock* (bordeaux-threads:make-lock)
   "Protect the connection hash tables")
@@ -90,6 +92,16 @@ script."
 (defun get-connection (connection-id)
   "Return the connection associated with CONNECITION-ID. (Private)"
   (gethash connection-id *connection-ids*))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;
+;; get-connection-data ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defun get-connection-data (connection-id)
+  "Return the connecton data associated with the CONNECTION-ID a
+hash test: #'equal."
+  (gethash connection-id *connection-data*))
+
 
 ;;;;;;;;;;;;;;;;
 ;; prep-query ;;
@@ -131,7 +143,9 @@ the default answer. (Private)"
 	 (setf id (generate-id))
 	 (bordeaux-threads:with-lock-held (*connection-lock*)
 	   (setf (gethash connection *connections*) id)
-	   (setf (gethash id *connection-ids*) connection))
+	   (setf (gethash id *connection-ids*) connection)
+	   (setf (gethash id *connection-data*) (make-hash-table :test #'equal))
+	   (setf (gethash "connection-id" (get-connection-data id)) id))
 	 (when *verbose-output*
 	   (format t "New connection id - ~A - ~A~%" id connection))
 	 (websocket-driver:send connection
@@ -147,16 +161,22 @@ the default answer. (Private)"
 (defun handle-message (connection message)
   (let ((id (gethash connection *connections*))
 	(ml (ppcre:split ":" message :limit 2)))
-    (cond ((equal (car ml) "0")
+    (cond ((equal (first ml) "0")
 	   (when *verbose-output*
-	     (format t "~A Ping ~A~%" id (car ml))))
+	     (format t "~A Ping~%" id)))
+	  ((equal (first ml) "E")
+	   (let ((em (ppcre:split "-" (second ml) :limit 2)))
+	     (when *verbose-output*
+	       (format t "Channel ~A Hook ~A Data ~A~%"
+		       id (first em) (second em)))
+	     (funcall (gethash (first em) (get-connection-data id)))))
 	  (t
 	   (when *verbose-output*
-	     (format t "~A ~A = ~A~%" id (car ml) (cadr ml)))
+	     (format t "~A ~A = ~A~%" id (first ml) (second ml)))
 	   (bordeaux-threads:with-lock-held (*queries-lock*)
-	     (setf (gethash (parse-integer (car ml)) *queries*) (cadr ml)))
+	     (setf (gethash (parse-integer (first ml)) *queries*) (second ml)))
 	   (bordeaux-threads:signal-semaphore
-	    (gethash (parse-integer (car ml)) *queries-sems*))))))
+	    (gethash (parse-integer (first ml)) *queries-sems*))))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; handle-close-connection ;;
@@ -168,6 +188,7 @@ the default answer. (Private)"
       (when *verbose-output*
 	(format t "Connection id ~A has closed. ~A~%" id connection))
       (bordeaux-threads:with-lock-held (*connection-lock*)
+	(remhash id *connection-data*) ;; reconnects would lose data?
 	(remhash id *connection-ids*)
 	(remhash connection *connections*)))))
 
