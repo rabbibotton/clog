@@ -25,7 +25,17 @@
 			  (setf (property *last-obj* "innerHTML") "Inside")))
     (set-on-mouse-leave *last-obj*
 			(lambda ()
-			  (setf (property *last-obj* "innerHTML") "Outside")))))
+			  (setf (property *last-obj* "innerHTML") "Outside")))
+    (set-on-mouse-click *last-obj*
+			(lambda (data)
+			  (print data)))
+    (set-on-mouse-move *last-obj*
+		       (lambda (data)
+			 (format t "x=~A Y=~A~%" (getf data ':x) (getf data ':y))))
+    (set-on-character win
+		      (lambda (data)
+			(print data)))
+    ))
 
 (defun test ()
   (print "Init connection")

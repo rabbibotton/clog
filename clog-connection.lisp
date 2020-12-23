@@ -53,7 +53,7 @@ script."
 ;; Implemetation - clog-connection
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defvar *verbose-output* t "Verbose server output (default true)")
+(defvar *verbose-output* nil "Verbose server output (default false)")
 
 (defvar *app*                nil "Clack 'app' middle-ware")
 (defvar *client-handler*     nil "Clack 'handler' for socket traffic")
@@ -134,8 +134,7 @@ the default answer. (Private)"
 
 (defun handle-new-connection (connection id)
   (cond (id
-	 (when *verbose-output*
-	   (format t "Reconnection id - ~A to ~A~%" id connection))
+	 (format t "Reconnection id - ~A to ~A~%" id connection)
 	 (bordeaux-threads:with-lock-held (*connection-lock*)
 	   (setf (gethash id *connection-ids*) connection)
 	   (setf (gethash connection *connections*) id)))
@@ -146,8 +145,7 @@ the default answer. (Private)"
 	   (setf (gethash id *connection-ids*) connection)
 	   (setf (gethash id *connection-data*) (make-hash-table :test #'equal))
 	   (setf (gethash "connection-id" (get-connection-data id)) id))
-	 (when *verbose-output*
-	   (format t "New connection id - ~A - ~A~%" id connection))
+	 (format t "New connection id - ~A - ~A~%" id connection)
 	 (websocket-driver:send connection
 				(format nil "clog['connection_id']=~A" id))
 	 (bordeaux-threads:make-thread
@@ -202,7 +200,7 @@ the default answer. (Private)"
                          (lambda ()
 			   (let ((id (getf env :query-string)))
 			     (when (typep id 'string)
-			       (setf id (parse-integer id)))
+			       (setf id (parse-integer id :junk-allowed t)))
 			     (handle-new-connection ws id))))
     
     (websocket-driver:on :message ws
@@ -240,10 +238,9 @@ located at STATIC-ROOT."
 	 (lambda (env)
 	   (clog-server env))))
   (setf *client-handler* (clack:clackup *app* :address host :port port))
-  (when *verbose-output*
-    (format t "HTTP listening on : ~A:~A~%" host port)
-    (format t "HTML Root         : ~A~%"    static-root)
-    (format t "Boot file default : ~A~%"    boot-file)))
+  (format t "HTTP listening on : ~A:~A~%" host port)
+  (format t "HTML Root         : ~A~%"    static-root)
+  (format t "Boot file default : ~A~%"    boot-file))
 
 ;;;;;;;;;;;;;;;;;;;
 ;; shutdown-clog ;;
@@ -253,6 +250,7 @@ located at STATIC-ROOT."
   "Shutdown CLOG."
   (clack:stop *client-handler*)
   (bordeaux-threads:with-lock-held (*connection-lock*)
+    (clrhash *connection-data*)
     (clrhash *connections*)
     (clrhash *connection-ids*))
   (setf *app* nil)

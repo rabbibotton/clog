@@ -41,6 +41,7 @@ application."
   (create-with-html function)
     
   "CLOG utilities"
+  (js-true-p    function)
   (open-browser function))
 
 
@@ -75,7 +76,7 @@ application."
   "CLOG-Obj - Event Handling"
   (set-on-focus              generic-function)
   (set-on-blur               generic-function)
-  (set-on-chang              generic-function)
+  (set-on-change             generic-function)
   (set-on-focus-in           generic-function)
   (set-on-focus-out          generic-function)
   (set-on-reset              generic-function)
@@ -192,25 +193,86 @@ result. (Private)"))
 ;; bind-event-script ;;
 ;;;;;;;;;;;;;;;;;;;;;;;
 
-(defgeneric bind-event-script (clog-obj event call-back)
-  (:documentation "Create the code client side for call backs. (Private)"))
+(defgeneric bind-event-script (clog-obj event call-back &key cancel-event)
+  (:documentation "Create the code client side for EVENT CALL-BACK. (Private)"))
 
-(defmethod bind-event-script ((obj clog-obj) event call-back)
-  (jquery-execute
-   obj (format nil "on('~A',function (e, data){~A})" event call-back)))
+(defmethod bind-event-script ((obj clog-obj) event call-back
+			      &key (cancel-event nil))
+  (if cancel-event
+      (jquery-execute
+       obj (format nil "on('~A',function (e, data){~A});return false"
+		   event call-back))
+      (jquery-execute
+       obj (format nil "on('~A',function (e, data){~A})" event call-back))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;
+;; unbind-event-script ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric unbind-event-script (clog-obj event)
+  (:documentation "Remove the client call back code for EVENT. (Private)"))
 
 (defmethod unbind-event-script ((obj clog-obj) event)
   (jquery-execute obj (format nil "off(~A)" event)))
-			      
-(defgeneric set-event (clog-obj event handler)
+
+;;;;;;;;;;;;;;;;;;;;;;;
+;; parse-mouse-event ;;
+;;;;;;;;;;;;;;;;;;;;;;;
+
+(defconstant mouse-event-script 
+  "+ (e.clientX - e.target.getBoundingClientRect().left) + ':' + 
+     (e.clientY - e.target.getBoundingClientRect().top) + ':' + 
+     e.screenX + ':' + e.screenY + ':' + e.which + ':' + e.altKey + ':' +
+     e.ctrlKey + ':' + e.shiftKey + ':' + e.metaKey")
+;; e.buttons would be better but not supported currently outside
+;; of firefox and would always return 0 on Mac so using e.which.
+;; The use of offsetLeft and offsetTop is to correct the X and Y
+;; to the actual X,Y of the target.
+
+(defun parse-mouse-event (data)
+  (let ((f (ppcre:split ":" data)))
+    (list
+     :x            (parse-integer (nth 0 f) :junk-allowed t)
+     :y            (parse-integer (nth 1 f) :junk-allowed t)
+     :screen-y     (parse-integer (nth 2 f) :junk-allowed t)
+     :screen-x     (parse-integer (nth 3 f) :junk-allowed t)
+     :which-button (parse-integer (nth 4 f) :junk-allowed t)
+     :alt-key      (js-true-p (nth 5 f))
+     :ctrl-key     (js-true-p (nth 6 f))
+     :shift-key    (js-true-p (nth 7 f))
+     :meta-key     (js-true-p (nth 8 f)))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; parse-keyboard-event ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defconstant keyboard-event-script
+  "+ e.keyCode + ':' + e.charCode + ':' + e.altKey + ':' + e.ctrlKey + ':'
+     + e.shiftKey + ':' + e.metaKey")
+
+(defun parse-keyboard-event (data)
+  (let ((f (ppcre:split ":" data)))
+    (list
+     :key-code  (parse-integer (nth 0 f) :junk-allowed t)
+     :char-code (parse-integer (nth 1 f) :junk-allowed t)
+     :alt-key   (js-true-p (nth 2 f))
+     :ctrl-key  (js-true-p (nth 3 f))
+     :shift-key (js-true-p (nth 4 f))
+     :meta-key  (js-true-p (nth 5 f)))))
+
+;;;;;;;;;;;;;;;
+;; set-event ;;
+;;;;;;;;;;;;;;;
+
+(defgeneric set-event (clog-obj event handler &key call-back-script)
   (:documentation "Create the hood for incoming events. (Private)"))
 
-(defmethod set-event ((obj clog-obj) event handler)
+(defmethod set-event ((obj clog-obj) event handler &key (call-back-script ""))
   ;; meeds mutex
   (let ((hook (format nil "~A:~A" (html-id obj) event)))
     (cond (handler
-	   (bind-event-script obj event
-			      (format nil "ws.send('E:~A-')" hook))
+	   (bind-event-script
+	    obj event (format nil "ws.send('E:~A-'~A)" hook call-back-script))
 	   (setf (gethash hook (connection-data obj)) handler))
 	  (t
 	   (unbind-event-script obj event)
@@ -609,8 +671,8 @@ on an on-click event."))
   (let ((on-mouse-click on-mouse-click-handler))      
     (set-event obj "click"
 	       (lambda (data)
-		 (declare (ignore data)) ; needs decode and to set mouse event
-		 (funcall on-mouse-click)))))
+		 (funcall on-mouse-click (parse-mouse-event data)))
+	       :call-back-script mouse-event-script)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; set-on-mouse-double-click ;;
@@ -619,14 +681,14 @@ on an on-click event."))
 (defgeneric set-on-mouse-double-click (clog-obj on-mouse-double-click-handler)
   (:documentation "Set the ON-MOUSE-DOUBLE-CLICK-HANDLER for CLOG-OBJ. If
 ON-MOUSE-DOUBLE-CLICK-HANDLER is nil unbind the event. Setting this event will
-replace on an on-context-menu event."))
+replace on an on-double-click event."))
 
 (defmethod set-on-mouse-double-click ((obj clog-obj) on-mouse-double-click-handler)
   (let ((on-mouse-double-click on-mouse-double-click-handler))      
     (set-event obj "dblclick"
 	       (lambda (data)
-		 (declare (ignore data)) ; needs decode and to set mouse event
-		 (funcall on-mouse-double-click)))))
+		 (funcall on-mouse-double-click (parse-mouse-event data)))
+	       :call-back-script mouse-event-script)))	      
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; set-on-mouse-right-click ;;
@@ -641,8 +703,8 @@ replace on an on-context-menu event."))
   (let ((on-mouse-right-click on-mouse-right-click-handler))      
     (set-event obj "contextmenu"
 	       (lambda (data)
-		 (declare (ignore data)) ; needs decode and to set mouse event
-		 (funcall on-mouse-right-click)))))
+		 (funcall on-mouse-right-click (parse-mouse-event data)))
+	       :call-back-script mouse-event-script)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;
 ;; set-on-mouse-enter ;;
@@ -716,8 +778,8 @@ ON-MOUSE-DOWN-HANDLER is nil unbind the event."))
   (let ((on-mouse-down on-mouse-down-handler))      
     (set-event obj "mousedown"
 	       (lambda (data)
-		 (declare (ignore data)) ; needs decode and to set mouse event
-		 (funcall on-mouse-down)))))
+		 (funcall on-mouse-down (parse-mouse-event data)))
+	       :call-back-script mouse-event-script)))
 
 ;;;;;;;;;;;;;;;;;;;;;
 ;; set-on-mouse-up ;;
@@ -731,8 +793,8 @@ ON-MOUSE-UP-HANDLER is nil unbind the event."))
   (let ((on-mouse-up on-mouse-up-handler))      
     (set-event obj "mouseup"
 	       (lambda (data)
-		 (declare (ignore data)) ; needs decode and to set mouse event
-		 (funcall on-mouse-up)))))
+		 (funcall on-mouse-up (parse-mouse-event data)))
+	       :call-back-script mouse-event-script)))	       
 
 ;;;;;;;;;;;;;;;;;;;;;;;
 ;; set-on-mouse-move ;;
@@ -746,8 +808,8 @@ ON-MOUSE-MOVE-HANDLER is nil unbind the event."))
   (let ((on-mouse-move on-mouse-move-handler))      
     (set-event obj "mousemove"
 	       (lambda (data)
-		 (declare (ignore data)) ; needs decode and to set mouse event
-		 (funcall on-mouse-move)))))
+		 (funcall on-mouse-move (parse-mouse-event data)))
+	       :call-back-script mouse-event-script)))	       
 
 ;;;;;;;;;;;;;;;;;;;;;;
 ;; set-on-character ;;
@@ -762,8 +824,9 @@ will replace a on-key-press"))
   (let ((on-character on-character-handler))      
     (set-event obj "keypress"
 	       (lambda (data)
-		 (declare (ignore data)) ; need to decode keys and set key event
-		 (funcall on-character)))))
+		 (let ((f (parse-keyboard-event data)))
+		   (funcall on-character (code-char (getf f ':char-code)))))
+	       :call-back-script keyboard-event-script)))
 
 ;;;;;;;;;;;;;;;;;;;;;
 ;; set-on-key-down ;;
@@ -777,8 +840,8 @@ ON-KEY-DOWN-HANDLER is nil unbind the event."))
   (let ((on-key-down on-key-down-handler))      
     (set-event obj "keydown"
 	       (lambda (data)
-		 (declare (ignore data)) ; needs key decode and event
-		 (funcall on-key-down)))))
+		 (funcall on-key-down (parse-keyboard-event data)))
+	       :call-back-script keyboard-event-script)))	       
 
 ;;;;;;;;;;;;;;;;;;;
 ;; set-on-key-up ;;
@@ -792,8 +855,8 @@ ON-KEY-UP-HANDLER is nil unbind the event."))
   (let ((on-key-up on-key-up-handler))      
     (set-event obj "keyup"
 	       (lambda (data)
-		 (declare (ignore data)) ; needs key decode and event
-		 (funcall on-key-up)))))
+		 (funcall on-key-up (parse-keyboard-event data)))
+	       :call-back-script keyboard-event-script)))	       
 
 ;;;;;;;;;;;;;;;;;;;;;;
 ;; set-on-key-press ;;
@@ -807,8 +870,8 @@ ON-KEY-PRESS-HANDLER is nil unbind the event."))
   (let ((on-key-press on-key-press-handler))      
     (set-event obj "keypress"
 	       (lambda (data)
-		 (declare (ignore data)) ; needs key decode and event
-		 (funcall on-key-press)))))
+		 (funcall on-key-press (parse-keyboard-event data)))
+	       :call-back-script keyboard-event-script)))	       
 
 ;;;;;;;;;;;;;;;;;
 ;; set-on-copy ;;
@@ -921,6 +984,14 @@ requires placement or will not be visible, ie. place-after, etc"
      (format nil "clog['~A']=$(\"~A\"); clog['~A'].first().prop('id','~A')"
 	     web-id html web-id web-id))
     (make-clog-obj connection-id web-id)))
+
+;;;;;;;;;;;;;;;
+;; js-true-p ;;
+;;;;;;;;;;;;;;;
+
+(defun js-true-p (value)
+  "Return true if VALUE equalp the string true"
+  (equalp value "true"))
 
 ;;;;;;;;;;;;;;;;;;
 ;; open-browser ;;
