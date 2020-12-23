@@ -12,4 +12,7 @@
 		       #:lack-middleware-static #:lack-middleware-session
                        #:mgl-pax)
   :components ((:file "clog-connection")
-	       (:file "clog")))
+	       (:file "clog")
+	       (:file "clog-system")
+	       (:file "clog-utilities")
+	       (:file "clog-base")))

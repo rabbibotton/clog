@@ -25,7 +25,7 @@
 
 (defun test ()
   (print "Init connection")
-  (clog:initialize #'on-connect :boot-file "/debug.html")
+  (clog-connection:initialize #'on-connect :boot-file "/debug.html")
   (print "Open browser")
   (clog:open-browser)
 )
