@@ -51,13 +51,14 @@ Sample CLOG app with code base so far:
 Status:
 
 - Connection methods
-  - Websockets - Done
+  - Websockets - DONE
   - AJAX/HTML - to do (In 2021 are there browsers not supporting Websockets?)
   - Long Poll - to do (Needed for websites for webcrawlers and firewalls) 
   - Direct API access to native browser components - to do
 
-- HTML bindings and Browser - to do
-  - Base (Not per se a binding of Node in DOM but takes its place)
+- HTML bindings and Browser
+  - Base system for bindings - DONE
+  - Event system - DONE
   - Base Elements (HTML Elements)
   - Canvas - HTML 5 Canvas bindings
   - SVG - HTML SVG vector graphics
@@ -82,4 +83,4 @@ Status:
   - General CL systems
   - Widgets
   
-- Documentation
+- Documentation - Auto Generated - DONE
