@@ -102,3 +102,11 @@ application."
   (set-on-paste              generic-function))
 ;; need to add drag and drop events
 
+(export 'make-markup)
+(defun make-markup ()
+  (load "clog.lisp")
+  (load "clog-base.lisp")
+  (load "clog-system.lisp")
+  (load "clog-utilities.lisp")
+  (describe clog:@CLOG-MANUAL))
+  

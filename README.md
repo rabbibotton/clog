@@ -20,7 +20,9 @@ To load this package and use the tests:
 
 Documentation for CLOG in markdown can be generated with
 
-(describe clog:@CLOG-MANUAL)
+(clog:make-markup)
+
+or by running the script if you have ecl installed - make-manual-ecl
 
 
 Sample CLOG app with code base so far:

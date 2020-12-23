@@ -1,0 +1,1 @@
+ecl --eval "(ql:quickload :clog)" --eval "(clog:make-markup)" --eval "(quit)" > docs/manual.md
