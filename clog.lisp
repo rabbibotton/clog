@@ -74,6 +74,7 @@ application."
   (validp          generic-function)
 
   "CLOG-Obj - Event Handling"
+  (set-on-resize             generic-function)
   (set-on-focus              generic-function)
   (set-on-blur               generic-function)
   (set-on-change             generic-function)
@@ -117,10 +118,7 @@ application."
     :initarg :connection-id)
    (html-id
     :reader html-id
-    :initarg :html-id)
-   (event-handlers
-    :accessor event-handlers
-    :initform (make-hash-table :test #'equal)))
+    :initarg :html-id))
   (:documentation "CLOG objects (clog-obj) encapsulate the connection between
 lisp and the HTML DOM element."))
 
@@ -129,9 +127,6 @@ lisp and the HTML DOM element."))
 
 (defgeneric html-id (clog-obj)
   (:documentation "Reader for html-id slot. (Private)"))
-
-(defgeneric event-handlers (clog-obj)
-  (:documentation "Reader/writer for even-handler hash. (Private)"))
 
 ;;;;;;;;;;;;;;;;;;;
 ;; make-clog-obj ;;
@@ -474,6 +469,21 @@ clog-obj that will persist regardless of thread."))
 (defmethod place-inside-bottom-of ((obj clog-obj) next-obj)
   (jquery-execute obj (format nil "append(~A)" (script-id next-obj)))
   next-obj)
+
+;;;;;;;;;;;;;;;;;;;
+;; set-on-resize ;;
+;;;;;;;;;;;;;;;;;;;
+
+(defgeneric set-on-resize (clog-obj on-resize-handler)
+  (:documentation "Set the ON-RESIZE-HANDLER for CLOG-OBJ. If ON-RESIZE-HANDLER
+is nil unbind the event."))
+
+(defmethod set-on-resize ((obj clog-obj) on-resize-handler)
+  (let ((on-resize on-resize-handler))
+    (set-event obj "resize"
+	       (lambda (data)
+		 (declare (ignore data)) ; event has no data to decode
+		 (funcall on-resize)))))
 
 ;;;;;;;;;;;;;;;;;;
 ;; set-on-focus ;;
