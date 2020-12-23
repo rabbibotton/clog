@@ -27,26 +27,25 @@ or by running the script if you have ecl installed - make-manual-ecl
 
 Sample CLOG app with code base so far:
 
-``` 
-(defpackage #:test-clog
+```
+(defpackage #:clog-user
   (:use #:cl #:clog)
-  (:export test))
+  (:export hello))
 
-(in-package :test-clog)
+(in-package :clog-user)
 
-(defvar *last-obj*)
+(defun hello ()
+  "Simple Hello world using CLOG."
 
-(defun on-new-window (win)
-  (create-child win "<button>test</botton>")
-  (create-child win "<H2>Cool!</H2>")
-  (setf *last-obj* (create-child win "<button>a</button>")))
+  ;; Initialize the CLOG system
+  (clog:initialize
+   (lambda (win)
+     (clog:set-on-click
+      (clog:create-child win "<h1>Hello World!</H1>")
+      (lambda ()
+	(clog:create-child win "<p>You Clicked me!</p>")))))
 
-(defun test ()
-  (print "Init connection")
-  (initialize #'on-new-window :boot-file "/debug.html")
-  (print "Connection set")
-  (print "Open browser")
-  (open-browser))
+  (clog:open-browser))
 ```
 
 
