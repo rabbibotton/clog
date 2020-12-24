@@ -115,7 +115,7 @@ result. (Private)"))
 ;; parse-mouse-event ;;
 ;;;;;;;;;;;;;;;;;;;;;;;
 
-(defconstant mouse-event-script 
+(defparameter mouse-event-script
   "+ (e.clientX - e.target.getBoundingClientRect().left) + ':' + 
      (e.clientY - e.target.getBoundingClientRect().top) + ':' + 
      e.screenX + ':' + e.screenY + ':' + e.which + ':' + e.altKey + ':' +
@@ -142,7 +142,7 @@ result. (Private)"))
 ;; parse-keyboard-event ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defconstant keyboard-event-script
+(defparameter keyboard-event-script
   "+ e.keyCode + ':' + e.charCode + ':' + e.altKey + ':' + e.ctrlKey + ':'
      + e.shiftKey + ':' + e.metaKey")
 
