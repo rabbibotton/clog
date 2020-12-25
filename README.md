@@ -1,4 +1,3 @@
-
 # CLOG - The Common Lisp Omnificent GUI
 
 ## David Botton <david@botton.com>
@@ -17,13 +16,6 @@ To load this package and use the tests:
 2. Start emacs/slime or your common lisp repl in that directory.
 3. In the REPL run (ql:quickload :clog)
 4. Then (load "~/common-lisp/clog/test/test-clog.lisp) (clog-test:test)
-
-Documentation for CLOG in markdown can be generated with
-
-(clog:make-markup)
-
-or by running the script if you have ecl installed - make-manual-ecl
-
 
 Sample CLOG app with code base so far:
 

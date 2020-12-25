@@ -1,0 +1,336 @@
+body {
+  font-family: sans-serif;
+  margin: auto;
+  background-color: #FFFEFB;
+  color: #000000;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: serif;
+  font-weight: bold;
+  text-shadow: 0.05em 0.05em 0.02em #DDDDDD;
+}
+
+h1 a {
+  border-bottom: none;
+}
+
+h2 a {
+  border-bottom: none;
+}
+
+h3 a {
+  border-bottom: none;
+}
+
+h4 a {
+  border-bottom: none;
+}
+
+h5 a {
+  border-bottom: none;
+}
+
+h1 {
+  font-size: 250%
+}
+
+h2 {
+  border-bottom: 0.05em solid #CCCCCC;
+  font-size: 200%;
+}
+
+h3 {
+  font-size: 150%;
+}
+
+h4 {
+  font-size: 130%;
+}
+
+h5 {
+  font-size: 110%;
+  margin-top: 0.75em;
+  margin-bottom: 0.5em;
+}
+
+h6 {
+  color: #777777;
+  background-color: inherit;
+  font-size: 100%;
+}
+
+hr {
+  height: 0.2em;
+  border: 0;
+  color: #CCCCCC;
+  background-color: #CCCCCC;
+}
+
+p, blockquote, table, pre {
+  line-height: 1.5;
+  margin: 0.5em 0 0 0;
+}
+
+ul, ol, dl {
+  padding-left: 1.1em;
+  list-style-position: outside;
+  /* margin: 0; */
+}
+
+li {
+  line-height: 1.5;
+  margin: 0 0 0 0;
+}
+
+pre {
+  background-color: #F5F3ED;
+  color: #000000;
+  border: 0.1em solid #CCCCCC;
+  line-height: 1.25em;
+  overflow: auto;
+  margin: 0.5em 0 0 0;
+  padding: 0.2em;
+}
+
+pre > code {
+  color: #222222;
+}
+
+code {
+  color: #222222;
+}
+
+a {
+  color: #222222;
+  text-decoration: none;
+  border-bottom: 1px solid;
+}
+
+h6 a {
+  color: #777777;
+}
+
+a:hover {
+  /* text-decoration: none; */
+}
+
+.reference-bullet {
+}
+
+.reference {
+  /* padding: 0.3em 0; */
+  /* background-color: #EEEEEE; */
+}
+
+.locative-type a {
+  text-decoration: none;
+  border-bottom: 0;
+  font-weight: bold;
+}
+
+.reference-object {
+  background-color: #EBE8E2;
+  padding: 0.1em;
+  border: solid 1px;
+  font-weight: bold;
+}
+
+.reference-object a {
+  border-bottom: none;
+}
+
+.locative-args {
+  font-style: italic;
+}
+
+.locative-args code {
+  font-family: sans-serif;
+}
+
+.navigation a {
+  color: #CCCCCC;
+  text-shadow: none;
+  border-bottom: none;
+}
+
+/* Option 1 for navigation links: just hide the links in the previous
+   line. Good because there is no jumping around of content as with
+   the other otptions. */
+
+.navigation {
+  display: block;
+  visibility: hidden;
+  margin-bottom: -1.5em;
+}
+
+.outer-navigation:hover .navigation {
+  visibility: visible;
+}
+
+/* Option 2 for navigation links: heading moves right to make room for
+   the links. */
+
+/* .navigation { */
+/*   display: none; */
+/* } */
+/*  */
+/* h1:hover .navigation, */
+/* h2:hover .navigation, */
+/* h3:hover .navigation, */
+/* h4:hover .navigation, */
+/* h5:hover .navigation, */
+/* h6:hover .navigation { */
+/*   display: inline; */
+/* } */
+
+/* Option 3 for navigation links: heading moves down to make room for
+   the links. */
+
+/* .navigation { */
+/*   display: none; */
+/* } */
+/*  */
+/* h1:hover .navigation, */
+/* h2:hover .navigation, */
+/* h3:hover .navigation, */
+/* h4:hover .navigation, */
+/* h5:hover .navigation, */
+/* h6:hover .navigation { */
+/*   display: block; */
+/* } */
+
+/* Syntax highlighting with Colorize */
+
+.symbol { color : #770055; background-color : transparent; border: 0px; margin: 0px;}
+a.symbol:link { color : #229955; background-color : transparent; text-decoration: none; border: 0px; margin: 0px; }
+a.symbol:active { color : #229955; background-color : transparent; text-decoration: none; border: 0px; margin: 0px; }
+a.symbol:visited { color : #229955; background-color : transparent; text-decoration: none; border: 0px; margin: 0px; }
+a.symbol:hover { color : #229955; background-color : transparent; text-decoration: none; border: 0px; margin: 0px; }
+.special { color : #FF5000; background-color : inherit; }
+.keyword { color : #770000; background-color : inherit; }
+.comment { color : #007777; background-color : inherit; }
+.string { color : #777777; background-color : inherit; }
+.atom { color : #314F4F; background-color : inherit; }
+.macro { color : #FF5000; background-color : inherit; }
+.variable { color : #36648B; background-color : inherit; }
+.function { color : #8B4789; background-color : inherit; }
+.attribute { color : #FF5000; background-color : inherit; }
+.character { color : #0055AA; background-color : inherit; }
+.syntaxerror { color : #FF0000; background-color : inherit; }
+.diff-deleted { color : #5F2121; background-color : inherit; }
+.diff-added { color : #215F21; background-color : inherit; }
+
+/* Disable rainbow nesting on hover */
+
+/* span.paren1 { background-color : inherit; -webkit-transition: background-color 0.2s linear; } */
+/* span.paren1:hover { color : inherit; background-color : #BAFFFF; } */
+/* span.paren2 { background-color : inherit; -webkit-transition: background-color 0.2s linear; } */
+/* span.paren2:hover { color : inherit; background-color : #FFCACA; } */
+/* span.paren3 { background-color : inherit; -webkit-transition: background-color 0.2s linear; } */
+/* span.paren3:hover { color : inherit; background-color : #FFFFBA; } */
+/* span.paren4 { background-color : inherit; -webkit-transition: background-color 0.2s linear; } */
+/* span.paren4:hover { color : inherit; background-color : #CACAFF; } */
+/* span.paren5 { background-color : inherit; -webkit-transition: background-color 0.2s linear; } */
+/* span.paren5:hover { color : inherit; background-color : #CAFFCA; } */
+/* span.paren6 { background-color : inherit; -webkit-transition: background-color 0.2s linear; } */
+/* span.paren6:hover { color : inherit; background-color : #FFBAFF; } */
+
+#content-container
+{
+  margin: 0;
+  padding: 0;
+}
+
+#content
+{
+  margin-left: 40ex;
+  padding-left: 2.5em;
+  max-width: 85ex;
+}
+
+#toc {
+  top: 0px;
+  left: 0px;
+  height: 100%;
+  width: 40ex;
+  max-width: 33%;
+  position: fixed;
+  overflow-y:auto;
+  overflow-x:hidden;
+  background: #333;
+  box-shadow: inset -5px 0 5px 0px #000;
+  color: #aaa;
+}
+
+#toc ul {
+  font-size: 80%;
+}
+
+#toc li {
+  line-height: 1.0;
+}
+
+#toc a {
+  border-bottom: none;
+}
+
+#toc hr {
+  height: 0.05em;
+  border: 0;
+  background: #777;
+}
+
+#toc ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+#toc li {
+  padding: 5px 10px;
+}
+
+#toc .toc-h2 {
+  padding-left: 10px;
+}
+
+#toc .toc-h3 {
+  padding-left: 20px;
+}
+
+#toc .toc-h4 {
+  padding-left: 30px;
+}
+
+#toc .toc-active {
+  background: #336699;
+  box-shadow: inset -5px 0px 10px -5px #000;
+}
+
+#page-toc a {
+  color: #fff;
+}
+
+.menu-block {
+  padding-left: 10px;
+  margin-bottom: 1em;
+}
+
+.menu-block-title {
+  font-size: 90%;
+}
+
+.menu-block a {
+  color: #fff;
+  border-bottom: none;
+}
+
+#toc-header a {
+  color: #777777;
+}
+
+#toc-footer a {
+  font-size: 80%;
+  color: #777777;
+}

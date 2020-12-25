@@ -156,3 +156,16 @@ application."
   (load "clog-body.lisp")
   (describe clog:@CLOG-MANUAL))
   
+(export 'make-html)
+(defun make-html ()
+  (load "clog.lisp")
+  (load "clog-base.lisp")
+  (load "clog-window.lisp")
+  (load "clog-navigator.lisp")
+  (load "clog-document.lisp")
+  (load "clog-location.lisp")
+  (load "clog-system.lisp")
+  (load "clog-utilities.lisp")
+  (load "clog-body.lisp")
+  (mgl-pax:update-asdf-system-html-docs clog:@CLOG-MANUAL :clog))
+
