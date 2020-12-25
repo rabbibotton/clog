@@ -19,10 +19,10 @@
 
 (defvar *on-new-window* nil "Store the on-new-window handler")
 
-(defun on-connect (id)
+(defun on-connect (connection-id)
   (when cc:*verbose-output*
-    (format t "Start new window handler on connection-id - ~A" id))
-  (let ((body (make-clog-obj id 0)))
+    (format t "Start new window handler on connection-id - ~A" connection-id))
+  (let ((body (make-clog-body connection-id)))
     (funcall *on-new-window* body)))
     
 (defun initialize (on-new-window

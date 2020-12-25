@@ -72,6 +72,12 @@ $( document ).ready(function() {
     var s = document.location.search;
     var tokens;
     var r = /[?&]?([^=]+)=([^&]*)/g;
+
+    clog['body']=document.body;
+    clog['window']=window;
+    clog['navigator']=navigator;
+    clog['document']=window.document;
+    clog['location']=window.location;
     
     s = s.split("+").join(" ");
     

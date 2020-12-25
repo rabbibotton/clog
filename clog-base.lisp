@@ -35,8 +35,7 @@ lisp and the HTML DOM element."))
 
 (defun make-clog-obj (connection-id html-id)
   "Construct a new clog-obj. (Private)"
-  (make-instance 'clog-obj :connection-id connection-id
-			   :html-id html-id))
+  (make-instance 'clog-obj :connection-id connection-id :html-id html-id))
 
 ;;;;;;;;;;;;;;;
 ;; script-id ;;

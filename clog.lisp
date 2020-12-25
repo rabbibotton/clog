@@ -29,7 +29,12 @@ application."
 
   (@clog-system    section)
   (@clog-utilities section)
-  (@clog-objs      section))
+  (@clog-obj       section)
+  (@clog-body      section)
+  (@clog-window    section)
+  (@clog-document  section)
+  (@clog-location  section)
+  (@clog-navigator section))
 
 (defsection @clog-system (:title "CLOG System")
   "CLOG Startup and Shutdown"
@@ -41,7 +46,7 @@ application."
   (js-true-p    function)
   (open-browser function))
 
-(defsection @clog-objs (:title "CLOG Objects")
+(defsection @clog-obj (:title "CLOG Objects")
   "CLOG-Obj - Base class for CLOG Objects"
   (clog-obj class)
 
@@ -102,11 +107,52 @@ application."
   (set-on-paste              generic-function))
 ;; need to add drag and drop events
 
+(defsection @clog-body (:title "CLOG Body Objects")
+  "CLOG-Body - CLOG Body Objects"
+  (clog-body class)
+
+  "CLOG-Body - Properties"
+  (window        generic-function)
+  (html-document generic-function)
+  (location      generic-function)
+  (navigator     generic-function))
+
+(defsection @clog-window (:title "CLOG Window Objects")
+  "CLOG-Window - CLOG Window Objects"
+  (clog-window class)
+
+  "CLOG-Window - Properties"
+  (window-name generic-function)
+
+  "CLOG-Window - Methods"
+  (alert generic-function))
+
+(defsection @clog-document (:title "CLOG Document Objects")
+  "CLOG-Document - CLOG Document Objects"
+  (clog-document class))
+
+(defsection @clog-location (:title "CLOG Location Objects")
+  "CLOG-Location - CLOG Location Objects"
+  (clog-location class))
+
+(defsection @clog-navigator (:title "CLOG Navigator Objects")
+  "CLOG-Navigator - CLOG Navigator Objects"
+  (clog-navigator class))
+
+(defsection @clog-location (:title "CLOG Location Objects")
+  "CLOG-Location - CLOG Location Objects"
+  (clog-location class))
+
 (export 'make-markup)
 (defun make-markup ()
   (load "clog.lisp")
   (load "clog-base.lisp")
+  (load "clog-window.lisp")
+  (load "clog-navigator.lisp")
+  (load "clog-document.lisp")
+  (load "clog-location.lisp")
   (load "clog-system.lisp")
   (load "clog-utilities.lisp")
+  (load "clog-body.lisp")
   (describe clog:@CLOG-MANUAL))
   

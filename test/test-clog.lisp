@@ -5,8 +5,10 @@
 (in-package :test-clog)
 
 (defvar *last-obj*)
+(defvar *last-win*)
 
 (defun on-new-window (win)
+  (setf *last-win* win)
   (let ((tmp))
     (clog-connection:put-line (clog::connection-id win) "<button id='myid'>In html</button>")
     (setf tmp (attach-as-child win "myid"))
@@ -15,7 +17,7 @@
     (when (equal (property tmp "draggable")
 		 (setf (property tmp "innerHTML") "<h2>I am draggable</h2>")))
     (setf tmp (create-child win "<button>test</botton>"))
-    (set-on-click tmp (lambda () (clog-connection:alert-box (clog::connection-id win) "clicked")))
+    (set-on-click tmp (lambda () (alert (window win) "clicked")))
     (setf (width tmp) 300)
     (setf (height tmp) 50)
     (create-child win (format nil "<H2>~A</H2>" (gethash "connection-id" (connection-data win))))
