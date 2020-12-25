@@ -9,6 +9,10 @@ The Common Lisp Omnificient GUI, CLOG for short, uses web technology
 to produce graphical user interfaces for applications locally or
 remotely, ie as web applications.
 
+View the HTML Documentation:
+
+https://htmlpreview.github.io/?https://github.com/rabbibotton/clog/blob/main/doc/clog-manual.html
+
 
 To load this package and use the tests:
 
