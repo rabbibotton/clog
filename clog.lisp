@@ -122,10 +122,40 @@ application."
   (clog-window class)
 
   "CLOG-Window - Properties"
-  (window-name generic-function)
+  (window-name  generic-function)
+  (inner-height generic-function)
+  (inner-width  generic-function)
+  (outer-height generic-function)
+  (outer-width  generic-function)
+  (x-offset     generic-function)
+  (y-offset     generic-function)
+  (left         generic-function)
+  (top          generic-function)
 
   "CLOG-Window - Methods"
-  (alert generic-function))
+  (alert            generic-function)
+  (log-console      generic-function)
+  (log-error        generic-function)
+  (print-window     generic-function)
+  (scroll-by        generic-function)
+  (scroll-to        generic-function)
+  ;;(close-window     generic-function)
+  ;;(close-connection generic-function)
+
+  "CLOG-Window - Events"
+  ;;  (set-on-abort              generic-function)
+  ;;  (set-on-error              generic-function)
+  ;;  (set-on-before-unload      generic-function)
+  ;;  (set-on-hash-change        generic-function)
+  ;;  (set-on-orientation-change generic-function)
+  ;;  (set-on-storage            generic-function)
+
+  ;; These have no use in most modern browsers
+  ;; (move-by    generic-function)
+  ;; (move-to    generic-function)
+  ;; (resize-by  generic-function)
+  ;; (resize-to  generic-function)
+  )
 
 (defsection @clog-document (:title "CLOG Document Objects")
   "CLOG-Document - CLOG Document Objects"

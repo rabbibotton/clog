@@ -8,6 +8,8 @@
 (defvar *last-win*)
 
 (defun on-new-window (win)
+  (log-console (window win) "Message!")
+  (log-error (window win) "Error Log")
   (setf *last-win* win)
   (let ((tmp))
     (clog-connection:put-line (clog::connection-id win) "<button id='myid'>In html</button>")
