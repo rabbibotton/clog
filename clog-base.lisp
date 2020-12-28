@@ -418,7 +418,7 @@ is nil unbind the event."))
 		 (funcall on-blur)))))
 
 ;;;;;;;;;;;;;;;;;;;
-;; set-on-change ;;
+;; Set-on-change ;;
 ;;;;;;;;;;;;;;;;;;;
 
 (defgeneric set-on-change (clog-obj on-change-handler)

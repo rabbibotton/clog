@@ -186,6 +186,16 @@ window."))
   (setf (property obj "screenX") value))
 (defsetf left set-x-offset)
 
+;;;;;;;;;;;;;;;;;
+;; pixel-ratio ;;
+;;;;;;;;;;;;;;;;;
+
+(defgeneric pixel-ratio (clog-window)
+  (:documentation "Get device pixel ratio."))
+
+(defmethod pixel-ratio ((obj clog-window))
+  (property obj "devicePixelRatio"))
+
 ;;;;;;;;;;;
 ;; alert ;;
 ;;;;;;;;;;;
@@ -230,14 +240,14 @@ events and messages may not be trasmitted on most browsers."))
   (cc:execute (connection-id obj) "print()"))
 
 ;;;;;;;;;;;;;;;
-;; scroll-by ;;
+;; Scroll-by ;;
 ;;;;;;;;;;;;;;;
 
 (defgeneric scroll-by (clog-window x y)
   (:documentation "Scroll browser window by x y."))
 
 (defmethod scroll-by ((obj clog-window) x y)
-  (jquery-execute obj (format nil "scrollBy(~A,~A)")))
+  (jquery-execute obj (format nil "scrollBy(~A,~A)" x y)))
 
 ;;;;;;;;;;;;;;;
 ;; scroll-to ;;
@@ -247,4 +257,131 @@ events and messages may not be trasmitted on most browsers."))
   (:documentation "Scroll browser window to x y."))
 
 (defmethod scroll-to ((obj clog-window) x y)
-  (jquery-execute obj (format nil "scrollTo(~A,~A)")))
+  (jquery-execute obj (format nil "scrollTo(~A,~A)" x y)))
+
+;;;;;;;;;;;;;;;;;;
+;; close-window ;;
+;;;;;;;;;;;;;;;;;;
+
+(defgeneric close-window (clog-window)
+  (:documentation "Close browser window."))
+
+(defmethod close-window ((obj clog-window))
+  (jquery-execute obj "close()"))
+
+;;;;;;;;;;;;;;;;;;;;;;
+;; close-connection ;;
+;;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric close-connection (clog-window)
+  (:documentation "Close connection to browser with out closing browser."))
+
+(defmethod close-connection ((obj clog-window))
+  (cc:cclose (connection-id obj)))
+
+;;;;;;;;;;;;;;;;;;
+;; Set-on-abort ;;
+;;;;;;;;;;;;;;;;;;
+
+(defgeneric set-on-abort (clog-window on-abort-handler)
+  (:documentation "Set the ON-ABORT-HANDLER for CLOG-OBJ. If ON-ABORT-HANDLER
+is nil unbind the event."))
+
+(defmethod set-on-abort ((obj clog-window) on-abort-handler)
+  (let ((on-abort on-abort-handler))      
+    (set-event obj "abort"
+	       (lambda (data)
+		 (declare (ignore data))
+		 (funcall on-abort)))))
+
+;;;;;;;;;;;;;;;;;;
+;; Set-on-error ;;
+;;;;;;;;;;;;;;;;;;
+
+(defgeneric set-on-error (clog-window on-error-handler)
+  (:documentation "Set the ON-ERROR-HANDLER for CLOG-OBJ. If ON-ERROR-HANDLER
+is nil unbind the event."))
+
+(defmethod set-on-error ((obj clog-window) on-error-handler)
+  (let ((on-error on-error-handler))      
+    (set-event obj "error"
+	       (lambda (data)
+		 (declare (ignore data))
+		 (funcall on-error)))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Set-on-before-unload ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric set-on-before-unload (clog-window on-before-unload-handler)
+  (:documentation "Set the ON-BEFORE-UNLOAD-HANDLER for CLOG-OBJ. If
+ON-BEFORE-UNLOAD-HANDLER is nil unbind the event."))
+
+(defmethod set-on-before-unload ((obj clog-window) on-before-unload-handler)
+  (let ((on-before-unload on-before-unload-handler))      
+    (set-event obj "beforeunload"
+	       (lambda (data)
+		 (declare (ignore data))
+		 (funcall on-before-unload)))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;
+;; Set-on-hash-change ;;
+;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric set-on-hash-change (clog-window on-hash-change-handler)
+  (:documentation "Set the ON-HASH-CHANGE-HANDLER for CLOG-OBJ. If
+ON-HASH-CHANGE-HANDLER is nil unbind the event."))
+
+(defmethod set-on-hash-change ((obj clog-window) on-hash-change-handler)
+  (let ((on-hash-change on-hash-change-handler))      
+    (set-event obj "hashchange"
+	       (lambda (data)
+		 (declare (ignore data))
+		 (funcall on-hash-change)))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Set-on-orientation-change ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric set-on-orientation-change (clog-window
+				       on-orientation-change-handler)
+  (:documentation "Set the ON-ORIENTATION-CHANGE-HANDLER for CLOG-OBJ.
+If ON-ORIENTATION-CHANGE-HANDLER is nil unbind the event."))
+
+(defmethod set-on-orientation-change ((obj clog-window)
+				      on-orientation-change-handler)
+  (let ((on-orientation-change on-orientation-change-handler))      
+    (set-event obj "orientationchange"
+	       (lambda (data)
+		 (declare (ignore data))
+		 (funcall on-orientation-change)))))
+
+;;;;;;;;;;;;;;;;;;;;
+;; Set-on-storage ;;
+;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric set-on-storage (clog-window on-storage-handler)
+  (:documentation "Set the ON-STORAGE-HANDLER for CLOG-OBJ. If
+ON-STORAGE-HANDLER is nil unbind the event."))
+
+(defmethod set-on-storage ((obj clog-window) on-storage-handler)
+  (let ((on-storage on-storage-handler))      
+    (set-event obj "storage"
+	       (lambda (data)
+		 (declare (ignore data))
+		 (funcall on-storage)))))
+
+;;;;;;;;;;;;;;;;;;;
+;; Set-on-resize ;;
+;;;;;;;;;;;;;;;;;;;
+
+(defgeneric set-on-resize (clog-window on-resize-handler)
+  (:documentation "Set the ON-RESIZE-HANDLER for CLOG-OBJ. If ON-RESIZE-HANDLER
+is nil unbind the event."))
+
+(defmethod set-on-resize ((obj clog-window) on-resize-handler)
+  (let ((on-resize on-resize-handler))      
+    (set-event obj "resize"
+	       (lambda (data)
+		 (declare (ignore data))
+		 (funcall on-resize)))))

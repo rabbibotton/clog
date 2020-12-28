@@ -131,6 +131,7 @@ application."
   (y-offset     generic-function)
   (left         generic-function)
   (top          generic-function)
+  (pixel-ratio  generic-function)
 
   "CLOG-Window - Methods"
   (alert            generic-function)
@@ -139,16 +140,17 @@ application."
   (print-window     generic-function)
   (scroll-by        generic-function)
   (scroll-to        generic-function)
-  ;;(close-window     generic-function)
-  ;;(close-connection generic-function)
+  (close-window     generic-function)
+  (close-connection generic-function)
 
   "CLOG-Window - Events"
-  ;;  (set-on-abort              generic-function)
-  ;;  (set-on-error              generic-function)
-  ;;  (set-on-before-unload      generic-function)
-  ;;  (set-on-hash-change        generic-function)
-  ;;  (set-on-orientation-change generic-function)
-  ;;  (set-on-storage            generic-function)
+  (set-on-abort              generic-function)
+  (set-on-error              generic-function)
+  (set-on-before-unload      generic-function)
+  (set-on-hash-change        generic-function)
+  (set-on-orientation-change generic-function)
+  (set-on-storage            generic-function)
+  (set-on-resize             generic-function)
 
   ;; These have no use in most modern browsers
   ;; (move-by    generic-function)
