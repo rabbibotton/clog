@@ -43,8 +43,9 @@ application."
 
 (defsection @clog-utilities (:title "CLOG Utilities")
   "CLOG utilities"
-  (js-true-p    function)
-  (open-browser function))
+  (js-true-p     function)
+  (open-browser  function)
+  (escape-string function))
 
 (defsection @clog-obj (:title "CLOG Objects")
   "CLOG-Obj - Base class for CLOG Objects"
@@ -161,7 +162,23 @@ application."
 
 (defsection @clog-document (:title "CLOG Document Objects")
   "CLOG-Document - CLOG Document Objects"
-  (clog-document class))
+  (clog-document class)
+
+  (domain           generic-function)
+  (input-encoding   generic-function)
+  (last-modified    generic-function)
+  (referrer         generic-function)
+  (title            generic-function)
+  (url              generic-function)
+  (head-element     generic-function)
+  (body-element     generic-function)
+  (document-element generic-function)
+  (ready-state      generic-function)
+  (load-css         generic-function)
+  (put              generic-function)
+  (put-line         generic-function)
+  (put-br           generic-function)
+  (put-newline      generic-function))
 
 (defsection @clog-location (:title "CLOG Location Objects")
   "CLOG-Location - CLOG Location Objects"

@@ -84,6 +84,30 @@ result. (Private)"))
   (cc:query (connection-id obj)
 	    (format nil "~A.~A" (jquery obj) method)))
 
+;;;;;;;;;;;;;
+;; execute ;;
+;;;;;;;;;;;;;
+
+(defgeneric execute (clog-obj method)
+  (:documentation "Execute the js METHOD on OBJ. Result is
+dicarded. (Private)"))
+
+(defmethod execute ((obj clog-obj) method)
+  (cc:execute (connection-id obj)
+	      (format nil "~A.~A" (script-id obj) method)))
+
+;;;;;;;;;;;
+;; query ;;
+;;;;;;;;;;;
+
+(defgeneric query (clog-obj method)
+  (:documentation "Execute the js query METHOD on OBJ and return
+result. (Private)"))
+
+(defmethod query ((obj clog-obj) method)
+  (cc:query (connection-id obj)
+	    (format nil "~A.~A" (script-id obj) method)))
+
 ;;;;;;;;;;;;;;;;;;;;;;;
 ;; bind-event-script ;;
 ;;;;;;;;;;;;;;;;;;;;;;;
@@ -142,8 +166,8 @@ result. (Private)"))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defparameter keyboard-event-script
-  "+ e.keyCode + ':' + e.charCode + ':' + e.altKey + ':' + e.ctrlKey + ':'
-     + e.shiftKey + ':' + e.metaKey")
+  "+ e.keyCode + ':' + e.charCode + ':' + e.altKey + ':' + e.ctrlKey + ':' +
+     e.shiftKey + ':' + e.metaKey")
 
 (defun parse-keyboard-event (data)
   (let ((f (ppcre:split ":" data)))
@@ -187,7 +211,7 @@ result. (Private)"))
   (:documentation "Set html property."))
 
 (defmethod set-property ((obj clog-obj) property-name value)
-  (jquery-execute obj (format nil "prop('~A','~A')" property-name value)))
+  (jquery-execute obj (format nil "prop('~A','~A')" property-name (escape-string value))))
 (defsetf property set-property)
 
 ;;;;;;;;;;;
@@ -204,7 +228,7 @@ result. (Private)"))
   (:documentation "Set css style."))
 
 (defmethod set-style ((obj clog-obj) style-name value)
-  (jquery-execute obj (format nil "css('~A','~A')" style-name value)))
+  (jquery-execute obj (format nil "css('~A','~A')" style-name (escape-string value))))
 (defsetf style set-style)
 
 ;;;;;;;;;;;;;;;
@@ -221,7 +245,7 @@ result. (Private)"))
   (:documentation "Set html tag attribute."))
 
 (defmethod set-attribute ((obj clog-obj) attribute-name value)
-  (jquery-execute obj (format nil "attr('~A','~A')" attribute-name value)))
+  (jquery-execute obj (format nil "attr('~A','~A')" attribute-name (escape-string value))))
 (defsetf attribute set-attribute)
 
 ;;;;;;;;;;;;

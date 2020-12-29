@@ -28,3 +28,16 @@
 (defun open-browser (&key (url "http://127.0.0.1:8080"))
   "Open a web browser to URL."
   (trivial-open-browser:open-browser url))
+
+;;;;;;;;;;;;;;;;;;;
+;; escape-string ;;
+;;;;;;;;;;;;;;;;;;;
+
+(defun escape-string (str)
+  "Escape STR for sending to browser script."
+  (let ((res))
+    (setf res (ppcre:regex-replace-all "\\x22" str "\\x22"))
+    (setf res (ppcre:regex-replace-all "\\x27" res "\\x27"))
+    (setf res (ppcre:regex-replace-all "\\x0A" res "\\x0A"))
+    (setf res (ppcre:regex-replace-all "\\x0D" res "\\x0D"))
+    res))

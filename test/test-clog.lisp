@@ -10,6 +10,7 @@
 (defun on-new-window (win)
   (log-console (window win) "Message!")
   (log-error (window win) "Error Log")
+  (put-br (html-document win) "test 1 2 3")
   (setf *last-win* win)
   (let ((tmp))
     (clog-connection:put-line (clog::connection-id win) "<button id='myid'>In html</button>")
@@ -39,6 +40,8 @@
     (set-on-character win
 		      (lambda (data)
 			(print data)))
+    (setf (title (html-document win)) "CLOG Test App")
+    (print (title (html-document win)))
     ))
 
 (defun test ()

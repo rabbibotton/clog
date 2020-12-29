@@ -17,9 +17,9 @@
   ((window
     :reader window
     :initarg :window)
-   (document
+   (html-document
     :reader html-document
-    :initarg :document)
+    :initarg :html-document)
    (location
     :reader location
     :initarg :location)
@@ -37,10 +37,10 @@
   (make-instance
    'clog-body
    :connection-id connection-id :html-id 0
-   :window (make-instance 'clog-window    :connection-id connection-id)
-   :window (make-instance 'clog-document  :connection-id connection-id)
-   :window (make-instance 'clog-location  :connection-id connection-id)
-   :window (make-instance 'clog-navigator :connection-id connection-id)))
+   :window        (make-clog-window    connection-id)
+   :html-document (make-clog-document  connection-id)
+   :location      (make-clog-location  connection-id)
+   :navigator     (make-clog-navigator connection-id)))
 
 ;;;;;;;;;;;;
 ;; window ;;

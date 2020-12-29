@@ -33,12 +33,12 @@
 window."))
 
 (defmethod window-name ((obj clog-window))
-  (property obj "name"))
+  (query obj "name"))
 
 (defgeneric set-window-name (clog-window value))
   
 (defmethod set-window-name ((obj clog-window) value)
-  (setf (property obj "name") value))
+  (execute obj "name" (escape-string value)))
 (defsetf window-name set-window-name)
 
 ;;;;;;;;;;;;;;;;
@@ -49,12 +49,12 @@ window."))
   (:documentation "Get/Setf status bar text."))
 
 (defmethod status-bar ((obj clog-window))
-  (property obj "status"))
+  (query obj "status"))
 
 (defgeneric set-status-bar (clog-window value))
   
 (defmethod set-status-bar ((obj clog-window) value)
-  (setf (property obj "status") value))
+  (execute obj "status" (escape-string value)))
 (defsetf status-bar set-status-bar)
 
 ;;;;;;;;;;;;;;;;;;
@@ -65,12 +65,12 @@ window."))
   (:documentation "Get/Setf inner height of browser window."))
 
 (defmethod inner-height ((obj clog-window))
-  (property obj "innerHeight"))
+  (query obj "innerHeight"))
 
 (defgeneric set-inner-height (clog-window value))
   
 (defmethod set-inner-height ((obj clog-window) value)
-  (setf (property obj "innerHeight") value))
+  (execute obj "innerHeight" value))
 (defsetf inner-height set-inner-height)
 
 ;;;;;;;;;;;;;;;;;
@@ -81,12 +81,12 @@ window."))
   (:documentation "Get/Setf inner width of browser window."))
 
 (defmethod inner-width ((obj clog-window))
-  (property obj "innerWidth"))
+  (query obj "innerWidth"))
 
 (defgeneric set-inner-width (clog-window value))
   
 (defmethod set-inner-width ((obj clog-window) value)
-  (setf (property obj "innerWidth") value))
+  (execute obj "innerWidth" value))
 (defsetf inner-width set-inner-width)
 
 ;;;;;;;;;;;;;;;;;;
@@ -97,12 +97,12 @@ window."))
   (:documentation "Get/Setf outer height of browser window."))
 
 (defmethod outer-height ((obj clog-window))
-  (property obj "outerHeight"))
+  (query obj "outerHeight"))
 
 (defgeneric set-outer-height (clog-window value))
   
 (defmethod set-outer-height ((obj clog-window) value)
-  (setf (property obj "outerHeight") value))
+  (execute obj "outerHeight" value))
 (defsetf outer-height set-outer-height)
 
 ;;;;;;;;;;;;;;;;;
@@ -113,12 +113,12 @@ window."))
   (:documentation "Get/Setf outer width of browser window."))
 
 (defmethod outer-width ((obj clog-window))
-  (property obj "outerWidth"))
+  (query obj "outerWidth"))
 
 (defgeneric set-outer-width (clog-window value))
   
 (defmethod set-outer-width ((obj clog-window) value)
-  (setf (property obj "outerWidth") value))
+  (execute obj "outerWidth" value))
 (defsetf outer-width set-outer-width)
 
 ;;;;;;;;;;;;;;
@@ -129,12 +129,12 @@ window."))
   (:documentation "Get/Setf browser window x offset from left edge."))
 
 (defmethod x-offset ((obj clog-window))
-  (property obj "pageXOffset"))
+  (query obj "pageXOffset"))
 
 (defgeneric set-x-offset (clog-window value))
   
 (defmethod set-x-offset ((obj clog-window) value)
-  (setf (property obj "pageXOffset") value))
+  (execute obj "pageXOffset" value))
 (defsetf x-offset set-x-offset)
 
 ;;;;;;;;;;;;;;
@@ -145,13 +145,13 @@ window."))
   (:documentation "Get/Setf browser window y offset from top edge."))
 
 (defmethod y-offset ((obj clog-window))
-  (property obj "pageYOffset"))
+  (query obj "pageYOffset"))
 
 
 (defgeneric set-y-offset (clog-window value))
   
 (defmethod set-y-offset ((obj clog-window) value)
-  (setf (property obj "pageYOffset") value))
+  (execute obj "pageYOffset" value))
 (defsetf y-offset set-y-offsett)
 
 ;;;;;;;;;
@@ -162,12 +162,12 @@ window."))
   (:documentation "Get/Setf browser y postion."))
 
 (defmethod top ((obj clog-window))
-  (property obj "screenY"))
+  (query obj "screenY"))
 
 (defgeneric set-top (clog-window value))
   
 (defmethod set-top ((obj clog-window) value)
-  (setf (property obj "screenY") value))
+  (exectue obj "screenY" value))
 (defsetf top set-top)
 
 ;;;;;;;;;;
@@ -178,12 +178,12 @@ window."))
   (:documentation "Get/Setf browser x position."))
 
 (defmethod left ((obj clog-window))
-  (property obj "screenX"))
+  (query obj "screenX"))
 
 (defgeneric set-left (clog-window value))
   
 (defmethod set-left ((obj clog-window) value)
-  (setf (property obj "screenX") value))
+  (execute obj "screenX" value))
 (defsetf left set-x-offset)
 
 ;;;;;;;;;;;;;;;;;
@@ -194,7 +194,7 @@ window."))
   (:documentation "Get device pixel ratio."))
 
 (defmethod pixel-ratio ((obj clog-window))
-  (property obj "devicePixelRatio"))
+  (query obj "devicePixelRatio"))
 
 ;;;;;;;;;;;
 ;; alert ;;
@@ -205,7 +205,7 @@ window."))
 events and messages may not be trasmitted on most browsers."))
 
 (defmethod alert ((obj clog-window) message)
-  (cc:alert-box (connection-id obj) message))
+  (execute obj (format nil "alert('~A');" (escape-string message))))
 
 ;;;;;;;;;;;;;;;;;
 ;; log-console ;;
@@ -215,8 +215,8 @@ events and messages may not be trasmitted on most browsers."))
   (:documentation "Print message to browser console."))
 
 (defmethod log-console ((obj clog-window) message)
-  (cc:execute (connection-id obj) (format nil "console.log('~A')"
-					  (cc:escape-string message))))
+  (execute obj (format nil "console.log('~A')"
+		       (escape-string message))))
 
 ;;;;;;;;;;;;;;;
 ;; log-error ;;
@@ -226,8 +226,8 @@ events and messages may not be trasmitted on most browsers."))
   (:documentation "Print error message to browser console."))
 
 (defmethod log-error ((obj clog-window) message)
-  (cc:execute (connection-id obj) (format nil "console.error('~A')"
-					  (cc:escape-string message))))
+  (execute obj (format nil "console.error('~A')"
+		       (escape-string message))))
 
 ;;;;;;;;;;;;;;;;;;
 ;; print-window ;;
@@ -237,7 +237,7 @@ events and messages may not be trasmitted on most browsers."))
   (:documentation "Send browser window to printer."))
 
 (defmethod print-window ((obj clog-window))
-  (cc:execute (connection-id obj) "print()"))
+  (execute obj "print()"))
 
 ;;;;;;;;;;;;;;;
 ;; Scroll-by ;;
@@ -247,7 +247,7 @@ events and messages may not be trasmitted on most browsers."))
   (:documentation "Scroll browser window by x y."))
 
 (defmethod scroll-by ((obj clog-window) x y)
-  (jquery-execute obj (format nil "scrollBy(~A,~A)" x y)))
+  (execute obj (format nil "scrollBy(~A,~A)" x y)))
 
 ;;;;;;;;;;;;;;;
 ;; scroll-to ;;
@@ -257,7 +257,7 @@ events and messages may not be trasmitted on most browsers."))
   (:documentation "Scroll browser window to x y."))
 
 (defmethod scroll-to ((obj clog-window) x y)
-  (jquery-execute obj (format nil "scrollTo(~A,~A)" x y)))
+  (execute obj (format nil "scrollTo(~A,~A)" x y)))
 
 ;;;;;;;;;;;;;;;;;;
 ;; close-window ;;
@@ -267,7 +267,7 @@ events and messages may not be trasmitted on most browsers."))
   (:documentation "Close browser window."))
 
 (defmethod close-window ((obj clog-window))
-  (jquery-execute obj "close()"))
+  (execute obj "close()"))
 
 ;;;;;;;;;;;;;;;;;;;;;;
 ;; close-connection ;;
@@ -360,6 +360,20 @@ If ON-ORIENTATION-CHANGE-HANDLER is nil unbind the event."))
 ;; Set-on-storage ;;
 ;;;;;;;;;;;;;;;;;;;;
 
+;; need to change to use a true on-storage event
+
+(defparameter storage-event-script
+  "+ e.originalEvent.key + ':' +
+     e.originalEvent.oldValue + ':' +
+     e.originalEvent.newValue + ':'")
+
+(defun parse-storage-event (data)
+  (let ((f (ppcre:split ":" data)))
+    (list
+     :key-value (nth 0 f)
+     :old-value (nth 1 f)
+     :new-value (nth 2 f))))
+
 (defgeneric set-on-storage (clog-window on-storage-handler)
   (:documentation "Set the ON-STORAGE-HANDLER for CLOG-OBJ. If
 ON-STORAGE-HANDLER is nil unbind the event."))
@@ -368,8 +382,8 @@ ON-STORAGE-HANDLER is nil unbind the event."))
   (let ((on-storage on-storage-handler))      
     (set-event obj "storage"
 	       (lambda (data)
-		 (declare (ignore data))
-		 (funcall on-storage)))))
+		 (funcall on-storage (parse-storage-event data)))
+	       :call-back-script storage-event-script)))
 
 ;;;;;;;;;;;;;;;;;;;
 ;; Set-on-resize ;;
