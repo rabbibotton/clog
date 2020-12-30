@@ -62,7 +62,6 @@ Status:
   - SVG - HTML SVG vector graphics
   - Multimedia - HTML 5 Audio and Video
   - Styles - CSS Style blocks
-  - Window, Navigator, Screen, Location, Document
 
 - CLOG higher level containers and GUI widgets - to do
 
