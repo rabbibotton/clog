@@ -28,38 +28,38 @@
 ;; cookie-enabled ;;
 ;;;;;;;;;;;;;;;;;;;;
 
-(defgeneric cookie-enabled (clog-location)
+(defgeneric cookie-enabled (clog-navigator)
   (:documentation "Get if cookie enabled."))
 
-(defmethod cookie-enabled ((obj clog-location))
+(defmethod cookie-enabled ((obj clog-navigator))
   (js-true-p (query obj "cookieEnabled")))
 
 ;;;;;;;;;;;;;;
 ;; language ;;
 ;;;;;;;;;;;;;;
 
-(defgeneric language (clog-location)
+(defgeneric language (clog-navigator)
   (:documentation "Get user prefered language."))
 
-(defmethod language ((obj clog-location))
+(defmethod language ((obj clog-navigator))
   (query obj "language"))
 
 ;;;;;;;;;;;;;;;;
 ;; user-agent ;;
 ;;;;;;;;;;;;;;;;
 
-(defgeneric user-agent (clog-location)
+(defgeneric user-agent (clog-navigator)
   (:documentation "Get user agent."))
 
-(defmethod user-agent ((obj clog-location))
+(defmethod user-agent ((obj clog-navigator))
   (query obj "userAgent"))
 
 ;;;;;;;;;;;;
 ;; vendor ;;
 ;;;;;;;;;;;;
 
-(defgeneric vendor (clog-location)
+(defgeneric vendor (clog-navigator)
   (:documentation "Get browser vendor."))
 
-(defmethod vendor ((obj clog-location))
+(defmethod vendor ((obj clog-navigator))
   (query obj "vendor"))
