@@ -178,13 +178,15 @@ application."
   (put-br           generic-function)
   (new-line         generic-function))
 
-(defsection @clog-location (:title "CLOG Location Objects")
-  "CLOG-Location - CLOG Location Objects"
-  (clog-location class))
-
 (defsection @clog-navigator (:title "CLOG Navigator Objects")
   "CLOG-Navigator - CLOG Navigator Objects"
-  (clog-navigator class))
+  (clog-navigator class)
+
+  (cookie-enabled generic-function)
+  (language       generic-function)
+  (user-agent     generic-function)
+  (vendor         generic-function))
+  
 
 (defsection @clog-location (:title "CLOG Location Objects")
   "CLOG-Location - CLOG Location Objects"
