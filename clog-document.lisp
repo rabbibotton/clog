@@ -13,7 +13,15 @@
 ;; Implementation - clog-document
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defclass clog-document (clog-obj)()
+(defclass clog-document (clog-obj)
+  ((document-element
+    :reader document-element
+    :initarg :document-element)
+   (head-element
+    :reader head-element
+    :initarg :head-element)
+   (body-element
+    :reader body-element))
   (:documentation "CLOG Document Objects encapsulate the document."))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;
@@ -22,7 +30,45 @@
 
 (defun make-clog-document (connection-id)
   "Construct a new clog-document. (Private)"
-  (make-instance 'clog-document :connection-id connection-id :html-id "document"))
+  (make-instance
+   'clog-document :connection-id connection-id :html-id "document"
+		  :document-element (make-instance 'clog-obj
+						   :connection-id connection-id
+						   :html-id       "head")
+		  :head-element (make-instance 'clog-obj
+					       :connection-id connection-id
+					       :html-id "documentElement")))
+;;;;;;;;;;;;;;;;;;;;;;
+;; document-element ;;
+;;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric document-element (clog-document)
+  (:documentation "Reader for Document Element object"))
+
+;;;;;;;;;;;;;;;;;;
+;; head-element ;;
+;;;;;;;;;;;;;;;;;;
+
+(defgeneric head-element (clog-document)
+  (:documentation "Reader for Head Element object"))
+
+;;;;;;;;;;;;;;;;;;
+;; body-element ;;
+;;;;;;;;;;;;;;;;;;
+
+(defgeneric document-element (clog-document)
+  (:documentation "Reader for Body Element object"))
+
+;;;;;;;;;;;;;;
+;; set-body ;;
+;;;;;;;;;;;;;;
+
+(defgeneric set-body (clog-document body)
+  (:documentation "Set the body slot after creating the
+clog-documentation object. (Private)"))
+
+(defmethod set-body ((obj clog-document) body)
+  (setf (slot-value obj 'body-element) body))
 
 ;;;;;;;;;;;;
 ;; domain ;;
@@ -89,36 +135,6 @@
 
 (defmethod url ((obj clog-document))
   (query obj "url"))
-
-;;;;;;;;;;;;;;;;;;;;;;
-;; document-element ;;
-;;;;;;;;;;;;;;;;;;;;;;
-
-(defgeneric document-element (clog-document)
-  (:documentation "Get document-element."))
-
-(defmethod document-element ((obj clog-document))
-  (make-instance 'clog-base :connection-id (connection-id obj) :html-id "documentElement"))
-
-;;;;;;;;;;;;;;;;;;
-;; head-element ;;
-;;;;;;;;;;;;;;;;;;
-
-(defgeneric head-element (clog-document)
-  (:documentation "Get head-element."))
-
-(defmethod head-element ((obj clog-document))
-  (make-instance 'clog-base :connection-id (connection-id obj) :html-id "head"))
-  
-;;;;;;;;;;
-;; body ;;
-;;;;;;;;;;
-
-(defgeneric body-element (clog-document)
-  (:documentation "Get body-element."))
-
-(defmethod body-element ((obj clog-document))
-  (make-instance 'clog-base :connection-id (connection-id obj) :html-id "body"))
 
 ;;;;;;;;;;;;;;;;;
 ;; ready-state ;;

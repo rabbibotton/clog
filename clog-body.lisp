@@ -34,13 +34,14 @@
 
 (defun make-clog-body (connection-id)
   "Construct a new clog-body object."
-  (make-instance
-   'clog-body
-   :connection-id connection-id :html-id 0
-   :window        (make-clog-window    connection-id)
-   :html-document (make-clog-document  connection-id)
-   :location      (make-clog-location  connection-id)
-   :navigator     (make-clog-navigator connection-id)))
+  (let ((body (make-instance
+	       'clog-body
+	       :connection-id connection-id :html-id 0
+	       :window        (make-clog-window    connection-id)
+	       :html-document (make-clog-document  connection-id)
+	       :location      (make-clog-location  connection-id)
+	       :navigator     (make-clog-navigator connection-id))))
+    (set-body (html-document body) body)))
 
 ;;;;;;;;;;;;
 ;; window ;;
