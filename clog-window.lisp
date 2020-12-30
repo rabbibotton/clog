@@ -240,7 +240,7 @@ events and messages may not be trasmitted on most browsers."))
   (execute obj "print()"))
 
 ;;;;;;;;;;;;;;;
-;; Scroll-by ;;
+;; scroll-by ;;
 ;;;;;;;;;;;;;;;
 
 (defgeneric scroll-by (clog-window x y)
@@ -258,6 +258,46 @@ events and messages may not be trasmitted on most browsers."))
 
 (defmethod scroll-to ((obj clog-window) x y)
   (execute obj (format nil "scrollTo(~A,~A)" x y)))
+
+;;;;;;;;;;;;;
+;; move-by ;;
+;;;;;;;;;;;;;
+
+(defgeneric move-by (clog-window x y)
+  (:documentation "Move browser window by x y."))
+
+(defmethod move-by ((obj clog-window) x y)
+  (execute obj (format nil "moveBy(~A,~A)" x y)))
+
+;;;;;;;;;;;;;
+;; move-to ;;
+;;;;;;;;;;;;;
+
+(defgeneric move-to (clog-window x y)
+  (:documentation "Move browser window to x y."))
+
+(defmethod move-to ((obj clog-window) x y)
+  (execute obj (format nil "moveTo(~A,~A)" x y)))
+
+;;;;;;;;;;;;;;;
+;; resize-by ;;
+;;;;;;;;;;;;;;;
+
+(defgeneric resize-by (clog-window x y)
+  (:documentation "Resize browser window by x y."))
+
+(defmethod resize-by ((obj clog-window) x y)
+  (execute obj (format nil "resizeBy(~A,~A)" x y)))
+
+;;;;;;;;;;;;;;;
+;; resize-to ;;
+;;;;;;;;;;;;;;;
+
+(defgeneric resize-to (clog-window x y)
+  (:documentation "Resize browser window to x y."))
+
+(defmethod resize-to ((obj clog-window) x y)
+  (execute obj (format nil "resizeTo(~A,~A)" x y)))
 
 ;;;;;;;;;;;;;;;;;;
 ;; close-window ;;

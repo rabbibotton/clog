@@ -152,13 +152,11 @@ application."
   (set-on-orientation-change generic-function)
   (set-on-storage            generic-function)
   (set-on-resize             generic-function)
+  (move-by                   generic-function)
+  (move-to                   generic-function)
+  (resize-by                 generic-function)
+  (resize-to                 generic-function))
 
-  ;; These have no use in most modern browsers
-  ;; (move-by    generic-function)
-  ;; (move-to    generic-function)
-  ;; (resize-by  generic-function)
-  ;; (resize-to  generic-function)
-  )
 
 (defsection @clog-document (:title "CLOG Document Objects")
   "CLOG-Document - CLOG Document Objects"
