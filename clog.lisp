@@ -188,7 +188,23 @@ application."
 
 (defsection @clog-location (:title "CLOG Location Objects")
   "CLOG-Location - CLOG Location Objects"
-  (clog-location class))
+  (clog-location class)
+
+  "CLOG-Location - Properties"
+  (url         generic-function)
+  (hash        generic-function)
+  (host        generic-function)
+  (host-name   generic-function)
+  (origin      generic-function)
+  (path-name   generic-function)
+  (port        generic-function)
+  (protocol    generic-function)
+  (url-search  generic-function)
+  
+  "CLOG-Location - Methods"
+  (reload      generic-function)
+  (url-replace generic-function)
+  (url-assign  generic-function))
 
 (export 'make-markup)
 (defun make-markup ()
