@@ -56,6 +56,7 @@ Status:
 - HTML bindings and Browser
   - Base system for bindings - DONE
   - Event system - DONE
+  - General DOM (Window, Document, Location, Navigator) - DONE
   - Base Elements (HTML Elements)
   - Canvas - HTML 5 Canvas bindings
   - SVG - HTML SVG vector graphics
