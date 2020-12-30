@@ -167,7 +167,7 @@ application."
   (domain           generic-function)
   (input-encoding   generic-function)
   (last-modified    generic-function)
-  (referrer         generic-function)
+  (referer          generic-function)
   (title            generic-function)
   (url              generic-function)
   (head-element     generic-function)
@@ -178,7 +178,7 @@ application."
   (put              generic-function)
   (put-line         generic-function)
   (put-br           generic-function)
-  (put-newline      generic-function))
+  (new-line         generic-function))
 
 (defsection @clog-location (:title "CLOG Location Objects")
   "CLOG-Location - CLOG Location Objects"
@@ -218,3 +218,7 @@ application."
   (load "clog-body.lisp")
   (mgl-pax:update-asdf-system-html-docs clog:@CLOG-MANUAL :clog))
 
+(export 'make-world)
+(defun make-world ()
+  (make-html)
+  (asdf:compile-system :clog))

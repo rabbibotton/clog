@@ -116,6 +116,14 @@ located at <code>STATIC-ROOT</code>.</p></li>
 <p>Open a web browser to <code>URL</code>.</p></li>
 </ul>
 
+<p><a id='x-28CLOG-3AESCAPE-STRING-20FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#x-28CLOG-3AESCAPE-STRING-20FUNCTION-29" >ESCAPE-STRING</a></span></span> <span class="locative-args">STR</span></span></p>
+
+<p>Escape <code>STR</code> for sending to browser script.</p></li>
+</ul>
+
 <p><a id='x-28CLOG-3A-40CLOG-OBJ-20MGL-PAX-3ASECTION-29'></a></p>
 
 <p><span class="outer-navigation"><span class="navigation"> <a href="#x-28CLOG-3A-40CLOG-UTILITIES-20MGL-PAX-3ASECTION-29" title="CLOG Utilities">&#8592;</a> <a href="#x-28CLOG-3A-40CLOG-MANUAL-20MGL-PAX-3ASECTION-29" title="The CLOG manual">&#8593;</a> <a href="#x-28CLOG-3A-40CLOG-BODY-20MGL-PAX-3ASECTION-29" title="CLOG Body Objects">&#8594;</a> <a href="#x-28CLOG-3A-40CLOG-OBJ-20MGL-PAX-3ASECTION-29" title="CLOG Objects">&#8634;</a></span></span></p>
@@ -849,6 +857,126 @@ is nil unbind the event.</p></li>
 <li><p><span class=reference-bullet><span class=reference><span class="locative-type">[class]</span> <span class="reference-object"><a href="#x-28CLOG-3ACLOG-DOCUMENT-20CLASS-29" >CLOG-DOCUMENT</a></span></span> <span class="locative-args"><a href="#x-28CLOG-3ACLOG-OBJ-20CLASS-29" title="(CLOG:CLOG-OBJ CLASS)">CLOG-OBJ</a></span></span></p>
 
 <p><a href="#x-28-22clog-22-20ASDF-2FSYSTEM-3ASYSTEM-29" title="(\&quot;clog\&quot; ASDF/SYSTEM:SYSTEM)"><code>CLOG</code></a> Document Objects encapsulate the document.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3ADOMAIN-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ADOMAIN-20GENERIC-FUNCTION-29" >DOMAIN</a></span></span> <span class="locative-args">CLOG-DOCUMENT</span></span></p>
+
+<p>Get domain.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3AINPUT-ENCODING-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3AINPUT-ENCODING-20GENERIC-FUNCTION-29" >INPUT-ENCODING</a></span></span> <span class="locative-args">CLOG-DOCUMENT</span></span></p>
+
+<p>Get input encoding.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3ALAST-MODIFIED-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ALAST-MODIFIED-20GENERIC-FUNCTION-29" >LAST-MODIFIED</a></span></span> <span class="locative-args">CLOG-DOCUMENT</span></span></p>
+
+<p>Get last modified.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3AREFERER-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3AREFERER-20GENERIC-FUNCTION-29" >REFERER</a></span></span> <span class="locative-args">CLOG-DOCUMENT</span></span></p>
+
+<p>Get referer.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3ATITLE-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ATITLE-20GENERIC-FUNCTION-29" >TITLE</a></span></span> <span class="locative-args">CLOG-DOCUMENT</span></span></p>
+
+<p>Get/setf title.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3AURL-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3AURL-20GENERIC-FUNCTION-29" >URL</a></span></span> <span class="locative-args">CLOG-DOCUMENT</span></span></p>
+
+<p>Get url.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3AHEAD-ELEMENT-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3AHEAD-ELEMENT-20GENERIC-FUNCTION-29" >HEAD-ELEMENT</a></span></span> <span class="locative-args">CLOG-DOCUMENT</span></span></p>
+
+<p>Get head-element.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3ABODY-ELEMENT-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ABODY-ELEMENT-20GENERIC-FUNCTION-29" >BODY-ELEMENT</a></span></span> <span class="locative-args">CLOG-DOCUMENT</span></span></p>
+
+<p>Get body-element.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3ADOCUMENT-ELEMENT-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ADOCUMENT-ELEMENT-20GENERIC-FUNCTION-29" >DOCUMENT-ELEMENT</a></span></span> <span class="locative-args">CLOG-DOCUMENT</span></span></p>
+
+<p>Get document-element.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3AREADY-STATE-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3AREADY-STATE-20GENERIC-FUNCTION-29" >READY-STATE</a></span></span> <span class="locative-args">CLOG-DOCUMENT</span></span></p>
+
+<p>Get ready-state.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3ALOAD-CSS-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ALOAD-CSS-20GENERIC-FUNCTION-29" >LOAD-CSS</a></span></span> <span class="locative-args">CLOG-DOCUMENT CSS-URL</span></span></p>
+
+<p>Load css from <code>CSS-URL</code>.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3APUT-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3APUT-20GENERIC-FUNCTION-29" >PUT</a></span></span> <span class="locative-args">CLOG-DOCUMENT MESSAGE</span></span></p>
+
+<p>Write text to browser document object.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3APUT-LINE-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3APUT-LINE-20GENERIC-FUNCTION-29" >PUT-LINE</a></span></span> <span class="locative-args">CLOG-DOCUMENT MESSAGE</span></span></p>
+
+<p>Write text to browser document object with new-line.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3APUT-BR-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3APUT-BR-20GENERIC-FUNCTION-29" >PUT-BR</a></span></span> <span class="locative-args">CLOG-DOCUMENT MESSAGE</span></span></p>
+
+<p>Write text to browser document object with <br>new-line.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3ANEW-LINE-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ANEW-LINE-20GENERIC-FUNCTION-29" >NEW-LINE</a></span></span> <span class="locative-args">CLOG-DOCUMENT</span></span></p>
+
+<p>Write to browser document <br>new-line.</p></li>
 </ul>
 
 <p><a id='x-28CLOG-3A-40CLOG-LOCATION-20MGL-PAX-3ASECTION-29'></a></p>
