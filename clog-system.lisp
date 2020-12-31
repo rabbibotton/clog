@@ -25,7 +25,7 @@
   (let ((body (make-clog-body connection-id)))
     (funcall *on-new-window* body)))
     
-(defun initialize (on-new-window
+(defun initialize (on-new-window-handler
 		   &key
 		     (host           "0.0.0.0")
 		     (port           8080)
@@ -34,13 +34,20 @@
   "Inititalze CLOG on a socket using HOST and PORT to serve BOOT-FILE as 
 the default route to establish web-socket connections and static files
 located at STATIC-ROOT."
-  (setf *on-new-window* on-new-window)
+  (setf *on-new-window* on-new-window-handler)
   
   (cc:initialize #'on-connect
 		 :host host
 		 :port port
 		 :boot-file boot-file
 		 :static-root static-root))
+
+;;;;;;;;;;;;;;;;;;;;;;;
+;; set-on-new-window ;;
+;;;;;;;;;;;;;;;;;;;;;;;
+
+(defun set-on-new-window (on-new-window-handler)
+  (setf *on-new-window* on-new-window-handler))
 
 ;;;;;;;;;;;;;;
 ;; shutdown ;;

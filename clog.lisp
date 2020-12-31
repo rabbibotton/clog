@@ -38,8 +38,9 @@ application."
 
 (defsection @clog-system (:title "CLOG System")
   "CLOG Startup and Shutdown"
-  (initialize function)
-  (shutdown   function))
+  (initialize        function)
+  (set-on-new-window function)
+  (shutdown          function))
 
 (defsection @clog-utilities (:title "CLOG Utilities")
   "CLOG utilities"

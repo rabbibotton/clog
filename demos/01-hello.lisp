@@ -1,6 +1,6 @@
 (defpackage #:clog-user
   (:use #:cl #:clog)
-  (:export hello))
+  (:export start-demo))
 
 (in-package :clog-user)
 
