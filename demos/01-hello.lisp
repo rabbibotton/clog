@@ -4,7 +4,7 @@
 
 (in-package :clog-user)
 
-(defun hello ()
+(defun start-demo ()
   "Simple Hello world using CLOG."
 
   ;; Initialize the CLOG system
