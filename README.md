@@ -51,12 +51,12 @@ Status:
   - Websockets - DONE
   - AJAX/HTML - to do (In 2021 are there browsers not supporting Websockets?)
   - Long Poll - to do (Needed for websites for webcrawlers and firewalls) 
-  - Direct API access to native browser components - to do
+  - Direct API access to native browser components - to do (not needed but games, soft real-time apps, etc would be quicker) 
 
 - HTML bindings and Browser
   - Base system for bindings - DONE
   - Event system - DONE
-  - General DOM (Window, Document, Location, Navigator) - DONE
+  - General DOM (Window, Screen, Document, Location, Navigator) - DONE
   - Base Elements (HTML Elements)
   - Canvas - HTML 5 Canvas bindings
   - SVG - HTML SVG vector graphics
