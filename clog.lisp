@@ -123,16 +123,23 @@ application."
   (clog-window class)
 
   "CLOG-Window - Properties"
-  (window-name  generic-function)
-  (inner-height generic-function)
-  (inner-width  generic-function)
-  (outer-height generic-function)
-  (outer-width  generic-function)
-  (x-offset     generic-function)
-  (y-offset     generic-function)
-  (left         generic-function)
-  (top          generic-function)
-  (pixel-ratio  generic-function)
+  (window-name             generic-function)
+  (inner-height            generic-function)
+  (inner-width             generic-function)
+  (outer-height            generic-function)
+  (outer-width             generic-function)
+  (x-offset                generic-function)
+  (y-offset                generic-function)
+  (left                    generic-function)
+  (top                     generic-function)
+  (pixel-ratio             generic-function)
+  (screen-width            generic-function)
+  (screen-height           generic-function)
+  (screen-available-width  generic-function)
+  (screen-available-height generic-function)
+  (screen-available-top    generic-function)
+  (screen-available-left   generic-function)
+  (screen-color-depth      generic-function)
 
   "CLOG-Window - Methods"
   (alert            generic-function)
@@ -182,6 +189,7 @@ application."
   "CLOG-Navigator - CLOG Navigator Objects"
   (clog-navigator class)
 
+  "CLOG-Navigator - Properties"
   (cookie-enabled generic-function)
   (language       generic-function)
   (user-agent     generic-function)

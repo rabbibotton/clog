@@ -196,6 +196,76 @@ window."))
 (defmethod pixel-ratio ((obj clog-window))
   (query obj "devicePixelRatio"))
 
+;;;;;;;;;;;;;;;;;;
+;; screen-width ;;
+;;;;;;;;;;;;;;;;;;
+
+(defgeneric screen-width (clog-window)
+  (:documentation "Get screen width."))
+
+(defmethod screen-width ((obj clog-window))
+  (query obj "screen.width"))
+
+;;;;;;;;;;;;;;;;;;;
+;; screen-height ;;
+;;;;;;;;;;;;;;;;;;;
+
+(defgeneric screen-height (clog-window)
+  (:documentation "Get screen height."))
+
+(defmethod screen-height ((obj clog-window))
+  (query obj "screen.height"))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; screen-available-width ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric screen-available-width (clog-window)
+  (:documentation "Get available screen width."))
+
+(defmethod screen-available-width ((obj clog-window))
+  (query obj "screen.availWidth"))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; screen-available-height ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric screen-available-height (clog-window)
+  (:documentation "Get available screen height."))
+
+(defmethod screen-available-height ((obj clog-window))
+  (query obj "screen.availHeight"))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; screen-available-left ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric screen-available-left (clog-window)
+  (:documentation "Get available screen left."))
+
+(defmethod screen-available-left ((obj clog-window))
+  (query obj "screen.availLeft"))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; screen-available-top ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric screen-available-top (clog-window)
+  (:documentation "Get available screen top."))
+
+(defmethod screen-available-top ((obj clog-window))
+  (query obj "screen.availTop"))
+
+;;;;;;;;;;;;;;;;;;;;;;;;
+;; screen-color-depth ;;
+;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric screen-color-depth (clog-window)
+  (:documentation "Get screen color depth."))
+
+(defmethod screen-color-depth ((obj clog-window))
+  (query obj "screen.colorDepth"))
+
 ;;;;;;;;;;;
 ;; alert ;;
 ;;;;;;;;;;;
