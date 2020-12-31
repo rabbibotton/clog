@@ -10,7 +10,7 @@
   :depends-on (#:clack #:websocket-driver #:alexandria #:hunchentoot #:cl-ppcre
 		       #:bordeaux-threads #:trivial-open-browser
 		       #:lack-middleware-static #:lack-middleware-session
-                       #:mgl-pax)
+                       #:mgl-pax #:quri)
   :components ((:file "clog-connection")
 	       (:file "clog")
 	       (:file "clog-system")

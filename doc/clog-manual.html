@@ -77,11 +77,19 @@ application.</p>
 <p><a id='x-28CLOG-3AINITIALIZE-20FUNCTION-29'></a></p>
 
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#x-28CLOG-3AINITIALIZE-20FUNCTION-29" >INITIALIZE</a></span></span> <span class="locative-args">ON-NEW-WINDOW &amp;KEY (HOST &quot;0.0.0.0&quot;) (PORT 8080) (BOOT-FILE &quot;/boot.html&quot;) (STATIC-ROOT #P&quot;static-files/&quot;)</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#x-28CLOG-3AINITIALIZE-20FUNCTION-29" >INITIALIZE</a></span></span> <span class="locative-args">ON-NEW-WINDOW-HANDLER &amp;KEY (HOST &quot;0.0.0.0&quot;) (PORT 8080) (BOOT-FILE &quot;/boot.html&quot;) (STATIC-ROOT #P&quot;static-files/&quot;)</span></span></p>
 
 <p>Inititalze <a href="#x-28-22clog-22-20ASDF-2FSYSTEM-3ASYSTEM-29" title="(\&quot;clog\&quot; ASDF/SYSTEM:SYSTEM)"><code>CLOG</code></a> on a socket using <code>HOST</code> and <code>PORT</code> to serve <code>BOOT-FILE</code> as 
 the default route to establish web-socket connections and static files
 located at <code>STATIC-ROOT</code>.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3ASET-ON-NEW-WINDOW-20FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#x-28CLOG-3ASET-ON-NEW-WINDOW-20FUNCTION-29" >SET-ON-NEW-WINDOW</a></span></span> <span class="locative-args">ON-NEW-WINDOW-HANDLER</span></span></p>
+
+<p>Change the on-new-window handler.</p></li>
 </ul>
 
 <p><a id='x-28CLOG-3ASHUTDOWN-20FUNCTION-29'></a></p>

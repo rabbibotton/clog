@@ -473,16 +473,16 @@ If ON-ORIENTATION-CHANGE-HANDLER is nil unbind the event."))
 ;; need to change to use a true on-storage event
 
 (defparameter storage-event-script
-  "+ e.originalEvent.key + ':' +
-     e.originalEvent.oldValue + ':' +
-     e.originalEvent.newValue + ':'")
+  "+ encodeURIComponent(e.originalEvent.key) + ':' +
+     encodeURIComponent(e.originalEvent.oldValue) + ':' +
+     encodeURIComponent(e.originalEvent.newValue) + ':'")
 
 (defun parse-storage-event (data)
   (let ((f (ppcre:split ":" data)))
     (list
-     :key-value (nth 0 f)
-     :old-value (nth 1 f)
-     :new-value (nth 2 f))))
+     :key-value (quri:url-decode (nth 0 f))
+     :old-value (quri:url-decode (nth 1 f))
+     :new-value (quri:url-decode (nth 2 f)))))
 
 (defgeneric set-on-storage (clog-window on-storage-handler)
   (:documentation "Set the ON-STORAGE-HANDLER for CLOG-OBJ. If
