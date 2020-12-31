@@ -47,6 +47,7 @@ located at STATIC-ROOT."
 ;;;;;;;;;;;;;;;;;;;;;;;
 
 (defun set-on-new-window (on-new-window-handler)
+  "Change the on-new-window handler."
   (setf *on-new-window* on-new-window-handler))
 
 ;;;;;;;;;;;;;;
