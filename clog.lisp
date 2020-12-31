@@ -30,6 +30,7 @@ application."
   (@clog-system    section)
   (@clog-utilities section)
   (@clog-obj       section)
+  (@clog-element   section)
   (@clog-body      section)
   (@clog-window    section)
   (@clog-document  section)
@@ -54,8 +55,6 @@ application."
 
   "CLOG-Obj - General Properties"
   (property  generic-function)
-  (style     generic-function)
-  (attribute generic-function)
   
   "CLOG-Obj - General Methods"
   (height generic-function)
@@ -63,15 +62,7 @@ application."
   (focus  generic-function)
   (blur   generic-function)
   
-  "CLOG-Obj - Placement"
-  (place-after            generic-function)
-  (place-before           generic-function)
-  (place-inside-top-of    generic-function)
-  (place-inside-bottom-of generic-function)
-
   "CLOG-Obj - Low Level"
-  (create-child    generic-function)
-  (attach-as-child generic-function)
   (connection-data generic-function)
   (validp          generic-function)
 
@@ -108,6 +99,24 @@ application."
   (set-on-cut                generic-function)
   (set-on-paste              generic-function))
 ;; need to add drag and drop events
+
+(defsection @clog-element (:title "CLOG Elements")
+  "CLOG-Element - Base class for CLOG Elements"
+  (clog-element class)
+
+  "CLOG-Element - Low Level Creation"
+  (create-child    generic-function)
+  (attach-as-child generic-function)
+
+  "CLOG-Element - General Properties"
+  (style     generic-function)
+  (attribute generic-function)
+
+  "CLOG-Element - Placement"
+  (place-after            generic-function)
+  (place-before           generic-function)
+  (place-inside-top-of    generic-function)
+  (place-inside-bottom-of generic-function))
 
 (defsection @clog-body (:title "CLOG Body Objects")
   "CLOG-Body - CLOG Body Objects"
@@ -165,7 +174,6 @@ application."
   (resize-by                 generic-function)
   (resize-to                 generic-function))
 
-
 (defsection @clog-document (:title "CLOG Document Objects")
   "CLOG-Document - CLOG Document Objects"
   (clog-document class)
@@ -191,12 +199,11 @@ application."
   (clog-navigator class)
 
   "CLOG-Navigator - Properties"
-  (cookie-enabled generic-function)
-  (language       generic-function)
-  (user-agent     generic-function)
-  (vendor         generic-function))
+  (cookie-enabled-p generic-function)
+  (language         generic-function)
+  (user-agent       generic-function)
+  (vendor           generic-function))
   
-
 (defsection @clog-location (:title "CLOG Location Objects")
   "CLOG-Location - CLOG Location Objects"
   (clog-location class)

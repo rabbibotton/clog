@@ -24,14 +24,14 @@
   "Construct a new clog-navigator. (Private)"
   (make-instance 'clog-navigator :connection-id connection-id :html-id "navigator"))
 
-;;;;;;;;;;;;;;;;;;;;
-;; cookie-enabled ;;
-;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;
+;; cookie-enabled-p ;;
+;;;;;;;;;;;;;;;;;;;;;;
 
-(defgeneric cookie-enabled (clog-navigator)
+(defgeneric cookie-enabled-p (clog-navigator)
   (:documentation "Get if cookie enabled."))
 
-(defmethod cookie-enabled ((obj clog-navigator))
+(defmethod cookie-enabled-p ((obj clog-navigator))
   (js-true-p (query obj "cookieEnabled")))
 
 ;;;;;;;;;;;;;;

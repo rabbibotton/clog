@@ -23,8 +23,16 @@
   (:documentation "CLOG objects (clog-obj) encapsulate the connection between
 lisp and the HTML DOM element."))
 
+;;;;;;;;;;;;;;;;;;;
+;; connection-id ;;
+;;;;;;;;;;;;;;;;;;;
+
 (defgeneric connection-id (clog-obj)
   (:documentation "Reader for connection-id slot. (Private)"))
+
+;;;;;;;;;;;;;
+;; html-id ;;
+;;;;;;;;;;;;;
 
 (defgeneric html-id (clog-obj)
   (:documentation "Reader for html-id slot. (Private)"))
@@ -214,40 +222,6 @@ result. (Private)"))
   (jquery-execute obj (format nil "prop('~A','~A')" property-name (escape-string value))))
 (defsetf property set-property)
 
-;;;;;;;;;;;
-;; style ;;
-;;;;;;;;;;;
-
-(defgeneric style (clog-obj style-name)
-  (:documentation "Get/Setf css style."))
-
-(defmethod style ((obj clog-obj) style-name)
-  (jquery-query obj (format nil "css('~A')" style-name)))
-
-(defgeneric set-style (clog-obj style-name value)
-  (:documentation "Set css style."))
-
-(defmethod set-style ((obj clog-obj) style-name value)
-  (jquery-execute obj (format nil "css('~A','~A')" style-name (escape-string value))))
-(defsetf style set-style)
-
-;;;;;;;;;;;;;;;
-;; attribute ;;
-;;;;;;;;;;;;;;;
-
-(defgeneric attribute (clog-obj attribute-name)
-  (:documentation "Get/Setf html tag attribute. (eg. src on img tag)"))
-
-(defmethod attribute ((obj clog-obj) attribute-name)
-  (jquery-query obj (format nil "attr('~A')" attribute-name)))
-
-(defgeneric set-attribute (clog-obj attribute-name value)
-  (:documentation "Set html tag attribute."))
-
-(defmethod set-attribute ((obj clog-obj) attribute-name value)
-  (jquery-execute obj (format nil "attr('~A','~A')" attribute-name (escape-string value))))
-(defsetf attribute set-attribute)
-
 ;;;;;;;;;;;;
 ;; height ;;
 ;;;;;;;;;;;;
@@ -302,33 +276,6 @@ result. (Private)"))
 (defmethod focus ((obj clog-obj))
   (jquery-execute obj "blur()"))
 
-;;;;;;;;;;;;;;;;;;
-;; create-child ;;
-;;;;;;;;;;;;;;;;;;
-
-(defgeneric create-child (clog-obj html &key auto-place)
-  (:documentation "Create a new CLOG-OBJ from HTML element as child of OBJ and if :AUTO-PLACE (default t)
-place-inside-bottom-of OBJ"))
-
-(defmethod create-child ((obj clog-obj) html &key (auto-place t))
-  (let ((child (create-with-html (connection-id obj) html)))
-    (if auto-place
-	(place-inside-bottom-of obj child)
-	child)))
-
-;;;;;;;;;;;;;;;;;;;;;
-;; attach-as-child ;;
-;;;;;;;;;;;;;;;;;;;;;
-
-(defgeneric attach-as-child (clog-obj html-id)
-  (:documentation "Create a new CLOG-OBJ and attach an existing element with HTML-ID. The
-HTML-ID must be unique."))
-
-(defmethod attach-as-child ((obj clog-obj) html-id)
-  (cc:execute (connection-id obj) (format nil "clog['~A']=$('#~A')" html-id html-id))
-  (make-clog-obj (connection-id obj) html-id))
-
-
 ;;;;;;;;;;;;
 ;; validp ;;
 ;;;;;;;;;;;;
@@ -351,50 +298,6 @@ are stored in this string based hash in the format of:
 
 (defmethod connection-data ((obj clog-obj))
   (cc:get-connection-data (connection-id obj)))
-
-;;;;;;;;;;;;;;;;;
-;; place-after ;;
-;;;;;;;;;;;;;;;;;
-
-(defgeneric place-after (clog-obj next-obj)
-  (:documentation "Places NEXT-OBJ after CLOG-OBJ in DOM"))
-
-(defmethod place-after ((obj clog-obj) next-obj)
-  (jquery-execute obj (format nil "after(~A)" (script-id next-obj)))
-  next-obj)
-
-;;;;;;;;;;;;;;;;;;
-;; place-before ;;
-;;;;;;;;;;;;;;;;;;
-
-(defgeneric place-before (clog-obj next-obj)
-  (:documentation "Places NEXT-OBJ before CLOG-OBJ in DOM"))
-
-(defmethod place-before ((obj clog-obj) next-obj)
-  (jquery-execute obj (format nil "before(~A)" (script-id next-obj)))
-  next-obj)
-
-;;;;;;;;;;;;;;;;;;;;;;;;;
-;; place-inside-top-of ;;
-;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(defgeneric place-inside-top-of (clog-obj next-obj)
-  (:documentation "Places NEXT-OBJ inside top of CLOG-OBJ in DOM"))
-
-(defmethod place-inside-top-of ((obj clog-obj) next-obj)
-  (jquery-execute obj (format nil "prepend(~A)" (script-id next-obj)))
-  next-obj)
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; place-inside-bottom-of ;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(defgeneric place-inside-bottom-of (clog-obj next-obj)
-  (:documentation "Places NEXT-OBJ inside bottom of CLOG-OBJ in DOM"))
-
-(defmethod place-inside-bottom-of ((obj clog-obj) next-obj)
-  (jquery-execute obj (format nil "append(~A)" (script-id next-obj)))
-  next-obj)
 
 ;;;;;;;;;;;;;;;;;;;
 ;; set-on-resize ;;
@@ -442,7 +345,7 @@ is nil unbind the event."))
 		 (funcall on-blur)))))
 
 ;;;;;;;;;;;;;;;;;;;
-;; Set-on-change ;;
+;; set-on-change ;;
 ;;;;;;;;;;;;;;;;;;;
 
 (defgeneric set-on-change (clog-obj on-change-handler)
@@ -492,7 +395,8 @@ If ON-FOCUS-OUT-HANDLER is nil unbind the event."))
 
 (defgeneric set-on-reset (clog-obj on-reset-handler)
   (:documentation "Set the ON-RESET-HANDLER for CLOG-OBJ. If ON-RESET-HANDLER
-is nil unbind the event."))
+is nil unbind the event. This event is activated by using reset on a form. If
+this even is bound, you must call the form reset manually."))
 
 (defmethod set-on-reset ((obj clog-obj) on-reset-handler)
   (let ((on-reset on-reset-handler))      
@@ -522,7 +426,8 @@ is nil unbind the event."))
 
 (defgeneric set-on-select (clog-obj on-select-handler)
   (:documentation "Set the ON-SELECT-HANDLER for CLOG-OBJ. If ON-SELECT-HANDLER
-is nil unbind the event."))
+is nil unbind the event.  This event is activated by using submit on a form. If
+this even is bound, you must call the form submit manually."))
 
 (defmethod set-on-select ((obj clog-obj) on-select-handler)
   (let ((on-select on-select-handler))      
@@ -853,35 +758,3 @@ is nil unbind the event."))
 	       (lambda (data)
 		 (declare (ignore data))
 		 (funcall on-paste)))))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Implementation - CLOG Low Level
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-;;;;;;;;;;;;
-;; attach ;;
-;;;;;;;;;;;;
-
-(defun attach (connection-id html-id)
-  "Create a new clog-obj and attach an existing element with HTML-ID on
-CONNECTION-ID to it and then return it. The HTML-ID must be unique. (private)"
-  (cc:execute connection-id (format nil "clog['~A']=$('#~A')" html-id html-id))
-  (make-clog-obj connection-id html-id))
-
-;;;;;;;;;;;;;;;;;;;;;;
-;; create-with-html ;;
-;;;;;;;;;;;;;;;;;;;;;;
-
-(defun create-with-html (connection-id html)
-  "Create a new clog-obj and attach it to HTML on CONNECTION-ID. There must be
-a single outer block that will be set to an internal id. The returned clog-obj
-requires placement or will not be visible, ie. place-after, etc. (private)"
-  (let ((web-id (cc:generate-id)))
-    (cc:execute
-     connection-id
-     (format nil "clog['~A']=$(\"~A\"); clog['~A'].first().prop('id','~A')"
-	     web-id html web-id web-id))
-    (make-clog-obj connection-id web-id)))
-
-
-
