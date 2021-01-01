@@ -108,15 +108,30 @@ application."
   (create-child    generic-function)
   (attach-as-child generic-function)
 
-  "CLOG-Element - General Properties"
-  (style     generic-function)
-  (attribute generic-function)
-
   "CLOG-Element - Placement"
   (place-after            generic-function)
   (place-before           generic-function)
   (place-inside-top-of    generic-function)
-  (place-inside-bottom-of generic-function))
+  (place-inside-bottom-of generic-function)
+
+  "CLOG-Element - General Properties"
+  (style     generic-function)
+  (attribute generic-function)
+
+  "CLOG-Element - Properties"
+  (access-key      generic-function)
+  (advisory-title  generic-function)
+  (class-name      generic-function)
+  (editablep       generic-function)
+  (box-sizing-type type)
+  (box-sizing      generic-function)
+  (clear-side-type type)
+  (clear-side      generic-function)
+  (float-wrap-type type)
+  (float-wrap      generic-function)
+  (display-type    type)
+  (display         generic-function)
+  )
 
 (defsection @clog-body (:title "CLOG Body Objects")
   "CLOG-Body - CLOG Body Objects"
