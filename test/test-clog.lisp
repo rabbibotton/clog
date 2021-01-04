@@ -24,7 +24,9 @@
     (setf (box-sizing tmp) :border-box)
     (setf (width tmp) 300)
     (setf (height tmp) 50)    
-    (create-child win (format nil "<H2>~A</H2>" (gethash "connection-id" (connection-data win))))
+    (setf (border (create-child win
+			  (format nil "<H2>~A</H2>"
+				  (gethash "connection-id" (connection-data win))))) "4px dotted blue")
     (setf *last-obj* (create-child win "<button>********</button>"))
     (set-on-mouse-enter *last-obj*
 			(lambda ()

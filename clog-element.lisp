@@ -239,6 +239,299 @@ HTML-ID must be unique."))
   (setf (property obj "contentEditable") (p-true-js value)))
 (defsetf editablep set-editable)
 
+;;;;;;;;;;;;;;;;
+;; draggablep ;;
+;;;;;;;;;;;;;;;;
+
+(defgeneric draggablep (clog-element)
+  (:documentation "Get/Setf draggablep."))
+
+(defmethod draggablep ((obj clog-element))
+  (js-true-p (property obj "draggable")))
+
+(defgeneric set-draggablep (clog-element value)
+  (:documentation "Set draggablep VALUE for CLOG-ELEMENT"))
+
+(defmethod set-draggablep ((obj clog-element) value)
+  (setf (property obj "draggable") (p-true-js value)))
+(defsetf draggablep set-draggablep)
+
+;;;;;;;;;;;;;
+;; hiddenp ;;
+;;;;;;;;;;;;;
+
+(defgeneric hiddenp (clog-element)
+  (:documentation "Get/Setf hiddenp."))
+
+(defmethod hiddenp ((obj clog-element))
+  (js-true-p (property obj "hidden")))
+
+(defgeneric set-hiddenp (clog-element value)
+  (:documentation "Set hiddenp VALUE for CLOG-ELEMENT"))
+
+(defmethod set-hiddenp ((obj clog-element) value)
+  (setf (property obj "hidden") (p-true-js value)))
+(defsetf hiddenp set-hiddenp)
+
+;;;;;;;;;;;;;;;;
+;; inner-html ;;
+;;;;;;;;;;;;;;;;
+
+(defgeneric inner-html (clog-element)
+  (:documentation "Get/Setf inner-html."))
+
+(defmethod inner-html ((obj clog-element))
+  (jquery-query obj "html()"))
+
+(defgeneric set-inner-html (clog-element value)
+  (:documentation "Set inner-html VALUE for CLOG-ELEMENT"))
+
+(defmethod set-inner-html ((obj clog-element) value)
+  (jquery-execute obj (format nil "html('~A')" (escape-string value))))
+(defsetf inner-html set-inner-html)
+
+;;;;;;;;;;;;;;;;
+;; outer-html ;;
+;;;;;;;;;;;;;;;;
+
+(defgeneric outer-html (clog-element)
+  (:documentation "Get/Setf outer-html."))
+
+(defmethod outer-html ((obj clog-element))
+  (query obj "outerHTML"))
+
+;;;;;;;;;;;;;;;;;
+;; spellcheckp ;;
+;;;;;;;;;;;;;;;;;
+
+(defgeneric spellcheckp (clog-element)
+  (:documentation "Get/Setf spellcheckp."))
+
+(defmethod spellcheckp ((obj clog-element))
+  (js-true-p (property obj "spellcheck")))
+
+(defgeneric set-spellcheckp (clog-element value)
+  (:documentation "Set spellcheckp VALUE for CLOG-ELEMENT"))
+
+(defmethod set-spellcheckp ((obj clog-element) value)
+  (setf (property obj "spellcheck") (p-true-js value)))
+(defsetf spellcheckp set-spellcheckp)
+
+;;;;;;;;;;;;;;;
+;; tab-index ;;
+;;;;;;;;;;;;;;;
+
+(defgeneric tab-index (clog-element)
+  (:documentation "Get/Setf tab-index."))
+
+(defmethod tab-index ((obj clog-element))
+  (property obj "tabIndex"))
+
+(defgeneric set-tab-index (clog-element value)
+  (:documentation "Set tab-index VALUE for CLOG-ELEMENT"))
+
+(defmethod set-tab-index ((obj clog-element) value)
+  (setf (property obj "tabIndex") value))
+(defsetf tab-index set-tab-index)
+
+;;;;;;;;;;
+;; text ;;
+;;;;;;;;;;
+
+(defgeneric text (clog-element)
+  (:documentation "Get/Setf text."))
+
+(defmethod text ((obj clog-element))
+  (jquery-query obj "text()"))
+
+(defgeneric set-text (clog-element value)
+  (:documentation "Set text VALUE for CLOG-ELEMENT"))
+
+(defmethod set-text ((obj clog-element) value)
+  (jquery-execute obj (format nil "text('~A')" (escape-string value))))
+(defsetf text set-text)
+
+;;;;;;;;;;;;;;;;;;;;
+;; text-direction ;;
+;;;;;;;;;;;;;;;;;;;;
+
+(deftype text-direction-type () '(member :ltr :rtl))
+
+(defgeneric text-direction (clog-element)
+  (:documentation "Get/Setf text-direction."))
+
+(defmethod text-direction ((obj clog-element))
+  (property obj "dir"))
+
+(defgeneric set-text-direction (clog-element value)
+  (:documentation "Set text-direction VALUE for CLOG-ELEMENT"))
+
+(defmethod set-text-direction ((obj clog-element) value)
+  (setf (property obj "dir") value))
+(defsetf text-direction set-text-direction)
+
+;;;;;;;;;;;;;;;;;;;
+;; language-code ;;
+;;;;;;;;;;;;;;;;;;;
+
+(defgeneric language-code (clog-element)
+  (:documentation "Get/Setf language-code."))
+
+(defmethod language-code ((obj clog-element))
+  (property obj "lang"))
+
+(defgeneric set-language-code (clog-element value)
+  (:documentation "Set language-code VALUE for CLOG-ELEMENT"))
+
+(defmethod set-language-code ((obj clog-element) value)
+  (setf (property obj "lang") value))
+(defsetf language-code set-language-code)
+
+;;;;;;;;;;;;;;;;;
+;; client-left ;;
+;;;;;;;;;;;;;;;;;
+
+(defgeneric client-left (clog-element)
+  (:documentation "Get client-left."))
+
+(defmethod client-left ((obj clog-element))
+  (property obj "clientLeft"))
+
+;;;;;;;;;;;;;;;;
+;; client-top ;;
+;;;;;;;;;;;;;;;;
+
+(defgeneric client-top (clog-element)
+  (:documentation "Get client-top."))
+
+(defmethod client-top ((obj clog-element))
+  (property obj "clientTop"))
+
+;;;;;;;;;;;;;;;;;;;
+;; client-bottom ;;
+;;;;;;;;;;;;;;;;;;;
+
+(defgeneric client-bottom (clog-element)
+  (:documentation "Get client-bottom."))
+
+(defmethod client-bottom ((obj clog-element))
+  (property obj "clientBottom"))
+
+;;;;;;;;;;;;;;;;;;
+;; client-right ;;
+;;;;;;;;;;;;;;;;;;
+
+(defgeneric client-right (clog-element)
+  (:documentation "Get client-right."))
+
+(defmethod client-right ((obj clog-element))
+  (property obj "clientRight"))
+
+;;;;;;;;;;;;;;;;;
+;; offset-left ;;
+;;;;;;;;;;;;;;;;;
+
+(defgeneric offset-left (clog-element)
+  (:documentation "Get offset-left."))
+
+(defmethod offset-left ((obj clog-element))
+  (property obj "offsetLeft"))
+
+;;;;;;;;;;;;;;;;
+;; offset-top ;;
+;;;;;;;;;;;;;;;;
+
+(defgeneric offset-top (clog-element)
+  (:documentation "Get offset-top."))
+
+(defmethod offset-top ((obj clog-element))
+  (property obj "offsetTop"))
+
+;;;;;;;;;;;;;;;;;;;
+;; offset-bottom ;;
+;;;;;;;;;;;;;;;;;;;
+
+(defgeneric offset-bottom (clog-element)
+  (:documentation "Get offset-bottom."))
+
+(defmethod offset-bottom ((obj clog-element))
+  (property obj "offsetBottom"))
+
+;;;;;;;;;;;;;;;;;;
+;; offset-right ;;
+;;;;;;;;;;;;;;;;;;
+
+(defgeneric offset-right (clog-element)
+  (:documentation "Get offset-right."))
+
+(defmethod offset-right ((obj clog-element))
+  (property obj "offsetRight"))
+
+;;;;;;;;;;;;;;;;;
+;; scroll-left ;;
+;;;;;;;;;;;;;;;;;
+
+(defgeneric scroll-left (clog-element)
+  (:documentation "Get scroll-left."))
+
+(defmethod scroll-left ((obj clog-element))
+  (property obj "scrollLeft"))
+
+(defgeneric set-scroll-left (clog-element value)
+  (:documentation "Set scroll-left VALUE for CLOG-ELEMENT"))
+
+(defmethod set-scroll-left ((obj clog-element) value)
+  (setf (property obj "scrollLeft") value))
+(defsetf scroll-left set-scroll-left)
+
+;;;;;;;;;;;;;;;;
+;; scroll-top ;;
+;;;;;;;;;;;;;;;;
+
+(defgeneric scroll-top (clog-element)
+  (:documentation "Get scroll-top."))
+
+(defmethod scroll-top ((obj clog-element))
+  (property obj "scrollTop"))
+
+(defgeneric set-scroll-top (clog-element value)
+  (:documentation "Set scroll-top VALUE for CLOG-ELEMENT"))
+
+(defmethod set-scroll-top ((obj clog-element) value)
+  (setf (property obj "scrollTop") value))
+(defsetf scroll-top set-scroll-top)
+
+;;;;;;;;;;;;;;;;;;;
+;; scroll-bottom ;;
+;;;;;;;;;;;;;;;;;;;
+
+(defgeneric scroll-bottom (clog-element)
+  (:documentation "Get scroll-bottom."))
+
+(defmethod scroll-bottom ((obj clog-element))
+  (property obj "scrollBottom"))
+
+;;;;;;;;;;;;;;;;;;
+;; scroll-right ;;
+;;;;;;;;;;;;;;;;;;
+
+(defgeneric scroll-right (clog-element)
+  (:documentation "Get scroll-right."))
+
+(defmethod scroll-right ((obj clog-element))
+  (property obj "scrollRight"))
+
+;;;;;;;;;;;;;;
+;; html-tag ;;
+;;;;;;;;;;;;;;
+
+(defgeneric html-tag (clog-element)
+  (:documentation "Get html-tag."))
+
+(defmethod html-tag ((obj clog-element))
+  (property obj "tagName"))
+
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Styles - clog-element
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -663,37 +956,444 @@ parent in the DOM."))
   (setf (style obj "max-height") value))
 (defsetf maximum-height set-maximum-height)
 
-;;;;;;;;;;;;;;;;
-;; draggablep ;;
-;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;
+;; visiblep ;;
+;;;;;;;;;;;;;;
 
-(defgeneric draggablep (clog-element)
-  (:documentation "Get/Setf draggablep."))
+(defgeneric visiblep (clog-element)
+  (:documentation "Get/Setf visiblep."))
 
-(defmethod draggablep ((obj clog-element))
-  (js-true-p (property obj "draggable")))
+(defmethod visiblep ((obj clog-element))
+  (equalp (property obj "visibility") "visible"))
 
-(defgeneric set-draggablep (clog-element value)
-  (:documentation "Set draggablep VALUE for CLOG-ELEMENT"))
+(defgeneric set-visiblep (clog-element value)
+  (:documentation "Set visiblep VALUE for CLOG-ELEMENT"))
 
-(defmethod set-draggablep ((obj clog-element) value)
-  (setf (property obj "draggable") (p-true-js value)))
-(defsetf draggablep set-draggablep)
+(defmethod set-visiblep ((obj clog-element) value)
+  (if value
+      (setf (property obj "visibility") "visible")
+      (setf (property obj "visibility") "hidden")))
+(defsetf visiblep set-visiblep)
+
+;;;;;;;;;;;;;;;;;;
+;; inner-height ;;
+;;;;;;;;;;;;;;;;;;
+
+(defgeneric inner-height (clog-element)
+  (:documentation "Get/Setf inner-height."))
+
+(defmethod inner-height ((obj clog-element))
+  (jquery-query obj "innerHeight()"))
+
+(defgeneric set-inner-height (clog-element value)
+  (:documentation "Set inner-height VALUE for CLOG-ELEMENT"))
+
+(defmethod set-inner-height ((obj clog-element) value)
+  (jquery-execute obj (format nil "innerHeight('~A')" (escape-string value))))
+(defsetf inner-height set-inner-height)
+
+;;;;;;;;;;;;;;;;;
+;; inner-width ;;
+;;;;;;;;;;;;;;;;;
+
+(defgeneric inner-width (clog-element)
+  (:documentation "Get/Setf inner-width."))
+
+(defmethod inner-width ((obj clog-element))
+  (jquery-query obj "innerWidth()"))
+
+(defgeneric set-inner-width (clog-element value)
+  (:documentation "Set inner-width VALUE for CLOG-ELEMENT"))
+
+(defmethod set-inner-width ((obj clog-element) value)
+  (jquery-execute obj (format nil "innerWidth('~A')" (escape-string value))))
+(defsetf inner-width set-inner-width)
+
+;;;;;;;;;;;;;;;;;;
+;; outer-height ;;
+;;;;;;;;;;;;;;;;;;
+
+(defgeneric outer-height (clog-element)
+  (:documentation "Get outer-height."))
+
+(defmethod outer-height ((obj clog-element))
+  (jquery-query obj "outerHeight()"))
+
+;;;;;;;;;;;;;;;;;
+;; outer-width ;;
+;;;;;;;;;;;;;;;;;
+
+(defgeneric outer-width (clog-element)
+  (:documentation "Get outer-width."))
+
+(defmethod outer-width ((obj clog-element))
+  (jquery-query obj "outerWidth()"))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; outer-height-to-margin ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric outer-height-to-margin (clog-element)
+  (:documentation "Get outer-height-to-margin."))
+
+(defmethod outer-height-to-margin ((obj clog-element))
+  (jquery-query obj "outerHeight(true)"))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; outer-width-to-margin ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric outer-width-to-margin (clog-element)
+  (:documentation "Get outer-width-to-margin."))
+
+(defmethod outer-width-to-margin ((obj clog-element))
+  (jquery-query obj "outerWidth(true)"))
+
+;;;;;;;;;;;
+;; color ;;
+;;;;;;;;;;;
+
+(defgeneric color (clog-element)
+  (:documentation "Get/Setf color."))
+
+(defmethod color ((obj clog-element))
+  (style obj "color"))
+
+(defgeneric set-color (clog-element value)
+  (:documentation "Set color VALUE for CLOG-ELEMENT"))
+
+(defmethod set-color ((obj clog-element) value)
+  (setf (style obj "color") value))
+(defsetf color set-color)
 
 ;;;;;;;;;;;;;
-;; hiddenp ;;
+;; opacity ;;
 ;;;;;;;;;;;;;
 
-(defgeneric hiddenp (clog-element)
-  (:documentation "Get/Setf hiddenp."))
+(defgeneric opacity (clog-element)
+  (:documentation "Get/Setf opacity."))
 
-(defmethod hiddenp ((obj clog-element))
-  (js-true-p (property obj "hidden")))
+(defmethod opacity ((obj clog-element))
+  (style obj "opacity"))
 
-(defgeneric set-hiddenp (clog-element value)
-  (:documentation "Set hiddenp VALUE for CLOG-ELEMENT"))
+(defgeneric set-opacity (clog-element value)
+  (:documentation "Set opacity VALUE for CLOG-ELEMENT"))
 
-(defmethod set-hiddenp ((obj clog-element) value)
-  (setf (property obj "hidden") (p-true-js value)))
-(defsetf hiddenp set-hiddenp)
+(defmethod set-opacity ((obj clog-element) value)
+  (setf (style obj "opacity") value))
+(defsetf opacity set-opacity)
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; background-attachment ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric background-attachment (clog-element)
+  (:documentation "Get/Setf background-attachment."))
+
+(defmethod background-attachment ((obj clog-element))
+  (style obj "background-attachment"))
+
+(defgeneric set-background-attachment (clog-element value)
+  (:documentation "Set background-attachment VALUE for CLOG-ELEMENT"))
+
+(defmethod set-background-attachment ((obj clog-element) value)
+  (setf (style obj "background-attachment") value))
+(defsetf background-attachment set-background-attachment)
+
+;;;;;;;;;;;;;;;;;;;;;;
+;; background-color ;;
+;;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric background-color (clog-element)
+  (:documentation "Get/Setf background-color."))
+
+(defmethod background-color ((obj clog-element))
+  (style obj "background-color"))
+
+(defgeneric set-background-color (clog-element value)
+  (:documentation "Set background-color VALUE for CLOG-ELEMENT"))
+
+(defmethod set-background-color ((obj clog-element) value)
+  (setf (style obj "background-color") value))
+(defsetf background-color set-background-color)
+
+;;;;;;;;;;;;;;;;;;;;;;
+;; background-image ;;
+;;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric background-image (clog-element)
+  (:documentation "Get/Setf background-image url."))
+
+(defmethod background-image ((obj clog-element))
+  (style obj "background-image"))
+
+(defgeneric set-background-image (clog-element value)
+  (:documentation "Set background-image VALUE for CLOG-ELEMENT"))
+
+(defmethod set-background-image ((obj clog-element) value)
+  (if value
+      (setf (style obj "background-image") (format nil "url('~A')" value))
+      (setf (style obj "background-image") "none")))
+(defsetf background-image set-background-image)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;
+;; background-position ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric background-position (clog-element)
+  (:documentation "Get/Setf background-position."))
+
+(defmethod background-position ((obj clog-element))
+  (style obj "background-position"))
+
+(defgeneric set-background-position (clog-element value)
+  (:documentation "Set background-position VALUE for CLOG-ELEMENT"))
+
+(defmethod set-background-position ((obj clog-element) value)
+  (setf (style obj "background-position") value))
+(defsetf background-position set-background-position)
+
+;;;;;;;;;;;;;;;;;;;;;;;
+;; background-origin ;;
+;;;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric background-origin (clog-element)
+  (:documentation "Get/Setf background-origin."))
+
+(defmethod background-origin ((obj clog-element))
+  (style obj "background-origin"))
+
+(defgeneric set-background-origin (clog-element value)
+  (:documentation "Set background-origin VALUE for CLOG-ELEMENT"))
+
+(defmethod set-background-origin ((obj clog-element) value)
+  (setf (style obj "background-origin") value))
+(defsetf background-origin set-background-origin)
+
+;;;;;;;;;;;;;;;;;;;;;;;
+;; background-repeat ;;
+;;;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric background-repeat (clog-element)
+  (:documentation "Get/Setf background-repeat."))
+
+(defmethod background-repeat ((obj clog-element))
+  (style obj "background-repeat"))
+
+(defgeneric set-background-repeat (clog-element value)
+  (:documentation "Set background-repeat VALUE for CLOG-ELEMENT"))
+
+(defmethod set-background-repeat ((obj clog-element) value)
+  (setf (style obj "background-repeat") value))
+(defsetf background-repeat set-background-repeat)
+
+;;;;;;;;;;;;;;;;;;;;;
+;; background-clip ;;
+;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric background-clip (clog-element)
+  (:documentation "Get/Setf background-clip."))
+
+(defmethod background-clip ((obj clog-element))
+  (style obj "background-clip"))
+
+(defgeneric set-background-clip (clog-element value)
+  (:documentation "Set background-clip VALUE for CLOG-ELEMENT"))
+
+(defmethod set-background-clip ((obj clog-element) value)
+  (setf (style obj "background-clip") value))
+(defsetf background-clip set-background-clip)
+
+;;;;;;;;;;;;;;;;;;;;;
+;; background-size ;;
+;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric background-size (clog-element)
+  (:documentation "Get/Setf background-size."))
+
+(defmethod background-size ((obj clog-element))
+  (style obj "background-size"))
+
+(defgeneric set-background-size (clog-element value)
+  (:documentation "Set background-size VALUE for CLOG-ELEMENT"))
+
+(defmethod set-background-size ((obj clog-element) value)
+  (setf (style obj "background-size") value))
+(defsetf background-size set-background-size)
+
+;;;;;;;;;;;;
+;; border ;;
+;;;;;;;;;;;;
+
+(defgeneric set-border (clog-element value)
+  (:documentation "Set border VALUE for CLOG-ELEMENT"))
+
+(defmethod set-border ((obj clog-element) value)
+  (setf (style obj "border") value))
+(defsetf border set-border)
+
+;;;;;;;;;;;;;;;;;;;
+;; border-radius ;;
+;;;;;;;;;;;;;;;;;;;
+
+(defgeneric set-border-radius (clog-element value)
+  (:documentation "Set border-radius VALUE for CLOG-ELEMENT"))
+
+(defmethod set-border-radius ((obj clog-element) value)
+  (setf (style obj "border-radius") value))
+(defsetf border-radius set-border-radius)
+
+;;;;;;;;;;;;;;;;
+;; box-shadow ;;
+;;;;;;;;;;;;;;;;
+
+(defgeneric set-box-shadow (clog-element value)
+  (:documentation "Set box-shadow VALUE for CLOG-ELEMENT"))
+
+(defmethod set-box-shadow ((obj clog-element) value)
+  (setf (style obj "box-shadow") value))
+(defsetf box-shadow set-box-shadow)
+
+;;;;;;;;;;;;;
+;; outline ;;
+;;;;;;;;;;;;;
+
+(defgeneric set-outline (clog-element value)
+  (:documentation "Set outline VALUE for CLOG-ELEMENT"))
+
+(defmethod set-outline ((obj clog-element) value)
+  (setf (style obj "outline") value))
+(defsetf outline set-outline)
+
+;;;;;;;;;;;;
+;; margin ;;
+;;;;;;;;;;;;
+
+(defgeneric set-margin (clog-element value)
+  (:documentation "Set margin VALUE for CLOG-ELEMENT"))
+
+(defmethod set-margin ((obj clog-element) value)
+  (setf (style obj "margin") value))
+(defsetf margin set-margin)
+
+;;;;;;;;;;;;;
+;; padding ;;
+;;;;;;;;;;;;;
+
+(defgeneric set-padding (clog-element value)
+  (:documentation "Set padding VALUE for CLOG-ELEMENT"))
+
+(defmethod set-padding ((obj clog-element) value)
+  (setf (style obj "padding") value))
+(defsetf padding set-padding)
+
+;;;;;;;;;;;;
+;; cursor ;;
+;;;;;;;;;;;;
+
+(defgeneric cursor (clog-element)
+  (:documentation "Get/Setf cursor."))
+
+(defmethod cursor ((obj clog-element))
+  (style obj "cursor"))
+
+(defgeneric set-cursor (clog-element value)
+  (:documentation "Set cursor VALUE for CLOG-ELEMENT"))
+
+(defmethod set-cursor ((obj clog-element) value)
+  (setf (style obj "cursor") value))
+(defsetf cursor set-cursor)
+
+;;;;;;;;;;
+;; font ;;
+;;;;;;;;;;
+
+(defgeneric font (clog-element)
+  (:documentation "Get/Setf font."))
+
+(defmethod font ((obj clog-element))
+  (style obj "font"))
+
+(defgeneric set-font (clog-element value)
+  (:documentation "Set font VALUE for CLOG-ELEMENT"))
+
+(defmethod set-font ((obj clog-element) value)
+  (setf (style obj "font") value))
+(defsetf font set-font)
+
+;;;;;;;;;;;;;;;;;;;;
+;; vertical-align ;;
+;;;;;;;;;;;;;;;;;;;;
+
+(deftype vertical-align-type ()
+  '(member :baseline :sub :super :text-top :text-bottom :middle :top :bottom))
+
+(defgeneric vertical-align (clog-element)
+  (:documentation "Get/Setf vertical-align."))
+
+(defmethod vertical-align ((obj clog-element))
+  (style obj "vertical-align"))
+
+(defgeneric set-vertical-align (clog-element value)
+  (:documentation "Set vertical-align VALUE for CLOG-ELEMENT"))
+
+(defmethod set-vertical-align ((obj clog-element) value)
+  (setf (style obj "vertical-align") value))
+(defsetf vertical-align set-vertical-align)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Methods - clog-element
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;;;;;;;;;;;;;;;
+;; add-class ;;
+;;;;;;;;;;;;;;;
+
+(defgeneric add-class (clog-element class-name)
+  (:documentation "add-class."))
+
+(defmethod add-class ((obj clog-element) class-name)
+  (jquery-execute obj (format nil "addClass('~A')"
+			      (escape-string class-name))))
+
+;;;;;;;;;;;;;;;;;;
+;; remove-class ;;
+;;;;;;;;;;;;;;;;;;
+
+(defgeneric remove-class (clog-element class-name)
+  (:documentation "remove-class."))
+
+(defmethod remove-class ((obj clog-element) class-name)
+  (jquery-execute obj (format nil "removeClass('~A')"
+			      (escape-string class-name))))
+
+;;;;;;;;;;;;;;;;;;
+;; toggle-class ;;
+;;;;;;;;;;;;;;;;;;
+
+(defgeneric toggle-class (clog-element class-name)
+  (:documentation "toggle-class."))
+
+(defmethod toggle-class ((obj clog-element) class-name)
+  (jquery-execute obj (format nil "toggleClass('~A')"
+			      (escape-string class-name))))
+
+;;;;;;;;;;;;;;;;;;;;;
+;; remove-from-dom ;;
+;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric remove-from-dom (clog-element)
+  (:documentation "remove-from-dom."))
+
+(defmethod remove-from-dom ((obj clog-element))
+  (jquery-execute obj "remove()"))
+
+;;;;;;;;;;;
+;; click ;;
+;;;;;;;;;;;
+
+(defgeneric click (clog-element)
+  (:documentation "simulate click."))
+
+(defmethod click ((obj clog-element))
+  (jquery-execute obj "click()"))
