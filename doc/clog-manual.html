@@ -610,7 +610,19 @@ and if <code>:AUTO-PLACE</code> (default t) place-inside-bottom-of <code>CLOG-OB
 <ul>
 <li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3AACCESS-KEY-20GENERIC-FUNCTION-29" >ACCESS-KEY</a></span></span> <span class="locative-args">CLOG-ELEMENT</span></span></p>
 
-<p>Get/Setf access-key.</p></li>
+<p>Get/Setf access-key. Used for hot key access to element.
+[special key][] + Access_Key</p>
+
+<p>The [special key][] per browser and platform is:</p>
+
+<pre><code>Browser              Windows       Linux           Mac
+-----------------    -------       -----           ---
+Internet Explorer     [Alt]         N/A            N/A
+Chrome                [Alt]        [Alt]     [Control][Alt]
+Firefox           [Alt][Shift] [Alt][Shift]  [Control][Alt]
+Safari                [Alt]         N/A      [Control][Alt]
+Opera 15+             [Alt]        [Alt]          [Alt]
+</code></pre></li>
 </ul>
 
 <p><a id='x-28CLOG-3AADVISORY-TITLE-20GENERIC-FUNCTION-29'></a></p>
@@ -618,7 +630,8 @@ and if <code>:AUTO-PLACE</code> (default t) place-inside-bottom-of <code>CLOG-OB
 <ul>
 <li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3AADVISORY-TITLE-20GENERIC-FUNCTION-29" >ADVISORY-TITLE</a></span></span> <span class="locative-args">CLOG-ELEMENT</span></span></p>
 
-<p>Get/Setf advisory-title.</p></li>
+<p>Get/Setf advisory title of Element, usually
+used for body and image maps.</p></li>
 </ul>
 
 <p><a id='x-28CLASS-NAME-20GENERIC-FUNCTION-29'></a></p>
@@ -626,7 +639,9 @@ and if <code>:AUTO-PLACE</code> (default t) place-inside-bottom-of <code>CLOG-OB
 <ul>
 <li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLASS-NAME-20GENERIC-FUNCTION-29" >CLASS-NAME</a></span></span> <span class="locative-args">CLOG-ELEMENT</span></span></p>
 
-<p>Get/Setf class-name.</p></li>
+<p>Get/Setf class-name. CSS Class name, can be multiple
+seperated by <space>. See add-class, remove-class and toggle-class methods
+for adding and removing individual or groups of classes in an easier way.</p></li>
 </ul>
 
 <p><a id='x-28CLOG-3AEDITABLEP-20GENERIC-FUNCTION-29'></a></p>
@@ -634,7 +649,8 @@ and if <code>:AUTO-PLACE</code> (default t) place-inside-bottom-of <code>CLOG-OB
 <ul>
 <li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3AEDITABLEP-20GENERIC-FUNCTION-29" >EDITABLEP</a></span></span> <span class="locative-args">CLOG-ELEMENT</span></span></p>
 
-<p>Get/Setf editable.</p></li>
+<p>Get/Setf editable. This will make almost any element with
+content editable, even non-form types in most browsers.</p></li>
 </ul>
 
 <p><a id='x-28CLOG-3ADRAGGABLEP-20GENERIC-FUNCTION-29'></a></p>
@@ -642,7 +658,24 @@ and if <code>:AUTO-PLACE</code> (default t) place-inside-bottom-of <code>CLOG-OB
 <ul>
 <li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ADRAGGABLEP-20GENERIC-FUNCTION-29" >DRAGGABLEP</a></span></span> <span class="locative-args">CLOG-ELEMENT</span></span></p>
 
-<p>Get/Setf draggablep.</p></li>
+<p>Get/Setf draggablep. In order to make an object draggable
+in addition to Draggable being true the on-drag-start event <em>must</em> be bound
+as well to set the drag-text. To receive a drop, you need to bind on-drop.
+See clog-base.lisp</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3AVISIBLEP-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3AVISIBLEP-20GENERIC-FUNCTION-29" >VISIBLEP</a></span></span> <span class="locative-args">CLOG-ELEMENT</span></span></p>
+
+<p>Get/Setf visiblep. This will cause the Element to no longer
+be visible but it will still take up space where it was in the layout. Use
+hiddenp to also remove from layout.
+Note: that each property, visiblep, hiddenp and display (None) all work
+      independantly and do not reflect the actual client side visual state
+      but the property state. To check if an object is for sure not visible
+      would require checking all three properties.</p></li>
 </ul>
 
 <p><a id='x-28CLOG-3AHIDDENP-20GENERIC-FUNCTION-29'></a></p>
@@ -650,7 +683,10 @@ and if <code>:AUTO-PLACE</code> (default t) place-inside-bottom-of <code>CLOG-OB
 <ul>
 <li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3AHIDDENP-20GENERIC-FUNCTION-29" >HIDDENP</a></span></span> <span class="locative-args">CLOG-ELEMENT</span></span></p>
 
-<p>Get/Setf hiddenp.</p></li>
+<p>Get/Setf hiddenp. The hidden property will make an element
+invisible, however unlike visiblep, hiddenp implies the element is semantically
+not relevant not just visually and will <em>also</em> remove it from layout similar to
+setting display (None).</p></li>
 </ul>
 
 <p><a id='x-28CLOG-3AINNER-HTML-20GENERIC-FUNCTION-29'></a></p>
@@ -658,7 +694,12 @@ and if <code>:AUTO-PLACE</code> (default t) place-inside-bottom-of <code>CLOG-OB
 <ul>
 <li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3AINNER-HTML-20GENERIC-FUNCTION-29" >INNER-HTML</a></span></span> <span class="locative-args">CLOG-ELEMENT</span></span></p>
 
-<p>Get/Setf inner-html.</p></li>
+<p>Get/Setf inner-html. This will completely replace the inner
+html of an element. This will remove any Elements within Element from the DOM.
+If those elements were created in <a href="#x-28-22clog-22-20ASDF-2FSYSTEM-3ASYSTEM-29" title="(\&quot;clog\&quot; ASDF/SYSTEM:SYSTEM)"><code>CLOG</code></a> they are still available and can be
+placed in the DOM again using the placement methods. However if they were
+created through html writes or otherwise not assigned an ID by <a href="#x-28-22clog-22-20ASDF-2FSYSTEM-3ASYSTEM-29" title="(\&quot;clog\&quot; ASDF/SYSTEM:SYSTEM)"><code>CLOG</code></a>, they are
+lost forever.</p></li>
 </ul>
 
 <p><a id='x-28CLOG-3AOUTER-HTML-20GENERIC-FUNCTION-29'></a></p>
@@ -666,7 +707,8 @@ and if <code>:AUTO-PLACE</code> (default t) place-inside-bottom-of <code>CLOG-OB
 <ul>
 <li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3AOUTER-HTML-20GENERIC-FUNCTION-29" >OUTER-HTML</a></span></span> <span class="locative-args">CLOG-ELEMENT</span></span></p>
 
-<p>Get/Setf outer-html.</p></li>
+<p>Get/Setf outer-html. Returns the <code>HTML</code> for Element and all
+its contents</p></li>
 </ul>
 
 <p><a id='x-28CLOG-3ASPELLCHECKP-20GENERIC-FUNCTION-29'></a></p>
@@ -674,7 +716,8 @@ and if <code>:AUTO-PLACE</code> (default t) place-inside-bottom-of <code>CLOG-OB
 <ul>
 <li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ASPELLCHECKP-20GENERIC-FUNCTION-29" >SPELLCHECKP</a></span></span> <span class="locative-args">CLOG-ELEMENT</span></span></p>
 
-<p>Get/Setf spellcheckp.</p></li>
+<p>Get/Setf spellcheckp. If true Element is subject to browser
+spell checking if Editable is also true.</p></li>
 </ul>
 
 <p><a id='x-28CLOG-3ATAB-INDEX-20GENERIC-FUNCTION-29'></a></p>
@@ -690,7 +733,11 @@ and if <code>:AUTO-PLACE</code> (default t) place-inside-bottom-of <code>CLOG-OB
 <ul>
 <li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ATEXT-20GENERIC-FUNCTION-29" >TEXT</a></span></span> <span class="locative-args">CLOG-ELEMENT</span></span></p>
 
-<p>Get/Setf text.</p></li>
+<p>Get/Setf text.</p>
+
+<p><tag>Text Content</tag> - Text content is the content contained by the
+                          tag. This should not be confused with the
+                          'Value' of a Form Tag. (See clog-form.lisp)</p></li>
 </ul>
 
 <p><a id='x-28CLOG-3ATEXT-DIRECTION-TYPE-20-28TYPE-29-29'></a></p>
@@ -704,7 +751,7 @@ and if <code>:AUTO-PLACE</code> (default t) place-inside-bottom-of <code>CLOG-OB
 <ul>
 <li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ATEXT-DIRECTION-20GENERIC-FUNCTION-29" >TEXT-DIRECTION</a></span></span> <span class="locative-args">CLOG-ELEMENT</span></span></p>
 
-<p>Get/Setf text-direction.</p></li>
+<p>Get/Setf BiDi text-direction.</p></li>
 </ul>
 
 <p><a id='x-28CLOG-3ALANGUAGE-CODE-20GENERIC-FUNCTION-29'></a></p>
@@ -720,7 +767,8 @@ and if <code>:AUTO-PLACE</code> (default t) place-inside-bottom-of <code>CLOG-OB
 <ul>
 <li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ACLIENT-LEFT-20GENERIC-FUNCTION-29" >CLIENT-LEFT</a></span></span> <span class="locative-args">CLOG-ELEMENT</span></span></p>
 
-<p>Get client-left.</p></li>
+<p>Get client-left. The width of the left border of an element
+in pixels. It does not include the margin or padding.</p></li>
 </ul>
 
 <p><a id='x-28CLOG-3ACLIENT-TOP-20GENERIC-FUNCTION-29'></a></p>
@@ -728,23 +776,28 @@ and if <code>:AUTO-PLACE</code> (default t) place-inside-bottom-of <code>CLOG-OB
 <ul>
 <li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ACLIENT-TOP-20GENERIC-FUNCTION-29" >CLIENT-TOP</a></span></span> <span class="locative-args">CLOG-ELEMENT</span></span></p>
 
-<p>Get client-top.</p></li>
+<p>Get client-top. The width of the top border of an element
+in pixels. It does not include the margin or padding.</p></li>
 </ul>
 
-<p><a id='x-28CLOG-3ACLIENT-BOTTOM-20GENERIC-FUNCTION-29'></a></p>
+<p><a id='x-28CLOG-3ACLIENT-WIDTH-20GENERIC-FUNCTION-29'></a></p>
 
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ACLIENT-BOTTOM-20GENERIC-FUNCTION-29" >CLIENT-BOTTOM</a></span></span> <span class="locative-args">CLOG-ELEMENT</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ACLIENT-WIDTH-20GENERIC-FUNCTION-29" >CLIENT-WIDTH</a></span></span> <span class="locative-args">CLOG-ELEMENT</span></span></p>
 
-<p>Get client-bottom.</p></li>
+<p>Get client-width. Inner width of an element in pixels.
+CSS width + CSS padding - width of vertical scrollbar (if present)
+Does not include the border or margin.</p></li>
 </ul>
 
-<p><a id='x-28CLOG-3ACLIENT-RIGHT-20GENERIC-FUNCTION-29'></a></p>
+<p><a id='x-28CLOG-3ACLIENT-HEIGHT-20GENERIC-FUNCTION-29'></a></p>
 
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ACLIENT-RIGHT-20GENERIC-FUNCTION-29" >CLIENT-RIGHT</a></span></span> <span class="locative-args">CLOG-ELEMENT</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ACLIENT-HEIGHT-20GENERIC-FUNCTION-29" >CLIENT-HEIGHT</a></span></span> <span class="locative-args">CLOG-ELEMENT</span></span></p>
 
-<p>Get client-right.</p></li>
+<p>Get client-right. Inner height of an element in pixels.
+CSS height + CSS padding - height of horizontal scrollbar (if present)
+Does not include the border or margin.</p></li>
 </ul>
 
 <p><a id='x-28CLOG-3AOFFSET-LEFT-20GENERIC-FUNCTION-29'></a></p>
@@ -763,20 +816,22 @@ and if <code>:AUTO-PLACE</code> (default t) place-inside-bottom-of <code>CLOG-OB
 <p>Position in pixels from top relative to the document.</p></li>
 </ul>
 
-<p><a id='x-28CLOG-3AOFFSET-BOTTOM-20GENERIC-FUNCTION-29'></a></p>
+<p><a id='x-28CLOG-3AOFFSET-WIDTH-20GENERIC-FUNCTION-29'></a></p>
 
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3AOFFSET-BOTTOM-20GENERIC-FUNCTION-29" >OFFSET-BOTTOM</a></span></span> <span class="locative-args">CLOG-ELEMENT</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3AOFFSET-WIDTH-20GENERIC-FUNCTION-29" >OFFSET-WIDTH</a></span></span> <span class="locative-args">CLOG-ELEMENT</span></span></p>
 
-<p>Get offset-bottom.</p></li>
+<p>Get offset-width. CSS width + CSS padding + width of
+vertical scrollbar (if present) + Border</p></li>
 </ul>
 
-<p><a id='x-28CLOG-3AOFFSET-RIGHT-20GENERIC-FUNCTION-29'></a></p>
+<p><a id='x-28CLOG-3AOFFSET-HEIGHT-20GENERIC-FUNCTION-29'></a></p>
 
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3AOFFSET-RIGHT-20GENERIC-FUNCTION-29" >OFFSET-RIGHT</a></span></span> <span class="locative-args">CLOG-ELEMENT</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3AOFFSET-HEIGHT-20GENERIC-FUNCTION-29" >OFFSET-HEIGHT</a></span></span> <span class="locative-args">CLOG-ELEMENT</span></span></p>
 
-<p>Get offset-right.</p></li>
+<p>Get offset-height. CSS height + CSS padding + height of
+horizontal scrollbar (if present) + Border</p></li>
 </ul>
 
 <p><a id='x-28CLOG-3AHTML-TAG-20GENERIC-FUNCTION-29'></a></p>
@@ -800,7 +855,9 @@ and if <code>:AUTO-PLACE</code> (default t) place-inside-bottom-of <code>CLOG-OB
 <ul>
 <li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ABOX-SIZING-20GENERIC-FUNCTION-29" >BOX-SIZING</a></span></span> <span class="locative-args">CLOG-ELEMENT</span></span></p>
 
-<p>Get/Setf box-sizing.</p></li>
+<p>Get/Setf box-sizing. Affects if height and width
+properteries represent just the content or the border, marging, padding,
+scroll and conent area as a whole. The default is content-box</p></li>
 </ul>
 
 <p><a id='x-28CLOG-3ACLEAR-SIDE-TYPE-20-28TYPE-29-29'></a></p>
@@ -814,7 +871,8 @@ and if <code>:AUTO-PLACE</code> (default t) place-inside-bottom-of <code>CLOG-OB
 <ul>
 <li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ACLEAR-SIDE-20GENERIC-FUNCTION-29" >CLEAR-SIDE</a></span></span> <span class="locative-args">CLOG-ELEMENT</span></span></p>
 
-<p>Get/Setf clear-side.</p></li>
+<p>Get/Setf clear-side. When using 'float' for layout sets
+if the right or left side of block should be clear of any 'floated' Element.</p></li>
 </ul>
 
 <p><a id='x-28CLOG-3AFLOAT-WRAP-TYPE-20-28TYPE-29-29'></a></p>
@@ -843,7 +901,26 @@ elements wrap around it.</p></li>
 <ul>
 <li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ADISPLAY-20GENERIC-FUNCTION-29" >DISPLAY</a></span></span> <span class="locative-args">CLOG-ELEMENT</span></span></p>
 
-<p>Get/Setf display.</p></li>
+<p>Get/Setf display. Display sets the CSS Display property that
+handles how elements are treated by the browser layout engine.</p>
+
+<pre><code>Common Values:
+
+none         - Remove Element from layout but remain in the DOM this is
+               similar to hiddenp, but not like visiblep that makes the
+               element not visible but still take up space in layout.
+
+block        - Displays an element starting on a new line and stretches
+               out to the left and right as far as it can. e.g. &lt;div&gt; by
+               default
+
+inline       - Wraps with text in a paragraph. e.g. &lt;span&gt; by default
+
+inline-block - Flows with paragraph but will always fill from left to
+               right.
+
+flex         - Use the flexbox model
+</code></pre></li>
 </ul>
 
 <p><a id='x-28CLOG-3AOVERFLOW-TYPE-20-28TYPE-29-29'></a></p>
@@ -857,7 +934,8 @@ elements wrap around it.</p></li>
 <ul>
 <li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3AOVERFLOW-20GENERIC-FUNCTION-29" >OVERFLOW</a></span></span> <span class="locative-args">CLOG-ELEMENT</span></span></p>
 
-<p>Get/Setf overflow.</p></li>
+<p>Get/Setf overflow.  How to handle overflow of contents of
+an element's box. The default is visible - no clipping.</p></li>
 </ul>
 
 <p><a id='x-28CLOG-3AOVERFLOW-X-TYPE-20-28TYPE-29-29'></a></p>
@@ -871,7 +949,8 @@ elements wrap around it.</p></li>
 <ul>
 <li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3AOVERFLOW-X-20GENERIC-FUNCTION-29" >OVERFLOW-X</a></span></span> <span class="locative-args">CLOG-ELEMENT</span></span></p>
 
-<p>Get/Setf overflow-x.</p></li>
+<p>Get/Setf overflow-x. How to handle overflow of contents of
+an element's box for X. The default is Visible - no clipping.</p></li>
 </ul>
 
 <p><a id='x-28CLOG-3AOVERFLOW-Y-TYPE-20-28TYPE-29-29'></a></p>
@@ -885,7 +964,8 @@ elements wrap around it.</p></li>
 <ul>
 <li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3AOVERFLOW-Y-20GENERIC-FUNCTION-29" >OVERFLOW-Y</a></span></span> <span class="locative-args">CLOG-ELEMENT</span></span></p>
 
-<p>Get/Setf overflow-y.</p></li>
+<p>Get/Setf overflow-y. How to handle overflow of contents of
+an element's box for Y. The default is Visible - no clipping.</p></li>
 </ul>
 
 <p><a id='x-28CLOG-3AZ-INDEX-20GENERIC-FUNCTION-29'></a></p>
@@ -893,7 +973,9 @@ elements wrap around it.</p></li>
 <ul>
 <li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3AZ-INDEX-20GENERIC-FUNCTION-29" >Z-INDEX</a></span></span> <span class="locative-args">CLOG-ELEMENT</span></span></p>
 
-<p>Get/Setf z-index.</p></li>
+<p>Get/Setf z-index. Set stack order of element.
+Note: z-index only works on Elements with Position Type of absolute,
+      relative and fixed.</p></li>
 </ul>
 
 <p><a id='x-28CLOG-3ARESIZABLE-TYPE-20-28TYPE-29-29'></a></p>
@@ -907,7 +989,8 @@ elements wrap around it.</p></li>
 <ul>
 <li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ARESIZABLE-20GENERIC-FUNCTION-29" >RESIZABLE</a></span></span> <span class="locative-args">CLOG-ELEMENT</span></span></p>
 
-<p>Get/Setf resizable.</p></li>
+<p>Get/Setf resizable. If overflow is not set to visible,
+resizeable sets if element can be resized by user.</p></li>
 </ul>
 
 <p><a id='x-28CLOG-3APOSITION-TYPE-20-28TYPE-29-29'></a></p>
@@ -921,7 +1004,16 @@ elements wrap around it.</p></li>
 <ul>
 <li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3APOSITIONING-20GENERIC-FUNCTION-29" >POSITIONING</a></span></span> <span class="locative-args">CLOG-ELEMENT</span></span></p>
 
-<p>Get/Setf positioning.</p></li>
+<p>Get/Setf positioning. Determins how the properties left, right,
+top and bottom are interpreted.</p>
+
+<p>Static   - According to document flow, position properties have no
+              affect.
+   Absolute - Position properties are relative to the first non-static
+              element in the DOM before Element
+   Fixed    - Position properties are relative to browser window
+   Relative - Position properties are relative to where the static position
+              of the element would in the normal document flow.</p></li>
 </ul>
 
 <p><a id='x-28CLOG-3APOSITION-TOP-20GENERIC-FUNCTION-29'></a></p>
@@ -995,7 +1087,7 @@ parent in the DOM.</p></li>
 <ul>
 <li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ABOX-HEIGHT-20GENERIC-FUNCTION-29" >BOX-HEIGHT</a></span></span> <span class="locative-args">CLOG-ELEMENT</span></span></p>
 
-<p>Get/Setf box-height.</p></li>
+<p>Get/Setf box-height. Height based on box sizing.</p></li>
 </ul>
 
 <p><a id='x-28CLOG-3ABOX-WIDTH-20GENERIC-FUNCTION-29'></a></p>
@@ -1003,7 +1095,7 @@ parent in the DOM.</p></li>
 <ul>
 <li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ABOX-WIDTH-20GENERIC-FUNCTION-29" >BOX-WIDTH</a></span></span> <span class="locative-args">CLOG-ELEMENT</span></span></p>
 
-<p>Get/Setf box-width.</p></li>
+<p>Get/Setf box-width. Width based on box sizing.</p></li>
 </ul>
 
 <p><a id='x-28CLOG-3AMAXIMUM-HEIGHT-20GENERIC-FUNCTION-29'></a></p>
@@ -1036,14 +1128,6 @@ parent in the DOM.</p></li>
 <li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3AMINIMUM-WIDTH-20GENERIC-FUNCTION-29" >MINIMUM-WIDTH</a></span></span> <span class="locative-args">CLOG-ELEMENT</span></span></p>
 
 <p>Get/Setf minimum-width.</p></li>
-</ul>
-
-<p><a id='x-28CLOG-3AVISIBLEP-20GENERIC-FUNCTION-29'></a></p>
-
-<ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3AVISIBLEP-20GENERIC-FUNCTION-29" >VISIBLEP</a></span></span> <span class="locative-args">CLOG-ELEMENT</span></span></p>
-
-<p>Get/Setf visiblep.</p></li>
 </ul>
 
 <p><a id='x-28CLOG-3AINNER-HEIGHT-20GENERIC-FUNCTION-29'></a></p>
@@ -1083,7 +1167,7 @@ parent in the DOM.</p></li>
 <ul>
 <li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3AOUTER-HEIGHT-TO-MARGIN-20GENERIC-FUNCTION-29" >OUTER-HEIGHT-TO-MARGIN</a></span></span> <span class="locative-args">CLOG-ELEMENT</span></span></p>
 
-<p>Get outer-height-to-margin.</p></li>
+<p>Get outer-height-to-margin. Includes padding and border and margin.</p></li>
 </ul>
 
 <p><a id='x-28CLOG-3AOUTER-WIDTH-TO-MARGIN-20GENERIC-FUNCTION-29'></a></p>
@@ -1091,7 +1175,7 @@ parent in the DOM.</p></li>
 <ul>
 <li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3AOUTER-WIDTH-TO-MARGIN-20GENERIC-FUNCTION-29" >OUTER-WIDTH-TO-MARGIN</a></span></span> <span class="locative-args">CLOG-ELEMENT</span></span></p>
 
-<p>Get outer-width-to-margin.</p></li>
+<p>Get outer-width-to-margin. Includes padding and border and margin.</p></li>
 </ul>
 
 <p><a id='x-28CLOG-3ACOLOR-20GENERIC-FUNCTION-29'></a></p>
@@ -1108,6 +1192,12 @@ parent in the DOM.</p></li>
 <li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3AOPACITY-20GENERIC-FUNCTION-29" >OPACITY</a></span></span> <span class="locative-args">CLOG-ELEMENT</span></span></p>
 
 <p>Get/Setf opacity.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3ABACKGROUND-ATTACHMENT-TYPE-20-28TYPE-29-29'></a></p>
+
+<ul>
+<li><span class=reference-bullet><span class=reference><span class="locative-type">[type]</span> <span class="reference-object"><a href="#x-28CLOG-3ABACKGROUND-ATTACHMENT-TYPE-20-28TYPE-29-29" >BACKGROUND-ATTACHMENT-TYPE</a></span></span></span></li>
 </ul>
 
 <p><a id='x-28CLOG-3ABACKGROUND-ATTACHMENT-20GENERIC-FUNCTION-29'></a></p>
@@ -1131,7 +1221,8 @@ parent in the DOM.</p></li>
 <ul>
 <li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ABACKGROUND-IMAGE-20GENERIC-FUNCTION-29" >BACKGROUND-IMAGE</a></span></span> <span class="locative-args">CLOG-ELEMENT</span></span></p>
 
-<p>Get/Setf background-image url.</p></li>
+<p>Get/Setf background-image url. proper syntax is
+'url(...)' | nil to clear</p></li>
 </ul>
 
 <p><a id='x-28CLOG-3ABACKGROUND-POSITION-20GENERIC-FUNCTION-29'></a></p>
@@ -1139,7 +1230,14 @@ parent in the DOM.</p></li>
 <ul>
 <li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ABACKGROUND-POSITION-20GENERIC-FUNCTION-29" >BACKGROUND-POSITION</a></span></span> <span class="locative-args">CLOG-ELEMENT</span></span></p>
 
-<p>Get/Setf background-position.</p></li>
+<p>Get/Setf background-position. combination of 2 -
+left/right/center/top/bottom | %x %y | x y</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3ABACKGROUND-ORIGIN-TYPE-20-28TYPE-29-29'></a></p>
+
+<ul>
+<li><span class=reference-bullet><span class=reference><span class="locative-type">[type]</span> <span class="reference-object"><a href="#x-28CLOG-3ABACKGROUND-ORIGIN-TYPE-20-28TYPE-29-29" >BACKGROUND-ORIGIN-TYPE</a></span></span></span></li>
 </ul>
 
 <p><a id='x-28CLOG-3ABACKGROUND-ORIGIN-20GENERIC-FUNCTION-29'></a></p>
@@ -1147,7 +1245,14 @@ parent in the DOM.</p></li>
 <ul>
 <li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ABACKGROUND-ORIGIN-20GENERIC-FUNCTION-29" >BACKGROUND-ORIGIN</a></span></span> <span class="locative-args">CLOG-ELEMENT</span></span></p>
 
-<p>Get/Setf background-origin.</p></li>
+<p>Get/Setf background-origin. Background position property
+is relative to origin of: padding-box|border-box|content-box</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3ABACKGROUND-REPEAT-TYPE-20-28TYPE-29-29'></a></p>
+
+<ul>
+<li><span class=reference-bullet><span class=reference><span class="locative-type">[type]</span> <span class="reference-object"><a href="#x-28CLOG-3ABACKGROUND-REPEAT-TYPE-20-28TYPE-29-29" >BACKGROUND-REPEAT-TYPE</a></span></span></span></li>
 </ul>
 
 <p><a id='x-28CLOG-3ABACKGROUND-REPEAT-20GENERIC-FUNCTION-29'></a></p>
@@ -1155,7 +1260,14 @@ parent in the DOM.</p></li>
 <ul>
 <li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ABACKGROUND-REPEAT-20GENERIC-FUNCTION-29" >BACKGROUND-REPEAT</a></span></span> <span class="locative-args">CLOG-ELEMENT</span></span></p>
 
-<p>Get/Setf background-repeat.</p></li>
+<p>Get/Setf background-repeat. repeat-x | repeat-y |
+[ repeat | space | round | no-repeat ][]{1,2}</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3ABACKGROUND-CLIP-TYPE-20-28TYPE-29-29'></a></p>
+
+<ul>
+<li><span class=reference-bullet><span class=reference><span class="locative-type">[type]</span> <span class="reference-object"><a href="#x-28CLOG-3ABACKGROUND-CLIP-TYPE-20-28TYPE-29-29" >BACKGROUND-CLIP-TYPE</a></span></span></span></li>
 </ul>
 
 <p><a id='x-28CLOG-3ABACKGROUND-CLIP-20GENERIC-FUNCTION-29'></a></p>
@@ -1163,7 +1275,8 @@ parent in the DOM.</p></li>
 <ul>
 <li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ABACKGROUND-CLIP-20GENERIC-FUNCTION-29" >BACKGROUND-CLIP</a></span></span> <span class="locative-args">CLOG-ELEMENT</span></span></p>
 
-<p>Get/Setf background-clip.</p></li>
+<p>Get/Setf background-clip. If an element's background extends
+underneath its border box, padding box, or content box.</p></li>
 </ul>
 
 <p><a id='x-28CLOG-3ABACKGROUND-SIZE-20GENERIC-FUNCTION-29'></a></p>
@@ -1171,7 +1284,13 @@ parent in the DOM.</p></li>
 <ul>
 <li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ABACKGROUND-SIZE-20GENERIC-FUNCTION-29" >BACKGROUND-SIZE</a></span></span> <span class="locative-args">CLOG-ELEMENT</span></span></p>
 
-<p>Get/Setf background-size.</p></li>
+<p>Get/Setf background-size. auto | w h | % = cover of parent | contain</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3ABORDER-STYLE-TYPE-20-28TYPE-29-29'></a></p>
+
+<ul>
+<li><span class=reference-bullet><span class=reference><span class="locative-type">[type]</span> <span class="reference-object"><a href="#x-28CLOG-3ABORDER-STYLE-TYPE-20-28TYPE-29-29" >BORDER-STYLE-TYPE</a></span></span></span></li>
 </ul>
 
 <p><a id='x-28CLOG-3ABORDER-20GENERIC-FUNCTION-29'></a></p>
@@ -1179,7 +1298,16 @@ parent in the DOM.</p></li>
 <ul>
 <li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ABORDER-20GENERIC-FUNCTION-29" >BORDER</a></span></span> <span class="locative-args">CLOG-ELEMENT</span></span></p>
 
-<p>Get/Setf border.</p></li>
+<p>Get border. <line-width> <line-style> <line-color></p></li>
+</ul>
+
+<p><a id='x-28CLOG-3ASET-BORDER-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ASET-BORDER-20GENERIC-FUNCTION-29" >SET-BORDER</a></span></span> <span class="locative-args">CLOG-ELEMENT LINE-WIDTH LINE-STYLE LINE-COLOR</span></span></p>
+
+<p>Set border width style and color.
+line-width - size or medium|thin|thick|length|initial|inherit</p></li>
 </ul>
 
 <p><a id='x-28CLOG-3ABORDER-RADIUS-20GENERIC-FUNCTION-29'></a></p>
@@ -1198,12 +1326,27 @@ parent in the DOM.</p></li>
 <p>Get/Setf box-shadow.</p></li>
 </ul>
 
+<p><a id='x-28CLOG-3AOUTLINE-STYLE-TYPE-20-28TYPE-29-29'></a></p>
+
+<ul>
+<li><span class=reference-bullet><span class=reference><span class="locative-type">[type]</span> <span class="reference-object"><a href="#x-28CLOG-3AOUTLINE-STYLE-TYPE-20-28TYPE-29-29" >OUTLINE-STYLE-TYPE</a></span></span></span></li>
+</ul>
+
 <p><a id='x-28CLOG-3AOUTLINE-20GENERIC-FUNCTION-29'></a></p>
 
 <ul>
 <li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3AOUTLINE-20GENERIC-FUNCTION-29" >OUTLINE</a></span></span> <span class="locative-args">CLOG-ELEMENT</span></span></p>
 
-<p>Get/Setf outline.</p></li>
+<p>Get outline. <line-color> <line-style> <line-width></p></li>
+</ul>
+
+<p><a id='x-28CLOG-3ASET-OUTLINE-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ASET-OUTLINE-20GENERIC-FUNCTION-29" >SET-OUTLINE</a></span></span> <span class="locative-args">CLOG-ELEMENT LINE-COLOR LINE-STYLE LINE-WIDTH</span></span></p>
+
+<p>Set outline <line-color> <line-style> <line-width>
+line-width -  size or medium|thin|thick|length|initial|inherit</p></li>
 </ul>
 
 <p><a id='x-28CLOG-3AMARGIN-20GENERIC-FUNCTION-29'></a></p>
@@ -1211,7 +1354,15 @@ parent in the DOM.</p></li>
 <ul>
 <li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3AMARGIN-20GENERIC-FUNCTION-29" >MARGIN</a></span></span> <span class="locative-args">CLOG-ELEMENT</span></span></p>
 
-<p>Get/Setf margin.</p></li>
+<p>Get margin.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3ASET-MARGIN-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ASET-MARGIN-20GENERIC-FUNCTION-29" >SET-MARGIN</a></span></span> <span class="locative-args">CLOG-ELEMENT TOP RIGHT BOTTOM LEFT</span></span></p>
+
+<p>Set margins, Each can be - <length>|auto|initial|inherit</p></li>
 </ul>
 
 <p><a id='x-28CLOG-3APADDING-20GENERIC-FUNCTION-29'></a></p>
@@ -1219,7 +1370,15 @@ parent in the DOM.</p></li>
 <ul>
 <li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3APADDING-20GENERIC-FUNCTION-29" >PADDING</a></span></span> <span class="locative-args">CLOG-ELEMENT</span></span></p>
 
-<p>Get/Setf padding.</p></li>
+<p>Get padding.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3ASET-PADDING-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ASET-PADDING-20GENERIC-FUNCTION-29" >SET-PADDING</a></span></span> <span class="locative-args">CLOG-ELEMENT TOP RIGHT BOTTOM LEFT</span></span></p>
+
+<p>Set padding. Each can be - <length>|initial|inherit</p></li>
 </ul>
 
 <p><a id='x-28CLOG-3ACURSOR-20GENERIC-FUNCTION-29'></a></p>
@@ -1227,7 +1386,23 @@ parent in the DOM.</p></li>
 <ul>
 <li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ACURSOR-20GENERIC-FUNCTION-29" >CURSOR</a></span></span> <span class="locative-args">CLOG-ELEMENT</span></span></p>
 
-<p>Get/Setf cursor.</p></li>
+<p>Get/Setf cursor. Sets the cursor to a standard type or an
+image if set to url(url_to_image). When using a url is best to suggest an
+alternate cursor, e.g. 'url(url_to_image),auto'
+A list of standard cursor types can be found at:
+  http://www.w3schools.com/cssref/pr_class_cursor.asp</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3AFONT-STYLE-TYPE-20-28TYPE-29-29'></a></p>
+
+<ul>
+<li><span class=reference-bullet><span class=reference><span class="locative-type">[type]</span> <span class="reference-object"><a href="#x-28CLOG-3AFONT-STYLE-TYPE-20-28TYPE-29-29" >FONT-STYLE-TYPE</a></span></span></span></li>
+</ul>
+
+<p><a id='x-28CLOG-3AFONT-VARIANT-TYPE-20-28TYPE-29-29'></a></p>
+
+<ul>
+<li><span class=reference-bullet><span class=reference><span class="locative-type">[type]</span> <span class="reference-object"><a href="#x-28CLOG-3AFONT-VARIANT-TYPE-20-28TYPE-29-29" >FONT-VARIANT-TYPE</a></span></span></span></li>
 </ul>
 
 <p><a id='x-28CLOG-3AFONT-20GENERIC-FUNCTION-29'></a></p>
@@ -1236,6 +1411,28 @@ parent in the DOM.</p></li>
 <li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3AFONT-20GENERIC-FUNCTION-29" >FONT</a></span></span> <span class="locative-args">CLOG-ELEMENT</span></span></p>
 
 <p>Get/Setf font.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3ASET-FONT-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ASET-FONT-20GENERIC-FUNCTION-29" >SET-FONT</a></span></span> <span class="locative-args">CLOG-ELEMENT FONT-STYLE FONT-VARIANT FONT-WEIGHT FONT-HEIGHT FONT-FAMILY</span></span></p>
+
+<p>Set font.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3ATEXT-ALIGNMENT-TYPE-20-28TYPE-29-29'></a></p>
+
+<ul>
+<li><span class=reference-bullet><span class=reference><span class="locative-type">[type]</span> <span class="reference-object"><a href="#x-28CLOG-3ATEXT-ALIGNMENT-TYPE-20-28TYPE-29-29" >TEXT-ALIGNMENT-TYPE</a></span></span></span></li>
+</ul>
+
+<p><a id='x-28CLOG-3ATEXT-ALIGNMENT-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ATEXT-ALIGNMENT-20GENERIC-FUNCTION-29" >TEXT-ALIGNMENT</a></span></span> <span class="locative-args">CLOG-ELEMENT</span></span></p>
+
+<p>Get/Setf text-alignment.</p></li>
 </ul>
 
 <p><a id='x-28CLOG-3AVERTICAL-ALIGN-TYPE-20-28TYPE-29-29'></a></p>

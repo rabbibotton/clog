@@ -176,7 +176,18 @@ HTML-ID must be unique."))
 ;;;;;;;;;;;;;;;;
 
 (defgeneric access-key (clog-element)
-  (:documentation "Get/Setf access-key."))
+  (:documentation "Get/Setf access-key. Used for hot key access to element.
+[special key] + Access_Key
+
+   The [special key] per browser and platform is:
+  
+    Browser              Windows       Linux           Mac
+    -----------------    -------       -----           ---
+    Internet Explorer     [Alt]         N/A            N/A
+    Chrome                [Alt]        [Alt]     [Control][Alt]
+    Firefox           [Alt][Shift] [Alt][Shift]  [Control][Alt]
+    Safari                [Alt]         N/A      [Control][Alt]
+    Opera 15+             [Alt]        [Alt]          [Alt]"))
 
 (defmethod access-key ((obj clog-element))
   (property obj "accessKey"))
@@ -193,7 +204,8 @@ HTML-ID must be unique."))
 ;;;;;;;;;;;;;;;;;;;;
 
 (defgeneric advisory-title (clog-element)
-  (:documentation "Get/Setf advisory-title."))
+  (:documentation "Get/Setf advisory title of Element, usually
+used for body and image maps."))
 
 (defmethod advisory-title ((obj clog-element))
   (property obj "title"))
@@ -210,7 +222,9 @@ HTML-ID must be unique."))
 ;;;;;;;;;;;;;;;;
 
 (defgeneric class-name (clog-element)
-  (:documentation "Get/Setf class-name."))
+  (:documentation "Get/Setf class-name. CSS Class name, can be multiple
+seperated by <space>. See add-class, remove-class and toggle-class methods
+for adding and removing individual or groups of classes in an easier way."))
 
 (defmethod class-name ((obj clog-element))
   (property obj "className"))
@@ -227,7 +241,8 @@ HTML-ID must be unique."))
 ;;;;;;;;;;;;;;;
 
 (defgeneric editablep (clog-element)
-  (:documentation "Get/Setf editable."))
+  (:documentation "Get/Setf editable. This will make almost any element with
+content editable, even non-form types in most browsers."))
 
 (defmethod editablep ((obj clog-element))
   (js-true-p (property obj "isContentEditable")))
@@ -244,7 +259,10 @@ HTML-ID must be unique."))
 ;;;;;;;;;;;;;;;;
 
 (defgeneric draggablep (clog-element)
-  (:documentation "Get/Setf draggablep."))
+  (:documentation "Get/Setf draggablep. In order to make an object draggable
+in addition to Draggable being true the on-drag-start event _must_ be bound
+as well to set the drag-text. To receive a drop, you need to bind on-drop.
+See clog-base.lisp"))
 
 (defmethod draggablep ((obj clog-element))
   (js-true-p (property obj "draggable")))
@@ -261,7 +279,10 @@ HTML-ID must be unique."))
 ;;;;;;;;;;;;;
 
 (defgeneric hiddenp (clog-element)
-  (:documentation "Get/Setf hiddenp."))
+  (:documentation "Get/Setf hiddenp. The hidden property will make an element
+invisible, however unlike visiblep, hiddenp implies the element is semantically
+not relevant not just visually and will _also_ remove it from layout similar to
+setting display (None)."))
 
 (defmethod hiddenp ((obj clog-element))
   (js-true-p (property obj "hidden")))
@@ -273,12 +294,42 @@ HTML-ID must be unique."))
   (setf (property obj "hidden") (p-true-js value)))
 (defsetf hiddenp set-hiddenp)
 
+;;;;;;;;;;;;;;
+;; visiblep ;;
+;;;;;;;;;;;;;;
+
+(defgeneric visiblep (clog-element)
+  (:documentation "Get/Setf visiblep. This will cause the Element to no longer
+be visible but it will still take up space where it was in the layout. Use
+hiddenp to also remove from layout.
+Note: that each property, visiblep, hiddenp and display (None) all work
+      independantly and do not reflect the actual client side visual state
+      but the property state. To check if an object is for sure not visible
+      would require checking all three properties."))
+
+(defmethod visiblep ((obj clog-element))
+  (equalp (property obj "visibility") "visible"))
+
+(defgeneric set-visiblep (clog-element value)
+  (:documentation "Set visiblep VALUE for CLOG-ELEMENT"))
+
+(defmethod set-visiblep ((obj clog-element) value)
+  (if value
+      (setf (property obj "visibility") "visible")
+      (setf (property obj "visibility") "hidden")))
+(defsetf visiblep set-visiblep)
+
 ;;;;;;;;;;;;;;;;
 ;; inner-html ;;
 ;;;;;;;;;;;;;;;;
 
 (defgeneric inner-html (clog-element)
-  (:documentation "Get/Setf inner-html."))
+  (:documentation "Get/Setf inner-html. This will completely replace the inner
+html of an element. This will remove any Elements within Element from the DOM.
+If those elements were created in CLOG they are still available and can be
+placed in the DOM again using the placement methods. However if they were
+created through html writes or otherwise not assigned an ID by CLOG, they are
+lost forever."))
 
 (defmethod inner-html ((obj clog-element))
   (jquery-query obj "html()"))
@@ -295,7 +346,8 @@ HTML-ID must be unique."))
 ;;;;;;;;;;;;;;;;
 
 (defgeneric outer-html (clog-element)
-  (:documentation "Get/Setf outer-html."))
+  (:documentation "Get/Setf outer-html. Returns the HTML for Element and all
+its contents"))
 
 (defmethod outer-html ((obj clog-element))
   (query obj "outerHTML"))
@@ -305,7 +357,8 @@ HTML-ID must be unique."))
 ;;;;;;;;;;;;;;;;;
 
 (defgeneric spellcheckp (clog-element)
-  (:documentation "Get/Setf spellcheckp."))
+  (:documentation "Get/Setf spellcheckp. If true Element is subject to browser
+spell checking if Editable is also true."))
 
 (defmethod spellcheckp ((obj clog-element))
   (js-true-p (property obj "spellcheck")))
@@ -339,7 +392,11 @@ HTML-ID must be unique."))
 ;;;;;;;;;;
 
 (defgeneric text (clog-element)
-  (:documentation "Get/Setf text."))
+  (:documentation "Get/Setf text.
+
+<tag>Text Content</tag> - Text content is the content contained by the
+                          tag. This should not be confused with the
+                          'Value' of a Form Tag. (See clog-form.lisp)"))
 
 (defmethod text ((obj clog-element))
   (jquery-query obj "text()"))
@@ -358,7 +415,7 @@ HTML-ID must be unique."))
 (deftype text-direction-type () '(member :ltr :rtl))
 
 (defgeneric text-direction (clog-element)
-  (:documentation "Get/Setf text-direction."))
+  (:documentation "Get/Setf BiDi text-direction."))
 
 (defmethod text-direction ((obj clog-element))
   (property obj "dir"))
@@ -392,7 +449,8 @@ HTML-ID must be unique."))
 ;;;;;;;;;;;;;;;;;
 
 (defgeneric client-left (clog-element)
-  (:documentation "Get client-left."))
+  (:documentation "Get client-left. The width of the left border of an element
+in pixels. It does not include the margin or padding."))
 
 (defmethod client-left ((obj clog-element))
   (property obj "clientLeft"))
@@ -402,37 +460,43 @@ HTML-ID must be unique."))
 ;;;;;;;;;;;;;;;;
 
 (defgeneric client-top (clog-element)
-  (:documentation "Get client-top."))
+  (:documentation "Get client-top. The width of the top border of an element
+in pixels. It does not include the margin or padding."))
 
 (defmethod client-top ((obj clog-element))
   (property obj "clientTop"))
 
-;;;;;;;;;;;;;;;;;;;
-;; client-bottom ;;
-;;;;;;;;;;;;;;;;;;;
-
-(defgeneric client-bottom (clog-element)
-  (:documentation "Get client-bottom."))
-
-(defmethod client-bottom ((obj clog-element))
-  (property obj "clientBottom"))
-
 ;;;;;;;;;;;;;;;;;;
-;; client-right ;;
+;; client-width ;;
 ;;;;;;;;;;;;;;;;;;
 
-(defgeneric client-right (clog-element)
-  (:documentation "Get client-right."))
+(defgeneric client-width (clog-element)
+  (:documentation "Get client-width. Inner width of an element in pixels.
+CSS width + CSS padding - width of vertical scrollbar (if present)
+Does not include the border or margin."))
 
-(defmethod client-right ((obj clog-element))
-  (property obj "clientRight"))
+(defmethod client-width ((obj clog-element))
+  (property obj "clientWidth"))
+
+;;;;;;;;;;;;;;;;;;;
+;; client-height ;;
+;;;;;;;;;;;;;;;;;;;
+
+(defgeneric client-height (clog-element)
+  (:documentation "Get client-right. Inner height of an element in pixels.
+CSS height + CSS padding - height of horizontal scrollbar (if present)
+Does not include the border or margin."))
+
+(defmethod client-height ((obj clog-element))
+  (property obj "clientHeight"))
 
 ;;;;;;;;;;;;;;;;;
 ;; offset-left ;;
 ;;;;;;;;;;;;;;;;;
 
 (defgeneric offset-left (clog-element)
-  (:documentation "Get offset-left."))
+  (:documentation "Get offset-left. The width from parent element border to
+child border left."))
 
 (defmethod offset-left ((obj clog-element))
   (property obj "offsetLeft"))
@@ -442,37 +506,41 @@ HTML-ID must be unique."))
 ;;;;;;;;;;;;;;;;
 
 (defgeneric offset-top (clog-element)
-  (:documentation "Get offset-top."))
+  (:documentation "Get offset-top. The width from parent element border to
+child border top."))
 
 (defmethod offset-top ((obj clog-element))
   (property obj "offsetTop"))
 
-;;;;;;;;;;;;;;;;;;;
-;; offset-bottom ;;
-;;;;;;;;;;;;;;;;;;;
-
-(defgeneric offset-bottom (clog-element)
-  (:documentation "Get offset-bottom."))
-
-(defmethod offset-bottom ((obj clog-element))
-  (property obj "offsetBottom"))
-
 ;;;;;;;;;;;;;;;;;;
-;; offset-right ;;
+;; offset-width ;;
 ;;;;;;;;;;;;;;;;;;
 
-(defgeneric offset-right (clog-element)
-  (:documentation "Get offset-right."))
+(defgeneric offset-width (clog-element)
+  (:documentation "Get offset-width. CSS width + CSS padding + width of
+vertical scrollbar (if present) + Border"))
 
-(defmethod offset-right ((obj clog-element))
-  (property obj "offsetRight"))
+(defmethod offset-width ((obj clog-element))
+  (property obj "offsetWidth"))
+
+;;;;;;;;;;;;;;;;;;;
+;; offset-height ;;
+;;;;;;;;;;;;;;;;;;;
+
+(defgeneric offset-height (clog-element)
+  (:documentation "Get offset-height. CSS height + CSS padding + height of
+horizontal scrollbar (if present) + Border"))
+
+(defmethod offset-height ((obj clog-element))
+  (property obj "offsetHeight"))
 
 ;;;;;;;;;;;;;;;;;
 ;; scroll-left ;;
 ;;;;;;;;;;;;;;;;;
 
 (defgeneric scroll-left (clog-element)
-  (:documentation "Get scroll-left."))
+  (:documentation "Get scroll-left. The number of pixels that an element's
+content is scrolled to the left. For RTL languages is negative."))
 
 (defmethod scroll-left ((obj clog-element))
   (property obj "scrollLeft"))
@@ -489,7 +557,8 @@ HTML-ID must be unique."))
 ;;;;;;;;;;;;;;;;
 
 (defgeneric scroll-top (clog-element)
-  (:documentation "Get scroll-top."))
+  (:documentation "Get scroll-top. The number of pixels that an element's
+content has been scrolled upward."))
 
 (defmethod scroll-top ((obj clog-element))
   (property obj "scrollTop"))
@@ -501,25 +570,27 @@ HTML-ID must be unique."))
   (setf (property obj "scrollTop") value))
 (defsetf scroll-top set-scroll-top)
 
-;;;;;;;;;;;;;;;;;;;
-;; scroll-bottom ;;
-;;;;;;;;;;;;;;;;;;;
-
-(defgeneric scroll-bottom (clog-element)
-  (:documentation "Get scroll-bottom."))
-
-(defmethod scroll-bottom ((obj clog-element))
-  (property obj "scrollBottom"))
-
 ;;;;;;;;;;;;;;;;;;
-;; scroll-right ;;
+;; scroll-width ;;
 ;;;;;;;;;;;;;;;;;;
 
-(defgeneric scroll-right (clog-element)
-  (:documentation "Get scroll-right."))
+(defgeneric scroll-width (clog-element)
+  (:documentation "Get scroll-width. Either the width in pixels of the content
+of an element or the width of the element itself, whichever is greater."))
 
-(defmethod scroll-right ((obj clog-element))
-  (property obj "scrollRight"))
+(defmethod scroll-width ((obj clog-element))
+  (property obj "scrollWidth"))
+
+;;;;;;;;;;;;;;;;;;;
+;; scroll-height ;;
+;;;;;;;;;;;;;;;;;;;
+
+(defgeneric scroll-height (clog-element)
+  (:documentation "Get scroll-height. Height of an element's content, including
+content not visible on the screen due to overflow."))
+
+(defmethod scroll-height ((obj clog-element))
+  (property obj "scrollHeight"))
 
 ;;;;;;;;;;;;;;
 ;; html-tag ;;
@@ -543,7 +614,9 @@ HTML-ID must be unique."))
 (deftype box-sizing-type () '(member :content-box :border-box))
 
 (defgeneric box-sizing (clog-element)
-  (:documentation "Get/Setf box-sizing."))
+  (:documentation "Get/Setf box-sizing. Affects if height and width
+properteries represent just the content or the border, marging, padding,
+scroll and conent area as a whole. The default is content-box"))
 
 (defmethod box-sizing ((obj clog-element))
   (style obj "box-sizing"))
@@ -563,7 +636,8 @@ HTML-ID must be unique."))
   '(member :none :left :right :both :inline-start :inline-end))
 
 (defgeneric clear-side (clog-element)
-  (:documentation "Get/Setf clear-side."))
+  (:documentation "Get/Setf clear-side. When using 'float' for layout sets
+if the right or left side of block should be clear of any 'floated' Element."))
 
 (defmethod clear-side ((obj clog-element))
   (style obj "clear"))
@@ -603,7 +677,25 @@ elements wrap around it."))
 (deftype display-type () '(member :none :block :inline :inline-block :flex))
 
 (defgeneric display (clog-element)
-  (:documentation "Get/Setf display."))
+  (:documentation "Get/Setf display. Display sets the CSS Display property that
+handles how elements are treated by the browser layout engine.
+   
+    Common Values:
+
+    none         - Remove Element from layout but remain in the DOM this is
+                   similar to hiddenp, but not like visiblep that makes the
+                   element not visible but still take up space in layout.
+   
+    block        - Displays an element starting on a new line and stretches
+                   out to the left and right as far as it can. e.g. <div> by
+                   default
+   
+    inline       - Wraps with text in a paragraph. e.g. <span> by default
+   
+    inline-block - Flows with paragraph but will always fill from left to
+                   right.
+   
+    flex         - Use the flexbox model"))
 
 (defmethod display ((obj clog-element))
   (style obj "display"))
@@ -622,7 +714,8 @@ elements wrap around it."))
 (deftype overflow-type () '(member :visible :hidden :clip :scroll :auto))
 
 (defgeneric overflow (clog-element)
-  (:documentation "Get/Setf overflow."))
+  (:documentation "Get/Setf overflow.  How to handle overflow of contents of
+an element's box. The default is visible - no clipping."))
 
 (defmethod overflow ((obj clog-element))
   (style obj "overflow"))
@@ -641,7 +734,8 @@ elements wrap around it."))
 (deftype overflow-x-type () '(member :visible :hidden :clip :scroll :auto))
 
 (defgeneric overflow-x (clog-element)
-  (:documentation "Get/Setf overflow-x."))
+  (:documentation "Get/Setf overflow-x. How to handle overflow of contents of
+an element's box for X. The default is Visible - no clipping."))
 
 (defmethod overflow-x ((obj clog-element))
   (style obj "overflow-x"))
@@ -660,7 +754,8 @@ elements wrap around it."))
 (deftype overflow-y-type () '(member :visible :hidden :clip :scroll :auto))
 
 (defgeneric overflow-y (clog-element)
-  (:documentation "Get/Setf overflow-y."))
+  (:documentation "Get/Setf overflow-y. How to handle overflow of contents of
+an element's box for Y. The default is Visible - no clipping."))
 
 (defmethod overflow-y ((obj clog-element))
   (style obj "overflow-y"))
@@ -677,7 +772,9 @@ elements wrap around it."))
 ;;;;;;;;;;;;;
 
 (defgeneric z-index (clog-element)
-  (:documentation "Get/Setf z-index."))
+  (:documentation "Get/Setf z-index. Set stack order of element.
+Note: z-index only works on Elements with Position Type of absolute,
+      relative and fixed."))
 
 (defmethod z-index ((obj clog-element))
   (style obj "z-index"))
@@ -693,10 +790,12 @@ elements wrap around it."))
 ;; resizable ;;
 ;;;;;;;;;;;;;;;
 
-(deftype resizable-type () '(member :none :both :horizontal :vertical :block :inline))
+(deftype resizable-type ()
+  '(member :none :both :horizontal :vertical :block :inline))
 
 (defgeneric resizable (clog-element)
-  (:documentation "Get/Setf resizable."))
+  (:documentation "Get/Setf resizable. If overflow is not set to visible,
+resizeable sets if element can be resized by user."))
 
 (defmethod resizable ((obj clog-element))
   (style obj "resize"))
@@ -715,7 +814,16 @@ elements wrap around it."))
 (deftype positioning-type () '(member :static :relative :absolute :sticky :fixed))
 
 (defgeneric positioning (clog-element)
-  (:documentation "Get/Setf positioning."))
+  (:documentation "Get/Setf positioning. Determins how the properties left, right,
+top and bottom are interpreted.
+
+   Static   - According to document flow, position properties have no
+              affect.
+   Absolute - Position properties are relative to the first non-static
+              element in the DOM before Element
+   Fixed    - Position properties are relative to browser window
+   Relative - Position properties are relative to where the static position
+              of the element would in the normal document flow."))
 
 (defmethod positioning ((obj clog-element))
   (style obj "position"))
@@ -842,7 +950,7 @@ parent in the DOM."))
 ;;;;;;;;;;;;;;;;
 
 (defgeneric box-height (clog-element)
-  (:documentation "Get/Setf box-height."))
+  (:documentation "Get/Setf box-height. Height based on box sizing."))
 
 (defmethod box-height ((obj clog-element))
   (style obj "height"))
@@ -859,7 +967,7 @@ parent in the DOM."))
 ;;;;;;;;;;;;;;;
 
 (defgeneric box-width (clog-element)
-  (:documentation "Get/Setf box-width."))
+  (:documentation "Get/Setf box-width. Width based on box sizing."))
 
 (defmethod box-width ((obj clog-element))
   (style obj "width"))
@@ -956,31 +1064,19 @@ parent in the DOM."))
   (setf (style obj "max-height") value))
 (defsetf maximum-height set-maximum-height)
 
-;;;;;;;;;;;;;;
-;; visiblep ;;
-;;;;;;;;;;;;;;
-
-(defgeneric visiblep (clog-element)
-  (:documentation "Get/Setf visiblep."))
-
-(defmethod visiblep ((obj clog-element))
-  (equalp (property obj "visibility") "visible"))
-
-(defgeneric set-visiblep (clog-element value)
-  (:documentation "Set visiblep VALUE for CLOG-ELEMENT"))
-
-(defmethod set-visiblep ((obj clog-element) value)
-  (if value
-      (setf (property obj "visibility") "visible")
-      (setf (property obj "visibility") "hidden")))
-(defsetf visiblep set-visiblep)
+;;  For reference:
+;;  | Margin | Border | Padding | Scroll | [Element] | Scroll | Padding ...
+;;
+;;  Height and Width of Element are in part of clog-base
+;;  All the following have the advantage of the CSS related size properties
+;;  in that the results are always pixels and numeric.
 
 ;;;;;;;;;;;;;;;;;;
 ;; inner-height ;;
 ;;;;;;;;;;;;;;;;;;
 
 (defgeneric inner-height (clog-element)
-  (:documentation "Get/Setf inner-height."))
+  (:documentation "Get/Setf inner-height. Includes padding but not border."))
 
 (defmethod inner-height ((obj clog-element))
   (jquery-query obj "innerHeight()"))
@@ -997,7 +1093,7 @@ parent in the DOM."))
 ;;;;;;;;;;;;;;;;;
 
 (defgeneric inner-width (clog-element)
-  (:documentation "Get/Setf inner-width."))
+  (:documentation "Get/Setf inner-width. Includes padding but not border."))
 
 (defmethod inner-width ((obj clog-element))
   (jquery-query obj "innerWidth()"))
@@ -1014,7 +1110,7 @@ parent in the DOM."))
 ;;;;;;;;;;;;;;;;;;
 
 (defgeneric outer-height (clog-element)
-  (:documentation "Get outer-height."))
+  (:documentation "Get outer-height. Includes padding and border but not margin."))
 
 (defmethod outer-height ((obj clog-element))
   (jquery-query obj "outerHeight()"))
@@ -1024,7 +1120,7 @@ parent in the DOM."))
 ;;;;;;;;;;;;;;;;;
 
 (defgeneric outer-width (clog-element)
-  (:documentation "Get outer-width."))
+  (:documentation "Get outer-width. Includes padding and border but not margin."))
 
 (defmethod outer-width ((obj clog-element))
   (jquery-query obj "outerWidth()"))
@@ -1034,7 +1130,7 @@ parent in the DOM."))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defgeneric outer-height-to-margin (clog-element)
-  (:documentation "Get outer-height-to-margin."))
+  (:documentation "Get outer-height-to-margin. Includes padding and border and margin."))
 
 (defmethod outer-height-to-margin ((obj clog-element))
   (jquery-query obj "outerHeight(true)"))
@@ -1044,7 +1140,7 @@ parent in the DOM."))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defgeneric outer-width-to-margin (clog-element)
-  (:documentation "Get outer-width-to-margin."))
+  (:documentation "Get outer-width-to-margin. Includes padding and border and margin."))
 
 (defmethod outer-width-to-margin ((obj clog-element))
   (jquery-query obj "outerWidth(true)"))
@@ -1087,6 +1183,8 @@ parent in the DOM."))
 ;; background-attachment ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(deftype background-attachment-type () '(member :scroll :fixed :local))
+
 (defgeneric background-attachment (clog-element)
   (:documentation "Get/Setf background-attachment."))
 
@@ -1122,7 +1220,8 @@ parent in the DOM."))
 ;;;;;;;;;;;;;;;;;;;;;;
 
 (defgeneric background-image (clog-element)
-  (:documentation "Get/Setf background-image url."))
+  (:documentation "Get/Setf background-image url. proper syntax is
+'url(...)' | nil to clear"))
 
 (defmethod background-image ((obj clog-element))
   (style obj "background-image"))
@@ -1141,7 +1240,8 @@ parent in the DOM."))
 ;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defgeneric background-position (clog-element)
-  (:documentation "Get/Setf background-position."))
+  (:documentation "Get/Setf background-position. combination of 2 -
+left/right/center/top/bottom | %x %y | x y"))
 
 (defmethod background-position ((obj clog-element))
   (style obj "background-position"))
@@ -1157,8 +1257,12 @@ parent in the DOM."))
 ;; background-origin ;;
 ;;;;;;;;;;;;;;;;;;;;;;;
 
+(deftype background-origin-type ()
+  '(member :border-box :padding-box :content-box))
+
 (defgeneric background-origin (clog-element)
-  (:documentation "Get/Setf background-origin."))
+  (:documentation "Get/Setf background-origin. Background position property
+is relative to origin of: padding-box|border-box|content-box"))
 
 (defmethod background-origin ((obj clog-element))
   (style obj "background-origin"))
@@ -1174,8 +1278,12 @@ parent in the DOM."))
 ;; background-repeat ;;
 ;;;;;;;;;;;;;;;;;;;;;;;
 
+(deftype background-repeat-type ()
+  '(member :repeat-x :repeat-y :repeat :space :round :no-repeat))
+
 (defgeneric background-repeat (clog-element)
-  (:documentation "Get/Setf background-repeat."))
+  (:documentation "Get/Setf background-repeat. repeat-x | repeat-y |
+[ repeat | space | round | no-repeat ]{1,2}"))
 
 (defmethod background-repeat ((obj clog-element))
   (style obj "background-repeat"))
@@ -1191,8 +1299,12 @@ parent in the DOM."))
 ;; background-clip ;;
 ;;;;;;;;;;;;;;;;;;;;;
 
+(deftype background-clip-type ()
+  '(member :border-box :padding-box :content-box :text))
+    
 (defgeneric background-clip (clog-element)
-  (:documentation "Get/Setf background-clip."))
+  (:documentation "Get/Setf background-clip. If an element's background extends
+underneath its border box, padding box, or content box."))
 
 (defmethod background-clip ((obj clog-element))
   (style obj "background-clip"))
@@ -1209,7 +1321,7 @@ parent in the DOM."))
 ;;;;;;;;;;;;;;;;;;;;;
 
 (defgeneric background-size (clog-element)
-  (:documentation "Get/Setf background-size."))
+  (:documentation "Get/Setf background-size. auto | w h | % = cover of parent | contain"))
 
 (defmethod background-size ((obj clog-element))
   (style obj "background-size"))
@@ -1225,18 +1337,25 @@ parent in the DOM."))
 ;; border ;;
 ;;;;;;;;;;;;
 
+(deftype border-style-type ()
+  '(member :none :hidden :dotted :dashed :solid :double :groove :ridge :inset :outset))
+
 (defgeneric border (clog-element)
-  (:documentation "Get/Setf border."))
+  (:documentation "Get border. <line-width> <line-style> <line-color>"))
 
 (defmethod border ((obj clog-element))
   (style obj "border"))
 
-(defgeneric set-border (clog-element value)
-  (:documentation "Set border VALUE for CLOG-ELEMENT"))
+;;;;;;;;;;;;;;;;
+;; set-border ;;
+;;;;;;;;;;;;;;;;
 
-(defmethod set-border ((obj clog-element) value)
-  (setf (style obj "border") value))
-(defsetf border set-border)
+(defgeneric set-border (clog-element line-width line-style line-color)
+  (:documentation "Set border width style and color.
+line-width - size or medium|thin|thick|length|initial|inherit"))
+
+(defmethod set-border ((obj clog-element) line-width line-style line-color)
+  (setf (style obj "border") (format nil "~A ~A ~A" line-width line-style line-color)))
 
 ;;;;;;;;;;;;;;;;;;;
 ;; border-radius ;;
@@ -1266,7 +1385,7 @@ parent in the DOM."))
   (style obj "box-shadow"))
 
 (defgeneric set-box-shadow (clog-element value)
-  (:documentation "Set box-shadow VALUE for CLOG-ELEMENT"))
+  (:documentation "Set box-shadow. See https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Background_and_Borders/Box-shadow_generator"))
 
 (defmethod set-box-shadow ((obj clog-element) value)
   (setf (style obj "box-shadow") value))
@@ -1276,51 +1395,62 @@ parent in the DOM."))
 ;; outline ;;
 ;;;;;;;;;;;;;
 
-(defgeneric outline (clog-element)
-  (:documentation "Get/Setf outline."))
+(deftype outline-style-type ()
+  '(member :none :hidden :dotted :dashed :solid :double
+    :groove :ridge :inset :outset))
 
-(defmethod border ((obj clog-element))
+(defgeneric outline (clog-element) 
+  (:documentation "Get outline. <line-color> <line-style> <line-width>"))
+
+(defmethod outline ((obj clog-element))
   (style obj "outline"))
 
-(defgeneric set-outline (clog-element value)
-  (:documentation "Set outline VALUE for CLOG-ELEMENT"))
+;;;;;;;;;;;;;;;;;
+;; set-outline ;;
+;;;;;;;;;;;;;;;;;
 
-(defmethod set-outline ((obj clog-element) value)
-  (setf (style obj "outline") value))
-(defsetf outline set-outline)
+(defgeneric set-outline (clog-element line-color line-style line-width)
+  (:documentation "Set outline <line-color> <line-style> <line-width>
+line-width -  size or medium|thin|thick|length|initial|inherit"))
+
+(defmethod set-outline ((obj clog-element) line-color line-style line-width)
+  (setf (style obj "outline") (format nil "~A ~A ~A" line-color line-style line-width)))
 
 ;;;;;;;;;;;;
 ;; margin ;;
 ;;;;;;;;;;;;
 
 (defgeneric margin (clog-element)
-  (:documentation "Get/Setf margin."))
+  (:documentation "Get margin."))
 
 (defmethod margin ((obj clog-element))
   (style obj "margin"))
 
-(defgeneric set-margin (clog-element value)
-  (:documentation "Set margin VALUE for CLOG-ELEMENT"))
+;;;;;;;;;;;;;;;;
+;; set-margin ;;
+;;;;;;;;;;;;;;;;
 
-(defmethod set-margin ((obj clog-element) value)
-  (setf (style obj "margin") value))
-(defsetf margin set-margin)
+(defgeneric set-margin (clog-element top right bottom left)
+  (:documentation "Set margins, Each can be - <length>|auto|initial|inherit"))
+
+(defmethod set-margin ((obj clog-element) top right bottom left)
+  (setf (style obj "margin") (format nil "~A ~A ~A ~A" top right bottom left)))
 
 ;;;;;;;;;;;;;
 ;; padding ;;
 ;;;;;;;;;;;;;
 
 (defgeneric padding (clog-element)
-  (:documentation "Get/Setf padding."))
+  (:documentation "Get padding."))
 
 (defmethod padding ((obj clog-element))
   (style obj "padding"))
 
-(defgeneric set-padding (clog-element value)
-  (:documentation "Set padding VALUE for CLOG-ELEMENT"))
+(defgeneric set-padding (clog-element top right bottom left)
+  (:documentation "Set padding. Each can be - <length>|initial|inherit"))
 
-(defmethod set-padding ((obj clog-element) value)
-  (setf (style obj "padding") value))
+(defmethod set-padding ((obj clog-element) top right bottom left)
+  (setf (style obj "padding") (format nil "~A ~A ~A ~A" top right bottom left)))
 (defsetf padding set-padding)
 
 ;;;;;;;;;;;;
@@ -1328,7 +1458,11 @@ parent in the DOM."))
 ;;;;;;;;;;;;
 
 (defgeneric cursor (clog-element)
-  (:documentation "Get/Setf cursor."))
+  (:documentation "Get/Setf cursor. Sets the cursor to a standard type or an
+image if set to url(url_to_image). When using a url is best to suggest an
+alternate cursor, e.g. 'url(url_to_image),auto'
+A list of standard cursor types can be found at:
+  http://www.w3schools.com/cssref/pr_class_cursor.asp"))
 
 (defmethod cursor ((obj clog-element))
   (style obj "cursor"))
@@ -1344,18 +1478,46 @@ parent in the DOM."))
 ;; font ;;
 ;;;;;;;;;;
 
+(deftype font-style-type () '(member :normal :italic :unique))
+
+(deftype font-variant-type () '(member :normal :small-caps))
+
 (defgeneric font (clog-element)
   (:documentation "Get/Setf font."))
 
 (defmethod font ((obj clog-element))
   (style obj "font"))
 
-(defgeneric set-font (clog-element value)
-  (:documentation "Set font VALUE for CLOG-ELEMENT"))
+(defgeneric set-font
+    (clog-element font-style font-variant font-weight font-height font-family)
+(:documentation "Set font."))
 
-(defmethod set-font ((obj clog-element) value)
-  (setf (style obj "font") value))
-(defsetf font set-font)
+(defmethod set-font
+    ((obj clog-element)
+     font-style font-variant font-weight font-height font-family)
+  (setf (style obj "font")
+	(format nil "~A ~A ~A ~A ~A"
+		font-style font-variant font-weight font-height font-family)))
+
+;;;;;;;;;;;;;;;;;;;;
+;; text-alignment ;;
+;;;;;;;;;;;;;;;;;;;;
+
+(deftype text-alignment-type ()
+  '(member :start :end :left :right :center :justify :match-parent))
+
+(defgeneric text-alignment (clog-element)
+  (:documentation "Get/Setf text-alignment."))
+
+(defmethod text-alignment ((obj clog-element))
+  (style obj "text-align"))
+
+(defgeneric set-text-alignment (clog-element value)
+  (:documentation "Set text-alignment VALUE for CLOG-ELEMENT"))
+
+(defmethod set-text-alignment ((obj clog-element) value)
+  (setf (style obj "text-align") value))
+(defsetf text-alignment set-text-alignment)
 
 ;;;;;;;;;;;;;;;;;;;;
 ;; vertical-align ;;
@@ -1444,9 +1606,8 @@ html id than Element_Type will have an ID of undefined and therefore attached
 to no actual HTML elemen."))
 
 (defmethod first-child ((obj clog-element))
-  (make-clog-element
-   (connection-id obj)
-   (jquery-execute obj (format nil "children().first().attr('id');"))))
+  (attach-as-child
+   obj (jquery-execute obj (format nil "children().first().attr('id');"))))
 
 ;;;;;;;;;;;;;;;;;;
 ;; next-sibling ;;
@@ -1458,6 +1619,4 @@ html id than Element_Type will have an ID of undefined and therefore attached
 to no actual HTML elemen."))
 
 (defmethod next-sibling ((obj clog-element))
-  (make-clog-element
-   (connection-id obj)
-   (jquery-execute obj (format nil "next().attr('id');"))))
+  (attach-as-child obj (jquery-execute obj (format nil "next().attr('id');"))))
