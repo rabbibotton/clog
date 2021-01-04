@@ -1225,6 +1225,12 @@ parent in the DOM."))
 ;; border ;;
 ;;;;;;;;;;;;
 
+(defgeneric border (clog-element)
+  (:documentation "Get/Setf border."))
+
+(defmethod border ((obj clog-element))
+  (style obj "border"))
+
 (defgeneric set-border (clog-element value)
   (:documentation "Set border VALUE for CLOG-ELEMENT"))
 
@@ -1235,6 +1241,12 @@ parent in the DOM."))
 ;;;;;;;;;;;;;;;;;;;
 ;; border-radius ;;
 ;;;;;;;;;;;;;;;;;;;
+
+(defgeneric border-radius (clog-element)
+  (:documentation "Get/Setf border-radius."))
+
+(defmethod border-radius ((obj clog-element))
+  (style obj "border-radius"))
 
 (defgeneric set-border-radius (clog-element value)
   (:documentation "Set border-radius VALUE for CLOG-ELEMENT"))
@@ -1247,6 +1259,12 @@ parent in the DOM."))
 ;; box-shadow ;;
 ;;;;;;;;;;;;;;;;
 
+(defgeneric box-shadow (clog-element)
+  (:documentation "Get/Setf box-shadow."))
+
+(defmethod box-shadow ((obj clog-element))
+  (style obj "box-shadow"))
+
 (defgeneric set-box-shadow (clog-element value)
   (:documentation "Set box-shadow VALUE for CLOG-ELEMENT"))
 
@@ -1257,6 +1275,12 @@ parent in the DOM."))
 ;;;;;;;;;;;;;
 ;; outline ;;
 ;;;;;;;;;;;;;
+
+(defgeneric outline (clog-element)
+  (:documentation "Get/Setf outline."))
+
+(defmethod border ((obj clog-element))
+  (style obj "outline"))
 
 (defgeneric set-outline (clog-element value)
   (:documentation "Set outline VALUE for CLOG-ELEMENT"))
@@ -1269,6 +1293,12 @@ parent in the DOM."))
 ;; margin ;;
 ;;;;;;;;;;;;
 
+(defgeneric margin (clog-element)
+  (:documentation "Get/Setf margin."))
+
+(defmethod margin ((obj clog-element))
+  (style obj "margin"))
+
 (defgeneric set-margin (clog-element value)
   (:documentation "Set margin VALUE for CLOG-ELEMENT"))
 
@@ -1279,6 +1309,12 @@ parent in the DOM."))
 ;;;;;;;;;;;;;
 ;; padding ;;
 ;;;;;;;;;;;;;
+
+(defgeneric padding (clog-element)
+  (:documentation "Get/Setf padding."))
+
+(defmethod padding ((obj clog-element))
+  (style obj "padding"))
 
 (defgeneric set-padding (clog-element value)
   (:documentation "Set padding VALUE for CLOG-ELEMENT"))
@@ -1397,3 +1433,31 @@ parent in the DOM."))
 
 (defmethod click ((obj clog-element))
   (jquery-execute obj "click()"))
+
+;;;;;;;;;;;;;;;;;
+;; first-child ;;
+;;;;;;;;;;;;;;;;;
+
+(defgeneric first-child (clog-element)
+  (:documentation "Traverse to first child element. If Child does not have an
+html id than Element_Type will have an ID of undefined and therefore attached
+to no actual HTML elemen."))
+
+(defmethod first-child ((obj clog-element))
+  (make-clog-element
+   (connection-id obj)
+   (jquery-execute obj (format nil "children().first().attr('id');"))))
+
+;;;;;;;;;;;;;;;;;;
+;; next-sibling ;;
+;;;;;;;;;;;;;;;;;;
+
+(defgeneric next-sibling (clog-element)
+  (:documentation "Traverse to next sibling element. If Child does not have an
+html id than Element_Type will have an ID of undefined and therefore attached
+to no actual HTML elemen."))
+
+(defmethod next-sibling ((obj clog-element))
+  (make-clog-element
+   (connection-id obj)
+   (jquery-execute obj (format nil "next().attr('id');"))))

@@ -207,11 +207,15 @@ application."
   (vertical-align         generic-function)
 
   "CLOG-Element - Methods"
-  (addClass        generic-function)
-  (removeClass     generic-function)
-  (toggleClass     generic-function)
+  (add-class       generic-function)
+  (remove-class    generic-function)
+  (toggle-class    generic-function)
   (remove-from-dom generic-function)
-  (click           generic-function))
+  (click           generic-function)
+
+  "CLOG-Element - Traversal Methods"
+  (first-child  generic-function)
+  (next-sibling generic-function))
 
 (defsection @clog-body (:title "CLOG Body Objects")
   "CLOG-Body - CLOG Body Objects"
