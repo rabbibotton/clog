@@ -21,6 +21,16 @@
   "Return true if VALUE equalp the string true"
   (equalp value "true"))
 
+;;;;;;;;;;;;;;;
+;; p-true-js ;;
+;;;;;;;;;;;;;;;
+
+(defun p-true-js (value)
+  "Return \"true\" if VALUE true"
+  (if value
+      "true"
+      "false"))
+
 ;;;;;;;;;;;;;;;;;;
 ;; open-browser ;;
 ;;;;;;;;;;;;;;;;;;
@@ -36,7 +46,8 @@
 (defun escape-string (str)
   "Escape STR for sending to browser script."
   (let ((res))
-    (setf res (ppcre:regex-replace-all "\\x22" str "\\x22"))
+    (setf res (format nil "~A" str))
+    (setf res (ppcre:regex-replace-all "\\x22" res "\\x22"))
     (setf res (ppcre:regex-replace-all "\\x27" res "\\x27"))
     (setf res (ppcre:regex-replace-all "\\x0A" res "\\x0A"))
     (setf res (ppcre:regex-replace-all "\\x0D" res "\\x0D"))

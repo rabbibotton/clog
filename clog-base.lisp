@@ -236,7 +236,7 @@ result. (Private)"))
   (:documentation "Set height VALUE for CLOG-OBJ"))
 
 (defmethod set-height ((obj clog-obj) value)
-  (jquery-execute obj (format nil "height('~A')" value)))
+  (jquery-execute obj (format nil "height('~A')" (escape-string value))))
 (defsetf height set-height)
 
 ;;;;;;;;;;;
@@ -253,7 +253,7 @@ result. (Private)"))
   (:documentation "Set width VALUE for CLOG-OBJ"))
 
 (defmethod set-width ((obj clog-obj) value)
-  (jquery-execute obj (format nil "width('~A')" value)))
+  (jquery-execute obj (format nil "width('~A')" (escape-string value))))
 (defsetf width set-width)
 
 ;;;;;;;;;;;
