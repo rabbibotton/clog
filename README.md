@@ -11,8 +11,7 @@ remotely, ie as web applications.
 
 View the HTML Documentation:
 
-https://htmlpreview.github.io/?https://github.com/rabbibotton/clog/blob/main/doc/clog-manual.html
-
+https://rabbibotton.github.io/clog/clog-manual.html
 
 To load this package and use the tests:
 
