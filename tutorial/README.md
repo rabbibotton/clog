@@ -38,3 +38,4 @@ Tutorial Summary
 03-tutorial.lisp - Events fire in parallel
 05-tutorial.lisp - The event target, reusing event handlers
 05-tutorial.lisp - Using connection-data-item
+06-tutorial.lisp - Tasking and events

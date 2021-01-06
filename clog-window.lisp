@@ -147,12 +147,11 @@ window."))
 (defmethod y-offset ((obj clog-window))
   (query obj "pageYOffset"))
 
-
 (defgeneric set-y-offset (clog-window value))
   
 (defmethod set-y-offset ((obj clog-window) value)
   (execute obj "pageYOffset" value))
-(defsetf y-offset set-y-offsett)
+(defsetf y-offset set-y-offset)
 
 ;;;;;;;;;
 ;; top ;;
