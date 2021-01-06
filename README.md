@@ -45,7 +45,7 @@ Sample CLOG app with code base so far:
 	  ;; This application simply creates a CLOG-Element as a child to the
 	  ;; CLOG-body object in the browser window.
 
-      ;; A CLOG-Element represents a block of HTML (we will see later ways to
+	  ;; A CLOG-Element represents a block of HTML (we will see later ways to
 	  ;; directly create buttons and all sorts of HTML elements in more lisp
 	  ;; like ways with no knowledge of HTML or javascript. 
 	  (create-child body "<h1>Hello World! (click me!)</h1>")))
