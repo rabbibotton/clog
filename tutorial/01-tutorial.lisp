@@ -22,6 +22,7 @@
 
     (set-on-click hello-element      ; Now we set a function to handle clicks
 		  (lambda (obj)      ; In this case we use an anonymous function
+		    (declare (ignore obj))
 		    (setf (color hello-element) "green")))))
 ;; To see all the events one can set and the many properties and styles that
 ;; exist, take a look through the CLOG manual or the file clog-element.lisp

@@ -15,6 +15,7 @@
     (let ((x 0))
       (set-on-click hello-element
 		    (lambda (obj)
+		      (declare (ignore obj))
 		      (incf x)
 		      (dotimes (n x)
 			(create-child body

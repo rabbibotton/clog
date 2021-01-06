@@ -126,14 +126,14 @@ clog-documentation object. (Private)"))
   (execute obj (format nil "title='~A'" (cc:escape-string value))))
 (defsetf title set-title)
 
-;;;;;;;;;
-;; url ;;
-;;;;;;;;;
+;;;;;;;;;;;;;;;;;;
+;; document-url ;;
+;;;;;;;;;;;;;;;;;;
 
-(defgeneric url (clog-document)
+(defgeneric document-url (clog-document)
   (:documentation "Get url."))
 
-(defmethod url ((obj clog-document))
+(defmethod document-url ((obj clog-document))
   (query obj "url"))
 
 ;;;;;;;;;;;;;;;;;

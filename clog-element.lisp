@@ -217,24 +217,24 @@ used for body and image maps."))
   (setf (property obj "title") value))
 (defsetf advisory-title set-advisory-title)
 
-;;;;;;;;;;;;;;;;
-;; class-name ;;
-;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;
+;; css-class-name ;;
+;;;;;;;;;;;;;;;;;;;;
 
-(defgeneric class-name (clog-element)
-  (:documentation "Get/Setf class-name. CSS Class name, can be multiple
+(defgeneric css-class-name (clog-element)
+  (:documentation "Get/Setf css-class-name. CSS Class name, can be multiple
 seperated by <space>. See add-class, remove-class and toggle-class methods
 for adding and removing individual or groups of classes in an easier way."))
 
-(defmethod class-name ((obj clog-element))
+(defmethod css-class-name ((obj clog-element))
   (property obj "className"))
 
-(defgeneric set-class-name (clog-element value)
-  (:documentation "Set class-name VALUE for CLOG-ELEMENT"))
+(defgeneric set-css-class-name (clog-element value)
+  (:documentation "Set css-class-name VALUE for CLOG-ELEMENT"))
 
-(defmethod set-class-name ((obj clog-element) value)
+(defmethod set-css-class-name ((obj clog-element) value)
   (setf (property obj "className") value))
-(defsetf class-name set-class-name)
+(defsetf css-class-name set-css-class-name)
 
 ;;;;;;;;;;;;;;;
 ;; editablep ;;
@@ -1547,34 +1547,34 @@ A list of standard cursor types can be found at:
 ;; add-class ;;
 ;;;;;;;;;;;;;;;
 
-(defgeneric add-class (clog-element class-name)
+(defgeneric add-class (clog-element css-class-name)
   (:documentation "add-class."))
 
-(defmethod add-class ((obj clog-element) class-name)
+(defmethod add-class ((obj clog-element) css-class-name)
   (jquery-execute obj (format nil "addClass('~A')"
-			      (escape-string class-name))))
+			      (escape-string css-class-name))))
 
 ;;;;;;;;;;;;;;;;;;
 ;; remove-class ;;
 ;;;;;;;;;;;;;;;;;;
 
-(defgeneric remove-class (clog-element class-name)
+(defgeneric remove-class (clog-element css-class-name)
   (:documentation "remove-class."))
 
-(defmethod remove-class ((obj clog-element) class-name)
+(defmethod remove-class ((obj clog-element) css-class-name)
   (jquery-execute obj (format nil "removeClass('~A')"
-			      (escape-string class-name))))
+			      (escape-string css-class-name))))
 
 ;;;;;;;;;;;;;;;;;;
 ;; toggle-class ;;
 ;;;;;;;;;;;;;;;;;;
 
-(defgeneric toggle-class (clog-element class-name)
+(defgeneric toggle-class (clog-element css-class-name)
   (:documentation "toggle-class."))
 
-(defmethod toggle-class ((obj clog-element) class-name)
+(defmethod toggle-class ((obj clog-element) css-class-name)
   (jquery-execute obj (format nil "toggleClass('~A')"
-			      (escape-string class-name))))
+			      (escape-string css-class-name))))
 
 ;;;;;;;;;;;;;;;;;;;;;
 ;; remove-from-dom ;;

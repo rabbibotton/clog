@@ -78,11 +78,12 @@ application.</p>
 <p><a id='x-28CLOG-3AINITIALIZE-20FUNCTION-29'></a></p>
 
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#x-28CLOG-3AINITIALIZE-20FUNCTION-29" >INITIALIZE</a></span></span> <span class="locative-args">ON-NEW-WINDOW-HANDLER &amp;KEY (HOST &quot;0.0.0.0&quot;) (PORT 8080) (BOOT-FILE &quot;/boot.html&quot;) (STATIC-ROOT #P&quot;static-files/&quot;)</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#x-28CLOG-3AINITIALIZE-20FUNCTION-29" >INITIALIZE</a></span></span> <span class="locative-args">ON-NEW-WINDOW-HANDLER &amp;KEY (HOST &quot;0.0.0.0&quot;) (PORT 8080) (BOOT-FILE &quot;/boot.html&quot;) (STATIC-ROOT #P&quot;./static-files/&quot;)</span></span></p>
 
 <p>Inititalze <a href="#x-28-22clog-22-20ASDF-2FSYSTEM-3ASYSTEM-29" title="(\&quot;clog\&quot; ASDF/SYSTEM:SYSTEM)"><code>CLOG</code></a> on a socket using <code>HOST</code> and <code>PORT</code> to serve <code>BOOT-FILE</code> as 
 the default route to establish web-socket connections and static files
-located at <code>STATIC-ROOT</code>.</p></li>
+located at <code>STATIC-ROOT</code>. If <a href="#x-28-22clog-22-20ASDF-2FSYSTEM-3ASYSTEM-29" title="(\&quot;clog\&quot; ASDF/SYSTEM:SYSTEM)"><code>CLOG</code></a> was already initialized and not shut
+down, this function does the same as set-on-new-window.</p></li>
 </ul>
 
 <p><a id='x-28CLOG-3ASET-ON-NEW-WINDOW-20FUNCTION-29'></a></p>
@@ -215,6 +216,14 @@ are stored in this string based hash in the format of:
 &quot;html-id:event-name&quot; =&gt; event-handler.</p></li>
 </ul>
 
+<p><a id='x-28CLOG-3ACONNECTION-DATA-ITEM-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ACONNECTION-DATA-ITEM-20GENERIC-FUNCTION-29" >CONNECTION-DATA-ITEM</a></span></span> <span class="locative-args">CLOG-OBJ ITEM-NAME</span></span></p>
+
+<p>Get/Setf from connection-data the item-name in hash.</p></li>
+</ul>
+
 <p><a id='x-28CLOG-3AVALIDP-20GENERIC-FUNCTION-29'></a></p>
 
 <ul>
@@ -228,9 +237,9 @@ are stored in this string based hash in the format of:
 <p><a id='x-28CLOG-3ASET-ON-RESIZE-20GENERIC-FUNCTION-29'></a></p>
 
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ASET-ON-RESIZE-20GENERIC-FUNCTION-29" >SET-ON-RESIZE</a></span></span> <span class="locative-args">CLOG-WINDOW ON-RESIZE-HANDLER</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ASET-ON-RESIZE-20GENERIC-FUNCTION-29" >SET-ON-RESIZE</a></span></span> <span class="locative-args">CLOG-OBJ ON-RESIZE-HANDLER</span></span></p>
 
-<p>Set the <code>ON-RESIZE-HANDLER</code> for <a href="#x-28CLOG-3ACLOG-OBJ-20CLASS-29" title="(CLOG:CLOG-OBJ CLASS)"><code>CLOG-OBJ</code></a>. If <code>ON-RESIZE-HANDLER</code>
+<p>Set the <code>ON-RESIZE-HANDLER</code> for <code>CLOG-OBJ</code>. If <code>ON-RESIZE-HANDLER</code>
 is nil unbind the event.</p></li>
 </ul>
 
@@ -637,11 +646,7 @@ used for body and image maps.</p></li>
 <p><a id='x-28CLASS-NAME-20GENERIC-FUNCTION-29'></a></p>
 
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLASS-NAME-20GENERIC-FUNCTION-29" >CLASS-NAME</a></span></span> <span class="locative-args">CLOG-ELEMENT</span></span></p>
-
-<p>Get/Setf class-name. CSS Class name, can be multiple
-seperated by <space>. See add-class, remove-class and toggle-class methods
-for adding and removing individual or groups of classes in an easier way.</p></li>
+<li><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLASS-NAME-20GENERIC-FUNCTION-29" >CLASS-NAME</a></span></span> <span class="locative-args">CLASS</span></span></li>
 </ul>
 
 <p><a id='x-28CLOG-3AEDITABLEP-20GENERIC-FUNCTION-29'></a></p>
@@ -1454,7 +1459,7 @@ A list of standard cursor types can be found at:
 <p><a id='x-28CLOG-3AADD-CLASS-20GENERIC-FUNCTION-29'></a></p>
 
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3AADD-CLASS-20GENERIC-FUNCTION-29" >ADD-CLASS</a></span></span> <span class="locative-args">CLOG-ELEMENT CLASS-NAME</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3AADD-CLASS-20GENERIC-FUNCTION-29" >ADD-CLASS</a></span></span> <span class="locative-args">CLOG-ELEMENT CSS-CLASS-NAME</span></span></p>
 
 <p>add-class.</p></li>
 </ul>
@@ -1462,7 +1467,7 @@ A list of standard cursor types can be found at:
 <p><a id='x-28CLOG-3AREMOVE-CLASS-20GENERIC-FUNCTION-29'></a></p>
 
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3AREMOVE-CLASS-20GENERIC-FUNCTION-29" >REMOVE-CLASS</a></span></span> <span class="locative-args">CLOG-ELEMENT CLASS-NAME</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3AREMOVE-CLASS-20GENERIC-FUNCTION-29" >REMOVE-CLASS</a></span></span> <span class="locative-args">CLOG-ELEMENT CSS-CLASS-NAME</span></span></p>
 
 <p>remove-class.</p></li>
 </ul>
@@ -1470,7 +1475,7 @@ A list of standard cursor types can be found at:
 <p><a id='x-28CLOG-3ATOGGLE-CLASS-20GENERIC-FUNCTION-29'></a></p>
 
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ATOGGLE-CLASS-20GENERIC-FUNCTION-29" >TOGGLE-CLASS</a></span></span> <span class="locative-args">CLOG-ELEMENT CLASS-NAME</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ATOGGLE-CLASS-20GENERIC-FUNCTION-29" >TOGGLE-CLASS</a></span></span> <span class="locative-args">CLOG-ELEMENT CSS-CLASS-NAME</span></span></p>
 
 <p>toggle-class.</p></li>
 </ul>
@@ -1841,15 +1846,6 @@ If <code>ON-ORIENTATION-CHANGE-HANDLER</code> is nil unbind the event.</p></li>
 <code>ON-STORAGE-HANDLER</code> is nil unbind the event.</p></li>
 </ul>
 
-<p><a id='x-28CLOG-3ASET-ON-RESIZE-20GENERIC-FUNCTION-29'></a></p>
-
-<ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ASET-ON-RESIZE-20GENERIC-FUNCTION-29" >SET-ON-RESIZE</a></span></span> <span class="locative-args">CLOG-WINDOW ON-RESIZE-HANDLER</span></span></p>
-
-<p>Set the <code>ON-RESIZE-HANDLER</code> for <a href="#x-28CLOG-3ACLOG-OBJ-20CLASS-29" title="(CLOG:CLOG-OBJ CLASS)"><code>CLOG-OBJ</code></a>. If <code>ON-RESIZE-HANDLER</code>
-is nil unbind the event.</p></li>
-</ul>
-
 <p><a id='x-28CLOG-3AMOVE-BY-20GENERIC-FUNCTION-29'></a></p>
 
 <ul>
@@ -1938,12 +1934,12 @@ is nil unbind the event.</p></li>
 <p>Get/setf title.</p></li>
 </ul>
 
-<p><a id='x-28CLOG-3AURL-20GENERIC-FUNCTION-29'></a></p>
+<p><a id='x-28CLOG-3ADOCUMENT-URL-20GENERIC-FUNCTION-29'></a></p>
 
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3AURL-20GENERIC-FUNCTION-29" >URL</a></span></span> <span class="locative-args">CLOG-LOCATION</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ADOCUMENT-URL-20GENERIC-FUNCTION-29" >DOCUMENT-URL</a></span></span> <span class="locative-args">CLOG-DOCUMENT</span></span></p>
 
-<p>Get/Setf full url.</p></li>
+<p>Get url.</p></li>
 </ul>
 
 <p><a id='x-28CLOG-3AHEAD-ELEMENT-20GENERIC-FUNCTION-29'></a></p>
@@ -1957,7 +1953,7 @@ is nil unbind the event.</p></li>
 <p><a id='x-28CLOG-3ABODY-ELEMENT-20GENERIC-FUNCTION-29'></a></p>
 
 <ul>
-<li><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ABODY-ELEMENT-20GENERIC-FUNCTION-29" >BODY-ELEMENT</a></span></span> <span class="locative-args">SELF</span></span></li>
+<li><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ABODY-ELEMENT-20GENERIC-FUNCTION-29" >BODY-ELEMENT</a></span></span> <span class="locative-args">OBJECT</span></span></li>
 </ul>
 
 <p><a id='x-28CLOG-3ADOCUMENT-ELEMENT-20GENERIC-FUNCTION-29'></a></p>

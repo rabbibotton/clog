@@ -38,7 +38,7 @@ window."))
 (defgeneric set-window-name (clog-window value))
   
 (defmethod set-window-name ((obj clog-window) value)
-  (execute obj "name" (escape-string value)))
+  (execute obj (format nil "name='~A'" (escape-string value))))
 (defsetf window-name set-window-name)
 
 ;;;;;;;;;;;;;;;;
@@ -54,7 +54,7 @@ window."))
 (defgeneric set-status-bar (clog-window value))
   
 (defmethod set-status-bar ((obj clog-window) value)
-  (execute obj "status" (escape-string value)))
+  (execute obj (format nil "status='~A'" (escape-string value))))
 (defsetf status-bar set-status-bar)
 
 ;;;;;;;;;;;;;;;;;;
@@ -70,7 +70,7 @@ window."))
 (defgeneric set-inner-height (clog-window value))
   
 (defmethod set-inner-height ((obj clog-window) value)
-  (execute obj "innerHeight" value))
+  (execute obj (format nil "innerHeight='~A'" (escape-string value))))
 (defsetf inner-height set-inner-height)
 
 ;;;;;;;;;;;;;;;;;
@@ -86,7 +86,7 @@ window."))
 (defgeneric set-inner-width (clog-window value))
   
 (defmethod set-inner-width ((obj clog-window) value)
-  (execute obj "innerWidth" value))
+  (execute obj (format nil "innerWidth='~A'" (escape-string value))))
 (defsetf inner-width set-inner-width)
 
 ;;;;;;;;;;;;;;;;;;
@@ -102,7 +102,7 @@ window."))
 (defgeneric set-outer-height (clog-window value))
   
 (defmethod set-outer-height ((obj clog-window) value)
-  (execute obj "outerHeight" value))
+  (execute obj (format nil "outerHeight='~A'" (escape-string value))))
 (defsetf outer-height set-outer-height)
 
 ;;;;;;;;;;;;;;;;;
@@ -118,7 +118,7 @@ window."))
 (defgeneric set-outer-width (clog-window value))
   
 (defmethod set-outer-width ((obj clog-window) value)
-  (execute obj "outerWidth" value))
+  (execute obj (format nil "outerWidth='~A'" (escape-string value))))
 (defsetf outer-width set-outer-width)
 
 ;;;;;;;;;;;;;;
@@ -134,7 +134,7 @@ window."))
 (defgeneric set-x-offset (clog-window value))
   
 (defmethod set-x-offset ((obj clog-window) value)
-  (execute obj "pageXOffset" value))
+  (execute obj (format nil "pageXOffset='~A'" (escape-string value))))
 (defsetf x-offset set-x-offset)
 
 ;;;;;;;;;;;;;;
@@ -150,7 +150,7 @@ window."))
 (defgeneric set-y-offset (clog-window value))
   
 (defmethod set-y-offset ((obj clog-window) value)
-  (execute obj "pageYOffset" value))
+  (execute obj (format nil "pageYOffset='~A'" (escape-string value))))
 (defsetf y-offset set-y-offset)
 
 ;;;;;;;;;
@@ -166,7 +166,7 @@ window."))
 (defgeneric set-top (clog-window value))
   
 (defmethod set-top ((obj clog-window) value)
-  (exectue obj "screenY" value))
+  (execute obj (format nil "screenY='~A'" (escape-string value))))
 (defsetf top set-top)
 
 ;;;;;;;;;;
@@ -182,7 +182,7 @@ window."))
 (defgeneric set-left (clog-window value))
   
 (defmethod set-left ((obj clog-window) value)
-  (execute obj "screenX" value))
+  (execute obj (format nil "screenX='~A'" (escape-string value))))
 (defsetf left set-x-offset)
 
 ;;;;;;;;;;;;;;;;;
@@ -494,17 +494,3 @@ ON-STORAGE-HANDLER is nil unbind the event."))
 		 (funcall on-storage obj (parse-storage-event data)))
 	       :call-back-script storage-event-script)))
 
-;;;;;;;;;;;;;;;;;;;
-;; Set-on-resize ;;
-;;;;;;;;;;;;;;;;;;;
-
-(defgeneric set-on-resize (clog-window on-resize-handler)
-  (:documentation "Set the ON-RESIZE-HANDLER for CLOG-OBJ. If ON-RESIZE-HANDLER
-is nil unbind the event."))
-
-(defmethod set-on-resize ((obj clog-window) on-resize-handler)
-  (let ((on-resize on-resize-handler))      
-    (set-event obj "resize"
-	       (lambda (data)
-		 (declare (ignore data))
-		 (funcall on-resize obj)))))
