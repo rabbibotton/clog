@@ -6,10 +6,23 @@
 
 
 ;; Define our CLOG application
+(defun on-new-window (window)         ; Define the function called on-new-window
+  "On-new-window handler."            ; Optional docstring to describe function
 
-(defun on-new-window (win)                   ; define a function to be called 
-  (create-child win "<h1>Hello World!<h1>"))
-  
+  (let ((hello-element                ; hello-element is a local variable that
+	                              ; will be bound to our new CLOG-Element
+	  
+	  ;; This application simply creates a CLOG-Element as a child to window.
+	  ;; A CLOG-Element represents a block of HTML (we will see later ways to
+	  ;; directly create buttons and all sorts of HTML elements in more lisp
+	  ;; like ways with no knowledge of HTML or javascript. 
+	  (create-child window "<h1>Hello World! (click me!)</h1>")))
+
+    (set-on-click hello-element      ; Now we set a function to handle clicks
+		  (lambda ()         ; In this case we use an anonymous function
+		    (setf (color hello-element) "green")))))
+;; To see all the events one can set and the many properties and styles that
+;; exist, take a look through the CLOG manual or the file clog-element.lisp
 
 
 (defun start-tutorial ()   ; Define the function called start-tutorial
