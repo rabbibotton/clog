@@ -36,17 +36,19 @@ Sample CLOG app with code base so far:
 
 
 ;; Define our CLOG application
-(defun on-new-window (window)         ; Define the function called on-new-window
+(defun on-new-window (body)           ; Define the function called on-new-window
   "On-new-window handler."            ; Optional docstring to describe function
 
   (let ((hello-element                ; hello-element is a local variable that
-	                              ; will be bound to our new CLOG-Element
+	                                  ; will be bound to our new CLOG-Element
 	  
-	  ;; This application simply creates a CLOG-Element as a child to window.
-	  ;; A CLOG-Element represents a block of HTML (we will see later ways to
+	  ;; This application simply creates a CLOG-Element as a child to the
+	  ;; CLOG-body object in the browser window.
+
+      ;; A CLOG-Element represents a block of HTML (we will see later ways to
 	  ;; directly create buttons and all sorts of HTML elements in more lisp
 	  ;; like ways with no knowledge of HTML or javascript. 
-	  (create-child window "<h1>Hello World! (click me!)</h1>")))
+	  (create-child body "<h1>Hello World! (click me!)</h1>")))
 
     (set-on-click hello-element      ; Now we set a function to handle clicks
 		  (lambda ()         ; In this case we use an anonymous function
