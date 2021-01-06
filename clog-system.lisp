@@ -33,14 +33,18 @@
 		     (static-root    #P"./static-files/"))
   "Inititalze CLOG on a socket using HOST and PORT to serve BOOT-FILE as 
 the default route to establish web-socket connections and static files
-located at STATIC-ROOT."
-  (setf *on-new-window* on-new-window-handler)
+located at STATIC-ROOT. If CLOG was already initialized and not shut
+down, this function does the same as set-on-new-window."
+  (if *on-new-window*
+      (set-on-new-window on-new-window-handler)
+      (progn
+	(set-on-new-window on-new-window-handler)
   
-  (cc:initialize #'on-connect
-		 :host host
-		 :port port
-		 :boot-file boot-file
-		 :static-root static-root))
+	(cc:initialize #'on-connect
+		       :host host
+		       :port port
+		       :boot-file boot-file
+		       :static-root static-root))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;
 ;; set-on-new-window ;;
@@ -56,4 +60,5 @@ located at STATIC-ROOT."
 
 (defun shutdown ()
   "Shutdown CLOG."
+  (set-on-new-window nil)
   (cc:shutdown-clog))
