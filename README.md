@@ -75,7 +75,7 @@ Status:
 
 - Connection methods
   - Websockets - DONE
-  - AJAX/HTML - to do (In 2021 are there browsers not supporting Websockets?)
+  - Long Poll - to do (Needed for websites for webcrawlers and firewalls use) 
   - Direct API access to native browser components - to do (not needed but games, soft real-time apps, etc would be perfomance.) 
 
 - HTML bindings and Browser
