@@ -402,7 +402,7 @@ is nil unbind the event."))
     (set-event obj "abort"
 	       (lambda (data)
 		 (declare (ignore data))
-		 (funcall on-abort)))))
+		 (funcall on-abort obj)))))
 
 ;;;;;;;;;;;;;;;;;;
 ;; Set-on-error ;;
@@ -417,7 +417,7 @@ is nil unbind the event."))
     (set-event obj "error"
 	       (lambda (data)
 		 (declare (ignore data))
-		 (funcall on-error)))))
+		 (funcall on-error obj)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Set-on-before-unload ;;
@@ -432,7 +432,7 @@ ON-BEFORE-UNLOAD-HANDLER is nil unbind the event."))
     (set-event obj "beforeunload"
 	       (lambda (data)
 		 (declare (ignore data))
-		 (funcall on-before-unload)))))
+		 (funcall on-before-unload obj)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Set-on-hash-change ;;
@@ -447,7 +447,7 @@ ON-HASH-CHANGE-HANDLER is nil unbind the event."))
     (set-event obj "hashchange"
 	       (lambda (data)
 		 (declare (ignore data))
-		 (funcall on-hash-change)))))
+		 (funcall on-hash-change obj)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Set-on-orientation-change ;;
@@ -464,7 +464,7 @@ If ON-ORIENTATION-CHANGE-HANDLER is nil unbind the event."))
     (set-event obj "orientationchange"
 	       (lambda (data)
 		 (declare (ignore data))
-		 (funcall on-orientation-change)))))
+		 (funcall on-orientation-change obj)))))
 
 ;;;;;;;;;;;;;;;;;;;;
 ;; Set-on-storage ;;
@@ -492,7 +492,7 @@ ON-STORAGE-HANDLER is nil unbind the event."))
   (let ((on-storage on-storage-handler))      
     (set-event obj "storage"
 	       (lambda (data)
-		 (funcall on-storage (parse-storage-event data)))
+		 (funcall on-storage obj (parse-storage-event data)))
 	       :call-back-script storage-event-script)))
 
 ;;;;;;;;;;;;;;;;;;;
@@ -508,4 +508,4 @@ is nil unbind the event."))
     (set-event obj "resize"
 	       (lambda (data)
 		 (declare (ignore data))
-		 (funcall on-resize)))))
+		 (funcall on-resize obj)))))

@@ -21,7 +21,7 @@
 	  (create-child body "<h1>Hello World! (click me!)</h1>")))
 
     (set-on-click hello-element      ; Now we set a function to handle clicks
-		  (lambda ()         ; In this case we use an anonymous function
+		  (lambda (obj)      ; In this case we use an anonymous function
 		    (setf (color hello-element) "green")))))
 ;; To see all the events one can set and the many properties and styles that
 ;; exist, take a look through the CLOG manual or the file clog-element.lisp

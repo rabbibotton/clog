@@ -20,7 +20,7 @@
     (when (draggablep tmp)
       (setf (property tmp "innerHTML") "<h2>I am draggable</h2>"))
     (setf tmp (create-child win "<button>test</botton>"))
-    (set-on-click tmp (lambda () (alert (window win) "clicked")))
+    (set-on-click tmp (lambda (obj) (alert (window win) "clicked")))
     (setf (box-sizing tmp) :border-box)
     (setf (width tmp) 300)
     (setf (height tmp) 50)    
@@ -30,19 +30,19 @@
 	    "4px" :dotted "blue")
     (setf *last-obj* (create-child win "<button>********</button>"))
     (set-on-mouse-enter *last-obj*
-			(lambda ()
+			(lambda (obj)
 			  (setf (property *last-obj* "innerHTML") "Inside")))
     (set-on-mouse-leave *last-obj*
-			(lambda ()
+			(lambda (obj)
 			  (setf (property *last-obj* "innerHTML") "Outside")))
     (set-on-mouse-click *last-obj*
-			(lambda (data)
+			(lambda (obj data)
 			  (print data)))
     (set-on-mouse-move *last-obj*
-		       (lambda (data)
+		       (lambda (obj data)
 			 (format t "x=~A Y=~A~%" (getf data ':x) (getf data ':y))))
     (set-on-character win
-		      (lambda (data)
+		      (lambda (obj data)
 			(print data)))
     (setf (title (html-document win)) "CLOG Test App")
     (print (title (html-document win)))

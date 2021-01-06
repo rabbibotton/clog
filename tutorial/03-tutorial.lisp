@@ -7,14 +7,14 @@
 (defun on-new-window (body)
   "On-new-window handler."
 
-  (setf (title (html-document body)) "Tutorial 2")
+  (setf (title (html-document body)) "Tutorial 3")
   
   (let ((hello-element
 	  (create-child body "<h1>Hello World! (click me!)</h1>")))
 
     (let ((x 0))
       (set-on-click hello-element
-		    (lambda ()
+		    (lambda (obj)
 		      (incf x)
 		      (dotimes (n x)
 			(create-child body

@@ -299,6 +299,23 @@ are stored in this string based hash in the format of:
 (defmethod connection-data ((obj clog-obj))
   (cc:get-connection-data (connection-id obj)))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; connection-data-item ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric connection-data-item (clog-obj item-name)
+  (:documentation "Get/Setf from connection-data the item-name in hash."))
+
+(defmethod connection-data-item ((obj clog-obj) item-name)
+  (gethash item-name (connection-data obj)))
+
+(defgeneric set-connection-data-item (clog-obj item-name value)
+  (:documentation "Set connection-data the item-name in hash."))
+
+(defmethod set-connection-data-item ((obj clog-obj) item-name value)
+  (setf (gethash item-name (connection-data obj)) value))
+(defsetf connection-data-item set-connection-data-item)
+
 ;;;;;;;;;;;;;;;;;;;
 ;; set-on-resize ;;
 ;;;;;;;;;;;;;;;;;;;
@@ -312,7 +329,7 @@ is nil unbind the event."))
     (set-event obj "resize"
 	       (lambda (data)
 		 (declare (ignore data))
-		 (funcall on-resize)))))
+		 (funcall on-resize obj)))))
 
 ;;;;;;;;;;;;;;;;;;
 ;; set-on-focus ;;
@@ -327,7 +344,7 @@ is nil unbind the event."))
     (set-event obj "focus"
 	       (lambda (data)
 		 (declare (ignore data))
-		 (funcall on-focus)))))
+		 (funcall on-focus obj)))))
 
 ;;;;;;;;;;;;;;;;;
 ;; set-on-blur ;;
@@ -342,7 +359,7 @@ is nil unbind the event."))
     (set-event obj "blur"
 	       (lambda (data)
 		 (declare (ignore data))
-		 (funcall on-blur)))))
+		 (funcall on-blur obj)))))
 
 ;;;;;;;;;;;;;;;;;;;
 ;; set-on-change ;;
@@ -357,7 +374,7 @@ is nil unbind the event."))
     (set-event obj "change"
 	       (lambda (data)
 		 (declare (ignore data))
-		 (funcall on-change)))))
+		 (funcall on-change obj)))))
 
 ;;;;;;;;;;;;;;;;;;;;;
 ;; set-on-focus-in ;;
@@ -372,7 +389,7 @@ ON-FOCUS-IN-HANDLER is nil unbind the event."))
     (set-event obj "focusin"
 	       (lambda (data)
 		 (declare (ignore data))
-		 (funcall on-focus-in)))))
+		 (funcall on-focus-in obj)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;
 ;; set-on-focus-out ;;
@@ -387,7 +404,7 @@ If ON-FOCUS-OUT-HANDLER is nil unbind the event."))
     (set-event obj "focusout"
 	       (lambda (data)
 		 (declare (ignore data))
-		 (funcall on-focus-out)))))
+		 (funcall on-focus-out obj)))))
 
 ;;;;;;;;;;;;;;;;;;
 ;; set-on-reset ;;
@@ -403,7 +420,7 @@ this even is bound, you must call the form reset manually."))
     (set-event obj "reset"
 	       (lambda (data)
 		 (declare (ignore data))
-		 (funcall on-reset)))))
+		 (funcall on-reset obj)))))
 
 ;;;;;;;;;;;;;;;;;;;
 ;; set-on-search ;;
@@ -418,7 +435,7 @@ is nil unbind the event."))
     (set-event obj "search"
 	       (lambda (data)
 		 (declare (ignore data))
-		 (funcall on-search)))))
+		 (funcall on-search obj)))))
 
 ;;;;;;;;;;;;;;;;;;;
 ;; set-on-select ;;
@@ -434,7 +451,7 @@ this even is bound, you must call the form submit manually."))
     (set-event obj "select"
 	       (lambda (data)
 		 (declare (ignore data))
-		 (funcall on-select)))))
+		 (funcall on-select obj)))))
 
 ;;;;;;;;;;;;;;;;;;;
 ;; set-on-submit ;;
@@ -449,7 +466,7 @@ is nil unbind the event."))
     (set-event obj "submit"
 	       (lambda (data)
 		 (declare (ignore data))
-		 (funcall on-submit)))))
+		 (funcall on-submit obj)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; set-on-context-menu ;;
@@ -465,7 +482,7 @@ on-mouse-right-click will replace this handler."))
     (set-event obj "contextmenu"
 	       (lambda (data)
 		 (declare (ignore data))
-		 (funcall on-context-menu)))))
+		 (funcall on-context-menu obj)))))
 
 ;;;;;;;;;;;;;;;;;;
 ;; set-on-click ;;
@@ -481,7 +498,7 @@ set."))
     (set-event obj "click"
 	       (lambda (data)
 		 (declare (ignore data))
-		 (funcall on-click)))))
+		 (funcall on-click obj)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; set-on-double-click ;;
@@ -497,7 +514,7 @@ on-mouse-double-click event will replace this handler."))
     (set-event obj "dblclick"
 	       (lambda (data)
 		 (declare (ignore data))
-		 (funcall on-double-click)))))
+		 (funcall on-double-click obj)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;
 ;; set-on-mouse-click ;;
@@ -512,7 +529,7 @@ on an on-click event."))
   (let ((on-mouse-click on-mouse-click-handler))      
     (set-event obj "click"
 	       (lambda (data)
-		 (funcall on-mouse-click (parse-mouse-event data)))
+		 (funcall on-mouse-click obj (parse-mouse-event data)))
 	       :call-back-script mouse-event-script)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -528,7 +545,7 @@ replace on an on-double-click event."))
   (let ((on-mouse-double-click on-mouse-double-click-handler))      
     (set-event obj "dblclick"
 	       (lambda (data)
-		 (funcall on-mouse-double-click (parse-mouse-event data)))
+		 (funcall on-mouse-double-click obj (parse-mouse-event data)))
 	       :call-back-script mouse-event-script)))	      
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -544,7 +561,7 @@ replace on an on-context-menu event."))
   (let ((on-mouse-right-click on-mouse-right-click-handler))      
     (set-event obj "contextmenu"
 	       (lambda (data)
-		 (funcall on-mouse-right-click (parse-mouse-event data)))
+		 (funcall on-mouse-right-click obj (parse-mouse-event data)))
 	       :call-back-script mouse-event-script)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;
@@ -560,7 +577,7 @@ is nil unbind the event."))
     (set-event obj "mouseenter"
 	       (lambda (data)
 		 (declare (ignore data))
-		 (funcall on-mouse-enter)))))
+		 (funcall on-mouse-enter obj)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;
 ;; set-on-mouse-leave ;;
@@ -575,7 +592,7 @@ is nil unbind the event."))
     (set-event obj "mouseleave"
 	       (lambda (data)
 		 (declare (ignore data))
-		 (funcall on-mouse-leave)))))
+		 (funcall on-mouse-leave obj)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;
 ;; set-on-mouse-over ;;
@@ -590,7 +607,7 @@ is nil unbind the event."))
     (set-event obj "mouseover"
 	       (lambda (data)
 		 (declare (ignore data))
-		 (funcall on-mouse-over)))))
+		 (funcall on-mouse-over obj)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;
 ;; set-on-mouse-out ;;
@@ -605,7 +622,7 @@ is nil unbind the event."))
     (set-event obj "mouseout"
 	       (lambda (data)
 		 (declare (ignore data))
-		 (funcall on-mouse-out)))))
+		 (funcall on-mouse-out obj)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;
 ;; set-on-mouse-down ;;
@@ -619,7 +636,7 @@ ON-MOUSE-DOWN-HANDLER is nil unbind the event."))
   (let ((on-mouse-down on-mouse-down-handler))      
     (set-event obj "mousedown"
 	       (lambda (data)
-		 (funcall on-mouse-down (parse-mouse-event data)))
+		 (funcall on-mouse-down obj (parse-mouse-event data)))
 	       :call-back-script mouse-event-script)))
 
 ;;;;;;;;;;;;;;;;;;;;;
@@ -634,7 +651,7 @@ ON-MOUSE-UP-HANDLER is nil unbind the event."))
   (let ((on-mouse-up on-mouse-up-handler))      
     (set-event obj "mouseup"
 	       (lambda (data)
-		 (funcall on-mouse-up (parse-mouse-event data)))
+		 (funcall on-mouse-up obj (parse-mouse-event data)))
 	       :call-back-script mouse-event-script)))	       
 
 ;;;;;;;;;;;;;;;;;;;;;;;
@@ -649,7 +666,7 @@ ON-MOUSE-MOVE-HANDLER is nil unbind the event."))
   (let ((on-mouse-move on-mouse-move-handler))      
     (set-event obj "mousemove"
 	       (lambda (data)
-		 (funcall on-mouse-move (parse-mouse-event data)))
+		 (funcall on-mouse-move obj (parse-mouse-event data)))
 	       :call-back-script mouse-event-script)))	       
 
 ;;;;;;;;;;;;;;;;;;;;;;
@@ -666,7 +683,7 @@ will replace a on-key-press"))
     (set-event obj "keypress"
 	       (lambda (data)
 		 (let ((f (parse-keyboard-event data)))
-		   (funcall on-character (code-char (getf f ':char-code)))))
+		   (funcall on-character obj (code-char (getf f ':char-code)))))
 	       :call-back-script keyboard-event-script)))
 
 ;;;;;;;;;;;;;;;;;;;;;
@@ -681,7 +698,7 @@ ON-KEY-DOWN-HANDLER is nil unbind the event."))
   (let ((on-key-down on-key-down-handler))      
     (set-event obj "keydown"
 	       (lambda (data)
-		 (funcall on-key-down (parse-keyboard-event data)))
+		 (funcall on-key-down obj (parse-keyboard-event data)))
 	       :call-back-script keyboard-event-script)))	       
 
 ;;;;;;;;;;;;;;;;;;;
@@ -696,7 +713,7 @@ ON-KEY-UP-HANDLER is nil unbind the event."))
   (let ((on-key-up on-key-up-handler))      
     (set-event obj "keyup"
 	       (lambda (data)
-		 (funcall on-key-up (parse-keyboard-event data)))
+		 (funcall on-key-up obj (parse-keyboard-event data)))
 	       :call-back-script keyboard-event-script)))	       
 
 ;;;;;;;;;;;;;;;;;;;;;;
@@ -711,7 +728,7 @@ ON-KEY-PRESS-HANDLER is nil unbind the event."))
   (let ((on-key-press on-key-press-handler))      
     (set-event obj "keypress"
 	       (lambda (data)
-		 (funcall on-key-press (parse-keyboard-event data)))
+		 (funcall on-key-press obj (parse-keyboard-event data)))
 	       :call-back-script keyboard-event-script)))	       
 
 ;;;;;;;;;;;;;;;;;
@@ -727,7 +744,7 @@ is nil unbind the event."))
     (set-event obj "copy"
 	       (lambda (data)
 		 (declare (ignore data))
-		 (funcall on-copy)))))
+		 (funcall on-copy obj)))))
 
 ;;;;;;;;;;;;;;;;
 ;; set-on-cut ;;
@@ -742,7 +759,7 @@ is nil unbind the event."))
     (set-event obj "cut"
 	       (lambda (data)
 		 (declare (ignore data))
-		 (funcall on-cut)))))
+		 (funcall on-cut obj)))))
 
 ;;;;;;;;;;;;;;;;;;
 ;; set-on-paste ;;
@@ -757,4 +774,4 @@ is nil unbind the event."))
     (set-event obj "paste"
 	       (lambda (data)
 		 (declare (ignore data))
-		 (funcall on-paste)))))
+		 (funcall on-paste obj)))))

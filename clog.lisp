@@ -64,8 +64,9 @@ application."
   (blur   generic-function)
   
   "CLOG-Obj - Low Level"
-  (connection-data generic-function)
-  (validp          generic-function)
+  (connection-data      generic-function)
+  (connection-data-item generic-function)
+  (validp               generic-function)
 
   "CLOG-Obj - Event Handling"
   (set-on-resize             generic-function)

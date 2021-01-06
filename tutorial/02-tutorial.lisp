@@ -21,7 +21,7 @@
 
     (let ((x 0))                     ; A closure - each call to on-new-window will
       (set-on-click hello-element    ; create a different version of this closer.
-		    (lambda ()
+		    (lambda (obj)
 		      (incf x)
 		      (dotimes (n x)
 			(create-child body
