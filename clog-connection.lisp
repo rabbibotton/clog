@@ -167,7 +167,9 @@ the default answer. (Private)"
 	     (when *verbose-output*
 	       (format t "Channel ~A Hook ~A Data ~A~%"
 		       id (first em) (second em)))
-	     (funcall (gethash (first em) (get-connection-data id)) (second em))))
+	     (bordeaux-threads:make-thread
+	      (lambda ()
+		(funcall (gethash (first em) (get-connection-data id)) (second em))))))
 	  (t
 	   (when *verbose-output*
 	     (format t "~A ~A = ~A~%" id (first ml) (second ml)))
