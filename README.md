@@ -25,7 +25,7 @@ CL-USER> (load "/Users/dbotton/common-lisp/clog/tutorial/01-tutorial.lisp")
 CL-USER> (clog-user:start-tutorial)
 
 
-Sample CLOG app with code base so far:
+Sample CLOG app with code base so far (See tutorial 7 for a video game :) :
 
 ```lisp
 (defpackage #:clog-user               ; Setup a package for our work to exist in
