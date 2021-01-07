@@ -168,8 +168,6 @@ application."
   (positioning                generic-function)
   (position-top               generic-function)
   (position-left              generic-function)
-  (offset-top                 generic-function)
-  (offset-left                generic-function)
   (left                       generic-function)
   (top                        generic-function)
   (right                      generic-function)

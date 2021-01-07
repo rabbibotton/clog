@@ -183,7 +183,7 @@ window."))
   
 (defmethod set-left ((obj clog-window) value)
   (execute obj (format nil "screenX='~A'" (escape-string value))))
-(defsetf left set-x-offset)
+(defsetf left set-left)
 
 ;;;;;;;;;;;;;;;;;
 ;; pixel-ratio ;;
