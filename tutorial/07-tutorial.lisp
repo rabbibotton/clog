@@ -30,6 +30,7 @@
 	  
 	  (set-on-resize (window body)
 			 (lambda (obj)
+			   (declare (ignore obj))
 			   (setf bounds-x (parse-integer (width (window body)) :junk-allowed t))
 			   (setf bounds-y (parse-integer (height (window body)) :junk-allowed t))))
 
