@@ -22,8 +22,8 @@
 	(let* ((mover (create-child body "<div>(-o-)</div>"))
 	       (bounds-x (parse-integer (width (window body)) :junk-allowed t))
 	       (bounds-y (parse-integer (height (window body)) :junk-allowed t))
-	       (mover-x (/ bounds-x 2))
-	       (mover-y (/ bounds-y 2)))
+	       (mover-x (random bounds-x))
+	       (mover-y (random bounds-y)))
 
 	  (setf (positioning mover) :fixed)
 	  (set-on-click mover #'on-click)
