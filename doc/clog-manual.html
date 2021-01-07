@@ -78,7 +78,7 @@ application.</p>
 <p><a id='x-28CLOG-3AINITIALIZE-20FUNCTION-29'></a></p>
 
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#x-28CLOG-3AINITIALIZE-20FUNCTION-29" >INITIALIZE</a></span></span> <span class="locative-args">ON-NEW-WINDOW-HANDLER &amp;KEY (HOST &quot;0.0.0.0&quot;) (PORT 8080) (BOOT-FILE &quot;/boot.html&quot;) (STATIC-ROOT #P&quot;./static-files/&quot;)</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#x-28CLOG-3AINITIALIZE-20FUNCTION-29" >INITIALIZE</a></span></span> <span class="locative-args">ON-NEW-WINDOW-HANDLER &amp;KEY (HOST &quot;0.0.0.0&quot;) (PORT 8080) (BOOT-FILE &quot;/boot.html&quot;) (STATIC-ROOT #P&quot;static-files/&quot;)</span></span></p>
 
 <p>Inititalze <a href="#x-28-22clog-22-20ASDF-2FSYSTEM-3ASYSTEM-29" title="(\&quot;clog\&quot; ASDF/SYSTEM:SYSTEM)"><code>CLOG</code></a> on a socket using <code>HOST</code> and <code>PORT</code> to serve <code>BOOT-FILE</code> as 
 the default route to establish web-socket connections and static files
@@ -517,9 +517,9 @@ is nil unbind the event.</p></li>
 <p><a id='x-28CLOG-3ASET-ON-PASTE-20GENERIC-FUNCTION-29'></a></p>
 
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ASET-ON-PASTE-20GENERIC-FUNCTION-29" >SET-ON-PASTE</a></span></span> <span class="locative-args">CLOG-OBJ ON-PASTE-HANDLER</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ASET-ON-PASTE-20GENERIC-FUNCTION-29" >SET-ON-PASTE</a></span></span> <span class="locative-args">CLOG-OBJ HANDLER</span></span></p>
 
-<p>Set the <code>ON-PASTE-HANDLER</code> for <code>CLOG-OBJ</code>. If <code>ON-PASTE-HANDLER</code>
+<p>Set the ON-PASTE-HANDLER for <code>CLOG-OBJ</code>. If ON-PASTE-HANDLER
 is nil unbind the event.</p></li>
 </ul>
 
@@ -1037,22 +1037,6 @@ parent in the DOM.</p></li>
 
 <p>Position from left in pixels relative to Element's
 parent in the DOM.</p></li>
-</ul>
-
-<p><a id='x-28CLOG-3AOFFSET-TOP-20GENERIC-FUNCTION-29'></a></p>
-
-<ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3AOFFSET-TOP-20GENERIC-FUNCTION-29" >OFFSET-TOP</a></span></span> <span class="locative-args">CLOG-ELEMENT</span></span></p>
-
-<p>Position in pixels from top relative to the document.</p></li>
-</ul>
-
-<p><a id='x-28CLOG-3AOFFSET-LEFT-20GENERIC-FUNCTION-29'></a></p>
-
-<ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3AOFFSET-LEFT-20GENERIC-FUNCTION-29" >OFFSET-LEFT</a></span></span> <span class="locative-args">CLOG-ELEMENT</span></span></p>
-
-<p>Position in pixels from left relative to the document.</p></li>
 </ul>
 
 <p><a id='x-28CLOG-3ALEFT-20GENERIC-FUNCTION-29'></a></p>
@@ -1953,7 +1937,7 @@ If <code>ON-ORIENTATION-CHANGE-HANDLER</code> is nil unbind the event.</p></li>
 <p><a id='x-28CLOG-3ABODY-ELEMENT-20GENERIC-FUNCTION-29'></a></p>
 
 <ul>
-<li><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ABODY-ELEMENT-20GENERIC-FUNCTION-29" >BODY-ELEMENT</a></span></span> <span class="locative-args">OBJECT</span></span></li>
+<li><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ABODY-ELEMENT-20GENERIC-FUNCTION-29" >BODY-ELEMENT</a></span></span> <span class="locative-args">SELF</span></span></li>
 </ul>
 
 <p><a id='x-28CLOG-3ADOCUMENT-ELEMENT-20GENERIC-FUNCTION-29'></a></p>

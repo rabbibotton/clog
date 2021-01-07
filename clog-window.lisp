@@ -389,67 +389,67 @@ events and messages may not be trasmitted on most browsers."))
   (cc:cclose (connection-id obj)))
 
 ;;;;;;;;;;;;;;;;;;
-;; Set-on-abort ;;
+;; set-on-abort ;;
 ;;;;;;;;;;;;;;;;;;
 
 (defgeneric set-on-abort (clog-window on-abort-handler)
   (:documentation "Set the ON-ABORT-HANDLER for CLOG-OBJ. If ON-ABORT-HANDLER
 is nil unbind the event."))
 
-(defmethod set-on-abort ((obj clog-window) on-abort-handler)
-  (let ((on-abort on-abort-handler))      
-    (set-event obj "abort"
+(defmethod set-on-abort ((obj clog-window) handler)
+  (set-event obj "abort"
+	     (when handler
 	       (lambda (data)
 		 (declare (ignore data))
-		 (funcall on-abort obj)))))
+		 (funcall handler obj)))))
 
 ;;;;;;;;;;;;;;;;;;
-;; Set-on-error ;;
+;; set-on-error ;;
 ;;;;;;;;;;;;;;;;;;
 
 (defgeneric set-on-error (clog-window on-error-handler)
   (:documentation "Set the ON-ERROR-HANDLER for CLOG-OBJ. If ON-ERROR-HANDLER
 is nil unbind the event."))
 
-(defmethod set-on-error ((obj clog-window) on-error-handler)
-  (let ((on-error on-error-handler))      
-    (set-event obj "error"
+(defmethod set-on-error ((obj clog-window) handler)
+  (set-event obj "error"
+	     (when handler
 	       (lambda (data)
 		 (declare (ignore data))
-		 (funcall on-error obj)))))
+		 (funcall handler obj)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Set-on-before-unload ;;
+;; set-on-before-unload ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defgeneric set-on-before-unload (clog-window on-before-unload-handler)
   (:documentation "Set the ON-BEFORE-UNLOAD-HANDLER for CLOG-OBJ. If
 ON-BEFORE-UNLOAD-HANDLER is nil unbind the event."))
 
-(defmethod set-on-before-unload ((obj clog-window) on-before-unload-handler)
-  (let ((on-before-unload on-before-unload-handler))      
-    (set-event obj "beforeunload"
+(defmethod set-on-before-unload ((obj clog-window) handler)
+  (set-event obj "beforeunload"
+	     (when handler
 	       (lambda (data)
 		 (declare (ignore data))
-		 (funcall on-before-unload obj)))))
+		 (funcall handler obj)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;
-;; Set-on-hash-change ;;
+;; set-on-hash-change ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defgeneric set-on-hash-change (clog-window on-hash-change-handler)
   (:documentation "Set the ON-HASH-CHANGE-HANDLER for CLOG-OBJ. If
 ON-HASH-CHANGE-HANDLER is nil unbind the event."))
 
-(defmethod set-on-hash-change ((obj clog-window) on-hash-change-handler)
-  (let ((on-hash-change on-hash-change-handler))      
-    (set-event obj "hashchange"
+(defmethod set-on-hash-change ((obj clog-window) handler)
+  (set-event obj "hashchange"
+	     (when handler
 	       (lambda (data)
 		 (declare (ignore data))
-		 (funcall on-hash-change obj)))))
+		 (funcall handler obj)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Set-on-orientation-change ;;
+;; set-on-orientation-change ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defgeneric set-on-orientation-change (clog-window
@@ -457,16 +457,15 @@ ON-HASH-CHANGE-HANDLER is nil unbind the event."))
   (:documentation "Set the ON-ORIENTATION-CHANGE-HANDLER for CLOG-OBJ.
 If ON-ORIENTATION-CHANGE-HANDLER is nil unbind the event."))
 
-(defmethod set-on-orientation-change ((obj clog-window)
-				      on-orientation-change-handler)
-  (let ((on-orientation-change on-orientation-change-handler))      
-    (set-event obj "orientationchange"
+(defmethod set-on-orientation-change ((obj clog-window) handler)
+  (set-event obj "orientationchange"
+	     (when handler
 	       (lambda (data)
 		 (declare (ignore data))
-		 (funcall on-orientation-change obj)))))
+		 (funcall handler obj)))))
 
 ;;;;;;;;;;;;;;;;;;;;
-;; Set-on-storage ;;
+;; set-on-storage ;;
 ;;;;;;;;;;;;;;;;;;;;
 
 ;; need to change to use a true on-storage event
@@ -487,10 +486,9 @@ If ON-ORIENTATION-CHANGE-HANDLER is nil unbind the event."))
   (:documentation "Set the ON-STORAGE-HANDLER for CLOG-OBJ. If
 ON-STORAGE-HANDLER is nil unbind the event."))
 
-(defmethod set-on-storage ((obj clog-window) on-storage-handler)
-  (let ((on-storage on-storage-handler))      
-    (set-event obj "storage"
+(defmethod set-on-storage ((obj clog-window) handler)
+  (set-event obj "storage"
+	     (when handler
 	       (lambda (data)
-		 (funcall on-storage obj (parse-storage-event data)))
-	       :call-back-script storage-event-script)))
-
+		 (funcall handler obj (parse-storage-event data))))
+	     :call-back-script storage-event-script))
