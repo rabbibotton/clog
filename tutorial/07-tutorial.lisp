@@ -7,8 +7,7 @@
 (defun on-click (obj)
   (setf (text obj) "DEAD")
   (setf (connection-data-item obj "done") t)
-  (set-on-click obj nil)
-)
+  (set-on-click obj nil))
 
 (defun on-new-window (body)
   (handler-case   ; Disconnects from the browser can be handled gracefully using the condition system.
@@ -17,24 +16,29 @@
 
 	(setf (hiddenp (prog1
 			   (create-child body "<h2>KILL Darth's Tie Fighter - Click on it!</h2>")
-			 (sleep 2))) t)
-	
-	(let* ((mover (create-child body "<div>(-o-)</div>"))
-	       (bounds-x (parse-integer (width (window body)) :junk-allowed t))
-	       (bounds-y (parse-integer (height (window body)) :junk-allowed t))
-	       (mover-x (random bounds-x))
-	       (mover-y (random bounds-y)))
+			 (sleep 2))) t)		 
 
+	(let* ((mover (create-child body "<div>(-o-)</div>"))
+	       bounds-x bounds-y mover-x mover-y)
+	  
+	  (flet ((set-bounds ()
+		   (setf bounds-x (parse-integer (width (window body)) :junk-allowed t))
+		   (setf bounds-y (parse-integer (height (window body)) :junk-allowed t))))
+	    (set-bounds)
+	    (setf mover-x (random bounds-x))
+	    (setf mover-y (random bounds-y))
+	    
+	    (set-on-resize (window body)
+			   (lambda (obj)
+			     (declare (ignore obj))
+			     (set-bounds))))
+	  
 	  (setf (positioning mover) :fixed)
 	  (set-on-click mover #'on-click)
 	  
-	  (set-on-resize (window body)
-			 (lambda (obj)
-			   (declare (ignore obj))
-			   (setf bounds-x (parse-integer (width (window body)) :junk-allowed t))
-			   (setf bounds-y (parse-integer (height (window body)) :junk-allowed t))))
-
 	  (loop
+	    (unless (validp body)
+	      (return))
 	    (when (connection-data-item body "done")
 	      (return))
 	    
@@ -59,8 +63,9 @@
 	      (setf mover-y bounds-y))
 	    
 	    (sleep .02)))
-	) (error ()
-	    (format t "Lost connection.~&"))))
+	(format t "GAME OVER"))
+    (error (c)
+      (format t "Lost connection.~%~%~A" c))))
 
 (defun start-tutorial ()
   "Start turtorial."

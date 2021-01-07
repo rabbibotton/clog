@@ -169,7 +169,10 @@ the default answer. (Private)"
 		       id (first em) (second em)))
 	     (bordeaux-threads:make-thread
 	      (lambda ()
-		(funcall (gethash (first em) (get-connection-data id)) (second em))))))
+		(let* ((event-hash (get-connection-data id))
+		       (event      (when event-hash
+				     (gethash (first em) event-hash))))
+		  (when event (funcall event (second em))))))))
 	  (t
 	   (when *verbose-output*
 	     (format t "~A ~A = ~A~%" id (first ml) (second ml)))

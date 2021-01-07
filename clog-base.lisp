@@ -324,12 +324,12 @@ are stored in this string based hash in the format of:
   (:documentation "Set the ON-RESIZE-HANDLER for CLOG-OBJ. If ON-RESIZE-HANDLER
 is nil unbind the event."))
 
-(defmethod set-on-resize ((obj clog-obj) on-resize-handler)
-  (let ((on-resize on-resize-handler))
-    (set-event obj "resize"
+(defmethod set-on-resize ((obj clog-obj) handler)
+  (set-event obj "resize"
+	     (when handler
 	       (lambda (data)
 		 (declare (ignore data))
-		 (funcall on-resize obj)))))
+		 (funcall handler obj)))))
 
 ;;;;;;;;;;;;;;;;;;
 ;; set-on-focus ;;
@@ -493,12 +493,12 @@ on-mouse-right-click will replace this handler."))
 is nil unbind the event. Setting this event will replace an on-mouse click if
 set."))
 
-(defmethod set-on-click ((obj clog-obj) on-click-handler)
-  (let ((on-click on-click-handler))      
-    (set-event obj "click"
+(defmethod set-on-click ((obj clog-obj) handler)
+  (set-event obj "click"
+	     (when handler
 	       (lambda (data)
 		 (declare (ignore data))
-		 (funcall on-click obj)))))
+		 (funcall handler obj)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; set-on-double-click ;;
