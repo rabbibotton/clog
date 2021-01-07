@@ -11,7 +11,7 @@
 )
 
 (defun on-new-window (body)
-  (handler-case
+  (handler-case   ; Disconnects from the browser can be handled gracefully using the condition system.
       (progn
 	(setf (title (html-document body)) "Tutorial 7")
 
@@ -58,7 +58,7 @@
 	      (setf mover-y bounds-y))
 	    
 	    (sleep .02)))
-	) (error (c)
+	) (error ()
 	    (format t "Lost connection.~&"))))
 
 (defun start-tutorial ()
