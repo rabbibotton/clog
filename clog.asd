@@ -17,6 +17,7 @@
 	       (:file "clog-utilities")
 	       (:file "clog-base")
 	       (:file "clog-element")
+	       (:file "clog-element-common")
 	       (:file "clog-window")
 	       (:file "clog-document")
 	       (:file "clog-location")

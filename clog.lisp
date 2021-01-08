@@ -27,15 +27,16 @@ application."
 
   (clog asdf:system)
 
-  (@clog-system    section)
-  (@clog-utilities section)
-  (@clog-obj       section)
-  (@clog-element   section)
-  (@clog-body      section)
-  (@clog-window    section)
-  (@clog-document  section)
-  (@clog-location  section)
-  (@clog-navigator section))
+  (@clog-system         section)
+  (@clog-utilities      section)
+  (@clog-obj            section)
+  (@clog-element        section)
+  (@clog-element-common section)
+  (@clog-body           section)
+  (@clog-window         section)
+  (@clog-document       section)
+  (@clog-location       section)
+  (@clog-navigator      section))
 
 (defsection @clog-system (:title "CLOG System")
   "CLOG Startup and Shutdown"
@@ -231,6 +232,28 @@ application."
   (first-child  generic-function)
   (next-sibling generic-function))
 
+(defsection @clog-element (:title "Common CLOG Elements")
+  "CLOG-BR - Class for CLOG Line Breaks"
+  (clog-br   class)
+  (create-br generic-function)
+  
+  "CLOG-Div - Class for CLOG Divs"
+  (clog-div   class)
+  (create-div generic-function)
+
+  "CLOG-HR - Class for CLOG Hortizontal Rules"
+  (clog-HR   class)
+  (create-HR generic-function)
+  
+  "CLOG-P - Class for CLOG Paragraphs"
+  (clog-p   class)
+  (create-p generic-function)
+
+  "CLOG-Span - Class for CLOG Spans"
+  (clog-span   class)
+  (create-span generic-function)
+  )
+
 (defsection @clog-body (:title "CLOG Body Objects")
   "CLOG-Body - CLOG Body Objects"
   (clog-body class)
@@ -340,6 +363,8 @@ application."
 (defun make-markup ()
   (load "clog.lisp")
   (load "clog-base.lisp")
+  (load "clog-element.lisp")
+  (load "clog-element-common.lisp")
   (load "clog-window.lisp")
   (load "clog-navigator.lisp")
   (load "clog-document.lisp")
@@ -353,6 +378,8 @@ application."
 (defun make-html ()
   (load "clog.lisp")
   (load "clog-base.lisp")
+  (load "clog-element.lisp")
+  (load "clog-element-common.lisp")
   (load "clog-window.lisp")
   (load "clog-navigator.lisp")
   (load "clog-document.lisp")

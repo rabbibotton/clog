@@ -44,6 +44,12 @@
     (set-on-character win
 		      (lambda (obj data)
 			(print data)))
+    (create-div win :content "Hello World! p")
+    (create-div win :content "Hello World! div")
+    (create-br win) 
+    (create-span win :content "Hello World! span")
+    (create-hr win) 
+
     (setf (title (html-document win)) "CLOG Test App")
     (print (title (html-document win)))
     ))

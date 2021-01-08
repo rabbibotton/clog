@@ -21,15 +21,15 @@ element objects."))
 ;; make-clog-element ;;
 ;;;;;;;;;;;;;;;;;;;;;;;
 
-(defun make-clog-element (connection-id html-id)
-  "Construct a new clog-element. (Private)"
-  (make-instance 'clog-element :connection-id connection-id :html-id html-id))
+(defun make-clog-element (connection-id html-id &key (clog-type 'clog-element))
+  "Construct a new clog-element or sub-element of CLOG-TYPE. (Private)"
+  (make-instance clog-type :connection-id connection-id :html-id html-id))
 
 ;;;;;;;;;;;;;;;;;;;;;;
 ;; create-with-html ;;
 ;;;;;;;;;;;;;;;;;;;;;;
 
-(defun create-with-html (connection-id html)
+(defun create-with-html (connection-id html &key (clog-type 'clog-element))
   "Create a new clog-element and attach it to HTML on CONNECTION-ID. There must be
 a single outer block that will be set to an internal id. The returned CLOG-Element
 requires placement or will not be visible, ie. place-after, etc. as it exists in
@@ -39,11 +39,7 @@ the javascript clog[] but is not in the DOM. (private)"
      connection-id
      (format nil "clog['~A']=$(\"~A\"); clog['~A'].first().prop('id','~A')"
 	     web-id html web-id web-id))
-    (make-clog-element connection-id web-id)))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Low Level  - clog-element
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    (make-clog-element connection-id web-id :clog-type clog-type)))
 
 ;;;;;;;;;;;;
 ;; attach ;;
@@ -55,16 +51,21 @@ CONNECTION-ID to it and then return it. The HTML-ID must be unique. (private)"
   (cc:execute connection-id (format nil "clog['~A']=$('#~A')" html-id html-id))
   (make-clog-element connection-id html-id))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Low Level  - clog-element
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 ;;;;;;;;;;;;;;;;;;
 ;; create-child ;;
 ;;;;;;;;;;;;;;;;;;
 
-(defgeneric create-child (clog-obj html &key auto-place)
-  (:documentation "Create a new CLOG-Element from HTML as child of CLOG-OBJ
-and if :AUTO-PLACE (default t) place-inside-bottom-of CLOG-OBJ"))
+(defgeneric create-child (clog-obj html &key auto-place clog-type)
+  (:documentation "Create a new CLOG-Element or sub-type of CLOG-TYPE from HTML
+as child of CLOG-OBJ and if :AUTO-PLACE (default t) place-inside-bottom-of
+CLOG-OBJ"))
 
-(defmethod create-child ((obj clog-obj) html &key (auto-place t))
-  (let ((child (create-with-html (connection-id obj) html)))
+(defmethod create-child ((obj clog-obj) html &key (auto-place t) (clog-type 'clog-element))
+  (let ((child (create-with-html (connection-id obj) html :clog-type clog-type)))
     (if auto-place
 	(place-inside-bottom-of obj child)
 	child)))
@@ -73,13 +74,15 @@ and if :AUTO-PLACE (default t) place-inside-bottom-of CLOG-OBJ"))
 ;; attach-as-child ;;
 ;;;;;;;;;;;;;;;;;;;;;
 
-(defgeneric attach-as-child (clog-obj html-id)
-  (:documentation "Create a new CLOG-Element and attach an existing element with HTML-ID. The
-HTML-ID must be unique."))
+(defgeneric attach-as-child (clog-obj html-id &key clog-type)
+  (:documentation "Create a new CLOG-Element or sub-type of CLOG-TYPE and attach
+an existing element with HTML-ID. The HTML-ID must be unique."))
 
-(defmethod attach-as-child ((obj clog-obj) html-id)
-  (cc:execute (connection-id obj) (format nil "clog['~A']=$('#~A')" html-id html-id))
-  (make-clog-element (connection-id obj) html-id))
+(defmethod attach-as-child ((obj clog-obj) html-id
+			    &key (clog-type 'clog-element))
+  (cc:execute (connection-id obj)
+	      (format nil "clog['~A']=$('#~A')" html-id html-id))
+  (make-clog-element (connection-id obj) html-id :clog-type clog-type))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; General Properties - clog-element
