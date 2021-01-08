@@ -18,7 +18,7 @@
 			   (create-child body "<h2>KILL Darth's Tie Fighter - Click on it!</h2>")
 			 (sleep 2))) t)		 
 
-	(let* ((mover (create-child body "<div>(-o-)</div>"))
+	(let* ((mover (create-div body :content "(-o-)"))
 	       bounds-x bounds-y mover-x mover-y)
 	  
 	  (flet ((set-bounds ()
@@ -35,6 +35,20 @@
 	  
 	  (setf (positioning mover) :fixed)
 	  (set-on-click mover #'on-click)
+
+	  (bordeaux-threads:make-thread    ; In addtion to the main task (the on-new-window)
+	   (lambda ()                      ; and the task created for each event like clicks
+	     (loop                         ; threads can be created as needed.
+		   (unless (validp body)
+		     (return))
+		   (when (connection-data-item body "done")
+		     (return))
+		   
+		   (sleep .5)
+		   (setf (text mover) ")-o-(")
+		   (sleep .2)
+		   (setf (text mover) "(-o-)"))
+	     (setf (inner-html mover) "<H1>GAME OVER</H1>")))
 	  
 	  (loop
 	    (unless (validp body)
@@ -62,8 +76,7 @@
 	    (when (> mover-y bounds-y)
 	      (setf mover-y bounds-y))
 	    
-	    (sleep .02)))
-	(format t "GAME OVER"))
+	    (sleep .02))))
     (error (c)
       (format t "Lost connection.~%~%~A" c))))
 
