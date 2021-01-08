@@ -232,10 +232,26 @@ application."
   (first-child  generic-function)
   (next-sibling generic-function))
 
-(defsection @clog-element (:title "Common CLOG Elements")
+(defsection @clog-element-common (:title "Common CLOG Elements")
+  "CLOG-A - Class for CLOG Anchors"
+  (clog-a   class)
+  (create-a generic-function)
+  (link     generic-function)
+  (target   generic-function)
+
   "CLOG-BR - Class for CLOG Line Breaks"
   (clog-br   class)
   (create-br generic-function)
+
+  "CLOG-BUTTON - Class for CLOG Buttons"
+  (clog-button   class)
+  (create-button generic-function)
+  (disabledp     generic-function)
+
+  "CLOG-IMG - Class for CLOG Imgs"
+  (clog-img   class)
+  (create-img generic-function)
+  (url-src    generic-function)
   
   "CLOG-Div - Class for CLOG Divs"
   (clog-div   class)

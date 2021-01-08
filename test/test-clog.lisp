@@ -49,9 +49,11 @@
     (create-br win) 
     (create-span win :content "Hello World! span")
     (create-hr win) 
-
+    (create-a win :link "http://www.google.com" :content "Link" :target "new")
     (setf (title (html-document win)) "CLOG Test App")
     (print (title (html-document win)))
+    (create-img win :url-src "https://common-lisp.net/static/imgs/lisplogo_flag2_128.png"
+		:alt-text "Lisp Flag")
     ))
 
 (defun test ()
