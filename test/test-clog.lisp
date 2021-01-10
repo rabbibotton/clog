@@ -53,7 +53,9 @@
     (setf (title (html-document win)) "CLOG Test App")
     (print (title (html-document win)))
     (create-img win :url-src "https://common-lisp.net/static/imgs/lisplogo_flag2_128.png"
-		:alt-text "Lisp Flag")
+		    :alt-text "Lisp Flag")
+    (setf (value (create-meter win)) 20)
+    (setf (value (create-progress-bar win)) 10)
     ))
 
 (defun test ()

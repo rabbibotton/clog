@@ -260,15 +260,30 @@ application."
   "CLOG-HR - Class for CLOG Hortizontal Rules"
   (clog-HR   class)
   (create-HR generic-function)
+
+  "CLOG-Meter - Class for CLOG Meters"
+  (clog-meter   class)
+  (create-meter generic-function)
+  (value        generic-function)
+  (high         generic-function)
+  (low          generic-function)
+  (minimum      generic-function)
+  (maximum      generic-function)
+  (optimum      generic-function)
   
+  "CLOG-Progress-Bar - Class for CLOG Progress Bars"
+  (clog-progress-bar   class)
+  (create-progress-bar generic-function)
+  (value               generic-function)
+  (maximum             generic-function)
+
   "CLOG-P - Class for CLOG Paragraphs"
   (clog-p   class)
   (create-p generic-function)
 
   "CLOG-Span - Class for CLOG Spans"
   (clog-span   class)
-  (create-span generic-function)
-  )
+  (create-span generic-function))
 
 (defsection @clog-body (:title "CLOG Body Objects")
   "CLOG-Body - CLOG Body Objects"

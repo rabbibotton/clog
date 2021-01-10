@@ -182,10 +182,10 @@ CLOG-OBJ"))
 ;;;;;;;;;;;;;;;;
 
 (defgeneric create-img (clog-obj &key url-src alt-text auto-place)
-  (:documentation "Create a new CLOG-Img as child of CLOG-OBJ with :CONTENT
-(default \"\") and if :AUTO-PLACE (default t) place-inside-bottom-of
-CLOG-OBJ. Use width and height properties before placing image to constrain
-image size."))
+  (:documentation "Create a new CLOG-Img as child of CLOG-OBJ with :URL-SRC
+(default \"\") and :ALT-TEXT (default \"\") if :AUTO-PLACE (default t)
+place-inside-bottom-of CLOG-OBJ. Use width and height properties before
+placing image to constrain image size."))
 
 (defmethod create-img ((obj clog-obj) &key (url-src "") (alt-text "") (auto-place t))
   (create-child obj (format nil "<img src='~A' alt='~A'>)"
@@ -209,6 +209,195 @@ image size."))
 (defmethod set-url-src ((obj clog-img) value)
   (setf (property obj "src") value))
 (defsetf url-src set-url-src)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Implementation - clog-meter
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defclass clog-meter (clog-element)()
+  (:documentation "CLOG Meter Objects."))
+
+;;;;;;;;;;;;;;;;;;
+;; create-meter ;;
+;;;;;;;;;;;;;;;;;;
+
+(defgeneric create-meter (clog-obj &key value high low maximum minimum optimum
+				     auto-place)
+  (:documentation "Create a new CLOG-Meter as child of CLOG-OBJ with VALUE
+(default 0) HIGH (default 100) LOW (default 0) MAXIMUM (default 100) MINIMUM
+(default 0) OPTIMUM (default 50) and if :AUTO-PLACE (default t)
+place-inside-bottom-of CLOG-OBJ."))
+
+(defmethod create-meter ((obj clog-obj) &key
+					  (value 0)
+					  (high 100)
+					  (low 0)
+					  (maximum 100)
+					  (minimum 0)
+					  (optimum 50)
+					  (auto-place t))
+  (create-child obj (format nil "<meter value=~A high=~A low=~A max=~A min=~A optimum=~A />"
+			    value high low maximum minimum optimum)
+		:clog-type 'clog-meter :auto-place auto-place))
+
+;;;;;;;;;;;
+;; value ;;
+;;;;;;;;;;;
+
+(defgeneric value (clog-meter)
+  (:documentation "Get/Setf the value of the meter."))
+
+(defmethod value ((obj clog-meter))
+  (property obj "value"))
+
+(defgeneric set-value (clog-meter value)
+  (:documentation "Set value VALUE for CLOG-METER"))
+
+(defmethod set-value ((obj clog-meter) value)
+  (setf (property obj "value") value))
+(defsetf value set-value)
+
+;;;;;;;;;;
+;; high ;;
+;;;;;;;;;;
+
+(defgeneric high (clog-meter)
+  (:documentation "Get/Setf the high of the meter."))
+
+(defmethod high ((obj clog-meter))
+  (property obj "high"))
+
+(defgeneric set-high (clog-meter high)
+  (:documentation "Set high HIGH for CLOG-METER"))
+
+(defmethod set-high ((obj clog-meter) high)
+  (setf (property obj "high") high))
+(defsetf high set-high)
+
+;;;;;;;;;
+;; low ;;
+;;;;;;;;;
+
+(defgeneric low (clog-meter)
+  (:documentation "Get/Setf the low of the meter."))
+
+(defmethod low ((obj clog-meter))
+  (property obj "low"))
+
+(defgeneric set-low (clog-meter low)
+  (:documentation "Set low LOW for CLOG-METER"))
+
+(defmethod set-low ((obj clog-meter) low)
+  (setf (property obj "low") low))
+(defsetf low set-low)
+
+;;;;;;;;;;;;;
+;; maximum ;;
+;;;;;;;;;;;;;
+
+(defgeneric maximum (clog-meter)
+  (:documentation "Get/Setf the maximum of the meter."))
+
+(defmethod maximum ((obj clog-meter))
+  (property obj "max"))
+
+(defgeneric set-maximum (clog-meter maximum)
+  (:documentation "Set maximum MAXIMUM for CLOG-METER"))
+
+(defmethod set-maximum ((obj clog-meter) maximum)
+  (setf (property obj "max") maximum))
+(defsetf maximum set-maximum)
+
+;;;;;;;;;;;;;
+;; minimum ;;
+;;;;;;;;;;;;;
+
+(defgeneric minimum (clog-meter)
+  (:documentation "Get/Setf the minimum of the meter."))
+
+(defmethod minimum ((obj clog-meter))
+  (property obj "min"))
+
+(defgeneric set-minimum (clog-meter minimum)
+  (:documentation "Set minimum MINIMUM for CLOG-METER"))
+
+(defmethod set-minimum ((obj clog-meter) minimum)
+  (setf (property obj "min") minimum))
+(defsetf minimum set-minimum)
+
+;;;;;;;;;;;;;
+;; optimum ;;
+;;;;;;;;;;;;;
+
+(defgeneric optimum (clog-meter)
+  (:documentation "Get/Setf the optimum of the meter."))
+
+(defmethod optimum ((obj clog-meter))
+  (property obj "optimum"))
+
+(defgeneric set-optimum (clog-meter optimum)
+  (:documentation "Set optimum OPTIMUM for CLOG-METER"))
+
+(defmethod set-optimum ((obj clog-meter) optimum)
+  (setf (property obj "optimum") optimum))
+(defsetf optimum set-optimum)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Implementation - clog-progress-bar
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defclass clog-progress-bar (clog-element)()
+  (:documentation "CLOG Progress-Bar Objects."))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;
+;; create-progress-bar ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric create-progress-bar (clog-obj &key value maximum auto-place)
+  (:documentation "Create a new CLOG-Progress-Bar as child of CLOG-OBJ with VALUE
+(default 0) MAXIMUM (default 100) and if :AUTO-PLACE (default t)
+place-inside-bottom-of CLOG-OBJ."))
+
+(defmethod create-progress-bar ((obj clog-obj) &key
+					  (value 0)
+					  (maximum 100)
+					  (auto-place t))
+  (create-child obj (format nil "<progress value=~A max=~A />" value maximum)
+		:clog-type 'clog-progress-bar :auto-place auto-place))
+
+;;;;;;;;;;;
+;; value ;;
+;;;;;;;;;;;
+
+(defgeneric value (clog-progress-bar)
+  (:documentation "Get/Setf the value of the progress-bar."))
+
+(defmethod value ((obj clog-progress-bar))
+  (property obj "value"))
+
+(defgeneric set-value (clog-progress-bar value)
+  (:documentation "Set value VALUE for CLOG-PROGRESS-BAR"))
+
+(defmethod set-value ((obj clog-progress-bar) value)
+  (setf (property obj "value") value))
+(defsetf value set-value)
+
+;;;;;;;;;;;;;
+;; maximum ;;
+;;;;;;;;;;;;;
+
+(defgeneric maximum (clog-progress-bar)
+  (:documentation "Get/Setf the maximum of the progress-bar."))
+
+(defmethod maximum ((obj clog-progress-bar))
+  (property obj "max"))
+
+(defgeneric set-maximum (clog-progress-bar maximum)
+  (:documentation "Set maximum MAXIMUM for CLOG-PROGRESS-BAR"))
+
+(defmethod set-maximum ((obj clog-progress-bar) maximum)
+  (setf (property obj "max") maximum))
+(defsetf maximum set-maximum)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Implementation - clog-p
