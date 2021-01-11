@@ -86,9 +86,7 @@ Status:
   - General DOM (Window, Screen, Document, Location, Navigator) - DONE
   - Base Elements (HTML Elements)
   - Canvas - HTML 5 Canvas bindings
-  - SVG - HTML SVG vector graphics
   - Multimedia - HTML 5 Audio and Video
-  - Styles - CSS Style blocks
 
 - CLOG higher level containers and GUI widgets - to do
 

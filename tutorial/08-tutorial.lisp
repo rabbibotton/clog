@@ -40,14 +40,12 @@
 	(set-on-mouse-leave obj 'on-mouse-leave)))))
 
 (defun on-mouse-move (obj data)
-  (let* ((app    (connection-data-item obj "app-data"))
-	 (x      (getf data ':screen-x))
-	 (y      (getf data ':screen-y))
-	 (new-x  (- x (drag-x app)))
-	 (new-y  (- y (drag-y app))))
+  (let* ((app (connection-data-item obj "app-data"))
+	 (x   (getf data ':screen-x))
+	 (y   (getf data ':screen-y)))
     
-    (setf (top obj) (format nil "~Apx" new-y))
-    (setf (left obj) (format nil "~Apx" new-x)))))
+    (setf (top obj) (format nil "~Apx" (- y (drag-y app))))
+    (setf (left obj) (format nil "~Apx" (- x (drag-x app)))))))
 
 (defun on-mouse-leave (obj)
   (let ((app (connection-data-item obj "app-data")))
@@ -68,8 +66,12 @@
 
   (let* ((div1 (create-div body))
 	 (div2 (create-div div1))
-	 (div3 (create-div div2)))
+	 (div3 (create-div div2))
+	 (dir  (create-div div1 :content "<b>Click and drag the boxes</b>")))
 
+    (setf (positioning dir) :absolute)
+    (setf (bottom dir) 0)
+    
     (set-border div1 :medium :solid :blue)
     (set-border div2 :thin :dotted :red)
     (set-border div3 :thick :dashed :green)
@@ -91,7 +93,8 @@
     (set-on-mouse-down div2 'on-mouse-down)
 
     (setf (positioning div3) :absolute)
-    (set-on-mouse-down div3 'on-mouse-down)))
+    (set-on-mouse-down div3 'on-mouse-down)
+    (create-span div3 "Hello world!")))
 
 (defun start-tutorial ()
   "Start turtorial."

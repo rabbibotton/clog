@@ -40,3 +40,4 @@ Tutorial Summary
 - 05-tutorial.lisp - Using connection-data-item
 - 06-tutorial.lisp - Tasking and events
 - 07-tutorial.lisp - My first CLOG video game (and handling disconnects)
+- 08-tutorial.lisp - Mice Love Containers

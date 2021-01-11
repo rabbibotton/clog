@@ -47,7 +47,7 @@
     (create-div win :content "Hello World! p")
     (create-div win :content "Hello World! div")
     (create-br win) 
-    (create-span win :content "Hello World! span")
+    (create-span win "Hello World! span")
     (create-hr win) 
     (create-a win :link "http://www.google.com" :content "Link" :target "new")
     (setf (title (html-document win)) "CLOG Test App")

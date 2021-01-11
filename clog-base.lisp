@@ -19,7 +19,10 @@
     :initarg :connection-id)
    (html-id
     :reader html-id
-    :initarg :html-id))
+    :initarg :html-id)
+   (connection-data-mutex
+    :reader connection-data-mutex
+    :initform (bordeaux-threads:make-lock)))
   (:documentation "CLOG objects (clog-obj) encapsulate the connection between
 lisp and the HTML DOM element."))
 
@@ -36,6 +39,13 @@ lisp and the HTML DOM element."))
 
 (defgeneric html-id (clog-obj)
   (:documentation "Reader for html-id slot. (Private)"))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; connection-data-mutex ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric connection-data-mutex (clog-obj)
+  (:documentation "Preader for connection-data thread lock. (Private)"))
 
 ;;;;;;;;;;;;;;;;;;;
 ;; make-clog-obj ;;
@@ -161,8 +171,8 @@ result. (Private)"))
     (list
      :x            (parse-integer (nth 0 f) :junk-allowed t)
      :y            (parse-integer (nth 1 f) :junk-allowed t)
-     :screen-y     (parse-integer (nth 2 f) :junk-allowed t)
-     :screen-x     (parse-integer (nth 3 f) :junk-allowed t)
+     :screen-x     (parse-integer (nth 2 f) :junk-allowed t)
+     :screen-y     (parse-integer (nth 3 f) :junk-allowed t)
      :which-button (parse-integer (nth 4 f) :junk-allowed t)
      :alt-key      (js-true-p (nth 5 f))
      :ctrl-key     (js-true-p (nth 6 f))
@@ -313,9 +323,16 @@ are stored in this string based hash in the format of:
   (:documentation "Set connection-data the item-name in hash."))
 
 (defmethod set-connection-data-item ((obj clog-obj) item-name value)
-  (setf (gethash item-name (connection-data obj)) value))
+  (bordeaux-threads:with-lock-held ((connection-data-mutex obj))
+    (setf (gethash item-name (connection-data obj)) value)))
 (defsetf connection-data-item set-connection-data-item)
 
+(defgeneric remove-connection-data-item (clog-obj item-name)
+  (:documentation "Remove from connection-data the item-name in hash."))
+
+(defmethod remove-connection-data-item ((obj clog-obj) item-name)
+  (bordeaux-threads:with-lock-held ((connection-data-mutex obj))
+    (remhash item-name (connection-data obj))))
 
 ;;;;;;;;;;;;;;;;;;;
 ;; set-on-resize ;;

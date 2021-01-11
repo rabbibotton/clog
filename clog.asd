@@ -5,7 +5,7 @@
 
   :author "David Botton <david@botton.com>"
   :license  "BSD"
-  :version "0.0.2"
+  :version "0.0.3"
   :serial t
   :depends-on (#:clack #:websocket-driver #:alexandria #:hunchentoot #:cl-ppcre
 		       #:bordeaux-threads #:trivial-open-browser
@@ -18,6 +18,7 @@
 	       (:file "clog-base")
 	       (:file "clog-element")
 	       (:file "clog-element-common")
+	       (:file "clog-form")
 	       (:file "clog-window")
 	       (:file "clog-document")
 	       (:file "clog-location")

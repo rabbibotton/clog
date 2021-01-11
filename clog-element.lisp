@@ -456,7 +456,7 @@ spell checking if Editable is also true."))
 in pixels. It does not include the margin or padding."))
 
 (defmethod client-left ((obj clog-element))
-  (property obj "clientLeft"))
+  (parse-integer (property obj "clientLeft")))
 
 ;;;;;;;;;;;;;;;;
 ;; client-top ;;
@@ -467,7 +467,7 @@ in pixels. It does not include the margin or padding."))
 in pixels. It does not include the margin or padding."))
 
 (defmethod client-top ((obj clog-element))
-  (property obj "clientTop"))
+  (parse-integer (property obj "clientTop")))
 
 ;;;;;;;;;;;;;;;;;;
 ;; client-width ;;
@@ -479,7 +479,7 @@ CSS width + CSS padding - width of vertical scrollbar (if present)
 Does not include the border or margin."))
 
 (defmethod client-width ((obj clog-element))
-  (property obj "clientWidth"))
+  (parse-integer (property obj "clientWidth")))
 
 ;;;;;;;;;;;;;;;;;;;
 ;; client-height ;;
@@ -491,7 +491,7 @@ CSS height + CSS padding - height of horizontal scrollbar (if present)
 Does not include the border or margin."))
 
 (defmethod client-height ((obj clog-element))
-  (property obj "clientHeight"))
+  (parse-integer (property obj "clientHeight")))
 
 ;;;;;;;;;;;;;;;;;
 ;; offset-left ;;
@@ -582,7 +582,7 @@ content has been scrolled upward."))
 of an element or the width of the element itself, whichever is greater."))
 
 (defmethod scroll-width ((obj clog-element))
-  (property obj "scrollWidth"))
+  (parse-integer (property obj "scrollWidth")))
 
 ;;;;;;;;;;;;;;;;;;;
 ;; scroll-height ;;
@@ -593,7 +593,7 @@ of an element or the width of the element itself, whichever is greater."))
 content not visible on the screen due to overflow."))
 
 (defmethod scroll-height ((obj clog-element))
-  (property obj "scrollHeight"))
+  (parse-integer (property obj "scrollHeight")))
 
 ;;;;;;;;;;;;;;
 ;; html-tag ;;
@@ -847,7 +847,7 @@ top and bottom are interpreted.
 parent in the DOM."))
 
 (defmethod position-top ((obj clog-element))
-  (jquery-query obj "position().top"))
+  (parse-integer (jquery-query obj "position().top")))
 
 ;;;;;;;;;;;;;;;;;;;
 ;; position-left ;;
@@ -858,7 +858,7 @@ parent in the DOM."))
 parent in the DOM."))
 
 (defmethod position-left ((obj clog-element))
-  (jquery-query obj "position().left"))
+  (parse-integer (jquery-query obj "position().left")))
 
 ;;;;;;;;;;;;;;;;
 ;; offset-top ;;
@@ -868,7 +868,7 @@ parent in the DOM."))
   (:documentation "Position in pixels from top relative to the document."))
 
 (defmethod offset-top ((obj clog-element))
-  (jquery-query obj "offset().top"))
+  (parse-integer (jquery-query obj "offset().top")))
 
 ;;;;;;;;;;;;;;;;;
 ;; offset-left ;;
@@ -878,7 +878,7 @@ parent in the DOM."))
   (:documentation "Position in pixels from left relative to the document."))
 
 (defmethod offset-left ((obj clog-element))
-  (jquery-query obj "offset().left"))
+  (parse-integer (jquery-query obj "offset().left")))
 
 ;;;;;;;;;;
 ;; left ;;
@@ -1070,7 +1070,7 @@ parent in the DOM."))
 ;;  For reference:
 ;;  | Margin | Border | Padding | Scroll | [Element] | Scroll | Padding ...
 ;;
-;;  Height and Width of Element are in part of clog-base
+;;  Height and Width of Element are in clog-base
 ;;  All the following have the advantage of the CSS related size properties
 ;;  in that the results are always pixels and numeric.
 

@@ -32,6 +32,7 @@ application."
   (@clog-obj            section)
   (@clog-element        section)
   (@clog-element-common section)
+  (@clog-form           section)
   (@clog-body           section)
   (@clog-window         section)
   (@clog-document       section)
@@ -65,9 +66,10 @@ application."
   (blur   generic-function)
   
   "CLOG-Obj - Low Level"
-  (connection-data      generic-function)
-  (connection-data-item generic-function)
-  (validp               generic-function)
+  (connection-data             generic-function)
+  (connection-data-item        generic-function)
+  (remove-connection-data-item generic-function)
+  (validp                      generic-function)
 
   "CLOG-Obj - Event Handling"
   (set-on-resize             generic-function)
@@ -284,6 +286,11 @@ application."
   "CLOG-Span - Class for CLOG Spans"
   (clog-span   class)
   (create-span generic-function))
+
+(defsection @clog-form (:title "CLOG Form Objects")
+  "CLOG-Form - Class for organizing Form Elements in to a From"
+  (clog-form   class)
+  (create-form generic-function))
 
 (defsection @clog-body (:title "CLOG Body Objects")
   "CLOG-Body - CLOG Body Objects"
