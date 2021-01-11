@@ -255,7 +255,7 @@ content editable, even non-form types in most browsers."))
 
 (defmethod set-editablep ((obj clog-element) value)
   (setf (property obj "contentEditable") (p-true-js value)))
-(defsetf editablep set-editable)
+(defsetf editablep set-editablep)
 
 ;;;;;;;;;;;;;;;;
 ;; draggablep ;;
@@ -294,7 +294,9 @@ setting display (None)."))
   (:documentation "Set hiddenp VALUE for CLOG-ELEMENT"))
 
 (defmethod set-hiddenp ((obj clog-element) value)
-  (setf (property obj "hidden") (p-true-js value)))
+  (if value
+      (setf (property obj "hidden") t)
+      (jquery-execute obj "removeAttr('hidden')")))
 (defsetf hiddenp set-hiddenp)
 
 ;;;;;;;;;;;;;;

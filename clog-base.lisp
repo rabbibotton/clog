@@ -283,7 +283,7 @@ result. (Private)"))
 (defgeneric blur (clog-obj)
   (:documentation "Remove focus from CLOG-OBJ"))
 
-(defmethod focus ((obj clog-obj))
+(defmethod blur ((obj clog-obj))
   (jquery-execute obj "blur()"))
 
 ;;;;;;;;;;;;
