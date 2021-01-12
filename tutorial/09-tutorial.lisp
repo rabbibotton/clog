@@ -29,13 +29,13 @@
 		     (setf (hiddenp f1) t)
 		     (create-span p1 "<br><b>Your form has been submitted</b>")))
     
-    (setf (width p1) 600)
-    (setf (width p2) 600)
-    (setf (width p3) 600)
+    (setf (width p1) "100%")
+    (setf (width p2) "100%")
+    (setf (width p3) "100%")
     
-    (setf (height p1) 300)
-    (setf (height p2) 300)
-    (setf (height p3) 300)
+    (setf (height p1) 400)
+    (setf (height p2) 400)
+    (setf (height p3) 400)
 
     (set-border p1 :thin :solid :black)
     (set-border p2 :thin :solid :black)
