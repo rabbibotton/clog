@@ -6,26 +6,32 @@
 
 (defun on-new-window (body)
   (let* (last-tab
+	 ;; Create tabs and panels
 	 (t1 (create-button body :content "Tab1"))
 	 (t2 (create-button body :content "Tab2"))
 	 (t3 (create-button body :content "Tab3"))
+	 (br (create-br body))
 	 (p1 (create-div body))
 	 (p2 (create-div body :content "Panel2 - Type here"))
 	 (p3 (create-div body :content "Panel3 - Type here"))
-	 (f1 (create-form p1))
-	 (l1  (create-label f1 :content "Fill in blank:"))
-	 (fe1 (create-form-element f1 :text :label l1))
-	 (fe2 (create-form-element f1 :submit :value "OK"))
-	 (fe3 (create-form-element f1 :reset :value "Start Again")))
 
-    (place-after t3 (create-br body))
-    (place-after fe1 (create-br body))
+	 ;; Create from for panel 1
+	 (f1  (create-form p1))
+	 (l   (create-label f1 :content "Fill in blank:"))
+	 (fe1 (create-form-element f1 :text :label l))
+	 (br  (create-br f1))
+	 (l   (create-label f1 :content "Pick a color:"))
+	 (fe2 (create-form-element f1 :color :label l))
+	 (br  (create-br f1))
+	 (s   (create-form-element f1 :submit :value "OK"))
+	 (s   (create-form-element f1 :reset :value "Start Again")))
 
     (setf (place-holder fe1) "type here..")
     
     (set-on-submit f1
 		   (lambda (obj)
 		     (setf (title (html-document body)) (value fe1))
+		     (setf (background-color p1) (value fe2))
 		     (setf (hiddenp f1) t)
 		     (create-span p1 "<br><b>Your form has been submitted</b>")))
     
