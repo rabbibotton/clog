@@ -40,11 +40,12 @@
 <li><a href="#x-28CLOG-3A-40CLOG-OBJ-20MGL-PAX-3ASECTION-29" title="CLOG Objects">4 CLOG Objects</a></li>
 <li><a href="#x-28CLOG-3A-40CLOG-ELEMENT-20MGL-PAX-3ASECTION-29" title="CLOG Elements">5 CLOG Elements</a></li>
 <li><a href="#x-28CLOG-3A-40CLOG-ELEMENT-COMMON-20MGL-PAX-3ASECTION-29" title="Common CLOG Elements">6 Common CLOG Elements</a></li>
-<li><a href="#x-28CLOG-3A-40CLOG-BODY-20MGL-PAX-3ASECTION-29" title="CLOG Body Objects">7 CLOG Body Objects</a></li>
-<li><a href="#x-28CLOG-3A-40CLOG-WINDOW-20MGL-PAX-3ASECTION-29" title="CLOG Window Objects">8 CLOG Window Objects</a></li>
-<li><a href="#x-28CLOG-3A-40CLOG-DOCUMENT-20MGL-PAX-3ASECTION-29" title="CLOG Document Objects">9 CLOG Document Objects</a></li>
-<li><a href="#x-28CLOG-3A-40CLOG-LOCATION-20MGL-PAX-3ASECTION-29" title="CLOG Location Objects">10 CLOG Location Objects</a></li>
-<li><a href="#x-28CLOG-3A-40CLOG-NAVIGATOR-20MGL-PAX-3ASECTION-29" title="CLOG Navigator Objects">11 CLOG Navigator Objects</a></li>
+<li><a href="#x-28CLOG-3A-40CLOG-FORM-20MGL-PAX-3ASECTION-29" title="CLOG Form Objects">7 CLOG Form Objects</a></li>
+<li><a href="#x-28CLOG-3A-40CLOG-BODY-20MGL-PAX-3ASECTION-29" title="CLOG Body Objects">8 CLOG Body Objects</a></li>
+<li><a href="#x-28CLOG-3A-40CLOG-WINDOW-20MGL-PAX-3ASECTION-29" title="CLOG Window Objects">9 CLOG Window Objects</a></li>
+<li><a href="#x-28CLOG-3A-40CLOG-DOCUMENT-20MGL-PAX-3ASECTION-29" title="CLOG Document Objects">10 CLOG Document Objects</a></li>
+<li><a href="#x-28CLOG-3A-40CLOG-LOCATION-20MGL-PAX-3ASECTION-29" title="CLOG Location Objects">11 CLOG Location Objects</a></li>
+<li><a href="#x-28CLOG-3A-40CLOG-NAVIGATOR-20MGL-PAX-3ASECTION-29" title="CLOG Navigator Objects">12 CLOG Navigator Objects</a></li>
 </ul>
 
 <h6>[in package CLOG]</h6>
@@ -62,7 +63,7 @@ application.</p>
 <h2><a href="#x-28-22clog-22-20ASDF-2FSYSTEM-3ASYSTEM-29">1 clog ASDF System Details</a></h2>
 
 <ul>
-<li>Version: 0.0.2</li>
+<li>Version: 0.0.3</li>
 <li>Description: The Common Lisp Omnificent GUI</li>
 <li>Licence: BSD</li>
 <li>Author: David Botton <a href="m&#x61;&#105;l&#x74;&#111;:&#x64;&#97;v&#x69;&#100;@&#x62;&#111;t&#x74;&#111;n&#x2E;&#99;o&#x6D;">m&#x61;&#105;l&#x74;&#111;:&#x64;&#97;v&#x69;&#100;@&#x62;&#111;t&#x74;&#111;n&#x2E;&#99;o&#x6D;</a></li>
@@ -225,6 +226,14 @@ are stored in this string based hash in the format of:
 <p>Get/Setf from connection-data the item-name in hash.</p></li>
 </ul>
 
+<p><a id='x-28CLOG-3AREMOVE-CONNECTION-DATA-ITEM-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3AREMOVE-CONNECTION-DATA-ITEM-20GENERIC-FUNCTION-29" >REMOVE-CONNECTION-DATA-ITEM</a></span></span> <span class="locative-args">CLOG-OBJ ITEM-NAME</span></span></p>
+
+<p>Remove from connection-data the item-name in hash.</p></li>
+</ul>
+
 <p><a id='x-28CLOG-3AVALIDP-20GENERIC-FUNCTION-29'></a></p>
 
 <ul>
@@ -314,8 +323,7 @@ is nil unbind the event.</p></li>
 <li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ASET-ON-SELECT-20GENERIC-FUNCTION-29" >SET-ON-SELECT</a></span></span> <span class="locative-args">CLOG-OBJ ON-SELECT-HANDLER</span></span></p>
 
 <p>Set the <code>ON-SELECT-HANDLER</code> for <code>CLOG-OBJ</code>. If <code>ON-SELECT-HANDLER</code>
-is nil unbind the event.  This event is activated by using submit on a form. If
-this even is bound, you must call the form submit manually.</p></li>
+is nil unbind the event.</p></li>
 </ul>
 
 <p><a id='x-28CLOG-3ASET-ON-SUBMIT-20GENERIC-FUNCTION-29'></a></p>
@@ -324,7 +332,8 @@ this even is bound, you must call the form submit manually.</p></li>
 <li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ASET-ON-SUBMIT-20GENERIC-FUNCTION-29" >SET-ON-SUBMIT</a></span></span> <span class="locative-args">CLOG-OBJ ON-SUBMIT-HANDLER</span></span></p>
 
 <p>Set the <code>ON-SUBMIT-HANDLER</code> for <code>CLOG-OBJ</code>. If <code>ON-SUBMIT-HANDLER</code>
-is nil unbind the event.</p></li>
+is nil unbind the event. This event is activated by using submit on a form. If
+this even is bound, you must call the form submit manually.</p></li>
 </ul>
 
 <p><a id='x-28CLOG-3ASET-ON-SELECT-20GENERIC-FUNCTION-29'></a></p>
@@ -333,8 +342,7 @@ is nil unbind the event.</p></li>
 <li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ASET-ON-SELECT-20GENERIC-FUNCTION-29" >SET-ON-SELECT</a></span></span> <span class="locative-args">CLOG-OBJ ON-SELECT-HANDLER</span></span></p>
 
 <p>Set the <code>ON-SELECT-HANDLER</code> for <code>CLOG-OBJ</code>. If <code>ON-SELECT-HANDLER</code>
-is nil unbind the event.  This event is activated by using submit on a form. If
-this even is bound, you must call the form submit manually.</p></li>
+is nil unbind the event.</p></li>
 </ul>
 
 <p><a id='x-28CLOG-3ASET-ON-CONTEXT-MENU-20GENERIC-FUNCTION-29'></a></p>
@@ -1506,7 +1514,7 @@ to no actual <code>HTML</code> elemen.</p></li>
 
 <p><a id='x-28CLOG-3A-40CLOG-ELEMENT-COMMON-20MGL-PAX-3ASECTION-29'></a></p>
 
-<p><span class="outer-navigation"><span class="navigation"> <a href="#x-28CLOG-3A-40CLOG-ELEMENT-20MGL-PAX-3ASECTION-29" title="CLOG Elements">&#8592;</a> <a href="#x-28CLOG-3A-40CLOG-MANUAL-20MGL-PAX-3ASECTION-29" title="The CLOG manual">&#8593;</a> <a href="#x-28CLOG-3A-40CLOG-BODY-20MGL-PAX-3ASECTION-29" title="CLOG Body Objects">&#8594;</a> <a href="#x-28CLOG-3A-40CLOG-ELEMENT-COMMON-20MGL-PAX-3ASECTION-29" title="Common CLOG Elements">&#8634;</a></span></span></p>
+<p><span class="outer-navigation"><span class="navigation"> <a href="#x-28CLOG-3A-40CLOG-ELEMENT-20MGL-PAX-3ASECTION-29" title="CLOG Elements">&#8592;</a> <a href="#x-28CLOG-3A-40CLOG-MANUAL-20MGL-PAX-3ASECTION-29" title="The CLOG manual">&#8593;</a> <a href="#x-28CLOG-3A-40CLOG-FORM-20MGL-PAX-3ASECTION-29" title="CLOG Form Objects">&#8594;</a> <a href="#x-28CLOG-3A-40CLOG-ELEMENT-COMMON-20MGL-PAX-3ASECTION-29" title="Common CLOG Elements">&#8634;</a></span></span></p>
 
 <h2><a href="#x-28CLOG-3A-40CLOG-ELEMENT-COMMON-20MGL-PAX-3ASECTION-29">6 Common CLOG Elements</a></h2>
 
@@ -1614,10 +1622,10 @@ line break and if <code>:AUTO-PLACE</code> (default t) place-inside-bottom-of <c
 <ul>
 <li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ACREATE-IMG-20GENERIC-FUNCTION-29" >CREATE-IMG</a></span></span> <span class="locative-args">CLOG-OBJ &amp;KEY URL-SRC ALT-TEXT AUTO-PLACE</span></span></p>
 
-<p>Create a new CLOG-Img as child of <code>CLOG-OBJ</code> with <code>:CONTENT</code>
-(default &quot;&quot;) and if <code>:AUTO-PLACE</code> (default t) place-inside-bottom-of
-<code>CLOG-OBJ</code>. Use width and height properties before placing image to constrain
-image size.</p></li>
+<p>Create a new CLOG-Img as child of <code>CLOG-OBJ</code> with <code>:URL-SRC</code>
+(default &quot;&quot;) and <code>:ALT-TEXT</code> (default &quot;&quot;) if <code>:AUTO-PLACE</code> (default t)
+place-inside-bottom-of <code>CLOG-OBJ</code>. Use width and height properties before
+placing image to constrain image size.</p></li>
 </ul>
 
 <p><a id='x-28CLOG-3AURL-SRC-20GENERIC-FUNCTION-29'></a></p>
@@ -1668,6 +1676,111 @@ horizontal rule (line) and if <code>:AUTO-PLACE</code> (default t) place-inside-
 <code>CLOG-OBJ</code></p></li>
 </ul>
 
+<p>CLOG-Meter - Class for <a href="#x-28-22clog-22-20ASDF-2FSYSTEM-3ASYSTEM-29" title="(\&quot;clog\&quot; ASDF/SYSTEM:SYSTEM)"><code>CLOG</code></a> Meters</p>
+
+<p><a id='x-28CLOG-3ACLOG-METER-20CLASS-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[class]</span> <span class="reference-object"><a href="#x-28CLOG-3ACLOG-METER-20CLASS-29" >CLOG-METER</a></span></span> <span class="locative-args"><a href="#x-28CLOG-3ACLOG-ELEMENT-20CLASS-29" title="(CLOG:CLOG-ELEMENT CLASS)">CLOG-ELEMENT</a></span></span></p>
+
+<p><a href="#x-28-22clog-22-20ASDF-2FSYSTEM-3ASYSTEM-29" title="(\&quot;clog\&quot; ASDF/SYSTEM:SYSTEM)"><code>CLOG</code></a> Meter Objects.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3ACREATE-METER-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ACREATE-METER-20GENERIC-FUNCTION-29" >CREATE-METER</a></span></span> <span class="locative-args">CLOG-OBJ &amp;KEY VALUE HIGH LOW MAXIMUM MINIMUM OPTIMUM AUTO-PLACE</span></span></p>
+
+<p>Create a new CLOG-Meter as child of <code>CLOG-OBJ</code> with <code>VALUE</code>
+(default 0) <code>HIGH</code> (default 100) <code>LOW</code> (default 0) <code>MAXIMUM</code> (default 100) <code>MINIMUM</code>
+(default 0) <code>OPTIMUM</code> (default 50) and if <code>:AUTO-PLACE</code> (default t)
+place-inside-bottom-of <code>CLOG-OBJ</code>.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3AVALUE-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3AVALUE-20GENERIC-FUNCTION-29" >VALUE</a></span></span> <span class="locative-args">CLOG-PROGRESS-BAR</span></span></p>
+
+<p>Get/Setf the value of the progress-bar.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3AHIGH-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3AHIGH-20GENERIC-FUNCTION-29" >HIGH</a></span></span> <span class="locative-args">CLOG-METER</span></span></p>
+
+<p>Get/Setf the high of the meter.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3ALOW-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ALOW-20GENERIC-FUNCTION-29" >LOW</a></span></span> <span class="locative-args">CLOG-METER</span></span></p>
+
+<p>Get/Setf the low of the meter.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3AMINIMUM-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3AMINIMUM-20GENERIC-FUNCTION-29" >MINIMUM</a></span></span> <span class="locative-args">CLOG-METER</span></span></p>
+
+<p>Get/Setf the minimum of the meter.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3AMAXIMUM-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3AMAXIMUM-20GENERIC-FUNCTION-29" >MAXIMUM</a></span></span> <span class="locative-args">CLOG-PROGRESS-BAR</span></span></p>
+
+<p>Get/Setf the maximum of the progress-bar.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3AOPTIMUM-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3AOPTIMUM-20GENERIC-FUNCTION-29" >OPTIMUM</a></span></span> <span class="locative-args">CLOG-METER</span></span></p>
+
+<p>Get/Setf the optimum of the meter.</p></li>
+</ul>
+
+<p>CLOG-Progress-Bar - Class for <a href="#x-28-22clog-22-20ASDF-2FSYSTEM-3ASYSTEM-29" title="(\&quot;clog\&quot; ASDF/SYSTEM:SYSTEM)"><code>CLOG</code></a> Progress Bars</p>
+
+<p><a id='x-28CLOG-3ACLOG-PROGRESS-BAR-20CLASS-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[class]</span> <span class="reference-object"><a href="#x-28CLOG-3ACLOG-PROGRESS-BAR-20CLASS-29" >CLOG-PROGRESS-BAR</a></span></span> <span class="locative-args"><a href="#x-28CLOG-3ACLOG-ELEMENT-20CLASS-29" title="(CLOG:CLOG-ELEMENT CLASS)">CLOG-ELEMENT</a></span></span></p>
+
+<p><a href="#x-28-22clog-22-20ASDF-2FSYSTEM-3ASYSTEM-29" title="(\&quot;clog\&quot; ASDF/SYSTEM:SYSTEM)"><code>CLOG</code></a> Progress-Bar Objects.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3ACREATE-PROGRESS-BAR-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ACREATE-PROGRESS-BAR-20GENERIC-FUNCTION-29" >CREATE-PROGRESS-BAR</a></span></span> <span class="locative-args">CLOG-OBJ &amp;KEY VALUE MAXIMUM AUTO-PLACE</span></span></p>
+
+<p>Create a new CLOG-Progress-Bar as child of <code>CLOG-OBJ</code> with <code>VALUE</code>
+(default 0) <code>MAXIMUM</code> (default 100) and if <code>:AUTO-PLACE</code> (default t)
+place-inside-bottom-of <code>CLOG-OBJ</code>.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3AVALUE-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3AVALUE-20GENERIC-FUNCTION-29" >VALUE</a></span></span> <span class="locative-args">CLOG-PROGRESS-BAR</span></span></p>
+
+<p>Get/Setf the value of the progress-bar.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3AMAXIMUM-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3AMAXIMUM-20GENERIC-FUNCTION-29" >MAXIMUM</a></span></span> <span class="locative-args">CLOG-PROGRESS-BAR</span></span></p>
+
+<p>Get/Setf the maximum of the progress-bar.</p></li>
+</ul>
+
 <p><a href="#x-28CLOG-3ACLOG-P-20CLASS-29" title="(CLOG:CLOG-P CLASS)"><code>CLOG-P</code></a> - Class for <a href="#x-28-22clog-22-20ASDF-2FSYSTEM-3ASYSTEM-29" title="(\&quot;clog\&quot; ASDF/SYSTEM:SYSTEM)"><code>CLOG</code></a> Paragraphs</p>
 
 <p><a id='x-28CLOG-3ACLOG-P-20CLASS-29'></a></p>
@@ -1701,18 +1814,108 @@ horizontal rule (line) and if <code>:AUTO-PLACE</code> (default t) place-inside-
 <p><a id='x-28CLOG-3ACREATE-SPAN-20GENERIC-FUNCTION-29'></a></p>
 
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ACREATE-SPAN-20GENERIC-FUNCTION-29" >CREATE-SPAN</a></span></span> <span class="locative-args">CLOG-OBJ &amp;KEY CONTENT AUTO-PLACE</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ACREATE-SPAN-20GENERIC-FUNCTION-29" >CREATE-SPAN</a></span></span> <span class="locative-args">CLOG-OBJ CONTENT &amp;KEY AUTO-PLACE</span></span></p>
 
-<p>Create a new CLOG-Span as child of <code>CLOG-OBJ</code> with <code>:CONTENT</code>
-(default &quot;&quot;) and if <code>:AUTO-PLACE</code> (default t) place-inside-bottom-of
+<p>Create a new CLOG-Span as child of <code>CLOG-OBJ</code> with <code>CONTENT</code>
+and if <code>:AUTO-PLACE</code> (default t) place-inside-bottom-of
 <code>CLOG-OBJ</code></p></li>
+</ul>
+
+<p><a id='x-28CLOG-3A-40CLOG-FORM-20MGL-PAX-3ASECTION-29'></a></p>
+
+<p><span class="outer-navigation"><span class="navigation"> <a href="#x-28CLOG-3A-40CLOG-ELEMENT-COMMON-20MGL-PAX-3ASECTION-29" title="Common CLOG Elements">&#8592;</a> <a href="#x-28CLOG-3A-40CLOG-MANUAL-20MGL-PAX-3ASECTION-29" title="The CLOG manual">&#8593;</a> <a href="#x-28CLOG-3A-40CLOG-BODY-20MGL-PAX-3ASECTION-29" title="CLOG Body Objects">&#8594;</a> <a href="#x-28CLOG-3A-40CLOG-FORM-20MGL-PAX-3ASECTION-29" title="CLOG Form Objects">&#8634;</a></span></span></p>
+
+<h2><a href="#x-28CLOG-3A-40CLOG-FORM-20MGL-PAX-3ASECTION-29">7 CLOG Form Objects</a></h2>
+
+<p>CLOG-Form - Class for organizing Form Elements in to a From</p>
+
+<p><a id='x-28CLOG-3ACLOG-FORM-20CLASS-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[class]</span> <span class="reference-object"><a href="#x-28CLOG-3ACLOG-FORM-20CLASS-29" >CLOG-FORM</a></span></span> <span class="locative-args"><a href="#x-28CLOG-3ACLOG-ELEMENT-20CLASS-29" title="(CLOG:CLOG-ELEMENT CLASS)">CLOG-ELEMENT</a></span></span></p>
+
+<p><a href="#x-28-22clog-22-20ASDF-2FSYSTEM-3ASYSTEM-29" title="(\&quot;clog\&quot; ASDF/SYSTEM:SYSTEM)"><code>CLOG</code></a> Form Objecs is the base class for all html forms.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3ACREATE-FORM-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ACREATE-FORM-20GENERIC-FUNCTION-29" >CREATE-FORM</a></span></span> <span class="locative-args">CLOG-OBJ &amp;KEY AUTO-PLACE</span></span></p>
+
+<p>Create a new CLOG-Form as child of <code>CLOG-OBJ</code> that organizes
+a collection of form elements in to a singnle form if <code>:AUTO-PLACE</code> (default t)
+place-inside-bottom-of <code>CLOG-OBJ</code>. In <a href="#x-28-22clog-22-20ASDF-2FSYSTEM-3ASYSTEM-29" title="(\&quot;clog\&quot; ASDF/SYSTEM:SYSTEM)"><code>CLOG</code></a> a form's on-submit handler should be
+set and the form elelement values handled in that handler as opposed to the
+<code>HTML</code> model of submitting to a new &quot;page&quot;.</p></li>
+</ul>
+
+<p>CLOG-Form-Element - Class for form elements</p>
+
+<p><a id='x-28CLOG-3ACLOG-FORM-ELEMENT-20CLASS-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[class]</span> <span class="reference-object"><a href="#x-28CLOG-3ACLOG-FORM-ELEMENT-20CLASS-29" >CLOG-FORM-ELEMENT</a></span></span> <span class="locative-args"><a href="#x-28CLOG-3ACLOG-ELEMENT-20CLASS-29" title="(CLOG:CLOG-ELEMENT CLASS)">CLOG-ELEMENT</a></span></span></p>
+
+<p><a href="#x-28-22clog-22-20ASDF-2FSYSTEM-3ASYSTEM-29" title="(\&quot;clog\&quot; ASDF/SYSTEM:SYSTEM)"><code>CLOG</code></a> Form Element Object is the base class for all form
+elements.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3ACREATE-FORM-ELEMENT-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ACREATE-FORM-ELEMENT-20GENERIC-FUNCTION-29" >CREATE-FORM-ELEMENT</a></span></span> <span class="locative-args">CLOG-FORM ELEMENT-TYPE &amp;KEY NAME VALUE LABEL</span></span></p>
+
+<p>Create a new clog-form-element as child of <code>CLOG-FORM</code>.
+clog-form-elements are always placed with in the <code>CLOG-FORM</code> in the DOM</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3AVALUE-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3AVALUE-20GENERIC-FUNCTION-29" >VALUE</a></span></span> <span class="locative-args">CLOG-PROGRESS-BAR</span></span></p>
+
+<p>Get/Setf the value of the progress-bar.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3APLACE-HOLDER-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3APLACE-HOLDER-20GENERIC-FUNCTION-29" >PLACE-HOLDER</a></span></span> <span class="locative-args">CLOG-FORM-ELEMENT</span></span></p>
+
+<p>Get/Setf from element place holder.</p></li>
+</ul>
+
+<p>CLOG-Label - Class for <a href="#x-28-22clog-22-20ASDF-2FSYSTEM-3ASYSTEM-29" title="(\&quot;clog\&quot; ASDF/SYSTEM:SYSTEM)"><code>CLOG</code></a> Labels</p>
+
+<p><a id='x-28CLOG-3ACLOG-LABEL-20CLASS-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[class]</span> <span class="reference-object"><a href="#x-28CLOG-3ACLOG-LABEL-20CLASS-29" >CLOG-LABEL</a></span></span> <span class="locative-args"><a href="#x-28CLOG-3ACLOG-ELEMENT-20CLASS-29" title="(CLOG:CLOG-ELEMENT CLASS)">CLOG-ELEMENT</a></span></span></p>
+
+<p><a href="#x-28-22clog-22-20ASDF-2FSYSTEM-3ASYSTEM-29" title="(\&quot;clog\&quot; ASDF/SYSTEM:SYSTEM)"><code>CLOG</code></a> Form Element Label Object</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3ACREATE-LABEL-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ACREATE-LABEL-20GENERIC-FUNCTION-29" >CREATE-LABEL</a></span></span> <span class="locative-args">CLOG-FORM &amp;KEY CONTENT LABEL-FOR</span></span></p>
+
+<p>Create a new clog-label as child of <code>CLOG-FORM</code>.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3ALABEL-FOR-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ALABEL-FOR-20GENERIC-FUNCTION-29" >LABEL-FOR</a></span></span> <span class="locative-args">CLOG-LABEL ELEMENT</span></span></p>
+
+<p>Set label is for <code>ELEMENT</code>.</p></li>
 </ul>
 
 <p><a id='x-28CLOG-3A-40CLOG-BODY-20MGL-PAX-3ASECTION-29'></a></p>
 
-<p><span class="outer-navigation"><span class="navigation"> <a href="#x-28CLOG-3A-40CLOG-ELEMENT-COMMON-20MGL-PAX-3ASECTION-29" title="Common CLOG Elements">&#8592;</a> <a href="#x-28CLOG-3A-40CLOG-MANUAL-20MGL-PAX-3ASECTION-29" title="The CLOG manual">&#8593;</a> <a href="#x-28CLOG-3A-40CLOG-WINDOW-20MGL-PAX-3ASECTION-29" title="CLOG Window Objects">&#8594;</a> <a href="#x-28CLOG-3A-40CLOG-BODY-20MGL-PAX-3ASECTION-29" title="CLOG Body Objects">&#8634;</a></span></span></p>
+<p><span class="outer-navigation"><span class="navigation"> <a href="#x-28CLOG-3A-40CLOG-FORM-20MGL-PAX-3ASECTION-29" title="CLOG Form Objects">&#8592;</a> <a href="#x-28CLOG-3A-40CLOG-MANUAL-20MGL-PAX-3ASECTION-29" title="The CLOG manual">&#8593;</a> <a href="#x-28CLOG-3A-40CLOG-WINDOW-20MGL-PAX-3ASECTION-29" title="CLOG Window Objects">&#8594;</a> <a href="#x-28CLOG-3A-40CLOG-BODY-20MGL-PAX-3ASECTION-29" title="CLOG Body Objects">&#8634;</a></span></span></p>
 
-<h2><a href="#x-28CLOG-3A-40CLOG-BODY-20MGL-PAX-3ASECTION-29">7 CLOG Body Objects</a></h2>
+<h2><a href="#x-28CLOG-3A-40CLOG-BODY-20MGL-PAX-3ASECTION-29">8 CLOG Body Objects</a></h2>
 
 <p>CLOG-Body - <a href="#x-28-22clog-22-20ASDF-2FSYSTEM-3ASYSTEM-29" title="(\&quot;clog\&quot; ASDF/SYSTEM:SYSTEM)"><code>CLOG</code></a> Body Objects</p>
 
@@ -1725,6 +1928,16 @@ horizontal rule (line) and if <code>:AUTO-PLACE</code> (default t) place-inside-
 </ul>
 
 <p>CLOG-Body - Properties</p>
+
+<p><a id='x-28CLOG-3ARUN-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ARUN-20GENERIC-FUNCTION-29" >RUN</a></span></span> <span class="locative-args">CLOG-BODY</span></span></p>
+
+<p>Keeps the main thread alive to prevent garbage
+collection of local objects when not using connection-data objects
+or global objects.</p></li>
+</ul>
 
 <p><a id='x-28CLOG-3AWINDOW-20GENERIC-FUNCTION-29'></a></p>
 
@@ -1762,7 +1975,7 @@ horizontal rule (line) and if <code>:AUTO-PLACE</code> (default t) place-inside-
 
 <p><span class="outer-navigation"><span class="navigation"> <a href="#x-28CLOG-3A-40CLOG-BODY-20MGL-PAX-3ASECTION-29" title="CLOG Body Objects">&#8592;</a> <a href="#x-28CLOG-3A-40CLOG-MANUAL-20MGL-PAX-3ASECTION-29" title="The CLOG manual">&#8593;</a> <a href="#x-28CLOG-3A-40CLOG-DOCUMENT-20MGL-PAX-3ASECTION-29" title="CLOG Document Objects">&#8594;</a> <a href="#x-28CLOG-3A-40CLOG-WINDOW-20MGL-PAX-3ASECTION-29" title="CLOG Window Objects">&#8634;</a></span></span></p>
 
-<h2><a href="#x-28CLOG-3A-40CLOG-WINDOW-20MGL-PAX-3ASECTION-29">8 CLOG Window Objects</a></h2>
+<h2><a href="#x-28CLOG-3A-40CLOG-WINDOW-20MGL-PAX-3ASECTION-29">9 CLOG Window Objects</a></h2>
 
 <p>CLOG-Window - <a href="#x-28-22clog-22-20ASDF-2FSYSTEM-3ASYSTEM-29" title="(\&quot;clog\&quot; ASDF/SYSTEM:SYSTEM)"><code>CLOG</code></a> Window Objects</p>
 
@@ -2072,7 +2285,7 @@ If <code>ON-ORIENTATION-CHANGE-HANDLER</code> is nil unbind the event.</p></li>
 
 <p><span class="outer-navigation"><span class="navigation"> <a href="#x-28CLOG-3A-40CLOG-WINDOW-20MGL-PAX-3ASECTION-29" title="CLOG Window Objects">&#8592;</a> <a href="#x-28CLOG-3A-40CLOG-MANUAL-20MGL-PAX-3ASECTION-29" title="The CLOG manual">&#8593;</a> <a href="#x-28CLOG-3A-40CLOG-LOCATION-20MGL-PAX-3ASECTION-29" title="CLOG Location Objects">&#8594;</a> <a href="#x-28CLOG-3A-40CLOG-DOCUMENT-20MGL-PAX-3ASECTION-29" title="CLOG Document Objects">&#8634;</a></span></span></p>
 
-<h2><a href="#x-28CLOG-3A-40CLOG-DOCUMENT-20MGL-PAX-3ASECTION-29">9 CLOG Document Objects</a></h2>
+<h2><a href="#x-28CLOG-3A-40CLOG-DOCUMENT-20MGL-PAX-3ASECTION-29">10 CLOG Document Objects</a></h2>
 
 <p>CLOG-Document - <a href="#x-28-22clog-22-20ASDF-2FSYSTEM-3ASYSTEM-29" title="(\&quot;clog\&quot; ASDF/SYSTEM:SYSTEM)"><code>CLOG</code></a> Document Objects</p>
 
@@ -2206,7 +2419,7 @@ If <code>ON-ORIENTATION-CHANGE-HANDLER</code> is nil unbind the event.</p></li>
 
 <p><span class="outer-navigation"><span class="navigation"> <a href="#x-28CLOG-3A-40CLOG-DOCUMENT-20MGL-PAX-3ASECTION-29" title="CLOG Document Objects">&#8592;</a> <a href="#x-28CLOG-3A-40CLOG-MANUAL-20MGL-PAX-3ASECTION-29" title="The CLOG manual">&#8593;</a> <a href="#x-28CLOG-3A-40CLOG-NAVIGATOR-20MGL-PAX-3ASECTION-29" title="CLOG Navigator Objects">&#8594;</a> <a href="#x-28CLOG-3A-40CLOG-LOCATION-20MGL-PAX-3ASECTION-29" title="CLOG Location Objects">&#8634;</a></span></span></p>
 
-<h2><a href="#x-28CLOG-3A-40CLOG-LOCATION-20MGL-PAX-3ASECTION-29">10 CLOG Location Objects</a></h2>
+<h2><a href="#x-28CLOG-3A-40CLOG-LOCATION-20MGL-PAX-3ASECTION-29">11 CLOG Location Objects</a></h2>
 
 <p>CLOG-Location - <a href="#x-28-22clog-22-20ASDF-2FSYSTEM-3ASYSTEM-29" title="(\&quot;clog\&quot; ASDF/SYSTEM:SYSTEM)"><code>CLOG</code></a> Location Objects</p>
 
@@ -2322,7 +2535,7 @@ If <code>ON-ORIENTATION-CHANGE-HANDLER</code> is nil unbind the event.</p></li>
 
 <p><span class="outer-navigation"><span class="navigation"> <a href="#x-28CLOG-3A-40CLOG-LOCATION-20MGL-PAX-3ASECTION-29" title="CLOG Location Objects">&#8592;</a> <a href="#x-28CLOG-3A-40CLOG-MANUAL-20MGL-PAX-3ASECTION-29" title="The CLOG manual">&#8593;</a> <a href="#x-28CLOG-3A-40CLOG-NAVIGATOR-20MGL-PAX-3ASECTION-29" title="CLOG Navigator Objects">&#8634;</a></span></span></p>
 
-<h2><a href="#x-28CLOG-3A-40CLOG-NAVIGATOR-20MGL-PAX-3ASECTION-29">11 CLOG Navigator Objects</a></h2>
+<h2><a href="#x-28CLOG-3A-40CLOG-NAVIGATOR-20MGL-PAX-3ASECTION-29">12 CLOG Navigator Objects</a></h2>
 
 <p>CLOG-Navigator - <a href="#x-28-22clog-22-20ASDF-2FSYSTEM-3ASYSTEM-29" title="(\&quot;clog\&quot; ASDF/SYSTEM:SYSTEM)"><code>CLOG</code></a> Navigator Objects</p>
 

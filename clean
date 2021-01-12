@@ -1,0 +1,4 @@
+rm -r *.fas
+rm -r *.fasl
+rm -r *~
+
