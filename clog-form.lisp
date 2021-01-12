@@ -49,18 +49,88 @@ elements."))
     :file :hidden :image :month :number :password :radio :range
     :reset :search :submit :tel :text :time :url :week))
   
-(defgeneric create-form-element (clog-form element-type &key name value)
+(defgeneric create-form-element (clog-form element-type &key name value label)
   (:documentation "Create a new clog-form-element as child of CLOG-FORM.
 clog-form-elements are always placed with in the CLOG-FORM in the DOM"))
 
 (defmethod create-form-element ((obj clog-form) element-type
-				&key (name nil) (value ""))
-  (create-child obj (format nil "<input type='~A' form='~A' value='~A' ~A/>"
-			    (escape-string element-type)
-			    (html-id obj)
-			    value
-			    (if name
-				(format nil "name='~A'" name)
-				""))
-		:clog-type 'clog-form-element :auto-place t))
-  
+				&key (name nil) (value "") (label nil))
+  (let ((element (create-child
+		  obj (format nil "<input type='~A' form='~A' value='~A' ~A/>"
+			      (escape-string element-type)
+			      (html-id obj)
+			      value
+			      (if name
+				  (format nil "name='~A'" name)
+				  ""))
+		  :clog-type 'clog-form-element :auto-place t)))
+    (when label
+      (label-for label element))
+    element))
+
+;;;;;;;;;;;
+;; value ;;
+;;;;;;;;;;;
+
+(defgeneric value (clog-form-element)
+  (:documentation "Get/Setf from element value."))
+
+(defmethod value ((obj clog-form-element))
+  (property obj "value"))
+
+(defgeneric set-value (clog-form-element value)
+  (:documentation "Set value VALUE for CLOG-FORM-ELEMENT"))
+
+(defmethod set-value ((obj clog-form-element) value)
+  (setf (property obj "value") value))
+(defsetf value set-value)
+
+;;;;;;;;;;;;;;;;;;
+;; place-holder ;;
+;;;;;;;;;;;;;;;;;;
+
+(defgeneric place-holder (clog-form-element)
+  (:documentation "Get/Setf from element place holder."))
+
+(defmethod place-holder ((obj clog-form-element))
+  (property obj "placeholder"))
+
+(defgeneric set-place-holder (clog-form-element place-holder)
+  (:documentation "Set placeholder PLACE-HOLDER for CLOG-FORM-ELEMENT"))
+
+(defmethod set-place-holder ((obj clog-form-element) place-holder)
+  (setf (property obj "placeholder") place-holder))
+(defsetf place-holder set-place-holder)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Implementation - clog-label
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defclass clog-label (clog-element)()
+  (:documentation "CLOG Form Element Label Object"));
+
+;;;;;;;;;;;;;;;;;;
+;; create-label ;;
+;;;;;;;;;;;;;;;;;;
+
+
+(defgeneric create-label (clog-form &key content label-for)
+  (:documentation "Create a new clog-label as child of CLOG-FORM."))
+
+(defmethod create-label ((obj clog-form) &key (content "") (label-for nil))
+  (create-child obj (format nil "<label for='~A'>~A</label>"
+			    (if label-for
+				(html-id label-for)
+				"")
+			    (escape-string content))
+		:clog-type 'clog-label :auto-place t))
+
+;;;;;;;;;;;;;;;
+;; label-for ;;
+;;;;;;;;;;;;;;;
+
+(defgeneric label-for (clog-label element)
+  (:documentation "Set label is for ELEMENT."))
+
+(defmethod label-for ((obj clog-label) element)
+  (setf (attribute obj "for") element))

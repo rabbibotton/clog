@@ -292,8 +292,17 @@ application."
   (clog-form   class)
   (create-form generic-function)
 
-  (clog-form-element class)
-  (create-form-element generic-function))
+  "CLOG-Form-Element - Class for form elements"
+  (clog-form-element   class)
+  (create-form-element generic-function)
+
+  (value               generic-function)
+  (place-holder        generic-function)
+
+  "CLOG-Label - Class for CLOG Labels"
+  (clog-label   class)
+  (create-label generic-function)
+  (label-for    generic-function))
 
 (defsection @clog-body (:title "CLOG Body Objects")
   "CLOG-Body - CLOG Body Objects"
