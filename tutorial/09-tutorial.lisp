@@ -6,26 +6,32 @@
 
 (defun on-new-window (body)
   (let* (last-tab
+	 ;; Note: Since the there is no need to use the tmp objects
+	 ;;       we reuse the same symbol name even though the
+	 ;;       compiler can mark those for collection early
+	 ;;       there is no issue as the element is created already
+	 ;;       in the browser window.
+	 
 	 ;; Create tabs and panels
-	 (t1 (create-button body :content "Tab1"))
-	 (t2 (create-button body :content "Tab2"))
-	 (t3 (create-button body :content "Tab3"))
-	 (br (create-br body))
-	 (p1 (create-div body))
-	 (p2 (create-div body :content "Panel2 - Type here"))
-	 (p3 (create-div body :content "Panel3 - Type here"))
+	 (t1  (create-button body :content "Tab1"))
+	 (t2  (create-button body :content "Tab2"))
+	 (t3  (create-button body :content "Tab3"))
+	 (tmp (create-br body))
+	 (p1  (create-div body))
+	 (p2  (create-div body :content "Panel2 - Type here"))
+	 (p3  (create-div body :content "Panel3 - Type here"))
 
 	 ;; Create from for panel 1
 	 (f1  (create-form p1))
-	 (l   (create-label f1 :content "Fill in blank:"))
-	 (fe1 (create-form-element f1 :text :label l))
-	 (br  (create-br f1))
-	 (l   (create-label f1 :content "Pick a color:"))
-	 (fe2 (create-form-element f1 :color :label l))
-	 (br  (create-br f1))
-	 (s   (create-form-element f1 :submit :value "OK"))
-	 (s   (create-form-element f1 :reset :value "Start Again")))
-
+	 (tmp (create-label f1 :content "Fill in blank:"))
+	 (fe1 (create-form-element f1 :text :label tmp))
+	 (tmp (create-br f1))
+	 (tmp (create-label f1 :content "Pick a color:"))
+	 (fe2 (create-form-element f1 :color :label tmp))
+	 (tmp (create-br f1))
+	 (tmp (create-form-element f1 :submit :value "OK"))
+	 (tmp (create-form-element f1 :reset :value "Start Again")))
+    
     (setf (place-holder fe1) "type here..")
     
     (set-on-submit f1
