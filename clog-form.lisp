@@ -13,7 +13,7 @@
 ;; Implementation - clog-form
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defclass clog-form (clog-obj)()
+(defclass clog-form (clog-element)()
   (:documentation "CLOG Form Objecs is the base class for all html forms."))
 
 
@@ -44,10 +44,23 @@ elements."))
 ;; create-form-elemnt ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defgeneric create-form-element (clog-form)
-  (:documentation "Create a new CLOG-Form-Element as child of CLOG-FORM.
-CLOG-Form-Elements are always placed with in the CLOG-FORM in the DOM"))
+(deftype form-element-type ()
+  '(member  :button :checkbox :color :date :datetime :datetime-local :email
+    :file :hidden :image :month :number :password :radio :range
+    :reset :search :submit :tel :text :time :url :week))
+  
+(defgeneric create-form-element (clog-form element-type &key name value)
+  (:documentation "Create a new clog-form-element as child of CLOG-FORM.
+clog-form-elements are always placed with in the CLOG-FORM in the DOM"))
 
-(defmethod create-form-element (clog-form)
-  (create-child obj "<input />" :clog-type 'clog-form-element :auto-place auto-place))
+(defmethod create-form-element ((obj clog-form) element-type
+				&key (name nil) (value ""))
+  (create-child obj (format nil "<input type='~A' form='~A' value='~A' ~A/>"
+			    (escape-string element-type)
+			    (html-id obj)
+			    value
+			    (if name
+				(format nil "name='~A'" name)
+				""))
+		:clog-type 'clog-form-element :auto-place t))
   

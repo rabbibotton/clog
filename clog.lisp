@@ -290,7 +290,10 @@ application."
 (defsection @clog-form (:title "CLOG Form Objects")
   "CLOG-Form - Class for organizing Form Elements in to a From"
   (clog-form   class)
-  (create-form generic-function))
+  (create-form generic-function)
+
+  (clog-form-element class)
+  (create-form-element generic-function))
 
 (defsection @clog-body (:title "CLOG Body Objects")
   "CLOG-Body - CLOG Body Objects"

@@ -130,17 +130,12 @@ result. (Private)"))
 ;; bind-event-script ;;
 ;;;;;;;;;;;;;;;;;;;;;;;
 
-(defgeneric bind-event-script (clog-obj event call-back &key cancel-event)
+(defgeneric bind-event-script (clog-obj event call-back)
   (:documentation "Create the code client side for EVENT CALL-BACK. (Private)"))
 
-(defmethod bind-event-script ((obj clog-obj) event call-back
-			      &key (cancel-event nil))
-  (if cancel-event
-      (jquery-execute
-       obj (format nil "on('~A',function (e, data){~A});return false"
-		   event call-back))
-      (jquery-execute
-       obj (format nil "on('~A',function (e, data){~A})" event call-back))))
+(defmethod bind-event-script ((obj clog-obj) event call-back)
+  (jquery-execute
+   obj (format nil "on('~A',function (e, data){~A})" event call-back)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; unbind-event-script ;;
@@ -204,12 +199,17 @@ result. (Private)"))
 (defgeneric set-event (clog-obj event handler &key call-back-script)
   (:documentation "Create the hood for incoming events. (Private)"))
 
-(defmethod set-event ((obj clog-obj) event handler &key (call-back-script ""))
-  ;; meeds mutex
+(defmethod set-event ((obj clog-obj) event handler
+		      &key (call-back-script "") (cancel-event nil))
   (let ((hook (format nil "~A:~A" (html-id obj) event)))
     (cond (handler
 	   (bind-event-script
-	    obj event (format nil "ws.send('E:~A-'~A)" hook call-back-script))
+	    obj event (format nil "ws.send('E:~A-'~A)~A"
+			      hook
+			      call-back-script
+			      (if cancel-event
+				  "; return false"
+				  "")))
 	   (setf (gethash hook (connection-data obj)) handler))
 	  (t
 	   (unbind-event-script obj event)
@@ -438,7 +438,8 @@ this even is bound, you must call the form reset manually."))
 	     (when handler
 	       (lambda (data)
 		 (declare (ignore data))
-		 (funcall handler obj)))))
+		 (funcall handler obj)))
+	     :cancel-event t))
 
 ;;;;;;;;;;;;;;;;;;;
 ;; set-on-search ;;
@@ -461,8 +462,7 @@ is nil unbind the event."))
 
 (defgeneric set-on-select (clog-obj on-select-handler)
   (:documentation "Set the ON-SELECT-HANDLER for CLOG-OBJ. If ON-SELECT-HANDLER
-is nil unbind the event.  This event is activated by using submit on a form. If
-this even is bound, you must call the form submit manually."))
+is nil unbind the event."))
 
 (defmethod set-on-select ((obj clog-obj) handler)
   (set-event obj "select"
@@ -477,14 +477,16 @@ this even is bound, you must call the form submit manually."))
 
 (defgeneric set-on-submit (clog-obj on-submit-handler)
   (:documentation "Set the ON-SUBMIT-HANDLER for CLOG-OBJ. If ON-SUBMIT-HANDLER
-is nil unbind the event."))
+is nil unbind the event. This event is activated by using submit on a form. If
+this even is bound, you must call the form submit manually."))
 
 (defmethod set-on-submit ((obj clog-obj) handler)
   (set-event obj "submit"
 	     (when handler
 	       (lambda (data)
 		 (declare (ignore data))
-		 (funcall handler obj)))))
+		 (funcall handler obj)))
+	     :cancel-event t))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; set-on-context-menu ;;
@@ -500,7 +502,8 @@ on-mouse-right-click will replace this handler."))
 	     (when handler
 	       (lambda (data)
 		 (declare (ignore data))
-		 (funcall handler obj)))))
+		 (funcall handler obj)))
+	     :cancel-event t))
 
 ;;;;;;;;;;;;;;;;;;
 ;; set-on-click ;;
@@ -580,7 +583,8 @@ replace on an on-context-menu event."))
 	     (when handler
 	       (lambda (data)
 		 (funcall handler obj (parse-mouse-event data))))
-	     :call-back-script mouse-event-script))
+	     :call-back-script mouse-event-script
+     	     :cancel-event t))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;
 ;; set-on-mouse-enter ;;

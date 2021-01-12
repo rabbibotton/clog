@@ -11,9 +11,20 @@
 	 (t3 (create-button body :content "Tab3"))
 	 (p1 (create-div body :content "Panel1 - Type here"))
 	 (p2 (create-div body :content "Panel2 - Type here"))
-	 (p3 (create-div body :content "Panel3 - Type here")))
+	 (p3 (create-div body :content "Panel3 - Type here"))
+	 (f1 (create-form p1))
+	 (fe1 (create-form-element f1 :text :value "Stuff"))
+	 (fe2 (create-form-element f1 :submit :value "OK"))
+	 (fe3 (create-form-element f1 :reset :value "Start Again")))
 
     (place-after t3 (create-br body))
+    (place-after fe1 (create-br body))
+
+    (set-on-submit f1
+		   (lambda (obj)
+		     (setf (title (html-document body)) (attribute fe1 "value"))
+		     (setf (hiddenp f1) t)
+		     (create-span p1 "<br><b>Your form has been submitted</b>")))
     
     (setf (width p1) 600)
     (setf (width p2) 600)
