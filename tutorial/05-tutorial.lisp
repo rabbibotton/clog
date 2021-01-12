@@ -20,7 +20,9 @@
 		#'my-on-click)
 
   (setf (connection-data-item body "changer")
-	(create-child body "<h1>I change</h1>")))
+	(create-child body "<h1>I change</h1>"))
+
+  (run body))
 
 (defun start-tutorial ()
   "Start turtorial."

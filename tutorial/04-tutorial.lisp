@@ -16,7 +16,9 @@
 		#'my-on-click)
 
   (set-on-click (create-child body "<h3>Click me too!</h3>")
-		#'my-on-click))
+		#'my-on-click)
+
+  (run body))
 
 (defun start-tutorial ()
   "Start turtorial."

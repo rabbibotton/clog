@@ -43,6 +43,22 @@
 	       :navigator     (make-clog-navigator connection-id))))
     (set-body (html-document body) body)))
 
+;;;;;;;;;
+;; run ;;
+;;;;;;;;;
+
+(defgeneric run (clog-body)
+  (:documentation "Keeps the main thread alive to prevent garbage
+collection of local objects when not using connection-data objects
+or global objects."))
+
+(defmethod run ((obj clog-body))
+  (loop
+	(if (validp obj)
+	    (sleep 10)
+	    (return (format t "Closing id ~A~%"
+			    (connection-id obj))))))
+
 ;;;;;;;;;;;;
 ;; window ;;
 ;;;;;;;;;;;;

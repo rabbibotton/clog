@@ -27,7 +27,8 @@
 		      (dotimes (n x)
 			(create-child body
 				      (format nil "<p>Clicked ~A times.</p>" x))
-			(scroll-to (window body) 0 (height body))))))))
+			(scroll-to (window body) 0 (height body))))))
+    (run body)))
 
 (defun start-tutorial ()
   "Start turtorial."

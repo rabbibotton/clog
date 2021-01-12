@@ -31,7 +31,8 @@
   (setf (title (html-document body)) "Tutorial 6")
 
   (set-on-click (create-child body "<h1>(click me to start!)</h1>")
-		#'my-on-click))
+		#'my-on-click)
+  (run body))
 
 (defun start-tutorial ()
   "Start turtorial."

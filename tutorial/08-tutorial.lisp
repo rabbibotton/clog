@@ -94,7 +94,9 @@
 
     (setf (positioning div3) :absolute)
     (set-on-mouse-down div3 'on-mouse-down)
-    (create-span div3 "Hello world!")))
+    (create-span div3 "Hello world!")
+    
+    (run body)))
 
 (defun start-tutorial ()
   "Start turtorial."

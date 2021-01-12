@@ -80,7 +80,8 @@
 			 (select-tab p2)))
       (set-on-click t3 (lambda (obj)
 			 (setf last-tab obj)
-			 (select-tab p3))))))
+			 (select-tab p3))))
+    (run body)))
 
 (defun start-tutorial ()
   "Start turtorial."

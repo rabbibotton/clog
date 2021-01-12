@@ -309,6 +309,7 @@ application."
   (clog-body class)
 
   "CLOG-Body - Properties"
+  (run           generic-function)
   (window        generic-function)
   (html-document generic-function)
   (location      generic-function)
