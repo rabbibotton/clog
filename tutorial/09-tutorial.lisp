@@ -30,9 +30,16 @@
 	 (fe2 (create-form-element f1 :color :label tmp))
 	 (tmp (create-br f1))
 	 (tmp (create-form-element f1 :submit :value "OK"))
-	 (tmp (create-form-element f1 :reset :value "Start Again")))
+	 (tmp (create-form-element f1 :reset :value "Start Again"))
+	 (dl1 (create-data-list f1)))
     
     (setf (place-holder fe1) "type here..")
+    (setf (requiredp fe1) t)
+    
+    (add-option dl1 "Cool Title")
+    (add-option dl1 "Not So Cool Title")
+    (add-option dl1 "Why Not Another Title")
+    (set-data-list fe1 dl1)
     
     (set-on-submit f1
 		   (lambda (obj)
@@ -61,9 +68,9 @@
 	     (setf (hiddenp p2) t)
 	     (setf (hiddenp p3) t)
 
-	     (setf (background-color t1) :grey)
-	     (setf (background-color t2) :grey)
-	     (setf (background-color t3) :grey)
+	     (setf (background-color t1) :lightgrey)
+	     (setf (background-color t2) :lightgrey)
+	     (setf (background-color t3) :lightgrey)
 	     
 	     (setf (background-color last-tab) :lightblue)
 	     (setf (hiddenp obj) nil)

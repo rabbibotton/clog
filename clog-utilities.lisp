@@ -26,10 +26,28 @@
 ;;;;;;;;;;;;;;;
 
 (defun p-true-js (value)
-  "Return \"true\" if VALUE true"
+  "Return \"true\" if VALUE t"
   (if value
       "true"
       "false"))
+
+;;;;;;;;;;;;;
+;; js-on-p ;;
+;;;;;;;;;;;;;
+
+(defun js-on-p (value)
+  "Return true if VALUE equalp the string on"
+  (equalp value "on"))
+
+;;;;;;;;;;;;;
+;; p-on-js ;;
+;;;;;;;;;;;;;
+
+(defun p-on-js (value)
+  "Return \"on\" if VALUE t or return \"off\""
+  (if value
+      "on"
+      "off"))
 
 ;;;;;;;;;;;;;;;;;;
 ;; open-browser ;;

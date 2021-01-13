@@ -125,7 +125,23 @@ down, this function does the same as set-on-new-window.</p></li>
 <ul>
 <li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#x-28CLOG-3AP-TRUE-JS-20FUNCTION-29" >P-TRUE-JS</a></span></span> <span class="locative-args">VALUE</span></span></p>
 
-<p>Return &quot;true&quot; if <code>VALUE</code> true</p></li>
+<p>Return &quot;true&quot; if <code>VALUE</code> t</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3AJS-ON-P-20FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#x-28CLOG-3AJS-ON-P-20FUNCTION-29" >JS-ON-P</a></span></span> <span class="locative-args">VALUE</span></span></p>
+
+<p>Return true if <code>VALUE</code> equalp the string on</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3AP-ON-JS-20FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#x-28CLOG-3AP-ON-JS-20FUNCTION-29" >P-ON-JS</a></span></span> <span class="locative-args">VALUE</span></span></p>
+
+<p>Return &quot;on&quot; if <code>VALUE</code> t or return &quot;off&quot;</p></li>
 </ul>
 
 <p><a id='x-28CLOG-3AOPEN-BROWSER-20FUNCTION-29'></a></p>
@@ -333,7 +349,8 @@ is nil unbind the event.</p></li>
 
 <p>Set the <code>ON-SUBMIT-HANDLER</code> for <code>CLOG-OBJ</code>. If <code>ON-SUBMIT-HANDLER</code>
 is nil unbind the event. This event is activated by using submit on a form. If
-this even is bound, you must call the form submit manually.</p></li>
+this event is bound, you must call the (submit clog-form) manually if wish the
+form action to be run. See CLOG-Form <a href="#x-28CLOG-3ASUBMIT-20GENERIC-FUNCTION-29" title="(CLOG:SUBMIT GENERIC-FUNCTION)"><code>SUBMIT</code></a> for more details.</p></li>
 </ul>
 
 <p><a id='x-28CLOG-3ASET-ON-SELECT-20GENERIC-FUNCTION-29'></a></p>
@@ -618,6 +635,14 @@ an existing element with <code>HTML-ID</code>. The <code>HTML-ID</code> must be 
 
 <ul>
 <li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3AATTRIBUTE-20GENERIC-FUNCTION-29" >ATTRIBUTE</a></span></span> <span class="locative-args">CLOG-ELEMENT ATTRIBUTE-NAME</span></span></p>
+
+<p>Get/Setf html tag attribute. (eg. src on img tag)</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3AREMOVE-ATTRIBUTE-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3AREMOVE-ATTRIBUTE-20GENERIC-FUNCTION-29" >REMOVE-ATTRIBUTE</a></span></span> <span class="locative-args">CLOG-ELEMENT ATTRIBUTE-NAME</span></span></p>
 
 <p>Get/Setf html tag attribute. (eg. src on img tag)</p></li>
 </ul>
@@ -1840,13 +1865,67 @@ and if <code>:AUTO-PLACE</code> (default t) place-inside-bottom-of
 <p><a id='x-28CLOG-3ACREATE-FORM-20GENERIC-FUNCTION-29'></a></p>
 
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ACREATE-FORM-20GENERIC-FUNCTION-29" >CREATE-FORM</a></span></span> <span class="locative-args">CLOG-OBJ &amp;KEY AUTO-PLACE</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ACREATE-FORM-20GENERIC-FUNCTION-29" >CREATE-FORM</a></span></span> <span class="locative-args">CLOG-OBJ &amp;KEY ACTION METHOD TARGET AUTO-PLACE</span></span></p>
 
 <p>Create a new CLOG-Form as child of <code>CLOG-OBJ</code> that organizes
-a collection of form elements in to a singnle form if <code>:AUTO-PLACE</code> (default t)
+a collection of form elements in to a single form if <code>:AUTO-PLACE</code> (default t)
 place-inside-bottom-of <code>CLOG-OBJ</code>. In <a href="#x-28-22clog-22-20ASDF-2FSYSTEM-3ASYSTEM-29" title="(\&quot;clog\&quot; ASDF/SYSTEM:SYSTEM)"><code>CLOG</code></a> a form's on-submit handler should be
-set and the form elelement values handled in that handler as opposed to the
-<code>HTML</code> model of submitting to a new &quot;page&quot;.</p></li>
+set and the form element values handled in that handler as opposed to the
+<code>HTML</code> model of submitting to a new &quot;page&quot;. If though one wishes to submit to
+another page can use the <code>:ACTION</code> <code>:METHOD</code> and <code>:TARGET</code> keys and either do not
+set an on-submit handler or call (submit <a href="#x-28CLOG-3ACLOG-FORM-20CLASS-29" title="(CLOG:CLOG-FORM CLASS)"><code>CLOG-FORM</code></a>) to perform the form
+action.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3AFORM-ELEMENT-COUNT-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3AFORM-ELEMENT-COUNT-20GENERIC-FUNCTION-29" >FORM-ELEMENT-COUNT</a></span></span> <span class="locative-args">CLOG-FORMT</span></span></p>
+
+<p>Get form element count.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3ASUBMIT-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ASUBMIT-20GENERIC-FUNCTION-29" >SUBMIT</a></span></span> <span class="locative-args">CLOG-FORMT</span></span></p>
+
+<p>Submit form.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3ARESET-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ARESET-20GENERIC-FUNCTION-29" >RESET</a></span></span> <span class="locative-args">CLOG-FORMT</span></span></p>
+
+<p>Reset form.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3AAUTOCOMPLETEP-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3AAUTOCOMPLETEP-20GENERIC-FUNCTION-29" >AUTOCOMPLETEP</a></span></span> <span class="locative-args">CLOG-FORM</span></span></p>
+
+<p>Get/Setf form autocompletep.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3AENCODING-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3AENCODING-20GENERIC-FUNCTION-29" >ENCODING</a></span></span> <span class="locative-args">CLOG-FORM</span></span></p>
+
+<p>Get/Setf form encoding. Comming values are:
+application/x-www-form-urlencoded
+multipart/form-data
+text/plain</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3AVALIDATE-ON-SUBMIT-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3AVALIDATE-ON-SUBMIT-20GENERIC-FUNCTION-29" >VALIDATE-ON-SUBMIT</a></span></span> <span class="locative-args">CLOG-FORM</span></span></p>
+
+<p>Get/Setf form validate-on-submit.</p></li>
 </ul>
 
 <p>CLOG-Form-Element - Class for form elements</p>
@@ -1869,6 +1948,77 @@ elements.</p></li>
 clog-form-elements are always placed with in the <code>CLOG-FORM</code> in the DOM</p></li>
 </ul>
 
+<p><a id='x-28CLOG-3AAUTOCOMPLETE-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3AAUTOCOMPLETE-20GENERIC-FUNCTION-29" >AUTOCOMPLETE</a></span></span> <span class="locative-args">CLOG-FORM-ELEMENT</span></span></p>
+
+<p>Get/Setf form element autocomplete.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3AAUTOFOCUSP-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3AAUTOFOCUSP-20GENERIC-FUNCTION-29" >AUTOFOCUSP</a></span></span> <span class="locative-args">CLOG-FORM-ELEMENT</span></span></p>
+
+<p>Get/Setf form element autofocusp. Only one element should
+have this set true. Autofocus on element when form loaded. </p></li>
+</ul>
+
+<p><a id='x-28CLOG-3APLACE-HOLDER-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3APLACE-HOLDER-20GENERIC-FUNCTION-29" >PLACE-HOLDER</a></span></span> <span class="locative-args">CLOG-FORM-ELEMENT</span></span></p>
+
+<p>Get/Setf form element place holder.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3ADISABLEDP-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ADISABLEDP-20GENERIC-FUNCTION-29" >DISABLEDP</a></span></span> <span class="locative-args">CLOG-BUTTON</span></span></p>
+
+<p>Get/Setf disabled status of button.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3AREAD-ONLY-P-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3AREAD-ONLY-P-20GENERIC-FUNCTION-29" >READ-ONLY-P</a></span></span> <span class="locative-args">CLOG-FORM-ELEMENT</span></span></p>
+
+<p>Get/Setf form element read-only-p.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3AREQUIREDP-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3AREQUIREDP-20GENERIC-FUNCTION-29" >REQUIREDP</a></span></span> <span class="locative-args">CLOG-FORM-ELEMENT</span></span></p>
+
+<p>Get/Setf form element requiredp.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3ANAME-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ANAME-20GENERIC-FUNCTION-29" >NAME</a></span></span> <span class="locative-args">CLOG-FORM-ELEMENT</span></span></p>
+
+<p>Get/Setf form element name.
+Form element name, name is not the id of the element but rather how
+the data returned from the element will be named in the submit to a
+server. For example if Name is My_Field a <code>GET</code> request could look like
+http://localhost:8080?My_Field=xxxx</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3ADEFAULT-VALUE-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ADEFAULT-VALUE-20GENERIC-FUNCTION-29" >DEFAULT-VALUE</a></span></span> <span class="locative-args">CLOG-FORM-ELEMENT</span></span></p>
+
+<p>Get/Setf form element default-value.
+If the form is reset the value will be set to default value
+If Value is set at time of creation it also sets it as the Default_Value</p></li>
+</ul>
+
 <p><a id='x-28CLOG-3AVALUE-20GENERIC-FUNCTION-29'></a></p>
 
 <ul>
@@ -1877,12 +2027,66 @@ clog-form-elements are always placed with in the <code>CLOG-FORM</code> in the D
 <p>Get/Setf the value of the progress-bar.</p></li>
 </ul>
 
-<p><a id='x-28CLOG-3APLACE-HOLDER-20GENERIC-FUNCTION-29'></a></p>
+<p><a id='x-28CLOG-3APATTERN-20GENERIC-FUNCTION-29'></a></p>
 
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3APLACE-HOLDER-20GENERIC-FUNCTION-29" >PLACE-HOLDER</a></span></span> <span class="locative-args">CLOG-FORM-ELEMENT</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3APATTERN-20GENERIC-FUNCTION-29" >PATTERN</a></span></span> <span class="locative-args">CLOG-FORM-ELEMENT</span></span></p>
 
-<p>Get/Setf from element place holder.</p></li>
+<p>Get/Setf form element regular expression pattern.
+(see JavaScript RegExp object for specifics)
+Form validation pattern. validate-on-submit fields with input
+will validate against their pattern if set on submit.
+In cases where a specific input type is not supported like
+(date, week, etc.) Pattern can be set to ensure the expected results.
+This works since Input type will fall back to a text input.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3AMINIMUM-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3AMINIMUM-20GENERIC-FUNCTION-29" >MINIMUM</a></span></span> <span class="locative-args">CLOG-METER</span></span></p>
+
+<p>Get/Setf the minimum of the meter.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3AMAXIMUM-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3AMAXIMUM-20GENERIC-FUNCTION-29" >MAXIMUM</a></span></span> <span class="locative-args">CLOG-PROGRESS-BAR</span></span></p>
+
+<p>Get/Setf the maximum of the progress-bar.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3ASIZE-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ASIZE-20GENERIC-FUNCTION-29" >SIZE</a></span></span> <span class="locative-args">CLOG-FORM-ELEMENT</span></span></p>
+
+<p>Get/Setf form element size.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3AELEMENT-STEP-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3AELEMENT-STEP-20GENERIC-FUNCTION-29" >ELEMENT-STEP</a></span></span> <span class="locative-args">CLOG-FORM-ELEMENT</span></span></p>
+
+<p>Get/Setf form element step.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3ASELECT-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ASELECT-20GENERIC-FUNCTION-29" >SELECT</a></span></span> <span class="locative-args">CLOG-FORM-ELEMENT</span></span></p>
+
+<p>Select and highlight the contents of element.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3ASET-DATA-LIST-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ASET-DATA-LIST-20GENERIC-FUNCTION-29" >SET-DATA-LIST</a></span></span> <span class="locative-args">CLOG-FORM-ELEMENT DATA-LIST</span></span></p>
+
+<p>Set the option data list to use for this element.</p></li>
 </ul>
 
 <p>CLOG-Label - Class for <a href="#x-28-22clog-22-20ASDF-2FSYSTEM-3ASYSTEM-29" title="(\&quot;clog\&quot; ASDF/SYSTEM:SYSTEM)"><code>CLOG</code></a> Labels</p>
@@ -1909,6 +2113,32 @@ clog-form-elements are always placed with in the <code>CLOG-FORM</code> in the D
 <li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ALABEL-FOR-20GENERIC-FUNCTION-29" >LABEL-FOR</a></span></span> <span class="locative-args">CLOG-LABEL ELEMENT</span></span></p>
 
 <p>Set label is for <code>ELEMENT</code>.</p></li>
+</ul>
+
+<p>CLOG-Data-List - Class for <a href="#x-28-22clog-22-20ASDF-2FSYSTEM-3ASYSTEM-29" title="(\&quot;clog\&quot; ASDF/SYSTEM:SYSTEM)"><code>CLOG</code></a> Option Data Lists</p>
+
+<p><a id='x-28CLOG-3ACLOG-DATA-LIST-20CLASS-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[class]</span> <span class="reference-object"><a href="#x-28CLOG-3ACLOG-DATA-LIST-20CLASS-29" >CLOG-DATA-LIST</a></span></span> <span class="locative-args"><a href="#x-28CLOG-3ACLOG-ELEMENT-20CLASS-29" title="(CLOG:CLOG-ELEMENT CLASS)">CLOG-ELEMENT</a></span></span></p>
+
+<p><a href="#x-28-22clog-22-20ASDF-2FSYSTEM-3ASYSTEM-29" title="(\&quot;clog\&quot; ASDF/SYSTEM:SYSTEM)"><code>CLOG</code></a> Form Element Data-List Options Object</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3ACREATE-DATA-LIST-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ACREATE-DATA-LIST-20GENERIC-FUNCTION-29" >CREATE-DATA-LIST</a></span></span> <span class="locative-args">CLOG-OBJ</span></span></p>
+
+<p>Create a new clog-data-list as child of <a href="#x-28CLOG-3ACLOG-FORM-20CLASS-29" title="(CLOG:CLOG-FORM CLASS)"><code>CLOG-FORM</code></a>.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3AADD-OPTION-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3AADD-OPTION-20GENERIC-FUNCTION-29" >ADD-OPTION</a></span></span> <span class="locative-args">CLOG-DATA-LIST VALUE</span></span></p>
+
+<p>Add option <code>VALUE</code> to data-list.</p></li>
 </ul>
 
 <p><a id='x-28CLOG-3A-40CLOG-BODY-20MGL-PAX-3ASECTION-29'></a></p>

@@ -49,6 +49,8 @@ application."
   "CLOG utilities"
   (js-true-p     function)
   (p-true-js     function)
+  (js-on-p       function)
+  (p-on-js       function)
   (open-browser  function)
   (escape-string function))
 
@@ -120,8 +122,9 @@ application."
   (place-inside-bottom-of generic-function)
 
   "CLOG-Element - General Properties"
-  (style     generic-function)
-  (attribute generic-function)
+  (style            generic-function)
+  (attribute        generic-function)
+  (remove-attribute generic-function)
 
   "CLOG-Element - Properties"
   (access-key          generic-function)
@@ -290,19 +293,45 @@ application."
 (defsection @clog-form (:title "CLOG Form Objects")
   "CLOG-Form - Class for organizing Form Elements in to a From"
   (clog-form   class)
-  (create-form generic-function)
+  (create-form        generic-function)
+  
+  (form-element-count generic-function)
+  (submit             generic-function)
+  (reset              generic-function)
+  (autocompletep      generic-function)
+  (encoding           generic-function)
+  (validate-on-submit generic-function)
 
   "CLOG-Form-Element - Class for form elements"
   (clog-form-element   class)
   (create-form-element generic-function)
 
-  (value               generic-function)
+  (autocomplete        generic-function)
+  (autofocusp          generic-function)
   (place-holder        generic-function)
+  (disabledp           generic-function)
+  (read-only-p         generic-function)
+  (requiredp           generic-function)
+  (name                generic-function)
+  (default-value       generic-function)
+  (value               generic-function)
+  (pattern             generic-function)
+  (minimum             generic-function)
+  (maximum             generic-function)
+  (size                generic-function)
+  (element-step        generic-function)
+  (select              generic-function)
+  (set-data-list       generic-function)
 
   "CLOG-Label - Class for CLOG Labels"
   (clog-label   class)
   (create-label generic-function)
-  (label-for    generic-function))
+  (label-for    generic-function)
+
+  "CLOG-Data-List - Class for CLOG Option Data Lists"
+  (clog-data-list   class)
+  (create-data-list generic-function)
+  (add-option       generic-function))
 
 (defsection @clog-body (:title "CLOG Body Objects")
   "CLOG-Body - CLOG Body Objects"

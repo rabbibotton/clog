@@ -56,8 +56,7 @@ or global objects."))
   (loop
 	(if (validp obj)
 	    (sleep 10)
-	    (return (format t "Closing id ~A~%"
-			    (connection-id obj))))))
+	    (return))))
 
 ;;;;;;;;;;;;
 ;; window ;;

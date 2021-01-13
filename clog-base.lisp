@@ -478,7 +478,8 @@ is nil unbind the event."))
 (defgeneric set-on-submit (clog-obj on-submit-handler)
   (:documentation "Set the ON-SUBMIT-HANDLER for CLOG-OBJ. If ON-SUBMIT-HANDLER
 is nil unbind the event. This event is activated by using submit on a form. If
-this even is bound, you must call the form submit manually."))
+this event is bound, you must call the (submit clog-form) manually if wish the
+form action to be run. See CLOG-Form SUBMIT for more details."))
 
 (defmethod set-on-submit ((obj clog-obj) handler)
   (set-event obj "submit"

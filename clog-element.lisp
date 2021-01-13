@@ -115,6 +115,12 @@ an existing element with HTML-ID. The HTML-ID must be unique."))
 (defmethod attribute ((obj clog-element) attribute-name)
   (jquery-query obj (format nil "attr('~A')" attribute-name)))
 
+(defgeneric remove-attribute (clog-element attribute-name)
+  (:documentation "Get/Setf html tag attribute. (eg. src on img tag)"))
+
+(defmethod remove-attribute ((obj clog-element) attribute-name)
+  (jquery-execute obj (format nil "removeAttr('~A')" attribute-name)))
+
 (defgeneric set-attribute (clog-element attribute-name value)
   (:documentation "Set html tag attribute."))
 
@@ -296,7 +302,7 @@ setting display (None)."))
 (defmethod set-hiddenp ((obj clog-element) value)
   (if value
       (setf (property obj "hidden") t)
-      (jquery-execute obj "removeAttr('hidden')")))
+      (remove-attribute obj "hidden")))
 (defsetf hiddenp set-hiddenp)
 
 ;;;;;;;;;;;;;;
