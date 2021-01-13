@@ -7,9 +7,9 @@
 (defun on-new-window (body)
   (let* (last-tab
 	 ;; Note: Since the there is no need to use the tmp objects
-	 ;;       we reuse the same symbol name even though the
-	 ;;       compiler can mark those for collection early
-	 ;;       there is no issue as the element is created already
+	 ;;       we reuse the same symbol name (tmp) even though the
+	 ;;       compiler can mark those for garbage collection early
+	 ;;       this not an issue as the element is created already
 	 ;;       in the browser window.
 	 
 	 ;; Create tabs and panels
@@ -33,6 +33,9 @@
 	 (tmp (create-form-element f1 :submit :value "OK"))
 	 (tmp (create-form-element f1 :reset :value "Start Again"))
 	 (dl))
+
+    ;; Panel 1 contents
+    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     
     (setf (place-holder fe1) "type here..")
     (setf (requiredp fe1) t)
@@ -71,8 +74,18 @@
     (set-border p2 :thin :solid :black)
     (set-border p3 :thin :solid :black)
 
+    ;; Panel 2 contents
+    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
     (setf (editablep p2) t)
+
+    ;; Panel 3 contents
+    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
     (setf (editablep p3) t)
+
+    ;; Tab functionality
+    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
     (flet ((select-tab (obj)
 	     (setf (hiddenp p1) t)

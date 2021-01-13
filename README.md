@@ -9,6 +9,29 @@ The Common Lisp Omnificient GUI, CLOG for short, uses web technology
 to produce graphical user interfaces for applications locally or
 remotely, ie as web applications.
 
+Many have asked me -
+
+	Why? or How is this different from X Y Z web framework?
+
+The answer is -
+
+	Why?
+	       Because more and more a browser "control" or window
+	       is the only medium you can use to do anything cross
+		   platform. You are limited to the languages and the
+		   tools dictated. A GUI framework using the browser
+		   to render the GUI is the perfect solution.
+		   
+    What's the difference from x or y web framework?
+
+	       The best way to understand the difference is look
+		   through the tutorials and demos, this is a GUI
+		   framework that happens to use the browser for
+		   rendering, the internet for remoting your apps etc.
+		   At the same time your app is already a web app and
+		   there is no reason not to deploy it (soon) as a
+		   web "site" also.
+
 View the HTML Documentation:
 
 https://rabbibotton.github.io/clog/clog-manual.html
