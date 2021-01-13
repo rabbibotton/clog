@@ -304,6 +304,7 @@ application."
 
   "CLOG-Form-Element - Class for form elements"
   (clog-form-element   class)
+  (form-element-type   type)
   (create-form-element generic-function)
 
   (autocomplete        generic-function)
@@ -321,7 +322,14 @@ application."
   (size                generic-function)
   (element-step        generic-function)
   (select              generic-function)
+  (file-accept         generic-function)
+  (url-src             generic-function)
+  (alt-text            generic-function)
+  (checkedp            generic-function)
+  (input-mode-type     type)
+  (input-mode          generic-function)
   (set-data-list       generic-function)
+  (make-data-list      generic-function)
 
   "CLOG-Label - Class for CLOG Labels"
   (clog-label   class)
@@ -332,13 +340,15 @@ application."
   (clog-data-list   class)
   (create-data-list generic-function)
   (add-option       generic-function)
+  (add-options      generic-function)
 
   "CLOG-Text-Area - Class for CLOG Text Areas"
   (clog-text-area   class)
   (create-text-area generic-function)
   (word-wrap        generic-function)
   (columns          generic-function)
-  (rows             generic-function))
+  (rows             generic-function)
+  (disable-resize   generic-function))
 
 (defsection @clog-body (:title "CLOG Body Objects")
   "CLOG-Body - CLOG Body Objects"

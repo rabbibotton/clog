@@ -210,6 +210,23 @@ placing image to constrain image size."))
   (setf (property obj "src") value))
 (defsetf url-src set-url-src)
 
+;;;;;;;;;;;;;;
+;; alt-text ;;
+;;;;;;;;;;;;;;
+
+(defgeneric alt-text (clog-img)
+  (:documentation "Get/Setf the alt-text of the img."))
+
+(defmethod alt-text ((obj clog-img))
+  (attribute obj "alt"))
+
+(defgeneric set-alt-text (clog-img value)
+  (:documentation "Set alt-text VALUE for CLOG-IMG"))
+
+(defmethod set-alt-text ((obj clog-img) value)
+  (setf (attribute obj "alt") value))
+(defsetf alt-text set-alt-text)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Implementation - clog-meter
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

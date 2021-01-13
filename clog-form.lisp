@@ -435,6 +435,106 @@ have this set true. Autofocus on element when form loaded. "))
 (defmethod set-data-list ((obj clog-form-element) data-list)
   (setf (attribute obj "list") (html-id data-list)))
 
+;;;;;;;;;;;;;;;;;;;;
+;; make-data-list ;;
+;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric make-data-list (clog-form-element data)
+  (:documentation "Set the option data list to use for this element."))
+
+(defmethod make-data-list ((obj clog-form-element) data)
+  (set-data-list obj (create-data-list obj :data-list data)))
+
+;;;;;;;;;;;;;;;;;
+;; file-accept ;;
+;;;;;;;;;;;;;;;;;
+
+(defgeneric file-accept (clog-form-element)
+  (:documentation "Get/Setf form element file-accept. Only works with
+the File form element type.
+   example: (setf (file-accept obj) \"image/png, image/jpeg\")"))
+
+(defmethod file-accept ((obj clog-form-element))
+  (attribute obj "accept"))
+
+(defgeneric set-file-accept (clog-form-element value)
+  (:documentation "Set file-accept VALUE for CLOG-FORM-ELEMENT"))
+
+(defmethod set-file-accept ((obj clog-form-element) value)
+  (setf (attribute obj "accept") value))
+(defsetf file-accept set-file-accept)
+
+;;;;;;;;;;;;;
+;; url-src ;;
+;;;;;;;;;;;;;
+
+(defgeneric url-src (clog-form-element)
+  (:documentation "Get/Setf the url-src of the img."))
+
+(defmethod url-src ((obj clog-form-element))
+  (property obj "src"))
+
+(defgeneric set-url-src (clog-form-element value)
+  (:documentation "Set url-src VALUE for CLOG-FORM-ELEMENT"))
+
+(defmethod set-url-src ((obj clog-form-element) value)
+  (setf (property obj "src") value))
+(defsetf url-src set-url-src)
+
+;;;;;;;;;;;;;;
+;; alt-text ;;
+;;;;;;;;;;;;;;
+
+(defgeneric alt-text (clog-form-element)
+  (:documentation "Get/Setf the alt-text of the img."))
+
+(defmethod alt-text ((obj clog-form-element))
+  (attribute obj "alt"))
+
+(defgeneric set-alt-text (clog-form-element value)
+  (:documentation "Set alt-text VALUE for CLOG-FORM-ELEMENT"))
+
+(defmethod set-alt-text ((obj clog-form-element) value)
+  (setf (attribute obj "alt") value))
+(defsetf alt-text set-alt-text)
+
+;;;;;;;;;;;;;;
+;; checkedp ;;
+;;;;;;;;;;;;;;
+
+(defgeneric checkedp (clog-form-element)
+  (:documentation "Get/Setf form element checkedp."))
+
+(defmethod checkedp ((obj clog-form-element))
+  (js-true-p (property obj "checked")))
+
+(defgeneric set-checkedp (clog-form-element value)
+  (:documentation "Set VALUE if checkedp for CLOG-FORM-ELEMENT"))
+
+(defmethod set-checkedp ((obj clog-form-element) value)
+  (setf (property obj "checked") (p-true-js value)))
+(defsetf checkedp set-checkedp)
+
+;;;;;;;;;;;;;;;;
+;; input-mode ;;
+;;;;;;;;;;;;;;;;
+
+(deftype input-mode-type ()
+  '(member :none :text :tel :url :email :numeric :decimal :search))
+
+(defgeneric input-mode (clog-form-element)
+  (:documentation "Get/Setf hint the input-mode of an element for
+virtual keyboards."))
+
+(defmethod input-mode ((obj clog-form-element))
+  (attribute obj "inputmode"))
+
+(defgeneric set-input-mode (clog-form-element value)
+  (:documentation "Set input-mode VALUE for CLOG-FORM-ELEMENT"))
+
+(defmethod set-input-mode ((obj clog-form-element) value)
+  (setf (attribute obj "inputmode") value))
+(defsetf input-mode set-input-mode)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Implementation - clog-label
@@ -480,11 +580,15 @@ have this set true. Autofocus on element when form loaded. "))
 ;; create-data-list ;;
 ;;;;;;;;;;;;;;;;;;;;;;
 
-(defgeneric create-data-list (clog-obj)
-  (:documentation "Create a new clog-data-list as child of CLOG-OBJ."))
+(defgeneric create-data-list (clog-obj &key data-list)
+  (:documentation "Create a new clog-data-list as child of CLOG-OBJ and
+optionally fill in with contents of data-list."))
 
-(defmethod create-data-list ((obj clog-obj))
-  (create-child obj "<datalist />" :clog-type 'clog-data-list :auto-place t))
+(defmethod create-data-list ((obj clog-obj) &key (data-list nil))
+  (let ((element (create-child obj "<datalist />" :clog-type 'clog-data-list :auto-place t)))
+    (when data-list
+      (add-options element data-list))
+    element))
 
 ;;;;;;;;;;;;;;;;
 ;; add-option ;;
@@ -496,6 +600,17 @@ have this set true. Autofocus on element when form loaded. "))
 (defmethod add-option ((obj clog-data-list) value)
   (create-child obj (format nil "<option value='~A'>" (escape-string value))
 		:clog-type 'clog-element :auto-place t))
+  
+;;;;;;;;;;;;;;;;;
+;; add-options ;;
+;;;;;;;;;;;;;;;;;
+
+(defgeneric add-options (clog-data-list data-list)
+  (:documentation "Add option VALUE to data-list."))
+
+(defmethod add-options ((obj clog-data-list) data-list)
+  (dolist (value data-list)
+    (add-option obj value)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Implementation - clog-text-area
@@ -595,3 +710,12 @@ have this set true. Autofocus on element when form loaded. "))
   (setf (property obj "rows") value))
 (defsetf rows set-rows)
 
+;;;;;;;;;;;;;;;;;;;;
+;; disable-resize ;;
+;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric disable-resize (clog-text-area)
+  (:documentation "Disable resize of text area."))
+
+(defmethod disable-resize ((obj clog-text-area))
+  (setf (resizable obj) :none))

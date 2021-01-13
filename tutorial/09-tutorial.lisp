@@ -6,7 +6,6 @@
 
 (defun on-new-window (body)
   (let* (last-tab
-	 dl
 	 ;; Note: Since the there is no need to use the tmp objects
 	 ;;       we reuse the same symbol name (tmp) even though the
 	 ;;       compiler can mark those for garbage collection early
@@ -28,8 +27,7 @@
 	 (fe1 (create-form-element f1 :text :label tmp))
 	 (tmp (create-br f1))
 	 (tmp (create-label f1 :content "Pick a color:"))
-	 (fe2 (create-form-element
-	       f1 :color :value "#ffffff" :label tmp))
+	 (fe2 (create-form-element f1 :color :value "#ffffff" :label tmp))
 	 (tmp (create-br f1))
 	 (tmp (create-form-element f1 :submit :value "OK"))
 	 (tmp (create-form-element f1 :reset :value "Start Again"))
@@ -49,20 +47,16 @@
     (setf (requiredp fe1) t)
     (setf (size fe1) 60)
 
-    (setf dl (create-data-list f1))
-    (add-option dl "Cool Title")
-    (add-option dl "Not So Cool Title")
-    (add-option dl "Why Not Another Title")
-    (set-data-list fe1 dl)
+    (make-data-list fe1 '("Cool Title"
+			  "Not So Cool Title"
+			  "Why Not Another Title"))
     
-    (setf dl (create-data-list f1))
-    (add-option dl "#ffffff")
-    (add-option dl "#ff0000")
-    (add-option dl "#00ff00")
-    (add-option dl "#0000ff")
-    (add-option dl "#ff00ff")
-    (set-data-list fe2 dl)
-    
+    (make-data-list fe2 '("#ffffff"
+			  "#ff0000"
+			  "#00ff00"
+			  "#0000ff"
+			  "#ff00ff"))
+
     (set-on-submit f1
 		   (lambda (obj)
 		     (setf (title (html-document body)) (value fe1))
@@ -86,6 +80,7 @@
     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
     (setf (vertical-align ta1) :top)
+    (disable-resize ta1)
     
     (set-on-submit f2
 		   (lambda (obj)
