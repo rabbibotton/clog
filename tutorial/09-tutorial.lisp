@@ -6,6 +6,7 @@
 
 (defun on-new-window (body)
   (let* (last-tab
+	 dl
 	 ;; Note: Since the there is no need to use the tmp objects
 	 ;;       we reuse the same symbol name (tmp) even though the
 	 ;;       compiler can mark those for garbage collection early
@@ -18,10 +19,10 @@
 	 (t3  (create-button body :content "Tab3"))
 	 (tmp (create-br body))
 	 (p1  (create-div body))
-	 (p2  (create-div body :content "Panel2 - Type here"))
+	 (p2  (create-div body))
 	 (p3  (create-div body :content "Panel3 - Type here"))
 
-	 ;; Create from for panel 1
+	 ;; Create form for panel 1
 	 (f1  (create-form p1))
 	 (tmp (create-label f1 :content "Fill in blank:"))
 	 (fe1 (create-form-element f1 :text :label tmp))
@@ -32,7 +33,14 @@
 	 (tmp (create-br f1))
 	 (tmp (create-form-element f1 :submit :value "OK"))
 	 (tmp (create-form-element f1 :reset :value "Start Again"))
-	 (dl))
+
+	 ;; Create for for panel 2
+	 (f2  (create-form p2))
+	 (tmp (create-label f2 :content "Please type here:"))
+	 (ta1 (create-text-area f2 :columns 60 :rows 8 :label tmp))
+	 (tmp (create-br f2))
+	 (tmp (create-form-element f2 :submit :value "OK"))
+	 (tmp (create-form-element f2 :reset :value "Start Again")))
 
     ;; Panel 1 contents
     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -77,7 +85,14 @@
     ;; Panel 2 contents
     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-    (setf (editablep p2) t)
+    (setf (vertical-align ta1) :top)
+    
+    (set-on-submit f2
+		   (lambda (obj)
+		     (setf (hiddenp f2) t)
+		     (create-span p2
+		       (format nil "<br><b>Your form has been submitted:</b><br>~A"
+			       (value ta1)))))
 
     ;; Panel 3 contents
     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

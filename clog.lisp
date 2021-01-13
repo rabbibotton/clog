@@ -331,7 +331,14 @@ application."
   "CLOG-Data-List - Class for CLOG Option Data Lists"
   (clog-data-list   class)
   (create-data-list generic-function)
-  (add-option       generic-function))
+  (add-option       generic-function)
+
+  "CLOG-Text-Area - Class for CLOG Text Areas"
+  (clog-text-area   class)
+  (create-text-area generic-function)
+  (word-wrap        generic-function)
+  (columns          generic-function)
+  (rows             generic-function))
 
 (defsection @clog-body (:title "CLOG Body Objects")
   "CLOG-Body - CLOG Body Objects"

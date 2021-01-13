@@ -1880,7 +1880,7 @@ action.</p></li>
 <p><a id='x-28CLOG-3AFORM-ELEMENT-COUNT-20GENERIC-FUNCTION-29'></a></p>
 
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3AFORM-ELEMENT-COUNT-20GENERIC-FUNCTION-29" >FORM-ELEMENT-COUNT</a></span></span> <span class="locative-args">CLOG-FORMT</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3AFORM-ELEMENT-COUNT-20GENERIC-FUNCTION-29" >FORM-ELEMENT-COUNT</a></span></span> <span class="locative-args">CLOG-FORM</span></span></p>
 
 <p>Get form element count.</p></li>
 </ul>
@@ -1942,10 +1942,11 @@ elements.</p></li>
 <p><a id='x-28CLOG-3ACREATE-FORM-ELEMENT-20GENERIC-FUNCTION-29'></a></p>
 
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ACREATE-FORM-ELEMENT-20GENERIC-FUNCTION-29" >CREATE-FORM-ELEMENT</a></span></span> <span class="locative-args">CLOG-FORM ELEMENT-TYPE &amp;KEY NAME VALUE LABEL</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ACREATE-FORM-ELEMENT-20GENERIC-FUNCTION-29" >CREATE-FORM-ELEMENT</a></span></span> <span class="locative-args">CLOG-OBJ ELEMENT-TYPE &amp;KEY NAME VALUE LABEL</span></span></p>
 
-<p>Create a new clog-form-element as child of <code>CLOG-FORM</code>.
-clog-form-elements are always placed with in the <code>CLOG-FORM</code> in the DOM</p></li>
+<p>Create a new clog-form-element as child of <code>CLOG-OBJ</code>.
+It is importamt tjat clog-form-elements are a child or descendant of a
+clog-form  in the DOM</p></li>
 </ul>
 
 <p><a id='x-28CLOG-3AAUTOCOMPLETE-20GENERIC-FUNCTION-29'></a></p>
@@ -2102,9 +2103,9 @@ This works since Input type will fall back to a text input.</p></li>
 <p><a id='x-28CLOG-3ACREATE-LABEL-20GENERIC-FUNCTION-29'></a></p>
 
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ACREATE-LABEL-20GENERIC-FUNCTION-29" >CREATE-LABEL</a></span></span> <span class="locative-args">CLOG-FORM &amp;KEY CONTENT LABEL-FOR</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ACREATE-LABEL-20GENERIC-FUNCTION-29" >CREATE-LABEL</a></span></span> <span class="locative-args">CLOG-OBJ &amp;KEY CONTENT LABEL-FOR</span></span></p>
 
-<p>Create a new clog-label as child of <code>CLOG-FORM</code>.</p></li>
+<p>Create a new clog-label as child of <code>CLOG-OBJ</code>.</p></li>
 </ul>
 
 <p><a id='x-28CLOG-3ALABEL-FOR-20GENERIC-FUNCTION-29'></a></p>
@@ -2130,7 +2131,7 @@ This works since Input type will fall back to a text input.</p></li>
 <ul>
 <li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ACREATE-DATA-LIST-20GENERIC-FUNCTION-29" >CREATE-DATA-LIST</a></span></span> <span class="locative-args">CLOG-OBJ</span></span></p>
 
-<p>Create a new clog-data-list as child of <a href="#x-28CLOG-3ACLOG-FORM-20CLASS-29" title="(CLOG:CLOG-FORM CLASS)"><code>CLOG-FORM</code></a>.</p></li>
+<p>Create a new clog-data-list as child of <code>CLOG-OBJ</code>.</p></li>
 </ul>
 
 <p><a id='x-28CLOG-3AADD-OPTION-20GENERIC-FUNCTION-29'></a></p>
@@ -2139,6 +2140,48 @@ This works since Input type will fall back to a text input.</p></li>
 <li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3AADD-OPTION-20GENERIC-FUNCTION-29" >ADD-OPTION</a></span></span> <span class="locative-args">CLOG-DATA-LIST VALUE</span></span></p>
 
 <p>Add option <code>VALUE</code> to data-list.</p></li>
+</ul>
+
+<p>CLOG-Text-Area - Class for <a href="#x-28-22clog-22-20ASDF-2FSYSTEM-3ASYSTEM-29" title="(\&quot;clog\&quot; ASDF/SYSTEM:SYSTEM)"><code>CLOG</code></a> Text Areas</p>
+
+<p><a id='x-28CLOG-3ACLOG-TEXT-AREA-20CLASS-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[class]</span> <span class="reference-object"><a href="#x-28CLOG-3ACLOG-TEXT-AREA-20CLASS-29" >CLOG-TEXT-AREA</a></span></span> <span class="locative-args"><a href="#x-28CLOG-3ACLOG-FORM-ELEMENT-20CLASS-29" title="(CLOG:CLOG-FORM-ELEMENT CLASS)">CLOG-FORM-ELEMENT</a></span></span></p>
+
+<p><a href="#x-28-22clog-22-20ASDF-2FSYSTEM-3ASYSTEM-29" title="(\&quot;clog\&quot; ASDF/SYSTEM:SYSTEM)"><code>CLOG</code></a> Form Element Text-Area Object</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3ACREATE-TEXT-AREA-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ACREATE-TEXT-AREA-20GENERIC-FUNCTION-29" >CREATE-TEXT-AREA</a></span></span> <span class="locative-args">CLOG-OBJ &amp;KEY COLUMNS ROWS NAME VALUE LABEL</span></span></p>
+
+<p>Create a new clog-text-area as child of <code>CLOG-OBJ</code>.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3AWORD-WRAP-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3AWORD-WRAP-20GENERIC-FUNCTION-29" >WORD-WRAP</a></span></span> <span class="locative-args">CLOG-TEXT-AREA</span></span></p>
+
+<p>Get/Setf form element word-wrap.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3ACOLUMNS-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ACOLUMNS-20GENERIC-FUNCTION-29" >COLUMNS</a></span></span> <span class="locative-args">CLOG-TEXT-AREA</span></span></p>
+
+<p>Get/Setf form element columns.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3AROWS-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3AROWS-20GENERIC-FUNCTION-29" >ROWS</a></span></span> <span class="locative-args">CLOG-TEXT-AREA</span></span></p>
+
+<p>Get/Setf form element rows.</p></li>
 </ul>
 
 <p><a id='x-28CLOG-3A-40CLOG-BODY-20MGL-PAX-3ASECTION-29'></a></p>

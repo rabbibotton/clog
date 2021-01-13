@@ -44,7 +44,7 @@ action."))
 ;; form-element-count ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defgeneric form-element-count (clog-formt)
+(defgeneric form-element-count (clog-form)
   (:documentation "Get form element count."))
 
 (defmethod form-element-count ((obj clog-form))
@@ -141,16 +141,16 @@ elements."))
     :file :hidden :image :month :number :password :radio :range
     :reset :search :submit :tel :text :time :url :week))
   
-(defgeneric create-form-element (clog-form element-type &key name value label)
-  (:documentation "Create a new clog-form-element as child of CLOG-FORM.
-clog-form-elements are always placed with in the CLOG-FORM in the DOM"))
+(defgeneric create-form-element (clog-obj element-type &key name value label)
+  (:documentation "Create a new clog-form-element as child of CLOG-OBJ.
+It is importamt tjat clog-form-elements are a child or descendant of a
+clog-form  in the DOM"))
 
-(defmethod create-form-element ((obj clog-form) element-type
+(defmethod create-form-element ((obj clog-obj) element-type
 				&key (name nil) (value "") (label nil))
   (let ((element (create-child
-		  obj (format nil "<input type='~A' form='~A' value='~A' ~A/>"
+		  obj (format nil "<input type='~A' value='~A' ~A/>"
 			      (escape-string element-type)
-			      (html-id obj)
 			      value
 			      (if name
 				  (format nil "name='~A'" name)
@@ -448,10 +448,10 @@ have this set true. Autofocus on element when form loaded. "))
 ;;;;;;;;;;;;;;;;;;
 
 
-(defgeneric create-label (clog-form &key content label-for)
-  (:documentation "Create a new clog-label as child of CLOG-FORM."))
+(defgeneric create-label (clog-obj &key content label-for)
+  (:documentation "Create a new clog-label as child of CLOG-OBJ."))
 
-(defmethod create-label ((obj clog-form) &key (content "") (label-for nil))
+(defmethod create-label ((obj clog-obj) &key (content "") (label-for nil))
   (create-child obj (format nil "<label for='~A'>~A</label>"
 			    (if label-for
 				(html-id label-for)
@@ -481,7 +481,7 @@ have this set true. Autofocus on element when form loaded. "))
 ;;;;;;;;;;;;;;;;;;;;;;
 
 (defgeneric create-data-list (clog-obj)
-  (:documentation "Create a new clog-data-list as child of CLOG-FORM."))
+  (:documentation "Create a new clog-data-list as child of CLOG-OBJ."))
 
 (defmethod create-data-list ((obj clog-obj))
   (create-child obj "<datalist />" :clog-type 'clog-data-list :auto-place t))
@@ -496,4 +496,102 @@ have this set true. Autofocus on element when form loaded. "))
 (defmethod add-option ((obj clog-data-list) value)
   (create-child obj (format nil "<option value='~A'>" (escape-string value))
 		:clog-type 'clog-element :auto-place t))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Implementation - clog-text-area
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defclass clog-text-area (clog-form-element)()
+  (:documentation "CLOG Form Element Text-Area Object"));
+
+;;;;;;;;;;;;;;;;;;;;;;
+;; create-text-area ;;
+;;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric create-text-area (clog-obj &key columns rows name value label)
+  (:documentation "Create a new clog-text-area as child of CLOG-OBJ."))
+
+(defmethod create-text-area ((obj clog-obj)
+			     &key (columns 20)
+			       (rows 2)
+			       (name "")
+			       (value "")
+			       (label nil))
+  (let ((element
+	  (create-child obj
+	    (format nil "<textarea name='~A' cols='~A' rows='~A'>~A</textarea>"
+		    name columns rows (escape-string value))
+	    :clog-type 'clog-text-area :auto-place t)))
+
+    (when label
+      (label-for label element))
+    element))
+
+;;;;;;;;;;;;;;;
+;; word-wrap ;;
+;;;;;;;;;;;;;;;
+
+(defgeneric word-wrap (clog-text-area)
+  (:documentation "Get/Setf form element word-wrap."))
+
+(defmethod word-wrap ((obj clog-text-area))
+  (property obj "wrap"))
+
+(defgeneric set-word-wrap (clog-text-area value)
+  (:documentation "Set word-wrap WORD-WRAP for CLOG-TEXT-AREA"))
+
+(defmethod set-word-wrap ((obj clog-text-area) value)
+  (setf (property obj "wrap") value))
+(defsetf word-wrap set-word-wrap)
+
+;;;;;;;;;;;;;;;
+;; word-wrap ;;
+;;;;;;;;;;;;;;;
+
+(defgeneric word-wrap (clog-text-area)
+  (:documentation "Get/Setf form element word-wrap."))
+
+(defmethod word-wrap ((obj clog-text-area))
+  (property obj "wrap"))
+
+(defgeneric set-word-wrap (clog-text-area value)
+  (:documentation "Set word-wrap WORD-WRAP for CLOG-TEXT-AREA"))
+
+(defmethod set-word-wrap ((obj clog-text-area) value)
+  (setf (property obj "wrap") value))
+(defsetf word-wrap set-word-wrap)
+
+;;;;;;;;;;;;;
+;; columns ;;
+;;;;;;;;;;;;;
+
+(defgeneric columns (clog-text-area)
+  (:documentation "Get/Setf form element columns."))
+
+(defmethod columns ((obj clog-text-area))
+  (property obj "cols"))
+
+(defgeneric set-columns (clog-text-area value)
+  (:documentation "Set columns COLUMNS for CLOG-TEXT-AREA"))
+
+(defmethod set-columns ((obj clog-text-area) value)
+  (setf (property obj "cols") value))
+(defsetf columns set-columns)
+
+;;;;;;;;;;
+;; rows ;;
+;;;;;;;;;;
+
+(defgeneric rows (clog-text-area)
+  (:documentation "Get/Setf form element rows."))
+
+(defmethod rows ((obj clog-text-area))
+  (property obj "rows"))
+
+(defgeneric set-rows (clog-text-area value)
+  (:documentation "Set rows ROWS for CLOG-TEXT-AREA"))
+
+(defmethod set-rows ((obj clog-text-area) value)
+  (setf (property obj "rows") value))
+(defsetf rows set-rows)
 
