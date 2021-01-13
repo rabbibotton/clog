@@ -27,19 +27,30 @@
 	 (fe1 (create-form-element f1 :text :label tmp))
 	 (tmp (create-br f1))
 	 (tmp (create-label f1 :content "Pick a color:"))
-	 (fe2 (create-form-element f1 :color :label tmp))
+	 (fe2 (create-form-element
+	       f1 :color :value "#ffffff" :label tmp))
 	 (tmp (create-br f1))
 	 (tmp (create-form-element f1 :submit :value "OK"))
 	 (tmp (create-form-element f1 :reset :value "Start Again"))
-	 (dl1 (create-data-list f1)))
+	 (dl))
     
     (setf (place-holder fe1) "type here..")
     (setf (requiredp fe1) t)
+    (setf (size fe1) 60)
+
+    (setf dl (create-data-list f1))
+    (add-option dl "Cool Title")
+    (add-option dl "Not So Cool Title")
+    (add-option dl "Why Not Another Title")
+    (set-data-list fe1 dl)
     
-    (add-option dl1 "Cool Title")
-    (add-option dl1 "Not So Cool Title")
-    (add-option dl1 "Why Not Another Title")
-    (set-data-list fe1 dl1)
+    (setf dl (create-data-list f1))
+    (add-option dl "#ffffff")
+    (add-option dl "#ff0000")
+    (add-option dl "#00ff00")
+    (add-option dl "#0000ff")
+    (add-option dl "#ff00ff")
+    (set-data-list fe2 dl)
     
     (set-on-submit f1
 		   (lambda (obj)
