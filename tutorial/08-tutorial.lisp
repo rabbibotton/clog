@@ -34,10 +34,16 @@
 	
 	(setf (drag-x app) (- mouse-x obj-left))
 	(setf (drag-y app) (- mouse-y obj-top))
-	
-	(set-on-mouse-move obj 'on-mouse-move)
-	(set-on-mouse-up obj 'stop-obj-grab)
-	(set-on-mouse-leave obj 'on-mouse-leave)))))
+
+	(if (eq (getf data ':event-type) :touch)
+	    (progn
+	      (set-on-touch-move obj 'on-mouse-move)
+	      (set-on-touch-end obj 'stop-obj-grab)
+	      (set-on-touch-cancel obj 'on-mouse-leave))
+	    (progn
+	      (set-on-mouse-move obj 'on-mouse-move)
+	      (set-on-mouse-up obj 'stop-obj-grab)
+	      (set-on-mouse-leave obj 'on-mouse-leave))))))))
 
 (defun on-mouse-move (obj data)
   (let* ((app (connection-data-item obj "app-data"))
@@ -45,11 +51,16 @@
 	 (y   (getf data ':screen-y)))
     
     (setf (top obj) (format nil "~Apx" (- y (drag-y app))))
-    (setf (left obj) (format nil "~Apx" (- x (drag-x app)))))))
+    (setf (left obj) (format nil "~Apx" (- x (drag-x app))))))
 
 (defun on-mouse-leave (obj)
   (let ((app (connection-data-item obj "app-data")))
     (setf (in-drag-p app) nil)
+    
+    (set-on-touch-move obj nil)
+    (set-on-touch-end obj nil)
+    (set-on-touch-cancel obj nil)
+    
     (set-on-mouse-move obj nil)
     (set-on-mouse-up obj nil)
     (set-on-mouse-leave obj nil)))
@@ -86,15 +97,17 @@
 
     (setf (positioning div1) :fixed)        ; It's location relative to window
     (setf (overflow div1) :hidden)          ; Clip the contents
+    (set-on-touch-start div1 'on-mouse-down)
     (set-on-mouse-down div1 'on-mouse-down)
 
     (setf (positioning div2) :absolute)     ; It's location relative to is parent container
     (setf (overflow div2) :hidden)
+    (set-on-touch-start div2 'on-mouse-down)
     (set-on-mouse-down div2 'on-mouse-down)
 
     (setf (positioning div3) :absolute)
+    (set-on-touch-start div3 'on-mouse-down)
     (set-on-mouse-down div3 'on-mouse-down)
-    (create-span div3 "Hello world!")
     
     (run body)))
 

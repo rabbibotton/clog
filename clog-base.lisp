@@ -164,6 +164,7 @@ result. (Private)"))
 (defun parse-mouse-event (data)
   (let ((f (ppcre:split ":" data)))
     (list
+     :event-type   :mouse
      :x            (parse-integer (nth 0 f) :junk-allowed t)
      :y            (parse-integer (nth 1 f) :junk-allowed t)
      :screen-x     (parse-integer (nth 2 f) :junk-allowed t)
@@ -173,6 +174,33 @@ result. (Private)"))
      :ctrl-key     (js-true-p (nth 6 f))
      :shift-key    (js-true-p (nth 7 f))
      :meta-key     (js-true-p (nth 8 f)))))
+
+;;;;;;;;;;;;;;;;;;;;;;;
+;; parse-touch-event ;;
+;;;;;;;;;;;;;;;;;;;;;;;
+
+(defparameter touch-event-script
+  "+ (e.touches[0].clientX - e.touches[0].target.getBoundingClientRect().left) + ':' + 
+     (e.touches[0].clientY - e.touches[0].target.getBoundingClientRect().top) + ':' + 
+     e.touches[0].screenX + ':' + e.touches[0].screenY + ':' + e.touches.length + ':' +
+     e.altKey + ':' +
+     e.ctrlKey + ':' +
+     e.shiftKey + ':' +
+     e.metaKey")
+
+(defun parse-touch-event (data)
+  (let ((f (ppcre:split ":" data)))
+    (list
+     :event-type     :touch
+     :x              (parse-integer (nth 0 f) :junk-allowed t)
+     :y              (parse-integer (nth 1 f) :junk-allowed t)
+     :screen-x       (parse-integer (nth 2 f) :junk-allowed t)
+     :screen-y       (parse-integer (nth 3 f) :junk-allowed t)
+     :number-fingers (parse-integer (nth 4 f) :junk-allowed t)
+     :alt-key        (js-true-p (nth 5 f))
+     :ctrl-key       (js-true-p (nth 6 f))
+     :shift-key      (js-true-p (nth 7 f))
+     :meta-key       (js-true-p (nth 8 f)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; parse-keyboard-event ;;
@@ -185,12 +213,13 @@ result. (Private)"))
 (defun parse-keyboard-event (data)
   (let ((f (ppcre:split ":" data)))
     (list
-     :key-code  (parse-integer (nth 0 f) :junk-allowed t)
-     :char-code (parse-integer (nth 1 f) :junk-allowed t)
-     :alt-key   (js-true-p (nth 2 f))
-     :ctrl-key  (js-true-p (nth 3 f))
-     :shift-key (js-true-p (nth 4 f))
-     :meta-key  (js-true-p (nth 5 f)))))
+     :event-type :keyboard
+     :key-code   (parse-integer (nth 0 f) :junk-allowed t)
+     :char-code  (parse-integer (nth 1 f) :junk-allowed t)
+     :alt-key    (js-true-p (nth 2 f))
+     :ctrl-key   (js-true-p (nth 3 f))
+     :shift-key  (js-true-p (nth 4 f))
+     :meta-key   (js-true-p (nth 5 f)))))
 
 ;;;;;;;;;;;;;;;
 ;; set-event ;;
@@ -691,6 +720,66 @@ ON-MOUSE-MOVE-HANDLER is nil unbind the event."))
 	       (lambda (data)
 		 (funcall handler obj (parse-mouse-event data))))
 	     :call-back-script mouse-event-script))
+
+;;;;;;;;;;;;;;;;;;;;;;;;
+;; set-on-touch-start ;;
+;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric set-on-touch-start (clog-obj on-touch-start-handler)
+  (:documentation "Set the ON-TOUCH-START-HANDLER for CLOG-OBJ. If
+ON-TOUCH-START-HANDLER is nil unbind the event."))
+
+(defmethod set-on-touch-start ((obj clog-obj) handler)
+  (set-event obj "touchstart"
+	     (when handler
+	       (lambda (data)
+		 (funcall handler obj (parse-touch-event data))))
+	     :call-back-script touch-event-script))
+
+;;;;;;;;;;;;;;;;;;;;;;;
+;; set-on-touch-move ;;
+;;;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric set-on-touch-move (clog-obj on-touch-move-handler)
+  (:documentation "Set the ON-TOUCH-MOVE-HANDLER for CLOG-OBJ. If
+ON-TOUCH-MOVE-HANDLER is nil unbind the event."))
+
+(defmethod set-on-touch-move ((obj clog-obj) handler)
+  (set-event obj "touchmove"
+	     (when handler
+	       (lambda (data)
+		 (funcall handler obj (parse-touch-event data))))
+	     :call-back-script touch-event-script))
+
+;;;;;;;;;;;;;;;;;;;;;;
+;; set-on-touch-end ;;
+;;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric set-on-touch-end (clog-obj on-touch-end-handler)
+  (:documentation "Set the ON-TOUCH-END-HANDLER for CLOG-OBJ. If
+ON-TOUCH-END-HANDLER is nil unbind the event."))
+
+(defmethod set-on-touch-end ((obj clog-obj) handler)
+  (set-event obj "touchend"
+	     (when handler
+	       (lambda (data)
+		 (funcall handler obj (parse-touch-event data))))
+	     :call-back-script touch-event-script))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;
+;; set-on-touch-cancel ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric set-on-touch-cancel (clog-obj on-touch-cancel-handler)
+  (:documentation "Set the ON-TOUCH-CANCEL-HANDLER for CLOG-OBJ. If
+ON-TOUCH-CANCEL-HANDLER is nil unbind the event."))
+
+(defmethod set-on-touch-cancel ((obj clog-obj) handler)
+  (set-event obj "touchcancel"
+	     (when handler
+	       (lambda (data)
+		 (funcall handler obj (parse-touch-event data))))
+	     :call-back-script touch-event-script))
 
 ;;;;;;;;;;;;;;;;;;;;;;
 ;; set-on-character ;;
