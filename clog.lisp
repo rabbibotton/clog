@@ -330,12 +330,29 @@ application."
   (input-mode          generic-function)
   (set-data-list       generic-function)
   (make-data-list      generic-function)
-
+  (minimum-length      generic-function)
+  (maximum-length      generic-function)
+  
   "CLOG-Label - Class for CLOG Labels"
   (clog-label   class)
   (create-label generic-function)
   (label-for    generic-function)
 
+  "CLOG-Fieldset - Class for CLOG Fieldsets"
+  (clog-fieldset   class)
+  (create-fieldset generic-function)
+
+  "CLOG-Select - Class for CLOG Selects"
+  (clog-select        class)
+  (create-select      generic-function)
+  (clog-option        class)
+  (create-option      generic-function)
+  (clog-optgroup      class)
+  (create-optgroup    generic-function)
+  (selectedp          generic-function)
+  (add-select-option  generic-function)
+  (add-select-options generic-function)
+		   
   "CLOG-Data-List - Class for CLOG Option Data Lists"
   (clog-data-list   class)
   (create-data-list generic-function)

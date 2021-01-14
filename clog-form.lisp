@@ -143,17 +143,19 @@ elements."))
   
 (defgeneric create-form-element (clog-obj element-type &key name value label)
   (:documentation "Create a new clog-form-element as child of CLOG-OBJ.
-It is importamt tjat clog-form-elements are a child or descendant of a
-clog-form  in the DOM"))
+It is importamt that clog-form-elements are a child or descendant of a
+clog-form in the DOM. The radio ELEMENT-TYPE groups by NAME."))
 
 (defmethod create-form-element ((obj clog-obj) element-type
-				&key (name nil) (value "") (label nil))
+				&key (name nil) (value nil) (label nil))
   (let ((element (create-child
-		  obj (format nil "<input type='~A' value='~A' ~A/>"
+		  obj (format nil "<input type='~A'~A~A/>"
 			      (escape-string element-type)
-			      value
+			      (if value
+				  (format nil " value='~A'" value)
+				  "")
 			      (if name
-				  (format nil "name='~A'" name)
+				  (format nil " name='~A'" name)
 				  ""))
 		  :clog-type 'clog-form-element :auto-place t)))
     (when label
@@ -415,6 +417,40 @@ have this set true. Autofocus on element when form loaded. "))
   (setf (property obj "size") value))
 (defsetf size set-size)
 
+;;;;;;;;;;;;;;;;;;;;
+;; minimum-length ;;
+;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric minimum-length (clog-form-element)
+  (:documentation "Get/Setf form element minimum-length."))
+
+(defmethod minimum-length ((obj clog-form-element))
+  (property obj "minlength"))
+
+(defgeneric set-minimum-length (clog-form-element value)
+  (:documentation "Set minimum-length VALUE for CLOG-FORM-ELEMENT"))
+
+(defmethod set-minimum-length ((obj clog-form-element) value)
+  (setf (property obj "minlength") value))
+(defsetf minimum-length set-minimum-length)
+
+;;;;;;;;;;;;;;;;;;;;
+;; maximum-length ;;
+;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric maximum-length (clog-form-element)
+  (:documentation "Get/Setf form element maximum-length."))
+
+(defmethod maximum-length ((obj clog-form-element))
+  (property obj "maxlength"))
+
+(defgeneric set-maximum-length (clog-form-element value)
+  (:documentation "Set maximum-length VALUE for CLOG-FORM-ELEMENT"))
+
+(defmethod set-maximum-length ((obj clog-form-element) value)
+  (setf (property obj "maxlength") value))
+(defsetf maximum-length set-maximum-length)
+
 ;;;;;;;;;;;;
 ;; select ;;
 ;;;;;;;;;;;;
@@ -569,6 +605,29 @@ virtual keyboards."))
 (defmethod label-for ((obj clog-label) element)
   (setf (attribute obj "for") element))
 
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Implementation - clog-fieldset
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defclass clog-fieldset (clog-element)()
+  (:documentation "CLOG Form Element Fieldset Object"));
+
+;;;;;;;;;;;;;;;;;;;;;
+;; create-fieldset ;;
+;;;;;;;;;;;;;;;;;;;;;
+
+
+(defgeneric create-fieldset (clog-obj &key legend)
+  (:documentation "Create a new clog-fieldset as child of CLOG-OBJ."))
+
+(defmethod create-fieldset ((obj clog-obj) &key (legend nil))
+  (create-child obj (format nil "<fieldset>~A</fieldset>"
+			    (if legend
+				(format nil "<legend>~A</legend>" legend)
+				""))
+		:clog-type 'clog-fieldset :auto-place t))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Implementation - clog-data-list
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -719,3 +778,129 @@ optionally fill in with contents of data-list."))
 
 (defmethod disable-resize ((obj clog-text-area))
   (setf (resizable obj) :none))
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Implementation - clog-select
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defclass clog-select (clog-form-element)()
+  (:documentation "CLOG Form Element Select Options Object"));
+
+;;;;;;;;;;;;;;;;;;;
+;; create-select ;;
+;;;;;;;;;;;;;;;;;;;
+
+(defgeneric create-select (clog-obj &key name multiple label)
+  (:documentation "Create a new clog-select as child of CLOG-OBJ."))
+
+(defmethod create-select ((obj clog-obj) &key (name nil) (multiple nil) (label nil))
+  (let ((element (create-child
+		  obj (format nil "<select~A~A/>"
+			      (if multiple
+				  " multiple"
+				  "")
+			      (if name
+				  (format nil " name='~A'" name)
+				  ""))
+		 :clog-type 'clog-select :auto-place t)))
+    (when label
+      (label-for label element))
+    element))
+
+;;;;;;;;;;;;;;;;;;;;;;;
+;; add-select-option ;;
+;;;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric add-select-option (clog-select value content)
+  (:documentation "Add option VALUE to select."))
+
+(defmethod add-select-option ((obj clog-select) value content)
+  (create-child obj (format nil "<option value='~A'>~A</option>"
+			    (escape-string value)
+			    (escape-string content))
+		:clog-type 'clog-element :auto-place t))
+  
+;;;;;;;;;;;;;;;;;;;;;;;;
+;; add-select-options ;;
+;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric add-select-options (clog-select select)
+  (:documentation "Add group of options to select."))
+
+(defmethod add-select-options ((obj clog-select) select)
+  (dolist (value select)
+    (add-select-option obj value value)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Implementation - clog-option
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defclass clog-option (clog-form-element)()
+  (:documentation "CLOG Form Element Option for CLOG Select Object"));
+
+;;;;;;;;;;;;;;;;;;;
+;; create-option ;;
+;;;;;;;;;;;;;;;;;;;
+
+(defgeneric create-option (clog-obj &key content value selected disabled)
+  (:documentation "Create a new clog-option as child of CLOG-OBJ."))
+
+(defmethod create-option ((obj clog-obj) &key
+					   (content "")
+					   (value nil)
+					   (selected nil)
+					   (disabled nil))			  			  
+  (create-child obj (format nil "<option~A~A~A>~A</option>"
+			    (if selected
+				" selected"
+				"")
+			    (if disabled
+				" disabled"
+				"")
+			    (if value
+				(format nil " value='~A'" name)
+				"")
+			    content)
+		:clog-type 'clog-option :auto-place t))
+
+;;;;;;;;;;;;;;;
+;; selectedp ;;
+;;;;;;;;;;;;;;;
+
+(defgeneric selectedp (clog-form-element)
+  (:documentation "Get/Setf form element selectedp."))
+
+(defmethod selectedp ((obj clog-form-element))
+  (js-true-p (property obj "selected")))
+
+(defgeneric set-selectedp (clog-form-element value)
+  (:documentation "Set selectedp VALUE for CLOG-FORM-ELEMENT"))
+
+(defmethod set-selectedp ((obj clog-form-element) value)
+  (setf (property obj "selected") (p-true-js value)))
+(defsetf selectedp set-selectedp)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Implementation - clog-optgroup
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defclass clog-optgroup (clog-form-element)()
+  (:documentation "CLOG Form Element Optgroup for CLOG Select Object"));
+
+;;;;;;;;;;;;;;;;;;;;;
+;; create-optgroup ;;
+;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric create-optgroup (clog-obj &key content disabled)
+  (:documentation "Create a new clog-optgroup as child of CLOG-OBJ."))
+
+(defmethod create-optgroup ((obj clog-obj) &key
+					   (content "")
+					   (disabled nil))			  			  
+  (create-child obj (format nil "<optgroup label='~A'~A/>"
+			    content
+			    (if disabled
+				" disabled"
+				""))
+		:clog-type 'clog-optgroup :auto-place t))

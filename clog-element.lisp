@@ -214,7 +214,8 @@ an existing element with HTML-ID. The HTML-ID must be unique."))
 
 (defgeneric advisory-title (clog-element)
   (:documentation "Get/Setf advisory title of Element, usually
-used for body and image maps."))
+used for body and image maps but creates in forms and many
+elements a tool tip."))
 
 (defmethod advisory-title ((obj clog-element))
   (property obj "title"))
