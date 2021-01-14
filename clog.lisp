@@ -33,6 +33,7 @@ application."
   (@clog-element        section)
   (@clog-element-common section)
   (@clog-form           section)
+  (@clog-canvas         section)
   (@clog-body           section)
   (@clog-window         section)
   (@clog-document       section)
@@ -370,6 +371,14 @@ application."
   (columns          generic-function)
   (rows             generic-function)
   (disable-resize   generic-function))
+
+(defsection @clog-canvas (:title "CLOG Canvas Objects")
+  "CLOG-Canvas - Class for CLOG canvas objects"
+  (clog-canvas   class)
+  (create-canvas generic-function)
+
+  (clog-context2d   class)
+  (create-context2d generic-function))
 
 (defsection @clog-body (:title "CLOG Body Objects")
   "CLOG-Body - CLOG Body Objects"

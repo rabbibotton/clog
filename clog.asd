@@ -18,6 +18,7 @@
 	       (:file "clog-base")
 	       (:file "clog-element")
 	       (:file "clog-element-common")
+	       (:file "clog-canvas")
 	       (:file "clog-form")
 	       (:file "clog-window")
 	       (:file "clog-document")
