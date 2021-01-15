@@ -424,7 +424,7 @@ spell checking if Editable is also true."))
 ;; text-direction ;;
 ;;;;;;;;;;;;;;;;;;;;
 
-(deftype text-direction-type () '(member :ltr :rtl))
+(deftype text-direction-type () '(member :ltr :rtl :inherit))
 
 (defgeneric text-direction (clog-element)
   (:documentation "Get/Setf BiDi text-direction."))
@@ -1494,6 +1494,9 @@ A list of standard cursor types can be found at:
 
 (deftype font-variant-type () '(member :normal :small-caps))
 
+(deftype system-font-type () ; can use with setf of font
+  '(member :caption :icon :menu :message-box :small-caption :status-bar))
+
 (defgeneric font (clog-element)
   (:documentation "Get/Setf font."))
 
@@ -1510,6 +1513,13 @@ A list of standard cursor types can be found at:
   (setf (style obj "font")
 	(format nil "~A ~A ~A ~A ~A"
 		font-style font-variant font-weight font-height font-family)))
+
+(defgeneric set-font-css (clog-element value)
+  (:documentation "Set font VALUE for CLOG-ELEMENT"))
+
+(defmethod set-font-css ((obj clog-element) value)
+  (setf (style obj "font") value))
+(defsetf font set-font-css)
 
 ;;;;;;;;;;;;;;;;;;;;
 ;; text-alignment ;;

@@ -10,10 +10,20 @@
 
     (set-border canvas :thin :solid :black)
     
-    (clog::execute cx "fillStyle='green'")
-    (clog::execute cx "fillRect(10, 10, 150, 100)"))
-  
-  (run body))
+    (fill-style cx :green)
+    (fill-rect cx 10 10 150 100)
+
+    (fill-style cx :blue)
+    (font-style cx "bold 24px serif")
+    (fill-text cx "Hello World" 10 150)
+
+    (fill-style cx :red)
+    (begin-path cx)
+    (ellipse cx 200 200 50 7 0.78 0 6.29)
+    (path-stroke cx)
+    (path-fill cx)
+    
+    (run body)))
 
 (defun start-tutorial ()
   "Start turtorial."

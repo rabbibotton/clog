@@ -42,3 +42,4 @@ Tutorial Summary
 - 07-tutorial.lisp - My first CLOG video game (and handling disconnects)
 - 08-tutorial.lisp - Mice Love Containers
 - 09-tutorial.lisp - Tabs, pannels and forms
+- 10-tutorial.lisp - Canvas
