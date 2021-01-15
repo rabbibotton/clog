@@ -13,7 +13,7 @@
 ;; Implementation - clog-body
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defclass clog-body (clog-obj)
+(defclass clog-body (clog-element)
   ((window
     :reader window
     :initarg :window)
