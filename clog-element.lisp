@@ -295,14 +295,14 @@ not relevant not just visually and will _also_ remove it from layout similar to
 setting display (None)."))
 
 (defmethod hiddenp ((obj clog-element))
-  (js-true-p (property obj "hidden")))
+  (js-true-p (attribute obj "hidden")))
 
 (defgeneric set-hiddenp (clog-element value)
   (:documentation "Set hiddenp VALUE for CLOG-ELEMENT"))
 
 (defmethod set-hiddenp ((obj clog-element) value)
   (if value
-      (setf (property obj "hidden") t)
+      (setf (attribute obj "hidden") t)
       (remove-attribute obj "hidden")))
 (defsetf hiddenp set-hiddenp)
 

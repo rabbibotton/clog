@@ -31,7 +31,7 @@
 		     (port           8080)
 		     (boot-file      "/boot.html")
 		     (static-root    #P"./static-files/"))
-  "Inititalze CLOG on a socket using HOST and PORT to serve BOOT-FILE as 
+  "Inititalize CLOG on a socket using HOST and PORT to serve BOOT-FILE as 
 the default route to establish web-socket connections and static files
 located at STATIC-ROOT. If CLOG was already initialized and not shut
 down, this function does the same as set-on-new-window."

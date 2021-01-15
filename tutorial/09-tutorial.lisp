@@ -84,7 +84,8 @@
 		     (setf (title (html-document body)) (value fe1))
 		     (setf (background-color p1) (value fe2))
 		     (setf (hiddenp f1) t)
-		     (create-span p1 "<br><b>Your form has been submitted</b>")))
+		     (create-span p1 :content
+				  "<br><b>Your form has been submitted</b>")))
     
     (setf (width p1) "100%")
     (setf (width p2) "100%")
@@ -126,7 +127,7 @@
     (set-on-submit f2
 		   (lambda (obj)
 		     (setf (hiddenp f2) t)
-		     (create-span p2
+		     (create-span p2 :content
 		       (format nil "<br><b>Your form has been submitted:</b>
                                        <br>~A<hr>1 - ~A<br>2 - ~A<br>3 - ~A"
 			       (value ta1)

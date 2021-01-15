@@ -448,12 +448,12 @@ CLOG-OBJ"))
 ;; create-span ;;
 ;;;;;;;;;;;;;;;;;
 
-(defgeneric create-span (clog-obj content &key auto-place)
+(defgeneric create-span (clog-obj &key content auto-place)
   (:documentation "Create a new CLOG-Span as child of CLOG-OBJ with CONTENT
 and if :AUTO-PLACE (default t) place-inside-bottom-of
 CLOG-OBJ"))
 
-(defmethod create-span ((obj clog-obj) content &key (auto-place t))
+(defmethod create-span ((obj clog-obj) &key (content "") (auto-place t))
   (create-child obj (format nil "<span>~A</span>" (escape-string content))
 		:clog-type 'clog-span :auto-place auto-place))
 
