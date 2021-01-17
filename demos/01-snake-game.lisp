@@ -5,8 +5,8 @@
 (in-package :clog-user)
 
 ;; Game Display
-(defconstant display-width 400)
-(defconstant display-height 400)
+(defconstant display-width 375)
+(defconstant display-height 375)
 
 ;; Snake Parameters
 (defconstant initial-length 5)
@@ -132,13 +132,26 @@
 	  ((or (eql key-code 83) (eql key-code 40)) (setf (snake-direction app) :down))
 	  ((or (eql key-code 68) (eql key-code 39)) (setf (snake-direction app) :right)))))
 	  
+(defun on-click (obj)
+  (let ((app     (connection-data-item obj "app-data"))
+	(btn-txt (text obj)))
+  (cond ((equal btn-txt "<--") (setf (snake-direction app) :left))
+	((equal btn-txt "-->") (setf (snake-direction app) :right))
+	((equal btn-txt "-^-") (setf (snake-direction app) :up))
+	((equal btn-txt "-v-") (setf (snake-direction app) :down)))))
 
 (defun start-game (body)
-  (let ((app (connection-data-item body "app-data"))
-	(disp (create-canvas body
-			     :width display-width
-			     :height display-height))
-	context)
+  (let* ((app       (connection-data-item body "app-data"))
+	 (disp      (create-canvas body
+				   :width display-width
+				   :height display-height))
+	 (br        (create-br body))
+	 (controls  (create-div body))
+	 (left-btn  (create-button controls :content "<--"))
+	 (right-btn (create-button controls :content "-->"))
+	 (up-btn    (create-button controls :content "-^-"))
+	 (down-btn  (create-button controls :content "-v-"))
+	 context)
 
     ;; Initialize display
     (setf (background-color body) :orange)
@@ -160,7 +173,11 @@
     (fill-text context (format nil "Score: ~A" (score app))
 	       5 (- display-height 15))
 
-    (set-on-key-down body #'on-key-down)
+    (set-on-key-down body      #'on-key-down)
+    (set-on-click    left-btn  #'on-click)
+    (set-on-click    right-btn #'on-click)
+    (set-on-click    up-btn    #'on-click)
+    (set-on-click    down-btn  #'on-click)
     
     ;; Game loop
     (loop
