@@ -54,7 +54,7 @@ action."))
 ;; submit ;;
 ;;;;;;;;;;;;
 
-(defgeneric submit (clog-formt)
+(defgeneric submit (clog-form)
   (:documentation "Submit form."))
 
 (defmethod submit ((obj clog-form))
@@ -64,7 +64,7 @@ action."))
 ;; reset ;;
 ;;;;;;;;;;;
 
-(defgeneric reset (clog-formt)
+(defgeneric reset (clog-form)
   (:documentation "Reset form."))
 
 (defmethod reset ((obj clog-form))
