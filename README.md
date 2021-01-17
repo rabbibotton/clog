@@ -105,15 +105,15 @@ Status:
 
 - Connection methods
   - Websockets - DONE
-  - Long Poll - to do (Needed for websites for webcrawlers and firewalls use) 
+  - (removed long poll method, I can create static web search version with tools)
   - Direct API access to native browser components - to do (not needed but games, soft real-time apps, etc would be perfomance.) 
 
 - HTML bindings and Browser
   - Base system for bindings - DONE
   - Event system - DONE
   - General DOM (Window, Screen, Document, Location, Navigator) - DONE
-  - Base Elements (HTML Elements)
-  - Canvas - HTML 5 Canvas bindings
+  - Base Elements (HTML Elements) - DONE
+  - Canvas - HTML 5 Canvas bindings - DONE
   - Multimedia - HTML 5 Audio and Video
 
 - CLOG higher level containers and GUI widgets - to do
