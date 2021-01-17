@@ -795,7 +795,7 @@ will replace a on-key-press"))
 	     (when handler
 	       (lambda (data)
 	       (let ((f (parse-keyboard-event data)))
-		 (funcall handler obj (code-char (getf f ':char-code))))))
+		 (funcall handler obj (code-char (getf f :char-code))))))
 	     :call-back-script keyboard-event-script))
 
 ;;;;;;;;;;;;;;;;;;;;;

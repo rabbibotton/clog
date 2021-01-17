@@ -32,10 +32,6 @@ Boot file default : /boot.html
 
 Most demos startup a browser, if not use http://127.0.0.1:8080
 
-When done with a demo can run:
+Demo Summary
 
-```
-(clog:shutdown)
-```
-
-This will shutdown clog and then can load up another demo.
+- 01-snake-game.lisp - Snake Gamey
