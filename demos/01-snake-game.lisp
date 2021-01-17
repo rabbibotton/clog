@@ -21,15 +21,19 @@
 (defclass app-data ()
   ((snake-direction
     :initform :right
+    :type snake-direction-type
     :accessor snake-direction)
    (score
     :initform 0
+    :type number
     :accessor score)
    (food
     :initform (new-food)
+    :type cons
     :accessor food)
    (snake
     :initform nil
+    :type cons
     :accessor snake)))
 
 (defun display-splash (body)
@@ -81,43 +85,43 @@
 				    (1+ (cadr head-cell))))))
 
       
-      (if (or (< (car head-cell) 0)
+      (cond ((or (< (car head-cell) 0)
 	      (< (cadr head-cell) 0)
 	      (>= (* (car head-cell) segment-size) display-width)
 	      (>= (* (cadr head-cell) segment-size) display-height)
 	      (self-collision))
-	  (progn
-	    (fill-style cx :red)
-	    (font-style cx "bold 20px sans-serif")
-	    (fill-text cx "GAME OVER" 30 30)
-	    (setf game-over t))
-	  (progn
-	    (fill-style cx :purple)
-	    (push head-cell (snake app))
-	    (dolist (cell (snake app))
-	      (draw-segment cell))
 
-	    (fill-style cx :white)
+	     (fill-style cx :red)
+	     (font-style cx "bold 20px sans-serif")
+	     (fill-text cx "GAME OVER" 30 30)
+	     (setf game-over t))
+	    (t
+	     (fill-style cx :purple)
+	     (push head-cell (snake app))
+	     (dolist (cell (snake app))
+	       (draw-segment cell))
 
-	    (if (equal head-cell (food app))
-		(progn
-		  (fill-text cx (format nil "Score: ~A" (score app))
-			     5 (- display-height 15))
-		  (setf (score app) (+ (score app) 10))
+	     (fill-style cx :white)
 
-		  (fill-style cx :green)
-		  (fill-text cx (format nil "Score: ~A" (score app))
-			     5 (- display-height 15))
-		  
-		  (setf (food app) (new-food)))
-		(progn
-		  (draw-segment (car (last (snake app))))
-		  (setf (snake app) (butlast (snake app))))))
+	     (cond ((equal head-cell (food app))
+
+		    (fill-text cx (format nil "Score: ~A" (score app))
+			       5 (- display-height 15))
+		    (setf (score app) (+ (score app) 10))
+		    
+		    (fill-style cx :green)
+		    (fill-text cx (format nil "Score: ~A" (score app))
+			       5 (- display-height 15))
+		    
+		    (setf (food app) (new-food)))
+		   (t
+		    (draw-segment (car (last (snake app))))
+		    (setf (snake app) (butlast (snake app)))))
 	  
-	  (fill-style cx :brown)
-	  (draw-segment (food app)))
+	     (fill-style cx :brown)
+	     (draw-segment (food app)))
       
-      game-over)))
+	game-over))))
 
 (defun on-key-down (obj event)
   (let ((app      (connection-data-item obj "app-data"))
