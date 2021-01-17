@@ -119,9 +119,9 @@
 		    (setf (snake app) (butlast (snake app)))))
 	  
 	     (fill-style cx :brown)
-	     (draw-segment (food app)))
+	     (draw-segment (food app))))
       
-	game-over))))
+	game-over)))
 
 (defun on-key-down (obj event)
   (let ((app      (connection-data-item obj "app-data"))
