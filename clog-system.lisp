@@ -34,7 +34,8 @@
   "Inititalize CLOG on a socket using HOST and PORT to serve BOOT-FILE as 
 the default route to establish web-socket connections and static files
 located at STATIC-ROOT. If CLOG was already initialized and not shut
-down, this function does the same as set-on-new-window."
+down, this function does the same as set-on-new-window. If the variable
+clog:*overide-static-root* is set STATIC-ROOT will be ignored."
   (if *on-new-window*
       (set-on-new-window on-new-window-handler)
       (progn
@@ -44,7 +45,9 @@ down, this function does the same as set-on-new-window."
 		       :host host
 		       :port port
 		       :boot-file boot-file
-		       :static-root static-root))))
+		       :static-root (if (boundp '*overide-static-root*)
+					*overide-static-root*
+					static-root)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;
 ;; set-on-new-window ;;

@@ -15,7 +15,6 @@
 ;; and added CLOG's boot.js script line. It was neccesary to add an id to the
 ;; form (id='form1') as the generator did not add one.
 ;;
-;;  - We tell clog to use the boot file "/tutorial/tut-11.html"
 ;;  - We set a blank on-submit to overide the behavior in the bootstrap
 ;;          buttons to submit the from HTML style.
 ;;  - We are going to attach to the "Good Button" an on-click handler
@@ -24,6 +23,10 @@
 ;;          value for and query them
 ;;  - We attach an on-click handler that resets the form to the
 ;;          "Scary Button"
+;;
+;;  - We go in the browser to the file
+;;               "http://127.0.0.1:8080/tutorial/tut-11.html"
+
 
 (defpackage #:clog-user
   (:use #:cl #:clog)
@@ -68,5 +71,5 @@
 (defun start-tutorial ()
   "Start turtorial."
 
-  (initialize #'on-new-window :boot-file "/tutorial/tut-11.html")
-  (open-browser))
+  (initialize #'on-new-window)
+  (open-browser :url "http://127.0.0.1:8080/tutorial/tut-11.html"))
