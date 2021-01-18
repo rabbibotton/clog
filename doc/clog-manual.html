@@ -41,11 +41,12 @@
 <li><a href="#x-28CLOG-3A-40CLOG-ELEMENT-20MGL-PAX-3ASECTION-29" title="CLOG Elements">5 CLOG Elements</a></li>
 <li><a href="#x-28CLOG-3A-40CLOG-ELEMENT-COMMON-20MGL-PAX-3ASECTION-29" title="Common CLOG Elements">6 Common CLOG Elements</a></li>
 <li><a href="#x-28CLOG-3A-40CLOG-FORM-20MGL-PAX-3ASECTION-29" title="CLOG Form Objects">7 CLOG Form Objects</a></li>
-<li><a href="#x-28CLOG-3A-40CLOG-BODY-20MGL-PAX-3ASECTION-29" title="CLOG Body Objects">8 CLOG Body Objects</a></li>
-<li><a href="#x-28CLOG-3A-40CLOG-WINDOW-20MGL-PAX-3ASECTION-29" title="CLOG Window Objects">9 CLOG Window Objects</a></li>
-<li><a href="#x-28CLOG-3A-40CLOG-DOCUMENT-20MGL-PAX-3ASECTION-29" title="CLOG Document Objects">10 CLOG Document Objects</a></li>
-<li><a href="#x-28CLOG-3A-40CLOG-LOCATION-20MGL-PAX-3ASECTION-29" title="CLOG Location Objects">11 CLOG Location Objects</a></li>
-<li><a href="#x-28CLOG-3A-40CLOG-NAVIGATOR-20MGL-PAX-3ASECTION-29" title="CLOG Navigator Objects">12 CLOG Navigator Objects</a></li>
+<li><a href="#x-28CLOG-3A-40CLOG-CANVAS-20MGL-PAX-3ASECTION-29" title="CLOG Canvas Objects">8 CLOG Canvas Objects</a></li>
+<li><a href="#x-28CLOG-3A-40CLOG-BODY-20MGL-PAX-3ASECTION-29" title="CLOG Body Objects">9 CLOG Body Objects</a></li>
+<li><a href="#x-28CLOG-3A-40CLOG-WINDOW-20MGL-PAX-3ASECTION-29" title="CLOG Window Objects">10 CLOG Window Objects</a></li>
+<li><a href="#x-28CLOG-3A-40CLOG-DOCUMENT-20MGL-PAX-3ASECTION-29" title="CLOG Document Objects">11 CLOG Document Objects</a></li>
+<li><a href="#x-28CLOG-3A-40CLOG-LOCATION-20MGL-PAX-3ASECTION-29" title="CLOG Location Objects">12 CLOG Location Objects</a></li>
+<li><a href="#x-28CLOG-3A-40CLOG-NAVIGATOR-20MGL-PAX-3ASECTION-29" title="CLOG Navigator Objects">13 CLOG Navigator Objects</a></li>
 </ul>
 
 <h6>[in package CLOG]</h6>
@@ -82,7 +83,7 @@ application.</p>
 <ul>
 <li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#x-28CLOG-3AINITIALIZE-20FUNCTION-29" >INITIALIZE</a></span></span> <span class="locative-args">ON-NEW-WINDOW-HANDLER &amp;KEY (HOST &quot;0.0.0.0&quot;) (PORT 8080) (BOOT-FILE &quot;/boot.html&quot;) (STATIC-ROOT #P&quot;static-files/&quot;)</span></span></p>
 
-<p>Inititalze <a href="#x-28-22clog-22-20ASDF-2FSYSTEM-3ASYSTEM-29" title="(\&quot;clog\&quot; ASDF/SYSTEM:SYSTEM)"><code>CLOG</code></a> on a socket using <code>HOST</code> and <code>PORT</code> to serve <code>BOOT-FILE</code> as 
+<p>Inititalize <a href="#x-28-22clog-22-20ASDF-2FSYSTEM-3ASYSTEM-29" title="(\&quot;clog\&quot; ASDF/SYSTEM:SYSTEM)"><code>CLOG</code></a> on a socket using <code>HOST</code> and <code>PORT</code> to serve <code>BOOT-FILE</code> as 
 the default route to establish web-socket connections and static files
 located at <code>STATIC-ROOT</code>. If <a href="#x-28-22clog-22-20ASDF-2FSYSTEM-3ASYSTEM-29" title="(\&quot;clog\&quot; ASDF/SYSTEM:SYSTEM)"><code>CLOG</code></a> was already initialized and not shut
 down, this function does the same as set-on-new-window.</p></li>
@@ -485,6 +486,42 @@ is nil unbind the event.</p></li>
 <code>ON-MOUSE-MOVE-HANDLER</code> is nil unbind the event.</p></li>
 </ul>
 
+<p><a id='x-28CLOG-3ASET-ON-TOUCH-START-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ASET-ON-TOUCH-START-20GENERIC-FUNCTION-29" >SET-ON-TOUCH-START</a></span></span> <span class="locative-args">CLOG-OBJ ON-TOUCH-START-HANDLER</span></span></p>
+
+<p>Set the <code>ON-TOUCH-START-HANDLER</code> for <code>CLOG-OBJ</code>. If
+<code>ON-TOUCH-START-HANDLER</code> is nil unbind the event.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3ASET-ON-TOUCH-MOVE-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ASET-ON-TOUCH-MOVE-20GENERIC-FUNCTION-29" >SET-ON-TOUCH-MOVE</a></span></span> <span class="locative-args">CLOG-OBJ ON-TOUCH-MOVE-HANDLER</span></span></p>
+
+<p>Set the <code>ON-TOUCH-MOVE-HANDLER</code> for <code>CLOG-OBJ</code>. If
+<code>ON-TOUCH-MOVE-HANDLER</code> is nil unbind the event.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3ASET-ON-TOUCH-END-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ASET-ON-TOUCH-END-20GENERIC-FUNCTION-29" >SET-ON-TOUCH-END</a></span></span> <span class="locative-args">CLOG-OBJ ON-TOUCH-END-HANDLER</span></span></p>
+
+<p>Set the <code>ON-TOUCH-END-HANDLER</code> for <code>CLOG-OBJ</code>. If
+<code>ON-TOUCH-END-HANDLER</code> is nil unbind the event.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3ASET-ON-TOUCH-CANCEL-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ASET-ON-TOUCH-CANCEL-20GENERIC-FUNCTION-29" >SET-ON-TOUCH-CANCEL</a></span></span> <span class="locative-args">CLOG-OBJ ON-TOUCH-CANCEL-HANDLER</span></span></p>
+
+<p>Set the <code>ON-TOUCH-CANCEL-HANDLER</code> for <code>CLOG-OBJ</code>. If
+<code>ON-TOUCH-CANCEL-HANDLER</code> is nil unbind the event.</p></li>
+</ul>
+
 <p><a id='x-28CLOG-3ASET-ON-CHARACTER-20GENERIC-FUNCTION-29'></a></p>
 
 <ul>
@@ -583,8 +620,8 @@ as child of <code>CLOG-OBJ</code> and if <code>:AUTO-PLACE</code> (default t) pl
 <ul>
 <li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3AATTACH-AS-CHILD-20GENERIC-FUNCTION-29" >ATTACH-AS-CHILD</a></span></span> <span class="locative-args">CLOG-OBJ HTML-ID &amp;KEY CLOG-TYPE</span></span></p>
 
-<p>Create a new CLOG-Element or sub-type of <code>CLOG-TYPE</code> and attach
-an existing element with <code>HTML-ID</code>. The <code>HTML-ID</code> must be unique.</p></li>
+<p>Create a new CLOG-Element or sub-type of <code>CLOG-TYPE</code> and
+attach an existing element with <code>HTML-ID</code>. The <code>HTML-ID</code> must be unique.</p></li>
 </ul>
 
 <p>CLOG-Element - Placement</p>
@@ -679,10 +716,14 @@ used for body and image maps but creates in forms and many
 elements a tool tip.</p></li>
 </ul>
 
-<p><a id='x-28CLASS-NAME-20GENERIC-FUNCTION-29'></a></p>
+<p><a id='x-28CLOG-3ACSS-CLASS-NAME-20GENERIC-FUNCTION-29'></a></p>
 
 <ul>
-<li><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLASS-NAME-20GENERIC-FUNCTION-29" >CLASS-NAME</a></span></span> <span class="locative-args">CLASS</span></span></li>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ACSS-CLASS-NAME-20GENERIC-FUNCTION-29" >CSS-CLASS-NAME</a></span></span> <span class="locative-args">CLOG-ELEMENT</span></span></p>
+
+<p>Get/Setf css-class-name. CSS Class name, can be multiple
+seperated by <space>. See add-class, remove-class and toggle-class methods
+for adding and removing individual or groups of classes in an easier way.</p></li>
 </ul>
 
 <p><a id='x-28CLOG-3AEDITABLEP-20GENERIC-FUNCTION-29'></a></p>
@@ -1045,8 +1086,8 @@ resizeable sets if element can be resized by user.</p></li>
 <ul>
 <li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3APOSITIONING-20GENERIC-FUNCTION-29" >POSITIONING</a></span></span> <span class="locative-args">CLOG-ELEMENT</span></span></p>
 
-<p>Get/Setf positioning. Determins how the properties left, right,
-top and bottom are interpreted.</p>
+<p>Get/Setf positioning. Determins how the properties left,
+right, top and bottom are interpreted.</p>
 
 <p>Static   - According to document flow, position properties have no
               affect.
@@ -1192,7 +1233,8 @@ parent in the DOM.</p></li>
 <ul>
 <li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3AOUTER-HEIGHT-TO-MARGIN-20GENERIC-FUNCTION-29" >OUTER-HEIGHT-TO-MARGIN</a></span></span> <span class="locative-args">CLOG-ELEMENT</span></span></p>
 
-<p>Get outer-height-to-margin. Includes padding and border and margin.</p></li>
+<p>Get outer-height-to-margin. Includes padding and border and
+margin.</p></li>
 </ul>
 
 <p><a id='x-28CLOG-3AOUTER-WIDTH-TO-MARGIN-20GENERIC-FUNCTION-29'></a></p>
@@ -1200,7 +1242,8 @@ parent in the DOM.</p></li>
 <ul>
 <li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3AOUTER-WIDTH-TO-MARGIN-20GENERIC-FUNCTION-29" >OUTER-WIDTH-TO-MARGIN</a></span></span> <span class="locative-args">CLOG-ELEMENT</span></span></p>
 
-<p>Get outer-width-to-margin. Includes padding and border and margin.</p></li>
+<p>Get outer-width-to-margin. Includes padding and border and
+margin.</p></li>
 </ul>
 
 <p><a id='x-28CLOG-3ACOLOR-20GENERIC-FUNCTION-29'></a></p>
@@ -1309,7 +1352,8 @@ underneath its border box, padding box, or content box.</p></li>
 <ul>
 <li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ABACKGROUND-SIZE-20GENERIC-FUNCTION-29" >BACKGROUND-SIZE</a></span></span> <span class="locative-args">CLOG-ELEMENT</span></span></p>
 
-<p>Get/Setf background-size. auto | w h | % = cover of parent | contain</p></li>
+<p>Get/Setf background-size.
+auto | w h | % = cover of parent | contain</p></li>
 </ul>
 
 <p><a id='x-28CLOG-3ABORDER-STYLE-TYPE-20-28TYPE-29-29'></a></p>
@@ -1428,6 +1472,12 @@ A list of standard cursor types can be found at:
 
 <ul>
 <li><span class=reference-bullet><span class=reference><span class="locative-type">[type]</span> <span class="reference-object"><a href="#x-28CLOG-3AFONT-VARIANT-TYPE-20-28TYPE-29-29" >FONT-VARIANT-TYPE</a></span></span></span></li>
+</ul>
+
+<p><a id='x-28CLOG-3ASYSTEM-FONT-TYPE-20-28TYPE-29-29'></a></p>
+
+<ul>
+<li><span class=reference-bullet><span class=reference><span class="locative-type">[type]</span> <span class="reference-object"><a href="#x-28CLOG-3ASYSTEM-FONT-TYPE-20-28TYPE-29-29" >SYSTEM-FONT-TYPE</a></span></span></span></li>
 </ul>
 
 <p><a id='x-28CLOG-3AFONT-20GENERIC-FUNCTION-29'></a></p>
@@ -1628,9 +1678,9 @@ line break and if <code>:AUTO-PLACE</code> (default t) place-inside-bottom-of <c
 <p><a id='x-28CLOG-3ADISABLEDP-20GENERIC-FUNCTION-29'></a></p>
 
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ADISABLEDP-20GENERIC-FUNCTION-29" >DISABLEDP</a></span></span> <span class="locative-args">CLOG-BUTTON</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ADISABLEDP-20GENERIC-FUNCTION-29" >DISABLEDP</a></span></span> <span class="locative-args">CLOG-FORM-ELEMENT</span></span></p>
 
-<p>Get/Setf disabled status of button.</p></li>
+<p>Get/Setf form element disabledp.</p></li>
 </ul>
 
 <p><a href="#x-28CLOG-3ACLOG-IMG-20CLASS-29" title="(CLOG:CLOG-IMG CLASS)"><code>CLOG-IMG</code></a> - Class for <a href="#x-28-22clog-22-20ASDF-2FSYSTEM-3ASYSTEM-29" title="(\&quot;clog\&quot; ASDF/SYSTEM:SYSTEM)"><code>CLOG</code></a> Imgs</p>
@@ -1657,7 +1707,7 @@ placing image to constrain image size.</p></li>
 <p><a id='x-28CLOG-3AURL-SRC-20GENERIC-FUNCTION-29'></a></p>
 
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3AURL-SRC-20GENERIC-FUNCTION-29" >URL-SRC</a></span></span> <span class="locative-args">CLOG-IMG</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3AURL-SRC-20GENERIC-FUNCTION-29" >URL-SRC</a></span></span> <span class="locative-args">CLOG-FORM-ELEMENT</span></span></p>
 
 <p>Get/Setf the url-src of the img.</p></li>
 </ul>
@@ -1726,9 +1776,11 @@ place-inside-bottom-of <code>CLOG-OBJ</code>.</p></li>
 <p><a id='x-28CLOG-3AVALUE-20GENERIC-FUNCTION-29'></a></p>
 
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3AVALUE-20GENERIC-FUNCTION-29" >VALUE</a></span></span> <span class="locative-args">CLOG-PROGRESS-BAR</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3AVALUE-20GENERIC-FUNCTION-29" >VALUE</a></span></span> <span class="locative-args">CLOG-FORM-ELEMENT</span></span></p>
 
-<p>Get/Setf the value of the progress-bar.</p></li>
+<p>Get/Setf form element value.
+Form element values are not accessible through the Text property but
+instead through the value property.</p></li>
 </ul>
 
 <p><a id='x-28CLOG-3AHIGH-20GENERIC-FUNCTION-29'></a></p>
@@ -1750,17 +1802,17 @@ place-inside-bottom-of <code>CLOG-OBJ</code>.</p></li>
 <p><a id='x-28CLOG-3AMINIMUM-20GENERIC-FUNCTION-29'></a></p>
 
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3AMINIMUM-20GENERIC-FUNCTION-29" >MINIMUM</a></span></span> <span class="locative-args">CLOG-METER</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3AMINIMUM-20GENERIC-FUNCTION-29" >MINIMUM</a></span></span> <span class="locative-args">CLOG-FORM-ELEMENT</span></span></p>
 
-<p>Get/Setf the minimum of the meter.</p></li>
+<p>Get/Setf form element minimum.</p></li>
 </ul>
 
 <p><a id='x-28CLOG-3AMAXIMUM-20GENERIC-FUNCTION-29'></a></p>
 
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3AMAXIMUM-20GENERIC-FUNCTION-29" >MAXIMUM</a></span></span> <span class="locative-args">CLOG-PROGRESS-BAR</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3AMAXIMUM-20GENERIC-FUNCTION-29" >MAXIMUM</a></span></span> <span class="locative-args">CLOG-FORM-ELEMENT</span></span></p>
 
-<p>Get/Setf the maximum of the progress-bar.</p></li>
+<p>Get/Setf form element maximum.</p></li>
 </ul>
 
 <p><a id='x-28CLOG-3AOPTIMUM-20GENERIC-FUNCTION-29'></a></p>
@@ -1794,17 +1846,19 @@ place-inside-bottom-of <code>CLOG-OBJ</code>.</p></li>
 <p><a id='x-28CLOG-3AVALUE-20GENERIC-FUNCTION-29'></a></p>
 
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3AVALUE-20GENERIC-FUNCTION-29" >VALUE</a></span></span> <span class="locative-args">CLOG-PROGRESS-BAR</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3AVALUE-20GENERIC-FUNCTION-29" >VALUE</a></span></span> <span class="locative-args">CLOG-FORM-ELEMENT</span></span></p>
 
-<p>Get/Setf the value of the progress-bar.</p></li>
+<p>Get/Setf form element value.
+Form element values are not accessible through the Text property but
+instead through the value property.</p></li>
 </ul>
 
 <p><a id='x-28CLOG-3AMAXIMUM-20GENERIC-FUNCTION-29'></a></p>
 
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3AMAXIMUM-20GENERIC-FUNCTION-29" >MAXIMUM</a></span></span> <span class="locative-args">CLOG-PROGRESS-BAR</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3AMAXIMUM-20GENERIC-FUNCTION-29" >MAXIMUM</a></span></span> <span class="locative-args">CLOG-FORM-ELEMENT</span></span></p>
 
-<p>Get/Setf the maximum of the progress-bar.</p></li>
+<p>Get/Setf form element maximum.</p></li>
 </ul>
 
 <p><a href="#x-28CLOG-3ACLOG-P-20CLASS-29" title="(CLOG:CLOG-P CLASS)"><code>CLOG-P</code></a> - Class for <a href="#x-28-22clog-22-20ASDF-2FSYSTEM-3ASYSTEM-29" title="(\&quot;clog\&quot; ASDF/SYSTEM:SYSTEM)"><code>CLOG</code></a> Paragraphs</p>
@@ -1840,7 +1894,7 @@ place-inside-bottom-of <code>CLOG-OBJ</code>.</p></li>
 <p><a id='x-28CLOG-3ACREATE-SPAN-20GENERIC-FUNCTION-29'></a></p>
 
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ACREATE-SPAN-20GENERIC-FUNCTION-29" >CREATE-SPAN</a></span></span> <span class="locative-args">CLOG-OBJ CONTENT &amp;KEY AUTO-PLACE</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ACREATE-SPAN-20GENERIC-FUNCTION-29" >CREATE-SPAN</a></span></span> <span class="locative-args">CLOG-OBJ &amp;KEY CONTENT AUTO-PLACE</span></span></p>
 
 <p>Create a new CLOG-Span as child of <code>CLOG-OBJ</code> with <code>CONTENT</code>
 and if <code>:AUTO-PLACE</code> (default t) place-inside-bottom-of
@@ -1849,7 +1903,7 @@ and if <code>:AUTO-PLACE</code> (default t) place-inside-bottom-of
 
 <p><a id='x-28CLOG-3A-40CLOG-FORM-20MGL-PAX-3ASECTION-29'></a></p>
 
-<p><span class="outer-navigation"><span class="navigation"> <a href="#x-28CLOG-3A-40CLOG-ELEMENT-COMMON-20MGL-PAX-3ASECTION-29" title="Common CLOG Elements">&#8592;</a> <a href="#x-28CLOG-3A-40CLOG-MANUAL-20MGL-PAX-3ASECTION-29" title="The CLOG manual">&#8593;</a> <a href="#x-28CLOG-3A-40CLOG-BODY-20MGL-PAX-3ASECTION-29" title="CLOG Body Objects">&#8594;</a> <a href="#x-28CLOG-3A-40CLOG-FORM-20MGL-PAX-3ASECTION-29" title="CLOG Form Objects">&#8634;</a></span></span></p>
+<p><span class="outer-navigation"><span class="navigation"> <a href="#x-28CLOG-3A-40CLOG-ELEMENT-COMMON-20MGL-PAX-3ASECTION-29" title="Common CLOG Elements">&#8592;</a> <a href="#x-28CLOG-3A-40CLOG-MANUAL-20MGL-PAX-3ASECTION-29" title="The CLOG manual">&#8593;</a> <a href="#x-28CLOG-3A-40CLOG-CANVAS-20MGL-PAX-3ASECTION-29" title="CLOG Canvas Objects">&#8594;</a> <a href="#x-28CLOG-3A-40CLOG-FORM-20MGL-PAX-3ASECTION-29" title="CLOG Form Objects">&#8634;</a></span></span></p>
 
 <h2><a href="#x-28CLOG-3A-40CLOG-FORM-20MGL-PAX-3ASECTION-29">7 CLOG Form Objects</a></h2>
 
@@ -1889,7 +1943,7 @@ action.</p></li>
 <p><a id='x-28CLOG-3ASUBMIT-20GENERIC-FUNCTION-29'></a></p>
 
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ASUBMIT-20GENERIC-FUNCTION-29" >SUBMIT</a></span></span> <span class="locative-args">CLOG-FORMT</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ASUBMIT-20GENERIC-FUNCTION-29" >SUBMIT</a></span></span> <span class="locative-args">CLOG-FORM</span></span></p>
 
 <p>Submit form.</p></li>
 </ul>
@@ -1897,7 +1951,7 @@ action.</p></li>
 <p><a id='x-28CLOG-3ARESET-20GENERIC-FUNCTION-29'></a></p>
 
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ARESET-20GENERIC-FUNCTION-29" >RESET</a></span></span> <span class="locative-args">CLOG-FORMT</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ARESET-20GENERIC-FUNCTION-29" >RESET</a></span></span> <span class="locative-args">CLOG-FORM</span></span></p>
 
 <p>Reset form.</p></li>
 </ul>
@@ -1984,9 +2038,9 @@ have this set true. Autofocus on element when form loaded. </p></li>
 <p><a id='x-28CLOG-3ADISABLEDP-20GENERIC-FUNCTION-29'></a></p>
 
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ADISABLEDP-20GENERIC-FUNCTION-29" >DISABLEDP</a></span></span> <span class="locative-args">CLOG-BUTTON</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ADISABLEDP-20GENERIC-FUNCTION-29" >DISABLEDP</a></span></span> <span class="locative-args">CLOG-FORM-ELEMENT</span></span></p>
 
-<p>Get/Setf disabled status of button.</p></li>
+<p>Get/Setf form element disabledp.</p></li>
 </ul>
 
 <p><a id='x-28CLOG-3AREAD-ONLY-P-20GENERIC-FUNCTION-29'></a></p>
@@ -2030,9 +2084,28 @@ If Value is set at time of creation it also sets it as the Default_Value</p></li
 <p><a id='x-28CLOG-3AVALUE-20GENERIC-FUNCTION-29'></a></p>
 
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3AVALUE-20GENERIC-FUNCTION-29" >VALUE</a></span></span> <span class="locative-args">CLOG-PROGRESS-BAR</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3AVALUE-20GENERIC-FUNCTION-29" >VALUE</a></span></span> <span class="locative-args">CLOG-FORM-ELEMENT</span></span></p>
 
-<p>Get/Setf the value of the progress-bar.</p></li>
+<p>Get/Setf form element value.
+Form element values are not accessible through the Text property but
+instead through the value property.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3ARADIO-VALUE-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ARADIO-VALUE-20GENERIC-FUNCTION-29" >RADIO-VALUE</a></span></span> <span class="locative-args">CLOG-OBJ NAME</span></span></p>
+
+<p>Returns the value of the selected radio button in a
+group called <code>NAME</code>.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3ANAME-VALUE-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ANAME-VALUE-20GENERIC-FUNCTION-29" >NAME-VALUE</a></span></span> <span class="locative-args">CLOG-OBJ NAME</span></span></p>
+
+<p>Returns the value of input item called <code>NAME</code>.</p></li>
 </ul>
 
 <p><a id='x-28CLOG-3APATTERN-20GENERIC-FUNCTION-29'></a></p>
@@ -2052,17 +2125,17 @@ This works since Input type will fall back to a text input.</p></li>
 <p><a id='x-28CLOG-3AMINIMUM-20GENERIC-FUNCTION-29'></a></p>
 
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3AMINIMUM-20GENERIC-FUNCTION-29" >MINIMUM</a></span></span> <span class="locative-args">CLOG-METER</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3AMINIMUM-20GENERIC-FUNCTION-29" >MINIMUM</a></span></span> <span class="locative-args">CLOG-FORM-ELEMENT</span></span></p>
 
-<p>Get/Setf the minimum of the meter.</p></li>
+<p>Get/Setf form element minimum.</p></li>
 </ul>
 
 <p><a id='x-28CLOG-3AMAXIMUM-20GENERIC-FUNCTION-29'></a></p>
 
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3AMAXIMUM-20GENERIC-FUNCTION-29" >MAXIMUM</a></span></span> <span class="locative-args">CLOG-PROGRESS-BAR</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3AMAXIMUM-20GENERIC-FUNCTION-29" >MAXIMUM</a></span></span> <span class="locative-args">CLOG-FORM-ELEMENT</span></span></p>
 
-<p>Get/Setf the maximum of the progress-bar.</p></li>
+<p>Get/Setf form element maximum.</p></li>
 </ul>
 
 <p><a id='x-28CLOG-3ASIZE-20GENERIC-FUNCTION-29'></a></p>
@@ -2102,7 +2175,7 @@ the File form element type.
 <p><a id='x-28CLOG-3AURL-SRC-20GENERIC-FUNCTION-29'></a></p>
 
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3AURL-SRC-20GENERIC-FUNCTION-29" >URL-SRC</a></span></span> <span class="locative-args">CLOG-IMG</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3AURL-SRC-20GENERIC-FUNCTION-29" >URL-SRC</a></span></span> <span class="locative-args">CLOG-FORM-ELEMENT</span></span></p>
 
 <p>Get/Setf the url-src of the img.</p></li>
 </ul>
@@ -2110,7 +2183,7 @@ the File form element type.
 <p><a id='x-28CLOG-3AALT-TEXT-20GENERIC-FUNCTION-29'></a></p>
 
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3AALT-TEXT-20GENERIC-FUNCTION-29" >ALT-TEXT</a></span></span> <span class="locative-args">CLOG-IMG</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3AALT-TEXT-20GENERIC-FUNCTION-29" >ALT-TEXT</a></span></span> <span class="locative-args">CLOG-FORM-ELEMENT</span></span></p>
 
 <p>Get/Setf the alt-text of the img.</p></li>
 </ul>
@@ -2373,18 +2446,366 @@ optionally fill in with contents of data-list.</p></li>
 <p>Disable resize of text area.</p></li>
 </ul>
 
+<p><a id='x-28CLOG-3A-40CLOG-CANVAS-20MGL-PAX-3ASECTION-29'></a></p>
+
+<p><span class="outer-navigation"><span class="navigation"> <a href="#x-28CLOG-3A-40CLOG-FORM-20MGL-PAX-3ASECTION-29" title="CLOG Form Objects">&#8592;</a> <a href="#x-28CLOG-3A-40CLOG-MANUAL-20MGL-PAX-3ASECTION-29" title="The CLOG manual">&#8593;</a> <a href="#x-28CLOG-3A-40CLOG-BODY-20MGL-PAX-3ASECTION-29" title="CLOG Body Objects">&#8594;</a> <a href="#x-28CLOG-3A-40CLOG-CANVAS-20MGL-PAX-3ASECTION-29" title="CLOG Canvas Objects">&#8634;</a></span></span></p>
+
+<h2><a href="#x-28CLOG-3A-40CLOG-CANVAS-20MGL-PAX-3ASECTION-29">8 CLOG Canvas Objects</a></h2>
+
+<p>CLOG-Canvas - Class for <a href="#x-28-22clog-22-20ASDF-2FSYSTEM-3ASYSTEM-29" title="(\&quot;clog\&quot; ASDF/SYSTEM:SYSTEM)"><code>CLOG</code></a> canvas objects</p>
+
+<p><a id='x-28CLOG-3ACLOG-CANVAS-20CLASS-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[class]</span> <span class="reference-object"><a href="#x-28CLOG-3ACLOG-CANVAS-20CLASS-29" >CLOG-CANVAS</a></span></span> <span class="locative-args"><a href="#x-28CLOG-3ACLOG-ELEMENT-20CLASS-29" title="(CLOG:CLOG-ELEMENT CLASS)">CLOG-ELEMENT</a></span></span></p>
+
+<p><a href="#x-28-22clog-22-20ASDF-2FSYSTEM-3ASYSTEM-29" title="(\&quot;clog\&quot; ASDF/SYSTEM:SYSTEM)"><code>CLOG</code></a> Canvas Objects.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3ACREATE-CANVAS-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ACREATE-CANVAS-20GENERIC-FUNCTION-29" >CREATE-CANVAS</a></span></span> <span class="locative-args">CLOG-OBJ &amp;KEY WIDTH HEIGHT AUTO-PLACE</span></span></p>
+
+<p>Create a new CLOG-Canvas as child of <code>CLOG-OBJ</code> if
+<code>:AUTO-PLACE</code> (default t) place-inside-bottom-of <code>CLOG-OBJ</code>.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3ACLOG-CONTEXT2D-20CLASS-29'></a></p>
+
+<ul>
+<li><span class=reference-bullet><span class=reference><span class="locative-type">[class]</span> <span class="reference-object"><a href="#x-28CLOG-3ACLOG-CONTEXT2D-20CLASS-29" >CLOG-CONTEXT2D</a></span></span> <span class="locative-args"><a href="#x-28CLOG-3ACLOG-OBJ-20CLASS-29" title="(CLOG:CLOG-OBJ CLASS)">CLOG-OBJ</a></span></span></li>
+</ul>
+
+<p><a id='x-28CLOG-3ACREATE-CONTEXT2D-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ACREATE-CONTEXT2D-20GENERIC-FUNCTION-29" >CREATE-CONTEXT2D</a></span></span> <span class="locative-args">CLOG-CANVAS</span></span></p>
+
+<p>Create a new CLOG-Context2d from a CLOG-Canvas</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3ACLEAR-RECT-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ACLEAR-RECT-20GENERIC-FUNCTION-29" >CLEAR-RECT</a></span></span> <span class="locative-args">CLOG-CONTEXT2D X Y WIDTH HEIGHT</span></span></p>
+
+<p>Clear rectangle to transparent black</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3AFILL-RECT-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3AFILL-RECT-20GENERIC-FUNCTION-29" >FILL-RECT</a></span></span> <span class="locative-args">CLOG-CONTEXT2D X Y WIDTH HEIGHT</span></span></p>
+
+<p>Fill rectangle with current fill-color</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3ASTROKE-RECT-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ASTROKE-RECT-20GENERIC-FUNCTION-29" >STROKE-RECT</a></span></span> <span class="locative-args">CLOG-CONTEXT2D X Y WIDTH HEIGHT</span></span></p>
+
+<p>Fill rectangle using current stroke-style</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3AFILL-TEXT-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3AFILL-TEXT-20GENERIC-FUNCTION-29" >FILL-TEXT</a></span></span> <span class="locative-args">CLOG-CONTEXT2D TEXT X Y &amp;KEY MAX-WIDTH</span></span></p>
+
+<p>Fill text with current fill-color</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3ASTROKE-TEXT-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ASTROKE-TEXT-20GENERIC-FUNCTION-29" >STROKE-TEXT</a></span></span> <span class="locative-args">CLOG-CONTEXT2D TEXT X Y &amp;KEY MAX-WIDTH</span></span></p>
+
+<p>Stroke text with current stroke-style</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3ALINE-WIDTH-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ALINE-WIDTH-20GENERIC-FUNCTION-29" >LINE-WIDTH</a></span></span> <span class="locative-args">CLOG-CONTEXT2D VALUE</span></span></p>
+
+<p>Set line style width</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3ALINE-CAP-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ALINE-CAP-20GENERIC-FUNCTION-29" >LINE-CAP</a></span></span> <span class="locative-args">CLOG-CONTEXT2D VALUE</span></span></p>
+
+<p>Set line cap style</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3ALINE-JOIN-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ALINE-JOIN-20GENERIC-FUNCTION-29" >LINE-JOIN</a></span></span> <span class="locative-args">CLOG-CONTEXT2D VALUE</span></span></p>
+
+<p>Set line join style</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3AMITER-LIMIT-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3AMITER-LIMIT-20GENERIC-FUNCTION-29" >MITER-LIMIT</a></span></span> <span class="locative-args">CLOG-CONTEXT2D VALUE</span></span></p>
+
+<p>Set miter style limit</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3AGET-LINE-DASH-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3AGET-LINE-DASH-20GENERIC-FUNCTION-29" >GET-LINE-DASH</a></span></span> <span class="locative-args">CLOG-CONTEXT2D</span></span></p>
+
+<p>Set line style dash pattern, e.g. [10, 20][]</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3ASET-LINE-DASH-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ASET-LINE-DASH-20GENERIC-FUNCTION-29" >SET-LINE-DASH</a></span></span> <span class="locative-args">CLOG-CONTEXT2D VALUE</span></span></p>
+
+<p>Set line style dash pattern, e.g. [10, 20][]</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3ALINE-DASH-OFFSET-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ALINE-DASH-OFFSET-20GENERIC-FUNCTION-29" >LINE-DASH-OFFSET</a></span></span> <span class="locative-args">CLOG-CONTEXT2D VALUE</span></span></p>
+
+<p>Set miter style limit</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3AFONT-STYLE-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3AFONT-STYLE-20GENERIC-FUNCTION-29" >FONT-STYLE</a></span></span> <span class="locative-args">CLOG-CONTEXT2D VALUE</span></span></p>
+
+<p>Set font style using css font string
+https://developer.mozilla.org/en-US/docs/Web/CSS/font</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3ATEXT-ALIGN-TYPE-20-28TYPE-29-29'></a></p>
+
+<ul>
+<li><span class=reference-bullet><span class=reference><span class="locative-type">[type]</span> <span class="reference-object"><a href="#x-28CLOG-3ATEXT-ALIGN-TYPE-20-28TYPE-29-29" >TEXT-ALIGN-TYPE</a></span></span></span></li>
+</ul>
+
+<p><a id='x-28CLOG-3ATEXT-ALIGN-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ATEXT-ALIGN-20GENERIC-FUNCTION-29" >TEXT-ALIGN</a></span></span> <span class="locative-args">CLOG-CONTEXT2D VALUE</span></span></p>
+
+<p>Set text alignment style</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3ATEXT-BASELINE-TYPE-20-28TYPE-29-29'></a></p>
+
+<ul>
+<li><span class=reference-bullet><span class=reference><span class="locative-type">[type]</span> <span class="reference-object"><a href="#x-28CLOG-3ATEXT-BASELINE-TYPE-20-28TYPE-29-29" >TEXT-BASELINE-TYPE</a></span></span></span></li>
+</ul>
+
+<p><a id='x-28CLOG-3ATEXT-BASELINE-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ATEXT-BASELINE-20GENERIC-FUNCTION-29" >TEXT-BASELINE</a></span></span> <span class="locative-args">CLOG-CONTEXT2D VALUE</span></span></p>
+
+<p>Set text baseline style</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3ATEXT-DIR-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ATEXT-DIR-20GENERIC-FUNCTION-29" >TEXT-DIR</a></span></span> <span class="locative-args">CLOG-CONTEXT2D VALUE</span></span></p>
+
+<p>Set text direction style</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3AFILL-STYLE-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3AFILL-STYLE-20GENERIC-FUNCTION-29" >FILL-STYLE</a></span></span> <span class="locative-args">CLOG-CONTEXT2D VALUE</span></span></p>
+
+<p>Set text direction style</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3ASTROKE-STYLE-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ASTROKE-STYLE-20GENERIC-FUNCTION-29" >STROKE-STYLE</a></span></span> <span class="locative-args">CLOG-CONTEXT2D VALUE</span></span></p>
+
+<p>Set text stroke style</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3ASHADOW-BLUR-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ASHADOW-BLUR-20GENERIC-FUNCTION-29" >SHADOW-BLUR</a></span></span> <span class="locative-args">CLOG-CONTEXT2D VALUE</span></span></p>
+
+<p>Set text shadow blur</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3ASHADOW-COLOR-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ASHADOW-COLOR-20GENERIC-FUNCTION-29" >SHADOW-COLOR</a></span></span> <span class="locative-args">CLOG-CONTEXT2D VALUE</span></span></p>
+
+<p>Set text shadow color</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3ASHADOW-OFFSET-X-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ASHADOW-OFFSET-X-20GENERIC-FUNCTION-29" >SHADOW-OFFSET-X</a></span></span> <span class="locative-args">CLOG-CONTEXT2D VALUE</span></span></p>
+
+<p>Set text shadow offset x</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3ASHADOW-OFFSET-Y-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ASHADOW-OFFSET-Y-20GENERIC-FUNCTION-29" >SHADOW-OFFSET-Y</a></span></span> <span class="locative-args">CLOG-CONTEXT2D VALUE</span></span></p>
+
+<p>Set text shadow offset y</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3ABEGIN-PATH-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ABEGIN-PATH-20GENERIC-FUNCTION-29" >BEGIN-PATH</a></span></span> <span class="locative-args">CLOG-CONTEXT2D</span></span></p>
+
+<p>Starts a new path empting any previous points.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3ACLOSE-PATH-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ACLOSE-PATH-20GENERIC-FUNCTION-29" >CLOSE-PATH</a></span></span> <span class="locative-args">CLOG-CONTEXT2D</span></span></p>
+
+<p>Adds a line to start point of path.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3AMOVE-TO-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3AMOVE-TO-20GENERIC-FUNCTION-29" >MOVE-TO</a></span></span> <span class="locative-args">CLOG-WINDOW X Y</span></span></p>
+
+<p>Move browser window to x y.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3ALINE-TO-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ALINE-TO-20GENERIC-FUNCTION-29" >LINE-TO</a></span></span> <span class="locative-args">CLOG-CONTEXT2D X Y</span></span></p>
+
+<p>Adds a line to the current path.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3ABEZIER-CURVE-TO-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ABEZIER-CURVE-TO-20GENERIC-FUNCTION-29" >BEZIER-CURVE-TO</a></span></span> <span class="locative-args">CLOG-CONTEXT2D CP1X CP1Y CP2X CP2Y X Y</span></span></p>
+
+<p>Adds a cubic Bezier curve to the current path.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3AQUADRATIC-CURVE-TO-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3AQUADRATIC-CURVE-TO-20GENERIC-FUNCTION-29" >QUADRATIC-CURVE-TO</a></span></span> <span class="locative-args">CLOG-CONTEXT2D CPX CPY X Y</span></span></p>
+
+<p>Adds a quadratic Bezier curve to the current path.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3AARC-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3AARC-20GENERIC-FUNCTION-29" >ARC</a></span></span> <span class="locative-args">CLOG-CONTEXT2D X Y RADIUS START-ANGLE END-ANGLE &amp;KEY ANTICLOCKWISE</span></span></p>
+
+<p>Adds a circular arc to the current path.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3AARC-TO-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3AARC-TO-20GENERIC-FUNCTION-29" >ARC-TO</a></span></span> <span class="locative-args">CLOG-CONTEXT2D X1 Y1 X2 Y2</span></span></p>
+
+<p>Adds an arc to the current path.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3AELLIPSE-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3AELLIPSE-20GENERIC-FUNCTION-29" >ELLIPSE</a></span></span> <span class="locative-args">CLOG-CONTEXT2D X Y RADIUS-X RADIUS-Y ROTATION START-ANGLE END-ANGLE &amp;KEY ANTICLOCKWISE</span></span></p>
+
+<p>Adds an elliptical arc to the current path.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3ARECT-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ARECT-20GENERIC-FUNCTION-29" >RECT</a></span></span> <span class="locative-args">CLOG-CONTEXT2D X Y WIDTH HEIGHT</span></span></p>
+
+<p>Adds a rectangle to the current path.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3APATH-FILL-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3APATH-FILL-20GENERIC-FUNCTION-29" >PATH-FILL</a></span></span> <span class="locative-args">CLOG-CONTEXT2D</span></span></p>
+
+<p>Fill a path.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3APATH-STROKE-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3APATH-STROKE-20GENERIC-FUNCTION-29" >PATH-STROKE</a></span></span> <span class="locative-args">CLOG-CONTEXT2D</span></span></p>
+
+<p>Stroke a path.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3APATH-CLIP-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3APATH-CLIP-20GENERIC-FUNCTION-29" >PATH-CLIP</a></span></span> <span class="locative-args">CLOG-CONTEXT2D</span></span></p>
+
+<p>Clip a path.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3ACANVAS-SAVE-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ACANVAS-SAVE-20GENERIC-FUNCTION-29" >CANVAS-SAVE</a></span></span> <span class="locative-args">CLOG-CONTEXT2D</span></span></p>
+
+<p>Save canvas to stack</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3ACANVAS-RESTORE-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ACANVAS-RESTORE-20GENERIC-FUNCTION-29" >CANVAS-RESTORE</a></span></span> <span class="locative-args">CLOG-CONTEXT2D</span></span></p>
+
+<p>Restore canvas from stack</p></li>
+</ul>
+
 <p><a id='x-28CLOG-3A-40CLOG-BODY-20MGL-PAX-3ASECTION-29'></a></p>
 
-<p><span class="outer-navigation"><span class="navigation"> <a href="#x-28CLOG-3A-40CLOG-FORM-20MGL-PAX-3ASECTION-29" title="CLOG Form Objects">&#8592;</a> <a href="#x-28CLOG-3A-40CLOG-MANUAL-20MGL-PAX-3ASECTION-29" title="The CLOG manual">&#8593;</a> <a href="#x-28CLOG-3A-40CLOG-WINDOW-20MGL-PAX-3ASECTION-29" title="CLOG Window Objects">&#8594;</a> <a href="#x-28CLOG-3A-40CLOG-BODY-20MGL-PAX-3ASECTION-29" title="CLOG Body Objects">&#8634;</a></span></span></p>
+<p><span class="outer-navigation"><span class="navigation"> <a href="#x-28CLOG-3A-40CLOG-CANVAS-20MGL-PAX-3ASECTION-29" title="CLOG Canvas Objects">&#8592;</a> <a href="#x-28CLOG-3A-40CLOG-MANUAL-20MGL-PAX-3ASECTION-29" title="The CLOG manual">&#8593;</a> <a href="#x-28CLOG-3A-40CLOG-WINDOW-20MGL-PAX-3ASECTION-29" title="CLOG Window Objects">&#8594;</a> <a href="#x-28CLOG-3A-40CLOG-BODY-20MGL-PAX-3ASECTION-29" title="CLOG Body Objects">&#8634;</a></span></span></p>
 
-<h2><a href="#x-28CLOG-3A-40CLOG-BODY-20MGL-PAX-3ASECTION-29">8 CLOG Body Objects</a></h2>
+<h2><a href="#x-28CLOG-3A-40CLOG-BODY-20MGL-PAX-3ASECTION-29">9 CLOG Body Objects</a></h2>
 
 <p>CLOG-Body - <a href="#x-28-22clog-22-20ASDF-2FSYSTEM-3ASYSTEM-29" title="(\&quot;clog\&quot; ASDF/SYSTEM:SYSTEM)"><code>CLOG</code></a> Body Objects</p>
 
 <p><a id='x-28CLOG-3ACLOG-BODY-20CLASS-29'></a></p>
 
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[class]</span> <span class="reference-object"><a href="#x-28CLOG-3ACLOG-BODY-20CLASS-29" >CLOG-BODY</a></span></span> <span class="locative-args"><a href="#x-28CLOG-3ACLOG-OBJ-20CLASS-29" title="(CLOG:CLOG-OBJ CLASS)">CLOG-OBJ</a></span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[class]</span> <span class="reference-object"><a href="#x-28CLOG-3ACLOG-BODY-20CLASS-29" >CLOG-BODY</a></span></span> <span class="locative-args"><a href="#x-28CLOG-3ACLOG-ELEMENT-20CLASS-29" title="(CLOG:CLOG-ELEMENT CLASS)">CLOG-ELEMENT</a></span></span></p>
 
 <p><a href="#x-28-22clog-22-20ASDF-2FSYSTEM-3ASYSTEM-29" title="(\&quot;clog\&quot; ASDF/SYSTEM:SYSTEM)"><code>CLOG</code></a> Body Object encapsulate the view in the window.</p></li>
 </ul>
@@ -2437,7 +2858,7 @@ or global objects.</p></li>
 
 <p><span class="outer-navigation"><span class="navigation"> <a href="#x-28CLOG-3A-40CLOG-BODY-20MGL-PAX-3ASECTION-29" title="CLOG Body Objects">&#8592;</a> <a href="#x-28CLOG-3A-40CLOG-MANUAL-20MGL-PAX-3ASECTION-29" title="The CLOG manual">&#8593;</a> <a href="#x-28CLOG-3A-40CLOG-DOCUMENT-20MGL-PAX-3ASECTION-29" title="CLOG Document Objects">&#8594;</a> <a href="#x-28CLOG-3A-40CLOG-WINDOW-20MGL-PAX-3ASECTION-29" title="CLOG Window Objects">&#8634;</a></span></span></p>
 
-<h2><a href="#x-28CLOG-3A-40CLOG-WINDOW-20MGL-PAX-3ASECTION-29">9 CLOG Window Objects</a></h2>
+<h2><a href="#x-28CLOG-3A-40CLOG-WINDOW-20MGL-PAX-3ASECTION-29">10 CLOG Window Objects</a></h2>
 
 <p>CLOG-Window - <a href="#x-28-22clog-22-20ASDF-2FSYSTEM-3ASYSTEM-29" title="(\&quot;clog\&quot; ASDF/SYSTEM:SYSTEM)"><code>CLOG</code></a> Window Objects</p>
 
@@ -2747,7 +3168,7 @@ If <code>ON-ORIENTATION-CHANGE-HANDLER</code> is nil unbind the event.</p></li>
 
 <p><span class="outer-navigation"><span class="navigation"> <a href="#x-28CLOG-3A-40CLOG-WINDOW-20MGL-PAX-3ASECTION-29" title="CLOG Window Objects">&#8592;</a> <a href="#x-28CLOG-3A-40CLOG-MANUAL-20MGL-PAX-3ASECTION-29" title="The CLOG manual">&#8593;</a> <a href="#x-28CLOG-3A-40CLOG-LOCATION-20MGL-PAX-3ASECTION-29" title="CLOG Location Objects">&#8594;</a> <a href="#x-28CLOG-3A-40CLOG-DOCUMENT-20MGL-PAX-3ASECTION-29" title="CLOG Document Objects">&#8634;</a></span></span></p>
 
-<h2><a href="#x-28CLOG-3A-40CLOG-DOCUMENT-20MGL-PAX-3ASECTION-29">10 CLOG Document Objects</a></h2>
+<h2><a href="#x-28CLOG-3A-40CLOG-DOCUMENT-20MGL-PAX-3ASECTION-29">11 CLOG Document Objects</a></h2>
 
 <p>CLOG-Document - <a href="#x-28-22clog-22-20ASDF-2FSYSTEM-3ASYSTEM-29" title="(\&quot;clog\&quot; ASDF/SYSTEM:SYSTEM)"><code>CLOG</code></a> Document Objects</p>
 
@@ -2881,7 +3302,7 @@ If <code>ON-ORIENTATION-CHANGE-HANDLER</code> is nil unbind the event.</p></li>
 
 <p><span class="outer-navigation"><span class="navigation"> <a href="#x-28CLOG-3A-40CLOG-DOCUMENT-20MGL-PAX-3ASECTION-29" title="CLOG Document Objects">&#8592;</a> <a href="#x-28CLOG-3A-40CLOG-MANUAL-20MGL-PAX-3ASECTION-29" title="The CLOG manual">&#8593;</a> <a href="#x-28CLOG-3A-40CLOG-NAVIGATOR-20MGL-PAX-3ASECTION-29" title="CLOG Navigator Objects">&#8594;</a> <a href="#x-28CLOG-3A-40CLOG-LOCATION-20MGL-PAX-3ASECTION-29" title="CLOG Location Objects">&#8634;</a></span></span></p>
 
-<h2><a href="#x-28CLOG-3A-40CLOG-LOCATION-20MGL-PAX-3ASECTION-29">11 CLOG Location Objects</a></h2>
+<h2><a href="#x-28CLOG-3A-40CLOG-LOCATION-20MGL-PAX-3ASECTION-29">12 CLOG Location Objects</a></h2>
 
 <p>CLOG-Location - <a href="#x-28-22clog-22-20ASDF-2FSYSTEM-3ASYSTEM-29" title="(\&quot;clog\&quot; ASDF/SYSTEM:SYSTEM)"><code>CLOG</code></a> Location Objects</p>
 
@@ -2997,7 +3418,7 @@ If <code>ON-ORIENTATION-CHANGE-HANDLER</code> is nil unbind the event.</p></li>
 
 <p><span class="outer-navigation"><span class="navigation"> <a href="#x-28CLOG-3A-40CLOG-LOCATION-20MGL-PAX-3ASECTION-29" title="CLOG Location Objects">&#8592;</a> <a href="#x-28CLOG-3A-40CLOG-MANUAL-20MGL-PAX-3ASECTION-29" title="The CLOG manual">&#8593;</a> <a href="#x-28CLOG-3A-40CLOG-NAVIGATOR-20MGL-PAX-3ASECTION-29" title="CLOG Navigator Objects">&#8634;</a></span></span></p>
 
-<h2><a href="#x-28CLOG-3A-40CLOG-NAVIGATOR-20MGL-PAX-3ASECTION-29">12 CLOG Navigator Objects</a></h2>
+<h2><a href="#x-28CLOG-3A-40CLOG-NAVIGATOR-20MGL-PAX-3ASECTION-29">13 CLOG Navigator Objects</a></h2>
 
 <p>CLOG-Navigator - <a href="#x-28-22clog-22-20ASDF-2FSYSTEM-3ASYSTEM-29" title="(\&quot;clog\&quot; ASDF/SYSTEM:SYSTEM)"><code>CLOG</code></a> Navigator Objects</p>
 

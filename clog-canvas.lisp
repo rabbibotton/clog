@@ -108,7 +108,8 @@
   (:documentation "Measure text"))
 
 (defmethod measure-text ((obj clog-context2d) text)
-  ;; (let ((text-metric (query obj (format nil "measureText('~A')" (escape-string text)))))
+  ;; (let ((text-metric (query obj
+  ;;(format nil "measureText('~A')" (escape-string text)))))
     ;; needs way to query like for events
     )
 
@@ -183,7 +184,8 @@
   (execute obj (format nil "textAlign='~A'" value)))
 
 ;;textBaseline
-(deftype text-baseline-type () '(member :top :hanging :middle :alphabetic :ideographic :bottom))
+(deftype text-baseline-type ()
+  '(member :top :hanging :middle :alphabetic :ideographic :bottom))
 
 (defgeneric text-baseline (clog-context2d value)
   (:documentation "Set text baseline style"))
@@ -295,7 +297,7 @@
 (defmethod arc ((obj clog-context2d) x y radius start-angle end-angle
 		&key (anticlockwise nil))
   (execute obj (format nil "arc(~A,~A,~A,~A,~A~A)"
-		       x y radius startAngle endAngle
+		       x y radius start-angle end-angle
 		       (if anticlockwise
 			   (format nil ",~A" anticlockwise)
 			   ""))))

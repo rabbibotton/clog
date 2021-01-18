@@ -885,7 +885,7 @@ optionally fill in with contents of data-list."))
 				" disabled"
 				"")
 			    (if value
-				(format nil " value='~A'" name)
+				(format nil " value='~A'" value)
 				"")
 			    content)
 		:clog-type 'clog-option :auto-place t))
