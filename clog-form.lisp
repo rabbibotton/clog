@@ -326,6 +326,32 @@ have this set true. Autofocus on element when form loaded. "))
   (setf (property obj "value") value))
 (defsetf value set-value)
 
+;;;;;;;;;;;;;;;;;
+;; radio-value ;;
+;;;;;;;;;;;;;;;;;
+
+(defgeneric radio-value (clog-obj name)
+  (:documentation "Returns the value of the selected radio button in a
+group called NAME."))
+
+(defmethod radio-value ((obj clog-obj) name)
+  (cc:query (connection-id obj)
+	    (format nil "$('input:radio[name=~A]:checked').val()"
+		    name)))
+
+
+
+;;;;;;;;;;;;;;;;
+;; name-value ;;
+;;;;;;;;;;;;;;;;
+
+(defgeneric name-value (clog-obj name)
+  (:documentation "Returns the value of input item called NAME."))
+
+(defmethod name-value ((obj clog-obj) name)
+  (cc:query (connection-id obj)
+	    (format nil "$('input[name=~A]').val()" name)))
+
 ;;;;;;;;;;;;;
 ;; pattern ;;
 ;;;;;;;;;;;;;

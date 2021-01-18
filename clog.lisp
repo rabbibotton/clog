@@ -134,7 +134,7 @@ application."
   "CLOG-Element - Properties"
   (access-key          generic-function)
   (advisory-title      generic-function)
-  (class-name          generic-function)
+  (css-class-name      generic-function)
   (editablep           generic-function)
   (draggablep          generic-function)
   (visiblep            generic-function)
@@ -322,6 +322,8 @@ application."
   (name                generic-function)
   (default-value       generic-function)
   (value               generic-function)
+  (radio-value         generic-function)
+  (name-value          generic-function)
   (pattern             generic-function)
   (minimum             generic-function)
   (maximum             generic-function)

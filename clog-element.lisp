@@ -37,7 +37,8 @@ the javascript clog[] but is not in the DOM. (private)"
   (let ((web-id (cc:generate-id)))
     (cc:execute
      connection-id
-     (format nil "clog['~A']=$(\"~A\"); clog['~A'].first().prop('id','~A')"
+     (format nil
+	     "clog['~A']=$(\"~A\").get(0); $(clog['~A']).first().prop('id','~A')"
 	     web-id html web-id web-id))
     (make-clog-element connection-id web-id :clog-type clog-type)))
 
@@ -48,7 +49,8 @@ the javascript clog[] but is not in the DOM. (private)"
 (defun attach (connection-id html-id)
   "Create a new clog-obj and attach an existing element with HTML-ID on
 CONNECTION-ID to it and then return it. The HTML-ID must be unique. (private)"
-  (cc:execute connection-id (format nil "clog['~A']=$('#~A')" html-id html-id))
+  (cc:execute connection-id
+	      (format nil "clog['~A']=$('#~A').get(0)" html-id html-id))
   (make-clog-element connection-id html-id))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -64,7 +66,8 @@ CONNECTION-ID to it and then return it. The HTML-ID must be unique. (private)"
 as child of CLOG-OBJ and if :AUTO-PLACE (default t) place-inside-bottom-of
 CLOG-OBJ"))
 
-(defmethod create-child ((obj clog-obj) html &key (auto-place t) (clog-type 'clog-element))
+(defmethod create-child ((obj clog-obj) html &key (auto-place t)
+					       (clog-type 'clog-element))
   (let ((child (create-with-html (connection-id obj) html :clog-type clog-type)))
     (if auto-place
 	(place-inside-bottom-of obj child)
@@ -75,13 +78,13 @@ CLOG-OBJ"))
 ;;;;;;;;;;;;;;;;;;;;;
 
 (defgeneric attach-as-child (clog-obj html-id &key clog-type)
-  (:documentation "Create a new CLOG-Element or sub-type of CLOG-TYPE and attach
-an existing element with HTML-ID. The HTML-ID must be unique."))
+  (:documentation "Create a new CLOG-Element or sub-type of CLOG-TYPE and
+attach an existing element with HTML-ID. The HTML-ID must be unique."))
 
 (defmethod attach-as-child ((obj clog-obj) html-id
 			    &key (clog-type 'clog-element))
   (cc:execute (connection-id obj)
-	      (format nil "clog['~A']=$('#~A')" html-id html-id))
+	      (format nil "clog['~A']=$('#~A').get(0)" html-id html-id))
   (make-clog-element (connection-id obj) html-id :clog-type clog-type))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -102,7 +105,8 @@ an existing element with HTML-ID. The HTML-ID must be unique."))
   (:documentation "Set css style."))
 
 (defmethod set-style ((obj clog-element) style-name value)
-  (jquery-execute obj (format nil "css('~A','~A')" style-name (escape-string value))))
+  (jquery-execute obj (format nil "css('~A','~A')"
+			      style-name (escape-string value))))
 (defsetf style set-style)
 
 ;;;;;;;;;;;;;;;
@@ -125,7 +129,8 @@ an existing element with HTML-ID. The HTML-ID must be unique."))
   (:documentation "Set html tag attribute."))
 
 (defmethod set-attribute ((obj clog-element) attribute-name value)
-  (jquery-execute obj (format nil "attr('~A','~A')" attribute-name (escape-string value))))
+  (jquery-execute obj (format nil "attr('~A','~A')"
+			      attribute-name (escape-string value))))
 (defsetf attribute set-attribute)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -823,11 +828,12 @@ resizeable sets if element can be resized by user."))
 ;; positioning ;;
 ;;;;;;;;;;;;;;;;;
 
-(deftype positioning-type () '(member :static :relative :absolute :sticky :fixed))
+(deftype positioning-type ()
+  '(member :static :relative :absolute :sticky :fixed))
 
 (defgeneric positioning (clog-element)
-  (:documentation "Get/Setf positioning. Determins how the properties left, right,
-top and bottom are interpreted.
+  (:documentation "Get/Setf positioning. Determins how the properties left,
+right, top and bottom are interpreted.
 
    Static   - According to document flow, position properties have no
               affect.
@@ -1122,7 +1128,8 @@ parent in the DOM."))
 ;;;;;;;;;;;;;;;;;;
 
 (defgeneric outer-height (clog-element)
-  (:documentation "Get outer-height. Includes padding and border but not margin."))
+  (:documentation "Get outer-height. Includes padding and border but not
+margin."))
 
 (defmethod outer-height ((obj clog-element))
   (jquery-query obj "outerHeight()"))
@@ -1142,7 +1149,8 @@ parent in the DOM."))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defgeneric outer-height-to-margin (clog-element)
-  (:documentation "Get outer-height-to-margin. Includes padding and border and margin."))
+  (:documentation "Get outer-height-to-margin. Includes padding and border and
+margin."))
 
 (defmethod outer-height-to-margin ((obj clog-element))
   (jquery-query obj "outerHeight(true)"))
@@ -1152,7 +1160,8 @@ parent in the DOM."))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defgeneric outer-width-to-margin (clog-element)
-  (:documentation "Get outer-width-to-margin. Includes padding and border and margin."))
+  (:documentation "Get outer-width-to-margin. Includes padding and border and
+margin."))
 
 (defmethod outer-width-to-margin ((obj clog-element))
   (jquery-query obj "outerWidth(true)"))
@@ -1333,7 +1342,8 @@ underneath its border box, padding box, or content box."))
 ;;;;;;;;;;;;;;;;;;;;;
 
 (defgeneric background-size (clog-element)
-  (:documentation "Get/Setf background-size. auto | w h | % = cover of parent | contain"))
+  (:documentation "Get/Setf background-size.
+auto | w h | % = cover of parent | contain"))
 
 (defmethod background-size ((obj clog-element))
   (style obj "background-size"))
@@ -1350,7 +1360,8 @@ underneath its border box, padding box, or content box."))
 ;;;;;;;;;;;;
 
 (deftype border-style-type ()
-  '(member :none :hidden :dotted :dashed :solid :double :groove :ridge :inset :outset))
+  '(member :none :hidden :dotted :dashed :solid
+    :double :groove :ridge :inset :outset))
 
 (defgeneric border (clog-element)
   (:documentation "Get border. <line-width> <line-style> <line-color>"))
@@ -1367,7 +1378,8 @@ underneath its border box, padding box, or content box."))
 line-width - size or medium|thin|thick|length|initial|inherit"))
 
 (defmethod set-border ((obj clog-element) line-width line-style line-color)
-  (setf (style obj "border") (format nil "~A ~A ~A" line-width line-style line-color)))
+  (setf (style obj "border") (format nil "~A ~A ~A"
+				     line-width line-style line-color)))
 
 ;;;;;;;;;;;;;;;;;;;
 ;; border-radius ;;
@@ -1426,7 +1438,8 @@ line-width - size or medium|thin|thick|length|initial|inherit"))
 line-width -  size or medium|thin|thick|length|initial|inherit"))
 
 (defmethod set-outline ((obj clog-element) line-color line-style line-width)
-  (setf (style obj "outline") (format nil "~A ~A ~A" line-color line-style line-width)))
+  (setf (style obj "outline") (format nil "~A ~A ~A"
+				      line-color line-style line-width)))
 
 ;;;;;;;;;;;;
 ;; margin ;;
@@ -1462,7 +1475,8 @@ line-width -  size or medium|thin|thick|length|initial|inherit"))
   (:documentation "Set padding. Each can be - <length>|initial|inherit"))
 
 (defmethod set-padding ((obj clog-element) top right bottom left)
-  (setf (style obj "padding") (format nil "~A ~A ~A ~A" top right bottom left)))
+  (setf (style obj "padding") (format nil "~A ~A ~A ~A"
+				      top right bottom left)))
 (defsetf padding set-padding)
 
 ;;;;;;;;;;;;

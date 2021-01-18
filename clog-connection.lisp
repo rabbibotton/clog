@@ -46,7 +46,8 @@ script."
   (put-line    function)
   (new-line    function)
   (alert-box   function)
-  (generate-id function))
+  (generate-id function)
+  (debug-mode  function))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -369,3 +370,10 @@ HTML <br />."
   "Create an alert box on CONNECTION-ID with MESSAGE"
   (execute connection-id (format nil "alert('~A');" (escape-string message))))
 
+;;;;;;;;;;;;;;;;
+;; debug-mode ;;
+;;;;;;;;;;;;;;;;
+
+(defun debug-mode (connection-id)
+  "Turn on javascript debug mode in the boot.js file"
+  (execute connection-id "clog_debug = true"))
