@@ -15,15 +15,15 @@ function Ping_ws() {
 }
 
 function Shutdown_ws(event) {
-    ws.onerror = null;
-    ws.onclose = null;
-    ws.close ();
-    ws = null;
+    if (ws != null) {
+	ws.onerror = null;
+	ws.onclose = null;
+	ws.close ();
+	ws = null;
+    }
     clearInterval (pingerid);
     if (clog['html_on_close'] != "") {
         $(document.body).html(clog['html_on_close']);
-    } else {
-        alert ("Server connection lost " + event.reason);
     }
 }
 

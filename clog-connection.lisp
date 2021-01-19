@@ -37,17 +37,18 @@ script."
   
   "CLOG connections"
   
-  (execute     function)
-  (query       function)
-  (validp      function)
-  (cclose      function)
-  (shutdown    function)
-  (put         function)
-  (put-line    function)
-  (new-line    function)
-  (alert-box   function)
-  (generate-id function)
-  (debug-mode  function))
+  (execute           function)
+  (query             function)
+  (validp            function)
+  (cclose            function)
+  (shutdown          function)
+  (put               function)
+  (put-line          function)
+  (new-line          function)
+  (alert-box         function)
+  (generate-id       function)
+  (debug-mode        function)
+  (set-html-on-close function))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -102,7 +103,6 @@ script."
   "Return the connecton data associated with the CONNECTION-ID a
 hash test: #'equal."
   (gethash connection-id *connection-data*))
-
 
 ;;;;;;;;;;;;;;;;
 ;; prep-query ;;
@@ -377,3 +377,14 @@ HTML <br />."
 (defun debug-mode (connection-id)
   "Turn on javascript debug mode in the boot.js file"
   (execute connection-id "clog_debug = true"))
+
+;;;;;;;;;;;;;;;;;;;;;;;
+;; set-html-on-close ;;
+;;;;;;;;;;;;;;;;;;;;;;;
+
+(defun set-html-on-close (connection-id html)
+  "Set the client side variable clog['html_on_close'] to replace
+the browser contents in case of connection loss."
+  (execute connection-id (format nil "clog['html_on_close']='~A'"
+				 (escape-string html))))
+
