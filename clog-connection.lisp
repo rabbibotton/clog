@@ -29,6 +29,7 @@ script."
   (initialize          function)
   (shutdown-clog       function)
   (set-on-connect      function)
+  (set-clog-path       function)
   (get-connection-data function)
 
   "CLOG system utilities"
@@ -77,6 +78,8 @@ script."
 (defvar *queries*        (make-hash-table) "Query ID to Answers")
 (defvar *queries-sems*   (make-hash-table) "Query ID to semiphores")
 (defvar *query-time-out* 3 "Number of seconds to timeout waiting for a query")
+
+(defvar *url-to-boot-file* (make-hash-table :test 'equalp) "URL to boot-file")
 
 ;;;;;;;;;;;;;;;;;
 ;; generate-id ;;
@@ -230,23 +233,31 @@ the default answer. (Private)"
 		     (port           8080)
 		     (boot-file      "/boot.html")
 		     (static-root    #P"./static-files/"))
-  "Inititalze CLOG on a socket using HOST and PORT to serve BOOT-FILE as 
-the default route to establish web-socket connections and static files
-located at STATIC-ROOT."
-  (set-on-connect on-connect-handler)  
+  "Initialize CLOG on a socket using HOST and PORT to serve BOOT-FILE as 
+the default route for '/' to establish web-socket connections and static files
+located at STATIC-ROOT. If BOOT-FILE is nil no initial clog-path's will be
+setup, use clog-path to add. The on-connect-handler needs to indentify the
+path by querying the browser. See PATH-NAME (CLOG-LOCATION)."
+
+  (set-on-connect on-connect-handler)
+
+  (when boot-file
+    (set-clog-path "/" boot-file))
+  
   (setf *app*
 	(lack:builder
 	 (:static :path (lambda (path)
-			  (cond ((ppcre:scan "^(?:/clog$)" path) nil)
-				((equal path "/") boot-file)
-				(t path)))
+			  (let ((clog-path (gethash path *url-to-boot-file*)))
+			    (cond ((ppcre:scan "^(?:/clog$)" path) nil)
+				  (clog-path clog-path)
+				  (t path))))
 		  :root static-root)
 	 (lambda (env)
 	   (clog-server env))))
   (setf *client-handler* (clack:clackup *app* :address host :port port))
-  (format t "HTTP listening on : ~A:~A~%" host port)
-  (format t "HTML Root         : ~A~%"    static-root)
-  (format t "Boot file default : ~A~%"    boot-file))
+  (format t "HTTP listening on    : ~A:~A~%" host port)
+  (format t "HTML Root            : ~A~%"    static-root)
+  (format t "Boot file for path / : ~A~%"    boot-file))
 
 ;;;;;;;;;;;;;;;;;;;
 ;; shutdown-clog ;;
@@ -259,6 +270,7 @@ located at STATIC-ROOT."
     (clrhash *connection-data*)
     (clrhash *connections*)
     (clrhash *connection-ids*))
+  (clrhash *url-to-boot-file*)
   (setf *app* nil)
   (setf *client-handler* nil))
 
@@ -269,6 +281,15 @@ located at STATIC-ROOT."
 (defun set-on-connect (on-connect-handler)
   "Change the ON-CONNECTION-HANDLER set during Initialize."
   (setf *on-connect-handler* on-connect-handler))
+
+;;;;;;;;;;;;;;;;;;;
+;; set-clog-path ;;
+;;;;;;;;;;;;;;;;;;;
+
+(defun set-clog-path (path boot-file)
+  (if boot-file
+      (setf (gethash path *url-to-boot-file*) boot-file)
+      (remhash path *url-to-boot-file*)))
 
 ;;;;;;;;;;;;;;;;;;;
 ;; escape-string ;;
