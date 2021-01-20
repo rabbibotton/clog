@@ -44,3 +44,4 @@ Tutorial Summary
 - 09-tutorial.lisp - Tabs, pannels and forms
 - 10-tutorial.lisp - Canvas
 - 11-tutorial.lisp - Attaching to existing HTML
+- 12-tutorial.lisp - Running a website in CLOG (routing)
