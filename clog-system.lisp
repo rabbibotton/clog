@@ -57,7 +57,7 @@ is nil no default boot-file will be set for /."
 		   :host host
 		   :port port
 		   :boot-file boot-file
-		   :static-root (if (boundp '*overide-static-root*)
+		   :static-root (if *overide-static-root*
 				    *overide-static-root*
 				    static-root))))
 
