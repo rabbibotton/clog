@@ -29,7 +29,7 @@
 ;;;;;;;;;
 
 (defgeneric url (clog-location)
-  (:documentation "Get/Setf full url."))
+  (:documentation "Get/Setf full url. Setting the URL causes navgation to URL."))
 
 (defmethod url ((obj clog-location))
   (property obj "href"))
