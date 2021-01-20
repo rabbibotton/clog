@@ -32,7 +32,7 @@
 			      (gethash "/" *url-to-on-new-window*))))
       (if on-new-window  
 	  (funcall on-new-window body)
-	  (put-br (html-document win) "No route to on-new-window")))))
+	  (put-br (html-document body) "No route to on-new-window")))))
 
 (defun initialize (on-new-window-handler
 		   &key
