@@ -64,7 +64,7 @@ application.</p>
 <h2><a href="#x-28-22clog-22-20ASDF-2FSYSTEM-3ASYSTEM-29">1 clog ASDF System Details</a></h2>
 
 <ul>
-<li>Version: 0.0.3</li>
+<li>Version: 0.1.1</li>
 <li>Description: The Common Lisp Omnificent GUI</li>
 <li>Licence: BSD</li>
 <li>Author: David Botton <a href="m&#x61;&#105;l&#x74;&#111;:&#x64;&#97;v&#x69;&#100;@&#x62;&#111;t&#x74;&#111;n&#x2E;&#99;o&#x6D;">m&#x61;&#105;l&#x74;&#111;:&#x64;&#97;v&#x69;&#100;@&#x62;&#111;t&#x74;&#111;n&#x2E;&#99;o&#x6D;</a></li>
@@ -86,15 +86,21 @@ application.</p>
 <p>Inititalize <a href="#x-28-22clog-22-20ASDF-2FSYSTEM-3ASYSTEM-29" title="(\&quot;clog\&quot; ASDF/SYSTEM:SYSTEM)"><code>CLOG</code></a> on a socket using <code>HOST</code> and <code>PORT</code> to serve <code>BOOT-FILE</code> as 
 the default route to establish web-socket connections and static files
 located at <code>STATIC-ROOT</code>. If <a href="#x-28-22clog-22-20ASDF-2FSYSTEM-3ASYSTEM-29" title="(\&quot;clog\&quot; ASDF/SYSTEM:SYSTEM)"><code>CLOG</code></a> was already initialized and not shut
-down, this function does the same as set-on-new-window.</p></li>
+down, this function does the same as set-on-new-window. If the variable
+clog:<em>overide-static-root</em> is set <code>STATIC-ROOT</code> will be ignored. If <code>BOOT-FILE</code>
+is nil no default boot-file will be set for /.</p></li>
 </ul>
 
 <p><a id='x-28CLOG-3ASET-ON-NEW-WINDOW-20FUNCTION-29'></a></p>
 
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#x-28CLOG-3ASET-ON-NEW-WINDOW-20FUNCTION-29" >SET-ON-NEW-WINDOW</a></span></span> <span class="locative-args">ON-NEW-WINDOW-HANDLER</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#x-28CLOG-3ASET-ON-NEW-WINDOW-20FUNCTION-29" >SET-ON-NEW-WINDOW</a></span></span> <span class="locative-args">ON-NEW-WINDOW-HANDLER &amp;KEY (PATH &quot;/&quot;) (BOOT-FILE &quot;/boot.html&quot;)</span></span></p>
 
-<p>Change the on-new-window handler.</p></li>
+<p>Set or change the on-new-window handler or set a new one for <code>PATH</code>
+using BOOT_FILE. Paths should always begin with a '/'. If <code>PATH</code> is set to
+&quot;default&quot; will use boot-file when the route can not be determined, ie
+a static html file including boot.js that has not been added with this
+function. If <code>BOOT-FILE</code> is nil path is removed.</p></li>
 </ul>
 
 <p><a id='x-28CLOG-3ASHUTDOWN-20FUNCTION-29'></a></p>
@@ -3321,7 +3327,7 @@ If <code>ON-ORIENTATION-CHANGE-HANDLER</code> is nil unbind the event.</p></li>
 <ul>
 <li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3AURL-20GENERIC-FUNCTION-29" >URL</a></span></span> <span class="locative-args">CLOG-LOCATION</span></span></p>
 
-<p>Get/Setf full url.</p></li>
+<p>Get/Setf full url. Setting the <a href="#x-28CLOG-3AURL-20GENERIC-FUNCTION-29" title="(CLOG:URL GENERIC-FUNCTION)"><code>URL</code></a> causes navgation to <a href="#x-28CLOG-3AURL-20GENERIC-FUNCTION-29" title="(CLOG:URL GENERIC-FUNCTION)"><code>URL</code></a>.</p></li>
 </ul>
 
 <p><a id='x-28CLOG-3AHASH-20GENERIC-FUNCTION-29'></a></p>
