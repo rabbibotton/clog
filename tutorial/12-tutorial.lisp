@@ -13,7 +13,9 @@
 ;; examples using templates like bootstrap with CLOG, etc).
 ;;
 ;; Here we demonstrate CLOG's routing to dynamic pages. Static pages are
-;; placed in the directory set on initialization
+;; placed in the directory set on initialization.
+;;
+;; See START-TUTORIAL below.
 
 (defpackage #:clog-user
   (:use #:cl #:clog)
@@ -24,14 +26,15 @@
 (defun on-main (body)
 
   (create-div body :content
-     "<h1>Pick a link</h1>
+     "We are in on-main<br><br>
+      <h1>Pick a link</h1>
       <ul>
-        <li><a href='/page1'>/page1</a>
-        <li><a href='/page1.html'>/page1.html</a>
-        <li><a href='/page2'>/page2</a>
-        <li><a href='/page3'>/page3</a>
-        <li><a href='/tutorial/tut-11.html'>/tutorial/tut-11.html</a>
-        <li><a href='/tutorial/regular-file.html'>'/tutorial/regular-file.html</a>
+        <li><a href='/page1'>/page1</a> - a CLOG app
+        <li><a href='/page1.html'>/page1.html</a> - a CLOG app mascarading as a .html
+        <li><a href='/page2'>/page2</a> - a CLOG app using an alternative boot file
+        <li><a href='/page3'>/page3</a> - tutorial 11 as part of this tutorial
+        <li><a href='/tutorial/tut-11.html'>/tutorial/tut-11.html</a> - an html file using boot.js
+        <li><a href='/tutorial/regular-file.html'>'/tutorial/regular-file.html</a> - a regular html file
      </ul>")
   
   (run body))
