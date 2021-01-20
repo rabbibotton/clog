@@ -4,51 +4,70 @@
 
 ### License BSD 3-Clause License
 
-####
-The Common Lisp Omnificient GUI, CLOG for short, uses web technology
-to produce graphical user interfaces for applications locally or
-remotely, ie as web applications.
-
-Many have asked me -
-
-    Why? or How is this different from X Y Z web framework?
-
-The answer is -
-
-    Why?
-           Because more and more a browser "control" or window
-           is the only medium you can use to do anything cross
-           platform. You are limited to the languages and the
-           tools dictated. A GUI framework using the browser
-           to render the GUI is the perfect solution.
-           
-    What's the difference from x or y web framework?
-
-           The best way to understand the difference is look
-           through the tutorials and demos, this is a GUI
-           framework that happens to use the browser for
-           rendering, the internet for remoting your apps etc.
-           At the same time your app is already a web app and
-           there is no reason not to deploy it (soon) as a
-           web "site" also.
-
 View the HTML Documentation:
 
 https://rabbibotton.github.io/clog/clog-manual.html
 
 
-To load this package and work through tutorials::
+The Common Lisp Omnificient GUI, CLOG for short, uses web technology to
+produce graphical user interfaces for applications locally or remotely.
+CLOG can take the place, or work along side, most cross platform GUI
+frameworks and website frameworks. The CLOG package starts up the
+connectivity to the browser or other websocket client (often a browser
+embedded in a native template application.)
+
+STATUS: CLOG is complete enough for most uses, there are a few loose
+ends (multimedia, client side storage, integrations with databases),
+but CLOG is actually based on a framework I wrote for Ada, GNOGA, in
+2013 and used in commercial production code for the last 6 years,
+i.e. the techiniques it uses are solid and proven.
+
+Some of the things CLOG can be used for:
+
+* Cross platform GUIs and Reports
+* Secure websites and complex interactive web applications
+* Write mobile software
+* Write massive multiplayer online games
+* Monitoring software for embedded systems
+* A fun way to teaching programming and advanced multi-tasking
+  parallel programming techniques. (CLOG is a parallel GUI)
+* And the list goes on
+
+The key to CLOG is the relationship it forms with a Browser window
+or Browser control compiled to native code. CLOG uses websockets
+for communications and the browser to render a GUI that maintanes
+an active soft realtime connection. For most CLOG applications all
+programming logic, events and decisions are done on the server
+which can be local or remote over the web.
+
+
+CLOG is developed on an M1 MacBook with ECL, it is tested fairly
+regulary with SCBL on Linux, Windows and Intel MacBook. It should
+in theory work on any system QuickLisp and CLACK will load on to.
+
+CLOG will be in QuickSlip in the next update, but a good idea,
+since I am still adding code daily, is to cloan the github repo
+in to your ~/common-lisp directory:
+
+cd ~/common-lisp
+git clone https://github.com/rabbibotton/clog.git
+
+
+To load this package and work through tutorials (assuming you
+have QuickSlip configured):
 
 1. cd to the CLOG dir (the dir should be one used by QuickLisp ex. ~/common-lisp/)
-2. Start emacs/slime or your common lisp "repl" in that directory.
+2. Start emacs/slime or your common lisp "repl" in _that_ directory.
 3. In the REPL run:
 
 CL-USER> (ql:quickload :clog)
-CL-USER> (load "/Users/dbotton/common-lisp/clog/tutorial/01-tutorial.lisp")
+CL-USER> (load "~/common-lisp/clog/tutorial/01-tutorial.lisp")
 CL-USER> (clog-user:start-tutorial)
 
+Work your way through the tutorials. You will see how quick and easy it is
+to be a CLOGer.
 
-Sample CLOG app with code base so far (See tutorial 7 for a video game :) :
+Here is a sample CLOG app:
 
 ```lisp
 (defpackage #:clog-user               ; Setup a package for our work to exist in
@@ -101,36 +120,23 @@ Sample CLOG app with code base so far (See tutorial 7 for a video game :) :
 ```
 
 
-Status:
+Enhancements being worked on now:
 
-- Connection methods
-  - Websockets - DONE
-  - (removed long poll method, I can create static web search version with tools)
-  - Direct API access to native browser components - to do (not needed but games, soft real-time apps, etc would be perfomance.) 
+- Multimedia - HTML 5 Audio and Video
 
-- HTML bindings and Browser
-  - Base system for bindings - DONE
-  - Event system - DONE
-  - General DOM (Window, Screen, Document, Location, Navigator) - DONE
-  - Base Elements (HTML Elements) - DONE
-  - Canvas - HTML 5 Canvas bindings - DONE
-  - Multimedia - HTML 5 Audio and Video
+- CLOG higher level containers and GUI widgets
 
-- CLOG higher level containers and GUI widgets - to do
-
-- Database bindings and server side APIs - to do
+- Database bindings and server side APIs
   - Current CL packages
   - Direct bidings to widgets ete.
 
-- CLOG Devtools - to do
+- CLOG Devtools
   - Generate application scaffolding
   - GUI Builder
     - Grid style
     - Page style
   - Electron for native GUIs
   
-- Plugins - to do
+- Plugin API 
   - General CL systems
-  - Widgets
-  
-- Documentation - Auto Generated - DONE
+  - Widgets created from JavaScript code
