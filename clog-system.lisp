@@ -18,6 +18,8 @@
 
 (defvar *clog-running* nil "If clog running.")
 
+(defvar *overide-static-root* nil "Overide the static-root settings.")
+
 ;;;;;;;;;;;;;;;;
 ;; initialize ;;
 ;;;;;;;;;;;;;;;;

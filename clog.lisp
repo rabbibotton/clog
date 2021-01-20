@@ -12,33 +12,34 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (mgl-pax:define-package :clog
-  (:documentation "The Common List Omnificent GUI - Parent package")  
+  (:documentation "The Common List Omnificent GUI - CLOG")  
   (:local-nicknames (:cc :clog-connection))
   (:use #:cl #:mgl-pax))
 
 (in-package :clog)
 
 (defsection @clog-manual (:title "The CLOG manual")
-  "The Common Lisp Omnificient GUI, CLOG for short, uses web technology
-to produce graphical user interfaces for applications locally or
-remotely. The CLOG package starts up the connectivity to the browser
-or other websocket client (often a browser embedded in a native
-application."
+  "The Common Lisp Omnificient GUI, CLOG for short, uses web technology to
+produce graphical user interfaces for applications locally or remotely.
+CLOG can take the place, or work along side, most cross platform GUI
+frameworks and website frameworks. The CLOG package starts up the
+connectivity to the browser or other websocket client (often a browser
+embedded in a native template application.)"
 
-  (clog asdf:system)
-
-  (@clog-system         section)
-  (@clog-utilities      section)
-  (@clog-obj            section)
-  (@clog-element        section)
-  (@clog-element-common section)
-  (@clog-form           section)
-  (@clog-canvas         section)
-  (@clog-body           section)
-  (@clog-window         section)
-  (@clog-document       section)
-  (@clog-location       section)
-  (@clog-navigator      section))
+  (@clog-getting-started section)
+  
+  (@clog-system          section)
+  (@clog-utilities       section)
+  (@clog-obj             section)
+  (@clog-element         section)
+  (@clog-element-common  section)
+  (@clog-form            section)
+  (@clog-canvas          section)
+  (@clog-body            section)
+  (@clog-window          section)
+  (@clog-document        section)
+  (@clog-location        section)
+  (@clog-navigator       section))
 
 (defsection @clog-system (:title "CLOG System")
   "CLOG Startup and Shutdown"
@@ -113,14 +114,14 @@ application."
 ;; need to add drag and drop events
 
 (defsection @clog-element (:title "CLOG Elements")
-  "CLOG-Element - Base class for CLOG Elements"
+  "CLOG-Element - Class for CLOG Elements"
   (clog-element class)
 
   "CLOG-Element - Low Level Creation"
   (create-child    generic-function)
   (attach-as-child generic-function)
 
-  "CLOG-Element - Placement"
+  "CLOG-Element - DOM Placement"
   (place-after            generic-function)
   (place-before           generic-function)
   (place-inside-top-of    generic-function)
@@ -239,9 +240,11 @@ application."
   (remove-from-dom generic-function)
   (click           generic-function)
 
-  "CLOG-Element - Traversal Methods"
-  (first-child  generic-function)
-  (next-sibling generic-function))
+  "CLOG-Element - DOM Traversal Methods"
+  (parent-element   generic-function)
+  (first-child      generic-function)
+  (previous-sibling generic-function)
+  (next-sibling     generic-function))
 
 (defsection @clog-element-common (:title "Common CLOG Elements")
   "CLOG-A - Class for CLOG Anchors"
@@ -259,12 +262,12 @@ application."
   (create-button generic-function)
   (disabledp     generic-function)
 
-  "CLOG-IMG - Class for CLOG Imgs"
+  "CLOG-IMG - Class for CLOG Images"
   (clog-img   class)
   (create-img generic-function)
   (url-src    generic-function)
   
-  "CLOG-Div - Class for CLOG Divs"
+  "CLOG-Div - Class for CLOG Div Blocks"
   (clog-div   class)
   (create-div generic-function)
 
@@ -292,7 +295,7 @@ application."
   (clog-p   class)
   (create-p generic-function)
 
-  "CLOG-Span - Class for CLOG Spans"
+  "CLOG-Span - Class for CLOG Inline Spans"
   (clog-span   class)
   (create-span generic-function))
 
@@ -307,6 +310,11 @@ application."
   (autocompletep      generic-function)
   (encoding           generic-function)
   (validate-on-submit generic-function)
+
+  "CLOG-Fieldset - Class for CLOG Fieldsets"
+  (clog-fieldset   class)
+  (create-fieldset generic-function)
+
 
   "CLOG-Form-Element - Class for form elements"
   (clog-form-element   class)
@@ -345,10 +353,6 @@ application."
   (clog-label   class)
   (create-label generic-function)
   (label-for    generic-function)
-
-  "CLOG-Fieldset - Class for CLOG Fieldsets"
-  (clog-fieldset   class)
-  (create-fieldset generic-function)
 
   "CLOG-Select - Class for CLOG Selects"
   (clog-select        class)

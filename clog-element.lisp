@@ -1632,6 +1632,19 @@ A list of standard cursor types can be found at:
 (defmethod click ((obj clog-element))
   (jquery-execute obj "click()"))
 
+
+;;;;;;;;;;;;;;;;;;;;
+;; parent-element ;;
+;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric parent-element (clog-element)
+  (:documentation "Return a new clog-element represeting the parent of
+CLOG-ELEMENT."))
+
+(defmethod parent-element ((obj clog-element))
+  (attach-as-child obj (jquery-execute obj (format nil "parent().attr('id');"))))
+
+
 ;;;;;;;;;;;;;;;;;
 ;; first-child ;;
 ;;;;;;;;;;;;;;;;;
@@ -1656,3 +1669,15 @@ to no actual HTML elemen."))
 
 (defmethod next-sibling ((obj clog-element))
   (attach-as-child obj (jquery-execute obj (format nil "next().attr('id');"))))
+
+;;;;;;;;;;;;;;;;;;;;;;
+;; previous-sibling ;;
+;;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric previous-sibling (clog-element)
+  (:documentation "Traverse to previous sibling element. If Child does not have an
+html id than Element_Type will have an ID of undefined and therefore attached
+to no actual HTML elemen."))
+
+(defmethod previous-sibling ((obj clog-element))
+  (attach-as-child obj (jquery-execute obj (format nil "previous().attr('id');"))))

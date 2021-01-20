@@ -40,7 +40,6 @@ an active soft realtime connection. For most CLOG applications all
 programming logic, events and decisions are done on the server
 which can be local or remote over the web.
 
-
 CLOG is developed on an M1 MacBook with ECL, it is tested fairly
 regulary with SCBL on Linux, Windows and Intel MacBook. It should
 in theory work on any system QuickLisp and CLACK will load on to.
@@ -49,9 +48,10 @@ CLOG will be in QuickSlip in the next update, but a good idea,
 since I am still adding code daily, is to cloan the github repo
 in to your ~/common-lisp directory:
 
+```
 cd ~/common-lisp
 git clone https://github.com/rabbibotton/clog.git
-
+```
 
 To load this package and work through tutorials (assuming you
 have QuickSlip configured):
@@ -118,6 +118,29 @@ Here is a sample CLOG app:
   ;; Open a browser to http://12.0.0.1:8080 - the default for CLOG apps
   (open-browser))
 ```
+
+Work in progress:
+(Add an enhacement request if want to see some feature specificly not
+ covered yet.)
+
+Tutorial Summary
+
+- 01-tutorial.lisp - Hello World
+- 02-tutorial.lisp - Closures in CLOG
+- 03-tutorial.lisp - Events fire in parallel
+- 05-tutorial.lisp - The event target, reusing event handlers
+- 05-tutorial.lisp - Using connection-data-item
+- 06-tutorial.lisp - Tasking and events
+- 07-tutorial.lisp - My first CLOG video game (and handling disconnects)
+- 08-tutorial.lisp - Mice Love Containers
+- 09-tutorial.lisp - Tabs, pannels and forms
+- 10-tutorial.lisp - Canvas
+- 11-tutorial.lisp - Attaching to existing HTML
+- 12-tutorial.lisp - Running a website in CLOG (routing)
+
+Demo Summary
+
+- 01-snake-game.lisp - Sparkey the Snake Game
 
 
 Enhancements being worked on now:

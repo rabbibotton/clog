@@ -4,7 +4,7 @@ A) If running a tutorial or demo:
       Did you start the application / emacs and slime in the directory of clog? 
       By default that is /common-lisp/clog?
 
-      Or you can use (defparameter clog::*overide-static-root* #P"~/common-lisp/clog/static-files/")
+      Or you can use (setf clog::*overide-static-root* #P"~/common-lisp/clog/static-files/")
       to overide the static path in (clog:initialize)
 
    If running your own app. Make sure the :static-file key is set correctly on (clog:initialize)

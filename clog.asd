@@ -13,6 +13,7 @@
                        #:mgl-pax #:quri)
   :components ((:file "clog-connection")
 	       (:file "clog")
+	       (:file "clog-docs")
 	       (:file "clog-system")
 	       (:file "clog-utilities")
 	       (:file "clog-base")
