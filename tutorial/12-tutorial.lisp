@@ -67,30 +67,30 @@
 	 (good-button  (attach-as-child body "button1id"))
 	 (scary-button (attach-as-child body "button2id")))
 
-    (defun on-click-good (obj)
-      (let ((alert-div (create-div body)))
+    (flet ((on-click-good (obj)
+	     (let ((alert-div (create-div body)))
 
-	(place-before form alert-div)
-	(setf (hiddenp form) t)
+	       (place-before form alert-div)
+	       (setf (hiddenp form) t)
 
-	; Bootstrap specific markup
-	(setf (css-class-name alert-div) "alert alert-success")
-	(setf (attribute alert-div "role") "alert")
-
-	(setf (inner-html alert-div)
-	      (format nil "<pre>radios value : ~A</pre><br>
+	       ;; Bootstrap specific markup
+	       (setf (css-class-name alert-div) "alert alert-success")
+	       (setf (attribute alert-div "role") "alert")
+	       
+	       (setf (inner-html alert-div)
+		     (format nil "<pre>radios value : ~A</pre><br>
                            <pre>textinput value : ~A</pre><br>"
-		      (radio-value form "radios")
-		      (name-value form "textinput")))))
+			     (radio-value form "radios")
+			     (name-value form "textinput")))))
 
-    (defun on-click-scary (obj)
-      (reset form))
+	   (on-click-scary (obj)
+	     (reset form)))
 
     ;; We need to overide the boostrap default to submit the form html style
     (set-on-submit form (lambda (obj)()))
 
     (set-on-click good-button #'on-click-good)
-    (set-on-click scary-button #'on-click-scary)
+    (set-on-click scary-button #'on-click-scary))
   
     (run body)))
 
