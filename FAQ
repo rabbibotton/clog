@@ -8,3 +8,10 @@ A) If running a tutorial or demo:
       to overide the static path in (clog:initialize)
 
    If running your own app. Make sure the :static-file key is set correctly on (clog:initialize)
+
+Q) How do I turn my CLOG app in to a native Mac, Windows or Linux app?
+
+A) There are many ways, the simplest is just use Ceramic -
+    http://ceramic.github.io/  which uses electron. You can of course use any
+tool the gives you a browser control. See clog/nativ-glues/gtk or an example
+with GTK in C, but you can use the cl-cffi-gtk to accomplish the same thing.
