@@ -32,12 +32,12 @@
   "Construct a new clog-document. (Private)"
   (make-instance
    'clog-document :connection-id connection-id :html-id "document"
-		  :document-element (make-instance 'clog-obj
+		  :document-element (make-instance 'clog-element
 						   :connection-id connection-id
-						   :html-id       "head")
-		  :head-element (make-instance 'clog-obj
+						   :html-id       "documentElement")
+		  :head-element (make-instance 'clog-element
 					       :connection-id connection-id
-					       :html-id "documentElement")))
+					       :html-id "head")))
 ;;;;;;;;;;;;;;;;;;;;;;
 ;; document-element ;;
 ;;;;;;;;;;;;;;;;;;;;;;
@@ -65,7 +65,7 @@
 
 (defgeneric set-body (clog-document body)
   (:documentation "Set the body slot after creating the
-clog-documentation object. (Private)"))
+clog-document object. (Private)"))
 
 (defmethod set-body ((obj clog-document) body)
   (setf (slot-value obj 'body-element) body))

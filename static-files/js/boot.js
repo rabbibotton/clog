@@ -74,6 +74,8 @@ $( document ).ready(function() {
     var r = /[?&]?([^=]+)=([^&]*)/g;
 
     clog['body']=document.body;
+    clog['head']=document.head;
+    clog['documentElement']=document.documentElement;
     clog['window']=window;
     clog['navigator']=navigator;
     clog['document']=window.document;
