@@ -495,7 +495,7 @@ on-storage event is fired for changes to :local storage keys."))
 ;; storage-length ;;
 ;;;;;;;;;;;;;;;;;;;;
 
-(deftype storage-type '(member local session))
+(deftype storage-type () '(member local session))
 
 (defgeneric storage-length (clog-window storage-type)
   (:documentation "Number of entries in browser STORAGE-TYPE.

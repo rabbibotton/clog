@@ -1617,7 +1617,7 @@ A list of standard cursor types can be found at:
 ;;;;;;;;;;;;;;;;;;;;;
 
 (defgeneric remove-from-dom (clog-element)
-  (:documentation "remove-from-dom."))
+  (:documentation "Remove CLOG-Element from the DOM."))
 
 (defmethod remove-from-dom ((obj clog-element))
   (jquery-execute obj "remove()"))

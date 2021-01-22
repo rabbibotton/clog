@@ -39,7 +39,8 @@ embedded in a native template application.)"
   (@clog-window          section)
   (@clog-document        section)
   (@clog-location        section)
-  (@clog-navigator       section))
+  (@clog-navigator       section)
+  (@clog-internals       section))
 
 (defsection @clog-system (:title "CLOG System")
   "CLOG Startup and Shutdown"
@@ -471,6 +472,7 @@ embedded in a native template application.)"
   (scroll-to        generic-function)
   (close-window     generic-function)
   (close-connection generic-function)
+  (storage-type     type)
   (storage-length   generic-function)
   (storage-key      generic-function)
   (storage-remove   generic-function)

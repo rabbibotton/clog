@@ -56,7 +56,7 @@ regulary with SCBL on Linux, Windows and Intel MacBook. It should
 in theory work on any system QuickLisp and CLACK will load on to.
 
 CLOG will be in QuickSlip in the next update, but a good idea,
-since I am still adding code daily, is to cloan the github repo
+since I am still adding code daily, is to clone the github repo
 in to your ~/common-lisp directory:
 
 ```
@@ -79,3 +79,61 @@ Work your way through the tutorials. You will see how quick and easy it is
 to be a CLOGer.
 
   ")
+
+(defsection @clog-internals (:title "CLOG Framework internals and extensions")
+"## Responding to new java script DOM events:
+
+If there is no data for the event just changing the name of the event is
+sufficient in this example:
+
+```lisp
+(defmethod set-on-click ((obj clog-obj) handler)
+  (set-event obj \"click\"
+	     (when handler
+	       (lambda (data)
+		 (declare (ignore data))
+		 (funcall handler obj)))))
+```
+
+If there is data for the event an additional string containing the needed
+java-script to return the even data and a function to parse out the data.
+
+Replace the event name with the correct name, parse-keyboard-even with the
+parse function and the string containing the needed JavaScrip replaces
+keyboard-event-script:
+
+* The event handlers setter
+
+```lisp
+(defmethod set-on-key-down ((obj clog-obj) handler)
+  (set-event obj \"keydown\"
+	     (when handler
+	       (lambda (data)
+		 (funcall handler obj (parse-keyboard-event data))))
+	     :call-back-script keyboard-event-script))   
+```
+
+* The script
+
+```lisp
+(defparameter keyboard-event-script
+  \"+ e.keyCode + ':' + e.charCode + ':' + e.altKey + ':' + e.ctrlKey + ':' +
+     e.shiftKey + ':' + e.metaKey\")
+```
+
+* The event parser
+
+```lisp
+(defun parse-keyboard-event (data)
+  (let ((f (ppcre:split \":\" data)))
+    (list
+     :event-type :keyboard
+     :key-code   (parse-integer (nth 0 f) :junk-allowed t)
+     :char-code  (parse-integer (nth 1 f) :junk-allowed t)
+     :alt-key    (js-true-p (nth 2 f))
+     :ctrl-key   (js-true-p (nth 3 f))
+     :shift-key  (js-true-p (nth 4 f))
+     :meta-key   (js-true-p (nth 5 f)))))
+```
+
+")

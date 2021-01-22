@@ -47,6 +47,7 @@
 <li><a href="#x-28CLOG-3A-40CLOG-DOCUMENT-20MGL-PAX-3ASECTION-29" title="CLOG Document Objects">11 CLOG Document Objects</a></li>
 <li><a href="#x-28CLOG-3A-40CLOG-LOCATION-20MGL-PAX-3ASECTION-29" title="CLOG Location Objects">12 CLOG Location Objects</a></li>
 <li><a href="#x-28CLOG-3A-40CLOG-NAVIGATOR-20MGL-PAX-3ASECTION-29" title="CLOG Navigator Objects">13 CLOG Navigator Objects</a></li>
+<li><a href="#x-28CLOG-3A-40CLOG-INTERNALS-20MGL-PAX-3ASECTION-29" title="CLOG Framework internals and extensions">14 CLOG Framework internals and extensions</a></li>
 </ul>
 
 <h6>[in package CLOG]</h6>
@@ -102,6 +103,33 @@ for communications and the browser to render a GUI that maintanes
 an active soft realtime connection. For most <code>CLOG</code> applications all
 programming logic, events and decisions are done on the server
 which can be local or remote over the web.</p>
+
+<p><code>CLOG</code> is developed on an M1 MacBook with ECL, it is tested fairly
+regulary with SCBL on Linux, Windows and Intel MacBook. It should
+in theory work on any system QuickLisp and <code>CLACK</code> will load on to.</p>
+
+<p><code>CLOG</code> will be in QuickSlip in the next update, but a good idea,
+since I am still adding code daily, is to clone the github repo
+in to your ~/common-lisp directory:</p>
+
+<pre><code><span class="code">cd ~/common-lisp
+git clone https://github.com/rabbibotton/clog.git</span></code></pre>
+
+<p>To load this package and work through tutorials (assuming you
+have QuickSlip configured):</p>
+
+<ol>
+<li><p>cd to the <code>CLOG</code> dir (the dir should be one used by QuickLisp ex. ~/common-lisp/)</p></li>
+<li><p>Start emacs/slime or your common lisp &quot;repl&quot; in <em>that</em> directory.</p></li>
+<li><p>In the REPL run:</p></li>
+</ol>
+
+<p><code>CL-USER</code>&gt; (ql:quickload :clog)
+<code>CL-USER</code>&gt; (load &quot;~/common-lisp/clog/tutorial/01-tutorial.lisp&quot;)
+<code>CL-USER</code>&gt; (clog-user:start-tutorial)</p>
+
+<p>Work your way through the tutorials. You will see how quick and easy it is
+to be a CLOGer.</p>
 
 <p><a id='x-28CLOG-3A-40CLOG-SYSTEM-20MGL-PAX-3ASECTION-29'></a></p>
 
@@ -568,7 +596,7 @@ is nil unbind the event.</p></li>
 
 <p>Set the <code>ON-CHARACTER-HANDLER</code> for <code>CLOG-OBJ</code>. If
 <code>ON-CHARACTER-HANDLER</code> is nil unbind the event. Setting this event
-will replace a on-key-press</p></li>
+will replace a on-key-down</p></li>
 </ul>
 
 <p><a id='x-28CLOG-3ASET-ON-KEY-DOWN-20GENERIC-FUNCTION-29'></a></p>
@@ -1594,7 +1622,7 @@ A list of standard cursor types can be found at:
 <ul>
 <li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3AREMOVE-FROM-DOM-20GENERIC-FUNCTION-29" >REMOVE-FROM-DOM</a></span></span> <span class="locative-args">CLOG-ELEMENT</span></span></p>
 
-<p>remove-from-dom.</p></li>
+<p>Remove CLOG-Element from the DOM.</p></li>
 </ul>
 
 <p><a id='x-28CLOG-3ACLICK-20GENERIC-FUNCTION-29'></a></p>
@@ -3134,6 +3162,47 @@ events and messages may not be trasmitted on most browsers.</p></li>
 <p>Close connection to browser with out closing browser.</p></li>
 </ul>
 
+<p><a id='x-28CLOG-3ASTORAGE-TYPE-20-28TYPE-29-29'></a></p>
+
+<ul>
+<li><span class=reference-bullet><span class=reference><span class="locative-type">[type]</span> <span class="reference-object"><a href="#x-28CLOG-3ASTORAGE-TYPE-20-28TYPE-29-29" >STORAGE-TYPE</a></span></span></span></li>
+</ul>
+
+<p><a id='x-28CLOG-3ASTORAGE-LENGTH-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ASTORAGE-LENGTH-20GENERIC-FUNCTION-29" >STORAGE-LENGTH</a></span></span> <span class="locative-args">CLOG-WINDOW STORAGE-TYPE</span></span></p>
+
+<p>Number of entries in browser <code>STORAGE-TYPE</code>.
+(local = persistant or session)</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3ASTORAGE-KEY-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ASTORAGE-KEY-20GENERIC-FUNCTION-29" >STORAGE-KEY</a></span></span> <span class="locative-args">CLOG-WINDOW STORAGE-TYPE KEY-NUM</span></span></p>
+
+<p>Return the key for entry number <code>KEY-NUM</code> in browser
+<code>STORAGE-TYPE</code>. (local = persistant or session)</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3ASTORAGE-REMOVE-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ASTORAGE-REMOVE-20GENERIC-FUNCTION-29" >STORAGE-REMOVE</a></span></span> <span class="locative-args">CLOG-WINDOW STORAGE-TYPE KEY-NAME</span></span></p>
+
+<p>Remove the storage key and value in browser
+<code>STORAGE-TYPE</code>. (local = persistant or session)</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3ASTORAGE-ELEMENT-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ASTORAGE-ELEMENT-20GENERIC-FUNCTION-29" >STORAGE-ELEMENT</a></span></span> <span class="locative-args">CLOG-WINDOW STORAGE-TYPE KEY-NAME</span></span></p>
+
+<p>Get/Setf storage-element on browser client.</p></li>
+</ul>
+
 <p>CLOG-Window - Events</p>
 
 <p><a id='x-28CLOG-3ASET-ON-ABORT-20GENERIC-FUNCTION-29'></a></p>
@@ -3186,8 +3255,8 @@ If <code>ON-ORIENTATION-CHANGE-HANDLER</code> is nil unbind the event.</p></li>
 <ul>
 <li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ASET-ON-STORAGE-20GENERIC-FUNCTION-29" >SET-ON-STORAGE</a></span></span> <span class="locative-args">CLOG-WINDOW ON-STORAGE-HANDLER</span></span></p>
 
-<p>Set the <code>ON-STORAGE-HANDLER</code> for <a href="#x-28CLOG-3ACLOG-OBJ-20CLASS-29" title="(CLOG:CLOG-OBJ CLASS)"><code>CLOG-OBJ</code></a>. If
-<code>ON-STORAGE-HANDLER</code> is nil unbind the event.</p></li>
+<p>Set the <code>ON-STORAGE-HANDLER</code> for <a href="#x-28CLOG-3ACLOG-OBJ-20CLASS-29" title="(CLOG:CLOG-OBJ CLASS)"><code>CLOG-OBJ</code></a>. The
+on-storage event is fired for changes to :local storage keys.</p></li>
 </ul>
 
 <p><a id='x-28CLOG-3AMOVE-BY-20GENERIC-FUNCTION-29'></a></p>
@@ -3451,7 +3520,7 @@ If <code>ON-ORIENTATION-CHANGE-HANDLER</code> is nil unbind the event.</p></li>
 <p><a id='x-28CLOG-3ARELOAD-20GENERIC-FUNCTION-29'></a></p>
 
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ARELOAD-20GENERIC-FUNCTION-29" >RELOAD</a></span></span> <span class="locative-args">CLOG-WINDOW</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ARELOAD-20GENERIC-FUNCTION-29" >RELOAD</a></span></span> <span class="locative-args">CLOG-LOCATION</span></span></p>
 
 <p>Reload browser window.</p></li>
 </ul>
@@ -3474,7 +3543,7 @@ If <code>ON-ORIENTATION-CHANGE-HANDLER</code> is nil unbind the event.</p></li>
 
 <p><a id='x-28CLOG-3A-40CLOG-NAVIGATOR-20MGL-PAX-3ASECTION-29'></a></p>
 
-<p><span class="outer-navigation"><span class="navigation"> <a href="#x-28CLOG-3A-40CLOG-LOCATION-20MGL-PAX-3ASECTION-29" title="CLOG Location Objects">&#8592;</a> <a href="#x-28CLOG-3A-40CLOG-MANUAL-20MGL-PAX-3ASECTION-29" title="The CLOG manual">&#8593;</a> <a href="#x-28CLOG-3A-40CLOG-NAVIGATOR-20MGL-PAX-3ASECTION-29" title="CLOG Navigator Objects">&#8634;</a></span></span></p>
+<p><span class="outer-navigation"><span class="navigation"> <a href="#x-28CLOG-3A-40CLOG-LOCATION-20MGL-PAX-3ASECTION-29" title="CLOG Location Objects">&#8592;</a> <a href="#x-28CLOG-3A-40CLOG-MANUAL-20MGL-PAX-3ASECTION-29" title="The CLOG manual">&#8593;</a> <a href="#x-28CLOG-3A-40CLOG-INTERNALS-20MGL-PAX-3ASECTION-29" title="CLOG Framework internals and extensions">&#8594;</a> <a href="#x-28CLOG-3A-40CLOG-NAVIGATOR-20MGL-PAX-3ASECTION-29" title="CLOG Navigator Objects">&#8634;</a></span></span></p>
 
 <h2><a href="#x-28CLOG-3A-40CLOG-NAVIGATOR-20MGL-PAX-3ASECTION-29">13 CLOG Navigator Objects</a></h2>
 
@@ -3521,6 +3590,65 @@ If <code>ON-ORIENTATION-CHANGE-HANDLER</code> is nil unbind the event.</p></li>
 
 <p>Get browser vendor.</p></li>
 </ul>
+
+<p><a id='x-28CLOG-3A-40CLOG-INTERNALS-20MGL-PAX-3ASECTION-29'></a></p>
+
+<p><span class="outer-navigation"><span class="navigation"> <a href="#x-28CLOG-3A-40CLOG-NAVIGATOR-20MGL-PAX-3ASECTION-29" title="CLOG Navigator Objects">&#8592;</a> <a href="#x-28CLOG-3A-40CLOG-MANUAL-20MGL-PAX-3ASECTION-29" title="The CLOG manual">&#8593;</a> <a href="#x-28CLOG-3A-40CLOG-INTERNALS-20MGL-PAX-3ASECTION-29" title="CLOG Framework internals and extensions">&#8634;</a></span></span></p>
+
+<h2><a href="#x-28CLOG-3A-40CLOG-INTERNALS-20MGL-PAX-3ASECTION-29">14 CLOG Framework internals and extensions</a></h2>
+
+<h2>Responding to new java script DOM events:</h2>
+
+<p>If there is no data for the event just changing the name of the event is
+sufficient in this example:</p>
+
+<pre><code><span class="code"><span class="paren1">(<span class="code"><i><span class="symbol">defmethod</span></i> set-on-click <span class="paren2">(<span class="code"><span class="paren3">(<span class="code">obj clog-obj</span>)</span> handler</span>)</span>
+  <span class="paren2">(<span class="code">set-event obj <span class="string">"click"</span>
+         <span class="paren3">(<span class="code">when handler
+           <span class="paren4">(<span class="code"><i><span class="symbol">lambda</span></i> <span class="paren5">(<span class="code">data</span>)</span>
+         <span class="paren5">(<span class="code">declare <span class="paren6">(<span class="code">ignore data</span>)</span></span>)</span>
+         <span class="paren5">(<span class="code">funcall handler obj</span>)</span></span>)</span></span>)</span></span>)</span></span>)</span></span></code></pre>
+
+<p>If there is data for the event an additional string containing the needed
+java-script to return the even data and a function to parse out the data.</p>
+
+<p>Replace the event name with the correct name, parse-keyboard-even with the
+parse function and the string containing the needed JavaScrip replaces
+keyboard-event-script:</p>
+
+<ul>
+<li>The event handlers setter</li>
+</ul>
+
+<pre><code><span class="code"><span class="paren1">(<span class="code"><i><span class="symbol">defmethod</span></i> set-on-key-down <span class="paren2">(<span class="code"><span class="paren3">(<span class="code">obj clog-obj</span>)</span> handler</span>)</span>
+  <span class="paren2">(<span class="code">set-event obj <span class="string">"keydown"</span>
+         <span class="paren3">(<span class="code">when handler
+           <span class="paren4">(<span class="code"><i><span class="symbol">lambda</span></i> <span class="paren5">(<span class="code">data</span>)</span>
+         <span class="paren5">(<span class="code">funcall handler obj <span class="paren6">(<span class="code">parse-keyboard-event data</span>)</span></span>)</span></span>)</span></span>)</span>
+         <span class="keyword">:call-back-script</span> keyboard-event-script</span>)</span></span>)</span>   </span></code></pre>
+
+<ul>
+<li>The script</li>
+</ul>
+
+<pre><code><span class="code"><span class="paren1">(<span class="code"><i><span class="symbol">defparameter</span></i> keyboard-event-script
+  <span class="string">"+ e.keyCode + ':' + e.charCode + ':' + e.altKey + ':' + e.ctrlKey + ':' +
+     e.shiftKey + ':' + e.metaKey"</span></span>)</span></span></code></pre>
+
+<ul>
+<li>The event parser</li>
+</ul>
+
+<pre><code><span class="code"><span class="paren1">(<span class="code"><i><span class="symbol">defun</span></i> parse-keyboard-event <span class="paren2">(<span class="code">data</span>)</span>
+  <span class="paren2">(<span class="code"><i><span class="symbol">let</span></i> <span class="paren3">(<span class="code"><span class="paren4">(<span class="code">f <span class="paren5">(<span class="code">ppcre:split <span class="string">":"</span> data</span>)</span></span>)</span></span>)</span>
+    <span class="paren3">(<span class="code">list
+     <span class="keyword">:event-type</span> <span class="keyword">:keyboard</span>
+     <span class="keyword">:key-code</span>   <span class="paren4">(<span class="code">parse-integer <span class="paren5">(<span class="code">nth 0 f</span>)</span> <span class="keyword">:junk-allowed</span> t</span>)</span>
+     <span class="keyword">:char-code</span>  <span class="paren4">(<span class="code">parse-integer <span class="paren5">(<span class="code">nth 1 f</span>)</span> <span class="keyword">:junk-allowed</span> t</span>)</span>
+     <span class="keyword">:alt-key</span>    <span class="paren4">(<span class="code">js-true-p <span class="paren5">(<span class="code">nth 2 f</span>)</span></span>)</span>
+     <span class="keyword">:ctrl-key</span>   <span class="paren4">(<span class="code">js-true-p <span class="paren5">(<span class="code">nth 3 f</span>)</span></span>)</span>
+     <span class="keyword">:shift-key</span>  <span class="paren4">(<span class="code">js-true-p <span class="paren5">(<span class="code">nth 4 f</span>)</span></span>)</span>
+     <span class="keyword">:meta-key</span>   <span class="paren4">(<span class="code">js-true-p <span class="paren5">(<span class="code">nth 5 f</span>)</span></span>)</span></span>)</span></span>)</span></span>)</span></span></code></pre>
   </div>
 </div>
 <script>$('#page-toc').toc({'selectors': 'h1,h2,h3,h4'});</script>

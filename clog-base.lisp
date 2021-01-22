@@ -107,7 +107,7 @@ result. (Private)"))
 ;;;;;;;;;;;;;
 
 (defgeneric execute (clog-obj method)
-  (:documentation "Execute the js METHOD on OBJ. Result is
+  (:documentation "Execute the JavaScript METHOD on OBJ. Result is
 dicarded. (Private)"))
 
 (defmethod execute ((obj clog-obj) method)
@@ -119,7 +119,7 @@ dicarded. (Private)"))
 ;;;;;;;;;;;
 
 (defgeneric query (clog-obj method)
-  (:documentation "Execute the js query METHOD on OBJ and return
+  (:documentation "Execute the JavaScript query METHOD on OBJ and return
 result. (Private)"))
 
 (defmethod query ((obj clog-obj) method)
@@ -788,7 +788,7 @@ ON-TOUCH-CANCEL-HANDLER is nil unbind the event."))
 (defgeneric set-on-character (clog-obj on-character-handler)
   (:documentation "Set the ON-CHARACTER-HANDLER for CLOG-OBJ. If
 ON-CHARACTER-HANDLER is nil unbind the event. Setting this event
-will replace a on-key-press"))
+will replace a on-key-down"))
 
 (defmethod set-on-character ((obj clog-obj) handler)
   (set-event obj "keypress"
