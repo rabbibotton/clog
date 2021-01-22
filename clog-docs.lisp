@@ -81,7 +81,7 @@ to be a CLOGer.
   ")
 
 (defsection @clog-internals (:title "CLOG Framework internals and extensions")
-"## Responding to new java script DOM events:
+"## Responding to new java script DOM events
 
 If there is no data for the event just changing the name of the event is
 sufficient in this example:
