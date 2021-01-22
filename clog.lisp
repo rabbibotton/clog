@@ -471,7 +471,11 @@ embedded in a native template application.)"
   (scroll-to        generic-function)
   (close-window     generic-function)
   (close-connection generic-function)
-
+  (storage-length   generic-function)
+  (storage-key      generic-function)
+  (storage-remove   generic-function)
+  (storage-element  generic-function)
+  
   "CLOG-Window - Events"
   (set-on-abort              generic-function)
   (set-on-error              generic-function)
@@ -537,6 +541,7 @@ embedded in a native template application.)"
 (export 'make-markup)
 (defun make-markup ()
   (load "clog.lisp")
+  (load "clog-docs.lisp")
   (load "clog-base.lisp")
   (load "clog-element.lisp")
   (load "clog-element-common.lisp")
@@ -554,6 +559,7 @@ embedded in a native template application.)"
 (export 'make-html)
 (defun make-html ()
   (load "clog.lisp")
+  (load "clog-docs.lisp")
   (load "clog-base.lisp")
   (load "clog-element.lisp")
   (load "clog-element-common.lisp")

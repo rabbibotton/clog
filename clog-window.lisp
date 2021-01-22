@@ -468,8 +468,6 @@ If ON-ORIENTATION-CHANGE-HANDLER is nil unbind the event."))
 ;; set-on-storage ;;
 ;;;;;;;;;;;;;;;;;;;;
 
-;; need to change to use a true on-storage event
-
 (defparameter storage-event-script
   "+ encodeURIComponent(e.originalEvent.key) + ':' +
      encodeURIComponent(e.originalEvent.oldValue) + ':' +
@@ -478,13 +476,13 @@ If ON-ORIENTATION-CHANGE-HANDLER is nil unbind the event."))
 (defun parse-storage-event (data)
   (let ((f (ppcre:split ":" data)))
     (list
-     :key-value (quri:url-decode (nth 0 f))
+     :key (quri:url-decode (nth 0 f))
      :old-value (quri:url-decode (nth 1 f))
-     :new-value (quri:url-decode (nth 2 f)))))
+     :value (quri:url-decode (nth 2 f)))))
 
 (defgeneric set-on-storage (clog-window on-storage-handler)
-  (:documentation "Set the ON-STORAGE-HANDLER for CLOG-OBJ. If
-ON-STORAGE-HANDLER is nil unbind the event."))
+  (:documentation "Set the ON-STORAGE-HANDLER for CLOG-OBJ. The
+on-storage event is fired for changes to :local storage keys."))
 
 (defmethod set-on-storage ((obj clog-window) handler)
   (set-event obj "storage"
@@ -492,3 +490,60 @@ ON-STORAGE-HANDLER is nil unbind the event."))
 	       (lambda (data)
 		 (funcall handler obj (parse-storage-event data))))
 	     :call-back-script storage-event-script))
+
+;;;;;;;;;;;;;;;;;;;;
+;; storage-length ;;
+;;;;;;;;;;;;;;;;;;;;
+
+(deftype storage-type '(member local session))
+
+(defgeneric storage-length (clog-window storage-type)
+  (:documentation "Number of entries in browser STORAGE-TYPE.
+(local = persistant or session)"))
+
+(defmethod storage-length ((obj clog-window) storage-type)
+  (parse-integer (query obj "~(~a~)Storage.length" storage-type)))
+
+;;;;;;;;;;;;;;;;;
+;; storage-key ;;
+;;;;;;;;;;;;;;;;;
+
+(defgeneric storage-key (clog-window storage-type key-num)
+  (:documentation "Return the key for entry number KEY-NUM in browser
+STORAGE-TYPE. (local = persistant or session)"))
+
+(defmethod storage-key ((obj clog-window) storage-type key-num)
+  (query obj (format nil "~(~a~)Storage.key(~A)" storage-type key-num)))
+
+;;;;;;;;;;;;;;;;;;;;
+;; storage-remove ;;
+;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric storage-remove (clog-window storage-type key-name)
+  (:documentation "Remove the storage key and value in browser
+STORAGE-TYPE. (local = persistant or session)"))
+
+(defmethod storage-remove ((obj clog-window) storage-type key-name)
+  (execute obj (format nil "~(~a~)Storage.removeItem(~A)" storage-type key-name)))
+
+;;;;;;;;;;;;;;;;;;;;;
+;; storage-element ;;
+;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric storage-element (clog-window storage-type key-name)
+  (:documentation "Get/Setf storage-element on browser client."))
+
+(defmethod storage-element ((obj clog-window) storage-type key-name)
+  (query obj (format nil "~(~a~)Storage.getItem('~A')"
+		     storage-type
+		     (escape-string key-name))))
+
+(defgeneric set-storage-element (clog-window storage-type key-name value)
+  (:documentation "Set storage-element."))
+
+(defmethod set-storage-element ((obj clog-window) storage-type key-name value)
+  (execute obj (format nil "~(~a~)Storage.setItem('~A','~A')"
+		       storage-type
+		       (escape-string key-name)
+		       (escape-string value))))
+(defsetf storage-element set-storage-element)

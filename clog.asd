@@ -5,7 +5,7 @@
 
   :author "David Botton <david@botton.com>"
   :license  "BSD"
-  :version "0.1.1"
+  :version "0.2.0"
   :serial t
   :depends-on (#:clack #:websocket-driver #:alexandria #:hunchentoot #:cl-ppcre
 		       #:bordeaux-threads #:trivial-open-browser

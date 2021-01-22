@@ -174,10 +174,10 @@
 ;; reload ;;
 ;;;;;;;;;;;;
 
-(defgeneric reload (clog-window)
+(defgeneric reload (clog-location)
   (:documentation "Reload browser window."))
 
-(defmethod reload ((obj clog-window))
+(defmethod reload ((obj clog-location))
   (execute obj "reload()"))
 
 ;;;;;;;;;;;;;;;;;
