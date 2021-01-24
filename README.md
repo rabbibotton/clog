@@ -11,42 +11,42 @@ https://rabbibotton.github.io/clog/clog-manual.html
 
 The Common Lisp Omnificient GUI, CLOG for short, uses web technology to
 produce graphical user interfaces for applications locally or remotely.
-CLOG can take the place, or work along side, most cross platform GUI
+CLOG can take the place, or work alongside, most cross-platform GUI
 frameworks and website frameworks. The CLOG package starts up the
 connectivity to the browser or other websocket client (often a browser
 embedded in a native template application.)
 
-STATUS: CLOG is complete enough for most uses, there are a few loose
-ends (multimedia, client side storage, integrations with databases),
-but CLOG is actually based on a framework I wrote for Ada, GNOGA, in
+STATUS: CLOG is complete enough for most uses. While there are loose
+ends (multimedia, client-side storage, database integrations),
+CLOG is actually based on GNOGA, a framework I wrote for Ada in
 2013 and used in commercial production code for the last 6 years,
-i.e. the techiniques it uses are solid and proven.
+i.e. the techiniques CLOG uses are solid and proven.
 
-Some of the things CLOG can be used for:
+Some potential applications for CLOG:
 
-* Cross platform GUIs and Reports
+* Cross-platform GUIs and Reports
 * Secure websites and complex interactive web applications
-* Write mobile software
-* Write massive multiplayer online games
+* Mobile software
+* Massive multiplayer online games
 * Monitoring software for embedded systems
-* A fun way to teaching programming and advanced multi-tasking
+* A fun way to teach programming and advanced multi-tasking
   parallel programming techniques. (CLOG is a parallel GUI)
 * And the list goes on
 
 The key to CLOG is the relationship it forms with a Browser window
 or Browser control compiled to native code. CLOG uses websockets
-for communications and the browser to render a GUI that maintanes
+for communications and the browser to render a GUI that maintains
 an active soft realtime connection. For most CLOG applications all
 programming logic, events and decisions are done on the server
 which can be local or remote over the web.
 
 CLOG is developed on an M1 MacBook with ECL, it is tested fairly
 regulary with SCBL on Linux, Windows and Intel MacBook. It should
-in theory work on any system QuickLisp and CLACK will load on to.
+in theory work on any system Quicklisp and CLACK will load on to.
 
-CLOG will be in QuickSlip in the next update, but a good idea,
-since I am still adding code daily, is to cloan the github repo
-in to your ~/common-lisp directory:
+CLOG will be in Quicklisp in the next update, but because I am still 
+adding code daily, it is currently preferable to clone the github repo
+into your ~/common-lisp directory:
 
 ```
 cd ~/common-lisp
@@ -54,11 +54,11 @@ git clone https://github.com/rabbibotton/clog.git
 ```
 
 To load this package and work through tutorials (assuming you
-have QuickSlip configured):
+have Quicklisp configured):
 
-1. cd to the CLOG dir (the dir should be one used by QuickLisp ex. ~/common-lisp/)
+1. cd to the CLOG dir (the dir should be one used by Quicklisp ex. ~/common-lisp/)
 2. Start emacs/slime or your common lisp "repl" in _that_ directory.
-3. In the REPL run:
+3. In the REPL, run:
 
 CL-USER> (ql:quickload :clog)
 CL-USER> (load "~/common-lisp/clog/tutorial/01-tutorial.lisp")
@@ -87,9 +87,9 @@ Here is a sample CLOG app:
       ;; This application simply creates a CLOG-Element as a child to the
       ;; CLOG-body object in the browser window.
 
-      ;; A CLOG-Element represents a block of HTML (we will see later ways to
-      ;; directly create buttons and all sorts of HTML elements in more lisp
-      ;; like ways with no knowledge of HTML or javascript. 
+      ;; A CLOG-Element represents a block of HTML (we will later see ways to
+      ;; directly create buttons and all sorts of HTML elements in more 
+      ;; lisp-like ways with no knowledge of HTML or JavaScript. 
       (create-child body "<h1>Hello World! (click me!)</h1>")))
 
     (set-on-click hello-element      ; Now we set a function to handle clicks
@@ -101,17 +101,17 @@ Here is a sample CLOG app:
                 ; until no longer needed.
             
 ;; To see all the events one can set and the many properties and styles that
-;; exist, take a look through the CLOG manual or the file clog-element.lisp
+;; exist, refer to the CLOG manual or the file clog-element.lisp
 
 
 (defun start-tutorial ()   ; Define the function called start-tutorial
-  "Start turtorial."       ; Optional docstring to describe function
+  "Start tutorial."        ; Optional docstring to describe function
 
   ;; Initialize the CLOG system
   (initialize #'on-new-window)
   ;; Set the function on-new-window to execute
-  ;; everytime a browser connection to our app.
-  ;; #' tells common lisp to pass the function
+  ;; every time a browser connection to our app.
+  ;; #' tells Common Lisp to pass the function
   ;; to intialize and not to execute it.
 
 
@@ -120,8 +120,7 @@ Here is a sample CLOG app:
 ```
 
 Work in progress:
-(Add an enhacement request if want to see some feature specificly not
- covered yet.)
+(Add an enhancement request if you want to see a specific feature not yet covered.)
 
 Tutorial Summary
 
@@ -133,27 +132,27 @@ Tutorial Summary
 - 06-tutorial.lisp - Tasking and events
 - 07-tutorial.lisp - My first CLOG video game (and handling disconnects)
 - 08-tutorial.lisp - Mice Love Containers
-- 09-tutorial.lisp - Tabs, pannels and forms
+- 09-tutorial.lisp - Tabs, panels, and forms
 - 10-tutorial.lisp - Canvas
 - 11-tutorial.lisp - Attaching to existing HTML
 - 12-tutorial.lisp - Running a website in CLOG (routing)
 - 13-tutorial/     - Flying Solo - A minimalist CLOG project
-- 14-tutorial.lisp - Local (persistent) and Session client side storage
+- 14-tutorial.lisp - Local (persistent) and Session client-side storage
 
 Demo Summary
 
 - 01-snake-game.lisp - Sparkey the Snake Game
 
 
-Enhancements being worked on now:
+Enhancements underway:
 
 - Multimedia - HTML 5 Audio and Video
 
 - CLOG higher level containers and GUI widgets
 
-- Database bindings and server side APIs
+- Database bindings and server-side APIs
   - Current CL packages
-  - Direct bidings to widgets ete.
+  - Direct bidings to widgets etc.
 
 - CLOG Devtools
   - Generate application scaffolding
