@@ -15,3 +15,7 @@ A) There are many ways, the simplest is just use Ceramic -
     http://ceramic.github.io/  which uses electron. You can of course use any
 tool the gives you a browser control. See clog/nativ-glues/gtk or an example
 with GTK in C, but you can use the cl-cffi-gtk to accomplish the same thing.
+
+Q) I want to take an HTML snapshot of a clog created page:
+
+(format t "=> ~A" (outer-html (document-element (html-document body))))

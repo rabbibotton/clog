@@ -9,7 +9,7 @@ View the HTML Documentation:
 https://rabbibotton.github.io/clog/clog-manual.html
 
 
-The Common Lisp Omnificient GUI, CLOG for short, uses web technology to
+The Common Lisp Omnificent GUI, CLOG for short, uses web technology to
 produce graphical user interfaces for applications locally or remotely.
 CLOG can take the place, or work alongside, most cross-platform GUI
 frameworks and website frameworks. The CLOG package starts up the
