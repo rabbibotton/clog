@@ -76,14 +76,133 @@ have Quicklisp configured):
 2. Start emacs/slime or your common lisp \"repl\" in _that_ directory.
 3. In the REPL, run:
 
+```
 CL-USER> (ql:quickload :clog)
 CL-USER> (load \"~/common-lisp/clog/tutorial/01-tutorial.lisp\")
 CL-USER> (clog-user:start-tutorial)
+```
 
 Work your way through the tutorials. You will see how quick and easy it is
-to be a CLOGer.
+to be a CLOGer. The next section also covers the basic programming concepts
+needed for mastering CLOG.")
 
-  ")
+(defsection @clog-programming-basics (:title "CLOG Programming Basics")
+  "
+* Prerequisites
+    - You don't have to be an expert in Common Lisp but should know the basics
+    - You _don't_ need to know JavaScript
+    - You don't need to know HTML but it helps unless someone else is doing the
+      design work.
+    - You have installed CLOG and (ql:quickload :clog) is working for you.
+
+
+
+* Simple REPL techniques Tutorial
+
+We first need to load CLOG
+
+```lisp
+CL-USER> (ql:quickload :clog)
+To load \"clog\":
+  Load 1 ASDF system:
+    clog
+; Loading \"clog\"
+................................................
+(:CLOG)
+```
+
+Next, we need to use the INITIALIZE function to tell CLOG to start up the web
+server, what to do when someone connects and where the static HTML files
+are located.
+
+```lisp
+CL-USER> (clog:initialize (lambda (body)()) :static-root #P\"~/common-lisp/clog/static-files/\")
+Hunchentoot server is started.
+Listening on 0.0.0.0:8080.
+HTTP listening on    : 0.0.0.0:8080
+HTML Root            : /Users/dbotton/common-lisp/clog/static-files/
+Boot file for path / : /boot.html
+NIL
+```
+
+At this point our CLOG app doese very little. To see our CLOG app so far go to
+http://127.0.0.1:8008  or in most common-list configurations you can use:
+
+```lisp
+CL-USER> (clog:open-browser)
+```
+
+Something more than an empty lambda function is needed to do more. The
+tutorials are a good place to start with make CLOG apps in code, so
+here we are going to demonstrate the concepts using some REPL tricks
+to help developing CLOG apps in general.
+
+We need to give ourselves easier access to CLOG and or an app we are
+working one. Let's create a package that uses CLOG and of course
+common lisp \"cl\" we will call it \"clog-user\".
+
+```lisp
+CL-USER> (defpackage #:clog-user
+  (:use #:cl #:clog))
+(in-package :clog-user)
+#<\"CLOG-USER\" package>
+CLOG-USER> 
+```
+
+Since we already initialized CLOG let's use SET-ON-NEW-WINDOW to change our
+on-new-window handler (handler is just a made up name for a function that
+will handle an event).
+
+```lisp
+CLOG-USER> (set-on-new-window (lambda (body) (create-div body :content \"Hello World!\")))
+```
+
+Now go ahead and resresh our browser and you should see the famous first words
+of every app.
+
+This of though is still not very REPL like, CLOG is a 'live' connection to a
+browser. So lets redo our on-new-window handler to give us access to the
+browser in the REPL.
+
+```lisp
+CLOG-USER> (defparameter *body* nil)
+*BODY*
+CLOG-USER> (set-on-new-window (lambda (body) (setf *body* body)))
+```
+
+Reset your browser again (or navigate to http://127.0.0.1:8080 and let's have
+some fun.
+
+(From here on, we will leave out the promps and responses in our quotes of
+code.)
+
+```lisp
+(create-div *body* :content \"Hello World\")
+```
+
+If you have the browser on the screen you will see the results immediately. Try
+this line and you can watch it happen:
+
+```lisp
+(dotimes (n 10) (create-div *body* :content (format nil \"Line ~A - Hello World\" n)) (sleep .3))
+```
+
+We can also set and respond to events and set properties etc:
+
+```lisp
+(let ((tmp (create-button *body* :content \"Click Me\")))
+  (set-on-click tmp (lambda (obj)(setf (hiddenp tmp) t))))
+```
+
+Important take aways to using CLOG from the REPL:
+
+1. You will need to pass to a global from the running system whatever you want to tinker
+with in the live system from the REPL.
+2. Any time you recompile the on-new-window handler or want to use a different one
+you will need to use SET-ON-NEW-WINDOW.
+3. Similarily with all events, any time an event handler is recompiled or want to
+change the even hander, set-on-* function will need to be called.")
+
 
 (defsection @clog-event-data (:title "CLOG Event Data")
 "

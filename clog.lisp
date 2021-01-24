@@ -26,8 +26,9 @@ frameworks and website frameworks. The CLOG package starts up the
 connectivity to the browser or other websocket client (often a browser
 embedded in a native template application.)"
 
-  (@clog-getting-started section)
-  (@clog-event-data      section)
+  (@clog-getting-started    section)
+  (@clog-programming-basics section)
+  (@clog-event-data         section)
   
   (@clog-system          section)
   (@clog-utilities       section)
