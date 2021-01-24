@@ -13,17 +13,13 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defsection @clog-getting-started (:title "CLOG Getting Started")
-"# CLOG - The Common Lisp Omnificent GUI
+"CLOG - The Common Lisp Omnificent GUI
 
-## David Botton <david@botton.com>
+David Botton <david@botton.com>
 
 License BSD 3-Clause License
 
-View the HTML Documentation:
-
-https://rabbibotton.github.io/clog/clog-manual.html
-
-### Introduction
+- Introduction
 
 The Common Lisp Omnificent GUI, CLOG for short, uses web technology to
 produce graphical user interfaces for applications locally or remotely.
@@ -32,11 +28,11 @@ frameworks and website frameworks. The CLOG package starts up the
 connectivity to the browser or other websocket client (often a browser
 embedded in a native template application.)
 
-STATUS: CLOG is complete enough for most uses. While there are loose
-ends (multimedia, database integrations), CLOG is actually based on
-GNOGA, a framework I wrote for Ada in 2013 and used in commercial
-production code for the last 6 years, i.e. the techiniques CLOG uses
-are solid and proven.
+STATUS: CLOG is complete enough for most uses. See the README.md for
+some enhacements bing worked on, CLOG is actually based on GNOGA, a
+framework I wrote for Ada in 2013 and used in commercial production
+code for the last 6 years, i.e. the techiniques CLOG uses are solid
+and proven.
 
 Some potential applications for CLOG:
 
@@ -255,7 +251,7 @@ From clog-window
 ")
 
 (defsection @clog-internals (:title "CLOG Framework internals and extensions")
-"## Responding to new java script DOM events
+"Responding to new java script DOM events
 
 If there is no data for the event just changing the name of the event is
 sufficient in this example:

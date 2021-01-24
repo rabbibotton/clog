@@ -37,6 +37,7 @@ embedded in a native template application.)"
   (@clog-element-common  section)
   (@clog-form            section)
   (@clog-canvas          section)
+  (@clog-multimedia      section)
   (@clog-body            section)
   (@clog-window          section)
   (@clog-document        section)
@@ -430,6 +431,16 @@ embedded in a native template application.)"
   (canvas-save         generic-function)
   (canvas-restore      generic-function))
 
+(defsection @clog-multimedia (:title "CLOG Multimedia Objects")
+  "CLOG-Multimedia - Base Class for CLOG multimedia objects"
+  (clog-multimedia class)
+
+  (clog-audio     class)
+  (create-audio   generic-function)
+
+  (clog-video     class)
+  (create-video   generic-function))
+  
 (defsection @clog-body (:title "CLOG Body Objects")
   "CLOG-Body - CLOG Body Objects"
   (clog-body class)
