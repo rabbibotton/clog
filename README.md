@@ -17,10 +17,10 @@ connectivity to the browser or other websocket client (often a browser
 embedded in a native template application.)
 
 STATUS: CLOG is complete enough for most uses. While there are loose
-ends (multimedia, client-side storage, database integrations),
-CLOG is actually based on GNOGA, a framework I wrote for Ada in
-2013 and used in commercial production code for the last 6 years,
-i.e. the techiniques CLOG uses are solid and proven.
+ends (multimedia, database integrations), CLOG is actually based on
+GNOGA, a framework I wrote for Ada in 2013 and used in commercial
+production code for the last 6 years, i.e. the techiniques CLOG uses
+are solid and proven.
 
 Some potential applications for CLOG:
 

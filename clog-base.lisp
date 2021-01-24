@@ -45,7 +45,7 @@ lisp and the HTML DOM element."))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defgeneric connection-data-mutex (clog-obj)
-  (:documentation "Preader for connection-data thread lock. (Private)"))
+  (:documentation "Reader for connection-data thread lock. (Private)"))
 
 ;;;;;;;;;;;;;;;;;;;
 ;; make-clog-obj ;;

@@ -27,6 +27,7 @@ connectivity to the browser or other websocket client (often a browser
 embedded in a native template application.)"
 
   (@clog-getting-started section)
+  (@clog-event-data      section)
   
   (@clog-system          section)
   (@clog-utilities       section)
@@ -302,7 +303,7 @@ embedded in a native template application.)"
 
 (defsection @clog-form (:title "CLOG Form Objects")
   "CLOG-Form - Class for organizing Form Elements in to a From"
-  (clog-form   class)
+  (clog-form          class)
   (create-form        generic-function)
   
   (form-element-count generic-function)
@@ -393,7 +394,6 @@ embedded in a native template application.)"
   (stroke-rect         generic-function)  
   (fill-text           generic-function)
   (stroke-text         generic-function)
-  ;; (measure-text         generic-function)
   (line-width          generic-function)
   (line-cap            generic-function)
   (line-join           generic-function)
