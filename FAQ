@@ -1,8 +1,15 @@
 Q) I start my application and I don't see anything? It worked before!
 
 A) If running a tutorial or demo:
-      Did you start the application / emacs and slime in the directory of clog? 
-      By default that is /common-lisp/clog?
+      Try:
+      
+          (let ((swank::*default-pathname-defaults* #P"~/common-lisp/clog/"))
+             (clog-user:start-tutorial))
+             
+
+      Alternatively:
+
+      Start the application / emacs and slime in your local directory of clog (eg. ~/common-lisp/clog)
 
       Or you can use (setf clog::*overide-static-root* #P"~/common-lisp/clog/static-files/")
       to overide the static path in (clog:initialize)
