@@ -195,8 +195,7 @@
     (setf (connection-data-item body "app-data") app))
   
   (display-splash body)
-  (start-game body)
-  (run body))
+  (start-game body))
 
 (defun start-demo ()
   "Start demo."
