@@ -155,7 +155,8 @@ result. (Private)"))
   "+ (e.clientX - e.target.getBoundingClientRect().left) + ':' + 
      (e.clientY - e.target.getBoundingClientRect().top) + ':' + 
      e.screenX + ':' + e.screenY + ':' + e.which + ':' + e.altKey + ':' +
-     e.ctrlKey + ':' + e.shiftKey + ':' + e.metaKey")
+     e.ctrlKey + ':' + e.shiftKey + ':' + e.metaKey"
+  "JavaScript to collect mouse event data from browser.")
 ;; e.buttons would be better but not supported currently outside
 ;; of firefox and would always return 0 on Mac so using e.which.
 ;; The use of offsetLeft and offsetTop is to correct the X and Y
@@ -186,7 +187,8 @@ result. (Private)"))
      e.altKey + ':' +
      e.ctrlKey + ':' +
      e.shiftKey + ':' +
-     e.metaKey")
+     e.metaKey"
+    "JavaScript to collect touch event data from browser.")
 
 (defun parse-touch-event (data)
   (let ((f (ppcre:split ":" data)))
@@ -208,7 +210,8 @@ result. (Private)"))
 
 (defparameter keyboard-event-script
   "+ e.keyCode + ':' + e.charCode + ':' + e.altKey + ':' + e.ctrlKey + ':' +
-     e.shiftKey + ':' + e.metaKey")
+     e.shiftKey + ':' + e.metaKey"
+  "JavaScript to collect keyboard event data from browser.")
 
 (defun parse-keyboard-event (data)
   (let ((f (ppcre:split ":" data)))
@@ -226,7 +229,7 @@ result. (Private)"))
 ;;;;;;;;;;;;;;;
 
 (defgeneric set-event (clog-obj event handler &key call-back-script)
-  (:documentation "Create the hood for incoming events. (Private)"))
+  (:documentation "Create the hook for incoming events. (Private)"))
 
 (defmethod set-event ((obj clog-obj) event handler
 		      &key (call-back-script "") (cancel-event nil))
@@ -320,7 +323,7 @@ result. (Private)"))
 ;;;;;;;;;;;;
 
 (defgeneric validp (clog-obj)
-  (:documentation "Returns true of connection is valid on this CLOG-OBJ."))
+  (:documentation "Returns true if connection is valid on this CLOG-OBJ."))
 
 (defmethod validp ((obj clog-obj))
   (cc:validp (connection-id obj)))
@@ -333,7 +336,7 @@ result. (Private)"))
   (:documentation "Get connection-data that is associated with
 clog-obj that will persist regardless of thread. The event hooks
 are stored in this string based hash in the format of:
-\"html-id:event-name\" => event-handler."))
+\"html-id:event-name\" => #'event-handler."))
 
 (defmethod connection-data ((obj clog-obj))
   (cc:get-connection-data (connection-id obj)))

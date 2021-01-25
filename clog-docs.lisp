@@ -251,7 +251,34 @@ From clog-window
 ")
 
 (defsection @clog-internals (:title "CLOG Framework internals and extensions")
-"Responding to new java script DOM events
+"
+** Introduction to Internals **
+
+This section on internals is not intended for general use of CLOG. It is
+for those looking to maint or extend CLOG, or those creating plugins.
+
+** The Client Side and the Server Side **
+
+All objects created in CLOG have a server side and a client side
+representation, at least at the time of their creation. The server
+side representation is a CLOG-obj or one of its descendants that is
+returned by one of the many create-* functions. The client side
+representation is the DOM element (or other JavaScript object) itself
+stored in the clog array keyed by the html-id clog[html-id].
+
+** Client Side Scripting **
+
+Executing code on the client side is done in one of three ways:
+
+ 1. The connection - Using the clog-connection package execute or query
+ 2. The DOM object - Using the clog-obj execute or query
+ 3. The jQuery wrapper - Using the clog-obj jquery-execute or jquery-query
+
+Query time outs are set in clog-connect:*query-time-out* by default 3
+seconds.
+
+
+** Responding to new JavaScript DOM events **
 
 If there is no data for the event just changing the name of the event is
 sufficient in this example:
@@ -266,10 +293,10 @@ sufficient in this example:
 ```
 
 If there is data for the event an additional string containing the needed
-java-script to return the even data and a function to parse out the data.
+JavaScript to return the even data and a function to parse out the data.
 
 Replace the event name with the correct name, parse-keyboard-even with the
-parse function and the string containing the needed JavaScrip replaces
+parse function and the string containing the needed JavaScript replaces
 keyboard-event-script:
 
 * The event handlers setter

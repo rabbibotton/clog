@@ -466,7 +466,7 @@ lisp and the <code>HTML</code> DOM element.</p></li>
 <p>Get connection-data that is associated with
 clog-obj that will persist regardless of thread. The event hooks
 are stored in this string based hash in the format of:
-&quot;html-id:event-name&quot; =&gt; event-handler.</p></li>
+&quot;html-id:event-name&quot; =&gt; #'event-handler.</p></li>
 </ul>
 
 <p><a id='x-28CLOG-3ACONNECTION-DATA-ITEM-20GENERIC-FUNCTION-29'></a></p>
@@ -490,7 +490,7 @@ are stored in this string based hash in the format of:
 <ul>
 <li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3AVALIDP-20GENERIC-FUNCTION-29" >VALIDP</a></span></span> <span class="locative-args">CLOG-OBJ</span></span></p>
 
-<p>Returns true of connection is valid on this <code>CLOG-OBJ</code>.</p></li>
+<p>Returns true if connection is valid on this <code>CLOG-OBJ</code>.</p></li>
 </ul>
 
 <p>CLOG-Obj - Event Handling</p>
@@ -4165,7 +4165,34 @@ on-storage event is fired for changes to :local storage keys.</p></li>
 
 <h2><a href="#x-28CLOG-3A-40CLOG-INTERNALS-20MGL-PAX-3ASECTION-29">17 CLOG Framework internals and extensions</a></h2>
 
-<p>Responding to new java script DOM events</p>
+<p><em>* Introduction to Internals *</em></p>
+
+<p>This section on internals is not intended for general use of <code>CLOG</code>. It is
+for those looking to maint or extend <code>CLOG</code>, or those creating plugins.</p>
+
+<p><em>* The Client Side and the Server Side *</em></p>
+
+<p>All objects created in <code>CLOG</code> have a server side and a client side
+representation, at least at the time of their creation. The server
+side representation is a CLOG-obj or one of its descendants that is
+returned by one of the many create-* functions. The client side
+representation is the DOM element (or other JavaScript object) itself
+stored in the clog array keyed by the html-id clog[html-id][].</p>
+
+<p><em>* Client Side Scripting *</em></p>
+
+<p>Executing code on the client side is done in one of three ways:</p>
+
+<ol>
+<li><p>The connection - Using the clog-connection package execute or query</p></li>
+<li><p>The DOM object - Using the clog-obj execute or query</p></li>
+<li><p>The jQuery wrapper - Using the clog-obj jquery-execute or jquery-query</p></li>
+</ol>
+
+<p>Query time outs are set in clog-connect:<em>query-time-out</em> by default 3
+seconds.</p>
+
+<p><em>* Responding to new JavaScript DOM events *</em></p>
 
 <p>If there is no data for the event just changing the name of the event is
 sufficient in this example:</p>
@@ -4178,10 +4205,10 @@ sufficient in this example:</p>
          <span class="paren5">(<span class="code">funcall handler obj</span>)</span></span>)</span></span>)</span></span>)</span></span>)</span></span></code></pre>
 
 <p>If there is data for the event an additional string containing the needed
-java-script to return the even data and a function to parse out the data.</p>
+JavaScript to return the even data and a function to parse out the data.</p>
 
 <p>Replace the event name with the correct name, parse-keyboard-even with the
-parse function and the string containing the needed JavaScrip replaces
+parse function and the string containing the needed JavaScript replaces
 keyboard-event-script:</p>
 
 <ul>
