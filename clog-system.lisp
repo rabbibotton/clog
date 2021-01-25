@@ -18,7 +18,10 @@
 
 (defvar *clog-running* nil "If clog running.")
 
-(defvar *overide-static-root* nil "Overide the static-root settings.")
+(defvar *overide-static-root* nil
+  "Overide the static-root settings. This is not normally a good idea, but if
+trying to run the tutorials or demos and unable to have your local directy the
+same as the clog directy this overides the relative paths used in them.")
 
 ;;;;;;;;;;;;;;;;
 ;; initialize ;;

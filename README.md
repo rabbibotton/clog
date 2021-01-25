@@ -58,6 +58,8 @@ have Quicklisp configured):
 
 1. cd to the CLOG dir (the dir should be one used by Quicklisp ex. ~/common-lisp/)
 2. Start emacs/slime or your common lisp "repl" in _that_ directory.
+   (This is just for tutorial, so relative paths work. In your app you just set
+    the :site-root directory any place you want on initialize.)
 3. In the REPL, run:
 
 CL-USER> (ql:quickload :clog)
