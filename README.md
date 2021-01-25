@@ -147,8 +147,6 @@ Demo Summary
 
 Enhancements underway:
 
-- Multimedia - HTML 5 Audio and Video
-
 - CLOG higher level containers and GUI widgets
 
 - Database bindings and server-side APIs
