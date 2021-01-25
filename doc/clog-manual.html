@@ -3183,17 +3183,18 @@ Common values - 1.0 normal, 0.5 half speed, -1.0 reverse</p></li>
 
 <p>Returns true if browser claims support of a media type.
 Browsers report possibility but not guarantees of being able to support a
-media type.
-     Common values:
-       video/ogg
-       video/mp4
-       video/webm
-       audio/mpeg
-       audio/ogg
-       audio/mp4
-       audio/mp3</p>
+media type.</p>
 
-<pre><code> Common values, including codecs:
+<pre><code> Common values:
+   video/ogg
+   video/mp4
+   video/webm
+   audio/mpeg
+   audio/ogg
+   audio/mp4
+   audio/mp3
+
+ Common values, including codecs:
    video/ogg; codecs=&quot;theora, vorbis&quot;
    video/mp4; codecs=&quot;avc1.4D401E, mp4a.40.2&quot;
    video/webm; codecs=&quot;vp8.0, vorbis&quot;
@@ -3201,6 +3202,17 @@ media type.
    audio/mp4; codecs=&quot;mp4a.40.5&quot;
 </code></pre></li>
 </ul>
+
+<p>CLOG-Multimedia - Event Handlers</p>
+
+<p>The standard event order for a normal file load is:
+  On_Load_Start
+  On_Duration_Change
+  On_Loaded_Meta_Data
+  On_Loaded_Data
+  On_Progress
+  On_Can_Play
+  On_Can_Play_Though</p>
 
 <p><a id='x-28CLOG-3ASET-ON-MEDIA-ABORT-20GENERIC-FUNCTION-29'></a></p>
 

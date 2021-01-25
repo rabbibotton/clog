@@ -72,7 +72,7 @@
   (:documentation "Get/Setf postion of media in seconds."))
 
 (defmethod media-position ((obj clog-multimedia))
-  (parse-integer (property obj "currentTime")))
+  (property obj "currentTime"))
 
 (defgeneric set-media-position (clog-multimedia value)
   (:documentation "Set media source VALUE for CLOG-MULTIMEDIA"))
@@ -215,6 +215,7 @@ Common values - 1.0 normal, 0.5 half speed, -1.0 reverse"))
   (:documentation "Returns true if browser claims support of a media type.
 Browsers report possibility but not guarantees of being able to support a
 media type.
+
      Common values:
        video/ogg
        video/mp4
@@ -238,15 +239,6 @@ media type.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Events - clog-multimedia
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-;;  The standard event order for a normal file load is:
-;;    On_Load_Start
-;;    On_Duration_Change
-;;    On_Loaded_Meta_Data
-;;    On_Loaded_Data
-;;    On_Progress
-;;    On_Can_Play
-;;    On_Can_Play_Though
 
 ;;;;;;;;;;;;;;;;;;;;;;;;
 ;; set-on-media-abort ;;

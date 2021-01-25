@@ -450,7 +450,18 @@ embedded in a native template application.)"
   (pause-media       generic-function)
   (load-media        generic-function)
   (can-play-type-p   generic-function)
-  
+
+  "CLOG-Multimedia - Event Handlers
+
+    The standard event order for a normal file load is:
+      On_Load_Start
+      On_Duration_Change
+      On_Loaded_Meta_Data
+      On_Loaded_Data
+      On_Progress
+      On_Can_Play
+      On_Can_Play_Though"
+
   (set-on-media-abort      generic-function)
   (set-on-media-error      generic-function)
   (set-on-can-play         generic-function)
