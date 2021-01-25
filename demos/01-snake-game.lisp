@@ -55,7 +55,7 @@
       (sleep .1))
     (setf (hiddenp splash) t)))
 
-(defun paint (cx app)
+(defun paint (body cx app)
   (let ((game-over nil)
 	(head-cell (car (snake app))))
 
@@ -94,6 +94,7 @@
 	     (fill-style cx :red)
 	     (font-style cx "bold 20px sans-serif")
 	     (fill-text cx "GAME OVER" 30 30)
+	     (play-media (create-audio body :source "/demo/game-over.wav" :controls nil))
 	     (setf game-over t))
 	    (t
 	     (fill-style cx :purple)
@@ -112,7 +113,9 @@
 		    (fill-style cx :green)
 		    (fill-text cx (format nil "Score: ~A" (score app))
 			       5 (- display-height 15))
-		    
+
+		    (play-media (create-audio body :source "/demo/eat.wav" :controls nil))
+
 		    (setf (food app) (new-food)))
 		   (t
 		    (draw-segment (car (last (snake app))))
@@ -178,11 +181,13 @@
     (set-on-click    right-btn #'on-click)
     (set-on-click    up-btn    #'on-click)
     (set-on-click    down-btn  #'on-click)
+
+    (play-media (create-audio body :source "/demo/start.wav" :controls nil))
     
     ;; Game loop
     (loop
       (unless (validp body) (return))
-      (when (paint context app) (return))
+      (when (paint body context app) (return))
       (sleep .1))))
 
 (defun on-new-window (body)
@@ -190,7 +195,8 @@
     (setf (connection-data-item body "app-data") app))
   
   (display-splash body)
-  (start-game body))
+  (start-game body)
+  (run body))
 
 (defun start-demo ()
   "Start demo."
