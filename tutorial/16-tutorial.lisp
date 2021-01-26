@@ -5,9 +5,10 @@
 (in-package :clog-user)
 
 ;; In previous tutorials we attached to an html file using bootstrap. For this tutorial we
-;; are going to create a bootstrap 4.0 page just using CLOG. For the most part CLOG is about
-;; apps but it is possible to do static pages with it. You should also check out a CSS only
-;; alternative to bootsrap - https://www.w3schools.com/w3css/default.asp
+;; are going to create a bootstrap 4.0 page just using CLOG.
+;;
+;; You should also check out a CSS only alternative to bootsrap -
+;;   https://www.w3schools.com/w3css/default.asp
 
 (defun on-new-window (body)
   (load-css (html-document body) "https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css")
@@ -18,8 +19,13 @@
 
   (setf (title (html-document body)) "Hello Boostrap")
   
-  (let* ((jumbo (create-div body :class "jumbotron text-center"))
-	 (tmp   (create-section jumbo :h1 :content "My First Bootstrap Page"))
+  (let* ((nav   (create-section body :nav :class "nav"))
+	 (l1    (create-a nav :content "link1" :class "nav-link"))
+	 (l2    (create-a nav :content "link2" :class "nav-link"))
+	 (l3    (create-a nav :content "link3" :class "nav-link"))
+
+	 (jumbo (create-div body :class "jumbotron text-center"))
+	 (jname (create-section jumbo :h1 :content "My First Bootstrap Page"))
 	 (tmp   (create-p jumbo :content "Resize this responsive page to see the effect!"))
 
 	 (container (create-div body :class "container"))
@@ -35,7 +41,19 @@
 
 	 (col3 (create-div row :class "col-sm-4"))
 	 (tmp  (create-section col3 :h3 :content "Column 3"))
-	 (tmp  (create-p col3 :content "Lorem ipsum dolor.."))))
+	 (tmp  (create-p col3 :content "Lorem ipsum dolor..")))
+
+    (set-on-click l1 (lambda (obj)(alert (window body) "Clicked link1")))
+    
+    (set-on-click l2 (lambda (obj)
+		       (let* ((alert (create-div body :class "alert alert-warning alert-dismissible fade show"))
+			      (tmp   (create-phrase alert :strong :content "Wow! You clicked link 2"))
+			      (btn   (create-button alert :class "close" :content "<span>&times;</span>")))
+			 (setf (attribute alert "role") "alert")
+			 (setf (attribute btn "data-dismiss") "alert")
+			 (place-after nav alert))))
+    
+    (set-on-click l3 (lambda (obj)(setf (color jname) (rgb 128 128 0)))))
     
   (run body))
 

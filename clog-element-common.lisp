@@ -31,7 +31,7 @@ place-inside-bottom-of CLOG-OBJ.
    _self   = current frame or window"))
 
 (defmethod create-a ((obj clog-obj)
-		     &key (link "")
+		     &key (link "#")
 		       (content "")
 		       (target "_self")
 		       (class nil)
