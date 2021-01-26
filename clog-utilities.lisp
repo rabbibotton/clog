@@ -104,6 +104,8 @@
 alpha 0.0 - 1.0"
   (format nil "hsla(~A, ~A, ~A, ~A)" hue saturation lightness alpha))
 
+;; https://www.w3schools.com/colors/colors_names.asp
+;;
 ;; From - https://www.w3schools.com/
 ;;
 ;; linear-gradient(direction, color-stop1, color-stop2, ...);
