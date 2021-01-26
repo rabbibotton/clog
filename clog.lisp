@@ -336,7 +336,17 @@ embedded in a native template application.)"
 
   "CLOG-Span - Class for CLOG Inline Spans"
   (clog-span   class)
-  (create-span generic-function))
+  (create-span generic-function)
+
+  "CLOG-Section - Class for CLOG Inline Sections"
+  (section-type   type)
+  (clog-section   class)
+  (create-section generic-function)
+  
+  "CLOG-Phrase - Class for CLOG Inline Phrases"
+  (phrase-type   type)
+  (clog-phrase   class)
+  (create-phrase generic-function))
 
 (defsection @clog-form (:title "CLOG Form Objects")
   "CLOG-Form - Class for organizing Form Elements in to a From"

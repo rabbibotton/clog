@@ -457,3 +457,54 @@ CLOG-OBJ"))
   (create-child obj (format nil "<span>~A</span>" (escape-string content))
 		:clog-type 'clog-span :auto-place auto-place))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Implementation - clog-section
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defclass clog-section (clog-element)()
+  (:documentation "CLOG Section Objects."))
+
+;;;;;;;;;;;;;;;;;;;;
+;; create-section ;;
+;;;;;;;;;;;;;;;;;;;;
+
+(deftype section-type () '(member :address :article :aside :header :main :nav
+			   :p :pre :section :blockquote :h1 :h2 :h3 :h4 :h5 :h6
+			   :hgroup))
+
+(defgeneric create-section (clog-obj section &key content auto-place)
+  (:documentation "Create a new CLOG-Section of section type  as child of
+CLOG-OBJ with CONTENT and if :AUTO-PLACE (default t) place-inside-bottom-of
+CLOG-OBJ"))
+
+(defmethod create-section ((obj clog-obj) section
+			   &key (content "") (auto-place t))
+  (create-child obj (format nil "<~A>~A</~A>"
+			    section (escape-string content) section)
+		:clog-type 'clog-section :auto-place auto-place))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Implementation - clog-phrase
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defclass clog-phrase (clog-element)()
+  (:documentation "CLOG Phrase Objects."))
+
+;;;;;;;;;;;;;;;;;;;
+;; create-phrase ;;
+;;;;;;;;;;;;;;;;;;;
+
+(deftype phrase-type () '(member :abbr :code :strong :em :dfn :samp :kbd :var
+			  :marked :del :ins :s :q :big :small :time :tt :cite
+			  :i :b :u :sub :su))
+
+(defgeneric create-phrase (clog-obj phrase &key content auto-place)
+  (:documentation "Create a new CLOG-Phrase of phrase type  as child of
+CLOG-OBJ with CONTENT and if :AUTO-PLACE (default t) place-inside-bottom-of
+CLOG-OBJ"))
+
+(defmethod create-phrase ((obj clog-obj) phrase
+			   &key (content "") (auto-place t))
+  (create-child obj (format nil "<~A>~A</~A>"
+			    phrase (escape-string content) phrase)
+		:clog-type 'clog-phrase :auto-place auto-place))
