@@ -58,7 +58,11 @@ embedded in a native template application.)"
   (js-on-p       function)
   (p-on-js       function)
   (open-browser  function)
-  (escape-string function))
+  (escape-string function)
+  (rgb           function)
+  (rgba          function)
+  (hsl           function)
+  (hsla          function))
 
 (defsection @clog-obj (:title "CLOG Objects")
   "CLOG-Obj - Base class for CLOG Objects"
