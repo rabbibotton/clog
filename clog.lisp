@@ -643,6 +643,7 @@ embedded in a native template application.)"
   (document-element generic-function)
   (ready-state      generic-function)
   (load-css         generic-function)
+  (load-script      generic-function)
   (put              generic-function)
   (put-line         generic-function)
   (put-br           generic-function)

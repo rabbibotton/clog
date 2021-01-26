@@ -155,8 +155,20 @@ clog-document object. (Private)"))
 
 (defmethod load-css ((obj clog-document) css-url)
   (jquery-execute (head-element obj)
-		  (format nil "append('<link rel=\"stylesheet\"
-           href=\"~A\" type=\"text/css\">')" (escape-string css-url))))
+		  (format nil "append('<link rel=\"stylesheet\" href=\"~A\" type=\"text/css\">')"
+			  (escape-string css-url))))
+
+;;;;;;;;;;;;;;;;;
+;; load-script ;;
+;;;;;;;;;;;;;;;;;
+
+(defgeneric load-script (clog-document script-url)
+  (:documentation "Load script from SCRIPT-URL."))
+
+(defmethod load-script ((obj clog-document) script-url)
+  (jquery-execute (head-element obj)
+		  (format nil "append('<script src=\"~A\">')"
+			  (escape-string script-url))))
 
 ;;;;;;;;;
 ;; put ;;
