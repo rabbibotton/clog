@@ -10,7 +10,7 @@
 ;; You should also check out a CSS only alternative to bootsrap -
 ;;   https://www.w3schools.com/w3css/default.asp
 
-(defun on-new-window (body)
+(defun on-index (body)
   (load-css (html-document body) "https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css")
   ;; Bootstrap requires jQuery but there is no need to load it as so does CLOG so already loaded
   ;; the generic boot.html
@@ -23,6 +23,7 @@
 	 (l1    (create-a nav :content "link1" :class "nav-link"))
 	 (l2    (create-a nav :content "link2" :class "nav-link"))
 	 (l3    (create-a nav :content "link3" :class "nav-link"))
+	 (l4    (create-a nav :content "link3" :class "nav-link" :link "/page2"))
 
 	 (jumbo (create-div body :class "jumbotron text-center"))
 	 (jname (create-section jumbo :h1 :content "My First Bootstrap Page"))
@@ -57,8 +58,28 @@
     
   (run body))
 
+(defun on-page2 (body)
+  ;; Since page2 is a new browser page we need to reload our bootstrap files.
+  (load-css (html-document body) "https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css")
+  (load-script (html-document body) "https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js")
+  (load-script (html-document body) "https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js")
+
+  (setf (title (html-document body)) "Hello Boostrap - page2")
+
+  (let* ((nav   (create-section body :nav :class "nav"))
+	 (l1    (create-a nav :content "link1" :class "nav-link"))
+	 (l2    (create-a nav :content "link2" :class "nav-link"))
+	 (l3    (create-a nav :content "link3" :class "nav-link"))
+	 (l4    (create-a nav :content "page1" :class "nav-link" :link "/"))
+
+	 (jumbo (create-div body :class "jumbotron text-center"))
+	 (jname (create-section jumbo :h1 :content "You found Page2"))))
+
+  (run body))
+
 (defun start-tutorial ()
   "Start turtorial."
 
-  (initialize #'on-new-window)
+  (initialize #'on-index)
+  (set-on-new-window #'on-page2 :path "/page2")
   (open-browser))
