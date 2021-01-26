@@ -21,7 +21,9 @@
 ;; create-form ;;
 ;;;;;;;;;;;;;;;;;
 
-(defgeneric create-form (clog-obj &key action method target auto-place)
+(deftype from-method-type () '(members :get :post :none))
+
+(defgeneric create-form (clog-obj &key action method target class auto-place)
   (:documentation "Create a new CLOG-Form as child of CLOG-OBJ that organizes
 a collection of form elements in to a single form if :AUTO-PLACE (default t)
 place-inside-bottom-of CLOG-OBJ. In CLOG a form's on-submit handler should be
@@ -32,12 +34,20 @@ set an on-submit handler or call (submit CLOG-FORM) to perform the form
 action."))
 
 (defmethod create-form ((obj clog-obj)
-			&key (action "")
-			  (method "get")
+			&key (action "#")
+			  (method :none)
 			  (target "_self")
+			  (class nil)
 			  (auto-place t))
-  (create-child obj (format nil "<form action='~A' method='~A' target='~A'/>"
-			    action method target)
+  (create-child obj (format nil "<form action='~A' ~A target='~A'/>"
+			    action
+			    (if (eq method :none)
+				"onSubmit='return false;'"
+				(format nil "method='~A'" method))
+			    target
+			    (if class
+				(format nil " class='~A'" (escape-string class))
+				""))
 		:clog-type 'clog-form :auto-place auto-place))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;
@@ -346,7 +356,8 @@ group called NAME."))
 ;;;;;;;;;;;;;;;;
 
 (defgeneric name-value (clog-obj name)
-  (:documentation "Returns the value of input item called NAME."))
+  (:documentation "Returns the value of input item called NAME and must
+be unique name on entire document."))
 
 (defmethod name-value ((obj clog-obj) name)
   (cc:query (connection-id obj)
@@ -629,7 +640,7 @@ virtual keyboards."))
   (:documentation "Set label is for ELEMENT."))
 
 (defmethod label-for ((obj clog-label) element)
-  (setf (attribute obj "for") element))
+  (setf (attribute obj "for") (html-id element)))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

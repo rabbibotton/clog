@@ -379,6 +379,7 @@ embedded in a native template application.)"
 
 (defsection @clog-form (:title "CLOG Form Objects")
   "CLOG-Form - Class for organizing Form Elements in to a From"
+  (form-method-type   type)
   (clog-form          class)
   (create-form        generic-function)
   

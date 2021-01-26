@@ -6,9 +6,6 @@
 
 ;; In previous tutorials we attached to an html file using bootstrap. For this tutorial we
 ;; are going to create a bootstrap 4.0 page just using CLOG.
-;;
-;; You should also check out a CSS only alternative to bootsrap -
-;;   https://www.w3schools.com/w3css/default.asp
 
 (defun on-index (body)
   (load-css (html-document body) "https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css")

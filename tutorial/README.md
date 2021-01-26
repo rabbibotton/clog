@@ -49,3 +49,4 @@ Tutorial Summary
 - 14-tutorial.lisp - Local (persistent) and Session client side storage
 - 15-tutorial.lisp - Multi-media
 - 16-tutorial.lisp - Bootstrap 4, Loading css files and javascript
+- 17-tutorial.lisp - W3.CSS layout example and Form submit methods

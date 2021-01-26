@@ -50,7 +50,13 @@
 	       ;; Bootstrap specific markup
 	       (setf (css-class-name alert-div) "alert alert-success")
 	       (setf (attribute alert-div "role") "alert")
-	       
+
+	       ;; We collect the data from the hidden form elements
+	       ;; using radio-value and name-value (for other types if
+	       ;; input other than radio buttons) or we could bind each
+	       ;; control (using ATTACH-AS-CHILD)and seek their value
+	       ;; directly. See tutorial 17 and to deal with forms in
+	       ;; the old html page model of "put" and "get"
 	       (setf (inner-html alert-div)
 		     (format nil "<pre>radios value : ~A</pre><br>
                            <pre>textinput value : ~A</pre><br>"
