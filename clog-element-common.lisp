@@ -508,3 +508,181 @@ CLOG-OBJ"))
   (create-child obj (format nil "<~A>~A</~A>"
 			    phrase (escape-string content) phrase)
 		:clog-type 'clog-phrase :auto-place auto-place))
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Implementation - clog-ordered-list
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defclass clog-ordered-list (clog-element)()
+  (:documentation "CLOG Ordered-List Objects."))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;
+;; create-ordered-list ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric create-ordered-list (clog-obj &key auto-place)
+  (:documentation "Create a new CLOG-Ordered-List as child of CLOG-OBJ
+and if :AUTO-PLACE (default t) place-inside-bottom-of CLOG-OBJ"))
+
+(defmethod create-ordered-list ((obj clog-obj) &key (auto-place t))
+  (create-child obj "<ol />"
+		:clog-type 'clog-ordered-list :auto-place auto-place))
+
+;;;;;;;;;;;;;;;
+;; list-kind ;;
+;;;;;;;;;;;;;;;
+
+(deftype list-kind-type () '(member :disc :armenian :circle :cjk-ideographic
+			     :decimal :decimal-leading-zero :georgian :hebrew
+			     :hiragana :hiragana-iroha :katakana
+			     :katakana-iroha :lower-alpha :lower-greek
+			     :lower-latin :lower-roman :none :square
+			     :upper-alpha :upper-latin :upper-roman))
+
+(defgeneric list-kind (clog-ordered-list)
+  (:documentation "Get/Setf list list-kind."))
+
+(defmethod list-kind ((obj clog-ordered-list))
+  (style obj "list-style-type"))
+
+(defgeneric set-list-kind (clog-ordered-list value)
+  (:documentation "Set list-kind VALUE for  CLOG-ORDERED-LIST"))
+
+(defmethod set-list-kind ((obj clog-ordered-list) value)
+  (setf (style obj "list-style-type") value))
+(defsetf list-kind set-list-kind)
+
+;;;;;;;;;;;;;;;;;;;
+;; list-location ;;
+;;;;;;;;;;;;;;;;;;;
+
+(deftype list-location-type () '(member :inside :outside))
+
+(defgeneric list-location (clog-ordered-list)
+  (:documentation "Get/Setf list list-location. Default
+is outside."))
+
+(defmethod list-location ((obj clog-ordered-list))
+  (style obj "list-style-position"))
+
+(defgeneric set-list-location (clog-ordered-list value)
+  (:documentation "Set list-location VALUE for CLOG-ORDERED-LIST"))
+
+(defmethod set-list-location ((obj clog-ordered-list) value)
+  (setf (style obj "list-style-position") value))
+(defsetf list-location set-list-location)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Implementation - clog-unordered-list
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defclass clog-unordered-list (clog-element)()
+  (:documentation "CLOG Unordered-List Objects."))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; create-unordered-list ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric create-unordered-list (clog-obj &key auto-place)
+  (:documentation "Create a new CLOG-Unordered-List as child of CLOG-OBJ
+and if :AUTO-PLACE (default t) place-inside-bottom-of CLOG-OBJ"))
+
+(defmethod create-unordered-list ((obj clog-obj) &key (auto-place t))
+  (create-child obj "<ul />"
+		:clog-type 'clog-unordered-list :auto-place auto-place))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Implementation - clog-list-item
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defclass clog-list-item (clog-element)()
+  (:documentation "CLOG List-Item Objects."))
+
+;;;;;;;;;;;;;;;;;;;;;;
+;; create-list-item ;;
+;;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric create-list-item (clog-obj &key content auto-place)
+  (:documentation "Create a new CLOG-List-Item as child of CLOG-OBJ
+and if :AUTO-PLACE (default t) place-inside-bottom-of CLOG-OBJ"))
+
+(defmethod create-list-item ((obj clog-obj) &key (content "") (auto-place t))
+  (create-child obj (format nil "<li>~A</li>" (escape-string content))
+		:clog-type 'clog-list-item :auto-place auto-place))
+
+;;;;;;;;;;;;;;;;
+;; item-value ;;
+;;;;;;;;;;;;;;;;
+
+(defgeneric item-value (clog-list-item)
+  (:documentation "Get/Setf list item-value."))
+
+(defmethod item-value ((obj clog-list-item))
+  (property obj "value"))
+
+(defgeneric set-item-value (clog-list-item value)
+  (:documentation "Set item-value VALUE for  CLOG-LIST-ITEM"))
+
+(defmethod set-item-value ((obj clog-list-item) value)
+  (setf (property obj "value") value))
+(defsetf item-value set-item-value)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Implementation - clog-definition-list
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defclass clog-definition-list (clog-element)()
+  (:documentation "CLOG Definition-List Objects."))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; create-definition-list ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric create-definition-list (clog-obj &key auto-place)
+  (:documentation "Create a new CLOG-Definition-List as child of CLOG-OBJ
+and if :AUTO-PLACE (default t) place-inside-bottom-of CLOG-OBJ"))
+
+(defmethod create-definition-list ((obj clog-obj) &key (auto-place t))
+  (create-child obj "<dl />"
+		:clog-type 'clog-definition-list :auto-place auto-place))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Implementation - clog-term
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defclass clog-term (clog-element)()
+  (:documentation "CLOG Term Objects."))
+
+;;;;;;;;;;;;;;;;;
+;; create-term ;;
+;;;;;;;;;;;;;;;;;
+
+(defgeneric create-term (clog-definition-list &key content auto-place)
+  (:documentation "Create a new CLOG-Term as child of CLOG-OBJ
+and if :AUTO-PLACE (default t) place-inside-bottom-of CLOG-OBJ"))
+
+(defmethod create-term ((obj clog-definition-list)
+			&key (content "") (auto-place t))
+  (create-child obj (format nil "<dt>~A</dt>" (escape-string content))
+		:clog-type 'clog-term :auto-place auto-place))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Implementation - clog-description
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defclass clog-description (clog-element)()
+  (:documentation "CLOG Description Objects."))
+
+;;;;;;;;;;;;;;;;;;;;;;;;
+;; create-description ;;
+;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric create-description (clog-definition-list &key content auto-place)
+  (:documentation "Create a new CLOG-Description as child of CLOG-OBJ
+and if :AUTO-PLACE (default t) place-inside-bottom-of CLOG-OBJ"))
+
+(defmethod create-description ((obj clog-definition-list)
+			       &key (content "") (auto-place t))
+  (create-child obj (format nil "<dd>~A</dd>" (escape-string content))
+		:clog-type 'clog-description :auto-place auto-place))

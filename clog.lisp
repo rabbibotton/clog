@@ -346,7 +346,36 @@ embedded in a native template application.)"
   "CLOG-Phrase - Class for CLOG Inline Phrases"
   (phrase-type   type)
   (clog-phrase   class)
-  (create-phrase generic-function))
+  (create-phrase generic-function)
+
+  "CLOG-Ordered-List - Class for CLOG Ordered-Lists"
+  (clog-ordered-list   class)
+  (create-ordered-list generic-function)
+  (list-kind-type      type)
+  (list-kind           generic-function)
+  (list-location-type  type)
+  (list-location       generic-function)
+  
+  "CLOG-Unordered-List - Class for CLOG Unordered-Lists"
+  (clog-unordered-list   class)
+  (create-unordered-list generic-function)
+
+  "CLOG-List-Item - Class for CLOG List-Items"
+  (clog-list-item   class)
+  (create-list-item generic-function)
+  (item-value       generic-function)
+  
+  "CLOG-Definition-List - Class for CLOG Definition-Lists"
+  (clog-definition-list   class)
+  (create-definition-list generic-function)
+
+  "CLOG-Term - Class for CLOG Terms"
+  (clog-term   class)
+  (create-term generic-function)
+  
+  "CLOG-Description - Class for CLOG Descriptions"
+  (clog-description   class)
+  (create-description generic-function))
 
 (defsection @clog-form (:title "CLOG Form Objects")
   "CLOG-Form - Class for organizing Form Elements in to a From"

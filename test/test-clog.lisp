@@ -56,6 +56,16 @@
 		    :alt-text "Lisp Flag")
     (setf (value (create-meter win)) 20)
     (setf (value (create-progress-bar win)) 10)
+
+    (create-section win :h3 :content "a header")
+    (create-phrase win :i :content "I am italic")
+    
+    (setf tmp (create-ordered-list win))
+    (setf (list-kind tmp) :hebrew)
+    (create-list-item tmp :content "list item 1")
+    (create-list-item tmp :content "list item 2")
+    (create-list-item tmp :content "list item 3")
+    (setf (list-location tmp) :inside)
     ))
 
 (defun test ()
