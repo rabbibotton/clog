@@ -691,7 +691,8 @@ elements wrap around it."))
 ;; display ;;
 ;;;;;;;;;;;;;
 
-(deftype display-type () '(member :none :block :inline :inline-block :flex))
+(deftype display-type () '(member :none :block :inline :inline-block :flex
+			   :grid :inline-grid))
 
 (defgeneric display (clog-element)
   (:documentation "Get/Setf display. Display sets the CSS Display property that
@@ -712,7 +713,55 @@ handles how elements are treated by the browser layout engine.
     inline-block - Flows with paragraph but will always fill from left to
                    right.
    
-    flex         - Use the flexbox model"))
+    flex         - Turn this item in to a flexbox container. The flexbox
+                   properties for container to adjust are:
+
+                      justify-content - how items are spaced in flexbox
+                      align-content - how items spaced when wrapped
+                      align-items - when placed (from start, center, from end)
+                      flex-direction - flex-box left<>right or top<>bottom
+                      flex-wrap - keep in one line or wrap to more
+
+                   The properties to adjust for items in the flexbox are:
+
+                      flex - sets the relative grow,shrink,basis
+                      order - sets visual item order in flexbox
+                      align-self - override flexbox's align-items for item
+
+                   :flex-start    [---  ]
+                   :flex-end      [   ---]
+                   :center        [ --- ]
+                   :space-between [-  -  -]
+                   :space-around  [ -   -   - ]
+                   :space-evenly  [ - - - ]
+
+    grid         - Turn this item in to a grid container block level. The grid
+                   properties to adjust for container are:
+
+                      grid-template-columns
+                      grid-template-rows
+                      grid-template-areas
+                      column-gap
+                      row-gap
+                      align-items
+                      justify-items
+                      justify-content - align the grid as a whole in container
+                      align-content - align the grid as a whole in container
+                      grid-auto-columns
+                      grid-auto-rows
+                      grid-auto-flow
+
+                    The properties to adjust for grid items is:
+
+                      grid-column-start
+                      grid-column-end
+                      grid-row-start
+                      grid-row-end
+                      align-self
+                      justify-self
+
+    inline-grid   - Turn this item in to a grid container inline level.
+"))
 
 (defmethod display ((obj clog-element))
   (style obj "display"))
@@ -723,6 +772,417 @@ handles how elements are treated by the browser layout engine.
 (defmethod set-display ((obj clog-element) value)
   (setf (style obj "display") value))
 (defsetf display set-display)
+
+;;;;;;;;;;;
+;; order ;;
+;;;;;;;;;;;
+
+(defgeneric order (clog-element)
+  (:documentation "Get/Setf visual item order flexbox packing but
+not actual order in document or tab order etc."))
+
+(defmethod order ((obj clog-element))
+  (style obj "order"))
+
+(defgeneric set-order (clog-element value)
+  (:documentation "Set order VALUE for CLOG-ELEMENT"))
+
+(defmethod set-order ((obj clog-element) value)
+  (setf (style obj "order") value))
+(defsetf order set-order)
+
+;;;;;;;;;;
+;; flex ;;
+;;;;;;;;;;
+
+(defgeneric flex (clog-element)
+  (:documentation "Get item's flexbox relative grow, shrink,
+and basis"))
+
+(defmethod flex ((obj clog-element))
+  (style obj "flex"))
+
+(defgeneric set-flex (clog-element &key grow shrink flex-basis)
+  (:documentation "Set flex grow (default 0) shrink (default 1) and
+flex-basis (default :auto = use width or height) for CLOG-ELEMENT"))
+
+(defmethod set-flex ((obj clog-element)
+		     &key (grow 0) (shrink 1) (flex-basis :auto))
+  (setf (style obj "flex") (format nil "~A ~A ~A" grow shrink flex-basis)))
+
+
+;;;;;;;;;;;;;;;
+;; flex-wrap ;;
+;;;;;;;;;;;;;;;
+
+(deftype flex-wrap-type ()
+  '(member :nowrap :wrap :wrap-reverse))
+
+(defgeneric flex-wrap (clog-element)
+  (:documentation "Get/Setf direction of flexbox packing."))
+
+(defmethod flex-wrap ((obj clog-element))
+  (style obj "flex-wrap"))
+
+(defgeneric set-flex-wrap (clog-element value)
+  (:documentation "Set flex-wrap VALUE for CLOG-ELEMENT"))
+
+(defmethod set-flex-wrap ((obj clog-element) value)
+  (setf (style obj "flex-wrap") value))
+(defsetf flex-wrap set-flex-wrap)
+
+;;;;;;;;;;;;;;;;;;;;
+;; flex-direction ;;
+;;;;;;;;;;;;;;;;;;;;
+
+(deftype flex-direction-type ()
+  '(member :row :row-reverse :column :column-reverse))
+
+(defgeneric flex-direction (clog-element)
+  (:documentation "Get/Setf direction of flexbox packing."))
+
+(defmethod flex-direction ((obj clog-element))
+  (style obj "flex-direction"))
+
+(defgeneric set-flex-direction (clog-element value)
+  (:documentation "Set flex-direction VALUE for CLOG-ELEMENT"))
+
+(defmethod set-flex-direction ((obj clog-element) value)
+  (setf (style obj "flex-direction") value))
+(defsetf flex-direction set-flex-direction)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; grid-template-columns ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric grid-template-columns (clog-element)
+  (:documentation "Get/Setf grid-template-columns."))
+
+(defmethod grid-template-columns ((obj clog-element))
+  (style obj "grid-template-columns"))
+
+(defgeneric set-grid-template-columns (clog-element value)
+  (:documentation "Set grid-template-columns VALUE for CLOG-ELEMENT"))
+
+(defmethod set-grid-template-columns ((obj clog-element) value)
+  (setf (style obj "grid-template-columns") value))
+(defsetf grid-template-columns set-grid-template-columns)
+
+;;;;;;;;;;;;;;;;;;;;;;;;
+;; grid-template-rows ;;
+;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric grid-template-rows (clog-element)
+  (:documentation "Get/Setf grid-template-rows."))
+
+(defmethod grid-template-rows ((obj clog-element))
+  (style obj "grid-template-rows"))
+
+(defgeneric set-grid-template-rows (clog-element value)
+  (:documentation "Set grid-template-rows VALUE for CLOG-ELEMENT"))
+
+(defmethod set-grid-template-rows ((obj clog-element) value)
+  (setf (style obj "grid-template-rows") value))
+(defsetf grid-template-rows set-grid-template-rows)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;
+;; grid-template-areas ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric grid-template-areas (clog-element)
+  (:documentation "Get/Setf grid-template-areas."))
+
+(defmethod grid-template-areas ((obj clog-element))
+  (style obj "grid-template-areas"))
+
+(defgeneric set-grid-template-areas (clog-element value)
+  (:documentation "Set grid-template-areas VALUE for CLOG-ELEMENT"))
+
+(defmethod set-grid-template-areas ((obj clog-element) value)
+  (setf (style obj "grid-template-areas") value))
+(defsetf grid-template-areas set-grid-template-areas)
+
+;;;;;;;;;;;;;;;;
+;; column-gap ;;
+;;;;;;;;;;;;;;;;
+
+(defgeneric column-gap (clog-element)
+  (:documentation "Get/Setf column-gap."))
+
+(defmethod column-gap ((obj clog-element))
+  (style obj "column-gap"))
+
+(defgeneric set-column-gap (clog-element value)
+  (:documentation "Set column-gap VALUE for CLOG-ELEMENT"))
+
+(defmethod set-column-gap ((obj clog-element) value)
+  (setf (style obj "column-gap") value))
+(defsetf column-gap set-column-gap)
+
+;;;;;;;;;;;;;
+;; row-gap ;;
+;;;;;;;;;;;;;
+
+(defgeneric row-gap (clog-element)
+  (:documentation "Get/Setf row-gap."))
+
+(defmethod row-gap ((obj clog-element))
+  (style obj "row-gap"))
+
+(defgeneric set-row-gap (clog-element value)
+  (:documentation "Set row-gap VALUE for CLOG-ELEMENT"))
+
+(defmethod set-row-gap ((obj clog-element) value)
+  (setf (style obj "row-gap") value))
+(defsetf row-gap set-row-gap)
+
+;;;;;;;;;;;;;;;;;;;;;;;
+;; grid-auto-columns ;;
+;;;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric grid-auto-columns (clog-element)
+  (:documentation "Get/Setf grid-auto-columns."))
+
+(defmethod grid-auto-columns ((obj clog-element))
+  (style obj "grid-auto-columns"))
+
+(defgeneric set-grid-auto-columns (clog-element value)
+  (:documentation "Set grid-auto-columns VALUE for CLOG-ELEMENT"))
+
+(defmethod set-grid-auto-columns ((obj clog-element) value)
+  (setf (style obj "grid-auto-columns") value))
+(defsetf grid-auto-columns set-grid-auto-columns)
+
+;;;;;;;;;;;;;;;;;;;;
+;; grid-auto-rows ;;
+;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric grid-auto-rows (clog-element)
+  (:documentation "Get/Setf grid-auto-rows."))
+
+(defmethod grid-auto-rows ((obj clog-element))
+  (style obj "grid-auto-rows"))
+
+(defgeneric set-grid-auto-rows (clog-element value)
+  (:documentation "Set grid-auto-rows VALUE for CLOG-ELEMENT"))
+
+(defmethod set-grid-auto-rows ((obj clog-element) value)
+  (setf (style obj "grid-auto-rows") value))
+(defsetf grid-auto-rows set-grid-auto-rows)
+
+;;;;;;;;;;;;;;;;;;;;
+;; grid-auto-flow ;;
+;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric grid-auto-flow (clog-element)
+  (:documentation "Get/Setf grid-auto-flow."))
+
+(defmethod grid-auto-flow ((obj clog-element))
+  (style obj "grid-auto-flow"))
+
+(defgeneric set-grid-auto-flow (clog-element value)
+  (:documentation "Set grid-auto-flow VALUE for CLOG-ELEMENT"))
+
+(defmethod set-grid-auto-flow ((obj clog-element) value)
+  (setf (style obj "grid-auto-flow") value))
+(defsetf grid-auto-flow set-grid-auto-flow)
+
+;;;;;;;;;;;;;;;;;;;;;;;
+;; grid-column-start ;;
+;;;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric grid-column-start (clog-element)
+  (:documentation "Get/Setf grid-column-start."))
+
+(defmethod grid-column-start ((obj clog-element))
+  (style obj "grid-column-start"))
+
+(defgeneric set-grid-column-start (clog-element value)
+  (:documentation "Set grid-column-start VALUE for CLOG-ELEMENT"))
+
+(defmethod set-grid-column-start ((obj clog-element) value)
+  (setf (style obj "grid-column-start") value))
+(defsetf grid-column-start set-grid-column-start)
+
+;;;;;;;;;;;;;;;;;;;;;
+;; grid-column-end ;;
+;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric grid-column-end (clog-element)
+  (:documentation "Get/Setf grid-column-end."))
+
+(defmethod grid-column-end ((obj clog-element))
+  (style obj "grid-column-end"))
+
+(defgeneric set-grid-column-end (clog-element value)
+  (:documentation "Set grid-column-end VALUE for CLOG-ELEMENT"))
+
+(defmethod set-grid-column-end ((obj clog-element) value)
+  (setf (style obj "grid-column-end") value))
+(defsetf grid-column-end set-grid-column-end)
+
+;;;;;;;;;;;;;;;;;;;;
+;; grid-row-start ;;
+;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric grid-row-start (clog-element)
+  (:documentation "Get/Setf grid-row-start."))
+
+(defmethod grid-row-start ((obj clog-element))
+  (style obj "grid-row-start"))
+
+(defgeneric set-grid-row-start (clog-element value)
+  (:documentation "Set grid-row-start VALUE for CLOG-ELEMENT"))
+
+(defmethod set-grid-row-start ((obj clog-element) value)
+  (setf (style obj "grid-row-start") value))
+(defsetf grid-row-start set-grid-row-start)
+
+;;;;;;;;;;;;;;;;;;
+;; grid-row-end ;;
+;;;;;;;;;;;;;;;;;;
+
+(defgeneric grid-row-end (clog-element)
+  (:documentation "Get/Setf grid-row-end."))
+
+(defmethod grid-row-end ((obj clog-element))
+  (style obj "grid-row-end"))
+
+(defgeneric set-grid-row-end (clog-element value)
+  (:documentation "Set grid-row-end VALUE for CLOG-ELEMENT"))
+
+(defmethod set-grid-row-end ((obj clog-element) value)
+  (setf (style obj "grid-row-end") value))
+(defsetf grid-row-end set-grid-row-end)
+
+;;;;;;;;;;;;;;;;;
+;; align-items ;;
+;;;;;;;;;;;;;;;;;
+
+(deftype align-items-type ()
+  '(member :flex-start :flex-end :start :end :center
+    :space-between :space-around :space-evenly :stretch))
+
+(defgeneric align-items (clog-element)
+  (:documentation "Get/Setf align items in a flexbox/grid on column axis."))
+
+(defmethod align-items ((obj clog-element))
+  (style obj "align-items"))
+
+(defgeneric set-align-items (clog-element value)
+  (:documentation "Set align-items VALUE for CLOG-ELEMENT"))
+
+(defmethod set-align-items ((obj clog-element) value)
+  (setf (style obj "align-items") value))
+(defsetf align-items set-align-items)
+
+;;;;;;;;;;;;;;;;
+;; align-self ;;
+;;;;;;;;;;;;;;;;
+
+(deftype align-self-type ()
+  '(member :flex-start :flex-end :start :end :center
+    :space-between :space-around :space-evenly :stretch))
+
+(defgeneric align-self (clog-element)
+  (:documentation "Get/Setf override align-items for this item
+in a flexbox/grid."))
+
+(defmethod align-self ((obj clog-element))
+  (style obj "align-self"))
+
+(defgeneric set-align-self (clog-element value)
+  (:documentation "Set align-self VALUE for CLOG-ELEMENT"))
+
+(defmethod set-align-self ((obj clog-element) value)
+  (setf (style obj "align-self") value))
+(defsetf align-self set-align-self)
+
+;;;;;;;;;;;;;;;;;;;
+;; justify-items ;;
+;;;;;;;;;;;;;;;;;;;
+
+(deftype justify-items-type ()
+  '(member :start :end :center :space-between :space-around
+    :space-evenly :stretch))
+
+(defgeneric justify-items (clog-element)
+  (:documentation "Get/Setf justify items in a grid on row axis."))
+
+(defmethod justify-items ((obj clog-element))
+  (style obj "justify-items"))
+
+(defgeneric set-justify-items (clog-element value)
+  (:documentation "Set justify-items VALUE for CLOG-ELEMENT"))
+
+(defmethod set-justify-items ((obj clog-element) value)
+  (setf (style obj "justify-items") value))
+(defsetf justify-items set-justify-items)
+
+;;;;;;;;;;;;;;;;;;
+;; justify-self ;;
+;;;;;;;;;;;;;;;;;;
+
+(deftype justify-self-type ()
+  '(member :start :end :center :space-between :space-around
+    :space-evenly :stretch))
+
+(defgeneric justify-self (clog-element)
+  (:documentation "Get/Setf override align this item in grid on row axis."))
+
+(defmethod justify-self ((obj clog-element))
+  (style obj "justify-self"))
+
+(defgeneric set-justify-self (clog-element value)
+  (:documentation "Set justify-self VALUE for CLOG-ELEMENT"))
+
+(defmethod set-justify-self ((obj clog-element) value)
+  (setf (style obj "justify-self") value))
+(defsetf justify-self set-justify-self)
+
+;;;;;;;;;;;;;;;;;;;;;
+;; justify-content ;;
+;;;;;;;;;;;;;;;;;;;;;
+
+(deftype justify-content-type ()
+  '(member :flex-start :flex-end :start :end :center
+    :space-between :space-around :space-evenly))
+
+(defgeneric justify-content (clog-element)
+  (:documentation "Get/Setf justify content for items inline of a
+ flexbox or grid on row access."))
+
+(defmethod justify-content ((obj clog-element))
+  (style obj "justify-content"))
+
+(defgeneric set-justify-content (clog-element value)
+  (:documentation "Set justify-content VALUE for CLOG-ELEMENT"))
+
+(defmethod set-justify-content ((obj clog-element) value)
+  (setf (style obj "justify-content") value))
+(defsetf justify-content set-justify-content)
+
+;;;;;;;;;;;;;;;;;;;
+;; align-content ;;
+;;;;;;;;;;;;;;;;;;;
+
+(deftype align-content-type ()
+  '(member :flex-start :flex-end :start :end :center
+    :space-between :space-around :space-evenly))
+
+(defgeneric align-content (clog-element)
+  (:documentation "Get/Setf align content wrapped inline of a flexbox
+on opposite sides of each other or grid on column axis."))
+
+(defmethod align-content ((obj clog-element))
+  (style obj "align-content"))
+
+(defgeneric set-align-content (clog-element value)
+  (:documentation "Set align-content VALUE for CLOG-ELEMENT"))
+
+(defmethod set-align-content ((obj clog-element) value)
+  (setf (style obj "align-content") value))
+(defsetf align-content set-align-content)
 
 ;;;;;;;;;;;;;;
 ;; overflow ;;

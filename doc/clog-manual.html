@@ -1235,8 +1235,293 @@ inline       - Wraps with text in a paragraph. e.g. &lt;span&gt; by default
 inline-block - Flows with paragraph but will always fill from left to
                right.
 
-flex         - Use the flexbox model
+flex         - Turn this item in to a flexbox container. The flexbox
+               properties for container to adjust are:
+
+                  justify-content - how items are spaced in flexbox
+                  align-content - how items spaced when wrapped
+                  align-items - when placed (from start, center, from end)
+                  flex-direction - flex-box left&lt;&gt;right or top&lt;&gt;bottom
+                  flex-wrap - keep in one line or wrap to more
+
+               The properties to adjust for items in the flexbox are:
+
+                  flex - sets the relative grow,shrink,basis
+                  order - sets visual item order in flexbox
+                  align-self - override flexbox's align-items for item
+
+               :flex-start    [---  ]
+               :flex-end      [   ---]
+               :center        [ --- ]
+               :space-between [-  -  -]
+               :space-around  [ -   -   - ]
+               :space-evenly  [ - - - ]
+
+grid         - Turn this item in to a grid container block level. The grid
+               properties to adjust for container are:
+
+                  grid-template-columns
+                  grid-template-rows
+                  grid-template-areas
+                  column-gap
+                  row-gap
+                  align-items
+                  justify-items
+                  justify-content - align the grid as a whole in container
+                  align-content - align the grid as a whole in container
+                  grid-auto-columns
+                  grid-auto-rows
+                  grid-auto-flow
+
+                The properties to adjust for grid items is:
+
+                  grid-column-start
+                  grid-column-end
+                  grid-row-start
+                  grid-row-end
+                  align-self
+                  justify-self
+
+inline-grid   - Turn this item in to a grid container inline level.
 </code></pre></li>
+</ul>
+
+<p><a id='x-28CLOG-3AORDER-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3AORDER-20GENERIC-FUNCTION-29" >ORDER</a></span></span> <span class="locative-args">CLOG-ELEMENT</span></span></p>
+
+<p>Get/Setf visual item order flexbox packing but
+not actual order in document or tab order etc.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3AFLEX-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3AFLEX-20GENERIC-FUNCTION-29" >FLEX</a></span></span> <span class="locative-args">CLOG-ELEMENT</span></span></p>
+
+<p>Get item's flexbox relative grow, shrink,
+and basis</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3ASET-FLEX-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ASET-FLEX-20GENERIC-FUNCTION-29" >SET-FLEX</a></span></span> <span class="locative-args">CLOG-ELEMENT &amp;KEY GROW SHRINK FLEX-BASIS</span></span></p>
+
+<p>Set flex grow (default 0) shrink (default 1) and
+flex-basis (default :auto = use width or height) for <code>CLOG-ELEMENT</code></p></li>
+</ul>
+
+<p><a id='x-28CLOG-3AFLEX-WRAP-TYPE-20-28TYPE-29-29'></a></p>
+
+<ul>
+<li><span class=reference-bullet><span class=reference><span class="locative-type">[type]</span> <span class="reference-object"><a href="#x-28CLOG-3AFLEX-WRAP-TYPE-20-28TYPE-29-29" >FLEX-WRAP-TYPE</a></span></span></span></li>
+</ul>
+
+<p><a id='x-28CLOG-3AFLEX-WRAP-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3AFLEX-WRAP-20GENERIC-FUNCTION-29" >FLEX-WRAP</a></span></span> <span class="locative-args">CLOG-ELEMENT</span></span></p>
+
+<p>Get/Setf direction of flexbox packing.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3AFLEX-DIRECTION-TYPE-20-28TYPE-29-29'></a></p>
+
+<ul>
+<li><span class=reference-bullet><span class=reference><span class="locative-type">[type]</span> <span class="reference-object"><a href="#x-28CLOG-3AFLEX-DIRECTION-TYPE-20-28TYPE-29-29" >FLEX-DIRECTION-TYPE</a></span></span></span></li>
+</ul>
+
+<p><a id='x-28CLOG-3AFLEX-DIRECTION-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3AFLEX-DIRECTION-20GENERIC-FUNCTION-29" >FLEX-DIRECTION</a></span></span> <span class="locative-args">CLOG-ELEMENT</span></span></p>
+
+<p>Get/Setf direction of flexbox packing.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3AGRID-TEMPLATE-COLUMNS-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3AGRID-TEMPLATE-COLUMNS-20GENERIC-FUNCTION-29" >GRID-TEMPLATE-COLUMNS</a></span></span> <span class="locative-args">CLOG-ELEMENT</span></span></p>
+
+<p>Get/Setf grid-template-columns.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3AGRID-TEMPLATE-ROWS-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3AGRID-TEMPLATE-ROWS-20GENERIC-FUNCTION-29" >GRID-TEMPLATE-ROWS</a></span></span> <span class="locative-args">CLOG-ELEMENT</span></span></p>
+
+<p>Get/Setf grid-template-rows.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3AGRID-TEMPLATE-AREAS-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3AGRID-TEMPLATE-AREAS-20GENERIC-FUNCTION-29" >GRID-TEMPLATE-AREAS</a></span></span> <span class="locative-args">CLOG-ELEMENT</span></span></p>
+
+<p>Get/Setf grid-template-areas.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3ACOLUMN-GAP-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ACOLUMN-GAP-20GENERIC-FUNCTION-29" >COLUMN-GAP</a></span></span> <span class="locative-args">CLOG-ELEMENT</span></span></p>
+
+<p>Get/Setf column-gap.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3AROW-GAP-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3AROW-GAP-20GENERIC-FUNCTION-29" >ROW-GAP</a></span></span> <span class="locative-args">CLOG-ELEMENT</span></span></p>
+
+<p>Get/Setf row-gap.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3AGRID-AUTO-COLUMNS-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3AGRID-AUTO-COLUMNS-20GENERIC-FUNCTION-29" >GRID-AUTO-COLUMNS</a></span></span> <span class="locative-args">CLOG-ELEMENT</span></span></p>
+
+<p>Get/Setf grid-auto-columns.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3AGRID-AUTO-ROWS-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3AGRID-AUTO-ROWS-20GENERIC-FUNCTION-29" >GRID-AUTO-ROWS</a></span></span> <span class="locative-args">CLOG-ELEMENT</span></span></p>
+
+<p>Get/Setf grid-auto-rows.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3AGRID-AUTO-FLOW-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3AGRID-AUTO-FLOW-20GENERIC-FUNCTION-29" >GRID-AUTO-FLOW</a></span></span> <span class="locative-args">CLOG-ELEMENT</span></span></p>
+
+<p>Get/Setf grid-auto-flow.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3AGRID-COLUMN-START-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3AGRID-COLUMN-START-20GENERIC-FUNCTION-29" >GRID-COLUMN-START</a></span></span> <span class="locative-args">CLOG-ELEMENT</span></span></p>
+
+<p>Get/Setf grid-column-start.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3AGRID-COLUMN-END-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3AGRID-COLUMN-END-20GENERIC-FUNCTION-29" >GRID-COLUMN-END</a></span></span> <span class="locative-args">CLOG-ELEMENT</span></span></p>
+
+<p>Get/Setf grid-column-end.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3AGRID-ROW-START-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3AGRID-ROW-START-20GENERIC-FUNCTION-29" >GRID-ROW-START</a></span></span> <span class="locative-args">CLOG-ELEMENT</span></span></p>
+
+<p>Get/Setf grid-row-start.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3AGRID-ROW-END-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3AGRID-ROW-END-20GENERIC-FUNCTION-29" >GRID-ROW-END</a></span></span> <span class="locative-args">CLOG-ELEMENT</span></span></p>
+
+<p>Get/Setf grid-row-end.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3AALIGN-ITEMS-TYPE-20-28TYPE-29-29'></a></p>
+
+<ul>
+<li><span class=reference-bullet><span class=reference><span class="locative-type">[type]</span> <span class="reference-object"><a href="#x-28CLOG-3AALIGN-ITEMS-TYPE-20-28TYPE-29-29" >ALIGN-ITEMS-TYPE</a></span></span></span></li>
+</ul>
+
+<p><a id='x-28CLOG-3AALIGN-ITEMS-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3AALIGN-ITEMS-20GENERIC-FUNCTION-29" >ALIGN-ITEMS</a></span></span> <span class="locative-args">CLOG-ELEMENT</span></span></p>
+
+<p>Get/Setf align items in a flexbox/grid on column axis.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3AALIGN-SELF-TYPE-20-28TYPE-29-29'></a></p>
+
+<ul>
+<li><span class=reference-bullet><span class=reference><span class="locative-type">[type]</span> <span class="reference-object"><a href="#x-28CLOG-3AALIGN-SELF-TYPE-20-28TYPE-29-29" >ALIGN-SELF-TYPE</a></span></span></span></li>
+</ul>
+
+<p><a id='x-28CLOG-3AALIGN-SELF-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3AALIGN-SELF-20GENERIC-FUNCTION-29" >ALIGN-SELF</a></span></span> <span class="locative-args">CLOG-ELEMENT</span></span></p>
+
+<p>Get/Setf override align-items for this item
+in a flexbox/grid.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3AALIGN-CONTENT-TYPE-20-28TYPE-29-29'></a></p>
+
+<ul>
+<li><span class=reference-bullet><span class=reference><span class="locative-type">[type]</span> <span class="reference-object"><a href="#x-28CLOG-3AALIGN-CONTENT-TYPE-20-28TYPE-29-29" >ALIGN-CONTENT-TYPE</a></span></span></span></li>
+</ul>
+
+<p><a id='x-28CLOG-3AALIGN-CONTENT-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3AALIGN-CONTENT-20GENERIC-FUNCTION-29" >ALIGN-CONTENT</a></span></span> <span class="locative-args">CLOG-ELEMENT</span></span></p>
+
+<p>Get/Setf align content wrapped inline of a flexbox
+on opposite sides of each other or grid on column axis.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3AJUSTIFY-ITEMS-TYPE-20-28TYPE-29-29'></a></p>
+
+<ul>
+<li><span class=reference-bullet><span class=reference><span class="locative-type">[type]</span> <span class="reference-object"><a href="#x-28CLOG-3AJUSTIFY-ITEMS-TYPE-20-28TYPE-29-29" >JUSTIFY-ITEMS-TYPE</a></span></span></span></li>
+</ul>
+
+<p><a id='x-28CLOG-3AJUSTIFY-ITEMS-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3AJUSTIFY-ITEMS-20GENERIC-FUNCTION-29" >JUSTIFY-ITEMS</a></span></span> <span class="locative-args">CLOG-ELEMENT</span></span></p>
+
+<p>Get/Setf justify items in a grid on row axis.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3AJUSTIFY-SELF-TYPE-20-28TYPE-29-29'></a></p>
+
+<ul>
+<li><span class=reference-bullet><span class=reference><span class="locative-type">[type]</span> <span class="reference-object"><a href="#x-28CLOG-3AJUSTIFY-SELF-TYPE-20-28TYPE-29-29" >JUSTIFY-SELF-TYPE</a></span></span></span></li>
+</ul>
+
+<p><a id='x-28CLOG-3AJUSTIFY-SELF-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3AJUSTIFY-SELF-20GENERIC-FUNCTION-29" >JUSTIFY-SELF</a></span></span> <span class="locative-args">CLOG-ELEMENT</span></span></p>
+
+<p>Get/Setf override align this item in grid on row axis.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3AJUSTIFY-CONTENT-TYPE-20-28TYPE-29-29'></a></p>
+
+<ul>
+<li><span class=reference-bullet><span class=reference><span class="locative-type">[type]</span> <span class="reference-object"><a href="#x-28CLOG-3AJUSTIFY-CONTENT-TYPE-20-28TYPE-29-29" >JUSTIFY-CONTENT-TYPE</a></span></span></span></li>
+</ul>
+
+<p><a id='x-28CLOG-3AJUSTIFY-CONTENT-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3AJUSTIFY-CONTENT-20GENERIC-FUNCTION-29" >JUSTIFY-CONTENT</a></span></span> <span class="locative-args">CLOG-ELEMENT</span></span></p>
+
+<p>Get/Setf justify content for items inline of a
+flexbox or grid on row access.</p></li>
 </ul>
 
 <p><a id='x-28CLOG-3AOVERFLOW-TYPE-20-28TYPE-29-29'></a></p>
