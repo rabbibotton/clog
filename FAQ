@@ -1,13 +1,6 @@
 Q) I start my application and I don't see anything? It worked before!
 
-A) If running a tutorial or demo:
-      Did you start the application / emacs and slime in the directory of clog? 
-      By default that is /common-lisp/clog?
-
-      Or you can use (setf clog::*overide-static-root* #P"~/common-lisp/clog/static-files/")
-      to overide the static path in (clog:initialize)
-
-   If running your own app. Make sure the :static-root key is set correctly on (clog:initialize)
+A) Make sure the :static-root key is set correctly on (clog:initialize)
 
 Q) How do I turn my CLOG app in to a native Mac, Windows or Linux app?
 
@@ -19,3 +12,7 @@ with GTK in C, but you can use the cl-cffi-gtk to accomplish the same thing.
 Q) I want to take an HTML snapshot of a clog created page:
 
 (format t "=> ~A" (outer-html (document-element (html-document body))))
+
+Q) I want to know where the :CLOG tutorials, demos and sources.
+
+Use (asdf:system-source-directory :clog)

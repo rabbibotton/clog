@@ -39,18 +39,22 @@ same as the clog directy this overides the relative paths used in them.")
 	  (funcall on-new-window body)
 	  (put-br (html-document body) "No route to on-new-window")))))
 
-(defun initialize (on-new-window-handler
-		   &key
-		     (host           "0.0.0.0")
-		     (port           8080)
-		     (boot-file      "/boot.html")
-		     (static-root    #P"./static-files/"))
-  "Inititalize CLOG on a socket using HOST and PORT to serve BOOT-FILE as 
-the default route to establish web-socket connections and static files
-located at STATIC-ROOT. If CLOG was already initialized and not shut
-down, this function does the same as set-on-new-window. If the variable
-clog:*overide-static-root* is set STATIC-ROOT will be ignored. If BOOT-FILE
-is nil no default boot-file will be set for /."
+(defun initialize
+    (on-new-window-handler
+     &key
+       (host           "0.0.0.0")
+       (port           8080)
+       (boot-file      "/boot.html")
+       (static-root    (merge-pathnames "./static-files/"
+			  (asdf:system-source-directory :clog))))
+  "Inititalize CLOG on a socket using HOST and PORT to serve BOOT-FILE
+as the default route to establish web-socket connections and static
+files located at STATIC-ROOT. If CLOG was already initialized and not
+shut down, this function does the same as set-on-new-window (does not
+change the static-root). STATIC-ROOT by default is the \"directory CLOG
+is installed in ./static-files\" If the variable clog:*overide-static-root*
+is set STATIC-ROOT will be ignored. If BOOT-FILE is nil no default
+boot-file will be set for root path, i.e. /."
 
   (set-on-new-window on-new-window-handler :path "/" :boot-file boot-file)
 

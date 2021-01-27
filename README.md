@@ -56,10 +56,7 @@ git clone https://github.com/rabbibotton/clog.git
 To load this package and work through tutorials (assuming you
 have Quicklisp configured):
 
-1. cd to the CLOG dir (the dir should be one used by Quicklisp ex. ~/common-lisp/)
-2. Start emacs/slime or your common lisp "repl" in _that_ directory.
-   (This is just for tutorial, so relative paths work. In your app you just set
-    the :site-root directory any place you want on initialize.)
+1. Start emacs/slime
 3. In the REPL, run:
 
 CL-USER> (ql:quickload :clog)
