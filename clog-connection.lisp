@@ -29,6 +29,7 @@ script."
   (initialize          function)
   (shutdown-clog       function)
   (set-on-connect      function)
+  (set-on-post         function)
   (set-clog-path       function)
   (get-connection-data function)
 
@@ -80,6 +81,7 @@ script."
 (defvar *query-time-out* 3 "Number of seconds to timeout waiting for a query")
 
 (defvar *url-to-boot-file* (make-hash-table :test 'equalp) "URL to boot-file")
+(defvar *on-post-handler* nil "Set a global on-post-handler for form posts")
 
 ;;;;;;;;;;;;;;;;;
 ;; generate-id ;;
@@ -223,6 +225,27 @@ the default answer. (Private)"
       (declare (ignore responder))
       (websocket-driver:start-connection ws))))
 
+;;;;;;;;;;;;;;;;;
+;; set-on-post ;;
+;;;;;;;;;;;;;;;;;
+
+(defun set-on-post (on-post-handler)
+  "Set the global ON-POST-HANDLER. ON-POST URI PARAMS
+the params is an a-list"
+  (setf *on-post-handler* on-post-handler))
+
+;;;;;;;;;;;;;;;;;;
+;; process-post ;;
+;;;;;;;;;;;;;;;;;;
+
+(defun process-post (env)
+  "Process incoming data posted to server. Note that posts are not based on
+connectons. You will need to post some session value to know how to connect
+the post data to an app."
+  (when *on-post-handler*
+    (funcall *on-post-handler* (getf env :request-uri) 
+	     (quri:url-decode-params (read-line (getf env :raw-body))))))
+
 ;;;;;;;;;;;;;;;;
 ;; initialize ;;
 ;;;;;;;;;;;;;;;;
@@ -246,14 +269,24 @@ path by querying the browser. See PATH-NAME (CLOG-LOCATION)."
   
   (setf *app*
 	(lack:builder
+	 
+	 (lambda (app)
+	   (lambda (env)
+             (prog1 (funcall app env)
+	       (when (equal (getf env :content-type)
+			    "application/x-www-form-urlencoded")
+		 (process-post env)))))
+	 
 	 (:static :path (lambda (path)
 			  (let ((clog-path (gethash path *url-to-boot-file*)))
 			    (cond ((ppcre:scan "^(?:/clog$)" path) nil)
 				  (clog-path clog-path)
 				  (t path))))
 		  :root static-root)
+	 
 	 (lambda (env)
 	   (clog-server env))))
+
   (setf *client-handler* (clack:clackup *app* :address host :port port))
   (format t "HTTP listening on    : ~A:~A~%" host port)
   (format t "HTML Root            : ~A~%"    static-root)
