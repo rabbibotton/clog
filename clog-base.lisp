@@ -224,19 +224,41 @@ result. (Private)"))
      :shift-key  (js-true-p (nth 4 f))
      :meta-key   (js-true-p (nth 5 f)))))
 
+;;;;;;;;;;;;;;;;;;;;;;
+;; parse-drop-event ;;
+;;;;;;;;;;;;;;;;;;;;;;
+
+(defparameter drop-event-script
+  "+ (e.clientX - e.target.getBoundingClientRect().left) + ':' + 
+     (e.clientY - e.target.getBoundingClientRect().top) + ':' +
+     encodeURIComponent(e.originalEvent.dataTransfer.getData('~A'))"
+  "JavaScript to collect drop event data from browser.")
+
+(defun parse-drop-event (data)
+  (let ((f (ppcre:split ":" data)))
+    (list
+     :event-type   :mouse
+     :x            (parse-integer (nth 0 f) :junk-allowed t)
+     :y            (parse-integer (nth 1 f) :junk-allowed t)
+     :drag-data    (quri:url-decode (or (nth 2 f) "")))))
+
 ;;;;;;;;;;;;;;;
 ;; set-event ;;
 ;;;;;;;;;;;;;;;
 
-(defgeneric set-event (clog-obj event handler &key call-back-script)
+(defgeneric set-event (clog-obj event handler
+		       &key call-back-script eval-script)
   (:documentation "Create the hook for incoming events. (Private)"))
 
 (defmethod set-event ((obj clog-obj) event handler
-		      &key (call-back-script "") (cancel-event nil))
+		      &key (call-back-script "")
+			(eval-script "")
+			(cancel-event nil))
   (let ((hook (format nil "~A:~A" (html-id obj) event)))
     (cond (handler
 	   (bind-event-script
-	    obj event (format nil "ws.send('E:~A-'~A)~A"
+	    obj event (format nil "~Aws.send('E:~A-'~A)~A"
+			      eval-script
 			      hook
 			      call-back-script
 			      (if cancel-event
@@ -425,6 +447,120 @@ is nil unbind the event."))
 	       (lambda (data)
 		 (declare (ignore data))
 		 (funcall handler obj)))))
+
+;;;;;;;;;;;;;;;;;;;;;;;
+;; set-on-drag-start ;;
+;;;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric set-on-drag-start (clog-obj on-drag-start-handler &key drag-data drag-type)
+  (:documentation "Set the ON-DRAG-START-HANDLER for CLOG-OBJ. If ON-DRAG-START-HANDLER
+is nil unbind the event."))
+
+(defmethod set-on-drag-start ((obj clog-obj) handler
+			      &key (drag-data "") (drag-type "text/plain"))
+  (set-event obj "dragstart"
+	     (when handler
+	       (lambda (data)
+		 (declare (ignore data))
+		 (funcall handler obj)))
+	     :eval-script (format nil
+		 "e.originalEvent.dataTransfer.setData('~A','~A'); "
+				  drag-type
+				  drag-data)))
+
+;;;;;;;;;;;;;;;;;
+;; set-on-drag ;;
+;;;;;;;;;;;;;;;;;
+
+(defgeneric set-on-drag (clog-obj on-drag-handler)
+  (:documentation "Set the ON-DRAG-HANDLER for CLOG-OBJ. If ON-DRAG-HANDLER
+is nil unbind the event."))
+
+(defmethod set-on-drag ((obj clog-obj) handler)
+  (set-event obj "drag"
+	     (when handler
+	       (lambda (data)
+		 (declare (ignore data))
+		 (funcall handler obj)))))
+
+;;;;;;;;;;;;;;;;;;;;;
+;; set-on-drag-end ;;
+;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric set-on-drag-end (clog-obj on-drag-end-handler)
+  (:documentation "Set the ON-DRAG-END-HANDLER for CLOG-OBJ. If ON-DRAG-END-HANDLER
+is nil unbind the event."))
+
+(defmethod set-on-drag-end ((obj clog-obj) handler)
+  (set-event obj "dragend"
+	     (when handler
+	       (lambda (data)
+		 (declare (ignore data))
+		 (funcall handler obj)))))
+
+;;;;;;;;;;;;;;;;;;;;;;;
+;; set-on-drag-enter ;;
+;;;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric set-on-drag-enter (clog-obj on-drag-enter-handler)
+  (:documentation "Set the ON-DRAG-ENTER-HANDLER for CLOG-OBJ. If ON-DRAG-ENTER-HANDLER
+is nil unbind the event."))
+
+(defmethod set-on-drag-enter ((obj clog-obj) handler)
+  (set-event obj "dragenter"
+	     (when handler
+	       (lambda (data)
+		 (declare (ignore data))
+		 (funcall handler obj)))))
+
+;;;;;;;;;;;;;;;;;;;;;;;
+;; set-on-drag-leave ;;
+;;;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric set-on-drag-leave (clog-obj on-drag-leave-handler)
+  (:documentation "Set the ON-DRAG-LEAVE-HANDLER for CLOG-OBJ. If ON-DRAG-LEAVE-HANDLER
+is nil unbind the event."))
+
+(defmethod set-on-drag-leave ((obj clog-obj) handler)
+  (set-event obj "dragleave"
+	     (when handler
+	       (lambda (data)
+		 (declare (ignore data))
+		 (funcall handler obj)))))
+
+;;;;;;;;;;;;;;;;;;;;;;
+;; set-on-drag-over ;;
+;;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric set-on-drag-over (clog-obj on-drag-over-handler)
+  (:documentation "Set the ON-DRAG-OVER-HANDLER for CLOG-OBJ. If ON-DRAG-OVER-HANDLER
+is nil unbind the event."))
+
+(defmethod set-on-drag-over ((obj clog-obj) handler)
+  (set-event obj "dragover"
+	     (when handler
+	       (lambda (data)
+		 (declare (ignore data))
+		 (funcall handler obj)))
+	     :cancel-event t
+	     :eval-script "e.preventDefault(); "))
+
+;;;;;;;;;;;;;;;;;
+;; set-on-drop ;;
+;;;;;;;;;;;;;;;;;
+
+(defgeneric set-on-drop (clog-obj on-drop-handler &key drag-type)
+  (:documentation "Set the ON-DROP-HANDLER for CLOG-OBJ. If ON-DROP-HANDLER
+is nil unbind the event."))
+
+(defmethod set-on-drop ((obj clog-obj) handler &key (drag-type "text/plain"))
+  (set-event obj "drop"
+	     (when handler
+	       (lambda (data)
+		 (funcall handler obj (parse-drop-event data))))
+	     :call-back-script (format nil drop-event-script drag-type)
+	     :eval-script "e.preventDefault(); "
+     	     :cancel-event t))
 
 ;;;;;;;;;;;;;;;;;;;;;
 ;; set-on-focus-in ;;

@@ -88,6 +88,13 @@ embedded in a native template application.)"
   (set-on-focus              generic-function)
   (set-on-blur               generic-function)
   (set-on-change             generic-function)
+  (set-on-drag-start         generic-function)
+  (set-on-drag               generic-function)
+  (set-on-drag-end           generic-function)
+  (set-on-drag-enter         generic-function)
+  (set-on-drag-leave         generic-function)
+  (set-on-drag-over          generic-function) 
+  (set-on-drop               generic-function)
   (set-on-focus-in           generic-function)
   (set-on-focus-out          generic-function)
   (set-on-reset              generic-function)
@@ -119,7 +126,6 @@ embedded in a native template application.)"
   (set-on-copy               generic-function)
   (set-on-cut                generic-function)
   (set-on-paste              generic-function))
-;; need to add drag and drop events
 
 (defsection @clog-element (:title "CLOG Elements")
   "CLOG-Element - Class for CLOG Elements"

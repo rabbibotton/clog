@@ -477,9 +477,9 @@ If ON-ORIENTATION-CHANGE-HANDLER is nil unbind the event."))
   (let ((f (ppcre:split ":" data)))
     (list
      :event-type :storage
-     :key        (quri:url-decode (nth 0 f))
-     :old-value  (quri:url-decode (nth 1 f))
-     :value      (quri:url-decode (nth 2 f)))))
+     :key        (quri:url-decode (or (nth 0 f) ""))
+     :old-value  (quri:url-decode (or (nth 1 f) ""))
+     :value      (quri:url-decode (or (nth 2 f) "")))))
 
 (defgeneric set-on-storage (clog-window on-storage-handler)
   (:documentation "Set the ON-STORAGE-HANDLER for CLOG-OBJ. The
