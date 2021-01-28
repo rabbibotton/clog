@@ -2740,6 +2740,196 @@ and if <code>:AUTO-PLACE</code> (default t) place-inside-bottom-of <a href="#x-2
 and if <code>:AUTO-PLACE</code> (default t) place-inside-bottom-of <a href="#x-28CLOG-3ACLOG-OBJ-20CLASS-29" title="(CLOG:CLOG-OBJ CLASS)"><code>CLOG-OBJ</code></a></p></li>
 </ul>
 
+<p>CLOG-Table - Class for <code>CLOG</code> Tables</p>
+
+<p><a id='x-28CLOG-3ACLOG-TABLE-20CLASS-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[class]</span> <span class="reference-object"><a href="#x-28CLOG-3ACLOG-TABLE-20CLASS-29" >CLOG-TABLE</a></span></span> <span class="locative-args"><a href="#x-28CLOG-3ACLOG-ELEMENT-20CLASS-29" title="(CLOG:CLOG-ELEMENT CLASS)">CLOG-ELEMENT</a></span></span></p>
+
+<p><code>CLOG</code> Table Objects.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3ACREATE-TABLE-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ACREATE-TABLE-20GENERIC-FUNCTION-29" >CREATE-TABLE</a></span></span> <span class="locative-args">CLOG-OBJ &amp;KEY CLASS AUTO-PLACE</span></span></p>
+
+<p>Create a new CLOG-Table as child of <code>CLOG-OBJ</code>
+and if <code>:AUTO-PLACE</code> (default t) place-inside-bottom-of <code>CLOG-OBJ</code></p></li>
+</ul>
+
+<p>CLOG-Table-Row - Class for <code>CLOG</code> Table-Rows</p>
+
+<p><a id='x-28CLOG-3ACLOG-TABLE-ROW-20CLASS-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[class]</span> <span class="reference-object"><a href="#x-28CLOG-3ACLOG-TABLE-ROW-20CLASS-29" >CLOG-TABLE-ROW</a></span></span> <span class="locative-args"><a href="#x-28CLOG-3ACLOG-ELEMENT-20CLASS-29" title="(CLOG:CLOG-ELEMENT CLASS)">CLOG-ELEMENT</a></span></span></p>
+
+<p><code>CLOG</code> Table-Row Objects.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3ACREATE-TABLE-ROW-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ACREATE-TABLE-ROW-20GENERIC-FUNCTION-29" >CREATE-TABLE-ROW</a></span></span> <span class="locative-args">CLOG-OBJ &amp;KEY CLASS AUTO-PLACE</span></span></p>
+
+<p>Create a new CLOG-Table-Row as child of <code>CLOG-OBJ</code>
+and if <code>:AUTO-PLACE</code> (default t) place-inside-bottom-of <code>CLOG-OBJ</code></p></li>
+</ul>
+
+<p>CLOG-Table-Column - Class for <code>CLOG</code> Table-Columns</p>
+
+<p><a id='x-28CLOG-3ACLOG-TABLE-COLUMN-20CLASS-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[class]</span> <span class="reference-object"><a href="#x-28CLOG-3ACLOG-TABLE-COLUMN-20CLASS-29" >CLOG-TABLE-COLUMN</a></span></span> <span class="locative-args"><a href="#x-28CLOG-3ACLOG-TABLE-ROW-20CLASS-29" title="(CLOG:CLOG-TABLE-ROW CLASS)">CLOG-TABLE-ROW</a></span></span></p>
+
+<p><code>CLOG</code> Table-Column Objects.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3ACREATE-TABLE-COLUMN-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ACREATE-TABLE-COLUMN-20GENERIC-FUNCTION-29" >CREATE-TABLE-COLUMN</a></span></span> <span class="locative-args">CLOG-OBJ &amp;KEY CONTENT COLUMN-SPAN ROW-SPAN CLASS AUTO-PLACE</span></span></p>
+
+<p>Create a new CLOG-Table-Column as child of <code>CLOG-OBJ</code>
+and if <code>:AUTO-PLACE</code> (default t) place-inside-bottom-of <code>CLOG-OBJ</code></p></li>
+</ul>
+
+<p>CLOG-Table-Heading - Class for <code>CLOG</code> Table-Headings</p>
+
+<p><a id='x-28CLOG-3ACLOG-TABLE-HEADING-20CLASS-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[class]</span> <span class="reference-object"><a href="#x-28CLOG-3ACLOG-TABLE-HEADING-20CLASS-29" >CLOG-TABLE-HEADING</a></span></span> <span class="locative-args"><a href="#x-28CLOG-3ACLOG-TABLE-ROW-20CLASS-29" title="(CLOG:CLOG-TABLE-ROW CLASS)">CLOG-TABLE-ROW</a></span></span></p>
+
+<p><code>CLOG</code> Table-Heading Objects.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3ACREATE-TABLE-HEADING-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ACREATE-TABLE-HEADING-20GENERIC-FUNCTION-29" >CREATE-TABLE-HEADING</a></span></span> <span class="locative-args">CLOG-OBJ &amp;KEY CONTENT COLUMN-SPAN ROW-SPAN CLASS AUTO-PLACE</span></span></p>
+
+<p>Create a new CLOG-Table-Heading as child of <code>CLOG-OBJ</code>
+and if <code>:AUTO-PLACE</code> (default t) place-inside-bottom-of <code>CLOG-OBJ</code></p></li>
+</ul>
+
+<p>CLOG-Table-Head - Class for <code>CLOG</code> Table-Heads</p>
+
+<p><a id='x-28CLOG-3ACLOG-TABLE-HEAD-20CLASS-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[class]</span> <span class="reference-object"><a href="#x-28CLOG-3ACLOG-TABLE-HEAD-20CLASS-29" >CLOG-TABLE-HEAD</a></span></span> <span class="locative-args"><a href="#x-28CLOG-3ACLOG-TABLE-20CLASS-29" title="(CLOG:CLOG-TABLE CLASS)">CLOG-TABLE</a></span></span></p>
+
+<p><code>CLOG</code> Table-Head Objects.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3ACREATE-TABLE-HEAD-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ACREATE-TABLE-HEAD-20GENERIC-FUNCTION-29" >CREATE-TABLE-HEAD</a></span></span> <span class="locative-args">CLOG-OBJ &amp;KEY CLASS AUTO-PLACE</span></span></p>
+
+<p>Create a new CLOG-Table-Head as child of <code>CLOG-OBJ</code>
+and if <code>:AUTO-PLACE</code> (default t) place-inside-bottom-of <code>CLOG-OBJ</code></p></li>
+</ul>
+
+<p>CLOG-Table-Body - Class for <code>CLOG</code> Table-Bodys</p>
+
+<p><a id='x-28CLOG-3ACLOG-TABLE-BODY-20CLASS-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[class]</span> <span class="reference-object"><a href="#x-28CLOG-3ACLOG-TABLE-BODY-20CLASS-29" >CLOG-TABLE-BODY</a></span></span> <span class="locative-args"><a href="#x-28CLOG-3ACLOG-TABLE-20CLASS-29" title="(CLOG:CLOG-TABLE CLASS)">CLOG-TABLE</a></span></span></p>
+
+<p><code>CLOG</code> Table-Body Objects.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3ACREATE-TABLE-BODY-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ACREATE-TABLE-BODY-20GENERIC-FUNCTION-29" >CREATE-TABLE-BODY</a></span></span> <span class="locative-args">CLOG-OBJ &amp;KEY CLASS AUTO-PLACE</span></span></p>
+
+<p>Create a new CLOG-Table-Body as child of <code>CLOG-OBJ</code>
+and if <code>:AUTO-PLACE</code> (default t) place-inside-bottom-of <code>CLOG-OBJ</code></p></li>
+</ul>
+
+<p>CLOG-Table-Caption - Class for <code>CLOG</code> Table-Captions</p>
+
+<p><a id='x-28CLOG-3ACLOG-TABLE-CAPTION-20CLASS-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[class]</span> <span class="reference-object"><a href="#x-28CLOG-3ACLOG-TABLE-CAPTION-20CLASS-29" >CLOG-TABLE-CAPTION</a></span></span> <span class="locative-args"><a href="#x-28CLOG-3ACLOG-TABLE-20CLASS-29" title="(CLOG:CLOG-TABLE CLASS)">CLOG-TABLE</a></span></span></p>
+
+<p><code>CLOG</code> Table-Caption Objects.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3ACREATE-TABLE-CAPTION-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ACREATE-TABLE-CAPTION-20GENERIC-FUNCTION-29" >CREATE-TABLE-CAPTION</a></span></span> <span class="locative-args">CLOG-OBJ &amp;KEY CONTENT CLASS AUTO-PLACE</span></span></p>
+
+<p>Create a new CLOG-Table-Caption as child of <code>CLOG-OBJ</code>
+and if <code>:AUTO-PLACE</code> (default t) place-inside-bottom-of <code>CLOG-OBJ</code></p></li>
+</ul>
+
+<p>CLOG-Table-Footer - Class for <code>CLOG</code> Table-Footers</p>
+
+<p><a id='x-28CLOG-3ACLOG-TABLE-FOOTER-20CLASS-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[class]</span> <span class="reference-object"><a href="#x-28CLOG-3ACLOG-TABLE-FOOTER-20CLASS-29" >CLOG-TABLE-FOOTER</a></span></span> <span class="locative-args"><a href="#x-28CLOG-3ACLOG-TABLE-20CLASS-29" title="(CLOG:CLOG-TABLE CLASS)">CLOG-TABLE</a></span></span></p>
+
+<p><code>CLOG</code> Table-Footer Objects.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3ACREATE-TABLE-FOOTER-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ACREATE-TABLE-FOOTER-20GENERIC-FUNCTION-29" >CREATE-TABLE-FOOTER</a></span></span> <span class="locative-args">CLOG-OBJ &amp;KEY CLASS AUTO-PLACE</span></span></p>
+
+<p>Create a new CLOG-Table-Footer as child of <code>CLOG-OBJ</code>
+and if <code>:AUTO-PLACE</code> (default t) place-inside-bottom-of <code>CLOG-OBJ</code></p></li>
+</ul>
+
+<p>CLOG-Table-Column-Group - Class for <code>CLOG</code> Table-Column-Groups</p>
+
+<p><a id='x-28CLOG-3ACLOG-TABLE-COLUMN-GROUP-20CLASS-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[class]</span> <span class="reference-object"><a href="#x-28CLOG-3ACLOG-TABLE-COLUMN-GROUP-20CLASS-29" >CLOG-TABLE-COLUMN-GROUP</a></span></span> <span class="locative-args"><a href="#x-28CLOG-3ACLOG-TABLE-20CLASS-29" title="(CLOG:CLOG-TABLE CLASS)">CLOG-TABLE</a></span></span></p>
+
+<p><code>CLOG</code> Table-Column-Group Objects.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3ACREATE-TABLE-COLUMN-GROUP-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ACREATE-TABLE-COLUMN-GROUP-20GENERIC-FUNCTION-29" >CREATE-TABLE-COLUMN-GROUP</a></span></span> <span class="locative-args">CLOG-OBJ &amp;KEY CLASS AUTO-PLACE</span></span></p>
+
+<p>Create a new CLOG-Table-Column-Group as child of <code>CLOG-OBJ</code>
+and if <code>:AUTO-PLACE</code> (default t) place-inside-bottom-of <code>CLOG-OBJ</code></p></li>
+</ul>
+
+<p>CLOG-Table-Column-Group-Item - Class for <code>CLOG</code> Table-Column-Group-Items</p>
+
+<p><a id='x-28CLOG-3ACLOG-TABLE-COLUMN-GROUP-ITEM-20CLASS-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[class]</span> <span class="reference-object"><a href="#x-28CLOG-3ACLOG-TABLE-COLUMN-GROUP-ITEM-20CLASS-29" >CLOG-TABLE-COLUMN-GROUP-ITEM</a></span></span> <span class="locative-args"><a href="#x-28CLOG-3ACLOG-TABLE-COLUMN-GROUP-20CLASS-29" title="(CLOG:CLOG-TABLE-COLUMN-GROUP CLASS)">CLOG-TABLE-COLUMN-GROUP</a></span></span></p>
+
+<p><code>CLOG</code> Table-Column-Group-Item Objects.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3ACREATE-TABLE-COLUMN-GROUP-ITEM-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ACREATE-TABLE-COLUMN-GROUP-ITEM-20GENERIC-FUNCTION-29" >CREATE-TABLE-COLUMN-GROUP-ITEM</a></span></span> <span class="locative-args">CLOG-OBJ &amp;KEY COLUMN-SPAN CLASS AUTO-PLACE</span></span></p>
+
+<p>Create a new CLOG-Table-Column-Group-Item as child of <code>CLOG-OBJ</code>
+and if <code>:AUTO-PLACE</code> (default t) place-inside-bottom-of <code>CLOG-OBJ</code></p></li>
+</ul>
+
 <p><a id='x-28CLOG-3A-40CLOG-FORM-20MGL-PAX-3ASECTION-29'></a></p>
 
 <p><span class="outer-navigation"><span class="navigation"> <a href="#x-28CLOG-3A-40CLOG-ELEMENT-COMMON-20MGL-PAX-3ASECTION-29" title="Common CLOG Elements">&#8592;</a> <a href="#x-28CLOG-3A-40CLOG-MANUAL-20MGL-PAX-3ASECTION-29" title="The CLOG manual">&#8593;</a> <a href="#x-28CLOG-3A-40CLOG-CANVAS-20MGL-PAX-3ASECTION-29" title="CLOG Canvas Objects">&#8594;</a> <a href="#x-28CLOG-3A-40CLOG-FORM-20MGL-PAX-3ASECTION-29" title="CLOG Form Objects">&#8634;</a></span></span></p>
