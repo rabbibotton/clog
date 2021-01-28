@@ -6,11 +6,9 @@
 
 ;; In this tutorial we will use a CSS only alternative to bootsrap -
 ;;   https://www.w3schools.com/w3css/default.asp
-;;
-;; In this case we will use the mobile themes
 
 (defun on-index (body)
-  (load-css (html-document body) "https://www.w3schools.com/w3css/4/w3pro.css")
+  (load-css (html-document body) "https://www.w3schools.com/w3css/4/w3.css")
   (load-css (html-document body) "https://www.w3schools.com/lib/w3-theme-teal.css")
   (setf (title (html-document body)) "Hello W3.CSS")
   
