@@ -25,7 +25,10 @@
 
 (defun test ()
   (print "Init connection")
-  (clog-connection:initialize #'on-connect :boot-file "/debug.html")
+  (clog-connection:initialize #'on-connect
+			      :static-root (merge-pathnames "./static-files/"
+					     (asdf:system-source-directory :clog))
+			      :boot-file "/debug.html")
   (print "Open browser")
   (clog:open-browser)
 )
