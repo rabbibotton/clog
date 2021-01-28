@@ -309,14 +309,16 @@ properties (to use for :property) are based on the event type.</p>
 <p><a id='x-28CLOG-3AINITIALIZE-20FUNCTION-29'></a></p>
 
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#x-28CLOG-3AINITIALIZE-20FUNCTION-29" >INITIALIZE</a></span></span> <span class="locative-args">ON-NEW-WINDOW-HANDLER &amp;KEY (HOST &quot;0.0.0.0&quot;) (PORT 8080) (BOOT-FILE &quot;/boot.html&quot;) (STATIC-ROOT #P&quot;static-files/&quot;)</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#x-28CLOG-3AINITIALIZE-20FUNCTION-29" >INITIALIZE</a></span></span> <span class="locative-args">ON-NEW-WINDOW-HANDLER &amp;KEY (HOST &quot;0.0.0.0&quot;) (PORT 8080) (BOOT-FILE &quot;/boot.html&quot;) (STATIC-ROOT (<code>MERGE-PATHNAMES</code> &quot;./static-files/&quot; (<code>ASDF/SYSTEM:SYSTEM-SOURCE-DIRECTORY</code> <code>:CLOG</code>)))</span></span></p>
 
-<p>Inititalize <code>CLOG</code> on a socket using <code>HOST</code> and <code>PORT</code> to serve <code>BOOT-FILE</code> as 
-the default route to establish web-socket connections and static files
-located at <code>STATIC-ROOT</code>. If <code>CLOG</code> was already initialized and not shut
-down, this function does the same as set-on-new-window. If the variable
-clog:<em>overide-static-root</em> is set <code>STATIC-ROOT</code> will be ignored. If <code>BOOT-FILE</code>
-is nil no default boot-file will be set for /.</p></li>
+<p>Inititalize <code>CLOG</code> on a socket using <code>HOST</code> and <code>PORT</code> to serve <code>BOOT-FILE</code>
+as the default route to establish web-socket connections and static
+files located at <code>STATIC-ROOT</code>. If <code>CLOG</code> was already initialized and not
+shut down, this function does the same as set-on-new-window (does not
+change the static-root). <code>STATIC-ROOT</code> by default is the &quot;directory <code>CLOG</code>
+is installed in ./static-files&quot; If the variable clog:<em>overide-static-root</em>
+is set <code>STATIC-ROOT</code> will be ignored. If <code>BOOT-FILE</code> is nil no default
+boot-file will be set for root path, i.e. /.</p></li>
 </ul>
 
 <p><a id='x-28CLOG-3ASET-ON-NEW-WINDOW-20FUNCTION-29'></a></p>
@@ -561,6 +563,69 @@ is nil unbind the event.</p></li>
 <li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ASET-ON-CHANGE-20GENERIC-FUNCTION-29" >SET-ON-CHANGE</a></span></span> <span class="locative-args">CLOG-OBJ ON-CHANGE-HANDLER</span></span></p>
 
 <p>Set the <code>ON-CHANGE-HANDLER</code> for <code>CLOG-OBJ</code>. If <code>ON-CHANGE-HANDLER</code>
+is nil unbind the event.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3ASET-ON-DRAG-START-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ASET-ON-DRAG-START-20GENERIC-FUNCTION-29" >SET-ON-DRAG-START</a></span></span> <span class="locative-args">CLOG-OBJ ON-DRAG-START-HANDLER &amp;KEY DRAG-DATA DRAG-TYPE</span></span></p>
+
+<p>Set the <code>ON-DRAG-START-HANDLER</code> for <code>CLOG-OBJ</code>. If <code>ON-DRAG-START-HANDLER</code>
+is nil unbind the event.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3ASET-ON-DRAG-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ASET-ON-DRAG-20GENERIC-FUNCTION-29" >SET-ON-DRAG</a></span></span> <span class="locative-args">CLOG-OBJ ON-DRAG-HANDLER</span></span></p>
+
+<p>Set the <code>ON-DRAG-HANDLER</code> for <code>CLOG-OBJ</code>. If <code>ON-DRAG-HANDLER</code>
+is nil unbind the event.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3ASET-ON-DRAG-END-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ASET-ON-DRAG-END-20GENERIC-FUNCTION-29" >SET-ON-DRAG-END</a></span></span> <span class="locative-args">CLOG-OBJ ON-DRAG-END-HANDLER</span></span></p>
+
+<p>Set the <code>ON-DRAG-END-HANDLER</code> for <code>CLOG-OBJ</code>. If <code>ON-DRAG-END-HANDLER</code>
+is nil unbind the event.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3ASET-ON-DRAG-ENTER-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ASET-ON-DRAG-ENTER-20GENERIC-FUNCTION-29" >SET-ON-DRAG-ENTER</a></span></span> <span class="locative-args">CLOG-OBJ ON-DRAG-ENTER-HANDLER</span></span></p>
+
+<p>Set the <code>ON-DRAG-ENTER-HANDLER</code> for <code>CLOG-OBJ</code>. If <code>ON-DRAG-ENTER-HANDLER</code>
+is nil unbind the event.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3ASET-ON-DRAG-LEAVE-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ASET-ON-DRAG-LEAVE-20GENERIC-FUNCTION-29" >SET-ON-DRAG-LEAVE</a></span></span> <span class="locative-args">CLOG-OBJ ON-DRAG-LEAVE-HANDLER</span></span></p>
+
+<p>Set the <code>ON-DRAG-LEAVE-HANDLER</code> for <code>CLOG-OBJ</code>. If <code>ON-DRAG-LEAVE-HANDLER</code>
+is nil unbind the event.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3ASET-ON-DRAG-OVER-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ASET-ON-DRAG-OVER-20GENERIC-FUNCTION-29" >SET-ON-DRAG-OVER</a></span></span> <span class="locative-args">CLOG-OBJ ON-DRAG-OVER-HANDLER</span></span></p>
+
+<p>Set the <code>ON-DRAG-OVER-HANDLER</code> for <code>CLOG-OBJ</code>. If <code>ON-DRAG-OVER-HANDLER</code>
+is nil unbind the event.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3ASET-ON-DROP-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ASET-ON-DROP-20GENERIC-FUNCTION-29" >SET-ON-DROP</a></span></span> <span class="locative-args">CLOG-OBJ ON-DROP-HANDLER &amp;KEY DRAG-TYPE</span></span></p>
+
+<p>Set the <code>ON-DROP-HANDLER</code> for <code>CLOG-OBJ</code>. If <code>ON-DROP-HANDLER</code>
 is nil unbind the event.</p></li>
 </ul>
 
@@ -2178,7 +2243,7 @@ to no actual <code>HTML</code> elemen.</p></li>
 <p><a id='x-28CLOG-3ACREATE-A-20GENERIC-FUNCTION-29'></a></p>
 
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ACREATE-A-20GENERIC-FUNCTION-29" >CREATE-A</a></span></span> <span class="locative-args">CLOG-OBJ &amp;KEY LINK CONTENT TARGET AUTO-PLACE</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ACREATE-A-20GENERIC-FUNCTION-29" >CREATE-A</a></span></span> <span class="locative-args">CLOG-OBJ &amp;KEY LINK CONTENT TARGET CLASS AUTO-PLACE</span></span></p>
 
 <p>Create a new <a href="#x-28CLOG-3ACLOG-A-20CLASS-29" title="(CLOG:CLOG-A CLASS)"><code>CLOG-A</code></a> as child of <code>CLOG-OBJ</code> with <code>:LINK</code> and
 <code>:CONTENT</code> (default &quot;&quot;) and <code>:TARGET</code> (&quot;_self&quot;) and if <code>:AUTO-PLACE</code> (default t)
@@ -2220,7 +2285,7 @@ place-inside-bottom-of <code>CLOG-OBJ</code>.</p>
 <p><a id='x-28CLOG-3ACREATE-BR-20GENERIC-FUNCTION-29'></a></p>
 
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ACREATE-BR-20GENERIC-FUNCTION-29" >CREATE-BR</a></span></span> <span class="locative-args">CLOG-OBJ &amp;KEY AUTO-PLACE</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ACREATE-BR-20GENERIC-FUNCTION-29" >CREATE-BR</a></span></span> <span class="locative-args">CLOG-OBJ &amp;KEY CLASS AUTO-PLACE</span></span></p>
 
 <p>Create a new <a href="#x-28CLOG-3ACLOG-BR-20CLASS-29" title="(CLOG:CLOG-BR CLASS)"><code>CLOG-BR</code></a> as child of <code>CLOG-OBJ</code> that creates a
 line break and if <code>:AUTO-PLACE</code> (default t) place-inside-bottom-of <code>CLOG-OBJ</code></p></li>
@@ -2239,7 +2304,7 @@ line break and if <code>:AUTO-PLACE</code> (default t) place-inside-bottom-of <c
 <p><a id='x-28CLOG-3ACREATE-BUTTON-20GENERIC-FUNCTION-29'></a></p>
 
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ACREATE-BUTTON-20GENERIC-FUNCTION-29" >CREATE-BUTTON</a></span></span> <span class="locative-args">CLOG-OBJ &amp;KEY CONTENT AUTO-PLACE</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ACREATE-BUTTON-20GENERIC-FUNCTION-29" >CREATE-BUTTON</a></span></span> <span class="locative-args">CLOG-OBJ &amp;KEY CONTENT CLASS AUTO-PLACE</span></span></p>
 
 <p>Create a new CLOG-Button as child of <code>CLOG-OBJ</code> with <code>:CONTENT</code>
 (default &quot;&quot;) and if <code>:AUTO-PLACE</code> (default t) place-inside-bottom-of
@@ -2267,7 +2332,7 @@ line break and if <code>:AUTO-PLACE</code> (default t) place-inside-bottom-of <c
 <p><a id='x-28CLOG-3ACREATE-IMG-20GENERIC-FUNCTION-29'></a></p>
 
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ACREATE-IMG-20GENERIC-FUNCTION-29" >CREATE-IMG</a></span></span> <span class="locative-args">CLOG-OBJ &amp;KEY URL-SRC ALT-TEXT AUTO-PLACE</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ACREATE-IMG-20GENERIC-FUNCTION-29" >CREATE-IMG</a></span></span> <span class="locative-args">CLOG-OBJ &amp;KEY URL-SRC ALT-TEXT CLASS AUTO-PLACE</span></span></p>
 
 <p>Create a new CLOG-Img as child of <code>CLOG-OBJ</code> with <code>:URL-SRC</code>
 (default &quot;&quot;) and <code>:ALT-TEXT</code> (default &quot;&quot;) if <code>:AUTO-PLACE</code> (default t)
@@ -2296,7 +2361,7 @@ placing image to constrain image size.</p></li>
 <p><a id='x-28CLOG-3ACREATE-DIV-20GENERIC-FUNCTION-29'></a></p>
 
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ACREATE-DIV-20GENERIC-FUNCTION-29" >CREATE-DIV</a></span></span> <span class="locative-args">CLOG-OBJ &amp;KEY CONTENT AUTO-PLACE</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ACREATE-DIV-20GENERIC-FUNCTION-29" >CREATE-DIV</a></span></span> <span class="locative-args">CLOG-OBJ &amp;KEY CONTENT CLASS AUTO-PLACE</span></span></p>
 
 <p>Create a new CLOG-Div as child of <code>CLOG-OBJ</code> with <code>:CONTENT</code>
 (default &quot;&quot;) and if <code>:AUTO-PLACE</code> (default t) place-inside-bottom-of
@@ -2316,7 +2381,7 @@ placing image to constrain image size.</p></li>
 <p><a id='x-28CLOG-3ACREATE-HR-20GENERIC-FUNCTION-29'></a></p>
 
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ACREATE-HR-20GENERIC-FUNCTION-29" >CREATE-HR</a></span></span> <span class="locative-args">CLOG-OBJ &amp;KEY AUTO-PLACE</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ACREATE-HR-20GENERIC-FUNCTION-29" >CREATE-HR</a></span></span> <span class="locative-args">CLOG-OBJ &amp;KEY CLASS AUTO-PLACE</span></span></p>
 
 <p>Create a new <a href="#x-28CLOG-3ACLOG-HR-20CLASS-29" title="(CLOG:CLOG-HR CLASS)"><code>CLOG-HR</code></a> as child of <code>CLOG-OBJ</code> that creates a
 horizontal rule (line) and if <code>:AUTO-PLACE</code> (default t) place-inside-bottom-of
@@ -2336,7 +2401,7 @@ horizontal rule (line) and if <code>:AUTO-PLACE</code> (default t) place-inside-
 <p><a id='x-28CLOG-3ACREATE-METER-20GENERIC-FUNCTION-29'></a></p>
 
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ACREATE-METER-20GENERIC-FUNCTION-29" >CREATE-METER</a></span></span> <span class="locative-args">CLOG-OBJ &amp;KEY VALUE HIGH LOW MAXIMUM MINIMUM OPTIMUM AUTO-PLACE</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ACREATE-METER-20GENERIC-FUNCTION-29" >CREATE-METER</a></span></span> <span class="locative-args">CLOG-OBJ &amp;KEY VALUE HIGH LOW MAXIMUM MINIMUM OPTIMUM CLASS AUTO-PLACE</span></span></p>
 
 <p>Create a new CLOG-Meter as child of <code>CLOG-OBJ</code> with <code>VALUE</code>
 (default 0) <code>HIGH</code> (default 100) <code>LOW</code> (default 0) <code>MAXIMUM</code> (default 100) <code>MINIMUM</code>
@@ -2407,10 +2472,10 @@ instead through the value property.</p></li>
 <p><a id='x-28CLOG-3ACREATE-PROGRESS-BAR-20GENERIC-FUNCTION-29'></a></p>
 
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ACREATE-PROGRESS-BAR-20GENERIC-FUNCTION-29" >CREATE-PROGRESS-BAR</a></span></span> <span class="locative-args">CLOG-OBJ &amp;KEY VALUE MAXIMUM AUTO-PLACE</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ACREATE-PROGRESS-BAR-20GENERIC-FUNCTION-29" >CREATE-PROGRESS-BAR</a></span></span> <span class="locative-args">CLOG-OBJ &amp;KEY VALUE MAXIMUM CLASS AUTO-PLACE</span></span></p>
 
-<p>Create a new CLOG-Progress-Bar as child of <code>CLOG-OBJ</code> with <code>VALUE</code>
-(default 0) <code>MAXIMUM</code> (default 100) and if <code>:AUTO-PLACE</code> (default t)
+<p>Create a new CLOG-Progress-Bar as child of <code>CLOG-OBJ</code> with
+<code>VALUE</code> (default 0) <code>MAXIMUM</code> (default 100) and if <code>:AUTO-PLACE</code> (default t)
 place-inside-bottom-of <code>CLOG-OBJ</code>.</p></li>
 </ul>
 
@@ -2445,7 +2510,7 @@ instead through the value property.</p></li>
 <p><a id='x-28CLOG-3ACREATE-P-20GENERIC-FUNCTION-29'></a></p>
 
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ACREATE-P-20GENERIC-FUNCTION-29" >CREATE-P</a></span></span> <span class="locative-args">CLOG-OBJ &amp;KEY CONTENT AUTO-PLACE</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ACREATE-P-20GENERIC-FUNCTION-29" >CREATE-P</a></span></span> <span class="locative-args">CLOG-OBJ &amp;KEY CONTENT CLASS AUTO-PLACE</span></span></p>
 
 <p>Create a new <a href="#x-28CLOG-3ACLOG-P-20CLASS-29" title="(CLOG:CLOG-P CLASS)"><code>CLOG-P</code></a> as child of <code>CLOG-OBJ</code> with <code>:CONTENT</code>
 (default &quot;&quot;) and if <code>:AUTO-PLACE</code> (default t) place-inside-bottom-of
@@ -2465,7 +2530,7 @@ instead through the value property.</p></li>
 <p><a id='x-28CLOG-3ACREATE-SPAN-20GENERIC-FUNCTION-29'></a></p>
 
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ACREATE-SPAN-20GENERIC-FUNCTION-29" >CREATE-SPAN</a></span></span> <span class="locative-args">CLOG-OBJ &amp;KEY CONTENT AUTO-PLACE</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ACREATE-SPAN-20GENERIC-FUNCTION-29" >CREATE-SPAN</a></span></span> <span class="locative-args">CLOG-OBJ &amp;KEY CONTENT CLASS AUTO-PLACE</span></span></p>
 
 <p>Create a new CLOG-Span as child of <code>CLOG-OBJ</code> with <code>CONTENT</code>
 and if <code>:AUTO-PLACE</code> (default t) place-inside-bottom-of
@@ -2491,7 +2556,7 @@ and if <code>:AUTO-PLACE</code> (default t) place-inside-bottom-of
 <p><a id='x-28CLOG-3ACREATE-SECTION-20GENERIC-FUNCTION-29'></a></p>
 
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ACREATE-SECTION-20GENERIC-FUNCTION-29" >CREATE-SECTION</a></span></span> <span class="locative-args">CLOG-OBJ SECTION &amp;KEY CONTENT AUTO-PLACE</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ACREATE-SECTION-20GENERIC-FUNCTION-29" >CREATE-SECTION</a></span></span> <span class="locative-args">CLOG-OBJ SECTION &amp;KEY CONTENT CLASS AUTO-PLACE</span></span></p>
 
 <p>Create a new CLOG-Section of section type  as child of
 <code>CLOG-OBJ</code> with <code>CONTENT</code> and if <code>:AUTO-PLACE</code> (default t) place-inside-bottom-of
@@ -2517,7 +2582,7 @@ and if <code>:AUTO-PLACE</code> (default t) place-inside-bottom-of
 <p><a id='x-28CLOG-3ACREATE-PHRASE-20GENERIC-FUNCTION-29'></a></p>
 
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ACREATE-PHRASE-20GENERIC-FUNCTION-29" >CREATE-PHRASE</a></span></span> <span class="locative-args">CLOG-OBJ PHRASE &amp;KEY CONTENT AUTO-PLACE</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ACREATE-PHRASE-20GENERIC-FUNCTION-29" >CREATE-PHRASE</a></span></span> <span class="locative-args">CLOG-OBJ PHRASE &amp;KEY CONTENT CLASS AUTO-PLACE</span></span></p>
 
 <p>Create a new CLOG-Phrase of phrase type  as child of
 <code>CLOG-OBJ</code> with <code>CONTENT</code> and if <code>:AUTO-PLACE</code> (default t) place-inside-bottom-of
@@ -2537,7 +2602,7 @@ and if <code>:AUTO-PLACE</code> (default t) place-inside-bottom-of
 <p><a id='x-28CLOG-3ACREATE-ORDERED-LIST-20GENERIC-FUNCTION-29'></a></p>
 
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ACREATE-ORDERED-LIST-20GENERIC-FUNCTION-29" >CREATE-ORDERED-LIST</a></span></span> <span class="locative-args">CLOG-OBJ &amp;KEY AUTO-PLACE</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ACREATE-ORDERED-LIST-20GENERIC-FUNCTION-29" >CREATE-ORDERED-LIST</a></span></span> <span class="locative-args">CLOG-OBJ &amp;KEY CLASS AUTO-PLACE</span></span></p>
 
 <p>Create a new CLOG-Ordered-List as child of <code>CLOG-OBJ</code>
 and if <code>:AUTO-PLACE</code> (default t) place-inside-bottom-of <code>CLOG-OBJ</code></p></li>
@@ -2585,7 +2650,7 @@ is outside.</p></li>
 <p><a id='x-28CLOG-3ACREATE-UNORDERED-LIST-20GENERIC-FUNCTION-29'></a></p>
 
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ACREATE-UNORDERED-LIST-20GENERIC-FUNCTION-29" >CREATE-UNORDERED-LIST</a></span></span> <span class="locative-args">CLOG-OBJ &amp;KEY AUTO-PLACE</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ACREATE-UNORDERED-LIST-20GENERIC-FUNCTION-29" >CREATE-UNORDERED-LIST</a></span></span> <span class="locative-args">CLOG-OBJ &amp;KEY CLASS AUTO-PLACE</span></span></p>
 
 <p>Create a new CLOG-Unordered-List as child of <code>CLOG-OBJ</code>
 and if <code>:AUTO-PLACE</code> (default t) place-inside-bottom-of <code>CLOG-OBJ</code></p></li>
@@ -2604,7 +2669,7 @@ and if <code>:AUTO-PLACE</code> (default t) place-inside-bottom-of <code>CLOG-OB
 <p><a id='x-28CLOG-3ACREATE-LIST-ITEM-20GENERIC-FUNCTION-29'></a></p>
 
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ACREATE-LIST-ITEM-20GENERIC-FUNCTION-29" >CREATE-LIST-ITEM</a></span></span> <span class="locative-args">CLOG-OBJ &amp;KEY CONTENT AUTO-PLACE</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ACREATE-LIST-ITEM-20GENERIC-FUNCTION-29" >CREATE-LIST-ITEM</a></span></span> <span class="locative-args">CLOG-OBJ &amp;KEY CONTENT CLASS AUTO-PLACE</span></span></p>
 
 <p>Create a new CLOG-List-Item as child of <code>CLOG-OBJ</code>
 and if <code>:AUTO-PLACE</code> (default t) place-inside-bottom-of <code>CLOG-OBJ</code></p></li>
@@ -2631,7 +2696,7 @@ and if <code>:AUTO-PLACE</code> (default t) place-inside-bottom-of <code>CLOG-OB
 <p><a id='x-28CLOG-3ACREATE-DEFINITION-LIST-20GENERIC-FUNCTION-29'></a></p>
 
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ACREATE-DEFINITION-LIST-20GENERIC-FUNCTION-29" >CREATE-DEFINITION-LIST</a></span></span> <span class="locative-args">CLOG-OBJ &amp;KEY AUTO-PLACE</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ACREATE-DEFINITION-LIST-20GENERIC-FUNCTION-29" >CREATE-DEFINITION-LIST</a></span></span> <span class="locative-args">CLOG-OBJ &amp;KEY CLASS AUTO-PLACE</span></span></p>
 
 <p>Create a new CLOG-Definition-List as child of <code>CLOG-OBJ</code>
 and if <code>:AUTO-PLACE</code> (default t) place-inside-bottom-of <code>CLOG-OBJ</code></p></li>
@@ -2650,7 +2715,7 @@ and if <code>:AUTO-PLACE</code> (default t) place-inside-bottom-of <code>CLOG-OB
 <p><a id='x-28CLOG-3ACREATE-TERM-20GENERIC-FUNCTION-29'></a></p>
 
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ACREATE-TERM-20GENERIC-FUNCTION-29" >CREATE-TERM</a></span></span> <span class="locative-args">CLOG-DEFINITION-LIST &amp;KEY CONTENT AUTO-PLACE</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ACREATE-TERM-20GENERIC-FUNCTION-29" >CREATE-TERM</a></span></span> <span class="locative-args">CLOG-DEFINITION-LIST &amp;KEY CONTENT CLASS AUTO-PLACE</span></span></p>
 
 <p>Create a new CLOG-Term as child of <a href="#x-28CLOG-3ACLOG-OBJ-20CLASS-29" title="(CLOG:CLOG-OBJ CLASS)"><code>CLOG-OBJ</code></a>
 and if <code>:AUTO-PLACE</code> (default t) place-inside-bottom-of <a href="#x-28CLOG-3ACLOG-OBJ-20CLASS-29" title="(CLOG:CLOG-OBJ CLASS)"><code>CLOG-OBJ</code></a></p></li>
@@ -2669,7 +2734,7 @@ and if <code>:AUTO-PLACE</code> (default t) place-inside-bottom-of <a href="#x-2
 <p><a id='x-28CLOG-3ACREATE-DESCRIPTION-20GENERIC-FUNCTION-29'></a></p>
 
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ACREATE-DESCRIPTION-20GENERIC-FUNCTION-29" >CREATE-DESCRIPTION</a></span></span> <span class="locative-args">CLOG-DEFINITION-LIST &amp;KEY CONTENT AUTO-PLACE</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ACREATE-DESCRIPTION-20GENERIC-FUNCTION-29" >CREATE-DESCRIPTION</a></span></span> <span class="locative-args">CLOG-DEFINITION-LIST &amp;KEY CONTENT CLASS AUTO-PLACE</span></span></p>
 
 <p>Create a new CLOG-Description as child of <a href="#x-28CLOG-3ACLOG-OBJ-20CLASS-29" title="(CLOG:CLOG-OBJ CLASS)"><code>CLOG-OBJ</code></a>
 and if <code>:AUTO-PLACE</code> (default t) place-inside-bottom-of <a href="#x-28CLOG-3ACLOG-OBJ-20CLASS-29" title="(CLOG:CLOG-OBJ CLASS)"><code>CLOG-OBJ</code></a></p></li>
@@ -2683,6 +2748,12 @@ and if <code>:AUTO-PLACE</code> (default t) place-inside-bottom-of <a href="#x-2
 
 <p>CLOG-Form - Class for organizing Form Elements in to a From</p>
 
+<p><a id='x-28CLOG-3AFORM-METHOD-TYPE-20-28TYPE-29-29'></a></p>
+
+<ul>
+<li><span class=reference-bullet><span class=reference><span class="locative-type">[type]</span> <span class="reference-object"><a href="#x-28CLOG-3AFORM-METHOD-TYPE-20-28TYPE-29-29" >FORM-METHOD-TYPE</a></span></span></span></li>
+</ul>
+
 <p><a id='x-28CLOG-3ACLOG-FORM-20CLASS-29'></a></p>
 
 <ul>
@@ -2694,7 +2765,7 @@ and if <code>:AUTO-PLACE</code> (default t) place-inside-bottom-of <a href="#x-2
 <p><a id='x-28CLOG-3ACREATE-FORM-20GENERIC-FUNCTION-29'></a></p>
 
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ACREATE-FORM-20GENERIC-FUNCTION-29" >CREATE-FORM</a></span></span> <span class="locative-args">CLOG-OBJ &amp;KEY ACTION METHOD TARGET AUTO-PLACE</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ACREATE-FORM-20GENERIC-FUNCTION-29" >CREATE-FORM</a></span></span> <span class="locative-args">CLOG-OBJ &amp;KEY ACTION METHOD TARGET CLASS AUTO-PLACE</span></span></p>
 
 <p>Create a new CLOG-Form as child of <code>CLOG-OBJ</code> that organizes
 a collection of form elements in to a single form if <code>:AUTO-PLACE</code> (default t)
@@ -2897,7 +2968,8 @@ group called <code>NAME</code>.</p></li>
 <ul>
 <li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ANAME-VALUE-20GENERIC-FUNCTION-29" >NAME-VALUE</a></span></span> <span class="locative-args">CLOG-OBJ NAME</span></span></p>
 
-<p>Returns the value of input item called <code>NAME</code>.</p></li>
+<p>Returns the value of input item called <code>NAME</code> and must
+be unique name on entire document.</p></li>
 </ul>
 
 <p><a id='x-28CLOG-3APATTERN-20GENERIC-FUNCTION-29'></a></p>
@@ -4480,6 +4552,14 @@ on-storage event is fired for changes to :local storage keys.</p></li>
 <li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ALOAD-CSS-20GENERIC-FUNCTION-29" >LOAD-CSS</a></span></span> <span class="locative-args">CLOG-DOCUMENT CSS-URL</span></span></p>
 
 <p>Load css from <code>CSS-URL</code>.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3ALOAD-SCRIPT-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ALOAD-SCRIPT-20GENERIC-FUNCTION-29" >LOAD-SCRIPT</a></span></span> <span class="locative-args">CLOG-DOCUMENT SCRIPT-URL</span></span></p>
+
+<p>Load script from <code>SCRIPT-URL</code>.</p></li>
 </ul>
 
 <p><a id='x-28CLOG-3APUT-20GENERIC-FUNCTION-29'></a></p>

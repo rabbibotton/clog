@@ -66,6 +66,19 @@
     (create-list-item tmp :content "list item 2")
     (create-list-item tmp :content "list item 3")
     (setf (list-location tmp) :inside)
+
+    (create-hr win)
+    
+    (let* ((tbl (create-table win))
+	   (cap (create-table-caption tbl :content "My Table"))
+	   (rw))
+
+      (set-border tbl :thin :solid :black)
+
+      (dotimes (y 10)
+	(setf rw (create-table-row tbl))	
+	(dotimes (x 6)
+	  (create-table-column rw :content (format nil "~A X ~A" x y)))))
     ))
 
 (defun test ()

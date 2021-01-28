@@ -381,7 +381,47 @@ embedded in a native template application.)"
   
   "CLOG-Description - Class for CLOG Descriptions"
   (clog-description   class)
-  (create-description generic-function))
+  (create-description generic-function)
+  
+  "CLOG-Table - Class for CLOG Tables"
+  (clog-table   class)
+  (create-table generic-function)
+  
+  "CLOG-Table-Row - Class for CLOG Table-Rows"
+  (clog-table-row   class)
+  (create-table-row generic-function)
+
+  "CLOG-Table-Column - Class for CLOG Table-Columns"
+  (clog-table-column   class)
+  (create-table-column generic-function)
+  
+  "CLOG-Table-Heading - Class for CLOG Table-Headings"
+  (clog-table-heading   class)
+  (create-table-heading generic-function)
+
+  "CLOG-Table-Head - Class for CLOG Table-Heads"
+  (clog-table-head   class)
+  (create-table-head generic-function)
+
+  "CLOG-Table-Body - Class for CLOG Table-Bodys"
+  (clog-table-body   class)
+  (create-table-body generic-function)
+
+  "CLOG-Table-Caption - Class for CLOG Table-Captions"
+  (clog-table-caption   class)
+  (create-table-caption generic-function)
+
+  "CLOG-Table-Footer - Class for CLOG Table-Footers"
+  (clog-table-footer   class)
+  (create-table-footer generic-function)
+  
+  "CLOG-Table-Column-Group - Class for CLOG Table-Column-Groups"
+  (clog-table-column-group   class)
+  (create-table-column-group generic-function)
+  
+  "CLOG-Table-Column-Group-Item - Class for CLOG Table-Column-Group-Items"
+  (clog-table-column-group-item   class)
+  (create-table-column-group-item generic-function))
 
 (defsection @clog-form (:title "CLOG Form Objects")
   "CLOG-Form - Class for organizing Form Elements in to a From"
