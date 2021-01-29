@@ -75,10 +75,6 @@ embedded in a native template application.)</p>
 
 <p>License BSD 3-Clause License</p>
 
-<ul>
-<li>Introduction</li>
-</ul>
-
 <p>The Common Lisp Omnificent GUI, <code>CLOG</code> for short, uses web technology to
 produce graphical user interfaces for applications locally or remotely.
 <code>CLOG</code> can take the place, or work alongside, most cross-platform GUI
@@ -86,10 +82,10 @@ frameworks and website frameworks. The <code>CLOG</code> package starts up the
 connectivity to the browser or other websocket client (often a browser
 embedded in a native template application.)</p>
 
-<p>STATUS: <code>CLOG</code> is complete enough for most uses. See the README.md for
-some enhacements bing worked on, <code>CLOG</code> is actually based on GNOGA, a
+<p>STATUS: <code>CLOG</code> is complete enough for most uses. See below for some
+enhacements bing worked on, <code>CLOG</code> is actually based on GNOGA, a
 framework I wrote for Ada in 2013 and used in commercial production
-code for the last 6 years, i.e. the techiniques <code>CLOG</code> uses are solid
+code for the last 8 years, i.e. the techiniques <code>CLOG</code> uses are solid
 and proven.</p>
 
 <p>Some potential applications for <code>CLOG</code>:</p>
@@ -127,14 +123,25 @@ git clone https://github.com/rabbibotton/clog.git</span></code></pre>
 have Quicklisp configured):</p>
 
 <ol>
-<li><p>cd to the <code>CLOG</code> dir (the dir should be one used by Quicklisp ex. ~/common-lisp/)</p></li>
-<li><p>Start emacs/slime or your common lisp &quot;repl&quot; in <em>that</em> directory.</p></li>
+<li><p>Start emacs then M-x slime</p></li>
 <li><p>In the REPL, run:</p></li>
 </ol>
 
 <pre><code><span class="code">CL-USER&gt; <span class="paren1">(<span class="code">ql:quickload <span class="keyword">:clog</span></span>)</span>
-CL-USER&gt; <span class="paren1">(<span class="code">load <span class="string">"~/common-lisp/clog/tutorial/01-tutorial.lisp"</span></span>)</span>
-CL-USER&gt; <span class="paren1">(<span class="code">clog-user:start-tutorial</span>)</span></span></code></pre>
+CL-USER&gt; <span class="paren1">(<span class="code">clog-user:run-tutorial 1</span>)</span></span></code></pre>
+
+<p>To see where the source files are:</p>
+
+<pre><code><span class="code">CL-USER&gt; <span class="paren1">(<span class="code">clog:clog-install-dir</span>)</span></span></code></pre>
+
+<p>You can the load the demos with:</p>
+
+<pre><code><span class="code">CL-USER&gt; <span class="paren1">(<span class="code">load <span class="string">"path to clog/demos/01-snake.lisp"</span></span>)</span>
+CL-USER&gt; <span class="paren1">(<span class="code">clog-user:start-demo</span>)</span></span></code></pre>
+
+<p>To open a browser with the <code>CLOG</code> manual:</p>
+
+<pre><code><span class="code">CL-USER&gt; <span class="paren1">(<span class="code">clog:open-manual</span>)</span></span></code></pre>
 
 <p>Work your way through the tutorials. You will see how quick and easy it is
 to be a CLOGer. The next section also covers the basic programming concepts
@@ -4998,13 +5005,25 @@ on-storage event is fired for changes to :local storage keys.</p></li>
 <p><a id='x-28CLOG-3ACLOG-INSTALL-DIR-20FUNCTION-29'></a></p>
 
 <ul>
-<li><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#x-28CLOG-3ACLOG-INSTALL-DIR-20FUNCTION-29" >CLOG-INSTALL-DIR</a></span></span> <span class="locative-args"></span></span></li>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#x-28CLOG-3ACLOG-INSTALL-DIR-20FUNCTION-29" >CLOG-INSTALL-DIR</a></span></span> <span class="locative-args"></span></span></p>
+
+<p>Return the directory <code>CLOG</code> was installed in.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3AOPEN-MANUAL-20FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#x-28CLOG-3AOPEN-MANUAL-20FUNCTION-29" >OPEN-MANUAL</a></span></span> <span class="locative-args"></span></span></p>
+
+<p>Launches a browser with <code>CLOG</code> manual.</p></li>
 </ul>
 
 <p><a id='x-28CLOG-3ARUN-TUTORIAL-20FUNCTION-29'></a></p>
 
 <ul>
-<li><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#x-28CLOG-3ARUN-TUTORIAL-20FUNCTION-29" >RUN-TUTORIAL</a></span></span> <span class="locative-args">NUM</span></span></li>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#x-28CLOG-3ARUN-TUTORIAL-20FUNCTION-29" >RUN-TUTORIAL</a></span></span> <span class="locative-args">NUM</span></span></p>
+
+<p>Run tutorial <code>NUM</code></p></li>
 </ul>
 
 <p>Functions for Compilation and Documentation</p>

@@ -73,8 +73,14 @@ CL-USER> (clog:clog-install-dir)
 You can the load the demos with:
 
 ```
-CL-USER> (load "path to clog/demos/01-snake.lisp)
+CL-USER> (load "path to clog/demos/01-snake.lisp")
 CL-USER> (clog-user:start-demo)
+```
+
+To open a browser with the CLOG manual:
+
+```
+CL-USER> (clog:open-manual)
 ```
 
 Work your way through the tutorials. You will see how quick and easy it is

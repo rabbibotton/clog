@@ -25,6 +25,16 @@
   "Return the directory CLOG was installed in."
   (asdf:system-source-directory :clog))
 
+;;;;;;;;;;;;;;;;;
+;; open-manual ;;
+;;;;;;;;;;;;;;;;;
+
+(defun open-manual ()
+  "Launches a browser with CLOG manual."
+  (open-browser :url (format nil "~A"
+			     (merge-pathnames "./doc/clog-manual.html"
+				      (asdf:system-source-directory :clog)))))
+   
 ;;;;;;;;;;;;;;;;;;
 ;; run-tutorial ;;
 ;;;;;;;;;;;;;;;;;;

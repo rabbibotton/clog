@@ -735,6 +735,7 @@ embedded in a native template application.)"
 (defsection @clog-helpers (:title "CLOG Helper Functions")
   "Tutorial and demo helpers"
   (clog-install-dir function)
+  (open-manual      function)
   (run-tutorial     function)
 
   "Functions for Compilation and Documentation"

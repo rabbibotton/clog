@@ -19,8 +19,6 @@ David Botton <david@botton.com>
 
 License BSD 3-Clause License
 
-- Introduction
-
 The Common Lisp Omnificent GUI, CLOG for short, uses web technology to
 produce graphical user interfaces for applications locally or remotely.
 CLOG can take the place, or work alongside, most cross-platform GUI
@@ -28,10 +26,10 @@ frameworks and website frameworks. The CLOG package starts up the
 connectivity to the browser or other websocket client (often a browser
 embedded in a native template application.)
 
-STATUS: CLOG is complete enough for most uses. See the README.md for
-some enhacements bing worked on, CLOG is actually based on GNOGA, a
+STATUS: CLOG is complete enough for most uses. See below for some
+enhacements bing worked on, CLOG is actually based on GNOGA, a
 framework I wrote for Ada in 2013 and used in commercial production
-code for the last 6 years, i.e. the techiniques CLOG uses are solid
+code for the last 8 years, i.e. the techiniques CLOG uses are solid
 and proven.
 
 Some potential applications for CLOG:
@@ -68,14 +66,31 @@ git clone https://github.com/rabbibotton/clog.git
 To load this package and work through tutorials (assuming you
 have Quicklisp configured):
 
-1. cd to the CLOG dir (the dir should be one used by Quicklisp ex. ~/common-lisp/)
-2. Start emacs/slime or your common lisp \"repl\" in _that_ directory.
-3. In the REPL, run:
+1. Start emacs then M-x slime
+2. In the REPL, run:
 
 ```
 CL-USER> (ql:quickload :clog)
-CL-USER> (load \"~/common-lisp/clog/tutorial/01-tutorial.lisp\")
-CL-USER> (clog-user:start-tutorial)
+CL-USER> (clog-user:run-tutorial 1)
+```
+
+To see where the source files are:
+
+```
+CL-USER> (clog:clog-install-dir)
+```
+
+You can the load the demos with:
+
+```
+CL-USER> (load \"path to clog/demos/01-snake.lisp\")
+CL-USER> (clog-user:start-demo)
+```
+
+To open a browser with the CLOG manual:
+
+```
+CL-USER> (clog:open-manual)
 ```
 
 Work your way through the tutorials. You will see how quick and easy it is
