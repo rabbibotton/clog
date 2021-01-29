@@ -43,7 +43,9 @@ embedded in a native template application.)"
   (@clog-document        section)
   (@clog-location        section)
   (@clog-navigator       section)
+  (@clog-helpers         section)
   (@clog-internals       section))
+
 
 (defsection @clog-system (:title "CLOG System")
   "CLOG Startup and Shutdown"
@@ -711,7 +713,7 @@ embedded in a native template application.)"
   (vendor           generic-function))
   
 (defsection @clog-location (:title "CLOG Location Objects")
-  "CLOG-Location - CLOG Location Objects"
+  "Clog-Location - CLOG Location Objects"
   (clog-location class)
 
   "CLOG-Location - Properties"
@@ -730,43 +732,13 @@ embedded in a native template application.)"
   (url-replace generic-function)
   (url-assign  generic-function))
 
-(export 'make-markup)
-(defun make-markup ()
-  (load "clog.lisp")
-  (load "clog-docs.lisp")
-  (load "clog-base.lisp")
-  (load "clog-element.lisp")
-  (load "clog-element-common.lisp")
-  (load "clog-canvas.lisp")
-  (load "clog-form.lisp")
-  (load "clog-window.lisp")
-  (load "clog-navigator.lisp")
-  (load "clog-document.lisp")
-  (load "clog-location.lisp")
-  (load "clog-system.lisp")
-  (load "clog-utilities.lisp")
-  (load "clog-body.lisp")
-  (describe clog:@CLOG-MANUAL))
-  
-(export 'make-html)
-(defun make-html ()
-  (load "clog.lisp")
-  (load "clog-docs.lisp")
-  (load "clog-base.lisp")
-  (load "clog-element.lisp")
-  (load "clog-element-common.lisp")
-  (load "clog-canvas.lisp")
-  (load "clog-form.lisp")
-  (load "clog-window.lisp")
-  (load "clog-navigator.lisp")
-  (load "clog-document.lisp")
-  (load "clog-location.lisp")
-  (load "clog-system.lisp")
-  (load "clog-utilities.lisp")
-  (load "clog-body.lisp")
-  (mgl-pax:update-asdf-system-html-docs clog:@CLOG-MANUAL :clog))
+(defsection @clog-helpers (:title "CLOG Helper Functions")
+  "Tutorial and demo helpers"
+  (clog-install-dir function)
+  (run-tutorial     function)
 
-(export 'make-world)
-(defun make-world ()
-  (make-html)
-  (asdf:compile-system :clog))
+  "Functions for Compilation and Documentation"
+  (load-world       function)
+  (make-mark-down   function)
+  (make-html        function)
+  (make-world       function))

@@ -56,12 +56,26 @@ git clone https://github.com/rabbibotton/clog.git
 To load this package and work through tutorials (assuming you
 have Quicklisp configured):
 
-1. Start emacs/slime
-3. In the REPL, run:
+1. Start emacs then M-x slime
+2. In the REPL, run:
 
+```
 CL-USER> (ql:quickload :clog)
-CL-USER> (load "~/common-lisp/clog/tutorial/01-tutorial.lisp")
-CL-USER> (clog-user:start-tutorial)
+CL-USER> (clog-user:run-tutorial 1)
+```
+
+To see where the source files are:
+
+```
+CL-USER> (clog:clog-install-dir)
+```
+
+You can the load the demos with:
+
+```
+CL-USER> (load "path to clog/demos/01-snake.lisp)
+CL-USER> (clog-user:start-demo)
+```
 
 Work your way through the tutorials. You will see how quick and easy it is
 to be a CLOGer.
@@ -158,7 +172,6 @@ Enhancements underway:
   - GUI Builder
     - Grid style
     - Page style
-  - Electron for native GUIs
   
 - Plugin API 
   - General CL systems

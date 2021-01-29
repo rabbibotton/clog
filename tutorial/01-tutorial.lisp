@@ -23,7 +23,7 @@
     (set-on-click hello-element      ; Now we set a function to handle clicks
 		  (lambda (obj)      ; In this case we use an anonymous function
 		    (declare (ignore obj))
-		    (setf (color hello-element) "green")))
+		    (setf (color hello-element) :green)))
     
     (run body))) ; Keep our thread alive until connection closes
 		 ; and prevent garbage collection of our CLOG-Objects

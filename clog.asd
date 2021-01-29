@@ -26,4 +26,5 @@
 	       (:file "clog-document")
 	       (:file "clog-location")
 	       (:file "clog-navigator")	       
-	       (:file "clog-body")))
+	       (:file "clog-body")
+	       (:file "clog-helpers")))

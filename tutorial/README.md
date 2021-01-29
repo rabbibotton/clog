@@ -1,4 +1,4 @@
-To run a tutorial, start emacs/slime or your CL Lisp in the common-lisp/clog directory:
+To run a tutorial load clog:
 
 ```
 CL-USER> (ql:quickload :clog)
@@ -10,14 +10,14 @@ To load "clog":
 (:CLOG)
 ```
 
-Load the demo:
+Load the tutorial:
 
 ```
 CL-USER> (load "/Users/dbotton/common-lisp/clog/tutorial/01-tutorial.lisp")
 #P"/Users/dbotton/common-lisp/clog/tutorial/01-tutorial.lisp"
 ```
 
-Start the demo:
+Start the tutorial:
 
 ```
 CL-USER> (clog-user:start-tutorial)
