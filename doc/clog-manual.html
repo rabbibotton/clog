@@ -452,9 +452,9 @@ lisp and the <code>HTML</code> DOM element.</p></li>
 <p><a id='x-28CLOG-3APROPERTY-20GENERIC-FUNCTION-29'></a></p>
 
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3APROPERTY-20GENERIC-FUNCTION-29" >PROPERTY</a></span></span> <span class="locative-args">CLOG-OBJ PROPERTY-NAME</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3APROPERTY-20GENERIC-FUNCTION-29" >PROPERTY</a></span></span> <span class="locative-args">CLOG-OBJ PROPERTY-NAME &amp;KEY DEFAULT-ANSWER</span></span></p>
 
-<p>Get/Setf html property. (eg. draggable)</p></li>
+<p>Get/Setf html property.</p></li>
 </ul>
 
 <p>CLOG-Obj - General Methods</p>
@@ -995,7 +995,7 @@ attach an existing element with <code>HTML-ID</code>. The <code>HTML-ID</code> m
 <p><a id='x-28CLOG-3ASTYLE-20GENERIC-FUNCTION-29'></a></p>
 
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ASTYLE-20GENERIC-FUNCTION-29" >STYLE</a></span></span> <span class="locative-args">CLOG-ELEMENT STYLE-NAME</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ASTYLE-20GENERIC-FUNCTION-29" >STYLE</a></span></span> <span class="locative-args">CLOG-ELEMENT STYLE-NAME &amp;KEY DEFAULT-ANSWER</span></span></p>
 
 <p>Get/Setf css style.</p></li>
 </ul>
@@ -1003,7 +1003,7 @@ attach an existing element with <code>HTML-ID</code>. The <code>HTML-ID</code> m
 <p><a id='x-28CLOG-3AATTRIBUTE-20GENERIC-FUNCTION-29'></a></p>
 
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3AATTRIBUTE-20GENERIC-FUNCTION-29" >ATTRIBUTE</a></span></span> <span class="locative-args">CLOG-ELEMENT ATTRIBUTE-NAME</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3AATTRIBUTE-20GENERIC-FUNCTION-29" >ATTRIBUTE</a></span></span> <span class="locative-args">CLOG-ELEMENT ATTRIBUTE-NAME &amp;KEY DEFAULT-ANSWER</span></span></p>
 
 <p>Get/Setf html tag attribute. (eg. src on img tag)</p></li>
 </ul>
@@ -1246,6 +1246,42 @@ vertical scrollbar (if present) + Border</p></li>
 
 <p>Get offset-height. CSS height + CSS padding + height of
 horizontal scrollbar (if present) + Border</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3ASCROLL-LEFT-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ASCROLL-LEFT-20GENERIC-FUNCTION-29" >SCROLL-LEFT</a></span></span> <span class="locative-args">CLOG-ELEMENT</span></span></p>
+
+<p>Get scroll-left. The number of pixels that an element's
+content is scrolled to the left. For RTL languages is negative.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3ASCROLL-TOP-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ASCROLL-TOP-20GENERIC-FUNCTION-29" >SCROLL-TOP</a></span></span> <span class="locative-args">CLOG-ELEMENT</span></span></p>
+
+<p>Get scroll-top. The number of pixels that an element's
+content has been scrolled upward.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3ASCROLL-WIDTH-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ASCROLL-WIDTH-20GENERIC-FUNCTION-29" >SCROLL-WIDTH</a></span></span> <span class="locative-args">CLOG-ELEMENT</span></span></p>
+
+<p>Get scroll-width. Either the width in pixels of the content
+of an element or the width of the element itself, whichever is greater.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3ASCROLL-HEIGHT-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ASCROLL-HEIGHT-20GENERIC-FUNCTION-29" >SCROLL-HEIGHT</a></span></span> <span class="locative-args">CLOG-ELEMENT</span></span></p>
+
+<p>Get scroll-height. Height of an element's content, including
+content not visible on the screen due to overflow.</p></li>
 </ul>
 
 <p><a id='x-28CLOG-3AHTML-TAG-20GENERIC-FUNCTION-29'></a></p>
