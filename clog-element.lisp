@@ -95,11 +95,13 @@ attach an existing element with HTML-ID. The HTML-ID must be unique."))
 ;; style ;;
 ;;;;;;;;;;;
 
-(defgeneric style (clog-element style-name)
+(defgeneric style (clog-element style-name &key default-answer)
   (:documentation "Get/Setf css style."))
 
-(defmethod style ((obj clog-element) style-name)
-  (jquery-query obj (format nil "css('~A')" style-name)))
+(defmethod style ((obj clog-element) style-name
+		      &key (default-answer nil))
+  (jquery-query obj (format nil "css('~A')" style-name)
+		:default-answer default-answer))
 
 (defgeneric set-style (clog-element style-name value)
   (:documentation "Set css style."))
@@ -113,11 +115,13 @@ attach an existing element with HTML-ID. The HTML-ID must be unique."))
 ;; attribute ;;
 ;;;;;;;;;;;;;;;
 
-(defgeneric attribute (clog-element attribute-name)
+(defgeneric attribute (clog-element attribute-name &key default-answer)
   (:documentation "Get/Setf html tag attribute. (eg. src on img tag)"))
 
-(defmethod attribute ((obj clog-element) attribute-name)
-  (jquery-query obj (format nil "attr('~A')" attribute-name)))
+(defmethod attribute ((obj clog-element) attribute-name
+		      &key (default-answer nil))
+  (jquery-query obj (format nil "attr('~A')" attribute-name)
+		:default-answer default-answer))
 
 (defgeneric remove-attribute (clog-element attribute-name)
   (:documentation "Get/Setf html tag attribute. (eg. src on img tag)"))
@@ -470,7 +474,7 @@ spell checking if Editable is also true."))
 in pixels. It does not include the margin or padding."))
 
 (defmethod client-left ((obj clog-element))
-  (parse-integer (property obj "clientLeft")))
+  (parse-integer (property obj "clientLeft" :default-answer 0)))
 
 ;;;;;;;;;;;;;;;;
 ;; client-top ;;
@@ -481,7 +485,7 @@ in pixels. It does not include the margin or padding."))
 in pixels. It does not include the margin or padding."))
 
 (defmethod client-top ((obj clog-element))
-  (parse-integer (property obj "clientTop")))
+  (parse-integer (property obj "clientTop" :default-answer 0)))
 
 ;;;;;;;;;;;;;;;;;;
 ;; client-width ;;
@@ -493,7 +497,7 @@ CSS width + CSS padding - width of vertical scrollbar (if present)
 Does not include the border or margin."))
 
 (defmethod client-width ((obj clog-element))
-  (parse-integer (property obj "clientWidth")))
+  (parse-integer (property obj "clientWidth" :default-answer 0)))
 
 ;;;;;;;;;;;;;;;;;;;
 ;; client-height ;;
@@ -505,7 +509,7 @@ CSS height + CSS padding - height of horizontal scrollbar (if present)
 Does not include the border or margin."))
 
 (defmethod client-height ((obj clog-element))
-  (parse-integer (property obj "clientHeight")))
+  (parse-integer (property obj "clientHeight" :default-answer 0)))
 
 ;;;;;;;;;;;;;;;;;
 ;; offset-left ;;
@@ -596,7 +600,7 @@ content has been scrolled upward."))
 of an element or the width of the element itself, whichever is greater."))
 
 (defmethod scroll-width ((obj clog-element))
-  (parse-integer (property obj "scrollWidth")))
+  (parse-integer (property obj "scrollWidth" :default-answer 0)))
 
 ;;;;;;;;;;;;;;;;;;;
 ;; scroll-height ;;
@@ -607,7 +611,7 @@ of an element or the width of the element itself, whichever is greater."))
 content not visible on the screen due to overflow."))
 
 (defmethod scroll-height ((obj clog-element))
-  (parse-integer (property obj "scrollHeight")))
+  (parse-integer (property obj "scrollHeight" :default-answer 0)))
 
 ;;;;;;;;;;;;;;
 ;; html-tag ;;
@@ -1322,7 +1326,7 @@ right, top and bottom are interpreted.
 parent in the DOM."))
 
 (defmethod position-top ((obj clog-element))
-  (parse-integer (jquery-query obj "position().top")))
+  (parse-integer (jquery-query obj "position().top" :default-answer 0)))
 
 ;;;;;;;;;;;;;;;;;;;
 ;; position-left ;;
@@ -1333,7 +1337,7 @@ parent in the DOM."))
 parent in the DOM."))
 
 (defmethod position-left ((obj clog-element))
-  (parse-integer (jquery-query obj "position().left")))
+  (parse-integer (jquery-query obj "position().left" :default-answer 0)))
 
 ;;;;;;;;;;;;;;;;
 ;; offset-top ;;
@@ -1343,7 +1347,7 @@ parent in the DOM."))
   (:documentation "Position in pixels from top relative to the document."))
 
 (defmethod offset-top ((obj clog-element))
-  (parse-integer (jquery-query obj "offset().top")))
+  (parse-integer (jquery-query obj "offset().top" :default-answer 0)))
 
 ;;;;;;;;;;;;;;;;;
 ;; offset-left ;;
@@ -1353,7 +1357,7 @@ parent in the DOM."))
   (:documentation "Position in pixels from left relative to the document."))
 
 (defmethod offset-left ((obj clog-element))
-  (parse-integer (jquery-query obj "offset().left")))
+  (parse-integer (jquery-query obj "offset().left" :default-answer 0)))
 
 ;;;;;;;;;;
 ;; left ;;

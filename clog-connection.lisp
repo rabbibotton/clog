@@ -351,10 +351,11 @@ path by querying the browser. See PATH-NAME (CLOG-LOCATION)."
 ;; query ;;
 ;;;;;;;;;;;
 
-(defun query (connection-id script)
-  "Execute SCRIPT on CONNECTION-ID, return value."
+(defun query (connection-id script &key (default-answer nil))
+  "Execute SCRIPT on CONNECTION-ID, return value. If times out answer
+DEFAULT-ANSWER."
   (let ((uid (generate-id)))
-    (prep-query uid nil)
+    (prep-query uid default-answer)
     (execute connection-id
 	     (format nil "ws.send (\"~A:\"+eval(\"~A\"));"
 		     uid

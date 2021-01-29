@@ -94,13 +94,14 @@ dicarded. (Private)"))
 ;; jquery-query ;;
 ;;;;;;;;;;;;;;;;;;
 
-(defgeneric jquery-query (clog-obj method)
+(defgeneric jquery-query (clog-obj method &key default-answer)
   (:documentation "Execute the jquery METHOD on OBJ and return
-result. (Private)"))
+result or DEFAULT-ANSWER on time out. (Private)"))
 
-(defmethod jquery-query ((obj clog-obj) method)
+(defmethod jquery-query ((obj clog-obj) method &key (default-answer nil))
   (cc:query (connection-id obj)
-	    (format nil "~A.~A" (jquery obj) method)))
+	    (format nil "~A.~A" (jquery obj) method)
+	    :default-answer default-answer))
 
 ;;;;;;;;;;;;;
 ;; execute ;;
@@ -118,13 +119,14 @@ dicarded. (Private)"))
 ;; query ;;
 ;;;;;;;;;;;
 
-(defgeneric query (clog-obj method)
+(defgeneric query (clog-obj method &key default-answer)
   (:documentation "Execute the JavaScript query METHOD on OBJ and return
-result. (Private)"))
+result or if time out DEFAULT-ANSWER (Private)"))
 
-(defmethod query ((obj clog-obj) method)
+(defmethod query ((obj clog-obj) method &key (default-answer nil))
   (cc:query (connection-id obj)
-	    (format nil "~A.~A" (script-id obj) method)))
+	    (format nil "~A.~A" (script-id obj) method)
+	    :default-answer default-answer))
 
 ;;;;;;;;;;;;;;;;;;;;;;;
 ;; bind-event-script ;;
@@ -273,11 +275,12 @@ result. (Private)"))
 ;; property ;;
 ;;;;;;;;;;;;;;
 
-(defgeneric property (clog-obj property-name)
-  (:documentation "Get/Setf html property. (eg. draggable)"))
+(defgeneric property (clog-obj property-name &key default-answer)
+  (:documentation "Get/Setf html property."))
 
-(defmethod property ((obj clog-obj) property-name)
-  (jquery-query obj (format nil "prop('~A')" property-name)))
+(defmethod property ((obj clog-obj) property-name &key (default-answer nil))
+  (jquery-query obj (format nil "prop('~A')" property-name)
+		:default-answer default-answer))
 
 (defgeneric set-property (clog-obj property-name value)
   (:documentation "Set html property."))

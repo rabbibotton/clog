@@ -35,3 +35,4 @@ Most demos startup a browser, if not use http://127.0.0.1:8080
 Demo Summary
 
 - 01-snake-game.lisp - Sparkey the Snake Game
+- 02-chat.lisp       - Chat - Private instant messenger

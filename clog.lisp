@@ -170,6 +170,10 @@ embedded in a native template application.)"
   (offset-top          generic-function)
   (offset-width        generic-function)
   (offset-height       generic-function)
+  (scroll-left         generic-function)
+  (scroll-top          generic-function)
+  (scroll-width        generic-function)
+  (scroll-height       generic-function)
   (html-tag            generic-function)
 
   "CLOG-Element - Styles"

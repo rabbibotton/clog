@@ -145,7 +145,7 @@ Tutorial Summary
 Demo Summary
 
 - 01-snake-game.lisp - Sparkey the Snake Game
-
+- 02-chat.lisp       - Chat - Private instant messenger
 
 Enhancements underway:
 
