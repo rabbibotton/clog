@@ -17,7 +17,16 @@
   ;; (navigator body) is the CLOG-Navigator object
   
   (let ((hello-element
-	  (create-child body "<h1>Hello World! (click me!)</h1>")))
+	  
+	  ;; CREATE-SECTION is a lispier way of create any of the HTML 5
+	  ;; section elements:
+	  ;;
+	  ;;   :address :article :aside :header :main :nav :hgroup
+	  ;;   :p :pre :section :blockquote :h1 :h2 :h3 :h4 :h5 :h6
+	  ;;
+	  ;; Take a look at clog-element-common.lisp or the clog-manual	  
+
+	  (create-section body :h1 :content "Hello World! (click me!)")))
 
     (let ((x 0))                     ; A closure - each call to on-new-window will
       (set-on-click hello-element    ; create a different version of this closer.

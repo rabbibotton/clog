@@ -10,7 +10,7 @@
   (setf (title (html-document body)) "Tutorial 3")
   
   (let ((hello-element
-	  (create-child body "<h1>Hello World! (click me!)</h1>")))
+	  (create-section body :h1 :content "Hello World! (click me!)")))
 
     (let ((x 0))
       (set-on-click hello-element
@@ -18,8 +18,8 @@
 		      (declare (ignore obj))
 		      (incf x)
 		      (dotimes (n x)
-			(create-child body
-				      (format nil "<p>Clicked ~A times.</p>" x))
+			(create-p body
+				  :content (format nil "Clicked ~A times." x))
 			(sleep x)))))
     (run body)))
 

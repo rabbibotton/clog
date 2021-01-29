@@ -17,7 +17,8 @@
 	  
 	  ;; A CLOG-Element represents a block of HTML (we will see later ways to
 	  ;; directly create buttons and all sorts of HTML elements in more lisp
-	  ;; like ways with no knowledge of HTML or javascript. 
+	  ;; like ways with no knowledge of HTML or javascript. CREATE-CHILD
+	  ;; allows any html element to be created and returned as a CLOG-Element.
 	  (create-child body "<h1>Hello World! (click me!)</h1>")))
 
     (set-on-click hello-element      ; Now we set a function to handle clicks

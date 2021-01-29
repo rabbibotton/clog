@@ -15,9 +15,9 @@
     (loop
       (if (and (validp obj) (connection-data-item obj "isRunning"))
 	  (progn
-	    (setf (color obj) "green")
+	    (setf (color obj) :green)
 	    (sleep 0.3)
-	    (setf (color obj) "red")
+	    (setf (color obj) :red)
 	    (sleep 0.3))
 	  (return))))
   (setf (connection-data-item obj "isRunning") nil)
@@ -30,7 +30,7 @@
   
   (setf (title (html-document body)) "Tutorial 6")
 
-  (set-on-click (create-child body "<h1>(click me to start!)</h1>")
+  (set-on-click (create-section body :h1 :content "(click me to start!)")
 		#'my-on-click)
   (run body))
 

@@ -16,11 +16,11 @@
   
   (setf (title (html-document body)) "Tutorial 5")
 
-  (set-on-click (create-child body "<h1>Hello World! (click me!)</h1>")
+  (set-on-click (create-section body :h1 :content "Hello World! (click me!)")
 		#'my-on-click)
 
   (setf (connection-data-item body "changer")
-	(create-child body "<h1>I change</h1>"))
+	(create-section body :h1 :content "I change"))
 
   (run body))
 

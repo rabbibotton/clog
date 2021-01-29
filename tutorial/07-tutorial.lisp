@@ -15,7 +15,8 @@
 	(setf (title (html-document body)) "Tutorial 7")
 
 	(setf (hiddenp (prog1
-			   (create-child body "<h2>KILL Darth's Tie Fighter - Click on it!</h2>")
+			   (create-section body :h2
+					   :content "KILL Darth's Tie Fighter - Click on it!")
 			 (sleep 2))) t)		 
 
 	(let* ((mover (create-div body :content "(-o-)"))
