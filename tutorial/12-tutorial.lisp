@@ -120,7 +120,7 @@
 
   ;; Setting a "default" path says that any use of an included boot.js
   ;; file will route to this function, in this case #'on-default
-  ;; that will deterime if this is coming from the path used in tutorial
+  ;; that will determine if this is coming from the path used in tutorial
   ;; 11 - "http://127.0.0.1:8080/tutorial/tut-11.html" and if does
   ;; use on-tutorial11 and if not say "No Dice!"
   (set-on-new-window #'on-default :path "default")

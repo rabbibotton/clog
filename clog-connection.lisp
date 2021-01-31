@@ -272,16 +272,30 @@ path by querying the browser. See PATH-NAME (CLOG-LOCATION)."
 	 
 	 (lambda (app)
 	   (lambda (env)
-             (prog1 (funcall app env)
-	       (when (equal (getf env :content-type)
-			    "application/x-www-form-urlencoded")
-		 (process-post env)))))
+	     ;; Check if post method response
+	     (when (equal (getf env :content-type)
+			  "application/x-www-form-urlencoded")
+	       (process-post env))
+
+	     ;; Special handling of "clog paths"
+	     (let ((clog-path (gethash (getf env :path-info) *url-to-boot-file*)))
+	       (cond (clog-path
+		      (let ((file (uiop:subpathname static-root clog-path)))
+			(print static-root)
+			(print clog-path)
+			(format t "Serving Boot File : ~A" file)
+			(with-open-file (stream file :direction :input
+						     :if-does-not-exist nil)			  
+			  (let ((string (make-string (file-length stream))))
+			    (read-sequence string stream)
+      			    `(200 (:content-type "text/html") (,string))))))
+		     
+		     ;; Pass the handling on next rule
+		     (t (funcall app env))))))
 	 
 	 (:static :path (lambda (path)
-			  (let ((clog-path (gethash path *url-to-boot-file*)))
-			    (cond ((ppcre:scan "^(?:/clog$)" path) nil)
-				  (clog-path clog-path)
-				  (t path))))
+			  (cond ((ppcre:scan "^(?:/clog$)" path) nil)
+				(t path)))
 		  :root static-root)
 	 
 	 (lambda (env)
@@ -321,7 +335,10 @@ path by querying the browser. See PATH-NAME (CLOG-LOCATION)."
 
 (defun set-clog-path (path boot-file)
   (if boot-file
-      (setf (gethash path *url-to-boot-file*) boot-file)
+      (setf (gethash path *url-to-boot-file*)
+	    (if (eql (char boot-file 0) #\/)
+		(concatenate 'string "." boot-file)
+		boot-file))
       (remhash path *url-to-boot-file*)))
 
 ;;;;;;;;;;;;;;;;;;;
