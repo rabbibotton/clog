@@ -8,6 +8,27 @@
 
 (cl:in-package :clog)
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Implementation - form-data
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric form-get-data (clog-obj)
+  (:documentation "Get the form data as an a-list sent by the get method"))
+
+(defmethod form-get-data (clog-obj)
+  (quri:uri-query-params
+   (quri:uri (cc:query (connection-id clog-obj) "location.href"))))
+
+(defgeneric form-post-data (clog-obj)
+  (:documentation "Get the form data as an a-list sent by post method"))
+
+(defmethod form-post-data (clog-obj)
+  (quri:url-decode-params
+   (cc:query (connection-id clog-obj) "clog['post-data']")))
+
+(defun form-data-item (form-data item)
+  "Return value for ITEM from a FROM-DATA a-list"
+  (cdr (assoc item form-data :test #'equalp)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Implementation - clog-form

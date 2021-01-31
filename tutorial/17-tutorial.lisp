@@ -19,8 +19,7 @@
 	 (tmp (create-hr data-area))
 	 
 	 ;; This is a traditional "post" form that will submit data
-	 ;; to a server. Posts are associated with the "page"  and
-	 ;; not with a CLOG connection, so are not ideal.
+	 ;; to a server.
 	 (fcontainer (create-div data-area :class "w3-container"))
 	 (tmp        (create-section fcontainer :h2 :content "Post Form"))
 	 (tmp        (create-br fcontainer))
@@ -33,9 +32,7 @@
 	 (tmp (create-hr data-area))
 
 	 ;; This is a traditional "get" form that will submit data
-	 ;; to a server. While also associated with the page and
-	 ;; not with the CLOG connection, you can get the URL from
-	 ;; browser and parse put out the results easily.
+	 ;; to a server.
 	 (fcontainer (create-div data-area :class "w3-container"))
 	 (tmp        (create-section fcontainer :h2 :content "Get Form"))
 	 (tmp        (create-br fcontainer))
@@ -74,35 +71,24 @@
   
   (run body))
 
-;; Globals are used as the post data is delivered in parallel to the new
-;; page being loaded. If one must use the post method, they will need
-;; a more elaborate scheme of hidden fields and synchroniaztion.
-(defvar *uri* nil)
-(defvar *params* nil)
-
-(defun on-post (uri params)
-  (setf *uri* uri)
-  (setf *params* params))
-
 (defun on-page2 (body)
-  (create-div body :content *uri*)
-  (create-div body :content *params*)
-  (create-div body :content (format nil "yourname = ~A"
-				    (cdr (assoc "yourname" *params* :test #'equalp))))
+  (let ((params (form-post-data body)))
+    (create-div body :content params)
+    (create-div body :content (format nil "yourname = ~A"
+				      (form-data-item params "yourname"))))
   (run body))
 
 (defun on-page3 (body)
-  (let ((params (quri:uri-query-params (quri:uri (url (location body))))))
+  (let ((params (form-get-data body)))
     (create-div body :content params)
     (create-div body :content (format nil "yourname = ~A"
-				      (cdr (assoc "yourname" params :test #'equalp)))))
+				      (form-data-item params "yourname"))))
   (run body))
 
 (defun start-tutorial ()
   "Start turtorial."
 
   (initialize #'on-index)
-  (clog-connection:set-on-post #'on-post)
   (set-on-new-window #'on-page2 :path "/page2")
   (set-on-new-window #'on-page3 :path "/page3")
   (open-browser))

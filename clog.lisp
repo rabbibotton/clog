@@ -430,7 +430,12 @@ embedded in a native template application.)"
   (create-table-column-group-item generic-function))
 
 (defsection @clog-form (:title "CLOG Form Objects")
-  "CLOG-Form - Class for organizing Form Elements in to a From"
+  "CLOG-Form-Data"
+  (form-get-data      generic-function)
+  (form-post-data     generic-function)
+  (form-data-item     function)
+
+  "CLOG-Form - Class for organizing Form Elements in to a From"  
   (form-method-type   type)
   (clog-form          class)
   (create-form        generic-function)

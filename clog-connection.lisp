@@ -29,7 +29,6 @@ script."
   (initialize          function)
   (shutdown-clog       function)
   (set-on-connect      function)
-  (set-on-post         function)
   (set-clog-path       function)
   (get-connection-data function)
 
@@ -81,7 +80,6 @@ script."
 (defvar *query-time-out* 3 "Number of seconds to timeout waiting for a query")
 
 (defvar *url-to-boot-file* (make-hash-table :test 'equalp) "URL to boot-file")
-(defvar *on-post-handler* nil "Set a global on-post-handler for form posts")
 
 ;;;;;;;;;;;;;;;;;
 ;; generate-id ;;
@@ -225,27 +223,6 @@ the default answer. (Private)"
       (declare (ignore responder))
       (websocket-driver:start-connection ws))))
 
-;;;;;;;;;;;;;;;;;
-;; set-on-post ;;
-;;;;;;;;;;;;;;;;;
-
-(defun set-on-post (on-post-handler)
-  "Set the global ON-POST-HANDLER. ON-POST URI PARAMS
-the params is an a-list"
-  (setf *on-post-handler* on-post-handler))
-
-;;;;;;;;;;;;;;;;;;
-;; process-post ;;
-;;;;;;;;;;;;;;;;;;
-
-(defun process-post (env)
-  "Process incoming data posted to server. Note that posts are not based on
-connectons. You will need to post some session value to know how to connect
-the post data to an app."
-  (when *on-post-handler*
-    (funcall *on-post-handler* (getf env :request-uri) 
-	     (quri:url-decode-params (read-line (getf env :raw-body))))))
-
 ;;;;;;;;;;;;;;;;
 ;; initialize ;;
 ;;;;;;;;;;;;;;;;
@@ -272,23 +249,31 @@ path by querying the browser. See PATH-NAME (CLOG-LOCATION)."
 	 
 	 (lambda (app)
 	   (lambda (env)
-	     ;; Check if post method response
-	     (when (equal (getf env :content-type)
-			  "application/x-www-form-urlencoded")
-	       (process-post env))
-
 	     ;; Special handling of "clog paths"
-	     (let ((clog-path (gethash (getf env :path-info) *url-to-boot-file*)))
+	     (let ((clog-path (gethash (getf env :path-info)
+				       *url-to-boot-file*)))
 	       (cond (clog-path
 		      (let ((file (uiop:subpathname static-root clog-path)))
-			(print static-root)
-			(print clog-path)
-			(format t "Serving Boot File : ~A" file)
 			(with-open-file (stream file :direction :input
-						     :if-does-not-exist nil)			  
-			  (let ((string (make-string (file-length stream))))
-			    (read-sequence string stream)
-      			    `(200 (:content-type "text/html") (,string))))))
+						     :if-does-not-exist nil)
+
+			  (let ((page-data (make-string (file-length stream)))
+				(post-data))
+			    
+			    (read-sequence page-data stream)
+
+			    ;; Check if post method response
+			    (when (equal (getf env :content-type)
+					 "application/x-www-form-urlencoded")
+			      (setf post-data (make-string (getf env :content-length)))
+			      (read-sequence post-data (getf env :raw-body)))
+
+      			    `(200 (:content-type "text/html")
+				  (,(if post-data
+				      (concatenate 'string page-data
+				        (format nil "<script>clog['post-data']='~A'</script>"
+						post-data))
+				      page-data)))))))
 		     
 		     ;; Pass the handling on next rule
 		     (t (funcall app env))))))
