@@ -5,9 +5,9 @@
 (in-package :clog-user)
 
 ;; In this tutorial we will see how to easily use a JavaScript
-;; component. In the static-files directory there is a simple java
-;; component (clog/static-files/tutorial/jslists) to create
-;; collapsible trees that we will use for this tutorial.
+;; component. In the static-files directory there is a simple
+;; JavaScript component (clog/static-files/tutorial/jslists) to create
+;; collapsable trees that we will use for this tutorial.
 
 (defun on-new-window (body)
   ;; First we need to load jslists' JavaScript file and css
@@ -25,9 +25,8 @@
 	 (item       (create-list-item list-b :content "Item 4")))
 
     (js-execute body (format nil "JSLists.applyToList('~A', 'ALL');"
-			     (html-id list-top)))
-  
-  (run body)))
+			     (html-id list-top))))
+  (run body))
 
 (defun start-tutorial ()
   "Start turtorial."
