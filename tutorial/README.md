@@ -52,3 +52,4 @@ Tutorial Summary
 - 17-tutorial.lisp - W3.CSS layout example and Form submit methods
 - 18-tutorial.lisp - Drag and Drop
 - 19-tutorial.lisp - Using JavaScript components
+- 20-tutorial.lisp - New CLOG plugin from JavaScript component
