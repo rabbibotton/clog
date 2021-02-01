@@ -1,8 +1,8 @@
 
-;; In this tutorial we will see how to wrap last tutorial's JavaScript
-;; component in to something that feels more like a plugin to CLOG.
+;;;; In this tutorial we will see how to wrap last tutorial's JavaScript
+;;;; component in to something that feels more like a plugin to CLOG.
 
-;; First we will create a package for our component
+;;; First we will create a package for our component
 (defpackage #:clog-toggler
   (:use #:cl #:clog)
   (:export clog-toggler
@@ -12,18 +12,17 @@
 
 (in-package :clog-toggler)
 
-;; Next we will create a function to initialize the environment
-;; for the component.
+;;; Next we will create a function to initialize the environment
+;;; for the component.
 (defun init-toggler (body &key (path-to-js "/tutorial/jslists/"))
-  "Initialize BODY to use clog-toggler components"
-  
+  "Initialize BODY to use clog-toggler components"  
   (load-css (html-document body)
 	    (concatenate 'string path-to-js "jsLists.css"))
   (load-script (html-document body)
 	       (concatenate 'string path-to-js "jsLists.js")))
 
-;; Next we will use the clog-unordered-list as the base for our new
-;; class clog-toggler
+;;; Next we will use the clog-unordered-list as the base for our new
+;;; class clog-toggler
 (defclass clog-toggler (clog-unordered-list) ()
   (:documentation "Toggler object - a collapsable UI component"))
 
@@ -35,11 +34,9 @@
 					    (auto-place t))
   (let ((new-obj (create-unordered-list obj :class class
 					    :auto-place auto-place)))
-
     ;; Using change-class we can reuse the parent clog-obj's create
     ;; method and it's initialization.
     (change-class new-obj 'clog-toggler)
-
     new-obj))
 
 (defgeneric activate (clog-toggler)
@@ -57,7 +54,6 @@
 
 (defun on-new-window (body)
   (clog-toggler:init-toggler body)
-  
   ;; Now we build or CLOG-Toggler
   (let* ((toggler    (clog-toggler:create-toggler body))
 	 (item       (create-list-item toggler :content "Top of tree"))
@@ -66,12 +62,10 @@
 	 (item       (create-list-item list-b :content "Item 2"))
 	 (item       (create-list-item list-b :content "Item 3"))
 	 (item       (create-list-item list-b :content "Item 4")))
-
     (clog-toggler:activate toggler))
   (run body))
 
 (defun start-tutorial ()
   "Start turtorial."
-
   (initialize #'on-new-window)
   (open-browser))
