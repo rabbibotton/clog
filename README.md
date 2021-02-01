@@ -57,7 +57,7 @@ To load this package and work through tutorials (assuming you
 have Quicklisp configured):
 
 1. Start emacs then M-x slime
-2. In the REPL, run (tutorials current 1 - 18):
+2. In the REPL, run (tutorials currently 1 - 18):
 
 ```
 CL-USER> (ql:quickload :clog)
