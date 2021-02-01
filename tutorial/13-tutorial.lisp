@@ -6,7 +6,6 @@
 
 (defun start-tutorial ()
   "Start turtorial."
-
   (format t "Tutorial 13 is a how to on building your own clog appliction.~%~
              Copy the directory - ~A~%~
              to your ~~/common-lisp directory or other asdf / quicklisp~%~

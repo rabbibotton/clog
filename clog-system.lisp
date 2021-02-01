@@ -93,3 +93,11 @@ function. If BOOT-FILE is nil path is removed."
   (clrhash *url-to-on-new-window*)
   (setf *clog-running* nil)
   (cc:shutdown-clog))
+
+;;;;;;;;;;;;;;;;
+;; debug-mode ;;
+;;;;;;;;;;;;;;;;
+
+(defun debug-mode (obj)
+  "Turn on browser console debugging for OBJ's connection."
+  (cc:debug-mode (connection-id obj)))

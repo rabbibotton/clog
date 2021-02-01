@@ -10,13 +10,11 @@
 		  (setf (storage-element (window body) :local "my-local-key")
 			(get-universal-time))
 		  (reload (location body))))
-  
   (set-on-click (create-button body :content "Set Session Key")
 		(lambda (obj)
 		  (setf (storage-element (window body) :session "my-session-key")
 			(get-universal-time))
 		  (reload (location body))))
-
   (set-on-storage (window body)
 		  (lambda (obj data)
 		    (create-div body :content
@@ -24,8 +22,6 @@
 				    (getf data ':key)
 				    (getf data ':old-value)
 				    (getf data ':value)))))
-				     
-  
   (create-div body :content (format nil
        "<H1>Local Storage vs Session Storage</H1>
 <p width=500>
@@ -46,11 +42,9 @@ Changes made to a local key will fire an event and print below:<br>"
        (storage-element (window body) :local "my-local-key")
        "my-session-key"
        (storage-element (window body) :session "my-session-key")))
-  
   (run body))
 
 (defun start-tutorial ()
   "Start turtorial."
-
   (initialize #'on-new-window)
   (open-browser))

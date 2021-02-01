@@ -11,7 +11,7 @@
 	 ;;       compiler can mark those for garbage collection early
 	 ;;       this not an issue as the element is created already
 	 ;;       in the browser window.
-	 
+	 ;;
 	 ;; Create tabs and panels
 	 (t1  (create-button body :content "Tab1"))
 	 (t2  (create-button body :content "Tab2"))
@@ -20,7 +20,6 @@
 	 (p1  (create-div body))
 	 (p2  (create-div body))
 	 (p3  (create-div body :content "Panel3 - Type here"))
-
 	 ;; Create form for panel 1
 	 (f1  (create-form p1))
 	 (fe1 (create-form-element f1 :text
@@ -31,7 +30,6 @@
 	 (tmp (create-br f1))
 	 (tmp (create-form-element f1 :submit :value "OK"))
 	 (tmp (create-form-element f1 :reset :value "Start Again"))
-
 	 ;; Create for for panel 2
 	 (f2  (create-form p2))
 	 (fs2 (create-fieldset f2 :legend "Stuff"))
@@ -49,8 +47,7 @@
 	 (tmp (create-label fs2 :content "There" :label-for ck2))
 	 (tmp (create-br fs2))	 
 	 (sl1 (create-select fs2 :label (create-label fs2 :content "Pick one:")))
-	 (sl2 (create-select fs2 :label (create-label fs2 :content "Pick one:")))
-	 
+	 (sl2 (create-select fs2 :label (create-label fs2 :content "Pick one:")))	 
 	 (sl3 (create-select fs2 :multiple t
 			     :label (create-label fs2 :content "Pick some:")))
 	 (o1  (create-option sl3 :content "one"))
@@ -61,50 +58,41 @@
 	 (o5  (create-option og1 :content "five"))
 	 (tmp (create-form-element f2 :submit :value "OK"))
 	 (tmp (create-form-element f2 :reset :value "Start Again")))
-
-    ;; Panel 1 contents
     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-    
+    ;; Panel 1 contents
+    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;    
     (setf (place-holder fe1) "type here..")
     (setf (requiredp fe1) t)
-    (setf (size fe1) 60)
-
+    (setf (size fe1) 60)    
     (make-data-list fe1 '("Cool Title"
 			  "Not So Cool Title"
-			  "Why Not, Another Title"))
-    
+			  "Why Not, Another Title"))    
     (make-data-list fe2 '("#ffffff"
 			  "#ff0000"
 			  "#00ff00"
 			  "#0000ff"
-			  "#ff00ff"))
-    
+			  "#ff00ff"))    
     (set-on-submit f1
 		   (lambda (obj)
 		     (setf (title (html-document body)) (value fe1))
 		     (setf (background-color p1) (value fe2))
 		     (setf (hiddenp f1) t)
 		     (create-span p1 :content
-				  "<br><b>Your form has been submitted</b>")))
-    
+				  "<br><b>Your form has been submitted</b>")))    
     (setf (width p1) "100%")
     (setf (width p2) "100%")
-    (setf (width p3) "100%")
-    
+    (setf (width p3) "100%")    
     (setf (height p1) 400)
     (setf (height p2) 400)
     (setf (height p3) 400)
-
     (set-border p1 :thin :solid :black)
     (set-border p2 :thin :solid :black)
     (set-border p3 :thin :solid :black)
-
+    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     ;; Panel 2 contents
     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
     (setf (vertical-align ta1) :top)
     (disable-resize ta1)
-
     (setf (vertical-align sl1) :top)
     (setf (vertical-align sl2) :top)
     (setf (vertical-align sl3) :top)
@@ -114,13 +102,11 @@
 			      "three"
 			      "four"
 			      "five"))
-
     (add-select-options sl2 '("one"
 			      "two"
 			      "three"
 			      "four"
 			      "five"))
-
     (set-on-change sl3 (lambda (obj)
 			 (when (selectedp o5)
 			   (alert (window body) "Selected 5"))))
@@ -134,31 +120,25 @@
 			       (value sl1)
 			       (value sl2)
 			       (selectedp o2)))))
-
+    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     ;; Panel 3 contents
     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
     (setf (editablep p3) t)
-
+    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     ;; Tab functionality
     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
     (flet ((select-tab (obj)
 	     (setf (hiddenp p1) t)
 	     (setf (hiddenp p2) t)
 	     (setf (hiddenp p3) t)
-
 	     (setf (background-color t1) :lightgrey)
 	     (setf (background-color t2) :lightgrey)
-	     (setf (background-color t3) :lightgrey)
-	     
+	     (setf (background-color t3) :lightgrey)	     
 	     (setf (background-color last-tab) :lightblue)
 	     (setf (hiddenp obj) nil)
 	     (focus obj)))
-
       (setf last-tab t1)
-      (select-tab p1)
-      
+      (select-tab p1)      
       (set-on-click t1 (lambda (obj)
 			 (setf last-tab obj)
 			 (select-tab p1)))
@@ -172,6 +152,5 @@
 
 (defun start-tutorial ()
   "Start turtorial."
-
   (initialize #'on-new-window)
   (open-browser))

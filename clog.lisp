@@ -51,7 +51,8 @@ embedded in a native template application.)"
   "CLOG Startup and Shutdown"
   (initialize        function)
   (set-on-new-window function)
-  (shutdown          function))
+  (shutdown          function)
+  (debug-mode        function))
 
 (defsection @clog-utilities (:title "CLOG Utilities")
   "CLOG utilities"

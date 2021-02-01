@@ -4,20 +4,20 @@
 
 (in-package :clog-user)
 
-;; In this tutorial we will use a CSS only alternative to bootsrap -
-;;   https://www.w3schools.com/w3css/default.asp
+;;; In this tutorial we will use a CSS only alternative to bootsrap -
+;;;   https://www.w3schools.com/w3css/default.asp
 
 (defun on-index (body)
+  ;; Load css files
   (load-css (html-document body) "https://www.w3schools.com/w3css/4/w3.css")
   (load-css (html-document body) "https://www.w3schools.com/lib/w3-theme-teal.css")
+  ;; Setup page
   (setf (title (html-document body)) "Hello W3.CSS")
-  
   (let* ((header (create-section body :header :class "w3-container w3-card w3-theme"))
 	 (tmp    (create-section header :h1 :content "Explore Forms"))
-
+	 ;; Main area of page
 	 (data-area (create-div body :class "w3-container"))
 	 (tmp (create-hr data-area))
-	 
 	 ;; This is a traditional "post" form that will submit data
 	 ;; to a server.
 	 (fcontainer (create-div data-area :class "w3-container"))
@@ -28,9 +28,7 @@
 					  (create-label form1 :content "Enter name:")))
 	 (fsubmit    (create-form-element form1 :submit))
 	 (tmp        (create-br fcontainer))
-
 	 (tmp (create-hr data-area))
-
 	 ;; This is a traditional "get" form that will submit data
 	 ;; to a server.
 	 (fcontainer (create-div data-area :class "w3-container"))
@@ -41,9 +39,7 @@
 					  (create-label form2 :content "Enter name:")))
 	 (fsubmit    (create-form-element form2 :submit))
 	 (tmp        (create-br fcontainer))
-
 	 (tmp (create-hr data-area))
-
 	 ;; This is a CLOG style form, instead of submitting data
 	 ;; to another page it is dealt with in place.
 	 (fcontainer (create-div data-area :class "w3-container"))
@@ -54,21 +50,18 @@
 					  (create-label form3 :content "Enter name:")))
 	 (fsubmit3   (create-form-element form3 :submit))
 	 (tmp        (create-br fcontainer))
-
 	 (tmp (create-hr data-area))
-	 
 	 (footer (create-section body :footer :class "w3-container w3-theme"))
 	 (tmp    (create-section footer :p :content "(c) All's well that ends well")))
 
     (set-on-click fsubmit3
-		  (lambda (obj)
-		    (setf (hiddenp data-area) t)
-		    (place-before footer
-				  (create-div body
-				    :content (format nil "yourname3 = using NAME-VALUE ~A or VALUE ~A"
-						     (name-value form3 "yourname3")
-						     (value finput3)))))))
-  
+      (lambda (obj)
+	(setf (hiddenp data-area) t)
+	(place-before footer
+		      (create-div body
+		         :content (format nil "yourname3 = using NAME-VALUE ~A or VALUE ~A"
+					  (name-value form3 "yourname3")
+					  (value finput3)))))))
   (run body))
 
 (defun on-page2 (body)
@@ -87,7 +80,6 @@
 
 (defun start-tutorial ()
   "Start turtorial."
-
   (initialize #'on-index)
   (set-on-new-window #'on-page2 :path "/page2")
   (set-on-new-window #'on-page3 :path "/page3")
