@@ -7,8 +7,13 @@
 (defun on-new-window (body)
   (let* ((target1 (create-div body))
 	 (target2 (create-div body))
-	 (object  (create-div target1)))
+	 (object  (create-div target1))
+	 (msg     (create-div body
+		    :content "Drag green box to other yellow box")))
 
+    (setf (positioning msg) :fixed)
+    (setf (top msg) "125px")
+    
     (setf (positioning target1) :fixed)
     (setf (top target1) "10px")
     (setf (left target1) "10px")

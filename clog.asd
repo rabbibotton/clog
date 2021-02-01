@@ -5,12 +5,11 @@
 
   :author "David Botton <david@botton.com>"
   :license  "BSD"
-  :version "0.8.0"
+  :version "0.9.0"
   :serial t
   :depends-on (#:clack #:websocket-driver #:alexandria #:hunchentoot #:cl-ppcre
 		       #:bordeaux-threads #:trivial-open-browser
-		       #:lack-middleware-static #:lack-middleware-session
-                       #:mgl-pax #:quri)
+		       #:lack-middleware-static #:mgl-pax #:quri)
   :components ((:file "clog-connection")
 	       (:file "clog")
 	       (:file "clog-docs")
