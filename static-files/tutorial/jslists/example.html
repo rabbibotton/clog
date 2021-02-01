@@ -1,0 +1,173 @@
+<!doctype html>
+<html>
+	<head>
+		<title>JSLists - Very simple nested list [Example 1]</title>
+		<link rel="stylesheet" href="jsLists.css"/>
+		<style>
+			html, body {
+				width: 100%;
+				height: 100%;
+				margin: 0;
+				padding: 0;
+			}
+			body {
+				font-family: Arial, Helvetica, sans-serif;
+				font-size: 16px;
+			}
+			header {
+				position: absolute;
+				top: 0;
+				left: 0;
+				width: 100%;
+				height: 90px;
+				background-color: rgb(156, 158, 160);
+				padding-left: 18px;
+			}
+			header > div {
+				position: relative;
+				display: inline-block;
+				top: 50%;
+				transform: translateY(-50%);
+				font-size: 3.4rem;
+				font-weight: 900;
+			}
+			main {
+				position: absolute;
+				top: 90px;
+				height: calc(100vh - 90px);
+			}
+			main > div:nth-child(1) {
+				padding: 16px;
+			}
+			main > div:nth-child(2) {
+				padding: 18px;
+			}
+		</style>
+	</head>
+	<body>
+		<header><div>JSLists</div></header>
+		<main>
+			<div style='height: 100%; width: 30%; float: left; overflow-y: scroll;'>
+				<div style='font-size: 1.4rem; font-weight:700;'>Example 1:</div>
+				<ul id='f1teams' class='jslists'>
+					<li>Formula One Teams (2018)
+						<ul>
+							<li>&#9675; Scuderia Ferrari</li>
+							<li>&#9675; Sahara Force India F1 Team</li>
+							<li>&#9675; Haas F1 Team</li>
+							<li>&#9675; McLaren F1 Team</li>
+							<li>&#9675; Mercedes AMG Petronas Motorsport</li>
+							<li>&#9675; Aston Martin Red Bull Racing</li>
+							<li>&#9675; Renault Sport Formula One Team</li>
+							<li>&#9675; Alfa Romeo Sauber F1 Team</li>
+							<li>&#9675; Red Bull Toro Rosso Honda</li>
+							<li>&#9675; Williams Martini Racing</li>
+						</ul>
+					</li>
+				</ul><br>
+				<div style='font-size: 1.4rem; font-weight:700;'>Example 2:</div>
+				<ul id='f1drivers' class='jslists'>
+					<li>Formula One Drivers (2018)
+						<ul>
+							<li>&#9679; Lewis Hamilton</li>
+							<li>&#9679; Sebastian Vettel</li>
+							<li>&#9679; Kimi Räikkönen</li>
+							<li>&#9679; Valtteri Bottas</li>
+							<li>&#9679; Daniel Ricciardo</li>
+							<li>&#9679; Max Verstappen</li>
+							<li>&#9679; Nico Hülkenberg</li>
+							<li>&#9679; Kevin Magnussen</li>
+							<li>&#9679; Fernando Alonso</li>
+							<li>&#9679; Sergio Pérez</li>
+							<li>&#9679; Carlos Sainz Jr.</li>
+							<li>&#9679; Esteban Ocon</li>
+							<li>&#9679; Pierre Gasly</li>
+							<li>&#9679; Romain Grosjean</li>
+							<li>&#9679; Charles Leclerc</li>
+							<li>&#9679; Stoffel Vandoorne</li>
+							<li>&#9679; Marcus Ericsson</li>
+							<li>&#9679; Lance Stroll</li>
+							<li>&#9679; Brendon Hartley</li>
+							<li>&#9679; Sergey Sirotkin</li>
+						</ul>
+					</li>
+				</ul><br>
+				<div style='font-size: 1.4rem; font-weight:700;'>Example 3:</div>
+				<ul id='f1combined' class='jslists'>
+					<li>Formula One combined (2018)
+						<ul>
+							<li>Scuderia Ferrari
+								<ul>
+									<li>&#9679; Sebastian Vettel</li>
+									<li>&#9679; Kimi Räikkönen</li>
+								</ul>
+							</li>
+							<li>Mercedes AMG
+								<ul>
+									<li>&#9679; Lewis Hamilton</li>
+									<li>&#9679; Valtteri Bottas</li>
+								</ul>
+							</li>
+							<li>Haas F1 Team
+								<ul>
+									<li>&#9679; Romain Grosjean</li>
+									<li>&#9679; Kevin Magnussen</li>
+								</ul>
+							</li>
+							<li>McLaren F1 Team
+								<ul>
+									<li>&#9679; Fernando Alonso</li>
+									<li>&#9679; Stoffel Vandoorne</li>
+								</ul>
+							</li>
+							<li>Red Bull Racing
+								<ul>
+									<li>&#9679; Max Verstappen</li>
+									<li>&#9679; Daniel Ricciardo</li>
+								</ul>
+							</li>
+							<li>Renault
+								<ul>
+									<li>&#9679; Max Verstappen</li>
+									<li>&#9679; Daniel Ricciardo</li>
+								</ul>
+							</li>
+						</ul>
+					</li>
+				</ul>
+			</div>
+			<div style='height: 100%; width: 70%; float: left; overflow-y: scroll; font-size: 1.15rem;'>
+				jslists is a small JavaScript library that can turn those pesky unordered & ordered list into a funky tree.
+				There is an example to the left which demostrates the basic functionality<br><br>
+				Because JSLists doesn't effect any element of the HTML list you are passing is, you can use all of the functionality of standard HTML list.
+				So ALL list items can contain any valid HTML elements, such as anchors &lt;a&gt;, &lt;img&gt;, &lt;div&gt; etc.
+				It's pretty easy to use. To create a tree element, give the UL/OL an id, then simply add another unordered or ordered list as a list item. The text within the list item becomes the heading for that list. <br><br>
+				The markup for the Formula One Teams list to the left is:<br>
+				&lt;ul id='f1teams' class='jslists'&gt;<br>
+				&emsp;&lt;li&gt;Formula One Teams (2018)<br>
+					&emsp;&emsp;&lt;ul&gt;<br>
+						&emsp;&emsp;&emsp;&lt;li&gt;&amp;#9675; Scuderia Ferrari&lt;/li&gt;<br>
+						&emsp;&emsp;&emsp;&lt;li&gt;&amp;#9675; Sahara Force India F1 Team&lt;/li&gt;<br>
+						&emsp;&emsp;&emsp;&lt;li&gt;&amp;#9675; Haas F1 Team&lt;/li&gt;<br>
+						&emsp;&emsp;&emsp;&lt;li&gt;&amp;#9675; McLaren F1 Team&lt;/li&gt;<br>
+						&emsp;&emsp;&emsp;&lt;li&gt;&amp;#9675; Mercedes AMG Petronas Motorsport&lt;/li&gt;<br>
+						&emsp;&emsp;&emsp;&lt;li&gt;&amp;#9675; Aston Martin Red Bull Racing&lt;/li&gt;<br>
+						&emsp;&emsp;&emsp;&lt;li&gt;&amp;#9675; Renault Sport Formula One Team&lt;/li&gt;<br>
+						&emsp;&emsp;&emsp;&lt;li&gt;&amp;#9675; Alfa Romeo Sauber F1 Team&lt;/li&gt;<br>
+						&emsp;&emsp;&emsp;&lt;li&gt;&amp;#9675; Red Bull Toro Rosso Honda&lt;/li&gt;<br>
+						&emsp;&emsp;&emsp;&lt;li&gt;&amp;#9675; Williams Martini Racing&lt;/li&gt;<br>
+						&emsp;&emsp;&lt;/ul&gt;<br>
+					&emsp;&lt;/li&gt;<br>
+				&lt;/ul&gt;<br><br>
+				You can also create nested lists using jsLists. Check out the source code for Example 3 and you will see the pattern is the same as the standard list.
+			</div>
+		</main>
+		<script src="jsLists.js"></script>
+		<script>
+			// JSLists.createTree("simple_list");
+			JSLists.createTree("f1teams");
+			JSLists.createTree("f1drivers");
+			JSLists.createTree("f1combined");
+		</script>
+	</body>
+</html>

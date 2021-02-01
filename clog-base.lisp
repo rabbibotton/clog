@@ -38,7 +38,7 @@ lisp and the HTML DOM element."))
 ;;;;;;;;;;;;;
 
 (defgeneric html-id (clog-obj)
-  (:documentation "Reader for html-id slot. (Private)"))
+  (:documentation "Internal html-id of CLOG-Obj. (Internal)"))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; connection-data-mutex ;;
@@ -68,6 +68,26 @@ during attachment. (Private)"))
       "'body'"
       (format nil "clog['~A']" (html-id obj))))
 
+;;;;;;;;;;;;;;;;
+;; js-execute ;;
+;;;;;;;;;;;;;;;;
+
+(defgeneric js-execute (clog-obj script)
+  (:documentation "Execure SCRIPT on browser. (Internal)"))
+
+(defmethod js-execute ((obj clog-obj) script)
+  (cc:execute (connection-id obj) script))
+
+;;;;;;;;;;;;;;
+;; js-query ;;
+;;;;;;;;;;;;;;
+
+(defgeneric js-query (clog-obj script &key default-answer)
+  (:documentation "Execure SCRIPT on browser and return result. (Internal)"))
+
+(defmethod js-query ((obj clog-obj) script &key (default-answer nil))
+  (cc:query (connection-id obj) script :default-answer default-answer))
+
 ;;;;;;;;;;;;
 ;; jquery ;;
 ;;;;;;;;;;;;
@@ -87,8 +107,7 @@ during attachment. (Private)"))
 dicarded. (Private)"))
 
 (defmethod jquery-execute ((obj clog-obj) method)
-  (cc:execute (connection-id obj)
-	      (format nil "~A.~A" (jquery obj) method)))
+  (js-execute obj (format nil "~A.~A" (jquery obj) method)))
 
 ;;;;;;;;;;;;;;;;;;
 ;; jquery-query ;;
@@ -99,8 +118,7 @@ dicarded. (Private)"))
 result or DEFAULT-ANSWER on time out. (Private)"))
 
 (defmethod jquery-query ((obj clog-obj) method &key (default-answer nil))
-  (cc:query (connection-id obj)
-	    (format nil "~A.~A" (jquery obj) method)
+  (js-query obj (format nil "~A.~A" (jquery obj) method)
 	    :default-answer default-answer))
 
 ;;;;;;;;;;;;;
@@ -112,8 +130,7 @@ result or DEFAULT-ANSWER on time out. (Private)"))
 dicarded. (Private)"))
 
 (defmethod execute ((obj clog-obj) method)
-  (cc:execute (connection-id obj)
-	      (format nil "~A.~A" (script-id obj) method)))
+  (js-execute obj (format nil "~A.~A" (script-id obj) method)))
 
 ;;;;;;;;;;;
 ;; query ;;
@@ -124,8 +141,7 @@ dicarded. (Private)"))
 result or if time out DEFAULT-ANSWER (Private)"))
 
 (defmethod query ((obj clog-obj) method &key (default-answer nil))
-  (cc:query (connection-id obj)
-	    (format nil "~A.~A" (script-id obj) method)
+  (js-query obj (format nil "~A.~A" (script-id obj) method)
 	    :default-answer default-answer))
 
 ;;;;;;;;;;;;;;;;;;;;;;;
@@ -133,11 +149,12 @@ result or if time out DEFAULT-ANSWER (Private)"))
 ;;;;;;;;;;;;;;;;;;;;;;;
 
 (defgeneric bind-event-script (clog-obj event call-back)
-  (:documentation "Create the code client side for EVENT CALL-BACK. (Private)"))
+  (:documentation "Create the code client side for EVENT CALL-BACK.
+(Private)"))
 
 (defmethod bind-event-script ((obj clog-obj) event call-back)
-  (jquery-execute
-   obj (format nil "on('~A',function (e, data){~A})" event call-back)))
+  (jquery-execute obj (format nil "on('~A',function (e, data){~A})"
+			      event call-back)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; unbind-event-script ;;

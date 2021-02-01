@@ -59,7 +59,7 @@ To load this package and work through tutorials (assuming you
 have Quicklisp configured):
 
 1. Start emacs then M-x slime
-2. In the REPL, run (tutorials currently 1 - 18):
+2. In the REPL, run (tutorials currently 1 - 19):
 
 ```
 CL-USER> (ql:quickload :clog)
@@ -163,6 +163,7 @@ Tutorial Summary
 - 16-tutorial.lisp - Bootstrap 4, Loading css files and javascript
 - 17-tutorial.lisp - W3.CSS layout example and Form submit methods
 - 18-tutorial.lisp - Drag and Drop
+- 19-tutorial.lisp - Using JavaScript componets
 
 Demo Summary
 

@@ -536,6 +536,32 @@ are stored in this string based hash in the format of:
 <p>Returns true if connection is valid on this <code>CLOG-OBJ</code>.</p></li>
 </ul>
 
+<p>CLOG-Obj - Internals for Extension Plugins</p>
+
+<p><a id='x-28CLOG-3AHTML-ID-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3AHTML-ID-20GENERIC-FUNCTION-29" >HTML-ID</a></span></span> <span class="locative-args">CLOG-OBJ</span></span></p>
+
+<p>Internal html-id of CLOG-Obj. (Internal)</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3AJS-EXECUTE-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3AJS-EXECUTE-20GENERIC-FUNCTION-29" >JS-EXECUTE</a></span></span> <span class="locative-args">CLOG-OBJ SCRIPT</span></span></p>
+
+<p>Execure <code>SCRIPT</code> on browser. (Internal)</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3AJS-QUERY-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3AJS-QUERY-20GENERIC-FUNCTION-29" >JS-QUERY</a></span></span> <span class="locative-args">CLOG-OBJ SCRIPT &amp;KEY DEFAULT-ANSWER</span></span></p>
+
+<p>Execure <code>SCRIPT</code> on browser and return result. (Internal)</p></li>
+</ul>
+
 <p>CLOG-Obj - Event Handling</p>
 
 <p><a id='x-28CLOG-3ASET-ON-RESIZE-20GENERIC-FUNCTION-29'></a></p>
@@ -5052,6 +5078,30 @@ on-storage event is fired for changes to :local storage keys.</p></li>
 <p>Run tutorial <code>NUM</code></p></li>
 </ul>
 
+<p><a id='x-28CLOG-3ALOAD-TUTORIAL-20FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#x-28CLOG-3ALOAD-TUTORIAL-20FUNCTION-29" >LOAD-TUTORIAL</a></span></span> <span class="locative-args">NUM</span></span></p>
+
+<p>Load tutorial <code>NUM</code> - use (clog-user:start-tutorial)</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3ARUN-DEMO-20FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#x-28CLOG-3ARUN-DEMO-20FUNCTION-29" >RUN-DEMO</a></span></span> <span class="locative-args">NUM</span></span></p>
+
+<p>Run demo <code>NUM</code></p></li>
+</ul>
+
+<p><a id='x-28CLOG-3ALOAD-DEMO-20FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#x-28CLOG-3ALOAD-DEMO-20FUNCTION-29" >LOAD-DEMO</a></span></span> <span class="locative-args">NUM</span></span></p>
+
+<p>Load demo <code>NUM</code> - use (clog-user:start-demo)</p></li>
+</ul>
+
 <p>Functions for Compilation and Documentation</p>
 
 <p><a id='x-28CLOG-3ALOAD-WORLD-20FUNCTION-29'></a></p>
@@ -5096,7 +5146,7 @@ representation, at least at the time of their creation. The server
 side representation is a CLOG-obj or one of its descendants that is
 returned by one of the many create-* functions. The client side
 representation is the DOM element (or other JavaScript object) itself
-stored in the clog array keyed by the html-id clog[html-id][].</p>
+stored in the clog array keyed by the html-id clog<a href="#x-28CLOG-3AHTML-ID-20GENERIC-FUNCTION-29" title="(CLOG:HTML-ID GENERIC-FUNCTION)"><code>html-id</code></a>.</p>
 
 <p><em>* Client Side Scripting *</em></p>
 

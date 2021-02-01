@@ -694,11 +694,11 @@ and if :AUTO-PLACE (default t) place-inside-bottom-of CLOG-OBJ"))
 					      (class nil)
 					      (auto-place t))
   (create-child obj (format nil "<li~A>~A</li>"
-			    (escape-string content)
 			    (if class
 				(format nil " class='~A'"
 					(escape-string class))
-				""))			    
+				"")
+			    (escape-string content))			    
 		:clog-type 'clog-list-item :auto-place auto-place))
 
 ;;;;;;;;;;;;;;;;

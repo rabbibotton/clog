@@ -85,6 +85,11 @@ embedded in a native template application.)"
   (remove-connection-data-item generic-function)
   (validp                      generic-function)
 
+  "CLOG-Obj - Internals for Extension Plugins"
+  (html-id    generic-function)
+  (js-execute generic-function)
+  (js-query   generic-function)
+  
   "CLOG-Obj - Event Handling"
   (set-on-resize             generic-function)
   (set-on-focus              generic-function)
