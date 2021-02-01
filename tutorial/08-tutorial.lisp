@@ -26,15 +26,12 @@
     (bordeaux-threads:with-lock-held ((drag-mutex app)) ; Insurce the first event received
       (unless (in-drag-p app)                           ; to drag is the only one, ie only
 	(setf (in-drag-p app) t)                        ; the innermost box is dragged.
-
       (let* ((mouse-x  (getf data ':screen-x))          ; Use the screen coordinents not
 	     (mouse-y  (getf data ':screen-y))          ; the coordents relative to the obj
 	     (obj-top  (parse-integer (top obj) :junk-allowed t))
-	     (obj-left (parse-integer (left obj) :junk-allowed t)))
-	
+	     (obj-left (parse-integer (left obj) :junk-allowed t)))	
 	(setf (drag-x app) (- mouse-x obj-left))
 	(setf (drag-y app) (- mouse-y obj-top))
-
 	(if (eq (getf data ':event-type) :touch)
 	    (progn
 	      (set-on-touch-move obj 'on-mouse-move)
@@ -48,19 +45,16 @@
 (defun on-mouse-move (obj data)
   (let* ((app (connection-data-item obj "app-data"))
 	 (x   (getf data ':screen-x))
-	 (y   (getf data ':screen-y)))
-    
+	 (y   (getf data ':screen-y)))    
     (setf (top obj) (format nil "~Apx" (- y (drag-y app))))
     (setf (left obj) (format nil "~Apx" (- x (drag-x app))))))
 
 (defun on-mouse-leave (obj)
   (let ((app (connection-data-item obj "app-data")))
     (setf (in-drag-p app) nil)
-    
     (set-on-touch-move obj nil)
     (set-on-touch-end obj nil)
     (set-on-touch-cancel obj nil)
-    
     (set-on-mouse-move obj nil)
     (set-on-mouse-up obj nil)
     (set-on-mouse-leave obj nil)))
@@ -71,48 +65,42 @@
 
 (defun on-new-window (body)
   (let ((app (make-instance 'app-data)))                 ; Create our "App-Data" for this instance
-    (setf (connection-data-item body "app-data") app))   ; of our App.
-  
+    (setf (connection-data-item body "app-data") app))   ; of our App. 
   (setf (title (html-document body)) "Tutorial 8")
-
   (let* ((div1 (create-div body))
 	 (div2 (create-div div1))
 	 (div3 (create-div div2))
 	 (dir  (create-div div1 :content "<b>Click and drag the boxes</b>")))
-
+    ;; Abosulute allows fixed positioning relative to parent
     (setf (positioning dir) :absolute)
     (setf (bottom dir) 0)
-    
+    ;; borders
     (set-border div1 :medium :solid :blue)
     (set-border div2 :thin :dotted :red)
     (set-border div3 :thick :dashed :green)
-
+    ;; sizes
     (setf (width div1) 400)
     (setf (width div2) 300)
-    (setf (width div3) 200)
-    
+    (setf (width div3) 200)    
     (setf (height div1) 400)
     (setf (height div2) 300)
     (setf (height div3) 200)
-
+    ;; Fixed positioning allows direct positioning relative
+    ;; to the entire window.
     (setf (positioning div1) :fixed)        ; It's location relative to window
     (setf (overflow div1) :hidden)          ; Clip the contents
     (set-on-touch-start div1 'on-mouse-down)
     (set-on-mouse-down div1 'on-mouse-down)
-
     (setf (positioning div2) :absolute)     ; It's location relative to is parent container
     (setf (overflow div2) :hidden)
     (set-on-touch-start div2 'on-mouse-down)
     (set-on-mouse-down div2 'on-mouse-down)
-
     (setf (positioning div3) :absolute)
     (set-on-touch-start div3 'on-mouse-down)
     (set-on-mouse-down div3 'on-mouse-down)
-    
     (run body)))
 
 (defun start-tutorial ()
   "Start turtorial."
-
   (initialize #'on-new-window)
   (open-browser))

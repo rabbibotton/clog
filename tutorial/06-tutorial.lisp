@@ -9,7 +9,6 @@
   (unless (connection-data-item obj "isRunning")    ; So we toggle a connection-data-item
     (setf (connection-data-item obj "isRunning") t) ; in order to turn on and off the flashing.
     (setf (text obj) "(click me to stop!)")
-
     ;; When looping in an event or thread always check if the connection is still
     ;; valid to close down the event or thread.
     (loop
@@ -27,15 +26,12 @@
 
 (defun on-new-window (body)
   "On-new-window handler."
-  
   (setf (title (html-document body)) "Tutorial 6")
-
   (set-on-click (create-section body :h1 :content "(click me to start!)")
 		#'my-on-click)
   (run body))
 
 (defun start-tutorial ()
   "Start turtorial."
-
   (initialize #'on-new-window)
   (open-browser))

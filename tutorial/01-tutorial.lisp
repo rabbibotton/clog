@@ -30,9 +30,8 @@
 		 ; and prevent garbage collection of our CLOG-Objects
 		 ; until no longer needed.
 
-;; To see all the events one can set and the many properties and styles that
-;; exist, take a look through the CLOG manual or the file clog-element.lisp
-
+;;; To see all the events one can set and the many properties and styles that
+;;; exist, take a look through the CLOG manual or the file clog-element.lisp
 
 (defun start-tutorial ()   ; Define the function called start-tutorial
   "Start turtorial."       ; Optional docstring to describe function
@@ -43,7 +42,6 @@
   ;; everytime a browser connection to our app.
   ;; #' tells common lisp to pass the function
   ;; to intialize and not to execute it.
-
 
   ;; Open a browser to http://12.0.0.1:8080 - the default for CLOG apps
   (open-browser))
