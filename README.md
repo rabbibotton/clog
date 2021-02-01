@@ -57,7 +57,7 @@ To load this package and work through tutorials (assuming you
 have Quicklisp configured):
 
 1. Start emacs then M-x slime
-2. In the REPL, run:
+2. In the REPL, run (tutorials current 1 - 18):
 
 ```
 CL-USER> (ql:quickload :clog)
@@ -70,11 +70,11 @@ To see where the source files are:
 CL-USER> (clog:clog-install-dir)
 ```
 
-You can the load the demos with:
+You can the run the demos with (currently 1 or 2):
 
 ```
-CL-USER> (load "path to clog/demos/01-snake.lisp")
-CL-USER> (clog-user:start-demo)
+CL-USER> (ql:quickload :clog)
+CL-USER> (clog-user:run-demo 1)
 ```
 
 To open a browser with the CLOG manual:
@@ -164,8 +164,8 @@ Tutorial Summary
 
 Demo Summary
 
-- 01-snake-game.lisp - Sparkey the Snake Game
-- 02-chat.lisp       - Chat - Private instant messenger
+- 01-demo.lisp - Sparkey the Snake Game
+- 02-demo.lisp - Chat - Private instant messenger
 
 Enhancements underway:
 

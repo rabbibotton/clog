@@ -15,8 +15,8 @@ To load "clog":
 Load the demo:
 
 ```
-CL-USER> (load "/Users/dbotton/common-lisp/clog/demos/01-hello.lisp")
-#P"/Users/dbotton/common-lisp/clog/demos/01-hello.lisp"
+CL-USER> (load "/Users/dbotton/common-lisp/clog/demos/01-demo.lisp")
+#P"/Users/dbotton/common-lisp/clog/demos/01-demo.lisp"
 ```
 
 Start the demo:
@@ -34,5 +34,5 @@ Most demos startup a browser, if not use http://127.0.0.1:8080
 
 Demo Summary
 
-- 01-snake-game.lisp - Sparkey the Snake Game
-- 02-chat.lisp       - Chat - Private instant messenger
+- 01-demo.lisp - Sparkey the Snake Game
+- 02-demo.lisp - Chat - Private instant messenger

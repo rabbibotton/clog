@@ -10,7 +10,7 @@
 
 (defpackage #:clog-user
   (:use #:cl #:clog)
-  (:export start-tutorial))
+  (:export start-tutorial start-demo))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Implementation - CLOG Utilities
@@ -41,12 +41,41 @@
 
 (defun run-tutorial (num)
   "Run tutorial NUM"
+  (load-tutorial num)
+  (clog-user:start-tutorial))
+
+;;;;;;;;;;;;;;;;;;;
+;; load-tutorial ;;
+;;;;;;;;;;;;;;;;;;;
+
+(defun load-tutorial (num)
+  "Load tutorial NUM - use (clog-user:start-tutorial)"
   (let ((p (merge-pathnames (format nil "./tutorial/~2,'0d-tutorial.lisp" num)
 			    (asdf:system-source-directory :clog))))
     (load p)
-    (clog-user:start-tutorial)
     (format t "~%~% ---- The tutorial src is located at: ~A~%" p)))
 
+;;;;;;;;;;;;;;
+;; run-demo ;;
+;;;;;;;;;;;;;;
+
+(defun run-demo (num)
+  "Run demo NUM"
+  (load-demo num)
+  (clog-user:start-demo))
+
+;;;;;;;;;;;;;;;
+;; load-demo ;;
+;;;;;;;;;;;;;;;
+
+(defun load-demo (num)
+  "Load demo NUM - use (clog-user:start-demo)"
+  (let ((p (merge-pathnames (format nil "./demos/~2,'0d-demo.lisp" num)
+			    (asdf:system-source-directory :clog))))
+    (load p)
+    (format t "~%~% ---- The demo src is located at: ~A~%" p)))
+
+ 
 ;;;;;;;;;;;;;;;;
 ;; load-world ;;
 ;;;;;;;;;;;;;;;;

@@ -58,25 +58,25 @@ script."
 
 (defvar *verbose-output* nil "Verbose server output (default false)")
 
-(defvar *app*                nil "Clack 'app' middle-ware")
-(defvar *client-handler*     nil "Clack 'handler' for socket traffic")
-(defvar *on-connect-handler* nil "New connection event handler.")
+(defvar *app*            nil "Clack 'app' middle-ware")
+(defvar *client-handler* nil "Clack 'handler' for socket traffic")
 
-(defvar *new-id* 0 "Last issued connection or script IDs")
+(defvar *on-connect-handler* nil "New connection event handler.")
 
 (defvar *connections*     (make-hash-table) "Connections to IDs")
 (defvar *connection-ids*  (make-hash-table) "IDs to connections")
 (defvar *connection-data* (make-hash-table) "Connection based data")
-
 (defvar *connection-lock* (bordeaux-threads:make-lock)
   "Protect the connection hash tables")
-(defvar *queries-lock*    (bordeaux-threads:make-lock)
-  "Protect query hash tables")
-(defvar *id-lock*         (bordeaux-threads:make-lock)
+
+(defvar *new-id*   0 "Last issued connection or script IDs")
+(defvar *id-lock*  (bordeaux-threads:make-lock)
   "Protect new-id variable.")
 
 (defvar *queries*        (make-hash-table) "Query ID to Answers")
 (defvar *queries-sems*   (make-hash-table) "Query ID to semiphores")
+(defvar *queries-lock*   (bordeaux-threads:make-lock)
+  "Protect query hash tables")
 (defvar *query-time-out* 3 "Number of seconds to timeout waiting for a query")
 
 (defvar *url-to-boot-file* (make-hash-table :test 'equalp) "URL to boot-file")
@@ -87,7 +87,6 @@ script."
 
 (defun generate-id ()
   "Generate unique ids for use in connections and sripts."
-  ;; needs mutex or atomic
   (bordeaux-threads:with-lock-held (*id-lock*) (incf *new-id*)))
 
 ;;;;;;;;;;;;;;;;;;;;
@@ -207,7 +206,12 @@ the default answer. (Private)"
   (let ((ws (websocket-driver:make-server env)))
     (websocket-driver:on :open ws
                          (lambda ()
-			   (let ((id (getf env :query-string)))
+			   (let* ((query (getf env :query-string))
+				  (items (when query
+					   (quri:url-decode-params query)))
+				  (id    (when items
+					   (cdr (assoc "r" items
+						       :test #'equalp)))))
 			     (when (typep id 'string)
 			       (setf id (parse-integer id :junk-allowed t)))
 			     (handle-new-connection ws id))))
@@ -321,6 +325,8 @@ path by querying the browser. See PATH-NAME (CLOG-LOCATION)."
 (defun set-clog-path (path boot-file)
   (if boot-file
       (setf (gethash path *url-to-boot-file*)
+	    ;; Make clog-path into a relative path of
+	    ;; of site-root.
 	    (if (eql (char boot-file 0) #\/)
 		(concatenate 'string "." boot-file)
 		boot-file))

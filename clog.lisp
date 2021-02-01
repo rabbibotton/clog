@@ -742,6 +742,9 @@ embedded in a native template application.)"
   (clog-install-dir function)
   (open-manual      function)
   (run-tutorial     function)
+  (load-tutorial    function)
+  (run-demo         function)
+  (load-demo        function)
 
   "Functions for Compilation and Documentation"
   (load-world       function)

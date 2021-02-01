@@ -42,7 +42,7 @@ function Setup_ws() {
     ws.onerror = function (event) {
         console.log ("onerror: reconnect");
         ws = null;
-        ws = new WebSocket (adr  + "?" + clog['connection_id']);
+        ws = new WebSocket (adr  + "?r=" + clog['connection_id']);
         ws.onopen = function (event) {
             console.log ("onerror: reconnect successful");
             Setup_ws();
@@ -56,7 +56,7 @@ function Setup_ws() {
     ws.onclose = function (event) {
         console.log ("onclose: reconnect");
         ws = null;
-        ws = new WebSocket (adr  + "?" + clog['connection_id']);
+        ws = new WebSocket (adr  + "?r=" + clog['connection_id']);
         ws.onopen = function (event) {
             console.log ("onclose: reconnect successful");
             Setup_ws();
