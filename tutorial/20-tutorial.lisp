@@ -34,7 +34,7 @@
 			                    (html-id nil)
 					    (auto-place t))
   (let ((new-obj (create-unordered-list obj :class class
-					    :html-if html-id
+					    :html-id html-id
 					    :auto-place auto-place)))
     ;; Using change-class we can reuse the parent clog-unordered-lists's
     ;; create method and it's initialization. Otherwise we can use
@@ -48,7 +48,7 @@
 (defmethod activate ((obj clog-toggler))
   (js-execute obj (format nil "JSLists.applyToList('~A', 'ALL');"
 			  (html-id obj))))
-
+  
 (defpackage #:clog-user
   (:use #:cl #:clog)
   (:export start-tutorial))
@@ -57,8 +57,10 @@
 
 (defun on-new-window (body)
   (clog-toggler:init-toggler body)
-  ;; Now we build or CLOG-Toggler
-  (let* ((toggler    (clog-toggler:create-toggler body))
+  ;; Now we build our CLOG-Toggler
+  ;; All create-functions also allow setting the :html-id instead of
+  ;; using a generated id.
+  (let* ((toggler    (clog-toggler:create-toggler body :html-id "myid"))
 	 (item       (create-list-item toggler :content "Top of tree"))
 	 (list-b     (create-unordered-list item))
 	 (item       (create-list-item list-b :content "Item 1"))
