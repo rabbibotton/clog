@@ -56,6 +56,7 @@
 
     (set-on-click fsubmit3
       (lambda (obj)
+	(declare (ignore obj))
 	(setf (hiddenp data-area) t)
 	(place-before footer
 		      (create-div body

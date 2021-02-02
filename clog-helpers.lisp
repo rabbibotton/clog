@@ -8,10 +8,6 @@
 
 (cl:in-package :clog)
 
-(defpackage #:clog-user
-  (:use #:cl #:clog)
-  (:export start-tutorial start-demo))
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Implementation - CLOG Utilities
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -42,7 +38,7 @@
 (defun run-tutorial (num)
   "Run tutorial NUM"
   (load-tutorial num)
-  (clog-user:start-tutorial))
+  (funcall (symbol-function (find-symbol "START-TUTORIAL" "CLOG-USER"))))
 
 ;;;;;;;;;;;;;;;;;;;
 ;; load-tutorial ;;
@@ -62,7 +58,7 @@
 (defun run-demo (num)
   "Run demo NUM"
   (load-demo num)
-  (clog-user:start-demo))
+  (funcall (symbol-function (find-symbol "START-DEMO" "CLOG-USER"))))
 
 ;;;;;;;;;;;;;;;
 ;; load-demo ;;

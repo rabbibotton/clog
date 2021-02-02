@@ -29,8 +29,7 @@
 (defgeneric create-toggler (clog-obj &key content class auto-place)
   (:documentation "Create a toggler with CONTENT as the top of tree."))
 
-(defmethod create-toggler ((obj clog-obj) &key (content "")
-					    (class nil)
+(defmethod create-toggler ((obj clog-obj) &key (class nil)
 			                    (html-id nil)
 					    (auto-place t))
   (let ((new-obj (create-unordered-list obj :class class

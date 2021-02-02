@@ -58,6 +58,7 @@
 	 (o5  (create-option og1 :content "five"))
 	 (tmp (create-form-element f2 :submit :value "OK"))
 	 (tmp (create-form-element f2 :reset :value "Start Again")))
+    (declare (ignore tmp))
     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     ;; Panel 1 contents
     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;    
@@ -74,6 +75,7 @@
 			  "#ff00ff"))    
     (set-on-submit f1
 		   (lambda (obj)
+		     (declare (ignore obj))
 		     (setf (title (html-document body)) (value fe1))
 		     (setf (background-color p1) (value fe2))
 		     (setf (hiddenp f1) t)
@@ -108,10 +110,12 @@
 			      "four"
 			      "five"))
     (set-on-change sl3 (lambda (obj)
+			 (declare (ignore obj))
 			 (when (selectedp o5)
 			   (alert (window body) "Selected 5"))))
     (set-on-submit f2
 		   (lambda (obj)
+		     (declare (ignore obj))
 		     (setf (hiddenp f2) t)
 		     (create-span p2 :content
 		       (format nil "<br><b>Your form has been submitted:</b>
