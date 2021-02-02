@@ -37,7 +37,7 @@
 	   (create-div body :content
 "<H1>(Sparky The Snake)</H1>
  <br />
- <p>Use your kebyoard to move Sparky to pick up batteries.</p>
+ <p>Use your keyboard to move Sparky to pick up batteries.</p>
  <i>Be careful...</i><br />
  If sparky hits his tail he electrocute himself to <b>death!!</b>
  <br /><br />
