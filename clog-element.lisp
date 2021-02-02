@@ -29,12 +29,17 @@ element objects."))
 ;; create-with-html ;;
 ;;;;;;;;;;;;;;;;;;;;;;
 
-(defun create-with-html (connection-id html &key (clog-type 'clog-element))
-  "Create a new clog-element and attach it to HTML on CONNECTION-ID. There must be
-a single outer block that will be set to an internal id. The returned CLOG-Element
-requires placement or will not be visible, ie. place-after, etc. as it exists in
-the javascript clog[] but is not in the DOM. (private)"
-  (let ((web-id (cc:generate-id)))
+(defun create-with-html (connection-id html
+			 &key (clog-type 'clog-element) (html-id nil))
+  "Create a new clog-element and attach it to HTML on
+CONNECTION-ID. There must be a single outer block that will be set to
+an internal id. The returned CLOG-Element requires placement or will
+not be visible, ie. place-after, etc. as it exists in the javascript
+clog[] but is not in the DOM. If HTML-ID is nil one is generated.
+(private)"
+  (let ((web-id (if html-id
+		    html-id
+		    (cc:generate-id))))
     (cc:execute
      connection-id
      (format nil
@@ -61,14 +66,17 @@ CONNECTION-ID to it and then return it. The HTML-ID must be unique. (private)"
 ;; create-child ;;
 ;;;;;;;;;;;;;;;;;;
 
-(defgeneric create-child (clog-obj html &key auto-place clog-type)
+(defgeneric create-child (clog-obj html &key html-id auto-place clog-type)
   (:documentation "Create a new CLOG-Element or sub-type of CLOG-TYPE from HTML
 as child of CLOG-OBJ and if :AUTO-PLACE (default t) place-inside-bottom-of
-CLOG-OBJ"))
+CLOG-OBJ. If HTML-ID is nil one will be generated."))
 
-(defmethod create-child ((obj clog-obj) html &key (auto-place t)
+(defmethod create-child ((obj clog-obj) html &key (html-id nil)
+					       (auto-place t)
 					       (clog-type 'clog-element))
-  (let ((child (create-with-html (connection-id obj) html :clog-type clog-type)))
+  (let ((child (create-with-html (connection-id obj) html
+				 :clog-type clog-type
+				 :html-id   html-id)))
     (if auto-place
 	(place-inside-bottom-of obj child)
 	child)))

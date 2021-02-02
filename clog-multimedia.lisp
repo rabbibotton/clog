@@ -123,7 +123,8 @@
 ;;;;;;;;;;;;;;;;;;;;;;
 
 (defgeneric playback-ended-p (clog-multimedia)
-  (:documentation "Get/Setf true of Media position has reached end of its duration."))
+  (:documentation "Get/Setf true of Media position has reached end of its
+duration."))
 
 (defmethod playback-ended-p ((obj clog-multimedia))
   (js-true-p (property obj "ended")))
@@ -151,7 +152,8 @@ Common values - 1.0 normal, 0.5 half speed, -1.0 reverse"))
 ;;;;;;;;;;;;;;;;;;;;;
 
 (defgeneric ready-to-play-p (clog-multimedia)
-  (:documentation "Get/Setf true of Media position has reached end of its duration."))
+  (:documentation "Get/Setf true of Media position has reached end of its
+duration."))
 
 (defmethod ready-to-play-p ((obj clog-multimedia))
   (js-true-p (property obj "readyState")))
@@ -588,6 +590,7 @@ HANDLER is nil unbind the event."))
 				     autoplay
 				     autoloop
 				     muted
+				     html-id
 				     auto-place)
   (:documentation "Create a CLOG Audio control"))
 
@@ -598,11 +601,13 @@ HANDLER is nil unbind the event."))
 			   (autoplay nil)
 			   (autoloop nil)
 			   (muted    nil)
+			   (html-id  nil)
 			   (auto-place t))
   (create-child obj (format nil "<audio~A~A~A~A~A~A/>"
 			    (if (equal source "")
 				""
-				(format nil " src='~A'" (escape-string source)))
+				(format nil " src='~A'"
+					(escape-string source)))
 			    (if controls
 				" controls"
 				"")
@@ -618,7 +623,9 @@ HANDLER is nil unbind the event."))
 			    (if muted
 				" muted"
 				""))
-		:clog-type 'clog-audio :auto-place auto-place))
+		:clog-type  'clog-audio
+		:html-id    html-id
+		:auto-place auto-place))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -636,6 +643,7 @@ HANDLER is nil unbind the event."))
 				     autoplay
 				     autoloop
 				     muted
+				     html-id
 				     auto-place)
 (:documentation "Create a CLOG video control"))
 
@@ -647,11 +655,13 @@ HANDLER is nil unbind the event."))
 			  (autoplay nil)
 			  (autoloop nil)
 			  (muted    nil)
+			  (html-id  nil)
 			  (auto-place t))
   (create-child obj (format nil "<video~A~A~A~A~A~A~A/>"
 			    (if (equal source "")
 				""
-				(format nil " src='~A'" (escape-string source)))
+				(format nil " src='~A'"
+					(escape-string source)))
 			    (if controls
 				" controls"
 				"")
@@ -660,7 +670,8 @@ HANDLER is nil unbind the event."))
 				"")
 			    (if (equal poster "")
 				""
-				(format nil " poster='~A'" (escape-string poster)))
+				(format nil " poster='~A'"
+					(escape-string poster)))
 			    (if autoplay
 				" autoplay"
 				"")
@@ -670,5 +681,7 @@ HANDLER is nil unbind the event."))
 			    (if muted
 				" muted"
 				""))			    
-		:clog-type 'clog-video :auto-place auto-place))
+		:clog-type  'clog-video
+		:html-id    html-id
+		:auto-place auto-place))
 

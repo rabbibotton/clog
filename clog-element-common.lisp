@@ -19,7 +19,8 @@
 ;; create-a ;;
 ;;;;;;;;;;;;;;
 
-(defgeneric create-a (clog-obj &key link content target class auto-place)
+(defgeneric create-a (clog-obj
+		      &key link content target class html-id auto-place)
   (:documentation "Create a new CLOG-A as child of CLOG-OBJ with :LINK and
 :CONTENT (default \"\") and :TARGET (\"_self\") and if :AUTO-PLACE (default t)
 place-inside-bottom-of CLOG-OBJ.
@@ -35,7 +36,7 @@ place-inside-bottom-of CLOG-OBJ.
 		       (content "")
 		       (target "_self")
 		       (class nil)
-		       (auto-place t))
+		       (html-id nil) (auto-place t))
   (create-child obj (format nil "<a~A target='~A' href='~A'>~A</a>"
 			    (if class
 				(format nil " class='~A'"
@@ -44,7 +45,8 @@ place-inside-bottom-of CLOG-OBJ.
 			    (escape-string target)
 			    (escape-string link)
 			    (escape-string content))
-		:clog-type 'clog-a
+		:clog-type  'clog-a
+		:html-id    html-id
 		:auto-place auto-place))
 
 ;;;;;;;;;;
@@ -92,17 +94,21 @@ place-inside-bottom-of CLOG-OBJ.
 ;; create-br ;;
 ;;;;;;;;;;;;;;;
 
-(defgeneric create-br (clog-obj &key class auto-place)
+(defgeneric create-br (clog-obj &key class html-id auto-place)
   (:documentation "Create a new CLOG-BR as child of CLOG-OBJ that creates a
 line break and if :AUTO-PLACE (default t) place-inside-bottom-of CLOG-OBJ"))
 
-(defmethod create-br ((obj clog-obj) &key (class nil) (auto-place t))
+(defmethod create-br ((obj clog-obj) &key (class nil)
+				       (html-id nil)
+				       (auto-place t))
   (create-child obj (format nil "<br~A/>"
 			    (if class
 				(format nil " class='~A'"
 					(escape-string class))
 				""))		    
-		:clog-type 'clog-br :auto-place auto-place))
+		:clog-type  'clog-br
+		:html-id    html-id
+		:auto-place auto-place))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Implementation - clog-button
@@ -115,20 +121,24 @@ line break and if :AUTO-PLACE (default t) place-inside-bottom-of CLOG-OBJ"))
 ;; create-button ;;
 ;;;;;;;;;;;;;;;;;;;
 
-(defgeneric create-button (clog-obj &key content class auto-place)
+(defgeneric create-button (clog-obj &key content class html-id auto-place)
   (:documentation "Create a new CLOG-Button as child of CLOG-OBJ with :CONTENT
 (default \"\") and if :AUTO-PLACE (default t) place-inside-bottom-of
 CLOG-OBJ"))
 
-(defmethod create-button ((obj clog-obj)
-			  &key (content "") (class nil) (auto-place t))
+(defmethod create-button ((obj clog-obj) &key (content "")
+					   (class nil)
+					   (html-id nil)
+					   (auto-place t))
   (create-child obj (format nil "<button~A>~A</button>"
 			    (if class
 				(format nil " class='~A'"
 					(escape-string class))
 				"")
 			    (escape-string content))
-		:clog-type 'clog-button :auto-place auto-place))
+		:clog-type  'clog-button
+		:html-id    html-id
+		:auto-place auto-place))
 
 ;;;;;;;;;;;;;;;
 ;; disabledp ;;
@@ -158,19 +168,23 @@ CLOG-OBJ"))
 ;; create-div ;;
 ;;;;;;;;;;;;;;;;
 
-(defgeneric create-div (clog-obj &key content class auto-place)
+(defgeneric create-div (clog-obj &key content class html-id auto-place)
   (:documentation "Create a new CLOG-Div as child of CLOG-OBJ with :CONTENT
 (default \"\") and if :AUTO-PLACE (default t) place-inside-bottom-of
 CLOG-OBJ"))
 
-(defmethod create-div ((obj clog-obj)
-		       &key (content "") (class nil) (auto-place t))
+(defmethod create-div ((obj clog-obj) &key (content "")
+					(class nil)
+					(html-id nil)
+					(auto-place t))
   (create-child obj (format nil "<div~A>~A</div>"
 			    (if class
 				(format nil " class='~A'" (escape-string class))
 				"")
 			    (escape-string content))
-		:clog-type 'clog-div :auto-place auto-place))
+		:clog-type  'clog-div
+		:html-id    html-id
+		:auto-place auto-place))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Implementation - clog-hr
@@ -183,18 +197,22 @@ CLOG-OBJ"))
 ;; create-hr ;;
 ;;;;;;;;;;;;;;;
 
-(defgeneric create-hr (clog-obj &key class auto-place)
+(defgeneric create-hr (clog-obj &key class html-id auto-place)
   (:documentation "Create a new CLOG-HR as child of CLOG-OBJ that creates a
 horizontal rule (line) and if :AUTO-PLACE (default t) place-inside-bottom-of
 CLOG-OBJ"))
 
-(defmethod create-hr ((obj clog-obj) &key (class nil) (auto-place t))
+(defmethod create-hr ((obj clog-obj) &key (class nil)
+				       (html-id nil)
+				       (auto-place t))
   (create-child obj (format nil "<hr~A/>"
 			    (if class
 				(format nil " class='~A'"
 					(escape-string class))
 				""))
-		:clog-type 'clog-hr :auto-place auto-place))
+		:clog-type  'clog-hr
+		:html-id    html-id
+		:auto-place auto-place))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Implementation - clog-img
@@ -207,7 +225,8 @@ CLOG-OBJ"))
 ;; create-img ;;
 ;;;;;;;;;;;;;;;;
 
-(defgeneric create-img (clog-obj &key url-src alt-text class auto-place)
+(defgeneric create-img (clog-obj
+			&key url-src alt-text class html-id auto-place)
   (:documentation "Create a new CLOG-Img as child of CLOG-OBJ with :URL-SRC
 (default \"\") and :ALT-TEXT (default \"\") if :AUTO-PLACE (default t)
 place-inside-bottom-of CLOG-OBJ. Use width and height properties before
@@ -217,6 +236,7 @@ placing image to constrain image size."))
 					(url-src "")
 					(alt-text "")
 					(class nil)
+					(html-id nil)
 					(auto-place t))
   (create-child obj (format nil "<img~A src='~A' alt='~A'>)"
 			    (if class
@@ -225,7 +245,9 @@ placing image to constrain image size."))
 				"")			    
 			    (escape-string url-src)
 			    (escape-string alt-text))
-		:clog-type 'clog-img :auto-place auto-place))
+		:clog-type  'clog-img
+		:html-id    html-id
+		:auto-place auto-place))
 
 ;;;;;;;;;;;;;
 ;; url-src ;;
@@ -274,6 +296,7 @@ placing image to constrain image size."))
 
 (defgeneric create-meter (clog-obj &key value high low maximum minimum optimum
 				     class
+				     html-id
 				     auto-place)
   (:documentation "Create a new CLOG-Meter as child of CLOG-OBJ with VALUE
 (default 0) HIGH (default 100) LOW (default 0) MAXIMUM (default 100) MINIMUM
@@ -288,6 +311,7 @@ place-inside-bottom-of CLOG-OBJ."))
 					  (minimum 0)
 					  (optimum 50)
 					  (class nil)
+					  (html-id nil)
 					  (auto-place t))
   (create-child obj (format nil
 	    "<meter value=~A high=~A low=~A max=~A min=~A optimum=~A~A/>"
@@ -296,7 +320,9 @@ place-inside-bottom-of CLOG-OBJ."))
 				(format nil " class='~A'"
 					(escape-string class))
 				""))
-		:clog-type 'clog-meter :auto-place auto-place))
+		:clog-type  'clog-meter
+		:html-id    html-id
+		:auto-place auto-place))
 
 ;;;;;;;;;;;
 ;; value ;;
@@ -411,7 +437,8 @@ place-inside-bottom-of CLOG-OBJ."))
 ;; create-progress-bar ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defgeneric create-progress-bar (clog-obj &key value maximum class auto-place)
+(defgeneric create-progress-bar (clog-obj
+				 &key value maximum class html-id auto-place)
   (:documentation "Create a new CLOG-Progress-Bar as child of CLOG-OBJ with
 VALUE (default 0) MAXIMUM (default 100) and if :AUTO-PLACE (default t)
 place-inside-bottom-of CLOG-OBJ."))
@@ -419,13 +446,16 @@ place-inside-bottom-of CLOG-OBJ."))
 (defmethod create-progress-bar ((obj clog-obj) &key (value 0)
 						 (maximum 100)
 						 (class nil)
+						 (html-id nil)
 						 (auto-place t))
   (create-child obj (format nil "<progress value=~A max=~A />" value maximum
 			    (if class
 				(format nil " class='~A'"
 					(escape-string class))
 				""))
-		:clog-type 'clog-progress-bar :auto-place auto-place))
+		:clog-type  'clog-progress-bar
+		:html-id    html-id
+		:auto-place auto-place))
 
 ;;;;;;;;;;;
 ;; value ;;
@@ -472,20 +502,24 @@ place-inside-bottom-of CLOG-OBJ."))
 ;; create-p ;;
 ;;;;;;;;;;;;;;
 
-(defgeneric create-p (clog-obj &key content class auto-place)
+(defgeneric create-p (clog-obj &key content class html-id auto-place)
   (:documentation "Create a new CLOG-P as child of CLOG-OBJ with :CONTENT
 (default \"\") and if :AUTO-PLACE (default t) place-inside-bottom-of
 CLOG-OBJ"))
 
-(defmethod create-p ((obj clog-obj)
-		     &key (content "") (class nil) (auto-place t))
+(defmethod create-p ((obj clog-obj) &key (content "")
+				      (class nil)
+				      (html-id nil)
+				      (auto-place t))
   (create-child obj (format nil "<p~A>~A</p>"
 			    (if class
 				(format nil " class='~A'"
 					(escape-string class))
 				"")
 			    (escape-string content))
-		:clog-type 'clog-p :auto-place auto-place))
+		:clog-type  'clog-p
+		:html-id    html-id
+		:auto-place auto-place))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -499,20 +533,23 @@ CLOG-OBJ"))
 ;; create-span ;;
 ;;;;;;;;;;;;;;;;;
 
-(defgeneric create-span (clog-obj &key content class auto-place)
+(defgeneric create-span (clog-obj &key content class html-id auto-place)
   (:documentation "Create a new CLOG-Span as child of CLOG-OBJ with CONTENT
-and if :AUTO-PLACE (default t) place-inside-bottom-of
-CLOG-OBJ"))
+and if :AUTO-PLACE (default t) place-inside-bottom-of CLOG-OBJ"))
 
-(defmethod create-span ((obj clog-obj)
-			&key (content "") (class nil) (auto-place t))
+(defmethod create-span ((obj clog-obj) &key (content "")
+					 (class nil)
+					 (html-id nil)
+					 (auto-place t))
   (create-child obj (format nil "<span~A>~A</span>"
 			    (if class
 				(format nil " class='~A'"
 					(escape-string class))
 				"")
 			    (escape-string content))
-		:clog-type 'clog-span :auto-place auto-place))
+		:clog-type  'clog-span
+		:html-id    html-id
+		:auto-place auto-place))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Implementation - clog-section
@@ -529,7 +566,8 @@ CLOG-OBJ"))
 			   :p :pre :section :blockquote :h1 :h2 :h3 :h4 :h5 :h6
 			   :hgroup))
 
-(defgeneric create-section (clog-obj section &key content class auto-place)
+(defgeneric create-section (clog-obj section
+			    &key content class html-id auto-place)
   (:documentation "Create a new CLOG-Section of section type  as child of
 CLOG-OBJ with CONTENT and if :AUTO-PLACE (default t) place-inside-bottom-of
 CLOG-OBJ"))
@@ -537,7 +575,7 @@ CLOG-OBJ"))
 (defmethod create-section ((obj clog-obj) section
 			   &key (content "")
 			     (class nil)
-			     (auto-place t))
+			     (html-id nil) (auto-place t))
   (create-child obj (format nil "<~A~A>~A</~A>"
 			    section
 			    (if class
@@ -546,7 +584,9 @@ CLOG-OBJ"))
 				"")			    
 			    (escape-string content)
 			    section)
-		:clog-type 'clog-section :auto-place auto-place))
+		:clog-type  'clog-section
+		:html-id    html-id
+		:auto-place auto-place))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Implementation - clog-phrase
@@ -563,7 +603,8 @@ CLOG-OBJ"))
 			  :marked :del :ins :s :q :big :small :time :tt :cite
 			  :i :b :u :sub :su))
 
-(defgeneric create-phrase (clog-obj phrase &key content class auto-place)
+(defgeneric create-phrase (clog-obj phrase
+			   &key content class html-id auto-place)
   (:documentation "Create a new CLOG-Phrase of phrase type  as child of
 CLOG-OBJ with CONTENT and if :AUTO-PLACE (default t) place-inside-bottom-of
 CLOG-OBJ"))
@@ -571,6 +612,7 @@ CLOG-OBJ"))
 (defmethod create-phrase ((obj clog-obj) phrase
 			  &key (content "")
 			    (class nil)
+			    (html-id nil)
 			    (auto-place t))
   (create-child obj (format nil "<~A~A>~A</~A>"
 			    phrase
@@ -580,7 +622,9 @@ CLOG-OBJ"))
 				"")			    
 			    (escape-string content)
 			    phrase)
-		:clog-type 'clog-phrase :auto-place auto-place))
+		:clog-type  'clog-phrase
+		:html-id    html-id
+		:auto-place auto-place))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -594,18 +638,20 @@ CLOG-OBJ"))
 ;; create-ordered-list ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defgeneric create-ordered-list (clog-obj &key class auto-place)
+(defgeneric create-ordered-list (clog-obj &key class html-id auto-place)
   (:documentation "Create a new CLOG-Ordered-List as child of CLOG-OBJ
 and if :AUTO-PLACE (default t) place-inside-bottom-of CLOG-OBJ"))
 
 (defmethod create-ordered-list ((obj clog-obj)
-				&key (class nil) (auto-place t))
+				&key (class nil) (html-id nil) (auto-place t))
   (create-child obj (format nil "<ol~A/>"
 			    (if class
 				(format nil " class='~A'"
 					(escape-string class))
 				""))			    
-		:clog-type 'clog-ordered-list :auto-place auto-place))
+		:clog-type  'clog-ordered-list
+		:html-id    html-id
+		:auto-place auto-place))
 
 ;;;;;;;;;;;;;;;
 ;; list-kind ;;
@@ -662,18 +708,21 @@ is outside."))
 ;; create-unordered-list ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defgeneric create-unordered-list (clog-obj &key class auto-place)
+(defgeneric create-unordered-list (clog-obj &key class html-id auto-place)
   (:documentation "Create a new CLOG-Unordered-List as child of CLOG-OBJ
 and if :AUTO-PLACE (default t) place-inside-bottom-of CLOG-OBJ"))
 
 (defmethod create-unordered-list ((obj clog-obj) &key (class nil)
+						   (html-id nil)
 						   (auto-place t))
   (create-child obj (format nil "<ul~A/>"
 			    (if class
 				(format nil " class='~A'"
 					(escape-string class))
 				""))			    
-		:clog-type 'clog-unordered-list :auto-place auto-place))
+		:clog-type  'clog-unordered-list
+		:html-id    html-id
+		:auto-place auto-place))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Implementation - clog-list-item
@@ -686,20 +735,22 @@ and if :AUTO-PLACE (default t) place-inside-bottom-of CLOG-OBJ"))
 ;; create-list-item ;;
 ;;;;;;;;;;;;;;;;;;;;;;
 
-(defgeneric create-list-item (clog-obj &key content class auto-place)
+(defgeneric create-list-item (clog-obj &key content class html-id auto-place)
   (:documentation "Create a new CLOG-List-Item as child of CLOG-OBJ
 and if :AUTO-PLACE (default t) place-inside-bottom-of CLOG-OBJ"))
 
 (defmethod create-list-item ((obj clog-obj) &key (content "")
 					      (class nil)
-					      (auto-place t))
+					      (html-id nil) (auto-place t))
   (create-child obj (format nil "<li~A>~A</li>"
 			    (if class
 				(format nil " class='~A'"
 					(escape-string class))
 				"")
 			    (escape-string content))			    
-		:clog-type 'clog-list-item :auto-place auto-place))
+		:clog-type  'clog-list-item
+		:html-id    html-id
+		:auto-place auto-place))
 
 ;;;;;;;;;;;;;;;;
 ;; item-value ;;
@@ -729,18 +780,21 @@ and if :AUTO-PLACE (default t) place-inside-bottom-of CLOG-OBJ"))
 ;; create-definition-list ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defgeneric create-definition-list (clog-obj &key class auto-place)
+(defgeneric create-definition-list (clog-obj &key class html-id auto-place)
   (:documentation "Create a new CLOG-Definition-List as child of CLOG-OBJ
 and if :AUTO-PLACE (default t) place-inside-bottom-of CLOG-OBJ"))
 
 (defmethod create-definition-list ((obj clog-obj) &key (class nil)
+						    (html-id nil)
 						    (auto-place t))
   (create-child obj (format nil "<dl~A/>"
 			    (if class
 				(format nil " class='~A'"
 					(escape-string class))
 				""))			    
-		:clog-type 'clog-definition-list :auto-place auto-place))
+		:clog-type  'clog-definition-list
+		:html-id    html-id
+		:auto-place auto-place))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Implementation - clog-term
@@ -753,21 +807,22 @@ and if :AUTO-PLACE (default t) place-inside-bottom-of CLOG-OBJ"))
 ;; create-term ;;
 ;;;;;;;;;;;;;;;;;
 
-(defgeneric create-term (clog-definition-list &key content class auto-place)
+(defgeneric create-term (clog-definition-list
+			 &key content class html-id auto-place)
   (:documentation "Create a new CLOG-Term as child of CLOG-OBJ
 and if :AUTO-PLACE (default t) place-inside-bottom-of CLOG-OBJ"))
 
 (defmethod create-term ((obj clog-definition-list)
 			&key (content "")
 			  (class nil)
-			  (auto-place t))
+			  (html-id nil) (auto-place t))
   (create-child obj (format nil "<dt>~A</dt>"
 			    (escape-string content)
 			    (if class
 				(format nil " class='~A'"
 					(escape-string class))
 				""))			    
-		:clog-type 'clog-term :auto-place auto-place))
+		:clog-type  'clog-term :html-id    html-id :auto-place auto-place))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Implementation - clog-description
@@ -781,13 +836,14 @@ and if :AUTO-PLACE (default t) place-inside-bottom-of CLOG-OBJ"))
 ;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defgeneric create-description (clog-definition-list
-				&key content class auto-place)
+				&key content class html-id auto-place)
   (:documentation "Create a new CLOG-Description as child of CLOG-OBJ
 and if :AUTO-PLACE (default t) place-inside-bottom-of CLOG-OBJ"))
 
 (defmethod create-description ((obj clog-definition-list)
 			       &key (content "")
 				 (class nil)
+				 (html-id nil)
 				 (auto-place t))
   (create-child obj (format nil "<dd>~A</dd>"
 			    (escape-string content)
@@ -795,7 +851,9 @@ and if :AUTO-PLACE (default t) place-inside-bottom-of CLOG-OBJ"))
 				(format nil " class='~A'"
 					(escape-string class))
 				""))			    
-		:clog-type 'clog-description :auto-place auto-place))
+		:clog-type  'clog-description
+		:html-id    html-id
+		:auto-place auto-place))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Implementation - clog-table
@@ -808,18 +866,20 @@ and if :AUTO-PLACE (default t) place-inside-bottom-of CLOG-OBJ"))
 ;; create-table ;;
 ;;;;;;;;;;;;;;;;;;
 
-(defgeneric create-table (clog-obj &key class auto-place)
+(defgeneric create-table (clog-obj &key class html-id auto-place)
   (:documentation "Create a new CLOG-Table as child of CLOG-OBJ
 and if :AUTO-PLACE (default t) place-inside-bottom-of CLOG-OBJ"))
 
 (defmethod create-table ((obj clog-obj)
-				&key (class nil) (auto-place t))
+				&key (class nil) (html-id nil) (auto-place t))
   (create-child obj (format nil "<table~A/>"
 			    (if class
 				(format nil " class='~A'"
 					(escape-string class))
 				""))			    
-		:clog-type 'clog-table :auto-place auto-place))
+		:clog-type  'clog-table
+		:html-id    html-id
+		:auto-place auto-place))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Implementation - clog-table-row
@@ -832,18 +892,20 @@ and if :AUTO-PLACE (default t) place-inside-bottom-of CLOG-OBJ"))
 ;; create-table-row ;;
 ;;;;;;;;;;;;;;;;;;;;;;
 
-(defgeneric create-table-row (clog-obj &key class auto-place)
+(defgeneric create-table-row (clog-obj &key class html-id auto-place)
   (:documentation "Create a new CLOG-Table-Row as child of CLOG-OBJ
 and if :AUTO-PLACE (default t) place-inside-bottom-of CLOG-OBJ"))
 
 (defmethod create-table-row ((obj clog-obj)
-				&key (class nil) (auto-place t))
+				&key (class nil) (html-id nil) (auto-place t))
   (create-child obj (format nil "<tr~A/>"
 			    (if class
 				(format nil " class='~A'"
 					(escape-string class))
 				""))			    
-		:clog-type 'clog-table-row :auto-place auto-place))
+		:clog-type  'clog-table-row
+		:html-id    html-id
+		:auto-place auto-place))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Implementation - clog-table-column
@@ -860,6 +922,7 @@ and if :AUTO-PLACE (default t) place-inside-bottom-of CLOG-OBJ"))
 					    column-span
 					    row-span
 					    class
+					    html-id
 					    auto-place)
   (:documentation "Create a new CLOG-Table-Column as child of CLOG-OBJ
 and if :AUTO-PLACE (default t) place-inside-bottom-of CLOG-OBJ"))
@@ -868,6 +931,7 @@ and if :AUTO-PLACE (default t) place-inside-bottom-of CLOG-OBJ"))
 						 (column-span 1)
 						 (row-span 1)
 						 (class nil)
+						 (html-id nil)
 						 (auto-place t))
   (create-child obj (format nil "<td colspan=~A rowspan=~A~A>~A</td>"
 			    column-span
@@ -877,7 +941,9 @@ and if :AUTO-PLACE (default t) place-inside-bottom-of CLOG-OBJ"))
 					(escape-string class))
 				"")
 			    (escape-string content))
-		:clog-type 'clog-table-column :auto-place auto-place))
+		:clog-type  'clog-table-column
+		:html-id    html-id
+		:auto-place auto-place))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Implementation - clog-table-heading
@@ -891,18 +957,20 @@ and if :AUTO-PLACE (default t) place-inside-bottom-of CLOG-OBJ"))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defgeneric create-table-heading (clog-obj &key content
-					    column-span
-					    row-span
-					    class
-					    auto-place)
+					     column-span
+					     row-span
+					     class
+					     html-id
+					     auto-place)
   (:documentation "Create a new CLOG-Table-Heading as child of CLOG-OBJ
 and if :AUTO-PLACE (default t) place-inside-bottom-of CLOG-OBJ"))
 
 (defmethod create-table-heading ((obj clog-obj) &key (content "")
-						 (column-span 1)
-						 (row-span 1)
-						 (class nil)
-						 (auto-place t))
+						  (column-span 1)
+						  (row-span 1)
+						  (class nil)
+						  (html-id nil)
+						  (auto-place t))
   (create-child obj (format nil "<th colspan=~A rowspan=~A~A>~A</th>"
 			    column-span
 			    row-span
@@ -911,7 +979,9 @@ and if :AUTO-PLACE (default t) place-inside-bottom-of CLOG-OBJ"))
 					(escape-string class))
 				"")
 			    (escape-string content))
-		:clog-type 'clog-table-heading :auto-place auto-place))
+		:clog-type  'clog-table-heading
+		:html-id    html-id
+		:auto-place auto-place))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Implementation - clog-table-head
@@ -924,18 +994,20 @@ and if :AUTO-PLACE (default t) place-inside-bottom-of CLOG-OBJ"))
 ;; create-table-head ;;
 ;;;;;;;;;;;;;;;;;;;;;;;
 
-(defgeneric create-table-head (clog-obj &key class auto-place)
+(defgeneric create-table-head (clog-obj &key class html-id auto-place)
   (:documentation "Create a new CLOG-Table-Head as child of CLOG-OBJ
 and if :AUTO-PLACE (default t) place-inside-bottom-of CLOG-OBJ"))
 
 (defmethod create-table-head ((obj clog-obj)
-				&key (class nil) (auto-place t))
+				&key (class nil) (html-id nil) (auto-place t))
   (create-child obj (format nil "<thead~A/>"
 			    (if class
 				(format nil " class='~A'"
 					(escape-string class))
 				""))			    
-		:clog-type 'clog-table-head :auto-place auto-place))
+		:clog-type  'clog-table-head
+		:html-id    html-id
+		:auto-place auto-place))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Implementation - clog-table-body
@@ -948,18 +1020,20 @@ and if :AUTO-PLACE (default t) place-inside-bottom-of CLOG-OBJ"))
 ;; create-table-body ;;
 ;;;;;;;;;;;;;;;;;;;;;;;
 
-(defgeneric create-table-body (clog-obj &key class auto-place)
+(defgeneric create-table-body (clog-obj &key class html-id auto-place)
   (:documentation "Create a new CLOG-Table-Body as child of CLOG-OBJ
 and if :AUTO-PLACE (default t) place-inside-bottom-of CLOG-OBJ"))
 
 (defmethod create-table-body ((obj clog-obj)
-				&key (class nil) (auto-place t))
+				&key (class nil) (html-id nil) (auto-place t))
   (create-child obj (format nil "<tbody~A/>"
 			    (if class
 				(format nil " class='~A'"
 					(escape-string class))
 				""))			    
-		:clog-type 'clog-table-body :auto-place auto-place))
+		:clog-type  'clog-table-body
+		:html-id    html-id
+		:auto-place auto-place))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Implementation - clog-table-caption
@@ -972,19 +1046,25 @@ and if :AUTO-PLACE (default t) place-inside-bottom-of CLOG-OBJ"))
 ;; create-table-caption ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defgeneric create-table-caption (clog-obj &key content class auto-place)
+(defgeneric create-table-caption (clog-obj
+				  &key content class html-id auto-place)
   (:documentation "Create a new CLOG-Table-Caption as child of CLOG-OBJ
 and if :AUTO-PLACE (default t) place-inside-bottom-of CLOG-OBJ"))
 
 (defmethod create-table-caption ((obj clog-obj)
-				&key (content "") (class nil) (auto-place t))
+				 &key (content "")
+				   (class nil)
+				   (html-id nil)
+				   (auto-place t))
   (create-child obj (format nil "<caption~A/>~A</caption>"
 			    (if class
 				(format nil " class='~A'"
 					(escape-string class))
 				"")
 			    (escape-string content))
-		:clog-type 'clog-table-caption :auto-place auto-place))
+		:clog-type  'clog-table-caption
+		:html-id    html-id
+		:auto-place auto-place))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Implementation - clog-table-footer
@@ -997,18 +1077,20 @@ and if :AUTO-PLACE (default t) place-inside-bottom-of CLOG-OBJ"))
 ;; create-table-footer ;;
 ;;;;;;;;;;;;;;;;;;;;;;;
 
-(defgeneric create-table-footer (clog-obj &key class auto-place)
+(defgeneric create-table-footer (clog-obj &key class html-id auto-place)
   (:documentation "Create a new CLOG-Table-Footer as child of CLOG-OBJ
 and if :AUTO-PLACE (default t) place-inside-bottom-of CLOG-OBJ"))
 
 (defmethod create-table-footer ((obj clog-obj)
-				&key (class nil) (auto-place t))
+				&key (class nil) (html-id nil) (auto-place t))
   (create-child obj (format nil "<tfoot~A/>"
 			    (if class
 				(format nil " class='~A'"
 					(escape-string class))
 				""))			    
-		:clog-type 'clog-table-footer :auto-place auto-place))
+		:clog-type  'clog-table-footer
+		:html-id    html-id
+		:auto-place auto-place))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Implementation - clog-table-column-group
@@ -1021,18 +1103,20 @@ and if :AUTO-PLACE (default t) place-inside-bottom-of CLOG-OBJ"))
 ;; create-table-column-group ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defgeneric create-table-column-group (clog-obj &key class auto-place)
+(defgeneric create-table-column-group (clog-obj &key class html-id auto-place)
   (:documentation "Create a new CLOG-Table-Column-Group as child of CLOG-OBJ
 and if :AUTO-PLACE (default t) place-inside-bottom-of CLOG-OBJ"))
 
 (defmethod create-table-column-group ((obj clog-obj)
-				&key (class nil) (auto-place t))
+				&key (class nil) (html-id nil) (auto-place t))
   (create-child obj (format nil "<colgroup~A/>"
 			    (if class
 				(format nil " class='~A'"
 					(escape-string class))
 				""))			    
-		:clog-type 'clog-table-column-group :auto-place auto-place))
+		:clog-type  'clog-table-column-group
+		:html-id    html-id
+		:auto-place auto-place))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Implementation - clog-table-column-group-item
@@ -1045,17 +1129,23 @@ and if :AUTO-PLACE (default t) place-inside-bottom-of CLOG-OBJ"))
 ;; create-table-column-group-item ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defgeneric create-table-column-group-item (clog-obj
-					    &key column-span class auto-place)
+(defgeneric create-table-column-group-item
+    (clog-obj
+     &key column-span class html-id auto-place)
   (:documentation "Create a new CLOG-Table-Column-Group-Item as child of CLOG-OBJ
 and if :AUTO-PLACE (default t) place-inside-bottom-of CLOG-OBJ"))
 
 (defmethod create-table-column-group-item ((obj clog-obj)
-				&key (column-span 1) (class nil) (auto-place t))
+					   &key (column-span 1)
+					     (class nil)
+					     (html-id nil)
+					     (auto-place t))
   (create-child obj (format nil "<col span=~A~A/>"
 			    column-span
 			    (if class
 				(format nil " class='~A'"
 					(escape-string class))
 				""))			    
-		:clog-type 'clog-table-column-group-item :auto-place auto-place))
+		:clog-type  'clog-table-column-group-item
+		:html-id    html-id
+		:auto-place auto-place))

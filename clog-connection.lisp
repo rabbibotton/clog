@@ -242,15 +242,11 @@ the default route for '/' to establish web-socket connections and static files
 located at STATIC-ROOT. If BOOT-FILE is nil no initial clog-path's will be
 setup, use clog-path to add. The on-connect-handler needs to indentify the
 path by querying the browser. See PATH-NAME (CLOG-LOCATION)."
-
   (set-on-connect on-connect-handler)
-
   (when boot-file
     (set-clog-path "/" boot-file))
-  
   (setf *app*
-	(lack:builder
-	 
+	(lack:builder	 
 	 (lambda (app)
 	   (lambda (env)
 	     ;; Special handling of "clog paths"
@@ -260,36 +256,28 @@ path by querying the browser. See PATH-NAME (CLOG-LOCATION)."
 		      (let ((file (uiop:subpathname static-root clog-path)))
 			(with-open-file (stream file :direction :input
 						     :if-does-not-exist nil)
-
 			  (let ((page-data (make-string (file-length stream)))
 				(post-data))
-			    
 			    (read-sequence page-data stream)
-
 			    ;; Check if post method response
 			    (when (equal (getf env :content-type)
 					 "application/x-www-form-urlencoded")
 			      (setf post-data (make-string (getf env :content-length)))
 			      (read-sequence post-data (getf env :raw-body)))
-
       			    `(200 (:content-type "text/html")
 				  (,(if post-data
 				      (concatenate 'string page-data
 				        (format nil "<script>clog['post-data']='~A'</script>"
 						post-data))
 				      page-data)))))))
-		     
 		     ;; Pass the handling on next rule
 		     (t (funcall app env))))))
-	 
 	 (:static :path (lambda (path)
 			  (cond ((ppcre:scan "^(?:/clog$)" path) nil)
 				(t path)))
 		  :root static-root)
-	 
 	 (lambda (env)
 	   (clog-server env))))
-
   (setf *client-handler* (clack:clackup *app* :address host :port port))
   (format t "HTTP listening on    : ~A:~A~%" host port)
   (format t "HTML Root            : ~A~%"    static-root)

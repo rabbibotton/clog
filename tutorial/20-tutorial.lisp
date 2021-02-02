@@ -31,11 +31,14 @@
 
 (defmethod create-toggler ((obj clog-obj) &key (content "")
 					    (class nil)
+			                    (html-id nil)
 					    (auto-place t))
   (let ((new-obj (create-unordered-list obj :class class
+					    :html-if html-id
 					    :auto-place auto-place)))
-    ;; Using change-class we can reuse the parent clog-obj's create
-    ;; method and it's initialization.
+    ;; Using change-class we can reuse the parent clog-unordered-lists's
+    ;; create method and it's initialization. Otherwise we can use
+    ;; create-child and the needed html.
     (change-class new-obj 'clog-toggler)
     new-obj))
 
