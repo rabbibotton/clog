@@ -21,19 +21,15 @@
 (defclass app-data ()
   ((snake-direction
     :initform :right
-    :type snake-direction-type
     :accessor snake-direction)
    (score
     :initform 0
-    :type number
     :accessor score)
    (food
     :initform (new-food)
-    :type cons
     :accessor food)
    (snake
     :initform nil
-    :type cons
     :accessor snake)))
 
 (defun display-splash (body)
