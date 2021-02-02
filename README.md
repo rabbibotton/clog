@@ -63,7 +63,7 @@ have Quicklisp configured):
 
 ```
 CL-USER> (ql:quickload :clog)
-CL-USER> (clog-user:run-tutorial 1)
+CL-USER> (clog:run-tutorial 1)
 ```
 
 To see where the source files are:
@@ -76,7 +76,7 @@ You can the run the demos with (currently 1 or 2):
 
 ```
 CL-USER> (ql:quickload :clog)
-CL-USER> (clog-user:run-demo 1)
+CL-USER> (clog:run-demo 1)
 ```
 
 To open a browser with the CLOG manual:

@@ -136,7 +136,7 @@ Boot file for path / : /boot.html
 NIL
 ```
 
-At this point our CLOG app doese very little. To see our CLOG app so far go to
+At this point our CLOG app does very little. To see our CLOG app so far go to
 http://127.0.0.1:8008  or in most common-list configurations you can use:
 
 ```lisp
