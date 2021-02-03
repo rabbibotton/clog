@@ -53,3 +53,4 @@ Tutorial Summary
 - 18-tutorial.lisp - Drag and Drop
 - 19-tutorial.lisp - Using JavaScript components
 - 20-tutorial.lisp - New CLOG plugin from JavaScript component
+- 21-tutorial.lisp - New CLOG plugin in Common-Lisp

@@ -10,6 +10,9 @@
 
 (in-package :clog-drop-list)
 
+;;; Next we will use the clog-unordered-list as the base for our new
+;;; class clog-drop list and allow access to the "drop root" for
+;;; list items to be children of.
 (defclass clog-drop-list (clog-unordered-list)
   ((drop-root :accessor drop-root))
   (:documentation "CLOG Drop List object - a collapsable list component"))
@@ -17,9 +20,9 @@
 (defgeneric drop-root (clog-drop-list)
   (:documentation "Accessor for the drop list root, create clog-list-items
 on the drop-root."))
-  
+
 (defgeneric create-drop-list (clog-obj &key content class html-id auto-place)
-  (:documentation "Create a toggler with CONTENT as the top of tree."))
+  (:documentation "Create a drop-list with CONTENT as the top of tree."))
 
 (defmethod create-drop-list ((obj clog-obj) &key (content "")
 					      (class nil)

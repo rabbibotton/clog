@@ -59,7 +59,7 @@ To load this package and work through tutorials (assuming you
 have Quicklisp configured):
 
 1. Start emacs then M-x slime
-2. In the REPL, run (tutorials currently 1 - 20):
+2. In the REPL, run (tutorials currently 1 - 21):
 
 ```
 CL-USER> (ql:quickload :clog)
@@ -175,6 +175,7 @@ Tutorial Summary
 - 18-tutorial.lisp - Drag and Drop
 - 19-tutorial.lisp - Using JavaScript components
 - 20-tutorial.lisp - New CLOG plugin from JavaScript component
+- 21-tutorial.lisp - New CLOG plugin in Common-Lisp
 
 Demo Summary
 
@@ -192,8 +193,3 @@ Enhancements underway:
   - GUI Builder
     - Grid style
     - Page style
-  
-- Plugin API 
-  - General CL systems
-  - Widgets created from JavaScript
-  - Widgets created in Common Lisp
