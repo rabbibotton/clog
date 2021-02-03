@@ -175,37 +175,31 @@ To load "clog":
 </span>................................................
 <span class="paren1">(<span class="code"><span class="keyword">:CLOG</span></span>)</span></span></code></pre>
 
-<p>Next, we need to use the <a href="#x-28CLOG-3AINITIALIZE-20FUNCTION-29" title="(CLOG:INITIALIZE FUNCTION)"><code>INITIALIZE</code></a> function to tell <code>CLOG</code> to start up the web
-server, what to do when someone connects and where the static <code>HTML</code> files
-are located.</p>
+<p>Next, we tell clog to start a clog-repl:</p>
 
-<pre><code><span class="code">CL-USER&gt; <span class="paren1">(<span class="code">clog:initialize <span class="paren2">(<span class="code"><i><span class="symbol">lambda</span></i> <span class="paren3">(<span class="code">body</span>)</span><span class="paren3">(<span class="code"></span>)</span></span>)</span> <span class="keyword">:static-root</span> #P<span class="string">"~/common-lisp/clog/static-files/"</span></span>)</span>
+<pre><code><span class="code">CL-USER&gt; <span class="paren1">(<span class="code">clog:clog-repl</span>)</span>
 Hunchentoot server is started.
 Listening on 0.0.0.0:8080.
 HTTP listening on    : 0.0.0.0:8080
-HTML Root            : /Users/dbotton/common-lisp/clog/static-files/
-Boot file for path / : /boot.html
+HTML Root            : ~/common-lisp/clog/static-files/
+Boot file for path / : /debug.html
+
+Use clog-user:*body* to access the clog-repl window.
 NIL</span></code></pre>
 
-<p>At this point our <code>CLOG</code> app does very little. To see our <code>CLOG</code> app so far go to
-http://127.0.0.1:8008  or in most common-list configurations you can use:</p>
+<p>At this point <code>CLOG</code> should open a browser window to
+ http://127.0.0.1:8008/repl</p>
 
-<pre><code><span class="code">CL-USER&gt; <span class="paren1">(<span class="code">clog:open-browser</span>)</span></span></code></pre>
+<p>We can new enter the clog-user package and hack a way.</p>
+
+<pre><code><span class="code">CL-USER&gt; <span class="paren1">(<span class="code">in-package clog-user</span>)</span>
+#&lt;"CLOG-USER" package&gt;
+CLOG-USER&gt; <span class="paren1">(<span class="code">setf <span class="paren2">(<span class="code">background-color <span class="special">*body*</span></span>)</span> <span class="keyword">:red</span></span>)</span></span></code></pre>
 
 <p>Something more than an empty lambda function is needed to do more. The
 tutorials are a good place to start with make <code>CLOG</code> apps in code, so
 here we are going to demonstrate the concepts using some REPL tricks
 to help developing <code>CLOG</code> apps in general.</p>
-
-<p>We need to give ourselves easier access to <code>CLOG</code> and or an app we are
-working one. Let's create a package that uses <code>CLOG</code> and of course
-common lisp &quot;cl&quot; we will call it &quot;clog-user&quot;.</p>
-
-<pre><code><span class="code">CL-USER&gt; <span class="paren1">(<span class="code"><i><span class="symbol">defpackage</span></i> <span class="keyword">#:clog-user</span>
-  <span class="paren2">(<span class="code"><span class="keyword">:use</span> <span class="keyword">#:cl</span> <span class="keyword">#:clog</span></span>)</span></span>)</span>
-<span class="paren1">(<span class="code">in-package <span class="keyword">:clog-user</span></span>)</span>
-#&lt;"CLOG-USER" package&gt;
-CLOG-USER&gt; </span></code></pre>
 
 <p>Since we already initialized <code>CLOG</code> let's use <a href="#x-28CLOG-3ASET-ON-NEW-WINDOW-20FUNCTION-29" title="(CLOG:SET-ON-NEW-WINDOW FUNCTION)"><code>SET-ON-NEW-WINDOW</code></a> to change our
 on-new-window handler (handler is just a made up name for a function that
@@ -213,21 +207,7 @@ will handle an event).</p>
 
 <pre><code><span class="code">CLOG-USER&gt; <span class="paren1">(<span class="code">set-on-new-window <span class="paren2">(<span class="code"><i><span class="symbol">lambda</span></i> <span class="paren3">(<span class="code">body</span>)</span> <span class="paren3">(<span class="code">create-div body <span class="keyword">:content</span> <span class="string">"Hello World!"</span></span>)</span></span>)</span></span>)</span></span></code></pre>
 
-<p>Now go ahead and resresh our browser and you should see the famous first words
-of every app.</p>
-
-<p>This of though is still not very REPL like, <code>CLOG</code> is a 'live' connection to a
-browser. So lets redo our on-new-window handler to give us access to the
-browser in the REPL.</p>
-
-<pre><code><span class="code">CLOG-USER&gt; <span class="paren1">(<span class="code"><i><span class="symbol">defparameter</span></i> <span class="special">*body*</span> nil</span>)</span>
-*BODY*
-CLOG-USER&gt; <span class="paren1">(<span class="code">set-on-new-window <span class="paren2">(<span class="code"><i><span class="symbol">lambda</span></i> <span class="paren3">(<span class="code">body</span>)</span> <span class="paren3">(<span class="code">setf <span class="special">*body*</span> body</span>)</span></span>)</span></span>)</span></span></code></pre>
-
-<p>Reset your browser again (or navigate to http://127.0.0.1:8080 and let's have
-some fun.</p>
-
-<p>(From here on, we will leave out the promps and responses in our quotes of
+<p>(From here on, we will leave out the prompts and responses in our quotes of
 code.)</p>
 
 <pre><code><span class="code"><span class="paren1">(<span class="code">create-div <span class="special">*body*</span> <span class="keyword">:content</span> <span class="string">"Hello World"</span></span>)</span></span></code></pre>
@@ -357,13 +337,53 @@ function. If <code>BOOT-FILE</code> is nil path is removed.</p></li>
 <p>Turn on browser console debugging for <code>OBJ</code>'s connection.</p></li>
 </ul>
 
+<p><a id='x-28CLOG-3AOPEN-BROWSER-20FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#x-28CLOG-3AOPEN-BROWSER-20FUNCTION-29" >OPEN-BROWSER</a></span></span> <span class="locative-args">&amp;KEY (URL &quot;http://127.0.0.1:8080&quot;)</span></span></p>
+
+<p>Open a web browser to <code>URL</code>.</p></li>
+</ul>
+
 <p><a id='x-28CLOG-3A-40CLOG-UTILITIES-20MGL-PAX-3ASECTION-29'></a></p>
 
 <p><span class="outer-navigation"><span class="navigation"> <a href="#x-28CLOG-3A-40CLOG-SYSTEM-20MGL-PAX-3ASECTION-29" title="CLOG System">&#8592;</a> <a href="#x-28CLOG-3A-40CLOG-MANUAL-20MGL-PAX-3ASECTION-29" title="The CLOG manual">&#8593;</a> <a href="#x-28CLOG-3A-40CLOG-OBJ-20MGL-PAX-3ASECTION-29" title="CLOG Objects">&#8594;</a> <a href="#x-28CLOG-3A-40CLOG-UTILITIES-20MGL-PAX-3ASECTION-29" title="CLOG Utilities">&#8634;</a></span></span></p>
 
 <h2><a href="#x-28CLOG-3A-40CLOG-UTILITIES-20MGL-PAX-3ASECTION-29">5 CLOG Utilities</a></h2>
 
-<p><code>CLOG</code> utilities</p>
+<p>CLOG-Group - Utility Class for CLOG-Obj storage</p>
+
+<p><a id='x-28CLOG-3ACLOG-GROUP-20CLASS-29'></a></p>
+
+<ul>
+<li><span class=reference-bullet><span class=reference><span class="locative-type">[class]</span> <span class="reference-object"><a href="#x-28CLOG-3ACLOG-GROUP-20CLASS-29" >CLOG-GROUP</a></span></span></span></li>
+</ul>
+
+<p><a id='x-28CLOG-3ACREATE-GROUP-20FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#x-28CLOG-3ACREATE-GROUP-20FUNCTION-29" >CREATE-GROUP</a></span></span> <span class="locative-args"></span></span></p>
+
+<p>Return a new <a href="#x-28CLOG-3ACLOG-GROUP-20CLASS-29" title="(CLOG:CLOG-GROUP CLASS)"><code>CLOG-GROUP</code></a> object for storing <a href="#x-28CLOG-3ACLOG-OBJ-20CLASS-29" title="(CLOG:CLOG-OBJ CLASS)"><code>CLOG-OBJ</code></a>s. They are indexed by
+their <a href="#x-28CLOG-3AHTML-ID-20GENERIC-FUNCTION-29" title="(CLOG:HTML-ID GENERIC-FUNCTION)"><code>HTML-ID</code></a>.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3AADD-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3AADD-20GENERIC-FUNCTION-29" >ADD</a></span></span> <span class="locative-args">CLOG-GROUP CLOG-OBJ &amp;KEY NAME</span></span></p>
+
+<p>Add <code>CLOG-OBJ</code> to a <code>CLOG-GROUP</code> indexed by the html-id of
+<code>CLOG-OBJ</code> unless <code>:NAME</code> is set and is used instead.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3AOBJ-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3AOBJ-20GENERIC-FUNCTION-29" >OBJ</a></span></span> <span class="locative-args">CLOG-GROUP NAME</span></span></li>
+</ul>
+
+<p><code>CLOG</code> JS utilities</p>
 
 <p><a id='x-28CLOG-3AJS-TRUE-P-20FUNCTION-29'></a></p>
 
@@ -397,14 +417,6 @@ function. If <code>BOOT-FILE</code> is nil path is removed.</p></li>
 <p>Return &quot;on&quot; if <code>VALUE</code> t or return &quot;off&quot;</p></li>
 </ul>
 
-<p><a id='x-28CLOG-3AOPEN-BROWSER-20FUNCTION-29'></a></p>
-
-<ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#x-28CLOG-3AOPEN-BROWSER-20FUNCTION-29" >OPEN-BROWSER</a></span></span> <span class="locative-args">&amp;KEY (URL &quot;http://127.0.0.1:8080&quot;)</span></span></p>
-
-<p>Open a web browser to <code>URL</code>.</p></li>
-</ul>
-
 <p><a id='x-28CLOG-3AESCAPE-STRING-20FUNCTION-29'></a></p>
 
 <ul>
@@ -412,6 +424,8 @@ function. If <code>BOOT-FILE</code> is nil path is removed.</p></li>
 
 <p>Escape <code>STR</code> for sending to browser script.</p></li>
 </ul>
+
+<p><code>CLOG</code> Color utilities</p>
 
 <p><a id='x-28CLOG-3ARGB-20FUNCTION-29'></a></p>
 
@@ -4822,7 +4836,7 @@ on-storage event is fired for changes to :local storage keys.</p></li>
 <p><a id='x-28CLOG-3ABODY-ELEMENT-20GENERIC-FUNCTION-29'></a></p>
 
 <ul>
-<li><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ABODY-ELEMENT-20GENERIC-FUNCTION-29" >BODY-ELEMENT</a></span></span> <span class="locative-args">OBJECT</span></span></li>
+<li><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ABODY-ELEMENT-20GENERIC-FUNCTION-29" >BODY-ELEMENT</a></span></span> <span class="locative-args">SELF</span></span></li>
 </ul>
 
 <p><a id='x-28CLOG-3ADOCUMENT-ELEMENT-20GENERIC-FUNCTION-29'></a></p>
@@ -5109,6 +5123,15 @@ on-storage event is fired for changes to :local storage keys.</p></li>
 <li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#x-28CLOG-3ALOAD-DEMO-20FUNCTION-29" >LOAD-DEMO</a></span></span> <span class="locative-args">NUM</span></span></p>
 
 <p>Load demo <code>NUM</code> - use (clog-user:start-demo)</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3ACLOG-REPL-20FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#x-28CLOG-3ACLOG-REPL-20FUNCTION-29" >CLOG-REPL</a></span></span> <span class="locative-args"></span></span></p>
+
+<p>Set a path /repl that opens a blank page and sets the global
+clog-user:<em>body</em> to last window openned to /repl.</p></li>
 </ul>
 
 <p>Functions for Compilation and Documentation</p>

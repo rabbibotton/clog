@@ -8,6 +8,11 @@
 
 (cl:in-package :clog)
 
+(defpackage #:clog-user
+  (:use #:cl #:clog))
+
+(defvar clog-user::*body* nil "clog-repl access to body")
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Implementation - CLOG Utilities
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -71,6 +76,19 @@
     (load p)
     (format t "~%~% ---- The demo src is located at: ~A~%" p)))
 
+;;;;;;;;;;;;;;;
+;; clog-repl ;;
+;;;;;;;;;;;;;;;
+
+(defun clog-repl ()
+  "Set a path /repl that opens a blank page and sets the global
+clog-user:*body* to last window openned to /repl."
+  (unless *clog-running*
+    (initialize nil :boot-file "/debug.html"))
+  (set-on-new-window (lambda (body)(setf clog-user::*body* body))
+		     :path "/repl")
+  (open-browser :url "http://127.0.0.1:8080/repl")
+  (format t "Use clog-user:*body* to access the clog-repl window."))
  
 ;;;;;;;;;;;;;;;;
 ;; load-world ;;

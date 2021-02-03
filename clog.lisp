@@ -759,6 +759,7 @@ embedded in a native template application.)"
   (load-tutorial    function)
   (run-demo         function)
   (load-demo        function)
+  (clog-repl        function)
 
   "Functions for Compilation and Documentation"
   (load-world       function)
