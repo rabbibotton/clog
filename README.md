@@ -79,6 +79,16 @@ CL-USER> (ql:quickload :clog)
 CL-USER> (clog:run-demo 1)
 ```
 
+You can also open a "clog-repl" window in your browser to play
+from the common-lisp repl:
+
+```
+CL-USER> (in-package clog-user)
+CLOG-USER> (clog-repl)
+CLOG-USER> (setf (background-color *body*) "beige")
+CLOG-USER> (create-div *body* :content "Hello World!")
+```
+
 To open a browser with the CLOG manual:
 
 ```
