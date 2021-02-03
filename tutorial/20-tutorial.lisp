@@ -1,4 +1,3 @@
-
 ;;;; In this tutorial we will see how to wrap last tutorial's JavaScript
 ;;;; component in to something that feels more like a plugin to CLOG.
 
@@ -26,8 +25,8 @@
 (defclass clog-toggler (clog-unordered-list) ()
   (:documentation "Toggler object - a collapsable UI component"))
 
-(defgeneric create-toggler (clog-obj &key content class auto-place)
-  (:documentation "Create a toggler with CONTENT as the top of tree."))
+(defgeneric create-toggler (clog-obj &key class html-id auto-place)
+  (:documentation "Create a toggler."))
 
 (defmethod create-toggler ((obj clog-obj) &key (class nil)
 			                    (html-id nil)
