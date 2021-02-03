@@ -312,7 +312,8 @@ not relevant not just visually and will _also_ remove it from layout similar to
 setting display (None)."))
 
 (defmethod hiddenp ((obj clog-element))
-  (js-true-p (attribute obj "hidden")))
+  (unless (equalp (attribute obj "hidden") "undefined")
+    t))
 
 (defgeneric set-hiddenp (clog-element value)
   (:documentation "Set hiddenp VALUE for CLOG-ELEMENT"))
@@ -2124,11 +2125,10 @@ CLOG-ELEMENT."))
 (defgeneric first-child (clog-element)
   (:documentation "Traverse to first child element. If Child does not have an
 html id than Element_Type will have an ID of undefined and therefore attached
-to no actual HTML elemen."))
+to no actual HTML element."))
 
 (defmethod first-child ((obj clog-element))
-  (attach-as-child
-   obj (jquery-execute obj (format nil "children().first().attr('id');"))))
+  (attach-as-child obj (jquery-query obj "children().first().prop('id');")))
 
 ;;;;;;;;;;;;;;;;;;
 ;; next-sibling ;;
@@ -2140,7 +2140,7 @@ html id than Element_Type will have an ID of undefined and therefore attached
 to no actual HTML elemen."))
 
 (defmethod next-sibling ((obj clog-element))
-  (attach-as-child obj (jquery-execute obj (format nil "next().attr('id');"))))
+  (attach-as-child obj (jquery-query obj "next().prop('id');")))
 
 ;;;;;;;;;;;;;;;;;;;;;;
 ;; previous-sibling ;;
@@ -2152,4 +2152,4 @@ html id than Element_Type will have an ID of undefined and therefore attached
 to no actual HTML elemen."))
 
 (defmethod previous-sibling ((obj clog-element))
-  (attach-as-child obj (jquery-execute obj (format nil "previous().attr('id');"))))
+  (attach-as-child obj (jquery-query obj "previous().prop('id');")))
