@@ -101,3 +101,12 @@ function. If BOOT-FILE is nil path is removed."
 (defun debug-mode (obj)
   "Turn on browser console debugging for OBJ's connection."
   (cc:debug-mode (connection-id obj)))
+
+;;;;;;;;;;;;;;;;;;
+;; open-browser ;;
+;;;;;;;;;;;;;;;;;;
+
+(defun open-browser (&key (url "http://127.0.0.1:8080"))
+  "Open a web browser to URL."
+  (trivial-open-browser:open-browser url))
+

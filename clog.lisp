@@ -52,16 +52,24 @@ embedded in a native template application.)"
   (initialize        function)
   (set-on-new-window function)
   (shutdown          function)
-  (debug-mode        function))
+  (debug-mode        function)
+  (open-browser      function))
 
 (defsection @clog-utilities (:title "CLOG Utilities")
-  "CLOG utilities"
+  "CLOG-Group - Utility Class for CLOG-Obj storage"
+  (clog-group    class)
+  (create-group  function)
+  (add           generic-function)
+  (obj           generic-function)
+  
+  "CLOG JS utilities"
   (js-true-p     function)
   (p-true-js     function)
   (js-on-p       function)
   (p-on-js       function)
-  (open-browser  function)
   (escape-string function)
+  
+  "CLOG Color utilities"
   (rgb           function)
   (rgba          function)
   (hsl           function)

@@ -3,14 +3,44 @@
 ;;;; (c) 2020-2021 David Botton                                            ;;;;
 ;;;; License BSD 3 Clause                                                  ;;;;
 ;;;;                                                                       ;;;;
-;;;; clog-system.lisp                                                      ;;;;
+;;;; clog-utilities.lisp                                                   ;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (cl:in-package :clog)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Implementation - CLOG Utilities
+;; Implementation - clog-group
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defclass clog-group ()
+  ((controls
+   :accessor controls
+   :initform (make-hash-table :test 'equalp))))
+
+(defun create-group ()
+  "Return a new CLOG-GROUP object for storing CLOG-OBJs. They are indexed by
+their HTML-ID."
+  (make-instance 'clog-group))
+
+(defgeneric add (clog-group clog-obj &key name)
+  (:documentation "Add CLOG-OBJ to a CLOG-GROUP indexed by the html-id of
+CLOG-OBJ unless :NAME is set and is used instead."))
+
+(defmethod add ((group clog-group) clog-obj &key (name nil))
+  (let ((id (if name
+		name
+		(html-id clog-obj))))
+    (setf (gethash id (controls group)) clog-obj)))
+
+(defmethod obj (clog-group name)
+  (:documentation "Retrieve from CLOG-GROUP the CLOG-OBJ with name"))
+
+(defmethod obj ((group clog-group) name)
+  (gethash name (controls group)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Implementation - JS Utilities
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;;;;;;;;;;;;;;;
@@ -49,14 +79,6 @@
       "on"
       "off"))
 
-;;;;;;;;;;;;;;;;;;
-;; open-browser ;;
-;;;;;;;;;;;;;;;;;;
-
-(defun open-browser (&key (url "http://127.0.0.1:8080"))
-  "Open a web browser to URL."
-  (trivial-open-browser:open-browser url))
-
 ;;;;;;;;;;;;;;;;;;;
 ;; escape-string ;;
 ;;;;;;;;;;;;;;;;;;;
@@ -70,6 +92,10 @@
     (setf res (ppcre:regex-replace-all "\\x0A" res "\\x0A"))
     (setf res (ppcre:regex-replace-all "\\x0D" res "\\x0D"))
     res))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Implementation - Color Utilities
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;;;;;;;;;
 ;; rgb ;;
