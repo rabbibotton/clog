@@ -23,11 +23,11 @@
 
 (defun on-mouse-down (obj data)
   (let ((app (connection-data-item obj "app-data")))    ; Access our instance of App-Data
-    (bordeaux-threads:with-lock-held ((drag-mutex app)) ; Insurce the first event received
+    (bordeaux-threads:with-lock-held ((drag-mutex app)) ; Ensure the first event received
       (unless (in-drag-p app)                           ; to drag is the only one, ie only
 	(setf (in-drag-p app) t)                        ; the innermost box is dragged.
-      (let* ((mouse-x  (getf data ':screen-x))          ; Use the screen coordinents not
-	     (mouse-y  (getf data ':screen-y))          ; the coordents relative to the obj
+      (let* ((mouse-x  (getf data ':screen-x))          ; Use the screen coordinates not
+	     (mouse-y  (getf data ':screen-y))          ; the coordinates relative to the obj
 	     (obj-top  (parse-integer (top obj) :junk-allowed t))
 	     (obj-left (parse-integer (left obj) :junk-allowed t)))	
 	(setf (drag-x app) (- mouse-x obj-left))
