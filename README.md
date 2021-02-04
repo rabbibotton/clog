@@ -98,6 +98,12 @@ CL-USER> (clog:open-manual)
 Work your way through the tutorials. You will see how quick and easy it is
 to be a CLOGer.
 
+
+![Image of demo1](https://rabbibotton.github.io/images/clog-demo1.png)
+![Image of demo2](https://rabbibotton.github.io/images/clog-demo2.png)
+![Image of demo3](https://rabbibotton.github.io/images/clog-demo3.png)
+
+
 Here is a sample CLOG app:
 
 ```lisp
