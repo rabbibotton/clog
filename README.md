@@ -19,7 +19,7 @@ connectivity to the browser or other websocket client (often a browser
 embedded in a native template application.)
 
 STATUS: CLOG is complete enough for most uses. See below for some
-enhacements bing worked on, CLOG is actually based on GNOGA, a
+enhacements being worked on, CLOG is actually based on GNOGA, a
 framework I wrote for Ada in 2013 and used in commercial production
 code for the last 8 years, i.e. the techiniques CLOG uses are solid
 and proven.
@@ -40,7 +40,7 @@ or Browser control compiled to native code. CLOG uses websockets
 for communications and the browser to render a GUI that maintains
 an active soft realtime connection. For most CLOG applications all
 programming logic, events and decisions are done on the server
-which can be local or remote over the web.
+which can be local, or remote over the web.
 
 CLOG is developed on an M1 MacBook with ECL, it is tested fairly
 regulary with SCBL on Linux, Windows and Intel MacBook. It should
