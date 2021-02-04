@@ -12,7 +12,7 @@
    (in-drag
     :accessor in-drag-p
     :initform nil
-    :documentation "Insure only one box is dragged at a time.")
+    :documentation "Ensure only one box is dragged at a time.")
    (drag-x
     :accessor drag-x
     :documentation "The location of the left side of the box relative to mouse during drag.")
@@ -23,11 +23,11 @@
 
 (defun on-mouse-down (obj data)
   (let ((app (connection-data-item obj "app-data")))    ; Access our instance of App-Data
-    (bordeaux-threads:with-lock-held ((drag-mutex app)) ; Insurce the first event received
+    (bordeaux-threads:with-lock-held ((drag-mutex app)) ; Ensure the first event received
       (unless (in-drag-p app)                           ; to drag is the only one, ie only
 	(setf (in-drag-p app) t)                        ; the innermost box is dragged.
-      (let* ((mouse-x  (getf data ':screen-x))          ; Use the screen coordinents not
-	     (mouse-y  (getf data ':screen-y))          ; the coordents relative to the obj
+      (let* ((mouse-x  (getf data ':screen-x))          ; Use the screen coordinates not
+	     (mouse-y  (getf data ':screen-y))          ; the coordinates relative to the obj
 	     (obj-top  (parse-integer (top obj) :junk-allowed t))
 	     (obj-left (parse-integer (left obj) :junk-allowed t)))	
 	(setf (drag-x app) (- mouse-x obj-left))
@@ -71,7 +71,7 @@
 	 (div2 (create-div div1))
 	 (div3 (create-div div2))
 	 (dir  (create-div div1 :content "<b>Click and drag the boxes</b>")))
-    ;; Abosulute allows fixed positioning relative to parent
+    ;; Absolute allows fixed positioning relative to parent
     (setf (positioning dir) :absolute)
     (setf (bottom dir) 0)
     ;; borders
@@ -87,11 +87,11 @@
     (setf (height div3) 200)
     ;; Fixed positioning allows direct positioning relative
     ;; to the entire window.
-    (setf (positioning div1) :fixed)        ; It's location relative to window
+    (setf (positioning div1) :fixed)        ; Its location relative to window
     (setf (overflow div1) :hidden)          ; Clip the contents
     (set-on-touch-start div1 'on-mouse-down)
     (set-on-mouse-down div1 'on-mouse-down)
-    (setf (positioning div2) :absolute)     ; It's location relative to is parent container
+    (setf (positioning div2) :absolute)     ; Its location relative to its parent container
     (setf (overflow div2) :hidden)
     (set-on-touch-start div2 'on-mouse-down)
     (set-on-mouse-down div2 'on-mouse-down)
