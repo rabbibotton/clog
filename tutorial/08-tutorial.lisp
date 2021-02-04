@@ -71,7 +71,7 @@
 	 (div2 (create-div div1))
 	 (div3 (create-div div2))
 	 (dir  (create-div div1 :content "<b>Click and drag the boxes</b>")))
-    ;; Abosulute allows fixed positioning relative to parent
+    ;; Absolute allows fixed positioning relative to parent
     (setf (positioning dir) :absolute)
     (setf (bottom dir) 0)
     ;; borders
@@ -87,11 +87,11 @@
     (setf (height div3) 200)
     ;; Fixed positioning allows direct positioning relative
     ;; to the entire window.
-    (setf (positioning div1) :fixed)        ; It's location relative to window
+    (setf (positioning div1) :fixed)        ; Its location relative to window
     (setf (overflow div1) :hidden)          ; Clip the contents
     (set-on-touch-start div1 'on-mouse-down)
     (set-on-mouse-down div1 'on-mouse-down)
-    (setf (positioning div2) :absolute)     ; It's location relative to is parent container
+    (setf (positioning div2) :absolute)     ; Its location relative to its parent container
     (setf (overflow div2) :hidden)
     (set-on-touch-start div2 'on-mouse-down)
     (set-on-mouse-down div2 'on-mouse-down)
