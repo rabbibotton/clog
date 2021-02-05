@@ -45,7 +45,7 @@
     ;; 5 the target on-drop event is set
     (set-on-drop target1 (lambda (obj data)
 			   (place-inside-bottom-of target1 object)))
-    ;; Set up other box 1 also as targer for returning drag box
+    ;; Set up other box 1 also as target for returning drag box
     (set-on-drag-over target2 (lambda (obj)()))
     (set-on-drop target2 (lambda (obj data)
 			   (print (getf data :drag-data))
@@ -53,6 +53,6 @@
   (run body)))
 
 (defun start-tutorial ()
-  "Start turtorial."
+  "Start tutorial."
   (initialize #'on-new-window)
   (open-browser))

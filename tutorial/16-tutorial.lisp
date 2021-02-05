@@ -25,7 +25,7 @@
 	 (jumbo (create-div body :class "jumbotron text-center"))
 	 (jname (create-section jumbo :h1 :content "My First Bootstrap Page"))
 	 (tmp   (create-p jumbo :content "Resize this responsive page to see the effect!"))
-	 ;; Container for three colomns pf text
+	 ;; Container for three columns of text
 	 (container (create-div body :class "container"))
 	 (row       (create-div container :class "row"))
 	 ;; Column 1

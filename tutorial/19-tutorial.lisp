@@ -7,14 +7,14 @@
 ;;; In this tutorial we will see how to easily use a JavaScript
 ;;; component. In the static-files directory there is a simple
 ;;; JavaScript component (clog/static-files/tutorial/jslists) to create
-;;; collapsable trees that we will use for this tutorial.
+;;; collapsible trees that we will use for this tutorial.
 
 (defun on-new-window (body)
   ;; First we need to load jslists' JavaScript file and css
   (load-css (html-document body) "/tutorial/jslists/jsLists.css")
   (load-script (html-document body) "/tutorial/jslists/jsLists.js")	    
   ;; Second we need to build an example list. jsLists uses an ordered
-  ;; or unordered list for it's data.
+  ;; or unordered list for its data.
   (let* ((list-top   (create-unordered-list body))
 	 (item       (create-list-item list-top :content "Top of tree"))
 	 (list-b     (create-unordered-list item))
@@ -27,6 +27,6 @@
   (run body))
 
 (defun start-tutorial ()
-  "Start turtorial."
+  "Start tutorial."
   (initialize #'on-new-window)
   (open-browser))
