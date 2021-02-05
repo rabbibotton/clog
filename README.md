@@ -72,7 +72,7 @@ To see where the source files are:
 CL-USER> (clog:clog-install-dir)
 ```
 
-You can the run the demos with (currently 1 or 2):
+You can the run the demos with (currently 1 or 3):
 
 ```
 CL-USER> (ql:quickload :clog)
