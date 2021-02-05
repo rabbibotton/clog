@@ -7,7 +7,7 @@
 (defclass app-data ()
   ((body
     :accessor body
-    :documentation "Store top level access on new window")
+    :documentation "Top level access to browser window")
    (drag-mutex
     :reader drag-mutex
     :initform (bordeaux-threads:make-lock)
@@ -26,31 +26,34 @@
 (defun on-mouse-down (obj data)
   (let ((app (connection-data-item obj "app-data")))
     (bordeaux-threads:with-lock-held ((drag-mutex app))
-      (setf (z-index obj) 1)
       (unless (in-drag-p app)
 	(setf (in-drag-p app) t)
-      (let* ((mouse-x  (getf data ':screen-x))
-	     (mouse-y  (getf data ':screen-y))
-	     (obj-top  (parse-integer (top obj) :junk-allowed t))
-	     (obj-left (parse-integer (left obj) :junk-allowed t)))	
-	(setf (drag-x app) (- mouse-x obj-left))
-	(setf (drag-y app) (- mouse-y obj-top))
-	(if (eq (getf data ':event-type) :touch)
-	    (progn
-	      (set-on-touch-move obj 'on-mouse-move)
-	      (set-on-touch-end obj 'stop-obj-grab)
-	      (set-on-touch-cancel obj 'on-mouse-leave))
-	    (progn
-	      (set-on-mouse-move obj 'on-mouse-move)
-	      (set-on-mouse-up obj 'stop-obj-grab)
-	      (set-on-mouse-leave obj 'on-mouse-leave))))))))
+	(let* ((id-drag  (attribute obj "data-drag-obj"))
+	       (drag-obj (attach-as-child obj id-drag))
+	       (mouse-x  (getf data ':screen-x))
+	       (mouse-y  (getf data ':screen-y))
+	       (obj-top  (parse-integer (top drag-obj) :junk-allowed t))
+	       (obj-left (parse-integer (left drag-obj) :junk-allowed t)))
+	  (setf (z-index drag-obj) 1)
+	  (setf (drag-x app) (- mouse-x obj-left))
+	  (setf (drag-y app) (- mouse-y obj-top))
+	  (if (eq (getf data ':event-type) :touch)
+	      (progn
+		(set-on-touch-move obj 'on-mouse-move)
+		(set-on-touch-end obj 'stop-obj-grab)
+		(set-on-touch-cancel obj 'on-mouse-leave))
+	      (progn
+		(set-on-mouse-move obj 'on-mouse-move)
+		(set-on-mouse-up obj 'stop-obj-grab)
+		(set-on-mouse-leave obj 'on-mouse-leave))))))))
 
 (defun on-mouse-move (obj data)
   (let* ((app (connection-data-item obj "app-data"))
+	 (drag-obj (attach-as-child obj (attribute obj "data-drag-obj")))	 
 	 (x   (getf data ':screen-x))
 	 (y   (getf data ':screen-y)))    
-    (setf (top obj) (format nil "~Apx" (- y (drag-y app))))
-    (setf (left obj) (format nil "~Apx" (- x (drag-x app))))))
+    (setf (top drag-obj) (format nil "~Apx" (- y (drag-y app))))
+    (setf (left drag-obj) (format nil "~Apx" (- x (drag-x app))))))
 
 (defun on-mouse-leave (obj)
   (let ((app (connection-data-item obj "app-data")))
@@ -84,27 +87,34 @@
   (let* ((app (connection-data-item obj "app-data"))
 	 (win (create-child (body app)
 	        (format nil
-			  "<div style='position:absolute;top:~Apx;left:~Apx;width:~Apx;height:~Apx;'
+			  "<div style='position:fixed;top:~Apx;left:~Apx;width:~Apx;height:~Apx;'
 	                               class='w3-card-4 w3-white w3-border'>
-                             <div class='w3-container w3-black' style='cursor: move;'>
+                             <div id='~A-title-bar' class='w3-container w3-black'
+                                   style='user-select: none;cursor: move;'
+                                   data-drag-obj='~A'>
                                <span id='~A-title'>~A</span>
-                               <span id='~A-close' class='w3-right' style='cursor: pointer;'>X</span>
+                               <span id='~A-close' class='w3-right'
+                                   style='cursor: pointer;user-select: none;'>X</span>
                                ~A
                              </div>
                              <div id='~A-body' style='right:0;height:100%;margin: 0 auto;'>~A</div>
                            </div>"
-			  top left width height html-id title html-id top-bar html-id content)
-		:html-id html-id)))
-    (set-on-click (attach-as-child obj (format nil "~A-close" html-id))
-		  (lambda (obj)
-		    (setf (hiddenp win) t)))
+			  top left width height html-id html-id html-id
+			  title html-id top-bar html-id content html-id)
+		:html-id html-id))
+	 (title-bar (attach-as-child win (format nil "~A-title-bar" html-id)))
+	 (close-x   (attach-as-child win (format nil "~A-close" html-id))))
+    (set-on-touch-start title-bar 'on-mouse-down)
+    (set-on-mouse-down  title-bar 'on-mouse-down)
+    (set-on-click       close-x   (lambda (obj)
+				    (setf (hiddenp win) t)))
     win))
 
 (defun do-ide-file-new (obj)
  (let* ((app (connection-data-item obj "app-data"))
 	(win (create-window obj "New window"
 				 :left (random 600)
-				 :top (+ 40 (random 400)))))
+				 :top  (+ 40 (random 400)))))
 	(create-child obj
 		      (format nil
 		      "<script>
@@ -112,9 +122,7 @@
                          editor.setTheme('ace/theme/xcode');
                          editor.session.setMode('ace/mode/lisp');
                       </script>"
-		      (html-id win)))
-   (set-on-touch-start win 'on-mouse-down)
-   (set-on-mouse-down win 'on-mouse-down)))
+		      (html-id win)))))
 
 (defun do-ide-help-about (obj)
   (let* ((app   (connection-data-item obj "app-data"))
@@ -124,11 +132,9 @@
 	                                 <center>The Common Lisp Omnificent GUI</center>"
 			       :content "<p><center>Demo 3</center>
                                          <center>(c) 2021 - David Botton</center></p>"
-			       :left (- (/ (width (body app)) 2) 100)
-			       :width 200
-			       :height 200)))
-    (set-on-touch-start about 'on-mouse-down)
-    (set-on-mouse-down about 'on-mouse-down)))
+			       :left    (- (/ (width (body app)) 2) 100)
+			       :width   200
+			       :height  200)))))
 		    
 (defun on-new-window (body)
   (let ((app (make-instance 'app-data)))
