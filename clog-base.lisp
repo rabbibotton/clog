@@ -276,7 +276,7 @@ result or if time out DEFAULT-ANSWER (Private)"))
   (let ((hook (format nil "~A:~A" (html-id obj) event)))
     (cond (handler
 	   (bind-event-script
-	    obj event (format nil "~Aws.send('E:~A-'~A)~A"
+	    obj event (format nil "~Aws.send('E:~A '~A)~A"
 			      eval-script
 			      hook
 			      call-back-script

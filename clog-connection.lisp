@@ -166,7 +166,7 @@ the default answer. (Private)"
 	   (when *verbose-output*
 	     (format t "~A Ping~%" id)))
 	  ((equal (first ml) "E")
-	   (let ((em (ppcre:split "-" (second ml) :limit 2)))
+	   (let ((em (ppcre:split " " (second ml) :limit 2)))
 	     (when *verbose-output*
 	       (format t "Channel ~A Hook ~A Data ~A~%"
 		       id (first em) (second em)))
