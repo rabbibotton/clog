@@ -4,7 +4,7 @@
 
 (in-package :clog-user)
 
-;;; In this tutorial we will use a CSS only alternative to bootsrap -
+;;; In this tutorial we will use a CSS only alternative to bootstrap -
 ;;;   https://www.w3schools.com/w3css/default.asp
 
 (defun on-index (body)
@@ -80,7 +80,7 @@
   (run body))
 
 (defun start-tutorial ()
-  "Start turtorial."
+  "Start tutorial."
   (initialize #'on-index)
   (set-on-new-window #'on-page2 :path "/page2")
   (set-on-new-window #'on-page3 :path "/page3")
