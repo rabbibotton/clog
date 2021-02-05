@@ -5,6 +5,7 @@
 (in-package :clog-user)
 
 (defun on-new-window (body)
+  (setf (title (html-document body)) "Tutorial 9")
   (let* (last-tab
 	 ;; Note: Since the there is no need to use the tmp objects
 	 ;;       we reuse the same symbol name (tmp) even though the

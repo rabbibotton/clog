@@ -5,6 +5,7 @@
 (in-package :clog-user)
 
 (defun on-new-window (body)
+  (setf (title (html-document body)) "Tutorial 14")
   (set-on-click (create-button body :content "Set Local Key")
 		(lambda (obj)
 		  (declare (ignore obj))
@@ -28,10 +29,12 @@
   (create-div body :content (format nil
        "<H1>Local Storage vs Session Storage</H1>
 <p width=500>
-The value of local storage persists in browser cache even after browser closed.
-If you reset this page the session storage key will remain the same, but opening
-in another window or tab will be a new session, but if it came from a click from
-this window the session keys are copied first to the new window.</p>
+The value of local storage persists in the browser cache even after the browser 
+is closed. If you reset this page the session storage key will remain the same,
+but openning this page in another window or tab will be a new session. If the
+new window came from a click from this window, the  session keys (on some
+browsers are copied first to the new window, if you wish to persist data accross
+windows use local storage instead.</p>
 <br>
 <a href='.' target='_blank'>Another Window = Different Session</a><br>
 <br>
