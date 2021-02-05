@@ -74,7 +74,7 @@ CLOG-OBJ. If HTML-ID is nil one will be generated."))
 (defmethod create-child ((obj clog-obj) html &key (html-id nil)
 					       (auto-place t)
 					       (clog-type 'clog-element))
-  (let ((child (create-with-html (connection-id obj) html
+  (let ((child (create-with-html (connection-id obj) (escape-string html)
 				 :clog-type clog-type
 				 :html-id   html-id)))
     (if auto-place
