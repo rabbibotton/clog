@@ -23,7 +23,7 @@
 ;;; Next we will use the clog-unordered-list as the base for our new
 ;;; class clog-toggler
 (defclass clog-toggler (clog-unordered-list) ()
-  (:documentation "Toggler object - a collapsable UI component"))
+  (:documentation "Toggler object - a collapsible UI component"))
 
 (defgeneric create-toggler (clog-obj &key class html-id auto-place)
   (:documentation "Create a toggler."))
@@ -34,8 +34,8 @@
   (let ((new-obj (create-unordered-list obj :class class
 					    :html-id html-id
 					    :auto-place auto-place)))
-    ;; Using change-class we can reuse the parent clog-unordered-lists's
-    ;; create method and it's initialization. Otherwise we can use
+    ;; Using change-class we can re-use the parent clog-unordered-lists's
+    ;; create method and its initialization. Otherwise we can use
     ;; create-child and the needed html.
     (change-class new-obj 'clog-toggler)
     new-obj))
@@ -69,6 +69,6 @@
   (run body))
 
 (defun start-tutorial ()
-  "Start turtorial."
+  "Start tutorial."
   (initialize #'on-new-window)
   (open-browser))
