@@ -11,11 +11,11 @@
 (in-package :clog-drop-list)
 
 ;;; Next we will use the clog-unordered-list as the base for our new
-;;; class clog-drop list and allow access to the "drop root" for
+;;; class clog-drop-list and allow access to the "drop-root" for
 ;;; list items to be children of.
 (defclass clog-drop-list (clog-unordered-list)
   ((drop-root :accessor drop-root))
-  (:documentation "CLOG Drop List object - a collapsable list component"))
+  (:documentation "CLOG Drop List object - a collapsible list component"))
 
 (defgeneric drop-root (clog-drop-list)
   (:documentation "Accessor for the drop list root, create clog-list-items
@@ -56,6 +56,6 @@ on the drop-root."))
   (run body))
 
 (defun start-tutorial ()
-  "Start turtorial."
+  "Start tutorial."
   (initialize #'on-new-window)
   (open-browser))
