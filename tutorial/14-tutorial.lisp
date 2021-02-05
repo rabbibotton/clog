@@ -29,9 +29,9 @@
        "<H1>Local Storage vs Session Storage</H1>
 <p width=500>
 The value of local storage persists in browser cache even after browser closed.
-If you reset this page the session storage key will remain the same, but openning
-in another window or tab will be a new session but if came from a click from this
-window the session keys are copied first to the new window.</p>
+If you reset this page the session and storage keys will remain the same, but
+opening in another window or tab will be a new session, but if it came from a
+click from this window the storage keys are copied first to the new window.</p>
 <br>
 <a href='.' target='_blank'>Another Window = Different Session</a><br>
 <br>
