@@ -223,6 +223,31 @@ result or if time out DEFAULT-ANSWER (Private)"))
      :shift-key      (js-true-p (nth 7 f))
      :meta-key       (js-true-p (nth 8 f)))))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;
+;; parse-pointer-event ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defparameter pointer-event-script
+  "+ (e.clientX - e.target.getBoundingClientRect().left) + ':' + 
+     (e.clientY - e.target.getBoundingClientRect().top) + ':' + 
+     e.screenX + ':' + e.screenY + ':' + e.which + ':' + e.altKey + ':' +
+     e.ctrlKey + ':' + e.shiftKey + ':' + e.metaKey"
+  "JavaScript to collect pointer event data from browser.")
+
+(defun parse-pointer-event (data)
+  (let ((f (ppcre:split ":" data)))
+    (list
+     :event-type   :pointer
+     :x            (parse-integer (nth 0 f) :junk-allowed t)
+     :y            (parse-integer (nth 1 f) :junk-allowed t)
+     :screen-x     (parse-integer (nth 2 f) :junk-allowed t)
+     :screen-y     (parse-integer (nth 3 f) :junk-allowed t)
+     :which-button (parse-integer (nth 4 f) :junk-allowed t)
+     :alt-key      (js-true-p (nth 5 f))
+     :ctrl-key     (js-true-p (nth 6 f))
+     :shift-key    (js-true-p (nth 7 f))
+     :meta-key     (js-true-p (nth 8 f)))))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; parse-keyboard-event ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -256,7 +281,7 @@ result or if time out DEFAULT-ANSWER (Private)"))
 (defun parse-drop-event (data)
   (let ((f (ppcre:split ":" data)))
     (list
-     :event-type   :mouse
+     :event-type   :drop
      :x            (parse-integer (nth 0 f) :junk-allowed t)
      :y            (parse-integer (nth 1 f) :junk-allowed t)
      :drag-data    (quri:url-decode (or (nth 2 f) "")))))
@@ -272,15 +297,17 @@ result or if time out DEFAULT-ANSWER (Private)"))
 (defmethod set-event ((obj clog-obj) event handler
 		      &key (call-back-script "")
 			(eval-script "")
+			(post-eval "")
 			(cancel-event nil)
 			(one-time nil))
   (let ((hook (format nil "~A:~A" (html-id obj) event)))
     (cond (handler
 	   (bind-event-script
-	    obj event (format nil "~Aws.send('E:~A '~A)~A~A"
+	    obj event (format nil "~Aws.send('E:~A '~A)~A~A~A"
 			      eval-script
 			      hook
 			      call-back-script
+			      post-eval
 			      (if one-time
 				  (format nil "; ~A.off('~A')"
 					  (jquery obj)
@@ -898,6 +925,119 @@ ON-MOUSE-MOVE-HANDLER is nil unbind the event."))
 	       (lambda (data)
 		 (funcall handler obj (parse-mouse-event data))))
 	     :call-back-script mouse-event-script))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; set-on-pointer-enter ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric set-on-pointer-enter (clog-obj on-pointer-enter-handler)
+  (:documentation "Set the ON-POINTER-ENTER-HANDLER for CLOG-OBJ. If ON-POINTER-ENTER-HANDLER
+is nil unbind the event."))
+
+(defmethod set-on-pointer-enter ((obj clog-obj) handler)
+  (set-event obj "pointerenter"
+	     (when handler
+	       (lambda (data)
+		 (declare (ignore data))
+		 (funcall handler obj)))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; set-on-pointer-leave ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric set-on-pointer-leave (clog-obj on-pointer-leave-handler)
+  (:documentation "Set the ON-POINTER-LEAVE-HANDLER for CLOG-OBJ. If ON-POINTER-LEAVE-HANDLER
+is nil unbind the event."))
+
+(defmethod set-on-pointer-leave ((obj clog-obj) handler)
+  (set-event obj "pointerleave"
+	     (when handler
+	       (lambda (data)
+		 (declare (ignore data))
+		 (funcall handler obj)))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;
+;; set-on-pointer-over ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric set-on-pointer-over (clog-obj on-pointer-over-handler)
+  (:documentation "Set the ON-POINTER-OVER-HANDLER for CLOG-OBJ. If ON-POINTER-OVER-HANDLER
+is nil unbind the event."))
+
+(defmethod set-on-pointer-over ((obj clog-obj) handler)
+  (set-event obj "pointerover"
+	     (when handler
+	       (lambda (data)
+		 (declare (ignore data))
+		 (funcall handler obj)))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;
+;; set-on-pointer-out ;;
+;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric set-on-pointer-out (clog-obj on-pointer-out-handler)
+  (:documentation "Set the ON-POINTER-OUT-HANDLER for CLOG-OBJ. If ON-POINTER-OUT-HANDLER
+is nil unbind the event."))
+
+(defmethod set-on-pointer-out ((obj clog-obj) handler)
+  (set-event obj "pointerout"
+	     (when handler
+	       (lambda (data)
+		 (declare (ignore data))
+		 (funcall handler obj)))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;
+;; set-on-pointer-down ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric set-on-pointer-down (clog-obj on-pointer-down-handler
+				 &key capture-pointer)
+  (:documentation "Set the ON-POINTER-DOWN-HANDLER for CLOG-OBJ. If
+ON-POINTER-DOWN-HANDLER is nil unbind the event."))
+
+(defmethod set-on-pointer-down ((obj clog-obj) handler
+				&key (capture-pointer nil))
+  (set-event obj "pointerdown"
+	     (when handler
+	       (lambda (data)
+		 (funcall handler obj (parse-pointer-event data))))
+	     :post-eval (if capture-pointer
+			    (format nil "; ~A.setPointerCapture(e.pointerId)"
+				    (script-id obj))
+			    "")
+	     :call-back-script pointer-event-script))
+
+;;;;;;;;;;;;;;;;;;;;;;;
+;; set-on-pointer-up ;;
+;;;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric set-on-pointer-up (clog-obj on-pointer-up-handler)
+  (:documentation "Set the ON-POINTER-UP-HANDLER for CLOG-OBJ. If
+ON-POINTER-UP-HANDLER is nil unbind the event."))
+
+(defmethod set-on-pointer-up ((obj clog-obj) handler)
+  (set-event obj "pointerup"
+	     (when handler
+	       (lambda (data)
+		 (funcall handler obj (parse-pointer-event data))))
+	     :post-eval (format nil "; ~A.releasePointerCapture(e.pointerId)"
+				(script-id obj))
+	     :call-back-script pointer-event-script))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;
+;; set-on-pointer-move ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric set-on-pointer-move (clog-obj on-pointer-move-handler)
+  (:documentation "Set the ON-POINTER-MOVE-HANDLER for CLOG-OBJ. If
+ON-POINTER-MOVE-HANDLER is nil unbind the event."))
+
+(defmethod set-on-pointer-move ((obj clog-obj) handler)
+  (set-event obj "pointermove"
+	     (when handler
+	       (lambda (data)
+		 (funcall handler obj (parse-pointer-event data))))
+	     :call-back-script pointer-event-script))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;
 ;; set-on-touch-start ;;
