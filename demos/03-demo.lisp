@@ -194,6 +194,25 @@
 			    (html-id (current-win app))
 			    (escape-string (copy-buf app))))))
 
+(defun do-ide-lisp-eval-buf (obj)
+  (let* ((app    (connection-data-item obj "app-data"))
+	 (form   (copy-buf app))
+	 (result (eval (read-from-string form))))
+    (do-ide-file-new obj)
+    (js-execute obj (format nil "editor_~A.setValue('~A')"
+			    (html-id (current-win app))
+			    (escape-string result)))))
+
+(defun do-ide-lisp-eval-file (obj)
+  (let* ((app    (connection-data-item obj "app-data"))
+	 (form   (js-query obj (format nil "editor_~A.getValue()"
+				       (html-id (current-win app)))))
+	 (result (eval (read-from-string form))))
+    (do-ide-file-new obj)
+    (js-execute obj (format nil "editor_~A.setValue('~A')"
+			    (html-id (current-win app))
+			    (escape-string result)))))
+    
 (defun on-new-window (body)
   (let ((app (make-instance 'app-data)))
     (setf (connection-data-item body "app-data") app)
@@ -206,6 +225,8 @@
     (set-on-click (attach-as-child body "ide-edit-copy") #'do-ide-edit-copy)
     (set-on-click (attach-as-child body "ide-edit-cut") #'do-ide-edit-cut)
     (set-on-click (attach-as-child body "ide-edit-paste") #'do-ide-edit-paste)    
+    (set-on-click (attach-as-child body "ide-lisp-eval-buf") #'do-ide-lisp-eval-buf)
+    (set-on-click (attach-as-child body "ide-lisp-eval-file") #'do-ide-lisp-eval-file)
     (set-on-click (attach-as-child body "ide-help-about") #'do-ide-help-about)
     (run body)))
 
