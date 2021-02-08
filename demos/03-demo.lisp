@@ -194,25 +194,35 @@
 			    (html-id (current-win app))
 			    (escape-string (copy-buf app))))))
 
+(defun capture-eval (form)
+  (let ((result (make-array '(0) :element-type 'base-char
+				 :fill-pointer 0 :adjustable t))
+	(eval-result))
+    (with-output-to-string (stream result)
+      (let ((*standard-output* stream)
+	    (*error-output* stream))
+	(setf eval-result (eval (read-from-string form)))))
+    (format nil "~A~%=>~A~%" result eval-result)))
+    
 (defun do-ide-lisp-eval-buf (obj)
-  (let* ((app    (connection-data-item obj "app-data"))
-	 (form   (copy-buf app))
-	 (result (eval (read-from-string form))))
+  (let* ((app         (connection-data-item obj "app-data"))
+	 (form-string (copy-buf app))
+	 (result      (capture-eval form-string)))
     (do-ide-file-new obj)
     (js-execute obj (format nil "editor_~A.setValue('~A')"
 			    (html-id (current-win app))
 			    (escape-string result)))))
 
 (defun do-ide-lisp-eval-file (obj)
-  (let* ((app    (connection-data-item obj "app-data"))
-	 (form   (js-query obj (format nil "editor_~A.getValue()"
-				       (html-id (current-win app)))))
-	 (result (eval (read-from-string form))))
+  (let* ((app         (connection-data-item obj "app-data"))
+	 (form-string (js-query obj (format nil "editor_~A.getValue()"
+					    (html-id (current-win app)))))
+	 (result      (capture-eval form-string)))
     (do-ide-file-new obj)
     (js-execute obj (format nil "editor_~A.setValue('~A')"
 			    (html-id (current-win app))
 			    (escape-string result)))))
-    
+
 (defun on-new-window (body)
   (let ((app (make-instance 'app-data)))
     (setf (connection-data-item body "app-data") app)
