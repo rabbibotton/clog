@@ -10,6 +10,14 @@
   ((body
     :accessor body
     :documentation "Top level access to browser window")
+   (current-win
+    :accessor current-win
+    :initform nil
+    :documentation "The current window at front.")
+   (copy-buf
+    :accessor copy-buf
+    :initform ""
+    :documentation "Copy buffer")
    (drag-mutex
     :reader drag-mutex
     :initform (bordeaux-threads:make-lock)
@@ -38,6 +46,7 @@
 	       (obj-left))
 	  (if (equalp (in-drag app) "m")
 	      (progn
+		(setf (current-win app) drag-obj)
 		(setf obj-top  (parse-integer (top drag-obj) :junk-allowed t))
 		(setf obj-left (parse-integer (left drag-obj) :junk-allowed t)))
 	      (progn
@@ -121,20 +130,23 @@
     win))
 
 (defun do-ide-file-new (obj)
- (let* ((app (connection-data-item obj "app-data"))
-	(win (create-window obj "New window"
-				 :left (random 600)
-				 :top  (+ 40 (random 400)))))
-	(create-child obj
-		      (format nil
-		      "<script>
+  (let* ((app (connection-data-item obj "app-data"))
+	 (win (create-window obj "New window"
+			     :left (random 600)
+			     :top  (+ 40 (random 400)))))
+    (create-child obj
+		  (format nil
+			  "<script>
                          var editor_~A = ace.edit('~A-body');
                          editor_~A.setTheme('ace/theme/xcode');
                          editor_~A.session.setMode('ace/mode/lisp');
+                         editor_~A.session.setTabSize(3);
                       </script>"
-		      (html-id win) (html-id win)
-		      (html-id win)
-		      (html-id win)))))
+			  (html-id win) (html-id win)
+			  (html-id win)
+			  (html-id win)
+			  (html-id win)))
+    (setf (current-win app) win)))
 
 (defun do-ide-help-about (obj)
   (let* ((app   (connection-data-item obj "app-data"))
@@ -147,15 +159,54 @@
                                          <center>(c) 2021 - David Botton</center></p></div>"
 			       :left    (- (/ (width (body app)) 2) 100)
 			       :width   200
-			       :height  200)))))
-		    
+			       :height  200)))
+    (setf (current-win app) about)))
+
+(defun do-ide-file-open (obj)
+  (do-ide-file-new obj)
+  (let* ((app (connection-data-item obj "app-data")))
+    (js-execute obj (format nil "editor_~A.setValue('~A')"
+			    (html-id (current-win app))
+			    (escape-string "(print \"hello!\")")))))
+  
+(defun do-ide-file-save (obj)
+  (let* ((app (connection-data-item obj "app-data")))
+    (print (js-query obj (format nil "editor_~A.getValue()"
+				 (html-id (current-win app)))))))
+
+(defun do-ide-file-save-as (obj)
+  (do-ide-file-save obj))
+
+(defun do-ide-edit-copy (obj)
+  (let* ((app (connection-data-item obj "app-data")))
+    (setf (copy-buf app) (js-query obj (format nil "editor_~A.getCopyText();"
+					       (html-id (current-win app)))))))
+
+(defun do-ide-edit-cut (obj)
+  (do-ide-edit-copy obj)
+  (let* ((app (connection-data-item obj "app-data")))
+    (js-execute obj (format nil "editor_~A.execCommand('cut')"
+			    (html-id (current-win app))))))
+
+(defun do-ide-edit-paste (obj)
+  (let* ((app (connection-data-item obj "app-data")))
+    (js-execute obj (format nil "editor_~A.execCommand('paste', '~A')"
+			    (html-id (current-win app))
+			    (escape-string (copy-buf app))))))
+
 (defun on-new-window (body)
   (let ((app (make-instance 'app-data)))
     (setf (connection-data-item body "app-data") app)
     (setf (body app) body)
-    (set-on-click (attach-as-child body "ide-file-new") #'do-ide-file-new)
-    (set-on-click (attach-as-child body "ide-help-about") #'do-ide-help-about)
     (set-on-click (attach-as-child body "ide-logo") #'do-ide-help-about)
+    (set-on-click (attach-as-child body "ide-file-new") #'do-ide-file-new)
+    (set-on-click (attach-as-child body "ide-file-open") #'do-ide-file-open)
+    (set-on-click (attach-as-child body "ide-file-save") #'do-ide-file-save)
+    (set-on-click (attach-as-child body "ide-file-save-as") #'do-ide-file-save-as)
+    (set-on-click (attach-as-child body "ide-edit-copy") #'do-ide-edit-copy)
+    (set-on-click (attach-as-child body "ide-edit-cut") #'do-ide-edit-cut)
+    (set-on-click (attach-as-child body "ide-edit-paste") #'do-ide-edit-paste)    
+    (set-on-click (attach-as-child body "ide-help-about") #'do-ide-help-about)
     (run body)))
 
 (defun start-demo ()
