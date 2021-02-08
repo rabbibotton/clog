@@ -14,23 +14,24 @@
    </HEAD>
    
    <BODY class="w3-teal">
-     <div class="w3-bar w3-black w3-card-4">
+     <div id='ide-menu' class="w3-bar w3-black w3-card-4">
        <button id='ide-logo' class="w3-button w3-bar-item">
 	 <img height=22 src="/demo/clogwicon.png"></button>
        <div class="w3-dropdown-hover">
 	 <button class="w3-button">File</button>
 	 <div class="w3-dropdown-content w3-bar-block w3-card-4">
-	   <span id='ide-file-new' class="w3-bar-item w3-button">New</span>
-	   <span class="w3-bar-item w3-button">Open...</span>
-	   <span class="w3-bar-item w3-button">Save</span>
-	   <span class="w3-bar-item w3-button">Save as...</span>
+	   <span id='ide-file-new'     class="w3-bar-item w3-button">New</span>
+	   <span id='ide-file-open'    class="w3-bar-item w3-button">Open...</span>
+	   <span id='ide-file-save'    class="w3-bar-item w3-button">Save</span>
+	   <span id='ide-file-save-as' class="w3-bar-item w3-button">Save as...</span>
 	 </div>
        </div>
        <div class="w3-dropdown-hover">
 	 <button class="w3-button">Edit</button>
 	 <div class="w3-dropdown-content w3-bar-block w3-card-4">
-	   <span class="w3-bar-item w3-button">Copy</span>
-	   <span class="w3-bar-item w3-button">Paste</span>
+	   <span id="ide-edit-copy"  class="w3-bar-item w3-button">Copy</span>
+	   <span id="ide-edit-cut"   class="w3-bar-item w3-button">Cut</span>
+	   <span id="ide-edit-paste" class="w3-bar-item w3-button">Paste</span>
 	 </div>
        </div>
        <div class="w3-dropdown-hover">
@@ -39,7 +40,10 @@
 	   <span id="ide-help-about" class="w3-bar-item w3-button">About CLOG Demo 3</span>
 	 </div>
        </div>
-       <span class="w3-bar-item w3-right" onClick="documentElement.requestFullscreen()">⤢</span>
+       <span class="w3-bar-item w3-right" style='user-select:none;'
+	     onClick="if (document.fullscreenElement==null) {
+                         documentElement.requestFullscreen()
+                      } else {document.exitFullscreen();}">⤢</span>
      </div>
      
    </BODY>

@@ -34,7 +34,6 @@
 	       (drag-obj  (attach-as-child obj id-drag))
 	       (pointer-x (getf data ':screen-x))
 	       (pointer-y (getf data ':screen-y))
-	       ;; (z         (parse-integer (z-index drag-obj) :junk-allowed t))
 	       (obj-top)
 	       (obj-left))
 	  (if (equalp (in-drag app) "m")
@@ -53,16 +52,19 @@
 (defun on-ide-drag-move (obj data)
   (let* ((app (connection-data-item obj "app-data"))
 	 (drag-obj (attach-as-child obj (attribute obj "data-drag-obj")))	 
-	 (x   (getf data ':screen-x))
-	 (y   (getf data ':screen-y)))
-    (if (equalp (in-drag app) "m")
-	(progn
-	  (setf (top drag-obj) (format nil "~Apx" (- y (drag-y app))))
-	  (setf (left drag-obj) (format nil "~Apx" (- x (drag-x app)))))
-	(progn
-	  (js-execute drag-obj (format nil "editor_~A.resize()" (html-id drag-obj)))
-	  (setf (height drag-obj) (format nil "~Apx" (- y (drag-y app))))
-	  (setf (width drag-obj) (format nil "~Apx" (- x (drag-x app))))))))
+	 (x        (getf data ':screen-x))
+	 (y        (getf data ':screen-y))
+	 (adj-y    (- y (drag-y app)))
+	 (adj-x    (- x (drag-x app))))
+    (when (and (> adj-x 0) (> adj-y 30))
+      (if (equalp (in-drag app) "m")
+	  (progn
+	    (setf (top drag-obj) (format nil "~Apx" adj-y))
+	    (setf (left drag-obj) (format nil "~Apx" adj-x)))
+	  (progn
+	    (js-execute drag-obj (format nil "editor_~A.resize()" (html-id drag-obj)))
+	    (setf (height drag-obj) (format nil "~Apx" adj-y))
+	    (setf (width drag-obj) (format nil "~Apx" adj-x)))))))
 
 (defun on-ide-drag-stop (obj data)
   (let ((app (connection-data-item obj "app-data")))
@@ -77,7 +79,6 @@
 
 (defmethod create-window ((obj clog-obj) title &key
 						 (html-id nil)
-						 (top-bar "")
 						 (content "")
 						 (left 60)
 						 (top 60)
@@ -98,16 +99,15 @@
                                      style='flex-grow:9;user-select:none;cursor:move;'>~A</span>
                                <span id='~A-close'
                                      style='cursor:pointer;user-select:none;'>X</span>
-                               ~A
                              </div>
-                             <div id='~A-body' class='w3-border-blue' style='flex-grow:9;'>~A</div>
+                             <div id='~A-body' style='flex-grow:9;'>~A</div>
                              <div id='~A-size' style='user-select:none;height:1px;
                                                       cursor:se-resize;opacity:0'
                                   class='w3-right' data-drag-obj='~A' data-drag-type='s'>+</div>
                            </div>"
 			  top left width height (incf *last-z*)  ; outer div
 			  html-id html-id html-id                ; title bar
-			  title html-id top-bar                  ; title
+			  title html-id                          ; title
 			  html-id content                        ; body
 			  html-id html-id)                       ; size
 		:html-id html-id))
@@ -139,11 +139,12 @@
 (defun do-ide-help-about (obj)
   (let* ((app   (connection-data-item obj "app-data"))
 	 (about (create-window (body app) "About"
-			       :top-bar "<center><img src='/demo/clogwicon.png'></center>
+			       :content "<div class='w3-black'>
+                                         <center><img src='/demo/clogwicon.png'></center>
 	                                 <center>CLOG</center>
-	                                 <center>The Common Lisp Omnificent GUI</center>"
-			       :content "<p><center>Demo 3</center>
-                                         <center>(c) 2021 - David Botton</center></p>"
+	                                 <center>The Common Lisp Omnificent GUI</center></div>
+			                 <div><p><center>Demo 3</center>
+                                         <center>(c) 2021 - David Botton</center></p></div>"
 			       :left    (- (/ (width (body app)) 2) 100)
 			       :width   200
 			       :height  200)))))

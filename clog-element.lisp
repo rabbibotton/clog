@@ -2095,6 +2095,16 @@ A list of standard cursor types can be found at:
 (defmethod remove-from-dom ((obj clog-element))
   (jquery-execute obj "remove()"))
 
+;;;;;;;;;;;;;;;;;;;;;;
+;; remove-from-clog ;;
+;;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric remove-from-clog (clog-element)
+  (:documentation "Remove CLOG-Element from the clog cache on browser."))
+
+(defmethod remove-from-clog ((obj clog-element))
+  (js-execute obj (format nil "~A=null;" (script-id obj))))
+
 ;;;;;;;;;;;
 ;; click ;;
 ;;;;;;;;;;;

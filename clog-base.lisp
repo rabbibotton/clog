@@ -885,15 +885,16 @@ is nil unbind the event."))
 ;; set-on-mouse-down ;;
 ;;;;;;;;;;;;;;;;;;;;;;;
 
-(defgeneric set-on-mouse-down (clog-obj on-mouse-down-handler)
+(defgeneric set-on-mouse-down (clog-obj on-mouse-down-handler &key one-time)
   (:documentation "Set the ON-MOUSE-DOWN-HANDLER for CLOG-OBJ. If
 ON-MOUSE-DOWN-HANDLER is nil unbind the event."))
 
-(defmethod set-on-mouse-down ((obj clog-obj) handler)
+(defmethod set-on-mouse-down ((obj clog-obj) handler &key (one-time nil))
   (set-event obj "mousedown"
 	     (when handler
 	       (lambda (data)
 		 (funcall handler obj (parse-mouse-event data))))
+	     :one-time one-time
 	     :call-back-script mouse-event-script))
 
 ;;;;;;;;;;;;;;;;;;;;;
@@ -991,12 +992,12 @@ is nil unbind the event."))
 ;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defgeneric set-on-pointer-down (clog-obj on-pointer-down-handler
-				 &key capture-pointer)
+				 &key capture-pointer one-time)
   (:documentation "Set the ON-POINTER-DOWN-HANDLER for CLOG-OBJ. If
 ON-POINTER-DOWN-HANDLER is nil unbind the event."))
 
 (defmethod set-on-pointer-down ((obj clog-obj) handler
-				&key (capture-pointer nil))
+				&key (capture-pointer nil) (one-time nil))
   (set-event obj "pointerdown"
 	     (when handler
 	       (lambda (data)
@@ -1005,6 +1006,7 @@ ON-POINTER-DOWN-HANDLER is nil unbind the event."))
 			    (format nil "; ~A.setPointerCapture(e.pointerId)"
 				    (script-id obj))
 			    "")
+	     :one-time one-time
 	     :call-back-script pointer-event-script))
 
 ;;;;;;;;;;;;;;;;;;;;;;;
