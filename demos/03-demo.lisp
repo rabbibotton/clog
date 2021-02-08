@@ -13,9 +13,9 @@
     :initform (bordeaux-threads:make-lock)
     :documentation "Serialize access to the on-ide-drag-down event.")
    (in-drag
-    :accessor in-drag-p
+    :accessor in-drag
     :initform nil
-    :documentation "Ensure only one box is dragged at a time.")
+    :documentation "Ensure only one box is dragged at a time and type of drag.")
    (drag-x
     :accessor drag-x
     :documentation "The location of the left side of the box relative to pointer during drag.")
@@ -26,39 +26,47 @@
 (defun on-ide-drag-down (obj data)
   (let ((app (connection-data-item obj "app-data")))
     (bordeaux-threads:with-lock-held ((drag-mutex app))
-      (unless (in-drag-p app)
-	(setf (in-drag-p app) t)
-	(let* ((id-drag  (attribute obj "data-drag-obj"))
-	       (drag-obj (attach-as-child obj id-drag))
-	       (pointer-x  (getf data ':screen-x))
-	       (pointer-y  (getf data ':screen-y))
-	       (obj-top  (parse-integer (top drag-obj) :junk-allowed t))
-	       (obj-left (parse-integer (left drag-obj) :junk-allowed t)))
+      (unless (in-drag app)
+	(setf (in-drag app) (attribute obj "data-drag-type"))
+	(let* ((id-drag   (attribute obj "data-drag-obj"))
+	       (drag-obj  (attach-as-child obj id-drag))
+	       (pointer-x (getf data ':screen-x))
+	       (pointer-y (getf data ':screen-y))
+	       (obj-top)
+	       (obj-left))
+	  (if (equalp (in-drag app) "m")
+	      (progn
+		(setf obj-top  (parse-integer (top drag-obj) :junk-allowed t))
+		(setf obj-left (parse-integer (left drag-obj) :junk-allowed t)))
+	      (progn
+		(setf obj-top  (height drag-obj))
+		(setf obj-left (width drag-obj))))
 	  (setf (z-index drag-obj) 1)
-	  (setf (drag-x app) (- pointer-x obj-left))
 	  (setf (drag-y app) (- pointer-y obj-top))
+	  (setf (drag-x app) (- pointer-x obj-left))
 	  (set-on-pointer-move obj 'on-ide-drag-move)
-	  (set-on-pointer-up obj 'stop-ide-drag)
-	  (set-on-pointer-leave obj 'on-ide-drag-leave))))))
+	  (set-on-pointer-up obj 'on-ide-drag-stop))))))
 
 (defun on-ide-drag-move (obj data)
   (let* ((app (connection-data-item obj "app-data"))
 	 (drag-obj (attach-as-child obj (attribute obj "data-drag-obj")))	 
 	 (x   (getf data ':screen-x))
-	 (y   (getf data ':screen-y)))    
-    (setf (top drag-obj) (format nil "~Apx" (- y (drag-y app))))
-    (setf (left drag-obj) (format nil "~Apx" (- x (drag-x app))))))
+	 (y   (getf data ':screen-y)))
+    (if (equalp (in-drag app) "m")
+	(progn
+	  (setf (top drag-obj) (format nil "~Apx" (- y (drag-y app))))
+	  (setf (left drag-obj) (format nil "~Apx" (- x (drag-x app)))))
+	(progn
+	  (format t "y = ~A  x = ~A~%" y x)
+	  (setf (height drag-obj) (format nil "~Apx" (- y (drag-y app))))
+	  (setf (width drag-obj) (format nil "~Apx" (- x (drag-x app))))))))
 
-(defun on-ide-drag-leave (obj)
+(defun on-ide-drag-stop (obj data)
   (let ((app (connection-data-item obj "app-data")))
-    (setf (in-drag-p app) nil)
+    (on-ide-drag-move obj data)
+    (setf (in-drag app) nil)
     (set-on-pointer-move obj nil)
-    (set-on-pointer-up obj nil)
-    (set-on-pointer-leave obj nil)))
-
-(defun stop-ide-drag (obj data)
-  (on-ide-drag-move obj data)
-  (on-ide-drag-leave obj))
+    (set-on-pointer-up obj nil)))
 
 (defgeneric create-window (clog-obj title
 			   &key html-id content left top width height)
@@ -82,7 +90,7 @@
 	                               class='w3-card-4 w3-white w3-border'>
                              <div id='~A-title-bar' class='w3-container w3-black'
                                    style='flex-container;display:flex;align-items:stretch;'>
-                               <span data-drag-obj='~A' id='~A-title'
+                               <span data-drag-obj='~A' data-drag-type='m' id='~A-title'
                                      style='flex-grow:9;user-select:none;cursor:move;'>~A</span>
                                <span id='~A-close'
                                      style='cursor:pointer;user-select:none;'>X</span>
@@ -90,14 +98,19 @@
                              </div>
                              <div id='~A-body' style='right:0;height:100%;margin: 0 auto;'>~A</div>
                              <div id='~A-size' style='user-select:none;cursor:se-resize;opacity:0'
-                                  class='w3-right'>+</div>
+                                  class='w3-right' data-drag-obj='~A' data-drag-type='s'>+</div>
                            </div>"
-			  top left width height html-id html-id html-id
-			  title html-id top-bar html-id content html-id)
+			  top left width height   ; outer div
+			  html-id html-id html-id ; title bar
+			  title html-id top-bar   ; title
+			  html-id content         ; body
+			  html-id html-id)        ; size
 		:html-id html-id))
 	 (title   (attach-as-child win (format nil "~A-title" html-id)))
-	 (close-x (attach-as-child win (format nil "~A-close" html-id))))
+	 (close-x (attach-as-child win (format nil "~A-close" html-id)))
+	 (sizer   (attach-as-child win (format nil "~A-size" html-id))))
     (set-on-pointer-down title 'on-ide-drag-down :capture-pointer t)
+    (set-on-pointer-down sizer 'on-ide-drag-down :capture-pointer t)    
     (set-on-click close-x (lambda (obj)
 			    (setf (hiddenp win) t)))
     win))
