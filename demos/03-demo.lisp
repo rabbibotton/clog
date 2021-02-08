@@ -4,6 +4,8 @@
 
 (in-package :clog-user)
 
+(defvar *last-z* -9999)
+
 (defclass app-data ()
   ((body
     :accessor body
@@ -18,10 +20,10 @@
     :documentation "Ensure only one box is dragged at a time and type of drag.")
    (drag-x
     :accessor drag-x
-    :documentation "The location of the left side of the box relative to pointer during drag.")
+    :documentation "Location of the left side or width relative to pointer during drag.")
    (drag-y
     :accessor drag-y
-   :documentation "The location of the top of the box relative to pointer during drag.")))
+   :documentation "Location of the top or height relative to pointer during drag.")))
 
 (defun on-ide-drag-down (obj data)
   (let ((app (connection-data-item obj "app-data")))
@@ -32,6 +34,7 @@
 	       (drag-obj  (attach-as-child obj id-drag))
 	       (pointer-x (getf data ':screen-x))
 	       (pointer-y (getf data ':screen-y))
+	       ;; (z         (parse-integer (z-index drag-obj) :junk-allowed t))
 	       (obj-top)
 	       (obj-left))
 	  (if (equalp (in-drag app) "m")
@@ -41,7 +44,7 @@
 	      (progn
 		(setf obj-top  (height drag-obj))
 		(setf obj-left (width drag-obj))))
-	  (setf (z-index drag-obj) 1)
+	  (setf (z-index drag-obj) (incf *last-z*))
 	  (setf (drag-y app) (- pointer-y obj-top))
 	  (setf (drag-x app) (- pointer-x obj-left))
 	  (set-on-pointer-move obj 'on-ide-drag-move)
@@ -57,7 +60,7 @@
 	  (setf (top drag-obj) (format nil "~Apx" (- y (drag-y app))))
 	  (setf (left drag-obj) (format nil "~Apx" (- x (drag-x app)))))
 	(progn
-	  (format t "y = ~A  x = ~A~%" y x)
+	  (js-execute drag-obj (format nil "editor_~A.resize()" (html-id drag-obj)))
 	  (setf (height drag-obj) (format nil "~Apx" (- y (drag-y app))))
 	  (setf (width drag-obj) (format nil "~Apx" (- x (drag-x app))))))))
 
@@ -86,7 +89,8 @@
   (let* ((app (connection-data-item obj "app-data"))
 	 (win (create-child (body app)
 	        (format nil
-			  "<div style='position:fixed;top:~Apx;left:~Apx;width:~Apx;height:~Apx;'
+			  "<div style='position:fixed;top:~Apx;left:~Apx;width:~Apx;height:~Apx;
+                                       flex-container;display:flex;flex-direction:column;z-index:~A'
 	                               class='w3-card-4 w3-white w3-border'>
                              <div id='~A-title-bar' class='w3-container w3-black'
                                    style='flex-container;display:flex;align-items:stretch;'>
@@ -96,15 +100,16 @@
                                      style='cursor:pointer;user-select:none;'>X</span>
                                ~A
                              </div>
-                             <div id='~A-body' style='right:0;height:100%;margin: 0 auto;'>~A</div>
-                             <div id='~A-size' style='user-select:none;cursor:se-resize;opacity:0'
+                             <div id='~A-body' class='w3-border-blue' style='flex-grow:9;'>~A</div>
+                             <div id='~A-size' style='user-select:none;height:1px;
+                                                      cursor:se-resize;opacity:0'
                                   class='w3-right' data-drag-obj='~A' data-drag-type='s'>+</div>
                            </div>"
-			  top left width height   ; outer div
-			  html-id html-id html-id ; title bar
-			  title html-id top-bar   ; title
-			  html-id content         ; body
-			  html-id html-id)        ; size
+			  top left width height (incf *last-z*)  ; outer div
+			  html-id html-id html-id                ; title bar
+			  title html-id top-bar                  ; title
+			  html-id content                        ; body
+			  html-id html-id)                       ; size
 		:html-id html-id))
 	 (title   (attach-as-child win (format nil "~A-title" html-id)))
 	 (close-x (attach-as-child win (format nil "~A-close" html-id)))
@@ -112,7 +117,7 @@
     (set-on-pointer-down title 'on-ide-drag-down :capture-pointer t)
     (set-on-pointer-down sizer 'on-ide-drag-down :capture-pointer t)    
     (set-on-click close-x (lambda (obj)
-			    (setf (hiddenp win) t)))
+			    (remove-from-dom win)))
     win))
 
 (defun do-ide-file-new (obj)
@@ -123,10 +128,12 @@
 	(create-child obj
 		      (format nil
 		      "<script>
-                         var editor = ace.edit('~A-body');
-                         editor.setTheme('ace/theme/xcode');
-                         editor.session.setMode('ace/mode/lisp');
+                         var editor_~A = ace.edit('~A-body');
+                         editor_~A.setTheme('ace/theme/xcode');
+                         editor_~A.session.setMode('ace/mode/lisp');
                       </script>"
+		      (html-id win) (html-id win)
+		      (html-id win)
 		      (html-id win)))))
 
 (defun do-ide-help-about (obj)
