@@ -1,3 +1,6 @@
+;;; As this demo uses Eval do not run over the internet.
+;;; Adding appropriate condition handlers is needed.
+
 (defpackage #:clog-user
   (:use #:cl #:clog)
   (:export start-demo))
@@ -80,7 +83,8 @@
     (on-ide-drag-move obj data)
     (setf (in-drag app) nil)
     (set-on-pointer-move obj nil)
-    (set-on-pointer-up obj nil)))
+    (set-on-pointer-up obj nil)))	   
+
 
 (defgeneric create-window (clog-obj title
 			   &key html-id content left top width height)
@@ -129,11 +133,50 @@
 			    (remove-from-dom win)))
     win))
 
+(defun set-title (obj title)
+  (setf (inner-html (attach-as-child obj (format nil "~A-title" (html-id obj)))) title))
+
+(defun get-title (obj)
+  (inner-html (attach-as-child obj (format nil "~A-title" (html-id obj)))))
+
+(defun read-file (infile)
+  (with-open-file (instream infile :direction :input :if-does-not-exist nil)
+    (when instream 
+      (let ((string (make-string (file-length instream))))
+        (read-sequence string instream)
+        string))))
+
+(defun write-file (string outfile &key (action-if-exists :rename))
+   (check-type action-if-exists (member nil :error :new-version :rename :rename-and-delete 
+                                        :overwrite :append :supersede))
+   (with-open-file (outstream outfile :direction :output :if-exists action-if-exists)
+     (write-sequence string outstream)))
+
+(defun get-file-name (obj title on-file-name)
+  (let* ((win   (create-window obj title :height 60))
+	 (body  (attach-as-child win (format nil "~A-body" (html-id win))))
+	 (input (create-form-element body :input :label
+				     (create-label body :content "File Name:")))
+	 (ok    (create-button body :content "OK")))
+    (set-on-click ok (lambda (obj)
+		       (remove-from-dom win)
+		       (funcall on-file-name (value input))))))
+
+(defun capture-eval (form)
+  (let ((result (make-array '(0) :element-type 'base-char
+				 :fill-pointer 0 :adjustable t))
+	(eval-result))
+    (with-output-to-string (stream result)
+      (let ((*standard-output* stream)
+	    (*error-output* stream))
+	(setf eval-result (eval (read-from-string (format nil "(progn ~A)" form))))))
+    (format nil "~A~%=>~A~%" result eval-result)))    
+
 (defun do-ide-file-new (obj)
-  (let* ((app (connection-data-item obj "app-data"))
-	 (win (create-window obj "New window"
-			     :left (random 600)
-			     :top  (+ 40 (random 400)))))
+  (let ((app (connection-data-item obj "app-data"))
+	(win (create-window obj "New window"
+			    :left (random 600)
+			    :top  (+ 40 (random 400)))))
     (create-child obj
 		  (format nil
 			  "<script>
@@ -141,41 +184,40 @@
                          editor_~A.setTheme('ace/theme/xcode');
                          editor_~A.session.setMode('ace/mode/lisp');
                          editor_~A.session.setTabSize(3);
+                         editor_~A.focus();
                       </script>"
 			  (html-id win) (html-id win)
+			  (html-id win)
 			  (html-id win)
 			  (html-id win)
 			  (html-id win)))
     (setf (current-win app) win)))
 
-(defun do-ide-help-about (obj)
-  (let* ((app   (connection-data-item obj "app-data"))
-	 (about (create-window (body app) "About"
-			       :content "<div class='w3-black'>
-                                         <center><img src='/demo/clogwicon.png'></center>
-	                                 <center>CLOG</center>
-	                                 <center>The Common Lisp Omnificent GUI</center></div>
-			                 <div><p><center>Demo 3</center>
-                                         <center>(c) 2021 - David Botton</center></p></div>"
-			       :left    (- (/ (width (body app)) 2) 100)
-			       :width   200
-			       :height  200)))
-    (setf (current-win app) about)))
-
 (defun do-ide-file-open (obj)
-  (do-ide-file-new obj)
-  (let* ((app (connection-data-item obj "app-data")))
-    (js-execute obj (format nil "editor_~A.setValue('~A')"
-			    (html-id (current-win app))
-			    (escape-string "(print \"hello!\")")))))
-  
+  (let ((app (connection-data-item obj "app-data")))
+    (get-file-name obj "Open..."
+		   (lambda (fname)
+		     (do-ide-file-new obj)
+		     (set-title (current-win app) fname)
+		     (js-execute obj (format nil "editor_~A.setValue('~A');editor_~A.moveCursorTo(0,0);"
+					     (html-id (current-win app))
+					     (escape-string (read-file fname))
+					     (html-id (current-win app))))))))
+
 (defun do-ide-file-save (obj)
-  (let* ((app (connection-data-item obj "app-data")))
-    (print (js-query obj (format nil "editor_~A.getValue()"
-				 (html-id (current-win app)))))))
+  (let ((app (connection-data-item obj "app-data")))
+    (if (equalp (get-title (current-win app)) "New Window")
+	(do-ide-file-save-as obj)
+	(write-file (js-query obj (format nil "editor_~A.getValue()"
+					  (html-id (current-win app))))
+		    (get-title (current-win app))))))
 
 (defun do-ide-file-save-as (obj)
-  (do-ide-file-save obj))
+  (let ((app (connection-data-item obj "app-data")))
+    (get-file-name obj "Save.."
+		   (lambda (fname)
+		     (set-title (current-win app) fname)
+		     (do-ide-file-save obj)))))
 
 (defun do-ide-edit-copy (obj)
   (let* ((app (connection-data-item obj "app-data")))
@@ -194,34 +236,30 @@
 			    (html-id (current-win app))
 			    (escape-string (copy-buf app))))))
 
-(defun capture-eval (form)
-  (let ((result (make-array '(0) :element-type 'base-char
-				 :fill-pointer 0 :adjustable t))
-	(eval-result))
-    (with-output-to-string (stream result)
-      (let ((*standard-output* stream)
-	    (*error-output* stream))
-	(setf eval-result (eval (read-from-string form)))))
-    (format nil "~A~%=>~A~%" result eval-result)))
-    
-(defun do-ide-lisp-eval-buf (obj)
-  (let* ((app         (connection-data-item obj "app-data"))
-	 (form-string (copy-buf app))
-	 (result      (capture-eval form-string)))
-    (do-ide-file-new obj)
-    (js-execute obj (format nil "editor_~A.setValue('~A')"
-			    (html-id (current-win app))
-			    (escape-string result)))))
-
 (defun do-ide-lisp-eval-file (obj)
   (let* ((app         (connection-data-item obj "app-data"))
 	 (form-string (js-query obj (format nil "editor_~A.getValue()"
 					    (html-id (current-win app)))))
 	 (result      (capture-eval form-string)))
     (do-ide-file-new obj)
-    (js-execute obj (format nil "editor_~A.setValue('~A')"
+    (js-execute obj (format nil "editor_~A.setValue('~A');editor_~A.moveCursorTo(0,0);"
 			    (html-id (current-win app))
-			    (escape-string result)))))
+			    (escape-string result)
+			    (html-id (current-win app))))))
+
+(defun do-ide-help-about (obj)
+  (let* ((app   (connection-data-item obj "app-data"))
+	 (about (create-window (body app) "About"
+			       :content "<div class='w3-black'>
+                                         <center><img src='/demo/clogwicon.png'></center>
+	                                 <center>CLOG</center>
+	                                 <center>The Common Lisp Omnificent GUI</center></div>
+			                 <div><p><center>Demo 3</center>
+                                         <center>(c) 2021 - David Botton</center></p></div>"
+			       :left    (- (/ (width (body app)) 2) 100)
+			       :width   200
+			       :height  200)))
+    (setf (current-win app) about)))
 
 (defun on-new-window (body)
   (let ((app (make-instance 'app-data)))
@@ -235,7 +273,6 @@
     (set-on-click (attach-as-child body "ide-edit-copy") #'do-ide-edit-copy)
     (set-on-click (attach-as-child body "ide-edit-cut") #'do-ide-edit-cut)
     (set-on-click (attach-as-child body "ide-edit-paste") #'do-ide-edit-paste)    
-    (set-on-click (attach-as-child body "ide-lisp-eval-buf") #'do-ide-lisp-eval-buf)
     (set-on-click (attach-as-child body "ide-lisp-eval-file") #'do-ide-lisp-eval-file)
     (set-on-click (attach-as-child body "ide-help-about") #'do-ide-help-about)
     (run body)))
