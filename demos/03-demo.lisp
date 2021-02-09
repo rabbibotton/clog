@@ -1,6 +1,6 @@
 ;;; As this demo uses eval do not run over the internet.
-;;; Adding appropriate condition handlers is needed.
-;;; Better tracking for which window has focus
+;;; See the accompanying boot file at
+;;;    https://github.com/rabbibotton/clog/blob/main/static-files/demo/frame.html
 
 (defpackage #:clog-user
   (:use #:cl #:clog)
@@ -8,7 +8,7 @@
 
 (in-package :clog-user)
 
-(defvar *last-z* -9999)
+(defvar *last-z* -9999 "Global z-order for windows")
 
 (defclass app-data ()
   ((body
@@ -22,14 +22,10 @@
     :accessor copy-buf
     :initform ""
     :documentation "Copy buffer")
-   (drag-mutex
-    :reader drag-mutex
-    :initform (bordeaux-threads:make-lock)
-    :documentation "Serialize access to the on-ide-drag-down event.")
    (in-drag
     :accessor in-drag
     :initform nil
-    :documentation "Ensure only one box is dragged at a time and type of drag.")
+    :documentation "Drag window or Size window.")
    (drag-x
     :accessor drag-x
     :documentation "Location of the left side or width relative to pointer during drag.")
@@ -39,28 +35,27 @@
 
 (defun on-ide-drag-down (obj data)
   (let ((app (connection-data-item obj "app-data")))
-    (bordeaux-threads:with-lock-held ((drag-mutex app))
-      (unless (in-drag app)
-	(setf (in-drag app) (attribute obj "data-drag-type"))
-	(let* ((id-drag   (attribute obj "data-drag-obj"))
-	       (drag-obj  (attach-as-child obj id-drag))
-	       (pointer-x (getf data ':screen-x))
-	       (pointer-y (getf data ':screen-y))
-	       (obj-top)
-	       (obj-left))
-	  (if (equalp (in-drag app) "m")
-	      (progn
-		(setf (current-win app) drag-obj)
-		(setf obj-top  (parse-integer (top drag-obj) :junk-allowed t))
-		(setf obj-left (parse-integer (left drag-obj) :junk-allowed t)))
-	      (progn
-		(setf obj-top  (height drag-obj))
-		(setf obj-left (width drag-obj))))
-	  (setf (z-index drag-obj) (incf *last-z*))
-	  (setf (drag-y app) (- pointer-y obj-top))
-	  (setf (drag-x app) (- pointer-x obj-left))
-	  (set-on-pointer-move obj 'on-ide-drag-move)
-	  (set-on-pointer-up obj 'on-ide-drag-stop))))))
+    (unless (in-drag app)
+      (setf (in-drag app) (attribute obj "data-drag-type"))
+      (let* ((id-drag   (attribute obj "data-drag-obj"))
+	     (drag-obj  (attach-as-child obj id-drag))
+	     (pointer-x (getf data ':screen-x))
+	     (pointer-y (getf data ':screen-y))
+	     (obj-top)
+	     (obj-left))
+	(if (equalp (in-drag app) "m")
+	    (progn
+	      (setf (current-win app) drag-obj)
+	      (setf obj-top  (parse-integer (top drag-obj) :junk-allowed t))
+	      (setf obj-left (parse-integer (left drag-obj) :junk-allowed t)))
+	    (progn
+	      (setf obj-top  (height drag-obj))
+	      (setf obj-left (width drag-obj))))
+	(setf (z-index drag-obj) (incf *last-z*))
+	(setf (drag-y app) (- pointer-y obj-top))
+	(setf (drag-x app) (- pointer-x obj-left))
+	(set-on-pointer-move obj 'on-ide-drag-move)
+	(set-on-pointer-up obj 'on-ide-drag-stop)))))
 
 (defun on-ide-drag-move (obj data)
   (let* ((app (connection-data-item obj "app-data"))
@@ -88,7 +83,7 @@
 
 (defgeneric create-window (clog-obj title
 			   &key html-id content left top width height)
-  (:documentation "Create an html-window"))
+  (:documentation "Create an mdi window"))
 
 (defmethod create-window ((obj clog-obj) title &key
 						 (html-id nil)
@@ -153,7 +148,11 @@
      (write-sequence string outstream)))
 
 (defun get-file-name (obj title on-file-name)
-  (let* ((win   (create-window obj title :height 60))
+  (let* ((app   (connection-data-item obj "app-data"))
+	 (win   (create-window obj title
+			       :left    (- (/ (width (body app)) 2) 200)
+			       :width  400
+			       :height 60))
 	 (body  (attach-as-child win (format nil "~A-body" (html-id win))))
 	 (form  (create-form body))
 	 (input (create-form-element form :input :label
@@ -181,12 +180,12 @@
     (create-child obj
 		  (format nil
 			  "<script>
-                         var editor_~A = ace.edit('~A-body');
-                         editor_~A.setTheme('ace/theme/xcode');
-                         editor_~A.session.setMode('ace/mode/lisp');
-                         editor_~A.session.setTabSize(3);
-                         editor_~A.focus();
-                      </script>"
+                            var editor_~A = ace.edit('~A-body');
+                            editor_~A.setTheme('ace/theme/xcode');
+                            editor_~A.session.setMode('ace/mode/lisp');
+                            editor_~A.session.setTabSize(3);
+                            editor_~A.focus();
+                           </script>"
 			  (html-id win) (html-id win)
 			  (html-id win)
 			  (html-id win)
