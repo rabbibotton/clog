@@ -1,5 +1,6 @@
-;;; As this demo uses Eval do not run over the internet.
+;;; As this demo uses eval do not run over the internet.
 ;;; Adding appropriate condition handlers is needed.
+;;; Better tracking for which window has focus
 
 (defpackage #:clog-user
   (:use #:cl #:clog)
@@ -155,9 +156,10 @@
 (defun get-file-name (obj title on-file-name)
   (let* ((win   (create-window obj title :height 60))
 	 (body  (attach-as-child win (format nil "~A-body" (html-id win))))
-	 (input (create-form-element body :input :label
-				     (create-label body :content "File Name:")))
-	 (ok    (create-button body :content "OK")))
+	 (form  (create-form body))
+	 (input (create-form-element form :input :label
+				     (create-label form :content "File Name:")))
+	 (ok    (create-button form :content "OK")))
     (set-on-click ok (lambda (obj)
 		       (remove-from-dom win)
 		       (funcall on-file-name (value input))))))
