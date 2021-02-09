@@ -627,8 +627,8 @@ is nil unbind the event.</p></li>
 <ul>
 <li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ASET-ON-DRAG-START-20GENERIC-FUNCTION-29" >SET-ON-DRAG-START</a></span></span> <span class="locative-args">CLOG-OBJ ON-DRAG-START-HANDLER &amp;KEY DRAG-DATA DRAG-TYPE</span></span></p>
 
-<p>Set the <code>ON-DRAG-START-HANDLER</code> for <code>CLOG-OBJ</code>. If <code>ON-DRAG-START-HANDLER</code>
-is nil unbind the event.</p></li>
+<p>Set the <code>ON-DRAG-START-HANDLER</code> for <code>CLOG-OBJ</code>.
+If <code>ON-DRAG-START-HANDLER</code> is nil unbind the event.</p></li>
 </ul>
 
 <p><a id='x-28CLOG-3ASET-ON-DRAG-20GENERIC-FUNCTION-29'></a></p>
@@ -754,27 +754,28 @@ is nil unbind the event.</p></li>
 <p><a id='x-28CLOG-3ASET-ON-CONTEXT-MENU-20GENERIC-FUNCTION-29'></a></p>
 
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ASET-ON-CONTEXT-MENU-20GENERIC-FUNCTION-29" >SET-ON-CONTEXT-MENU</a></span></span> <span class="locative-args">CLOG-OBJ ON-CONTEXT-MENU-HANDLER</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ASET-ON-CONTEXT-MENU-20GENERIC-FUNCTION-29" >SET-ON-CONTEXT-MENU</a></span></span> <span class="locative-args">CLOG-OBJ ON-CONTEXT-MENU-HANDLER &amp;KEY ONE-TIME</span></span></p>
 
 <p>Set the <code>ON-CONTEXT-MENU-HANDLER</code> for <code>CLOG-OBJ</code>. If
 <code>ON-CONTEXT-MENU-HANDLER</code> is nil unbind the event. Setting
-on-mouse-right-click will replace this handler.</p></li>
+on-mouse-right-click will replace this handler. If <code>:ONE-TIME</code> unbind
+event on right click.</p></li>
 </ul>
 
 <p><a id='x-28CLOG-3ASET-ON-CLICK-20GENERIC-FUNCTION-29'></a></p>
 
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ASET-ON-CLICK-20GENERIC-FUNCTION-29" >SET-ON-CLICK</a></span></span> <span class="locative-args">CLOG-OBJ ON-CLICK-HANDLER</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ASET-ON-CLICK-20GENERIC-FUNCTION-29" >SET-ON-CLICK</a></span></span> <span class="locative-args">CLOG-OBJ ON-CLICK-HANDLER &amp;KEY ONE-TIME</span></span></p>
 
 <p>Set the <code>ON-CLICK-HANDLER</code> for <code>CLOG-OBJ</code>. If <code>ON-CLICK-HANDLER</code>
 is nil unbind the event. Setting this event will replace an on-mouse click if
-set.</p></li>
+set. If <code>:ONE-TIME</code> unbind event on click.</p></li>
 </ul>
 
 <p><a id='x-28CLOG-3ASET-ON-DOUBLE-CLICK-20GENERIC-FUNCTION-29'></a></p>
 
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ASET-ON-DOUBLE-CLICK-20GENERIC-FUNCTION-29" >SET-ON-DOUBLE-CLICK</a></span></span> <span class="locative-args">CLOG-OBJ ON-DOUBLE-CLICK-HANDLER</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ASET-ON-DOUBLE-CLICK-20GENERIC-FUNCTION-29" >SET-ON-DOUBLE-CLICK</a></span></span> <span class="locative-args">CLOG-OBJ ON-DOUBLE-CLICK-HANDLER &amp;KEY ONE-TIME</span></span></p>
 
 <p>Set the <code>ON-DOUBLE-CLICK-HANDLER</code> for <code>CLOG-OBJ</code>. If
 <code>ON-DOUBLE-CLICK-HANDLER</code> is nil unbind the event. Setting the
@@ -784,7 +785,7 @@ on-mouse-double-click event will replace this handler.</p></li>
 <p><a id='x-28CLOG-3ASET-ON-MOUSE-CLICK-20GENERIC-FUNCTION-29'></a></p>
 
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ASET-ON-MOUSE-CLICK-20GENERIC-FUNCTION-29" >SET-ON-MOUSE-CLICK</a></span></span> <span class="locative-args">CLOG-OBJ ON-MOUSE-CLICK-HANDLER</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ASET-ON-MOUSE-CLICK-20GENERIC-FUNCTION-29" >SET-ON-MOUSE-CLICK</a></span></span> <span class="locative-args">CLOG-OBJ ON-MOUSE-CLICK-HANDLER &amp;KEY ONE-TIME</span></span></p>
 
 <p>Set the <code>ON-MOUSE-CLICK-HANDLER</code> for <code>CLOG-OBJ</code>. If
 <code>ON-MOUSE-CLICK-HANDLER</code> is nil unbind the event. Setting this event will replace
@@ -794,7 +795,7 @@ on an on-click event.</p></li>
 <p><a id='x-28CLOG-3ASET-ON-MOUSE-DOUBLE-CLICK-20GENERIC-FUNCTION-29'></a></p>
 
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ASET-ON-MOUSE-DOUBLE-CLICK-20GENERIC-FUNCTION-29" >SET-ON-MOUSE-DOUBLE-CLICK</a></span></span> <span class="locative-args">CLOG-OBJ ON-MOUSE-DOUBLE-CLICK-HANDLER</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ASET-ON-MOUSE-DOUBLE-CLICK-20GENERIC-FUNCTION-29" >SET-ON-MOUSE-DOUBLE-CLICK</a></span></span> <span class="locative-args">CLOG-OBJ ON-MOUSE-DOUBLE-CLICK-HANDLER &amp;KEY ONE-TIME</span></span></p>
 
 <p>Set the <code>ON-MOUSE-DOUBLE-CLICK-HANDLER</code> for <code>CLOG-OBJ</code>. If
 <code>ON-MOUSE-DOUBLE-CLICK-HANDLER</code> is nil unbind the event. Setting this event will
@@ -804,7 +805,7 @@ replace on an on-double-click event.</p></li>
 <p><a id='x-28CLOG-3ASET-ON-MOUSE-RIGHT-CLICK-20GENERIC-FUNCTION-29'></a></p>
 
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ASET-ON-MOUSE-RIGHT-CLICK-20GENERIC-FUNCTION-29" >SET-ON-MOUSE-RIGHT-CLICK</a></span></span> <span class="locative-args">CLOG-OBJ ON-MOUSE-RIGHT-CLICK-HANDLER</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ASET-ON-MOUSE-RIGHT-CLICK-20GENERIC-FUNCTION-29" >SET-ON-MOUSE-RIGHT-CLICK</a></span></span> <span class="locative-args">CLOG-OBJ ON-MOUSE-RIGHT-CLICK-HANDLER &amp;KEY ONE-TIME</span></span></p>
 
 <p>Set the <code>ON-MOUSE-RIGHT-CLICK-HANDLER</code> for <code>CLOG-OBJ</code>. If
 <code>ON-MOUSE-RIGHT-CLICK-HANDLER</code> is nil unbind the event. Setting this event will
@@ -850,7 +851,7 @@ is nil unbind the event.</p></li>
 <p><a id='x-28CLOG-3ASET-ON-MOUSE-DOWN-20GENERIC-FUNCTION-29'></a></p>
 
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ASET-ON-MOUSE-DOWN-20GENERIC-FUNCTION-29" >SET-ON-MOUSE-DOWN</a></span></span> <span class="locative-args">CLOG-OBJ ON-MOUSE-DOWN-HANDLER</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ASET-ON-MOUSE-DOWN-20GENERIC-FUNCTION-29" >SET-ON-MOUSE-DOWN</a></span></span> <span class="locative-args">CLOG-OBJ ON-MOUSE-DOWN-HANDLER &amp;KEY ONE-TIME</span></span></p>
 
 <p>Set the <code>ON-MOUSE-DOWN-HANDLER</code> for <code>CLOG-OBJ</code>. If
 <code>ON-MOUSE-DOWN-HANDLER</code> is nil unbind the event.</p></li>
@@ -874,10 +875,73 @@ is nil unbind the event.</p></li>
 <code>ON-MOUSE-MOVE-HANDLER</code> is nil unbind the event.</p></li>
 </ul>
 
+<p><a id='x-28CLOG-3ASET-ON-POINTER-ENTER-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ASET-ON-POINTER-ENTER-20GENERIC-FUNCTION-29" >SET-ON-POINTER-ENTER</a></span></span> <span class="locative-args">CLOG-OBJ ON-POINTER-ENTER-HANDLER</span></span></p>
+
+<p>Set the <code>ON-POINTER-ENTER-HANDLER</code> for <code>CLOG-OBJ</code>. If <code>ON-POINTER-ENTER-HANDLER</code>
+is nil unbind the event.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3ASET-ON-POINTER-LEAVE-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ASET-ON-POINTER-LEAVE-20GENERIC-FUNCTION-29" >SET-ON-POINTER-LEAVE</a></span></span> <span class="locative-args">CLOG-OBJ ON-POINTER-LEAVE-HANDLER</span></span></p>
+
+<p>Set the <code>ON-POINTER-LEAVE-HANDLER</code> for <code>CLOG-OBJ</code>. If <code>ON-POINTER-LEAVE-HANDLER</code>
+is nil unbind the event.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3ASET-ON-POINTER-OVER-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ASET-ON-POINTER-OVER-20GENERIC-FUNCTION-29" >SET-ON-POINTER-OVER</a></span></span> <span class="locative-args">CLOG-OBJ ON-POINTER-OVER-HANDLER</span></span></p>
+
+<p>Set the <code>ON-POINTER-OVER-HANDLER</code> for <code>CLOG-OBJ</code>. If <code>ON-POINTER-OVER-HANDLER</code>
+is nil unbind the event.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3ASET-ON-POINTER-OUT-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ASET-ON-POINTER-OUT-20GENERIC-FUNCTION-29" >SET-ON-POINTER-OUT</a></span></span> <span class="locative-args">CLOG-OBJ ON-POINTER-OUT-HANDLER</span></span></p>
+
+<p>Set the <code>ON-POINTER-OUT-HANDLER</code> for <code>CLOG-OBJ</code>. If <code>ON-POINTER-OUT-HANDLER</code>
+is nil unbind the event.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3ASET-ON-POINTER-DOWN-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ASET-ON-POINTER-DOWN-20GENERIC-FUNCTION-29" >SET-ON-POINTER-DOWN</a></span></span> <span class="locative-args">CLOG-OBJ ON-POINTER-DOWN-HANDLER &amp;KEY CAPTURE-POINTER ONE-TIME</span></span></p>
+
+<p>Set the <code>ON-POINTER-DOWN-HANDLER</code> for <code>CLOG-OBJ</code>. If
+<code>ON-POINTER-DOWN-HANDLER</code> is nil unbind the event.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3ASET-ON-POINTER-UP-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ASET-ON-POINTER-UP-20GENERIC-FUNCTION-29" >SET-ON-POINTER-UP</a></span></span> <span class="locative-args">CLOG-OBJ ON-POINTER-UP-HANDLER</span></span></p>
+
+<p>Set the <code>ON-POINTER-UP-HANDLER</code> for <code>CLOG-OBJ</code>. If
+<code>ON-POINTER-UP-HANDLER</code> is nil unbind the event.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3ASET-ON-POINTER-MOVE-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ASET-ON-POINTER-MOVE-20GENERIC-FUNCTION-29" >SET-ON-POINTER-MOVE</a></span></span> <span class="locative-args">CLOG-OBJ ON-POINTER-MOVE-HANDLER</span></span></p>
+
+<p>Set the <code>ON-POINTER-MOVE-HANDLER</code> for <code>CLOG-OBJ</code>. If
+<code>ON-POINTER-MOVE-HANDLER</code> is nil unbind the event.</p></li>
+</ul>
+
 <p><a id='x-28CLOG-3ASET-ON-TOUCH-START-20GENERIC-FUNCTION-29'></a></p>
 
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ASET-ON-TOUCH-START-20GENERIC-FUNCTION-29" >SET-ON-TOUCH-START</a></span></span> <span class="locative-args">CLOG-OBJ ON-TOUCH-START-HANDLER</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ASET-ON-TOUCH-START-20GENERIC-FUNCTION-29" >SET-ON-TOUCH-START</a></span></span> <span class="locative-args">CLOG-OBJ ON-TOUCH-START-HANDLER &amp;KEY ONE-TIME</span></span></p>
 
 <p>Set the <code>ON-TOUCH-START-HANDLER</code> for <code>CLOG-OBJ</code>. If
 <code>ON-TOUCH-START-HANDLER</code> is nil unbind the event.</p></li>
@@ -913,7 +977,7 @@ is nil unbind the event.</p></li>
 <p><a id='x-28CLOG-3ASET-ON-CHARACTER-20GENERIC-FUNCTION-29'></a></p>
 
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ASET-ON-CHARACTER-20GENERIC-FUNCTION-29" >SET-ON-CHARACTER</a></span></span> <span class="locative-args">CLOG-OBJ ON-CHARACTER-HANDLER</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ASET-ON-CHARACTER-20GENERIC-FUNCTION-29" >SET-ON-CHARACTER</a></span></span> <span class="locative-args">CLOG-OBJ ON-CHARACTER-HANDLER &amp;KEY ONE-TIME</span></span></p>
 
 <p>Set the <code>ON-CHARACTER-HANDLER</code> for <code>CLOG-OBJ</code>. If
 <code>ON-CHARACTER-HANDLER</code> is nil unbind the event. Setting this event
@@ -923,7 +987,7 @@ will replace a on-key-down</p></li>
 <p><a id='x-28CLOG-3ASET-ON-KEY-DOWN-20GENERIC-FUNCTION-29'></a></p>
 
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ASET-ON-KEY-DOWN-20GENERIC-FUNCTION-29" >SET-ON-KEY-DOWN</a></span></span> <span class="locative-args">CLOG-OBJ ON-KEY-DOWN-HANDLER</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ASET-ON-KEY-DOWN-20GENERIC-FUNCTION-29" >SET-ON-KEY-DOWN</a></span></span> <span class="locative-args">CLOG-OBJ ON-KEY-DOWN-HANDLER &amp;KEY ONE-TIME</span></span></p>
 
 <p>Set the <code>ON-KEY-DOWN-HANDLER</code> for <code>CLOG-OBJ</code>. If
 <code>ON-KEY-DOWN-HANDLER</code> is nil unbind the event.</p></li>
@@ -932,7 +996,7 @@ will replace a on-key-down</p></li>
 <p><a id='x-28CLOG-3ASET-ON-KEY-UP-20GENERIC-FUNCTION-29'></a></p>
 
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ASET-ON-KEY-UP-20GENERIC-FUNCTION-29" >SET-ON-KEY-UP</a></span></span> <span class="locative-args">CLOG-OBJ ON-KEY-UP-HANDLER</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ASET-ON-KEY-UP-20GENERIC-FUNCTION-29" >SET-ON-KEY-UP</a></span></span> <span class="locative-args">CLOG-OBJ ON-KEY-UP-HANDLER &amp;KEY ONE-TIME</span></span></p>
 
 <p>Set the <code>ON-KEY-UP-HANDLER</code> for <code>CLOG-OBJ</code>. If
 <code>ON-KEY-UP-HANDLER</code> is nil unbind the event.</p></li>
@@ -941,7 +1005,7 @@ will replace a on-key-down</p></li>
 <p><a id='x-28CLOG-3ASET-ON-KEY-PRESS-20GENERIC-FUNCTION-29'></a></p>
 
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ASET-ON-KEY-PRESS-20GENERIC-FUNCTION-29" >SET-ON-KEY-PRESS</a></span></span> <span class="locative-args">CLOG-OBJ ON-KEY-PRESS-HANDLER</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ASET-ON-KEY-PRESS-20GENERIC-FUNCTION-29" >SET-ON-KEY-PRESS</a></span></span> <span class="locative-args">CLOG-OBJ ON-KEY-PRESS-HANDLER &amp;KEY ONE-TIME</span></span></p>
 
 <p>Set the <code>ON-KEY-PRESS-HANDLER</code> for <code>CLOG-OBJ</code>. If
 <code>ON-KEY-PRESS-HANDLER</code> is nil unbind the event.</p></li>
@@ -2267,6 +2331,14 @@ A list of standard cursor types can be found at:
 <p>Remove CLOG-Element from the DOM.</p></li>
 </ul>
 
+<p><a id='x-28CLOG-3AREMOVE-FROM-CLOG-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3AREMOVE-FROM-CLOG-20GENERIC-FUNCTION-29" >REMOVE-FROM-CLOG</a></span></span> <span class="locative-args">CLOG-ELEMENT</span></span></p>
+
+<p>Remove CLOG-Element from the clog cache on browser.</p></li>
+</ul>
+
 <p><a id='x-28CLOG-3ACLICK-20GENERIC-FUNCTION-29'></a></p>
 
 <ul>
@@ -2293,7 +2365,7 @@ A list of standard cursor types can be found at:
 
 <p>Traverse to first child element. If Child does not have an
 html id than Element_Type will have an ID of undefined and therefore attached
-to no actual <code>HTML</code> elemen.</p></li>
+to no actual <code>HTML</code> element.</p></li>
 </ul>
 
 <p><a id='x-28CLOG-3APREVIOUS-SIBLING-20GENERIC-FUNCTION-29'></a></p>
