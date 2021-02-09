@@ -70,14 +70,13 @@
 	 (adj-y    (- y (drag-y app)))
 	 (adj-x    (- x (drag-x app))))
     (when (and (> adj-x 0) (> adj-y 30))
-      (if (equalp (in-drag app) "m")
-	  (progn
-	    (setf (top drag-obj) (format nil "~Apx" adj-y))
-	    (setf (left drag-obj) (format nil "~Apx" adj-x)))
-	  (progn
-	    (js-execute drag-obj (format nil "editor_~A.resize()" (html-id drag-obj)))
-	    (setf (height drag-obj) (format nil "~Apx" adj-y))
-	    (setf (width drag-obj) (format nil "~Apx" adj-x)))))))
+      (cond ((equalp (in-drag app) "m")
+	     (setf (top drag-obj) (format nil "~Apx" adj-y))
+	     (setf (left drag-obj) (format nil "~Apx" adj-x)))
+	    ((equalp (in-drag app) "s")
+	     (js-execute drag-obj (format nil "editor_~A.resize()" (html-id drag-obj)))
+	     (setf (height drag-obj) (format nil "~Apx" adj-y))
+	     (setf (width drag-obj) (format nil "~Apx" adj-x)))))))
 
 (defun on-ide-drag-stop (obj data)
   (let ((app (connection-data-item obj "app-data")))
