@@ -6,8 +6,6 @@
 
 (in-package :clog-user)
 
-(defvar *last-z* -9999 "Global z-order for windows")
-
 (defclass app-data ()
   ((body
     :accessor body
@@ -16,6 +14,10 @@
     :accessor current-win
     :initform nil
     :documentation "The current window at front.")
+   (last-z
+    :accessor last-z
+    :initform -9999
+    :documentation "Top z-order for windows")
    (copy-buf
     :accessor copy-buf
     :initform ""
@@ -49,7 +51,7 @@
 	    (progn
 	      (setf obj-top  (height drag-obj))
 	      (setf obj-left (width drag-obj))))
-	(setf (z-index drag-obj) (incf *last-z*))
+	(setf (z-index drag-obj) (incf (last-z app)))
 	(setf (drag-y app) (- pointer-y obj-top))
 	(setf (drag-x app) (- pointer-x obj-left))
 	(set-on-pointer-move obj 'on-ide-drag-move)
@@ -111,11 +113,11 @@
                                                       cursor:se-resize;opacity:0'
                                   class='w3-right' data-drag-obj='~A' data-drag-type='s'>+</div>
                            </div>"
-			  top left width height (incf *last-z*)  ; outer div
-			  html-id html-id html-id                ; title bar
-			  title html-id                          ; title
-			  html-id content                        ; body
-			  html-id html-id)                       ; size
+			  top left width height (incf (last-z app)) ; outer div
+			  html-id html-id html-id                   ; title bar
+			  title html-id                             ; title
+			  html-id content                           ; body
+			  html-id html-id)                          ; size
 		:html-id html-id))
 	 (title   (attach-as-child win (format nil "~A-title" html-id)))
 	 (close-x (attach-as-child win (format nil "~A-close" html-id)))
