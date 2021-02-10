@@ -8,7 +8,7 @@
   :version "0.9.0"
   :serial t
   :depends-on (#:clack #:websocket-driver #:alexandria #:hunchentoot #:cl-ppcre
-		       #:bordeaux-threads #:trivial-open-browser
+		       #:bordeaux-threads #:trivial-open-browser #:cl-dbi
 		       #:lack-middleware-static #:mgl-pax #:quri)
   :components ((:file "clog-connection")
 	       (:file "clog")
@@ -26,4 +26,5 @@
 	       (:file "clog-location")
 	       (:file "clog-navigator")	       
 	       (:file "clog-body")
+	       (:file "clog-gui")
 	       (:file "clog-helpers")))

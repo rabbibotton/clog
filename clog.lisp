@@ -38,6 +38,7 @@ embedded in a native template application.)"
   (@clog-form            section)
   (@clog-canvas          section)
   (@clog-multimedia      section)
+  (@clog-gui             section)
   (@clog-body            section)
   (@clog-window          section)
   (@clog-document        section)
@@ -646,6 +647,19 @@ embedded in a native template application.)"
   "Clog-Video - Class for CLOG Video Control"
   (clog-video     class)
   (create-video   generic-function))
+
+(defsection @clog-gui (:title "CLOG GUI Objects")
+  "CLOG-GUI -  Desktop GUI abstraction for CLOG"
+  (clog-gui-initialize function)
+
+  (clog-gui-menu-bar           class)
+  (create-gui-menu-bar         generic-function)
+  (clog-gui-menu-drop-down     class)
+  (create-gui-menu-drop-down   generic-function)
+  (clog-gui-menu-item          class)
+  (create-gui-menu-item        generic-function)
+  (create-gui-menu-full-screen generic-function)
+  (create-gui-menu-icon        generic-function))
   
 (defsection @clog-body (:title "CLOG Body Objects")
   "CLOG-Body - CLOG Body Objects"
