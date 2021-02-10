@@ -54,3 +54,4 @@ Tutorial Summary
 - 19-tutorial.lisp - Using JavaScript components
 - 20-tutorial.lisp - New CLOG plugin from JavaScript component
 - 21-tutorial.lisp - New CLOG plugin in Common-Lisp
+- 22-tutorial.lisp - CLOG GUI Menus and Desktop Look and Feel

@@ -59,7 +59,7 @@ To load this package and work through tutorials (assuming you
 have Quicklisp configured):
 
 1. Start emacs then M-x slime
-2. In the REPL, run (tutorials currently 1 - 21):
+2. In the REPL, run (tutorials currently 1 - 22):
 
 ```
 CL-USER> (ql:quickload :clog)
@@ -182,6 +182,7 @@ Tutorial Summary
 - 19-tutorial.lisp - Using JavaScript components
 - 20-tutorial.lisp - New CLOG plugin from JavaScript component
 - 21-tutorial.lisp - New CLOG plugin in Common-Lisp
+- 22-tutorial.lisp - CLOG GUI Menus and Desktop Look and Feel
 
 Demo Summary
 
@@ -189,14 +190,3 @@ Demo Summary
 - 02-demo.lisp - Chat - Private instant messenger
 - 03-demo.lisp - IDE - A very simple common lisp IDE
 
-Enhancements underway:
-
-- Database bindings and server-side APIs
-  - Current CL packages
-  - Direct bidings to widgets etc.
-
-- CLOG Devtools
-  - Generate application scaffolding
-  - GUI Builder
-    - Grid style
-    - Page style
