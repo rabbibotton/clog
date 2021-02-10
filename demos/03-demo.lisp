@@ -1,6 +1,4 @@
 ;;; As this demo uses eval do not run over the internet.
-;;; See the accompanying boot file at
-;;;    https://github.com/rabbibotton/clog/blob/main/static-files/demo/frame.html
 
 (defpackage #:clog-user
   (:use #:cl #:clog)
@@ -251,7 +249,7 @@
   (let* ((app   (connection-data-item obj "app-data"))
 	 (about (create-window (body app) "About"
 			       :content "<div class='w3-black'>
-                                         <center><img src='/demo/clogwicon.png'></center>
+                                         <center><img src='/img/clogwicon.png'></center>
 	                                 <center>CLOG</center>
 	                                 <center>The Common Lisp Omnificent GUI</center></div>
 			                 <div><p><center>Demo 3</center>
@@ -264,20 +262,29 @@
 (defun on-new-window (body)
   (let ((app (make-instance 'app-data)))
     (setf (connection-data-item body "app-data") app)
-    (setf (body app) body)
-    (set-on-click (attach-as-child body "ide-logo") #'do-ide-help-about)
-    (set-on-click (attach-as-child body "ide-file-new") #'do-ide-file-new)
-    (set-on-click (attach-as-child body "ide-file-open") #'do-ide-file-open)
-    (set-on-click (attach-as-child body "ide-file-save") #'do-ide-file-save)
-    (set-on-click (attach-as-child body "ide-file-save-as") #'do-ide-file-save-as)
-    (set-on-click (attach-as-child body "ide-edit-copy") #'do-ide-edit-copy)
-    (set-on-click (attach-as-child body "ide-edit-cut") #'do-ide-edit-cut)
-    (set-on-click (attach-as-child body "ide-edit-paste") #'do-ide-edit-paste)    
-    (set-on-click (attach-as-child body "ide-lisp-eval-file") #'do-ide-lisp-eval-file)
-    (set-on-click (attach-as-child body "ide-help-about") #'do-ide-help-about)
-    (run body)))
+    (setf (body app) body))  
+  (clog-gui-initialize body)
+  (load-script (html-document body) "https://pagecdn.io/lib/ace/1.4.12/ace.js")
+  (add-class body "w3-teal")
+  (let* ((menu  (create-gui-menu-bar body))
+	 (icon  (create-gui-menu-icon menu :on-click #'do-ide-help-about))
+	 (file  (create-gui-menu-drop-down menu :content "File"))
+	 (edit  (create-gui-menu-drop-down menu :content "Edit"))
+	 (lisp  (create-gui-menu-drop-down menu :content "Lisp"))
+	 (help  (create-gui-menu-drop-down menu :content "Help")))
+    (create-gui-menu-item file :content "New"       :on-click #'do-ide-file-new)
+    (create-gui-menu-item file :content "Open"      :on-click #'do-ide-file-open)
+    (create-gui-menu-item file :content "Save"      :on-click #'do-ide-file-save)
+    (create-gui-menu-item file :content "Save As"   :on-click #'do-ide-file-save-as)
+    (create-gui-menu-item edit :content "Copy"      :on-click #'do-ide-edit-copy)
+    (create-gui-menu-item edit :content "Cut"       :on-click #'do-ide-edit-cut)
+    (create-gui-menu-item edit :content "Paste"     :on-click #'do-ide-edit-paste)
+    (create-gui-menu-item lisp :content "Eval File" :on-click #'do-ide-lisp-eval-file)
+    (create-gui-menu-item help :content "About"     :on-click #'do-ide-help-about)
+    (create-gui-menu-full-screen menu))
+  (run body))
 
 (defun start-demo ()
   "Start demo."
-  (initialize #'on-new-window :boot-file "/demo/frame.html")
+  (initialize #'on-new-window)
   (open-browser))

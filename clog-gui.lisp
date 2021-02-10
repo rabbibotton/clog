@@ -66,18 +66,18 @@ clog-body."))
 
 (defgeneric create-gui-menu-item (clog-gui-menu-drop-down
 				  &key content
-				    on-click-handler
+				    on-click
 				    class
 				    html-id)
   (:documentation "Attached a menu item to a CLOG-GUI-MENU-DROP-DOWN"))
 
 (defmethod create-gui-menu-item ((obj clog-obj)
 				 &key (content "")
-				   (on-click-handler nil)
+				   (on-click nil)
 				   (class "w3-bar-item w3-button")
 				   (html-id nil))
   (let ((span (create-span obj :content content :class class :html-id html-id)))
-    (set-on-click span on-click-handler)
+    (set-on-click span on-click)
     (change-class span 'clog-gui-menu-item)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -103,14 +103,14 @@ icon ⤢ and full screen mode."))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defgeneric create-gui-menu-icon (clog-gui-menu-bar &key image-url
-						      on-click-handler
+						      on-click
 						      class
 						      html-id)
   (:documentation "Add icon as menu bar item."))
 
 (defmethod create-gui-menu-icon ((obj clog-gui-menu-bar)
 				 &key (image-url "/img/clogwicon.png")
-				   (on-click-handler nil)
+				   (on-click nil)
 				   (class "w3-button w3-bar-item")
 				   (html-id nil))
   (set-on-click
@@ -121,4 +121,4 @@ icon ⤢ and full screen mode."))
 			 image-url)
 		 :html-id html-id
 		 :clog-type 'clog-gui-menu-item)
-   on-click-handler))
+   on-click))
