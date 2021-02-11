@@ -74,7 +74,10 @@ embedded in a native template application.)"
   (rgb           function)
   (rgba          function)
   (hsl           function)
-  (hsla          function))
+  (hsla          function)
+
+  "CLOG Unit utilities"
+  (unit          function))
 
 (defsection @clog-obj (:title "CLOG Objects")
   "CLOG-Obj - Base class for CLOG Objects"
