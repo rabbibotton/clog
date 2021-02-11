@@ -46,8 +46,8 @@
   (let* ((app (connection-data-item obj "app-data"))
 	 (x   (getf data ':screen-x))
 	 (y   (getf data ':screen-y)))    
-    (setf (top obj) (format nil "~Apx" (- y (drag-y app))))
-    (setf (left obj) (format nil "~Apx" (- x (drag-x app))))))
+    (setf (top obj) (unit :px (- y (drag-y app))))
+    (setf (left obj) (unit :px (- x (drag-x app))))))
 
 (defun on-mouse-leave (obj)
   (let ((app (connection-data-item obj "app-data")))

@@ -130,14 +130,13 @@ CLOG-OBJ unless :NAME is set and is used instead."))
 alpha 0.0 - 1.0"
   (format nil "hsla(~A, ~A, ~A, ~A)" hue saturation lightness alpha))
 
-;; https://www.w3schools.com/colors/colors_names.asp
-;;
-;; From - https://www.w3schools.com/
-;;
-;; linear-gradient(direction, color-stop1, color-stop2, ...);
-;; radial-gradient(shape size at position, start-color, ..., last-color);
-;; repeating-linear-gradient(angle | to side-or-corner, color-stop1, color-stop2, ...);
-;; epeating-radial-gradient(shape size at position, start-color, ..., last-color);
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Implementation - Units
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;;;;;;;;;;
+;; unit ;;
+;;;;;;;;;;
 
 ;; cm	centimeters
 ;; mm	millimeters
@@ -145,7 +144,6 @@ alpha 0.0 - 1.0"
 ;; px  	pixels (1px = 1/96th of 1in)
 ;; pt	points (1pt = 1/72 of 1in)
 ;; pc	picas (1pc = 12 pt)
-
 ;; em	Relative to the font-size of the element (2em means 2 times the size of the current font)	
 ;; ex	Relative to the x-height of the current font (rarely used)	
 ;; ch	Relative to the width of the "0" (zero)	
@@ -155,6 +153,23 @@ alpha 0.0 - 1.0"
 ;; vmin	Relative to 1% of viewport's* smaller dimension	
 ;; vmax	Relative to 1% of viewport's* larger dimension	
 ;; %	Relative to the parent element
+
+(deftype unit-type () '(member :cm :mm :in :px :pt :pc :em :ex :ch :rem :vw
+			 :vh :vmin :vmax :%))
+
+(defun unit (unit-type value)
+  "produce a string from numeric value with UNIT-TYPE appended."
+  (format nil "~A~A" value unit-type))
+  
+;; https://www.w3schools.com/colors/colors_names.asp
+;;
+;; From - https://www.w3schools.com/
+;;
+;; linear-gradient(direction, color-stop1, color-stop2, ...);
+;; radial-gradient(shape size at position, start-color, ..., last-color);
+;; repeating-linear-gradient(angle | to side-or-corner, color-stop1, color-stop2, ...);
+;; epeating-radial-gradient(shape size at position, start-color, ..., last-color);
+
 ;;
 ;; * Viewport = the browser window size. If the viewport is 50cm wide, 1vw = 0.5cm.
 ;;
