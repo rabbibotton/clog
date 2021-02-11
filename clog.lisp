@@ -666,8 +666,17 @@ embedded in a native template application.)"
   (create-gui-menu-icon        generic-function)
 
   "CLOG-GUI - Windows"
+  (current-window              generic-function)
+  (clog-gui-window             class)
   (create-gui-window           generic-function)
   (window-title                generic-function)
+  (window-content              generic-function)
+  (set-on-window-can-close     generic-function)
+  (set-on-window-close         generic-function)
+  (set-on-window-can-move      generic-function)
+  (set-on-window-can-size      generic-function)
+  (set-on-window-move          generic-function)
+  (set-on-window-size          generic-function)
   (set-on-window-move-done     generic-function)
   (set-on-window-size-done     generic-function))
   

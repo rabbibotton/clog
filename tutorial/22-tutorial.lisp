@@ -5,9 +5,9 @@
 (in-package :clog-user)
 
 (defun on-file-new (body)
-  (setf (set-on-window-size-done (create-gui-window body))
-	(lambda (obj)
-	  (print "sized"))))
+  (let ((win (create-gui-window body)))
+    (dotimes (n 100)
+      (create-div (window-content win) :content n))))
 
 (defun on-new-window (body)
   (clog-gui-initialize body)

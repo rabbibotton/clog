@@ -19,7 +19,11 @@
    (current-win
     :accessor current-win
     :initform nil
-    :documentation "The current window at front.")
+    :documentation "The current window at front")
+   (windows
+    :accessor windows
+    :initform (make-hash-table :test 'equalp)
+    :documentation "Window collection")
    (last-z
     :accessor last-z
     :initform -9999
@@ -31,13 +35,17 @@
    (in-drag
     :accessor in-drag
     :initform nil
-    :documentation "Drag window or Size window.")
+    :documentation "Drag window or Size window")
+   (drag-obj
+    :accessor drag-obj
+    :initform nil
+    :documentation "Drag target object")
    (drag-x
     :accessor drag-x
-    :documentation "Location of the left side or width relative to pointer during drag.")
+    :documentation "Location of the left side or width relative to pointer during drag")
    (drag-y
     :accessor drag-y
-   :documentation "Location of the top or height relative to pointer during drag.")))
+   :documentation "Location of the top or height relative to pointer during drag")))
 
 ;;;;;;;;;;;;;;;;;;;;;
 ;; create-clog-gui ;;
@@ -45,7 +53,7 @@
 
 (defun create-clog-gui (clog-body)
   "Create a clog-gui object and places it in CLOG-BODY's connection-data as
-\"clog-gui\". (private)"
+\"clog-gui\". (Private)"
   (let ((clog-gui (make-instance 'clog-gui)))
     (setf (connection-data-item clog-body "clog-gui") clog-gui)
     (setf (body clog-gui) clog-body)
@@ -122,7 +130,8 @@ clog-body."))
 				   (on-click nil)
 				   (class "w3-bar-item w3-button")
 				   (html-id nil))
-  (let ((span (create-span obj :content content :class class :html-id html-id)))
+  (let ((span
+	  (create-span obj :content content :class class :html-id html-id)))
     (set-on-click span on-click)
     (change-class span 'clog-gui-menu-item)))
 
@@ -190,35 +199,35 @@ icon ⤢ and full screen mode."))
     :accessor sizer
     :documentation "Window sizer clog-element")
    (on-window-can-close
-    :accessor set-on-window-can-close
+    :accessor on-window-can-close
     :initform nil
     :documentation "Return t to allow close of window")
    (on-window-can-move
-    :accessor set-on-window-can-move
+    :accessor on-window-can-move
     :initform nil
     :documentation "Return t to allow move of window")
    (on-window-can-size
-    :accessor set-on-window-can-size
+    :accessor on-window-can-size
     :initform nil
     :documentation "Return t to allow close of window")
    (on-window-close
-    :accessor set-on-window-close
+    :accessor on-window-close
     :initform nil
     :documentation "Fired on window closed")
    (on-window-move
-    :accessor set-on-window-move
+    :accessor on-window-move
     :initform nil
     :documentation "Fired during move of window")
    (on-window-size
-    :accessor set-on-window-size
+    :accessor on-window-size
     :initform nil
     :documentation "Fired during size change of window")
    (on-window-move-done
-    :accessor set-on-window-move-done
+    :accessor on-window-move-done
     :initform nil
     :documentation "Fired after move of window")
    (on-window-size-done
-    :accessor set-on-window-size-done
+    :accessor on-window-size-done
     :initform nil
     :documentation "Fired after size change of window")))
 
@@ -231,26 +240,35 @@ icon ⤢ and full screen mode."))
   (let ((app (connection-data-item obj "clog-gui")))
     (unless (in-drag app)
       (setf (in-drag app) (attribute obj "data-drag-type"))
-      (let* ((id-drag   (attribute obj "data-drag-obj"))
-	     (drag-obj  (attach-as-child obj id-drag))
+      (let* ((target (gethash (attribute obj "data-drag-obj") (windows app)))
 	     (pointer-x (getf data ':screen-x))
 	     (pointer-y (getf data ':screen-y))
 	     (obj-top)
-	     (obj-left))
-	(cond ((equalp (in-drag app) "m")
-	       (setf obj-top  (parse-integer (top drag-obj) :junk-allowed t))
-	       (setf obj-left (parse-integer (left drag-obj) :junk-allowed t)))
-	    ((equalp (in-drag app) "s")
-	     (setf obj-top  (height drag-obj))
-	     (setf obj-left (width drag-obj)))
-	    (t
-	     (format t "Warning - invalid data-drag-type attribute")))
-	(setf (z-index drag-obj) (incf (last-z app)))
-	(setf (current-win app) drag-obj)
-	(setf (drag-y app) (- pointer-y obj-top))
-	(setf (drag-x app) (- pointer-x obj-left))
-	(set-on-pointer-move obj 'on-gui-drag-move)
-	(set-on-pointer-up obj 'on-gui-drag-stop)))))
+	     (obj-left)
+	     (perform-drag nil))
+	(when target
+	  (setf (drag-obj app) target)
+	  (cond ((equalp (in-drag app) "m")
+		 (setf obj-top
+		       (parse-integer (top (drag-obj app)) :junk-allowed t))
+		 (setf obj-left
+		       (parse-integer (left (drag-obj app)) :junk-allowed t))
+		 (setf perform-drag (fire-on-window-can-move (drag-obj app))))
+		((equalp (in-drag app) "s")
+		 (setf obj-top  (height (drag-obj app)))
+		 (setf obj-left (width (drag-obj app)))
+		 (setf perform-drag (fire-on-window-can-size (drag-obj app))))
+		(t		  
+		 (format t "Warning - invalid data-drag-type attribute")))
+	  (setf (z-index (drag-obj app)) (incf (last-z app)))
+	  (setf (current-win app) (drag-obj app))
+	  (setf (drag-y app) (- pointer-y obj-top))
+	  (setf (drag-x app) (- pointer-x obj-left)))
+	(cond (perform-drag
+	       (set-on-pointer-move obj 'on-gui-drag-move)
+	       (set-on-pointer-up obj 'on-gui-drag-stop))
+	      (t
+	       (setf (in-drag app) nil)))))))
 
 ;;;;;;;;;;;;;;;;;;;;;;
 ;; on-gui-drag-move ;;
@@ -259,20 +277,19 @@ icon ⤢ and full screen mode."))
 (defun on-gui-drag-move (obj data)
   "Handle mouse tracking on drag object"
   (let* ((app (connection-data-item obj "clog-gui"))
-	 (drag-obj (attach-as-child obj (attribute obj "data-drag-obj")))	 
 	 (x        (getf data ':screen-x))
 	 (y        (getf data ':screen-y))
 	 (adj-y    (- y (drag-y app)))
 	 (adj-x    (- x (drag-x app))))
     (when (and (> adj-x 0) (> adj-y 30))
       (cond ((equalp (in-drag app) "m")
-	     ;; send on-window-move
-	     (setf (top drag-obj) (unit :px adj-y))
-	     (setf (left drag-obj) (unit :px adj-x)))
+	     (fire-on-window-move (drag-obj app))
+	     (setf (top (drag-obj app)) (unit :px adj-y))
+	     (setf (left (drag-obj app)) (unit :px adj-x)))
 	    ((equalp (in-drag app) "s")
-	      ;; send on-window-resize
-	     (setf (height drag-obj) (unit :px adj-y))
-	     (setf (width drag-obj) (unit :px adj-x)))))))
+	     (fire-on-window-size (drag-obj app))
+	     (setf (height (drag-obj app)) (unit :px adj-y))
+	     (setf (width (drag-obj app)) (unit :px adj-x)))))))
 
 ;;;;;;;;;;;;;;;;;;;;;;
 ;; on-gui-drag-stop ;;
@@ -280,18 +297,16 @@ icon ⤢ and full screen mode."))
 
 (defun on-gui-drag-stop (obj data)
   "Handle end of drag object"
-  (let ((app (connection-data-item obj "clog-gui"))
-	(drag-obj (attach-as-child obj (attribute obj "data-drag-obj"))))
+  (let ((app (connection-data-item obj "clog-gui")))
     (on-gui-drag-move obj data)
-    (setf (in-drag app) nil)
     (set-on-pointer-move obj nil)
     (set-on-pointer-up obj nil)
     (cond ((equalp (in-drag app) "m")
-	   (when (set-on-window-move-done app)
-	     (funcall (set-on-window-move-done app) drag-obj)))
+	   (fire-on-window-move-done (drag-obj app)))
 	  ((equalp (in-drag app) "s")
-	   (when (set-on-window-size-done app)
-	     (funcall (set-on-window-size-done app) drag-obj))))))
+	   (fire-on-window-size-done (drag-obj app))))
+    (setf (in-drag app) nil)
+    (setf (drag-obj app) nil)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;
 ;; create-gui-window ;;
@@ -326,7 +341,7 @@ icon ⤢ and full screen mode."))
                                <span id='~A-closer'
                                      style='cursor:pointer;user-select:none;'>X</span>
                              </div>
-                             <div id='~A-body'  style='flex-grow:9;'>~A</div>
+                             <div id='~A-body' style='flex-grow:9;overflow:auto'>~A</div>
                              <div id='~A-sizer' style='user-select:none;height:1px;
                                                        cursor:se-resize;opacity:0'
                                   class='w3-right' data-drag-obj='~A' data-drag-type='s'>+</div>
@@ -348,8 +363,24 @@ icon ⤢ and full screen mode."))
     (set-on-pointer-down (win-title win) 'on-gui-drag-down :capture-pointer t)
     (set-on-pointer-down (sizer win) 'on-gui-drag-down :capture-pointer t)    
     (set-on-click (closer win) (lambda (obj)
-				 (remove-from-dom win)))
+				 (when (fire-on-window-can-close win)
+				   (remhash (format nil "~A" html-id) (windows app))
+				   (remove-from-dom win)
+				   (fire-on-window-close win))))
+    (setf (gethash (format nil "~A" html-id) (windows app)) win)
+    (setf (current-win app) win)
     win))
+
+;;;;;;;;;;;;;;;;;;;;
+;; current-window ;;
+;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric current-window (clog-obj)
+  (:documentation "Get the current selected clog-gui-window"))
+
+(defmethod current-window ((obj clog-obj))
+  (let ((app (connection-data-item obj "clog-gui")))
+    (current-win app)))
 
 ;;;;;;;;;;;;;;;;;;
 ;; window-title ;;
@@ -367,3 +398,146 @@ icon ⤢ and full screen mode."))
 (defmethod set-window-title ((obj clog-gui-window) value)
   (setf (inner-html (win-title obj)) value))
 (defsetf window-title set-window-title)
+
+;;;;;;;;;;;;;;;;;;;;
+;; window-content ;;
+;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric window-content (clog-gui-window)
+  (:documentation "Get window content element."))
+
+(defmethod window-content ((obj clog-gui-window))
+  (content obj))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; set-on-window-can-close ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric set-on-window-can-close (clog-gui-window handler)
+  (:documentation "Set the on-window-can-close HANDLER"))
+
+(defmethod set-on-window-can-close ((obj clog-gui-window) handler)
+  (setf (on-window-can-close obj) handler))
+
+(defgeneric fire-on-window-can-close (clog-gui-window)
+  (:documentation "Fire handler if set. (Private)"))
+
+(defmethod fire-on-window-can-close ((obj clog-gui-window))
+  (if (on-window-can-close obj)
+      (funcall (on-window-can-close obj) obj)
+      t))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;
+;; set-on-window-close ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric set-on-window-close (clog-gui-window handler)
+  (:documentation "Set the on-window-close HANDLER"))
+
+(defmethod set-on-window-close ((obj clog-gui-window) handler)
+  (setf (on-window-close obj) handler))
+
+(defgeneric fire-on-window-close (clog-gui-window)
+  (:documentation "Fire handler if set. (Private)"))
+
+(defmethod fire-on-window-close ((obj clog-gui-window))
+  (when (on-window-close obj)
+    (funcall (on-window-close obj) obj)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; set-on-window-can-size ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric set-on-window-can-size (clog-gui-window handler)
+  (:documentation "Set the on-window-can-size HANDLER"))
+
+(defmethod set-on-window-can-size ((obj clog-gui-window) handler)
+  (setf (on-window-can-size obj) handler))
+
+(defgeneric fire-on-window-can-size (clog-gui-window)
+  (:documentation "Fire handler if set. (Private)"))
+
+(defmethod fire-on-window-can-size ((obj clog-gui-window))
+  (if (on-window-can-size obj)
+      (funcall (on-window-can-size obj) obj)
+      t))
+
+;;;;;;;;;;;;;;;;;;;;;;;;
+;; set-on-window-size ;;
+;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric set-on-window-size (clog-gui-window handler)
+  (:documentation "Set the on-window-size HANDLER"))
+
+(defmethod set-on-window-size ((obj clog-gui-window) handler)
+  (setf (on-window-size obj) handler))
+
+(defgeneric fire-on-window-size (clog-gui-window)
+  (:documentation "Fire handler if set. (Private)"))
+
+(defmethod fire-on-window-size ((obj clog-gui-window))
+  (when (on-window-size obj)
+    (funcall (on-window-size obj) obj)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; set-on-window-size-done ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric set-on-window-size-done (clog-gui-window handler)
+  (:documentation "Set the on-window-size-done HANDLER"))
+
+(defmethod set-on-window-size-done ((obj clog-gui-window) handler)
+  (setf (on-window-size-done obj) handler))
+
+(defmethod fire-on-window-size-done ((obj clog-gui-window))
+  (when (on-window-size-done obj)
+    (funcall (on-window-size-done obj) obj)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; set-on-window-can-move ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric set-on-window-can-move (clog-gui-window handler)
+  (:documentation "Set the on-window-can-move HANDLER"))
+
+(defmethod set-on-window-can-move ((obj clog-gui-window) handler)
+  (setf (on-window-can-move obj) handler))
+
+(defgeneric fire-on-window-can-move (clog-gui-window)
+  (:documentation "Fire handler if set. (Private)"))
+
+(defmethod fire-on-window-can-move ((obj clog-gui-window))
+  (if (on-window-can-move obj)
+      (funcall (on-window-can-move obj) obj)
+      t))
+
+;;;;;;;;;;;;;;;;;;;;;;;;
+;; set-on-window-move ;;
+;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric set-on-window-move (clog-gui-window handler)
+  (:documentation "Set the on-window-move HANDLER"))
+
+(defmethod set-on-window-move ((obj clog-gui-window) handler)
+  (setf (on-window-move obj) handler))
+
+(defgeneric fire-on-window-move (clog-gui-window)
+  (:documentation "Fire handler if set. (Private)"))
+
+(defmethod fire-on-window-move ((obj clog-gui-window))
+  (when (on-window-move obj)
+    (funcall (on-window-move obj) obj)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; set-on-window-move-done ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric set-on-window-move-done (clog-gui-window handler)
+  (:documentation "Set the on-window-move-done HANDLER"))
+
+(defmethod set-on-window-move-done ((obj clog-gui-window) handler)
+  (setf (on-window-move-done obj) handler))
+
+(defmethod fire-on-window-move-done ((obj clog-gui-window))
+  (when (on-window-move-done obj)
+    (funcall (on-window-move-done obj) obj)))
