@@ -14,7 +14,7 @@
 (mgl-pax:define-package :clog
   (:documentation "The Common List Omnificent GUI - CLOG")  
   (:local-nicknames (:cc :clog-connection))
-  (:use #:cl #:mgl-pax))
+  (:use #:cl #:parse-float #:mgl-pax))
 
 (in-package :clog)
 
@@ -655,6 +655,7 @@ embedded in a native template application.)"
   "CLOG-GUI -  Desktop GUI abstraction for CLOG"
   (clog-gui-initialize function)
 
+  "CLOG-GUI - Menus"
   (clog-gui-menu-bar           class)
   (create-gui-menu-bar         generic-function)
   (clog-gui-menu-drop-down     class)
@@ -662,7 +663,13 @@ embedded in a native template application.)"
   (clog-gui-menu-item          class)
   (create-gui-menu-item        generic-function)
   (create-gui-menu-full-screen generic-function)
-  (create-gui-menu-icon        generic-function))
+  (create-gui-menu-icon        generic-function)
+
+  "CLOG-GUI - Windows"
+  (create-gui-window           generic-function)
+  (window-title                generic-function)
+  (set-on-window-move-done     generic-function)
+  (set-on-window-size-done     generic-function))
   
 (defsection @clog-body (:title "CLOG Body Objects")
   "CLOG-Body - CLOG Body Objects"

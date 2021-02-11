@@ -411,7 +411,8 @@ result or if time out DEFAULT-ANSWER (Private)"))
   (:documentation "Get connection-data that is associated with
 clog-obj that will persist regardless of thread. The event hooks
 are stored in this string based hash in the format of:
-\"html-id:event-name\" => #'event-handler."))
+\"html-id:event-name\" => #'event-handler. clog-* keys are reserved
+for internal use of clog."))
 
 (defmethod connection-data ((obj clog-obj))
   (cc:get-connection-data (connection-id obj)))

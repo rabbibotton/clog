@@ -153,6 +153,8 @@ alpha 0.0 - 1.0"
 ;; vmin	Relative to 1% of viewport's* smaller dimension	
 ;; vmax	Relative to 1% of viewport's* larger dimension	
 ;; %	Relative to the parent element
+;;
+;; * Viewport = the browser window size. If the viewport is 50cm wide, 1vw = 0.5cm.
 
 (deftype unit-type () '(member :cm :mm :in :px :pt :pc :em :ex :ch :rem :vw
 			 :vh :vmin :vmax :%))
@@ -169,9 +171,7 @@ alpha 0.0 - 1.0"
 ;; radial-gradient(shape size at position, start-color, ..., last-color);
 ;; repeating-linear-gradient(angle | to side-or-corner, color-stop1, color-stop2, ...);
 ;; epeating-radial-gradient(shape size at position, start-color, ..., last-color);
-
 ;;
-;; * Viewport = the browser window size. If the viewport is 50cm wide, 1vw = 0.5cm.
 ;;
 ;; The following list are the best web safe fonts for HTML and CSS:
 ;;
