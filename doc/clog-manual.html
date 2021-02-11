@@ -461,6 +461,16 @@ their <a href="#x-28CLOG-3AHTML-ID-20GENERIC-FUNCTION-29" title="(CLOG:HTML-ID G
 alpha 0.0 - 1.0</p></li>
 </ul>
 
+<p><code>CLOG</code> Unit utilities</p>
+
+<p><a id='x-28CLOG-3AUNIT-20FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#x-28CLOG-3AUNIT-20FUNCTION-29" >UNIT</a></span></span> <span class="locative-args">UNIT-TYPE VALUE</span></span></p>
+
+<p>produce a string from numeric value with <code>UNIT-TYPE</code> appended.</p></li>
+</ul>
+
 <p><a id='x-28CLOG-3A-40CLOG-OBJ-20MGL-PAX-3ASECTION-29'></a></p>
 
 <p><span class="outer-navigation"><span class="navigation"> <a href="#x-28CLOG-3A-40CLOG-UTILITIES-20MGL-PAX-3ASECTION-29" title="CLOG Utilities">&#8592;</a> <a href="#x-28CLOG-3A-40CLOG-MANUAL-20MGL-PAX-3ASECTION-29" title="The CLOG manual">&#8593;</a> <a href="#x-28CLOG-3A-40CLOG-ELEMENT-20MGL-PAX-3ASECTION-29" title="CLOG Elements">&#8594;</a> <a href="#x-28CLOG-3A-40CLOG-OBJ-20MGL-PAX-3ASECTION-29" title="CLOG Objects">&#8634;</a></span></span></p>
@@ -4429,14 +4439,15 @@ is nil unbind the event.</p></li>
 
 <h2><a href="#x-28CLOG-3A-40CLOG-GUI-20MGL-PAX-3ASECTION-29">12 CLOG GUI Objects</a></h2>
 
-<p>CLOG-GUI -  Desktop GUI abstraction for <code>CLOG</code></p>
+<p><code>CLOG-GUI</code> -  Desktop GUI abstraction for <code>CLOG</code></p>
 
 <p><a id='x-28CLOG-3ACLOG-GUI-INITIALIZE-20FUNCTION-29'></a></p>
 
 <ul>
 <li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#x-28CLOG-3ACLOG-GUI-INITIALIZE-20FUNCTION-29" >CLOG-GUI-INITIALIZE</a></span></span> <span class="locative-args">CLOG-BODY &amp;KEY (W3-CSS-URL &quot;/css/w3.css&quot;)</span></span></p>
 
-<p>Initializes clog-gui loading w3.css from <code>:W3-CSS-URL</code></p></li>
+<p>Initializes clog-gui loading w3.css from <code>:W3-CSS-URL</code> and installs a
+clog-gui object on connection.</p></li>
 </ul>
 
 <p><a id='x-28CLOG-3ACLOG-GUI-MENU-BAR-20CLASS-29'></a></p>
@@ -4483,7 +4494,7 @@ clog-body.</p></li>
 <p><a id='x-28CLOG-3ACREATE-GUI-MENU-ITEM-20GENERIC-FUNCTION-29'></a></p>
 
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ACREATE-GUI-MENU-ITEM-20GENERIC-FUNCTION-29" >CREATE-GUI-MENU-ITEM</a></span></span> <span class="locative-args">CLOG-GUI-MENU-DROP-DOWN &amp;KEY CONTENT ON-CLICK-HANDLER CLASS HTML-ID</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ACREATE-GUI-MENU-ITEM-20GENERIC-FUNCTION-29" >CREATE-GUI-MENU-ITEM</a></span></span> <span class="locative-args">CLOG-GUI-MENU-DROP-DOWN &amp;KEY CONTENT ON-CLICK CLASS HTML-ID</span></span></p>
 
 <p>Attached a menu item to a <code>CLOG-GUI-MENU-DROP-DOWN</code></p></li>
 </ul>
@@ -4500,7 +4511,7 @@ icon ⤢ and full screen mode.</p></li>
 <p><a id='x-28CLOG-3ACREATE-GUI-MENU-ICON-20GENERIC-FUNCTION-29'></a></p>
 
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ACREATE-GUI-MENU-ICON-20GENERIC-FUNCTION-29" >CREATE-GUI-MENU-ICON</a></span></span> <span class="locative-args">CLOG-GUI-MENU-BAR &amp;KEY IMAGE-URL ON-CLICK-HANDLER CLASS HTML-ID</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ACREATE-GUI-MENU-ICON-20GENERIC-FUNCTION-29" >CREATE-GUI-MENU-ICON</a></span></span> <span class="locative-args">CLOG-GUI-MENU-BAR &amp;KEY IMAGE-URL ON-CLICK CLASS HTML-ID</span></span></p>
 
 <p>Add icon as menu bar item.</p></li>
 </ul>
