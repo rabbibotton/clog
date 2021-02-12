@@ -5,19 +5,22 @@
 (in-package :clog-user)
 
 (defun on-file-count (body)
-  (let ((win (create-gui-window body :left (random 600) :top (+ 40 (random 400)))))
+  (let ((win (create-gui-window body :left (random 600) :top (+ 40 (random 400))
+				     :client-movement t)))
     (dotimes (n 100)
       ;; window-content is the root element for the clog-gui
       ;; windows
       (create-div (window-content win) :content n))))
 
 (defun on-file-browse (body)
-  (let* ((win (create-gui-window body :left (random 600) :top (+ 40 (random 400))))
+  (let* ((win (create-gui-window body :left (random 600) :top (+ 40 (random 400))
+				      :client-movement t))
 	 (browser (create-child (window-content win)
 	    "<iframe width=100% height=98% src='https://common-lisp.net/'></iframe>")))))
 
 (defun on-file-drawing (body)
-  (let* ((win (create-gui-window body :left (random 600) :top (+ 40 (random 400))))
+  (let* ((win (create-gui-window body :left (random 600) :top (+ 40 (random 400))
+				      :client-movement nil))
 	 (canvas (create-canvas (window-content win) :width 600 :height 400))
 	 (cx     (create-context2d canvas)))
     (set-border canvas :thin :solid :black)    
@@ -33,7 +36,8 @@
     (path-fill cx)))
 
 (defun on-file-movies (body)
-  (let* ((win (create-gui-window body :left (random 600) :top (+ 40 (random 400)))))
+  (let ((win (create-gui-window body :left (random 600) :top (+ 40 (random 400))
+				     :client-movement t)))
     (create-video (window-content win) :source "https://www.w3schools.com/html/mov_bbb.mp4")))
 
 (defun on-help-about (body)

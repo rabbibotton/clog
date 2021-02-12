@@ -67,10 +67,14 @@
 ;; clog-gui-initialize ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defun clog-gui-initialize (clog-body &key (w3-css-url "/css/w3.css"))
+(defun clog-gui-initialize (clog-body &key (w3-css-url "/css/w3.css")
+					(jquery-ui-css "/css/jquery-ui.css")
+					(jquery-ui "/js/jquery-ui.js"))
   "Initializes clog-gui loading w3.css from :W3-CSS-URL and installs a
 clog-gui object on connection."
   (create-clog-gui clog-body)
+  (load-script (html-document clog-body) jquery-ui)
+  (load-css (html-document clog-body) jquery-ui-css)
   (load-css (html-document clog-body) w3-css-url))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -305,7 +309,7 @@ The on-window-change clog-obj received is the new window"))
 		 (setf obj-top  (height (drag-obj app)))
 		 (setf obj-left (width (drag-obj app)))
 		 (setf perform-drag (fire-on-window-can-size (drag-obj app))))
-		(t		  
+		(t
 		 (format t "Warning - invalid data-drag-type attribute")))
 	  (setf (z-index (drag-obj app)) (incf (last-z app)))
 	  (fire-on-window-change (drag-obj app) app)
@@ -362,8 +366,10 @@ The on-window-change clog-obj received is the new window"))
 (defgeneric create-gui-window (clog-obj &key title
 					  content
 					  left top width height
+					  client-movement
 					  html-id)
-  (:documentation "Create a clog-gui-window"))
+  (:documentation "Create a clog-gui-window. If client-movement is t then
+use jquery-ui to move/resize."))
 
 (defmethod create-gui-window ((obj clog-obj) &key (title "New Window")
 					       (content "")
@@ -371,6 +377,7 @@ The on-window-change clog-obj received is the new window"))
 					       (top 60)
 					       (width 400)
 					       (height 300)
+					       (client-movement nil)
 					       (html-id nil))
   (unless html-id
     (setf html-id (clog-connection:generate-id)))
@@ -407,20 +414,31 @@ The on-window-change clog-obj received is the new window"))
     (setf (closer win) (attach-as-child win (format nil "~A-closer" html-id)))
     (setf (sizer win) (attach-as-child win (format nil "~A-sizer" html-id)))
     (setf (content win) (attach-as-child win (format nil "~A-body"  html-id)))
-    (set-on-pointer-down (win-title win) 'on-gui-drag-down :capture-pointer t)
     (set-on-double-click (win-title win) (lambda (obj)
 					   (setf (width win) (unit :px 800))
 					   (setf (height win) (unit :px 600))))
-    (set-on-pointer-down (sizer win) 'on-gui-drag-down :capture-pointer t)    
     (set-on-click (closer win) (lambda (obj)
 				 (declare (ignore obj))
 				 (when (fire-on-window-can-close win)
-				   (remhash (format nil "~A" html-id) (windows app))
+				   (remhash (format nil "~A" html-id)
+					    (windows app))
 				   (remove-from-dom win)
 				   (fire-on-window-change nil app)
 				   (fire-on-window-close win))))
     (setf (gethash (format nil "~A" html-id) (windows app)) win)
     (fire-on-window-change win app)
+    (cond (client-movement
+	   (jquery-execute win (format nil "draggable({handle:'#~A-title-bar'})" html-id))
+	   (jquery-execute win "resizable({handles:'se'})")
+	   (set-on-pointer-down (win-title win)
+				(lambda (obj data)
+				  (setf (z-index win) (incf (last-z app)))
+				  (fire-on-window-change win app))))
+	  (t
+	   (set-on-pointer-down
+	    (win-title win) 'on-gui-drag-down :capture-pointer t)
+	   (set-on-pointer-down
+	    (sizer win) 'on-gui-drag-down :capture-pointer t)))
     win))
 
 ;;;;;;;;;;;;;;;;;;
