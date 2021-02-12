@@ -40,6 +40,7 @@
 				     (create-label form :content "File Name:")))
 	 (ok    (create-button form :content "OK")))
     (set-on-click ok (lambda (obj)
+		       (declare (ignore obj))
 		       (remove-from-dom win)
 		       (funcall on-file-name (value input))))))
 
@@ -157,7 +158,8 @@
 				   :left    (- (/ (width (body app)) 2) 100)
 				   :width   200
 				   :height  200)))
-    (set-on-window-can-size about (lambda (obj)()))))
+    (set-on-window-can-size about (lambda (obj)
+				    (declare (ignore obj))()))))
 
 (defun on-new-window (body)
   (let ((app (make-instance 'app-data)))

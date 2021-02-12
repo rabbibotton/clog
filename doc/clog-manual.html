@@ -542,7 +542,8 @@ lisp and the <code>HTML</code> DOM element.</p></li>
 <p>Get connection-data that is associated with
 clog-obj that will persist regardless of thread. The event hooks
 are stored in this string based hash in the format of:
-&quot;html-id:event-name&quot; =&gt; #'event-handler.</p></li>
+&quot;html-id:event-name&quot; =&gt; #'event-handler. clog-* keys are reserved
+for internal use of clog.</p></li>
 </ul>
 
 <p><a id='x-28CLOG-3ACONNECTION-DATA-ITEM-20GENERIC-FUNCTION-29'></a></p>
@@ -4450,6 +4451,8 @@ is nil unbind the event.</p></li>
 clog-gui object on connection.</p></li>
 </ul>
 
+<p><code>CLOG-GUI</code> - Menus</p>
+
 <p><a id='x-28CLOG-3ACLOG-GUI-MENU-BAR-20CLASS-29'></a></p>
 
 <ul>
@@ -4514,6 +4517,121 @@ icon ⤢ and full screen mode.</p></li>
 <li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ACREATE-GUI-MENU-ICON-20GENERIC-FUNCTION-29" >CREATE-GUI-MENU-ICON</a></span></span> <span class="locative-args">CLOG-GUI-MENU-BAR &amp;KEY IMAGE-URL ON-CLICK CLASS HTML-ID</span></span></p>
 
 <p>Add icon as menu bar item.</p></li>
+</ul>
+
+<p><code>CLOG-GUI</code> - Window System</p>
+
+<p><a id='x-28CLOG-3ACURRENT-WINDOW-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ACURRENT-WINDOW-20GENERIC-FUNCTION-29" >CURRENT-WINDOW</a></span></span> <span class="locative-args">CLOG-OBJ</span></span></p>
+
+<p>Get the current selected clog-gui-window</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3ASET-ON-WINDOW-CHANGE-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ASET-ON-WINDOW-CHANGE-20GENERIC-FUNCTION-29" >SET-ON-WINDOW-CHANGE</a></span></span> <span class="locative-args">CLOG-OBJ HANDLER</span></span></p>
+
+<p>Set the on-window-change <code>HANDLER</code>.
+The on-window-change clog-obj received is the new window</p></li>
+</ul>
+
+<p><code>CLOG-GUI</code> - Individual Windows</p>
+
+<p><a id='x-28CLOG-3ACLOG-GUI-WINDOW-20CLASS-29'></a></p>
+
+<ul>
+<li><span class=reference-bullet><span class=reference><span class="locative-type">[class]</span> <span class="reference-object"><a href="#x-28CLOG-3ACLOG-GUI-WINDOW-20CLASS-29" >CLOG-GUI-WINDOW</a></span></span> <span class="locative-args"><a href="#x-28CLOG-3ACLOG-ELEMENT-20CLASS-29" title="(CLOG:CLOG-ELEMENT CLASS)">CLOG-ELEMENT</a></span></span></li>
+</ul>
+
+<p><a id='x-28CLOG-3ACREATE-GUI-WINDOW-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ACREATE-GUI-WINDOW-20GENERIC-FUNCTION-29" >CREATE-GUI-WINDOW</a></span></span> <span class="locative-args">CLOG-OBJ &amp;KEY TITLE CONTENT LEFT TOP WIDTH HEIGHT HTML-ID</span></span></p>
+
+<p>Create a clog-gui-window</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3AWINDOW-TITLE-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3AWINDOW-TITLE-20GENERIC-FUNCTION-29" >WINDOW-TITLE</a></span></span> <span class="locative-args">CLOG-GUI-WINDOW</span></span></p>
+
+<p>Get/setf window title</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3AWINDOW-CONTENT-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3AWINDOW-CONTENT-20GENERIC-FUNCTION-29" >WINDOW-CONTENT</a></span></span> <span class="locative-args">CLOG-GUI-WINDOW</span></span></p>
+
+<p>Get window content element.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3ASET-ON-WINDOW-CAN-CLOSE-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ASET-ON-WINDOW-CAN-CLOSE-20GENERIC-FUNCTION-29" >SET-ON-WINDOW-CAN-CLOSE</a></span></span> <span class="locative-args">CLOG-GUI-WINDOW HANDLER</span></span></p>
+
+<p>Set the on-window-can-close <code>HANDLER</code></p></li>
+</ul>
+
+<p><a id='x-28CLOG-3ASET-ON-WINDOW-CLOSE-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ASET-ON-WINDOW-CLOSE-20GENERIC-FUNCTION-29" >SET-ON-WINDOW-CLOSE</a></span></span> <span class="locative-args">CLOG-GUI-WINDOW HANDLER</span></span></p>
+
+<p>Set the on-window-close <code>HANDLER</code></p></li>
+</ul>
+
+<p><a id='x-28CLOG-3ASET-ON-WINDOW-CAN-MOVE-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ASET-ON-WINDOW-CAN-MOVE-20GENERIC-FUNCTION-29" >SET-ON-WINDOW-CAN-MOVE</a></span></span> <span class="locative-args">CLOG-GUI-WINDOW HANDLER</span></span></p>
+
+<p>Set the on-window-can-move <code>HANDLER</code></p></li>
+</ul>
+
+<p><a id='x-28CLOG-3ASET-ON-WINDOW-CAN-SIZE-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ASET-ON-WINDOW-CAN-SIZE-20GENERIC-FUNCTION-29" >SET-ON-WINDOW-CAN-SIZE</a></span></span> <span class="locative-args">CLOG-GUI-WINDOW HANDLER</span></span></p>
+
+<p>Set the on-window-can-size <code>HANDLER</code></p></li>
+</ul>
+
+<p><a id='x-28CLOG-3ASET-ON-WINDOW-MOVE-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ASET-ON-WINDOW-MOVE-20GENERIC-FUNCTION-29" >SET-ON-WINDOW-MOVE</a></span></span> <span class="locative-args">CLOG-GUI-WINDOW HANDLER</span></span></p>
+
+<p>Set the on-window-move <code>HANDLER</code></p></li>
+</ul>
+
+<p><a id='x-28CLOG-3ASET-ON-WINDOW-SIZE-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ASET-ON-WINDOW-SIZE-20GENERIC-FUNCTION-29" >SET-ON-WINDOW-SIZE</a></span></span> <span class="locative-args">CLOG-GUI-WINDOW HANDLER</span></span></p>
+
+<p>Set the on-window-size <code>HANDLER</code></p></li>
+</ul>
+
+<p><a id='x-28CLOG-3ASET-ON-WINDOW-MOVE-DONE-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ASET-ON-WINDOW-MOVE-DONE-20GENERIC-FUNCTION-29" >SET-ON-WINDOW-MOVE-DONE</a></span></span> <span class="locative-args">CLOG-GUI-WINDOW HANDLER</span></span></p>
+
+<p>Set the on-window-move-done <code>HANDLER</code></p></li>
+</ul>
+
+<p><a id='x-28CLOG-3ASET-ON-WINDOW-SIZE-DONE-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ASET-ON-WINDOW-SIZE-DONE-20GENERIC-FUNCTION-29" >SET-ON-WINDOW-SIZE-DONE</a></span></span> <span class="locative-args">CLOG-GUI-WINDOW HANDLER</span></span></p>
+
+<p>Set the on-window-size-done <code>HANDLER</code></p></li>
 </ul>
 
 <p><a id='x-28CLOG-3A-40CLOG-BODY-20MGL-PAX-3ASECTION-29'></a></p>
@@ -5002,7 +5120,7 @@ on-storage event is fired for changes to :local storage keys.</p></li>
 <p><a id='x-28CLOG-3ABODY-ELEMENT-20GENERIC-FUNCTION-29'></a></p>
 
 <ul>
-<li><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ABODY-ELEMENT-20GENERIC-FUNCTION-29" >BODY-ELEMENT</a></span></span> <span class="locative-args">SELF</span></span></li>
+<li><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ABODY-ELEMENT-20GENERIC-FUNCTION-29" >BODY-ELEMENT</a></span></span> <span class="locative-args">OBJECT</span></span></li>
 </ul>
 
 <p><a id='x-28CLOG-3ADOCUMENT-ELEMENT-20GENERIC-FUNCTION-29'></a></p>
