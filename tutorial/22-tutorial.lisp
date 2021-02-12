@@ -13,7 +13,7 @@
   ;; for fine control and is best for local applications although will be a bit
   ;; more choppy cross continent or via satellite.
   (let ((win (create-gui-window body :left (random 600) :top (+ 40 (random 400))
-				     :client-movement t))
+				     :client-movement t)))
     (dotimes (n 100)
       ;; window-content is the root element for the clog-gui
       ;; windows

@@ -433,6 +433,10 @@ use jquery-ui to move/resize."))
 	   (set-on-pointer-down (win-title win)
 				(lambda (obj data)
 				  (setf (z-index win) (incf (last-z app)))
+				  (fire-on-window-change win app)))
+	   (set-on-pointer-down (sizer win)
+				(lambda (obj data)
+				  (setf (z-index win) (incf (last-z app)))
 				  (fire-on-window-change win app))))
 	  (t
 	   (set-on-pointer-down
