@@ -4,19 +4,24 @@
 
 (in-package :clog-user)
 
-(defun on-file-new (body)
+(defun on-file-count (body)
   (let ((win (create-gui-window body)))
     (dotimes (n 100)
       (create-div (window-content win) :content n))))
 
+(defun on-file-browse (body)
+  (let* ((win     (create-gui-window body))
+	 (browser (create-child (window-content win)
+	    "<iframe width=100% height=98% src='https://common-lisp.net/'></iframe>")))))
+  
 (defun on-new-window (body)
   (clog-gui-initialize body)
-  (add-class body "w3-teal")  
+  (add-class body "w3-cyan")  
   (let* ((menu  (create-gui-menu-bar body))
 	 (icon  (create-gui-menu-icon menu))
 	 (file  (create-gui-menu-drop-down menu :content "File"))
-	 (new   (create-gui-menu-item file :content "New" :on-click #'on-file-new))
-	 (open  (create-gui-menu-item file :content "Open"))
+	 (new   (create-gui-menu-item file :content "Count" :on-click #'on-file-count))
+	 (open  (create-gui-menu-item file :content "Browse" :on-click #'on-file-browse))
 	 (save  (create-gui-menu-item file :content "Save"))
 	 (help  (create-gui-menu-drop-down menu :content "Help"))
 	 (about (create-gui-menu-item help :content "About"))
