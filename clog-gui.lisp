@@ -437,6 +437,7 @@ be fired for size or movement of window that window."))
 				  (fire-on-window-change win app)))
 	   (set-on-pointer-down (sizer win)
 				(lambda (obj data)
+				  (print "sizer")
 				  (setf (z-index win) (incf (last-z app)))
 				  (fire-on-window-change win app))))
 	  (t

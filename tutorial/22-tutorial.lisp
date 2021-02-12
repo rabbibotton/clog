@@ -62,6 +62,7 @@
 				    (declare (ignore obj))()))))
 
 (defun on-new-window (body)
+  (setf (title (html-document body)) "Tutorial 22")  
   (clog-gui-initialize body)
   (add-class body "w3-cyan")  
   (let* ((menu  (create-gui-menu-bar body))
