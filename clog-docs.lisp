@@ -198,7 +198,7 @@ The data is passed in the second argument to the event handler as a
 property list. To retrieve the data use (getf data :property) the available
 properties (to use for :property) are based on the event type.
 
-From clog-base
+Events in clog-base
 
      :event-type   :mouse
      :x            x relative to the target
@@ -211,6 +211,16 @@ From clog-base
      :shift-key    t or nil if shift-key held down
      :meta-key     t or nil if meta-key held down
 
+     :event-type   :pointer
+     :x            x relative to the target
+     :y            y relative to the target
+     :screen-x     x relative to the users screen
+     :screen-y     y relative to the users screen
+     :which-button which mouse button clicked
+     :alt-key      t or nil if alt-key held down
+     :ctrl-key     t or nil if ctrl-key held down
+     :shift-key    t or nil if shift-key held down
+     :meta-key     t or nil if meta-key held down
 
      :event-type     :touch
      :x              x relative to the target
@@ -231,7 +241,7 @@ From clog-base
      :shift-key  t or nil if shift-key held down
      :meta-key   t or nil if meta-key held down
 
-From clog-window
+Events in clog-window
 
      :event-type :storage
      :key        local storage key that was updated (even in another window)
