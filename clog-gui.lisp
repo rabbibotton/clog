@@ -389,7 +389,7 @@ The on-window-change clog-obj received is the new window"))
                                      style='cursor:pointer;user-select:none;'>X</span>
                              </div>
                              <div id='~A-body' style='flex-grow:9;overflow:auto'>~A</div>
-                             <div id='~A-sizer' style='user-select:none;height:1px;
+                             <div id='~A-sizer' style='user-select:none;height:3px;
                                                        cursor:se-resize;opacity:0'
                                   class='w3-right' data-drag-obj='~A' data-drag-type='s'>+</div>
                            </div>"
@@ -408,6 +408,9 @@ The on-window-change clog-obj received is the new window"))
     (setf (sizer win) (attach-as-child win (format nil "~A-sizer" html-id)))
     (setf (content win) (attach-as-child win (format nil "~A-body"  html-id)))
     (set-on-pointer-down (win-title win) 'on-gui-drag-down :capture-pointer t)
+    (set-on-double-click (win-title win) (lambda (obj)
+					   (setf (width win) (unit :px 800))
+					   (setf (height win) (unit :px 600))))
     (set-on-pointer-down (sizer win) 'on-gui-drag-down :capture-pointer t)    
     (set-on-click (closer win) (lambda (obj)
 				 (declare (ignore obj))
