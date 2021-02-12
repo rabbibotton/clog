@@ -483,7 +483,7 @@ spell checking if Editable is also true."))
 in pixels. It does not include the margin or padding."))
 
 (defmethod client-left ((obj clog-element))
-  (parse-integer (property obj "clientLeft" :default-answer 0)))
+  (parse-integer (property obj "clientLeft" :default-answer 0) :junk-allowed t))
 
 ;;;;;;;;;;;;;;;;
 ;; client-top ;;
@@ -494,7 +494,7 @@ in pixels. It does not include the margin or padding."))
 in pixels. It does not include the margin or padding."))
 
 (defmethod client-top ((obj clog-element))
-  (parse-integer (property obj "clientTop" :default-answer 0)))
+  (parse-integer (property obj "clientTop" :default-answer 0) :junk-allowed t))
 
 ;;;;;;;;;;;;;;;;;;
 ;; client-width ;;
@@ -506,7 +506,7 @@ CSS width + CSS padding - width of vertical scrollbar (if present)
 Does not include the border or margin."))
 
 (defmethod client-width ((obj clog-element))
-  (parse-integer (property obj "clientWidth" :default-answer 0)))
+  (parse-integer (property obj "clientWidth" :default-answer 0) :junk-allowed t))
 
 ;;;;;;;;;;;;;;;;;;;
 ;; client-height ;;
@@ -518,7 +518,7 @@ CSS height + CSS padding - height of horizontal scrollbar (if present)
 Does not include the border or margin."))
 
 (defmethod client-height ((obj clog-element))
-  (parse-integer (property obj "clientHeight" :default-answer 0)))
+  (parse-integer (property obj "clientHeight" :default-answer 0) :junk-allowed t))
 
 ;;;;;;;;;;;;;;;;;
 ;; offset-left ;;
@@ -609,7 +609,7 @@ content has been scrolled upward."))
 of an element or the width of the element itself, whichever is greater."))
 
 (defmethod scroll-width ((obj clog-element))
-  (parse-integer (property obj "scrollWidth" :default-answer 0)))
+  (parse-integer (property obj "scrollWidth" :default-answer 0) :junk-allowed t))
 
 ;;;;;;;;;;;;;;;;;;;
 ;; scroll-height ;;
@@ -620,7 +620,7 @@ of an element or the width of the element itself, whichever is greater."))
 content not visible on the screen due to overflow."))
 
 (defmethod scroll-height ((obj clog-element))
-  (parse-integer (property obj "scrollHeight" :default-answer 0)))
+  (parse-integer (property obj "scrollHeight" :default-answer 0) :junk-allowed t))
 
 ;;;;;;;;;;;;;;
 ;; html-tag ;;
@@ -1335,7 +1335,7 @@ right, top and bottom are interpreted.
 parent in the DOM."))
 
 (defmethod position-top ((obj clog-element))
-  (parse-integer (jquery-query obj "position().top" :default-answer 0)))
+  (parse-integer (jquery-query obj "position().top" :default-answer 0) :junk-allowed t))
 
 ;;;;;;;;;;;;;;;;;;;
 ;; position-left ;;
@@ -1346,7 +1346,7 @@ parent in the DOM."))
 parent in the DOM."))
 
 (defmethod position-left ((obj clog-element))
-  (parse-integer (jquery-query obj "position().left" :default-answer 0)))
+  (parse-integer (jquery-query obj "position().left" :default-answer 0) :junk-allowed t))
 
 ;;;;;;;;;;;;;;;;
 ;; offset-top ;;
@@ -1356,7 +1356,7 @@ parent in the DOM."))
   (:documentation "Position in pixels from top relative to the document."))
 
 (defmethod offset-top ((obj clog-element))
-  (parse-integer (jquery-query obj "offset().top" :default-answer 0)))
+  (parse-integer (jquery-query obj "offset().top" :default-answer 0) :junk-allowed t))
 
 ;;;;;;;;;;;;;;;;;
 ;; offset-left ;;
@@ -1366,7 +1366,7 @@ parent in the DOM."))
   (:documentation "Position in pixels from left relative to the document."))
 
 (defmethod offset-left ((obj clog-element))
-  (parse-integer (jquery-query obj "offset().left" :default-answer 0)))
+  (parse-integer (jquery-query obj "offset().left" :default-answer 0) :junk-allowed t))
 
 ;;;;;;;;;;
 ;; left ;;

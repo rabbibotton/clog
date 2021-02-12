@@ -87,6 +87,16 @@
 					   (escape-string (read-file fname))
 					   (html-id (current-window obj)))))))
 
+(defun do-ide-file-save-as (obj)
+  (let ((cw  (current-window obj)))
+    (when cw
+      (get-file-name obj "Save As.."
+		     (lambda (fname)
+		       (setf (window-title cw) fname)
+		       (write-file (js-query obj (format nil "editor_~A.getValue()"
+							 (html-id cw)))
+				   fname))))))
+
 (defun do-ide-file-save (obj)
   (if (equalp (window-title (current-window obj)) "New Window")
       (do-ide-file-save-as obj)
@@ -98,17 +108,6 @@
 	(setf (window-title cw) "SAVED")
 	(sleep 2)
 	(setf (window-title cw) fname))))
-
-(defun do-ide-file-save-as (obj)
-  (let ((cw  (current-window obj)))
-    (when cw
-      (get-file-name obj "Save As.."
-		     (lambda (fname)
-		       (setf (window-title cw) fname)
-		       (write-file (js-query obj (format nil "editor_~A.getValue()"
-							 (html-id cw)))
-				   fname))))))
-
 
 (defun do-ide-edit-copy (obj)
   (let ((cw (current-window obj)))

@@ -347,7 +347,7 @@ result or if time out DEFAULT-ANSWER (Private)"))
   (:documentation "Get/Setf html height in pixels."))
 
 (defmethod height ((obj clog-obj))
-  (parse-integer (jquery-query obj "height()")))
+  (parse-integer (jquery-query obj "height()") :junk-allowed t))
 
 (defgeneric set-height (clog-obj value)
   (:documentation "Set height VALUE for CLOG-OBJ"))
@@ -364,7 +364,7 @@ result or if time out DEFAULT-ANSWER (Private)"))
   (:documentation "Get/Setf html width in pixels."))
 
 (defmethod width ((obj clog-obj))
-  (parse-integer (jquery-query obj "width()")))
+  (parse-integer (jquery-query obj "width()") :junk-allowed t))
 
 (defgeneric set-width (clog-obj value)
   (:documentation "Set width VALUE for CLOG-OBJ"))
