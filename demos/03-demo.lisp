@@ -1,4 +1,5 @@
 ;;; As this demo uses eval do not run over the internet.
+;;; This app gives access to its users your local files.
 
 (defpackage #:clog-user
   (:use #:cl #:clog)
@@ -139,6 +140,7 @@
 	     (result      (capture-eval form-string)))
 	
 	(do-ide-file-new obj)
+	(setf cw (current-window obj))
 	(js-execute obj (format nil "editor_~A.setValue('~A');editor_~A.moveCursorTo(0,0);"
 				(html-id cw)
 				(escape-string result)
