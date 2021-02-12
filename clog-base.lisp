@@ -442,6 +442,21 @@ for internal use of clog."))
   (bordeaux-threads:with-lock-held ((connection-data-mutex obj))
     (remhash item-name (connection-data obj))))
 
+;;;;;;;;;;;;;;;;;;
+;; set-on-event ;;
+;;;;;;;;;;;;;;;;;;
+
+(defgeneric set-on-event (clog-obj event-name on-resize-handler)
+  (:documentation "Set a generic event for CLOG-OBJ. (Private)"))
+
+(defmethod set-on-event ((obj clog-obj) event-name handler)
+  (set-event obj event-name
+	     (when handler
+	       (lambda (data)
+		 (declare (ignore data))
+		 (funcall handler obj)))))
+
+
 ;;;;;;;;;;;;;;;;;;;
 ;; set-on-resize ;;
 ;;;;;;;;;;;;;;;;;;;

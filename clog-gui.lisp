@@ -369,7 +369,8 @@ The on-window-change clog-obj received is the new window"))
 					  client-movement
 					  html-id)
   (:documentation "Create a clog-gui-window. If client-movement is t then
-use jquery-ui to move/resize."))
+use jquery-ui to move/resize. When client-movement is t no events will
+be fired for size or movement of window that window."))
 
 (defmethod create-gui-window ((obj clog-obj) &key (title "New Window")
 					       (content "")
