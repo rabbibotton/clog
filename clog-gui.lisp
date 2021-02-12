@@ -45,7 +45,11 @@
     :documentation "Location of the left side or width relative to pointer during drag")
    (drag-y
     :accessor drag-y
-   :documentation "Location of the top or height relative to pointer during drag")))
+    :documentation "Location of the top or height relative to pointer during drag")
+   (on-window-change
+    :accessor on-window-change
+    :initform nil
+    :documentation "Fired when foreground window changed.")))
 
 ;;;;;;;;;;;;;;;;;;;;;
 ;; create-clog-gui ;;
@@ -179,7 +183,49 @@ icon ⤢ and full screen mode."))
    on-click))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Implementation - Windows
+;; Implementation - Window System
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;;;;;;;;;;;;;;;;;;;;
+;; current-window ;;
+;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric current-window (clog-obj)
+  (:documentation "Get the current selected clog-gui-window"))
+
+(defmethod current-window ((obj clog-obj))
+  (let ((app (connection-data-item obj "clog-gui")))
+    (current-win app)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; set-on-window-change ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+  
+(defgeneric set-on-window-change (clog-obj handler)
+  (:documentation "Set the on-window-change HANDLER.
+The on-window-change clog-obj received is the new window"))
+
+(defmethod set-on-window-change ((obj clog-obj) handler)
+  (let ((app (connection-data-item obj "clog-gui")))
+    (setf (on-window-change app) handler)))
+
+(defmethod fire-on-window-change (obj app)
+  "Fire handler if set. Change the value of current-win to clog-obj (Private)"
+  (unless obj
+    (let (new-order 
+	  (order -9999))
+      (maphash (lambda (key value)
+		 (setf new-order (z-index value))
+		 (when (>= new-order order)
+		   (setf order new-order)
+		   (setf obj value)))
+	       (windows app))))
+  (setf (current-win app) obj)
+  (when (on-window-change app)
+    (funcall (on-window-change app) obj)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Implementation - Individual Windows
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defclass clog-gui-window (clog-element)
@@ -261,7 +307,7 @@ icon ⤢ and full screen mode."))
 		(t		  
 		 (format t "Warning - invalid data-drag-type attribute")))
 	  (setf (z-index (drag-obj app)) (incf (last-z app)))
-	  (setf (current-win app) (drag-obj app))
+	  (fire-on-window-change (drag-obj app) app)
 	  (setf (drag-y app) (- pointer-y obj-top))
 	  (setf (drag-x app) (- pointer-x obj-left)))
 	(cond (perform-drag
@@ -366,21 +412,11 @@ icon ⤢ and full screen mode."))
 				 (when (fire-on-window-can-close win)
 				   (remhash (format nil "~A" html-id) (windows app))
 				   (remove-from-dom win)
+				   (fire-on-window-change nil app)
 				   (fire-on-window-close win))))
     (setf (gethash (format nil "~A" html-id) (windows app)) win)
-    (setf (current-win app) win)
+    (fire-on-window-change win app)
     win))
-
-;;;;;;;;;;;;;;;;;;;;
-;; current-window ;;
-;;;;;;;;;;;;;;;;;;;;
-
-(defgeneric current-window (clog-obj)
-  (:documentation "Get the current selected clog-gui-window"))
-
-(defmethod current-window ((obj clog-obj))
-  (let ((app (connection-data-item obj "clog-gui")))
-    (current-win app)))
 
 ;;;;;;;;;;;;;;;;;;
 ;; window-title ;;

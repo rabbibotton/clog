@@ -665,8 +665,11 @@ embedded in a native template application.)"
   (create-gui-menu-full-screen generic-function)
   (create-gui-menu-icon        generic-function)
 
-  "CLOG-GUI - Windows"
+  "CLOG-GUI - Window System"
   (current-window              generic-function)
+  (set-on-window-change        generic-function)
+  
+  "CLOG-GUI - Individual Windows"
   (clog-gui-window             class)
   (create-gui-window           generic-function)
   (window-title                generic-function)

@@ -89,46 +89,60 @@
 (defun do-ide-file-save (obj)
   (if (equalp (window-title (current-window obj)) "New Window")
       (do-ide-file-save-as obj)
-      (write-file (js-query obj (format nil "editor_~A.getValue()"
-					(html-id (current-window obj))))
-		  (window-title (current-window obj)))))
+      (let* ((cw     (current-window obj))
+	     (fname  (window-title cw)))
+	(write-file (js-query obj (format nil "editor_~A.getValue()"
+					  (html-id cw)))
+		    fname)
+	(setf (window-title cw) "SAVED")
+	(sleep 2)
+	(setf (window-title cw) fname))))
 
 (defun do-ide-file-save-as (obj)
   (let ((cw  (current-window obj)))
-    (get-file-name obj "Save As.."
-		   (lambda (fname)
-		     (setf (window-title cw) fname)
-		     (write-file (js-query obj (format nil "editor_~A.getValue()"
-						       (html-id cw)))
-				 fname)))))
+    (when cw
+      (get-file-name obj "Save As.."
+		     (lambda (fname)
+		       (setf (window-title cw) fname)
+		       (write-file (js-query obj (format nil "editor_~A.getValue()"
+							 (html-id cw)))
+				   fname))))))
 
 
 (defun do-ide-edit-copy (obj)
-  (let* ((app (connection-data-item obj "app-data")))
-    (setf (copy-buf app) (js-query obj (format nil "editor_~A.getCopyText();"
-					       (html-id (current-window obj)))))))
+  (let ((cw (current-window obj)))
+    (when cw
+      (let* ((app (connection-data-item obj "app-data")))
+	(setf (copy-buf app) (js-query obj (format nil "editor_~A.getCopyText();"
+						   (html-id cw))))))))
 
 (defun do-ide-edit-cut (obj)
-  (do-ide-edit-copy obj)
-  (js-execute obj (format nil "editor_~A.execCommand('cut')"
-			  (html-id (current-window obj)))))
+  (let ((cw (current-window obj)))
+    (when cw
+      (do-ide-edit-copy obj)
+      (js-execute obj (format nil "editor_~A.execCommand('cut')"
+			      (html-id cw))))))
 
 (defun do-ide-edit-paste (obj)
-  (let* ((app (connection-data-item obj "app-data")))
-    (js-execute obj (format nil "editor_~A.execCommand('paste', '~A')"
-			    (html-id (current-window obj))
-			    (escape-string (copy-buf app))))))
+  (let ((cw (current-window obj)))
+    (when cw
+      (let ((app (connection-data-item obj "app-data")))
+	(js-execute obj (format nil "editor_~A.execCommand('paste', '~A')"
+				(html-id cw)
+				(escape-string (copy-buf app))))))))
 
 (defun do-ide-lisp-eval-file (obj)
-  (let* ((form-string (js-query obj (format nil "editor_~A.getValue()"
-					    (html-id (current-window obj)))))
-	 (result      (capture-eval form-string)))
-
-    (do-ide-file-new obj)
-    (js-execute obj (format nil "editor_~A.setValue('~A');editor_~A.moveCursorTo(0,0);"
-			    (html-id (current-window obj))
-			    (escape-string result)
-			    (html-id (current-window obj))))))
+  (let ((cw (current-window obj)))
+    (when cw
+      (let* ((form-string (js-query obj (format nil "editor_~A.getValue()"
+						(html-id (current-window obj)))))
+	     (result      (capture-eval form-string)))
+	
+	(do-ide-file-new obj)
+	(js-execute obj (format nil "editor_~A.setValue('~A');editor_~A.moveCursorTo(0,0);"
+				(html-id cw)
+				(escape-string result)
+				(html-id cw)))))))
 
 (defun do-ide-help-about (obj)
   (let* ((app (connection-data-item obj "app-data"))
