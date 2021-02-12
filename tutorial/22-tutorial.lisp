@@ -5,8 +5,15 @@
 (in-package :clog-user)
 
 (defun on-file-count (body)
+  ;; Clog-gui has two mode for handling moving and resizing clog-gui-windows.
+  ;; The client-movement mode (as set here) specifies to jQuery-UI to manipulate
+  ;; the window. This mode works well for website as the movement logic is done
+  ;; on the client side. The on-file-drawing window uses the lisp based logic
+  ;; and :client-movement is set to nil. This mode offers numerous events
+  ;; for fine control and is best for local applications although will be a bit
+  ;; more choppy cross continent or via satellite.
   (let ((win (create-gui-window body :left (random 600) :top (+ 40 (random 400))
-				     :client-movement t)))
+				     :client-movement t))
     (dotimes (n 100)
       ;; window-content is the root element for the clog-gui
       ;; windows
