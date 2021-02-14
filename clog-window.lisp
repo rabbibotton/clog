@@ -65,7 +65,7 @@ window."))
   (:documentation "Get/Setf inner height of browser window."))
 
 (defmethod inner-height ((obj clog-window))
-  (query obj "innerHeight"))
+  (parse-integer (query obj "innerHeight") :junk-allowed t))
 
 (defgeneric set-inner-height (clog-window value))
   
@@ -81,7 +81,7 @@ window."))
   (:documentation "Get/Setf inner width of browser window."))
 
 (defmethod inner-width ((obj clog-window))
-  (query obj "innerWidth"))
+  (parse-integer (query obj "innerWidth") :junk-allowed t))
 
 (defgeneric set-inner-width (clog-window value))
   
@@ -97,7 +97,7 @@ window."))
   (:documentation "Get/Setf outer height of browser window."))
 
 (defmethod outer-height ((obj clog-window))
-  (query obj "outerHeight"))
+  (parse-integer (query obj "outerHeight") :junk-allowed t))
 
 (defgeneric set-outer-height (clog-window value))
   
@@ -113,7 +113,7 @@ window."))
   (:documentation "Get/Setf outer width of browser window."))
 
 (defmethod outer-width ((obj clog-window))
-  (query obj "outerWidth"))
+  (parse-integer (query obj "outerWidth") :junk-allowed t))
 
 (defgeneric set-outer-width (clog-window value))
   
@@ -129,7 +129,7 @@ window."))
   (:documentation "Get/Setf browser window x offset from left edge."))
 
 (defmethod x-offset ((obj clog-window))
-  (query obj "pageXOffset"))
+  (parse-integer (query obj "pageXOffset") :junk-allowed t))
 
 (defgeneric set-x-offset (clog-window value))
   
@@ -145,7 +145,7 @@ window."))
   (:documentation "Get/Setf browser window y offset from top edge."))
 
 (defmethod y-offset ((obj clog-window))
-  (query obj "pageYOffset"))
+  (parse-integer (query obj "pageYOffset") :junk-allowed t))
 
 (defgeneric set-y-offset (clog-window value))
   
@@ -161,7 +161,7 @@ window."))
   (:documentation "Get/Setf browser y postion."))
 
 (defmethod top ((obj clog-window))
-  (query obj "screenY"))
+  (parse-integer (query obj "screenY") :junk-allowed t))
 
 (defgeneric set-top (clog-window value))
   
@@ -177,7 +177,7 @@ window."))
   (:documentation "Get/Setf browser x position."))
 
 (defmethod left ((obj clog-window))
-  (query obj "screenX"))
+  (parse-integer (query obj "screenX") :junk-allowed t))
 
 (defgeneric set-left (clog-window value))
   
@@ -203,7 +203,7 @@ window."))
   (:documentation "Get screen width."))
 
 (defmethod screen-width ((obj clog-window))
-  (query obj "screen.width"))
+  (parse-integer (query obj "screen.width") :junk-allowed t))
 
 ;;;;;;;;;;;;;;;;;;;
 ;; screen-height ;;
@@ -213,7 +213,7 @@ window."))
   (:documentation "Get screen height."))
 
 (defmethod screen-height ((obj clog-window))
-  (query obj "screen.height"))
+  (parse-integer (query obj "screen.height") :junk-allowed t))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; screen-available-width ;;
@@ -223,7 +223,7 @@ window."))
   (:documentation "Get available screen width."))
 
 (defmethod screen-available-width ((obj clog-window))
-  (query obj "screen.availWidth"))
+  (parse-integer (query obj "screen.availWidth") :junk-allowed t))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; screen-available-height ;;
@@ -233,7 +233,7 @@ window."))
   (:documentation "Get available screen height."))
 
 (defmethod screen-available-height ((obj clog-window))
-  (query obj "screen.availHeight"))
+  (parse-integer (query obj "screen.availHeight") :junk-allowed t))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; screen-available-left ;;
@@ -243,7 +243,7 @@ window."))
   (:documentation "Get available screen left."))
 
 (defmethod screen-available-left ((obj clog-window))
-  (query obj "screen.availLeft"))
+  (parse-integer (query obj "screen.availLeft") :junk-allowed t))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; screen-available-top ;;
@@ -253,7 +253,7 @@ window."))
   (:documentation "Get available screen top."))
 
 (defmethod screen-available-top ((obj clog-window))
-  (query obj "screen.availTop"))
+  (parse-integer (query obj "screen.availTop") :junk-allowed t))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;
 ;; screen-color-depth ;;

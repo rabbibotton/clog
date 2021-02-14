@@ -251,6 +251,22 @@ The on-window-change clog-obj received is the new window"))
    (sizer
     :accessor sizer
     :documentation "Window sizer clog-element")
+   (last-width
+    :accessor last-width
+    :initform nil
+    :documentation "Last width before maximize")
+   (last-height
+    :accessor last-height
+    :initform nil
+    :documentation "Last heigth before maximize")
+   (last-x
+    :accessor last-x
+    :initform nil
+    :documentation "Last x before maximize")
+   (last-y
+    :accessor last-y
+    :initform nil
+    :documentation "Last y before maximize")
    (on-window-can-close
     :accessor on-window-can-close
     :initform nil
@@ -371,10 +387,10 @@ The on-window-change clog-obj received is the new window"))
 					  client-movement
 					  html-id)
   (:documentation "Create a clog-gui-window. If client-movement is t then
-use jquery-ui to move/resize. When client-movement is t only on-window-move
-is fired once at start of drag and on-window-move-done at end of drag and
-on-window-resize at start of resize and on-window-resize-done at end of
-resize."))
+use jquery-ui to move/resize and will not work on mobile. When client-movement
+is t only on-window-move is fired once at start of drag and on-window-move-done
+at end of drag and on-window-resize at start of resize and
+on-window-resize-done at end of resize."))
 
 (defmethod create-gui-window ((obj clog-obj) &key (title "New Window")
 					       (content "")
@@ -419,9 +435,23 @@ resize."))
     (setf (closer win) (attach-as-child win (format nil "~A-closer" html-id)))
     (setf (sizer win) (attach-as-child win (format nil "~A-sizer" html-id)))
     (setf (content win) (attach-as-child win (format nil "~A-body"  html-id)))
-    (set-on-double-click (win-title win) (lambda (obj)
-					   (setf (width win) (unit :px 800))
-					   (setf (height win) (unit :px 600))))
+    (set-on-double-click (win-title win)
+			 (lambda (obj)
+			   (cond ((last-width win)
+				  (setf (width win) (last-width win))
+				  (setf (height win) (last-height win))
+				  (setf (top win) (last-y win))
+				  (setf (left win) (last-x win))
+				  (setf (last-width win) nil))
+				 (t
+				  (setf (last-x win) (left win))
+				  (setf (last-y win) (top win))
+				  (setf (last-height win) (height win))
+				  (setf (last-width win) (width win))
+				  (setf (top win) (unit :px 35))
+				  (setf (left win) (unit :px 0))
+				  (setf (width win) (unit :vw 100))
+				  (setf (height win) (- (inner-height (window (body app))) 30))))))
     (set-on-click (closer win) (lambda (obj)
 				 (declare (ignore obj))
 				 (when (fire-on-window-can-close win)
