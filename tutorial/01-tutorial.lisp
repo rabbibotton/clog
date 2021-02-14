@@ -43,5 +43,5 @@
   ;; #' tells common lisp to pass the function
   ;; to intialize and not to execute it.
 
-  ;; Open a browser to http://12.0.0.1:8080 - the default for CLOG apps
+  ;; Open a browser to http://127.0.0.1:8080 - the default for CLOG apps
   (open-browser))
