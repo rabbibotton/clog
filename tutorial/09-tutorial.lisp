@@ -11,7 +11,8 @@
 	 ;;       we reuse the same symbol name (tmp) even though the
 	 ;;       compiler can mark those for garbage collection early
 	 ;;       this not an issue as the element is created already
-	 ;;       in the browser window.
+	 ;;       in the browser window. This is probably not the best
+	 ;;       option for a production app though regardless.
 	 ;;
 	 ;; Create tabs and panels
 	 (t1  (create-button body :content "Tab1"))
