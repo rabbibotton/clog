@@ -200,3 +200,5 @@ High Order Extensions to CLOG
   - Menus
   - Windowing system
   - In progress - Feb 2020 - File Load / Save dialogs
+- clog-data
+  - In progress - Feb 2020 - Database integrations
