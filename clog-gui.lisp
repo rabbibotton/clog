@@ -309,7 +309,7 @@ The on-window-change clog-obj received is the new window"))
 		 (setf obj-top  (height (drag-obj app)))
 		 (setf obj-left (width (drag-obj app)))
 		 (setf perform-drag (fire-on-window-can-size (drag-obj app))))
-		(t
+	(t
 		 (format t "Warning - invalid data-drag-type attribute")))
 	  (setf (z-index (drag-obj app)) (incf (last-z app)))
 	  (fire-on-window-change (drag-obj app) app)
@@ -369,8 +369,10 @@ The on-window-change clog-obj received is the new window"))
 					  client-movement
 					  html-id)
   (:documentation "Create a clog-gui-window. If client-movement is t then
-use jquery-ui to move/resize. When client-movement is t no events will
-be fired for size or movement of window that window."))
+use jquery-ui to move/resize. When client-movement is t only on-window-move
+is fired once at start of drag and on-window-move-done at end of drag and
+on-window-resize at start of resize and on-window-resize-done at end of
+resize."))
 
 (defmethod create-gui-window ((obj clog-obj) &key (title "New Window")
 					       (content "")
@@ -432,14 +434,21 @@ be fired for size or movement of window that window."))
 	   (jquery-execute win (format nil "draggable({handle:'#~A-title-bar'})" html-id))
 	   (jquery-execute win "resizable({handles:'se'})")
 	   (set-on-pointer-down (win-title win)
-				(lambda (obj data)
-				  (setf (z-index win) (incf (last-z app)))
-				  (fire-on-window-change win app)))
-	   (set-on-pointer-down (sizer win)
-				(lambda (obj data)
-				  (print "sizer")
-				  (setf (z-index win) (incf (last-z app)))
-				  (fire-on-window-change win app))))
+	    			(lambda (obj data)
+	    			  (setf (z-index win) (incf (last-z app)))
+	    			  (fire-on-window-change win app)))
+	   (set-on-event win "dragstart" 
+			 (lambda (obj)
+			   (fire-on-window-move win)))
+	   (set-on-event win "dragstop" 
+			 (lambda (obj)
+			   (fire-on-window-move-done win)))
+	   (set-on-event win "resizestart"
+			 (lambda (obj)
+			   (fire-on-window-size win)))
+	   (set-on-event win "resizestop" 
+			 (lambda (obj)
+			   (fire-on-window-size-done win))))
 	  (t
 	   (set-on-pointer-down
 	    (win-title win) 'on-gui-drag-down :capture-pointer t)
