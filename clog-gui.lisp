@@ -12,6 +12,9 @@
 ;; Implementation - clog-gui - Desktop GUI abstraction
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(defconstant menu-bar-height 37)
+(defconstant top-bar-height 20)
+
 (defclass clog-gui ()
   ((body
     :accessor body
@@ -28,6 +31,14 @@
     :accessor last-z
     :initform -9999
     :documentation "Top z-order for windows")
+   (last-x
+    :accessor last-x
+    :initform 0
+    :documentation "Last default open x point")
+   (last-y
+    :accessor last-y
+    :initform menu-bar-height
+    :documentation "Last default open y point")
    (copy-buf
     :accessor copy-buf
     :initform ""
@@ -350,7 +361,7 @@ The on-window-change clog-obj received is the new window"))
 	 (y        (getf data ':screen-y))
 	 (adj-y    (- y (drag-y app)))
 	 (adj-x    (- x (drag-x app))))
-    (when (and (> adj-x 0) (> adj-y 30))
+    (when (and (> adj-x 0) (> adj-y menu-bar-height))
       (cond ((equalp (in-drag app) "m")
 	     (fire-on-window-move (drag-obj app))
 	     (setf (top (drag-obj app)) (unit :px adj-y))
@@ -395,104 +406,111 @@ on-window-resize-done at end of resize."))
 
 (defmethod create-gui-window ((obj clog-obj) &key (title "New Window")
 					       (content "")
-					       (left 60)
-					       (top 60)
-					       (width 400)
-					       (height 300)
+					       (left nil)
+					       (top nil)
+					       (width 300)
+					       (height 200)
 					       (maximize nil)
 					       (client-movement nil)
 					       (html-id nil))
-  (unless html-id
-    (setf html-id (clog-connection:generate-id)))
-  
-  (let* ((app (connection-data-item obj "clog-gui"))
-	 (win (create-child (body app)
-	        (format nil
-			  "<div style='position:fixed;top:~Apx;left:~Apx;width:~Apx;height:~Apx;
-                                       flex-container;display:flex;flex-direction:column;z-index:~A'
-	                               class='w3-card-4 w3-white w3-border'>
-                             <div id='~A-title-bar' class='w3-container w3-black'
-                                   style='flex-container;display:flex;align-items:stretch;'>
-                               <span data-drag-obj='~A' data-drag-type='m' id='~A-title'
-                                     style='flex-grow:9;user-select:none;cursor:move;'>~A</span>
-                               <span id='~A-closer'
-                                     style='cursor:pointer;user-select:none;'>X</span>
-                             </div>
-                             <div id='~A-body' style='flex-grow:9;overflow:auto'>~A</div>
-                             <div id='~A-sizer' style='user-select:none;height:3px;
-                                                       cursor:se-resize;opacity:0'
-                                  class='w3-right' data-drag-obj='~A' data-drag-type='s'>+</div>
-                           </div>"
-			  top left width height (incf (last-z app)) ; outer div
-			  html-id html-id html-id                   ; title bar
-			  title html-id                             ; title
-			  html-id content                           ; body
-			  html-id html-id)                          ; size
-		:clog-type 'clog-gui-window
-		:html-id html-id)))
-    (setf (win-title win)
-	  (attach-as-child win (format nil "~A-title" html-id)))
-    (setf (title-bar win)
-	  (attach-as-child win (format nil "~A-title-bar" html-id)))
-    (setf (closer win) (attach-as-child win (format nil "~A-closer" html-id)))
-    (setf (sizer win) (attach-as-child win (format nil "~A-sizer" html-id)))
-    (setf (content win) (attach-as-child win (format nil "~A-body"  html-id)))
-    (flet ((maximize-window (obj)
-	     (cond ((last-width win)
-		    (setf (width win) (last-width win))
-		    (setf (height win) (last-height win))
-		    (setf (top win) (last-y win))
-		    (setf (left win) (last-x win))
-		    (setf (last-width win) nil))
-		   (t
-		    (setf (last-x win) (left win))
-		    (setf (last-y win) (top win))
-		    (setf (last-height win) (height win))
-		    (setf (last-width win) (width win))
-		    (setf (top win) (unit :px 35))
-		    (setf (left win) (unit :px 0))
-		    (setf (width win) (unit :vw 100))
-		    (setf (height win)
-			  (- (inner-height (window (body app))) 30))))))
-      (set-on-double-click (win-title win) #'maximize-window)
-      (when maximize
-	(maximize-window win)))
-    (set-on-click (closer win) (lambda (obj)
-				 (declare (ignore obj))
-				 (when (fire-on-window-can-close win)
-				   (remhash (format nil "~A" html-id)
-					    (windows app))
-				   (remove-from-dom win)
-				   (fire-on-window-change nil app)
-				   (fire-on-window-close win))))
-    (setf (gethash (format nil "~A" html-id) (windows app)) win)
-    (fire-on-window-change win app)
-    (cond (client-movement
-	   (jquery-execute win
-	     (format nil "draggable({handle:'#~A-title-bar'})" html-id))
-	   (jquery-execute win "resizable({handles:'se'})")
-	   (set-on-pointer-down (win-title win)
-	    			(lambda (obj data)
-	    			  (setf (z-index win) (incf (last-z app)))
-	    			  (fire-on-window-change win app)))
-	   (set-on-event win "dragstart" 
-			 (lambda (obj)
-			   (fire-on-window-move win)))
-	   (set-on-event win "dragstop" 
-			 (lambda (obj)
-			   (fire-on-window-move-done win)))
-	   (set-on-event win "resizestart"
-			 (lambda (obj)
-			   (fire-on-window-size win)))
-	   (set-on-event win "resizestop" 
-			 (lambda (obj)
-			   (fire-on-window-size-done win))))
-	  (t
-	   (set-on-pointer-down
-	    (win-title win) 'on-gui-drag-down :capture-pointer t)
-	   (set-on-pointer-down
-	    (sizer win) 'on-gui-drag-down :capture-pointer t)))
-    win))
+  (let ((app (connection-data-item obj "clog-gui")))
+    (unless html-id
+      (setf html-id (clog-connection:generate-id)))
+    (unless left
+      (setf left (last-x app))
+      (incf (last-x app) 10))
+    (unless top
+      (setf top (last-y app))
+      (incf (last-y app) top-bar-height)
+      (when (> top (- (inner-height (window (body app))) (last-y app)))
+	(setf (last-y app) menu-bar-height)))
+    (let ((win (create-child (body app)
+			    (format nil
+	    "<div style='position:fixed;top:~Apx;left:~Apx;width:~Apx;height:~Apx;
+                  flex-container;display:flex;flex-direction:column;z-index:~A'
+                  class='w3-card-4 w3-white w3-border'>
+                  <div id='~A-title-bar' class='w3-container w3-black'
+                       style='flex-container;display:flex;align-items:stretch;'>
+                       <span data-drag-obj='~A' data-drag-type='m' id='~A-title'
+                             style='flex-grow:9;user-select:none;cursor:move;'>~A</span>
+                              <span id='~A-closer'
+                                    style='cursor:pointer;user-select:none;'>X</span>
+                  </div>
+                  <div id='~A-body' style='flex-grow:9;overflow:auto'>~A</div>
+                  <div id='~A-sizer' style='user-select:none;height:3px;
+                       cursor:se-resize;opacity:0'
+                       class='w3-right' data-drag-obj='~A' data-drag-type='s'>+</div>
+             </div>"
+	    top left width height (incf (last-z app)) ; outer div
+	    html-id html-id html-id                   ; title bar
+	    title html-id                             ; title
+	    html-id content                           ; body
+	    html-id html-id)                          ; size
+			    :clog-type 'clog-gui-window
+			    :html-id html-id)))
+      (setf (win-title win)
+	    (attach-as-child win (format nil "~A-title" html-id)))
+      (setf (title-bar win)
+	    (attach-as-child win (format nil "~A-title-bar" html-id)))
+      (setf (closer win) (attach-as-child win (format nil "~A-closer" html-id)))
+      (setf (sizer win) (attach-as-child win (format nil "~A-sizer" html-id)))
+      (setf (content win) (attach-as-child win (format nil "~A-body"  html-id)))
+      (flet ((maximize-window (obj)
+	       (cond ((last-width win)
+		      (setf (width win) (last-width win))
+		      (setf (height win) (last-height win))
+		      (setf (top win) (last-y win))
+		      (setf (left win) (last-x win))
+		      (setf (last-width win) nil))
+		     (t
+		      (setf (last-x win) (left win))
+		      (setf (last-y win) (top win))
+		      (setf (last-height win) (height win))
+		      (setf (last-width win) (width win))
+		      (setf (top win) (unit :px menu-bar-height))
+		      (setf (left win) (unit :px 0))
+		      (setf (width win) (unit :vw 100))
+		      (setf (height win)
+			    (- (inner-height (window (body app))) 30))))))
+	(set-on-double-click (win-title win) #'maximize-window)
+	(when maximize
+	  (maximize-window win)))
+      (set-on-click (closer win) (lambda (obj)
+				   (declare (ignore obj))
+				   (when (fire-on-window-can-close win)
+				     (remhash (format nil "~A" html-id)
+					      (windows app))
+				     (remove-from-dom win)
+				     (fire-on-window-change nil app)
+				     (fire-on-window-close win))))
+      (setf (gethash (format nil "~A" html-id) (windows app)) win)
+      (fire-on-window-change win app)
+      (cond (client-movement
+	     (jquery-execute win
+			     (format nil "draggable({handle:'#~A-title-bar'})" html-id))
+	     (jquery-execute win "resizable({handles:'se'})")
+	     (set-on-pointer-down (win-title win)
+	    			  (lambda (obj data)
+	    			    (setf (z-index win) (incf (last-z app)))
+	    			    (fire-on-window-change win app)))
+	     (set-on-event win "dragstart" 
+			   (lambda (obj)
+			     (fire-on-window-move win)))
+	     (set-on-event win "dragstop" 
+			   (lambda (obj)
+			     (fire-on-window-move-done win)))
+	     (set-on-event win "resizestart"
+			   (lambda (obj)
+			     (fire-on-window-size win)))
+	     (set-on-event win "resizestop" 
+			   (lambda (obj)
+			     (fire-on-window-size-done win))))
+	    (t
+	     (set-on-pointer-down
+	      (win-title win) 'on-gui-drag-down :capture-pointer t)
+	     (set-on-pointer-down
+	      (sizer win) 'on-gui-drag-down :capture-pointer t)))
+      win)))
 
 ;;;;;;;;;;;;;;;;;;
 ;; window-title ;;
