@@ -70,12 +70,14 @@
 (defun clog-gui-initialize (clog-body &key (w3-css-url "/css/w3.css")
 					(jquery-ui-css "/css/jquery-ui.css")
 					(jquery-ui "/js/jquery-ui.js"))
-  "Initializes clog-gui loading w3.css from :W3-CSS-URL and installs a
-clog-gui object on connection."
+  "Initializes clog-gui and installs a clog-gui object on connection."
   (create-clog-gui clog-body)
-  (load-script (html-document clog-body) jquery-ui)
-  (load-css (html-document clog-body) jquery-ui-css)
-  (load-css (html-document clog-body) w3-css-url))
+  (when w3-css-url
+    (load-css (html-document clog-body) w3-css-url))
+  (when jquery-ui-css
+    (load-css (html-document clog-body) jquery-ui-css))
+  (when jquery-ui
+    (load-script (html-document clog-body) jquery-ui)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Implementation - Menus
@@ -431,7 +433,8 @@ resize."))
     (setf (gethash (format nil "~A" html-id) (windows app)) win)
     (fire-on-window-change win app)
     (cond (client-movement
-	   (jquery-execute win (format nil "draggable({handle:'#~A-title-bar'})" html-id))
+	   (jquery-execute win
+	     (format nil "draggable({handle:'#~A-title-bar'})" html-id))
 	   (jquery-execute win "resizable({handles:'se'})")
 	   (set-on-pointer-down (win-title win)
 	    			(lambda (obj data)
