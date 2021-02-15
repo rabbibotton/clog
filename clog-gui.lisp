@@ -87,6 +87,18 @@
 					(jquery-ui "/js/jquery-ui.js"))
   "Initializes clog-gui and installs a clog-gui object on connection."
   (create-clog-gui clog-body)
+  (set-on-full-screen-change (html-document clog-body)
+			     (lambda (obj)
+			       (when (current-window obj)
+				 (when (last-width (current-window obj))
+				   (window-normalize (current-window obj))
+				   (window-maximize (current-window obj))))))
+  (set-on-orientation-change (window clog-body)
+			     (lambda (obj)
+			       (when (current-window obj)
+				 (when (last-width (current-window obj))
+				   (window-normalize (current-window obj))
+				   (window-maximize (current-window obj))))))
   (when w3-css-url
     (load-css (html-document clog-body) w3-css-url))
   (when jquery-ui-css

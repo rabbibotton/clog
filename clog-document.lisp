@@ -208,3 +208,19 @@ clog-document object. (Private)"))
 
 (defmethod new-line ((obj clog-document))
   (execute obj (format nil "writeln('<\br>')")))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; set-on-full-screen-change ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric set-on-full-screen-change (clog-document
+				       on-full-screen-change-handler)
+  (:documentation "Set the ON-FULL-SCREEN-CHANGE-HANDLER for CLOG-OBJ.
+If ON-FULL-SCREEN-CHANGE-HANDLER is nil unbind the event."))
+
+(defmethod set-on-full-screen-change ((obj clog-document) handler)
+  (set-event obj "fullscreenchange"
+	     (when handler
+	       (lambda (data)
+		 (declare (ignore data))
+		 (funcall handler obj)))))

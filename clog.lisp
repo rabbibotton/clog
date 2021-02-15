@@ -768,7 +768,10 @@ embedded in a native template application.)"
   (put              generic-function)
   (put-line         generic-function)
   (put-br           generic-function)
-  (new-line         generic-function))
+  (new-line         generic-function)
+  
+  "CLOG-Document - Events"
+  (set-on-full-screen-change generic-function))
 
 (defsection @clog-navigator (:title "CLOG Navigator Objects")
   "CLOG-Navigator - CLOG Navigator Objects"
