@@ -42,7 +42,7 @@
 	 (ok    (create-button form :content "OK")))
     (set-on-click ok (lambda (obj)
 		       (declare (ignore obj))
-		       (remove-from-dom win)
+		       (window-close win)
 		       (funcall on-file-name (value input))))))
 
 (defun capture-eval (form)
@@ -63,6 +63,9 @@
     (set-on-window-size win (lambda (obj)
 			      (js-execute obj
 					  (format nil "editor_~A.resize()" (html-id win)))))
+    (set-on-window-size-done win (lambda (obj)
+				   (js-execute obj
+					       (format nil "editor_~A.resize()" (html-id win)))))
     (create-child win
 		  (format nil
 			  "<script>
@@ -174,6 +177,7 @@
 	 (file  (create-gui-menu-drop-down menu :content "File"))
 	 (edit  (create-gui-menu-drop-down menu :content "Edit"))
 	 (lisp  (create-gui-menu-drop-down menu :content "Lisp"))
+	 (wind  (create-gui-menu-drop-down menu :content "Window"))
 	 (help  (create-gui-menu-drop-down menu :content "Help")))
     (declare (ignore icon))
     (create-gui-menu-item file :content "New"       :on-click #'do-ide-file-new)
@@ -184,6 +188,7 @@
     (create-gui-menu-item edit :content "Cut"       :on-click #'do-ide-edit-cut)
     (create-gui-menu-item edit :content "Paste"     :on-click #'do-ide-edit-paste)
     (create-gui-menu-item lisp :content "Eval File" :on-click #'do-ide-lisp-eval-file)
+    (create-gui-menu-window-select wind)
     (create-gui-menu-item help :content "About"     :on-click #'do-ide-help-about)
     (create-gui-menu-full-screen menu))
   (run body))

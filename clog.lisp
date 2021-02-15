@@ -676,6 +676,7 @@ embedded in a native template application.)"
   (window-title                generic-function)
   (window-content              generic-function)
   (window-focus                generic-function)
+  (window-close                generic-function)
   (window-maximize             generic-function)
   (window-normalize            generic-function)
   (window-toggle-maximize      generic-function)

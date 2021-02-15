@@ -516,11 +516,7 @@ on-window-resize-done at end of resize."))
       (set-on-click (closer win) (lambda (obj)
 				   (declare (ignore obj))
 				   (when (fire-on-window-can-close win)
-				     (remhash (format nil "~A" html-id)
-					      (windows app))
-				     (remove-from-dom win)
-				     (fire-on-window-change nil app)
-				     (fire-on-window-close win))))
+				     (window-close win))))
       (cond (client-movement
 	     (jquery-execute win
 			     (format nil "draggable({handle:'#~A-title-bar'})" html-id))
@@ -594,6 +590,21 @@ on-window-resize-done at end of resize."))
     (setf (z-index obj) (incf (last-z app)))
     (fire-on-window-change obj app)))
 
+;;;;;;;;;;;;;;;;;;
+;; window-close ;;
+;;;;;;;;;;;;;;;;;;
+
+(defgeneric window-close (clog-gui-window)
+  (:documentation "Close CLOG-GUI-WINDOW. on-window-can-close is not called."))
+
+(defmethod window-close ((obj clog-gui-window))
+  (let ((app (connection-data-item obj "clog-gui")))
+    (remhash (format nil "~A" (html-id obj)) (windows app))
+    (remove-from-dom (window-select-item obj))
+    (remove-from-dom obj)
+    (fire-on-window-change nil app)
+    (fire-on-window-close obj)))
+
 ;;;;;;;;;;;;;;;;;;;;;
 ;; window-maximize ;;
 ;;;;;;;;;;;;;;;;;;;;;
@@ -613,14 +624,15 @@ on-window-resize-done at end of resize."))
       (setf (left obj) (unit :px 0))
       (setf (width obj) (unit :vw 100))
       (setf (height obj)
-	    (- (inner-height (window (body app))) menu-bar-height)))))
+	    (- (inner-height (window (body app))) menu-bar-height))
+      (fire-on-window-size-done obj))))
 
 ;;;;;;;;;;;;;;;;;;;;;;
 ;; window-normalize ;;
 ;;;;;;;;;;;;;;;;;;;;;;
 
 (defgeneric window-normalize (clog-gui-window)
-  (:documentation "Set CLOG-GUI-WINDOW as maximize window."))
+  (:documentation "Set CLOG-GUI-WINDOW as normalized window."))
 
 (defmethod window-normalize ((obj clog-gui-window))
   (window-focus obj)
@@ -629,14 +641,15 @@ on-window-resize-done at end of resize."))
     (setf (height obj) (last-height obj))
     (setf (top obj) (last-y obj))
     (setf (left obj) (last-x obj))
-    (setf (last-width obj) nil)))
+    (setf (last-width obj) nil)
+    (fire-on-window-size-done obj)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; window-toggle-maximize ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defgeneric window-toggle-maximize (clog-gui-window)
-  (:documentation "Set CLOG-GUI-WINDOW as maximize window."))
+  (:documentation "Toggle CLOG-GUI-WINDOW as maximize window."))
 
 (defmethod window-toggle-maximize ((obj clog-gui-window))
   (let ((app (connection-data-item obj "clog-gui")))
@@ -656,8 +669,8 @@ on-window-resize-done at end of resize."))
 	   (setf (left obj) (unit :px 0))
 	   (setf (width obj) (unit :vw 100))
 	   (setf (height obj)
-		 (- (inner-height (window (body app))) menu-bar-height))))))
-
+		 (- (inner-height (window (body app))) menu-bar-height))))
+    (fire-on-window-size-done obj)))
     
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; set-on-window-can-close ;;
