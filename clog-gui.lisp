@@ -26,7 +26,7 @@
    (windows
     :accessor windows
     :initform (make-hash-table :test 'equalp)
-    :documentation "Window collection")
+    :documentation "Window collection indexed by html-id")
    (last-z
     :accessor last-z
     :initform -9999
@@ -57,6 +57,10 @@
    (drag-y
     :accessor drag-y
     :documentation "Location of the top or height relative to pointer during drag")
+   (window-select
+    :accessor window-select
+    :initform nil
+    :documentation "If installed a drop down that selects window to maximize")
    (on-window-change
     :accessor on-window-change
     :initform nil
@@ -137,7 +141,7 @@ clog-body."))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defclass clog-gui-menu-item (clog-span)()
-  (:documentation "Menu bar"))
+  (:documentation "Menu item"))
 
 (defgeneric create-gui-menu-item (clog-gui-menu-drop-down
 				  &key content
@@ -155,6 +159,34 @@ clog-body."))
 	  (create-span obj :content content :class class :html-id html-id)))
     (set-on-click span on-click)
     (change-class span 'clog-gui-menu-item)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; create-gui-menu-window-select ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defclass clog-gui-menu-window-select (clog-select)()
+  (:documentation "Drop down containing windows. Selecting a window
+will maximize it on top."))
+
+(defgeneric create-gui-menu-window-select (clog-gui-menu-drop-down
+					   &key class
+					     html-id)
+  (:documentation "Attached a menu item to a CLOG-GUI-MENU-DROP-DOWN"))
+
+(defmethod create-gui-menu-window-select
+    ((obj clog-obj)
+     &key (class "w3-select")
+       (html-id nil))
+  (let ((window-select (create-select obj :class class :html-id html-id))
+	(app           (connection-data-item obj "clog-gui")))
+    (change-class window-select 'clog-gui-menu-window-select)
+    (setf (window-select app) window-select)
+    (set-on-change window-select (lambda (obj)
+				   (let ((win (gethash (value obj) (windows app))))
+				     (when win
+				       (window-maximize win)))))
+    (create-option window-select :content "Select Window")
+    window-select))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; create-gui-menu-full-screen ;;
@@ -278,6 +310,10 @@ The on-window-change clog-obj received is the new window"))
     :accessor last-y
     :initform nil
     :documentation "Last y before maximize")
+   (window-select-item
+    :accessor window-select-item
+    :initform nil
+    :documentation "Item in window select")
    (on-window-can-close
     :accessor on-window-can-close
     :initform nil
@@ -455,26 +491,16 @@ on-window-resize-done at end of resize."))
       (setf (closer win) (attach-as-child win (format nil "~A-closer" html-id)))
       (setf (sizer win) (attach-as-child win (format nil "~A-sizer" html-id)))
       (setf (content win) (attach-as-child win (format nil "~A-body"  html-id)))
-      (flet ((maximize-window (obj)
-	       (cond ((last-width win)
-		      (setf (width win) (last-width win))
-		      (setf (height win) (last-height win))
-		      (setf (top win) (last-y win))
-		      (setf (left win) (last-x win))
-		      (setf (last-width win) nil))
-		     (t
-		      (setf (last-x win) (left win))
-		      (setf (last-y win) (top win))
-		      (setf (last-height win) (height win))
-		      (setf (last-width win) (width win))
-		      (setf (top win) (unit :px menu-bar-height))
-		      (setf (left win) (unit :px 0))
-		      (setf (width win) (unit :vw 100))
-		      (setf (height win)
-			    (- (inner-height (window (body app))) 30))))))
-	(set-on-double-click (win-title win) #'maximize-window)
-	(when maximize
-	  (maximize-window win)))
+      (setf (gethash (format nil "~A" html-id) (windows app)) win)
+      (if maximize
+	  (window-maximize win)
+	  (fire-on-window-change win app))
+      (when (window-select app)
+	(setf (window-select-item win) (create-option (window-select app)
+						      :content title
+						      :value html-id)))      
+      (set-on-double-click (win-title win) (lambda (obj)
+					     (window-toggle-maximize win)))
       (set-on-click (closer win) (lambda (obj)
 				   (declare (ignore obj))
 				   (when (fire-on-window-can-close win)
@@ -483,27 +509,30 @@ on-window-resize-done at end of resize."))
 				     (remove-from-dom win)
 				     (fire-on-window-change nil app)
 				     (fire-on-window-close win))))
-      (setf (gethash (format nil "~A" html-id) (windows app)) win)
-      (fire-on-window-change win app)
       (cond (client-movement
 	     (jquery-execute win
 			     (format nil "draggable({handle:'#~A-title-bar'})" html-id))
 	     (jquery-execute win "resizable({handles:'se'})")
 	     (set-on-pointer-down (win-title win)
 	    			  (lambda (obj data)
+				    (declare (ignore obj) (ignore data))
 	    			    (setf (z-index win) (incf (last-z app)))
 	    			    (fire-on-window-change win app)))
 	     (set-on-event win "dragstart" 
 			   (lambda (obj)
+			     (declare (ignore obj))
 			     (fire-on-window-move win)))
 	     (set-on-event win "dragstop" 
 			   (lambda (obj)
+			     (declare (ignore obj))
 			     (fire-on-window-move-done win)))
 	     (set-on-event win "resizestart"
 			   (lambda (obj)
+			     (declare (ignore obj))
 			     (fire-on-window-size win)))
 	     (set-on-event win "resizestop" 
 			   (lambda (obj)
+			     (declare (ignore obj))
 			     (fire-on-window-size-done win))))
 	    (t
 	     (set-on-pointer-down
@@ -526,6 +555,8 @@ on-window-resize-done at end of resize."))
   (:documentation "Set window title"))
 
 (defmethod set-window-title ((obj clog-gui-window) value)
+  (when (window-select-item obj)
+    (setf (inner-html (window-select-item obj)) value))
   (setf (inner-html (win-title obj)) value))
 (defsetf window-title set-window-title)
 
@@ -539,6 +570,83 @@ on-window-resize-done at end of resize."))
 (defmethod window-content ((obj clog-gui-window))
   (content obj))
 
+;;;;;;;;;;;;;;;;;;
+;; window-focus ;;
+;;;;;;;;;;;;;;;;;;
+
+(defgeneric window-focus (clog-gui-window)
+  (:documentation "Set CLOG-GUI-WINDOW as focused window."))
+
+(defmethod window-focus ((obj clog-gui-window))
+  (let ((app (connection-data-item obj "clog-gui")))
+    (setf (z-index obj) (incf (last-z app)))
+    (fire-on-window-change obj app)))
+
+;;;;;;;;;;;;;;;;;;;;;
+;; window-maximize ;;
+;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric window-maximize (clog-gui-window)
+  (:documentation "Set CLOG-GUI-WINDOW as maximized window."))
+
+(defmethod window-maximize ((obj clog-gui-window))
+  (let ((app (connection-data-item obj "clog-gui")))
+    (window-focus obj)
+    (unless (last-width obj)
+      (setf (last-x obj) (left obj))
+      (setf (last-y obj) (top obj))
+      (setf (last-height obj) (height obj))
+      (setf (last-width obj) (width obj))
+      (setf (top obj) (unit :px menu-bar-height))
+      (setf (left obj) (unit :px 0))
+      (setf (width obj) (unit :vw 100))
+      (setf (height obj)
+	    (- (inner-height (window (body app))) menu-bar-height)))))
+
+;;;;;;;;;;;;;;;;;;;;;;
+;; window-normalize ;;
+;;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric window-normalize (clog-gui-window)
+  (:documentation "Set CLOG-GUI-WINDOW as maximize window."))
+
+(defmethod window-normalize ((obj clog-gui-window))
+  (window-focus obj)
+  (when (last-width obj)
+    (setf (width obj) (last-width obj))
+    (setf (height obj) (last-height obj))
+    (setf (top obj) (last-y obj))
+    (setf (left obj) (last-x obj))
+    (setf (last-width obj) nil)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; window-toggle-maximize ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric window-toggle-maximize (clog-gui-window)
+  (:documentation "Set CLOG-GUI-WINDOW as maximize window."))
+
+(defmethod window-toggle-maximize ((obj clog-gui-window))
+  (let ((app (connection-data-item obj "clog-gui")))
+    (window-focus obj)
+    (cond ((last-width obj)
+	   (setf (width obj) (last-width obj))
+	   (setf (height obj) (last-height obj))
+	   (setf (top obj) (last-y obj))
+	   (setf (left obj) (last-x obj))
+	   (setf (last-width obj) nil))
+	  (t
+	   (setf (last-x obj) (left obj))
+	   (setf (last-y obj) (top obj))
+	   (setf (last-height obj) (height obj))
+	   (setf (last-width obj) (width obj))
+	   (setf (top obj) (unit :px menu-bar-height))
+	   (setf (left obj) (unit :px 0))
+	   (setf (width obj) (unit :vw 100))
+	   (setf (height obj)
+		 (- (inner-height (window (body app))) menu-bar-height))))))
+
+    
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; set-on-window-can-close ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

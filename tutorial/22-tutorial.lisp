@@ -12,19 +12,19 @@
   ;; and :client-movement is set to nil. This mode offers numerous events
   ;; for fine control and is best for local applications although will be a bit
   ;; more choppy cross continent or via satellite.
-  (let ((win (create-gui-window body :client-movement t)))
+  (let ((win (create-gui-window body :title "Count" :client-movement t)))
     (dotimes (n 100)
       ;; window-content is the root element for the clog-gui
       ;; windows
       (create-div (window-content win) :content n))))
 
 (defun on-file-browse (body)
-  (let* ((win (create-gui-window body :client-movement t))
+  (let* ((win (create-gui-window body :title "Browse" :client-movement t))
 	 (browser (create-child (window-content win)
 	    "<iframe width=100% height=98% src='https://common-lisp.net/'></iframe>")))))
 
 (defun on-file-drawing (body)
-  (let* ((win (create-gui-window body :client-movement nil))
+  (let* ((win (create-gui-window body :title "Drawing" :client-movement t))
 	 (canvas (create-canvas (window-content win) :width 600 :height 400))
 	 (cx     (create-context2d canvas)))
     (set-border canvas :thin :solid :black)    
@@ -40,7 +40,7 @@
     (path-fill cx)))
 
 (defun on-file-movies (body)
-  (let ((win (create-gui-window body :client-movement t)))
+  (let ((win (create-gui-window body :title "Movie" :client-movement t)))
     (create-video (window-content win) :source "https://www.w3schools.com/html/mov_bbb.mp4")))
 
 (defun on-help-about (body)
@@ -67,7 +67,9 @@
 	 (tmp   (create-gui-menu-item file :content "Count" :on-click #'on-file-count))
 	 (tmp   (create-gui-menu-item file :content "Browse" :on-click #'on-file-browse))
 	 (tmp   (create-gui-menu-item file :content "Drawing" :on-click #'on-file-drawing))
-	 (tmp   (create-gui-menu-item file :content "Movies" :on-click #'on-file-movies))
+	 (tmp   (create-gui-menu-item file :content "Movie" :on-click #'on-file-movies))
+	 (win   (create-gui-menu-drop-down menu :content "Window"))
+	 (tmp   (create-gui-menu-window-select win))
 	 (help  (create-gui-menu-drop-down menu :content "Help"))
 	 (tmp   (create-gui-menu-item help :content "About" :on-click #'on-help-about))
 	 (tmp   (create-gui-menu-full-screen menu))))

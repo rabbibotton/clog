@@ -175,7 +175,7 @@ elements."))
     :reset :search :submit :tel :text :time :url :week))
   
 (defgeneric create-form-element (clog-obj element-type
-				 &key name value label html-id)
+				 &key name value label class html-id)
   (:documentation "Create a new clog-form-element as child of CLOG-OBJ.
 It is importamt that clog-form-elements are a child or descendant of a
 clog-form in the DOM. The radio ELEMENT-TYPE groups by NAME."))
@@ -184,10 +184,15 @@ clog-form in the DOM. The radio ELEMENT-TYPE groups by NAME."))
 				&key (name nil)
 				  (value nil)
 				  (label nil)
+				  (class nil)
 				  (html-id nil))
   (let ((element (create-child
-		  obj (format nil "<input type='~A'~A~A/>"
+		  obj (format nil "<input type='~A'~A~A~A/>"
 			      (escape-string element-type)
+			      (if class
+				  (format nil " class='~A'"
+					  (escape-string class))
+				  "")
 			      (if value
 				  (format nil " value='~A'" value)
 				  "")
@@ -648,15 +653,20 @@ virtual keyboards."))
 ;;;;;;;;;;;;;;;;;;
 
 
-(defgeneric create-label (clog-obj &key content label-for html-id)
+(defgeneric create-label (clog-obj &key content label-for class html-id)
   (:documentation "Create a new clog-label as child of CLOG-OBJ."))
 
 (defmethod create-label ((obj clog-obj) &key (content "")
 					  (label-for nil)
+					  (class nil)
 					  (html-id nil))
-  (create-child obj (format nil "<label for='~A'>~A</label>"
+  (create-child obj (format nil "<label for='~A'~A>~A</label>"
 			    (if label-for
 				(html-id label-for)
+				"")
+			    (if class
+				(format nil " class='~A'"
+					(escape-string class))
 				"")
 			    (escape-string content))
 		:clog-type 'clog-label :html-id html-id :auto-place t))
@@ -682,11 +692,17 @@ virtual keyboards."))
 ;; create-fieldset ;;
 ;;;;;;;;;;;;;;;;;;;;;
 
-(defgeneric create-fieldset (clog-obj &key legend html-id)
+(defgeneric create-fieldset (clog-obj &key legend class html-id)
   (:documentation "Create a new clog-fieldset as child of CLOG-OBJ."))
 
-(defmethod create-fieldset ((obj clog-obj) &key (legend nil) (html-id nil))
-  (create-child obj (format nil "<fieldset>~A</fieldset>"
+(defmethod create-fieldset ((obj clog-obj) &key (legend nil)
+					     (class nil)
+					     (html-id nil))
+  (create-child obj (format nil "<fieldset~A>~A</fieldset>"
+			    (if class
+				(format nil " class='~A'"
+					(escape-string class))
+				"")
 			    (if legend
 				(format nil "<legend>~A</legend>" legend)
 				""))
@@ -750,7 +766,7 @@ optionally fill in with contents of data-list."))
 ;;;;;;;;;;;;;;;;;;;;;;
 
 (defgeneric create-text-area (clog-obj
-			      &key columns rows name value label html-id)
+			      &key columns rows name value label class html-id)
   (:documentation "Create a new clog-text-area as child of CLOG-OBJ."))
 
 (defmethod create-text-area ((obj clog-obj)
@@ -759,11 +775,17 @@ optionally fill in with contents of data-list."))
 			       (name "")
 			       (value "")
 			       (label nil)
+			       (class nil)
 			       (html-id nil))
   (let ((element
 	  (create-child obj
-	    (format nil "<textarea name='~A' cols='~A' rows='~A'>~A</textarea>"
-		    name columns rows (escape-string value))
+	    (format nil "<textarea name='~A' cols='~A' rows='~A'~A>~A</textarea>"
+		    name columns rows
+		    (if class
+			(format nil " class='~A'"
+				(escape-string class))
+			"")
+		    (escape-string value))
 	    :clog-type 'clog-text-area :html-id html-id :auto-place t)))
 
     (when label
@@ -859,21 +881,26 @@ optionally fill in with contents of data-list."))
 ;; create-select ;;
 ;;;;;;;;;;;;;;;;;;;
 
-(defgeneric create-select (clog-obj &key name multiple label html-id)
+(defgeneric create-select (clog-obj &key name multiple label class html-id)
   (:documentation "Create a new clog-select as child of CLOG-OBJ."))
 
 (defmethod create-select ((obj clog-obj)
 			  &key (name nil)
 			    (multiple nil)
 			    (label nil)
+			    (class nil)
 			    (html-id nil))
   (let ((element (create-child
-		  obj (format nil "<select~A~A/>"
+		  obj (format nil "<select~A~A~A/>"
 			      (if multiple
 				  " multiple"
 				  "")
 			      (if name
 				  (format nil " name='~A'" name)
+				  "")
+			      (if class
+				  (format nil " class='~A'"
+					  (escape-string class))
 				  ""))
 		 :clog-type 'clog-select :html-id html-id :auto-place t)))
     (when label
@@ -916,7 +943,7 @@ optionally fill in with contents of data-list."))
 ;;;;;;;;;;;;;;;;;;;
 
 (defgeneric create-option (clog-obj
-			   &key content value selected disabled html-id)
+			   &key content value selected disabled class html-id)
   (:documentation "Create a new clog-option as child of CLOG-OBJ."))
 
 (defmethod create-option ((obj clog-obj) &key
@@ -924,8 +951,9 @@ optionally fill in with contents of data-list."))
 					   (value nil)
 					   (selected nil)
 					   (disabled nil)
+					   (class nil)
 					   (html-id nil))			  			  
-  (create-child obj (format nil "<option~A~A~A>~A</option>"
+  (create-child obj (format nil "<option~A~A~A~A>~A</option>"
 			    (if selected
 				" selected"
 				"")
@@ -935,6 +963,10 @@ optionally fill in with contents of data-list."))
 			    (if value
 				(format nil " value='~A'" value)
 				"")
+			    (if class
+				(format nil " class='~A'"
+					(escape-string class))
+				"")			    
 			    content)
 		:clog-type 'clog-option :html-id html-id :auto-place t))
 
@@ -971,9 +1003,14 @@ optionally fill in with contents of data-list."))
 
 (defmethod create-optgroup ((obj clog-obj) &key (content "")
 					     (disabled nil)
+					     (class nil)
 					     (html-id nil))			  			  
-  (create-child obj (format nil "<optgroup label='~A'~A/>"
+  (create-child obj (format nil "<optgroup label='~A'~A~A/>"
 			    content
+			    (if class
+				(format nil " class='~A'"
+					(escape-string class))
+				"")
 			    (if disabled
 				" disabled"
 				""))
