@@ -39,6 +39,19 @@
   (let ((win (create-gui-window body :title "Movie")))
     (create-video (window-content win) :source "https://www.w3schools.com/html/mov_bbb.mp4")))
 
+(defun on-file-pinned (body)
+  (let ((win (create-gui-window body :title "Pinned"
+				     :top (unit :px 50)
+				     :left (unit :px 0)
+				     :width 100
+				     :height 100)))
+    (flet ((can-do (obj)()))
+      (set-on-window-can-close win #'can-do)
+      (set-on-window-can-move win #'can-do)
+      (set-on-window-can-size win #'can-do))
+
+    (create-div win :content "I am pinned")))    
+
 (defun on-help-about (body)
   (let* ((about (create-gui-window body
 				   :title   "About"
@@ -64,6 +77,7 @@
 	 (tmp   (create-gui-menu-item file :content "Browse" :on-click #'on-file-browse))
 	 (tmp   (create-gui-menu-item file :content "Drawing" :on-click #'on-file-drawing))
 	 (tmp   (create-gui-menu-item file :content "Movie" :on-click #'on-file-movies))
+	 (tmp   (create-gui-menu-item file :content "Pinned" :on-click #'on-file-pinned))
 	 (win   (create-gui-menu-drop-down menu :content "Window"))
 	 (tmp   (create-gui-menu-item win :content "Maximize All"
 					  :on-click (lambda (obj)
