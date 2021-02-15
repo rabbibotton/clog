@@ -4,27 +4,23 @@
 
 (in-package :clog-user)
 
+;; For web oriented apps consider using the :client-movement option.
+;; See clog-gui-initialize documentation.
+
 (defun on-file-count (body)
-  ;; Clog-gui has two mode for handling moving and resizing clog-gui-windows.
-  ;; The client-movement mode (as set here) specifies to jQuery-UI to manipulate
-  ;; the window. This mode works well for website as the movement logic is done
-  ;; on the client side. The on-file-drawing window uses the lisp based logic
-  ;; and :client-movement is set to nil. This mode offers numerous events
-  ;; for fine control and is best for local applications although will be a bit
-  ;; more choppy cross continent or via satellite.
-  (let ((win (create-gui-window body :title "Count" :client-movement t)))
+  (let ((win (create-gui-window body :title "Count")))
     (dotimes (n 100)
       ;; window-content is the root element for the clog-gui
       ;; windows
       (create-div (window-content win) :content n))))
 
 (defun on-file-browse (body)
-  (let* ((win (create-gui-window body :title "Browse" :client-movement t))
+  (let* ((win (create-gui-window body :title "Browse"))
 	 (browser (create-child (window-content win)
 	    "<iframe width=100% height=98% src='https://common-lisp.net/'></iframe>")))))
 
 (defun on-file-drawing (body)
-  (let* ((win (create-gui-window body :title "Drawing" :client-movement t))
+  (let* ((win (create-gui-window body :title "Drawing"))
 	 (canvas (create-canvas (window-content win) :width 600 :height 400))
 	 (cx     (create-context2d canvas)))
     (set-border canvas :thin :solid :black)    
@@ -40,7 +36,7 @@
     (path-fill cx)))
 
 (defun on-file-movies (body)
-  (let ((win (create-gui-window body :title "Movie" :client-movement t)))
+  (let ((win (create-gui-window body :title "Movie")))
     (create-video (window-content win) :source "https://www.w3schools.com/html/mov_bbb.mp4")))
 
 (defun on-help-about (body)
