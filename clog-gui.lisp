@@ -93,13 +93,13 @@
   (set-on-full-screen-change (html-document clog-body)
 			     (lambda (obj)
 			       (when (current-window obj)
-				 (when (last-width (current-window obj))
+				 (when (window-maximized-p (current-window obj))
 				   (window-normalize (current-window obj))
 				   (window-maximize (current-window obj))))))
   (set-on-orientation-change (window clog-body)
 			     (lambda (obj)
 			       (when (current-window obj)
-				 (when (last-width (current-window obj))
+				 (when (window-maximized-p (current-window obj))
 				   (window-normalize (current-window obj))
 				   (window-maximize (current-window obj))))))
   (when w3-css-url
@@ -108,30 +108,6 @@
     (load-css (html-document clog-body) jquery-ui-css))
   (when jquery-ui
     (load-script (html-document clog-body) jquery-ui)))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Implementation - Menus
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-;;;;;;;;;;;;;;;;;;;;;;;;;
-;; create-gui-menu-bar ;;
-;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(defclass clog-gui-menu-bar (clog-div)()
-  (:documentation "Menu bar"))
-
-(defgeneric create-gui-menu-bar (clog-obj &key class html-id)
-  (:documentation "Attached a menu bar to a CLOG-OBJ in general a
-clog-body."))
-
-(defmethod create-gui-menu-bar ((obj clog-obj)
-				&key (class "w3-bar w3-black w3-card-4")
-				  (html-id nil))
-  (let ((div (create-div obj :class class :html-id html-id))
-	(app (connection-data-item obj "clog-gui")))
-    (change-class div 'clog-gui-menu-bar)
-    (setf (menu app) div)
-    div))
 
 ;;;;;;;;;;;;;;
 ;; menu-bar ;;
@@ -166,6 +142,69 @@ create-gui-menu-bar."))
 	(height (menu app))
 	0)))
 
+;;;;;;;;;;;;;;;;;;;;;;;
+;; window-collection ;;
+;;;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric window-collection (clog-obj)
+  (:documentation "Get hash table of open windows"))
+
+(defmethod window-collection ((obj clog-obj))
+  (let ((app (connection-data-item obj "clog-gui")))
+    (windows app)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; maximize-all-windows ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric maximize-all-windows (clog-obj)
+  (:documentation "Maximize all windows"))
+
+(defmethod maximize-all-windows ((obj clog-obj))
+  (let ((app (connection-data-item obj "clog-gui")))
+    (maphash (lambda (key value)
+	       (declare (ignore key))
+	       (window-maximize value))
+	     (windows app))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; normalize-all-windows ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric normalize-all-windows (clog-obj)
+  (:documentation "Normalize all windows"))
+
+(defmethod normalize-all-windows ((obj clog-obj))
+  (let ((app (connection-data-item obj "clog-gui")))
+    (maphash (lambda (key value)
+	       (declare (ignore key))
+	       (window-normalize value))
+	     (windows app))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Implementation - Menus
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;;;;;;;;;;;;;;;;;;;;;;;;;
+;; create-gui-menu-bar ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defclass clog-gui-menu-bar (clog-div)()
+  (:documentation "Menu bar"))
+
+(defgeneric create-gui-menu-bar (clog-obj &key class html-id)
+  (:documentation "Attached a menu bar to a CLOG-OBJ in general a
+clog-body."))
+
+(defmethod create-gui-menu-bar ((obj clog-obj)
+				&key (class "w3-bar w3-black w3-card-4")
+				  (html-id nil))
+  (let ((div (create-div obj :class class :html-id html-id))
+	(app (connection-data-item obj "clog-gui")))
+    (change-class div 'clog-gui-menu-bar)
+    (setf (menu app) div)
+    div))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; create-gui-menu-drop-down ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -186,6 +225,30 @@ create-gui-menu-bar."))
 	 (div    (create-div hover :class class :html-id html-id)))
     (declare (ignore button))
     (change-class div 'clog-gui-menu-drop-down)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; create-gui-menu-item ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defclass clog-gui-menu-item (clog-span)()
+  (:documentation "Menu item"))
+
+(defgeneric create-gui-menu-item (clog-gui-menu-drop-down
+				  &key content
+				    on-click
+				    class
+				    html-id)
+  (:documentation "Attached a menu item to a CLOG-GUI-MENU-DROP-DOWN"))
+
+(defmethod create-gui-menu-item ((obj clog-obj)
+				 &key (content "")
+				   (on-click nil)
+				   (class "w3-bar-item w3-button")
+				   (html-id nil))
+  (let ((span
+	  (create-span obj :content content :class class :html-id html-id)))
+    (set-on-click span on-click)
+    (change-class span 'clog-gui-menu-item)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; create-gui-menu-item ;;
@@ -654,6 +717,16 @@ on-window-resize-done at end of resize."))
     (fire-on-window-change nil app)
     (fire-on-window-close obj)))
 
+;;;;;;;;;;;;;;;;;;;;;;;;
+;; window-maximized-p ;;
+;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric window-maximized-p (clog-gui-window)
+  (:documentation "Set CLOG-GUI-WINDOW as maximized window."))
+
+(defmethod window-maximized-p ((obj clog-gui-window))
+  (last-width obj))
+
 ;;;;;;;;;;;;;;;;;;;;;
 ;; window-maximize ;;
 ;;;;;;;;;;;;;;;;;;;;;
@@ -664,7 +737,7 @@ on-window-resize-done at end of resize."))
 (defmethod window-maximize ((obj clog-gui-window))
   (let ((app (connection-data-item obj "clog-gui")))
     (window-focus obj)
-    (unless (last-width obj)
+    (unless (window-maximized-p obj)
       (setf (last-x obj) (left obj))
       (setf (last-y obj) (top obj))
       (setf (last-height obj) (height obj))
@@ -685,7 +758,7 @@ on-window-resize-done at end of resize."))
 
 (defmethod window-normalize ((obj clog-gui-window))
   (window-focus obj)
-  (when (last-width obj)
+  (when (window-maximized-p obj)
     (setf (width obj) (last-width obj))
     (setf (height obj) (last-height obj))
     (setf (top obj) (last-y obj))
@@ -703,7 +776,7 @@ on-window-resize-done at end of resize."))
 (defmethod window-toggle-maximize ((obj clog-gui-window))
   (let ((app (connection-data-item obj "clog-gui")))
     (window-focus obj)
-    (cond ((last-width obj)
+    (cond ((window-maximized-p obj)
 	   (setf (width obj) (last-width obj))
 	   (setf (height obj) (last-height obj))
 	   (setf (top obj) (last-y obj))

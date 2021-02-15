@@ -65,6 +65,12 @@
 	 (tmp   (create-gui-menu-item file :content "Drawing" :on-click #'on-file-drawing))
 	 (tmp   (create-gui-menu-item file :content "Movie" :on-click #'on-file-movies))
 	 (win   (create-gui-menu-drop-down menu :content "Window"))
+	 (tmp   (create-gui-menu-item win :content "Maximize All"
+					  :on-click (lambda (obj)
+						      (maximize-all-windows obj))))
+	 (tmp   (create-gui-menu-item win :content "Normalize All"
+					  :on-click (lambda (obj)
+						      (normalize-all-windows obj))))
 	 (tmp   (create-gui-menu-window-select win))
 	 (help  (create-gui-menu-drop-down menu :content "Help"))
 	 (tmp   (create-gui-menu-item help :content "About" :on-click #'on-help-about))

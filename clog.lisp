@@ -670,6 +670,9 @@ embedded in a native template application.)"
   (current-window              generic-function)
   (menu-bar                    generic-function)
   (menu-bar-height             generic-function)
+  (window-collection           generic-function)
+  (maximize-all-windows        generic-function)
+  (normalize-all-windows       generic-function)
   (set-on-window-change        generic-function)
   
   "CLOG-GUI - Individual Windows"
@@ -679,6 +682,7 @@ embedded in a native template application.)"
   (window-content              generic-function)
   (window-focus                generic-function)
   (window-close                generic-function)
+  (window-maximized-p          generic-function)
   (window-maximize             generic-function)
   (window-normalize            generic-function)
   (window-toggle-maximize      generic-function)
