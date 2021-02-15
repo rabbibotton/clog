@@ -194,11 +194,11 @@ Demo Summary
 - 02-demo.lisp - Chat - Private instant messenger
 - 03-demo.lisp - IDE - A very simple common lisp IDE
 
-High Order Extensions to CLOG
+High Order Extensions to CLOG (so far)
 
 - clog-gui - Desktop over the web
   - Menus
   - Windowing system
-  - In progress - Feb 2020 - File Load / Save dialogs
+  - In progress - File Load / Save dialogs
 - clog-data
-  - In progress - Feb 2020 - Database integrations
+  - In progress - Database integrations
