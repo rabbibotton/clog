@@ -180,10 +180,11 @@ clog-body."))
   (:documentation "Drop down containing windows. Selecting a window
 will maximize it on top."))
 
-(defgeneric create-gui-menu-window-select (clog-gui-menu-drop-down
+(defgeneric create-gui-menu-window-select (clog-obj
 					   &key class
 					     html-id)
-  (:documentation "Attached a menu item to a CLOG-GUI-MENU-DROP-DOWN"))
+  (:documentation "Attached a clog-select as a menu item that auto updates
+with open windows and maximizes them."))
 
 (defmethod create-gui-menu-window-select
     ((obj clog-obj)

@@ -69,7 +69,6 @@
 	 (help  (create-gui-menu-drop-down menu :content "Help"))
 	 (tmp   (create-gui-menu-item help :content "About" :on-click #'on-help-about))
 	 (tmp   (create-gui-menu-full-screen menu))))
-
   (run body))
 
 (defun start-tutorial ()
