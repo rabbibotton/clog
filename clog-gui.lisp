@@ -504,6 +504,10 @@ on-window-resize-done at end of resize."))
   (let ((app (connection-data-item obj "clog-gui")))
     (unless html-id
       (setf html-id (clog-connection:generate-id)))
+    (when (eql (hash-table-count (windows app)) 0)
+      ;; If previously no open windows reset default position
+      (setf (last-x app) 0)
+      (setf (last-y app) 0))
     (unless left
       ;; Generate sensible initial x location
       (setf left (last-x app))
