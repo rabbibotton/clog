@@ -12,8 +12,7 @@
 ;; Implementation - clog-gui - Desktop GUI abstraction
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defconstant menu-bar-height 37)
-(defconstant top-bar-height 20)
+(defconstant top-bar-height 20 "Overlap on new windows with nil set for top")
 
 (defclass clog-gui ()
   ((body
@@ -37,7 +36,7 @@
     :documentation "Last default open x point")
    (last-y
     :accessor last-y
-    :initform menu-bar-height
+    :initform 0
     :documentation "Last default open y point")
    (copy-buf
     :accessor copy-buf
@@ -57,6 +56,10 @@
    (drag-y
     :accessor drag-y
     :documentation "Location of the top or height relative to pointer during drag")
+   (menu
+    :accessor menu
+    :initform nil
+    :documentation "Installed menu bar if installed")
    (window-select
     :accessor window-select
     :initform nil
@@ -124,8 +127,44 @@ clog-body."))
 (defmethod create-gui-menu-bar ((obj clog-obj)
 				&key (class "w3-bar w3-black w3-card-4")
 				  (html-id nil))
-  (let ((div (create-div obj :class class :html-id html-id)))
-    (change-class div 'clog-gui-menu-bar)))
+  (let ((div (create-div obj :class class :html-id html-id))
+	(app (connection-data-item obj "clog-gui")))
+    (change-class div 'clog-gui-menu-bar)
+    (setf (menu app) div)
+    div))
+
+;;;;;;;;;;;;;;
+;; menu-bar ;;
+;;;;;;;;;;;;;;
+
+(defgeneric menu-bar (clog-obj)
+  (:documentation "Get/setf window menu-bar. This is set buy
+create-gui-menu-bar."))
+
+(defmethod menu-bar ((obj clog-obj))
+  (let ((app (connection-data-item obj "clog-gui")))
+    (menu app)))
+
+(defgeneric set-menu-bar (clog-obj value)
+  (:documentation "Set window menu-bar"))
+
+(defmethod set-menu-bar ((obj clog-obj) value)
+  (let ((app (connection-data-item obj "clog-gui")))
+    (setf (menu app) value)))
+(defsetf menu-bar set-menu-bar)
+
+;;;;;;;;;;;;;;;;;;;;;
+;; menu-bar-height ;;
+;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric menu-bar-height (clog-obj)
+  (:documentation "Get menu-bar height"))
+
+(defmethod menu-bar-height ((obj clog-obj))
+  (let ((app (connection-data-item obj "clog-gui")))
+    (if (menu app)
+	(height (menu app))
+	0)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; create-gui-menu-drop-down ;;
@@ -184,7 +223,7 @@ will maximize it on top."))
 					   &key class
 					     html-id)
   (:documentation "Attached a clog-select as a menu item that auto updates
-with open windows and maximizes them."))
+with open windows and maximizes them. Only one instance allowed."))
 
 (defmethod create-gui-menu-window-select
     ((obj clog-obj)
@@ -410,7 +449,7 @@ The on-window-change clog-obj received is the new window"))
 	 (y        (getf data ':screen-y))
 	 (adj-y    (- y (drag-y app)))
 	 (adj-x    (- x (drag-x app))))
-    (when (and (> adj-x 0) (> adj-y menu-bar-height))
+    (when (and (> adj-x 0) (> adj-y (menu-bar-height obj)))
       (cond ((equalp (in-drag app) "m")
 	     (fire-on-window-move (drag-obj app))
 	     (setf (top (drag-obj app)) (unit :px adj-y))
@@ -466,13 +505,17 @@ on-window-resize-done at end of resize."))
     (unless html-id
       (setf html-id (clog-connection:generate-id)))
     (unless left
+      ;; Generate sensible initial x location
       (setf left (last-x app))
       (incf (last-x app) 10))
     (unless top
+      ;; Generate sensible initial y location
+      (when (eql (last-y app) 0)
+	(setf (last-y app) (menu-bar-height obj)))
       (setf top (last-y app))
       (incf (last-y app) top-bar-height)
       (when (> top (- (inner-height (window (body app))) (last-y app)))
-	(setf (last-y app) menu-bar-height)))
+	(setf (last-y app) (menu-bar-height obj))))
     (let ((win (create-child (body app)
 			    (format nil
 	    "<div style='position:fixed;top:~Apx;left:~Apx;width:~Apx;height:~Apx;
@@ -513,6 +556,7 @@ on-window-resize-done at end of resize."))
 						      :content title
 						      :value html-id)))      
       (set-on-double-click (win-title win) (lambda (obj)
+					     (declare (ignore obj))
 					     (window-toggle-maximize win)))
       (set-on-click (closer win) (lambda (obj)
 				   (declare (ignore obj))
@@ -621,11 +665,11 @@ on-window-resize-done at end of resize."))
       (setf (last-y obj) (top obj))
       (setf (last-height obj) (height obj))
       (setf (last-width obj) (width obj))
-      (setf (top obj) (unit :px menu-bar-height))
+      (setf (top obj) (unit :px (menu-bar-height obj)))
       (setf (left obj) (unit :px 0))
       (setf (width obj) (unit :vw 100))
       (setf (height obj)
-	    (- (inner-height (window (body app))) menu-bar-height))
+	    (- (inner-height (window (body app))) (menu-bar-height obj)))
       (fire-on-window-size-done obj))))
 
 ;;;;;;;;;;;;;;;;;;;;;;
@@ -666,11 +710,11 @@ on-window-resize-done at end of resize."))
 	   (setf (last-y obj) (top obj))
 	   (setf (last-height obj) (height obj))
 	   (setf (last-width obj) (width obj))
-	   (setf (top obj) (unit :px menu-bar-height))
+	   (setf (top obj) (unit :px (menu-bar-height obj)))
 	   (setf (left obj) (unit :px 0))
 	   (setf (width obj) (unit :vw 100))
 	   (setf (height obj)
-		 (- (inner-height (window (body app))) menu-bar-height))))
+		 (- (inner-height (window (body app))) (menu-bar-height obj)))))
     (fire-on-window-size-done obj)))
     
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

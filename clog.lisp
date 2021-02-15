@@ -668,6 +668,8 @@ embedded in a native template application.)"
 
   "CLOG-GUI - Window System"
   (current-window              generic-function)
+  (menu-bar                    generic-function)
+  (menu-bar-height             generic-function)
   (set-on-window-change        generic-function)
   
   "CLOG-GUI - Individual Windows"
