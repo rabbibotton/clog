@@ -593,7 +593,7 @@ on-window-resize-done at end of resize."))
                        <span data-drag-obj='~A' data-drag-type='m' id='~A-title'
                              style='flex-grow:9;user-select:none;cursor:move;'>~A</span>
                               <span id='~A-closer'
-                                    style='cursor:pointer;user-select:none;'>X</span>
+                                    style='cursor:pointer;user-select:none;'>&times;</span>
                   </div>
                   <div id='~A-body' style='flex-grow:9;overflow:auto'>~A</div>
                   <div id='~A-sizer' style='user-select:none;height:3px;
@@ -932,7 +932,7 @@ on-window-resize-done at end of resize."))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defun server-file-dialog (obj title initial-dir on-file-name
-			   &key (left nil) (top nil) (width 400) (height 360)
+			   &key (left nil) (top nil) (width 400) (height 375)
 			     (initial-filename nil))
   "Create a local file dialog box called TITLE using INITIAL-DIR on server
 machine, upon close ON-FILE-NAME called with filename or nil if failure."
