@@ -926,3 +926,78 @@ on-window-resize-done at end of resize."))
 (defmethod fire-on-window-move-done ((obj clog-gui-window))
   (when (on-window-move-done obj)
     (funcall (on-window-move-done obj) obj)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Implementation - Dialog Boxes
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defun server-file-dialog (obj title initial-dir on-file-name
+			   &key (left nil) (top nil) (width 400) (height 360)
+			     (initial-filename nil))
+  "Create a local file dialog box called TITLE using INITIAL-DIR on server
+machine, upon close ON-FILE-NAME called with filename or nil if failure."
+  (let* ((win   (create-gui-window obj
+				   :title  title
+				   :top    top
+				   :left   left
+				   :width  width
+				   :height height))
+	 (box   (create-div (window-content win) :class "w3-panel"))
+	 (form  (create-form box))
+	 (dirs  (create-select form))
+	 (files (create-select form))
+	 (input (create-form-element form :input :label
+				     (create-label form :content "File Name:")))
+	 (ok    (create-button form :content "&nbsp;&nbsp;OK&nbsp;&nbsp;")))
+    (setf (size dirs) 4)
+    (setf (box-width dirs) "100%")
+    (setf (size files) 8)
+    (setf (box-width files) "100%")
+    (setf (box-width input) "100%")
+    (flet ((populate-dirs (dir)
+	     (setf (inner-html dirs) "")
+	     (add-select-option dirs (format nil "~A" dir) ".")
+	     (setf (value input) (truename dir))
+	     (unless (or (equalp dir "/") (equalp dir #P"/"))
+	       (add-select-option dirs (format nil "~A../" dir) ".."))
+	     (dolist (item (uiop:subdirectories dir))
+	       (add-select-option dirs item item)))
+	   (populate-files (dir)
+	     (setf (inner-html files) "")
+	     (dolist (item (uiop:directory-files dir))
+	       (add-select-option files item (file-namestring item))))
+	   (caret-at-end ()
+	     (focus input)
+	     (js-execute win (format nil "~A.setSelectionRange(~A.value.length,~A.value.length)"
+				     (clog::script-id input)
+				     (clog::script-id input)
+				     (clog::script-id input)))))
+      (populate-dirs initial-dir)
+      (populate-files initial-dir)
+      (when initial-filename
+	(setf (value input) (truename initial-filename))
+	(caret-at-end))
+      (set-on-change files (lambda (obj)
+			     (declare (ignore obj))
+			     (setf (value input) (truename (value files)))
+			     (caret-at-end)))
+      (set-on-change dirs (lambda (obj)
+			    (declare (ignore obj))
+			    (setf (value input) (value dirs))
+			    (caret-at-end)
+			    (populate-files (value dirs))))
+      (set-on-double-click dirs
+			   (lambda (obj)
+			     (declare (ignore obj))
+			     (populate-dirs (truename (value dirs)))))
+      (set-on-double-click files (lambda (obj)
+				   (declare (ignore obj))
+				   (click ok))))
+    (set-on-window-close win (lambda (obj)
+			       (declare (ignore obj))
+			       (funcall on-file-name nil)))
+    (set-on-click ok (lambda (obj)
+		       (declare (ignore obj))
+		       (set-on-window-close win nil)
+		       (window-close win)
+		       (funcall on-file-name (value input))))))

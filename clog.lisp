@@ -693,7 +693,10 @@ embedded in a native template application.)"
   (set-on-window-move          generic-function)
   (set-on-window-size          generic-function)
   (set-on-window-move-done     generic-function)
-  (set-on-window-size-done     generic-function))
+  (set-on-window-size-done     generic-function)
+
+  "CLOG-GUI - Dialog Boxes"
+  (server-file-dialog          function))
   
 (defsection @clog-body (:title "CLOG Body Objects")
   "CLOG-Body - CLOG Body Objects"

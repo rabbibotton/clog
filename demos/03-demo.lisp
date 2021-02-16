@@ -29,63 +29,6 @@
    (with-open-file (outstream outfile :direction :output :if-exists action-if-exists)
      (write-sequence string outstream)))
 
-(defun get-file-name (obj title on-file-name)
-  (let* ((app   (connection-data-item obj "app-data"))
-	 (win   (create-gui-window obj
-				   :title  title
-				   :left   (- (/ (width (body app)) 2) 200)
-				   :width  400
-				   :height 360))
-	 (box   (create-div (window-content win) :class "w3-panel"))
-	 (form  (create-form box))
-	 (dirs  (create-select form))
-	 (files (create-select form))
-	 (input (create-form-element form :input :label
-				     (create-label form :content "File Name:")))
-	 (ok    (create-button form :content "&nbsp;&nbsp;OK&nbsp;&nbsp;")))
-    (setf (size dirs) 4)
-    (setf (box-width dirs) "100%")
-    (setf (size files) 8)
-    (setf (box-width files) "100%")
-    (setf (box-width input) "100%")
-    (flet ((populate-dirs (dir)
-	     (setf (inner-html dirs) "")
-	     (add-select-option dirs (format nil "~A" dir) ".")
-	     (setf (value input) dir)
-	     (unless (or (equalp dir "/") (equalp dir #P"/"))
-	       (add-select-option dirs (format nil "~A../" dir) ".."))
-	     (dolist (item (uiop:subdirectories dir))
-	       (add-select-option dirs item item)))
-	   (populate-files (dir)
-	     (setf (inner-html files) "")
-	     (dolist (item (uiop:directory-files dir))
-	       (add-select-option files item (file-namestring item))))
-	   (caret-at-end ()
-	     (focus input)
-	     (js-execute win (format nil "~A.setSelectionRange(~A.value.length,~A.value.length)"
-				     (clog::script-id input)
-				     (clog::script-id input)
-				     (clog::script-id input)))))
-      (populate-dirs "./")
-      (populate-files "./")
-      (set-on-change files (lambda (obj)
-			     (setf (value input) (value files))
-			     (caret-at-end)))
-      (set-on-change dirs (lambda (obj)
-			    (setf (value input) (value dirs))
-			    (caret-at-end)
-			    (populate-files (value dirs))))
-      (set-on-double-click dirs
-	    (lambda (obj)
-	      (populate-dirs (truename (value dirs)))))
-      (set-on-double-click files
-	    (lambda (obj)
-	      (click ok))))
-    (set-on-click ok (lambda (obj)
-		       (declare (ignore obj))
-		       (window-close win)
-		       (funcall on-file-name (value input))))))
-
 (defun capture-eval (form)
   (let ((result (make-array '(0) :element-type 'base-char
 				 :fill-pointer 0 :adjustable t))
@@ -122,24 +65,33 @@
 			  (html-id win)))))
 
 (defun do-ide-file-open (obj)
-  (get-file-name obj "Open..."
-		 (lambda (fname)
-		   (do-ide-file-new obj)
-		   (setf (window-title (current-window obj)) fname)
-		   (js-execute obj (format nil "editor_~A.setValue('~A');editor_~A.moveCursorTo(0,0);"
+  (let ((app (connection-data-item obj "app-data")))
+	(server-file-dialog obj "Open..." "./"
+			    (lambda (fname)
+			      (when fname
+				(do-ide-file-new obj)
+				(setf (window-title (current-window obj)) fname)
+				(js-execute obj
+				   (format nil "editor_~A.setValue('~A');editor_~A.moveCursorTo(0,0);"
 					   (html-id (current-window obj))
 					   (escape-string (read-file fname))
-					   (html-id (current-window obj)))))))
+					   (html-id (current-window obj)))))
+			      :left (- (/ (width (body app)) 2) 200)))))
 
 (defun do-ide-file-save-as (obj)
-  (let ((cw  (current-window obj)))
+  (let* ((app (connection-data-item obj "app-data"))
+  	 (cw  (current-window obj))
+	 (dir (directory-namestring (window-title cw))))
     (when cw
-      (get-file-name obj "Save As.."
-		     (lambda (fname)
-		       (setf (window-title cw) fname)
-		       (write-file (js-query obj (format nil "editor_~A.getValue()"
-							 (html-id cw)))
-				   fname))))))
+      (server-file-dialog obj "Save As.." dir
+			  (lambda (fname)
+			    (when fname
+			      (setf (window-title cw) fname)
+			      (write-file (js-query obj (format nil "editor_~A.getValue()"
+								(html-id cw)))
+					  fname)))
+			    :left (- (/ (width (body app)) 2) 200)
+			    :initial-filename (window-title cw)))))
 
 (defun do-ide-file-save (obj)
   (if (equalp (window-title (current-window obj)) "New Window")
@@ -256,6 +208,7 @@
     (create-gui-menu-item help :content "About"         :on-click #'do-ide-help-about)
     (create-gui-menu-full-screen menu))
   (set-on-before-unload (window body) (lambda(obj)
+					(declare (ignore obj))
 					;; return empty string to prevent nav off page
 					""))
   (run body))
