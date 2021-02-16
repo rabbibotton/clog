@@ -199,6 +199,6 @@ High Order Extensions to CLOG (so far)
 - clog-gui - Desktop over the web
   - Menus
   - Windowing system
-  - In progress - File Load / Save dialogs
+  - File Load / Save dialogs
 - clog-data
   - In progress - Database integrations
