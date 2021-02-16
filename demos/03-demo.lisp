@@ -256,7 +256,6 @@
     (create-gui-menu-window-select wind)
     (create-gui-menu-item help :content "About"     :on-click #'do-ide-help-about)
     (create-gui-menu-full-screen menu))
-
   (set-on-before-unload (window body) (lambda(obj)
 					;; return empty string to prevent nav off page
 					""))
