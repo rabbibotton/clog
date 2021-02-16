@@ -423,8 +423,9 @@ is nil unbind the event."))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defgeneric set-on-before-unload (clog-window on-before-unload-handler)
-  (:documentation "Set the ON-BEFORE-UNLOAD-HANDLER for CLOG-OBJ. If
-ON-BEFORE-UNLOAD-HANDLER is nil unbind the event."))
+  (:documentation "Set the ON-BEFORE-UNLOAD-HANDLER for CLOG-WINDOW.
+Return and empty string in order to prevent navigation off page.
+If ON-BEFORE-UNLOAD-HANDLER is nil unbind the event."))
 
 (defmethod set-on-before-unload ((obj clog-window) handler)
   (set-event obj "beforeunload"

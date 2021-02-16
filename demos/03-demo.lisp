@@ -154,12 +154,29 @@
 	(sleep 2)
 	(setf (window-title cw) fname))))
 
+(defun do-ide-edit-undo (obj)
+  (let ((cw (current-window obj)))
+    (when cw
+      (do-ide-edit-copy obj)
+      (js-execute obj (format nil "editor_~A.execCommand('undo')"
+			      (html-id cw))))))
+			      
+(defun do-ide-edit-redo (obj)
+  (let ((cw (current-window obj)))
+    (when cw
+      (do-ide-edit-copy obj)
+      (js-execute obj (format nil "editor_~A.execCommand('redo')"
+			      (html-id cw))))))
+
 (defun do-ide-edit-copy (obj)
   (let ((cw (current-window obj)))
     (when cw
       (let* ((app (connection-data-item obj "app-data")))
-	(setf (copy-buf app) (js-query obj (format nil "editor_~A.getCopyText();"
-						   (html-id cw))))))))
+	(setf (copy-buf app) (js-query obj
+		    (format nil "editor_~A.execCommand('copy');~
+                                 navigator.clipboard.writeText(editor_~A.getCopyText());~
+                                 editor_~A.getCopyText();"
+			    (html-id cw) (html-id cw) (html-id cw))))))))
 
 (defun do-ide-edit-cut (obj)
   (let ((cw (current-window obj)))
@@ -172,9 +189,12 @@
   (let ((cw (current-window obj)))
     (when cw
       (let ((app (connection-data-item obj "app-data")))
-	(js-execute obj (format nil "editor_~A.execCommand('paste', '~A')"
-				(html-id cw)
-				(escape-string (copy-buf app))))))))
+	;; Note this methods uses the global clip buffer and not (copy-buf app)
+	;; on copy and paste we set both the global and local buffer.
+	(js-execute obj (format nil "navigator.clipboard.readText().then(function(text) {~
+                                        editor_~A.execCommand('paste', text)~
+                                     })"
+				(html-id cw)))))))
 
 (defun do-ide-lisp-eval-file (obj)
   (let ((cw (current-window obj)))
@@ -225,6 +245,8 @@
     (create-gui-menu-item file :content "Open"      :on-click #'do-ide-file-open)
     (create-gui-menu-item file :content "Save"      :on-click #'do-ide-file-save)
     (create-gui-menu-item file :content "Save As"   :on-click #'do-ide-file-save-as)
+    (create-gui-menu-item edit :content "Undo"      :on-click #'do-ide-edit-undo)
+    (create-gui-menu-item edit :content "Redo"      :on-click #'do-ide-edit-redo)
     (create-gui-menu-item edit :content "Copy"      :on-click #'do-ide-edit-copy)
     (create-gui-menu-item edit :content "Cut"       :on-click #'do-ide-edit-cut)
     (create-gui-menu-item edit :content "Paste"     :on-click #'do-ide-edit-paste)
@@ -234,6 +256,10 @@
     (create-gui-menu-window-select wind)
     (create-gui-menu-item help :content "About"     :on-click #'do-ide-help-about)
     (create-gui-menu-full-screen menu))
+
+  (set-on-before-unload (window body) (lambda(obj)
+					;; return empty string to prevent nav off page
+					""))
   (run body))
 
 (defun start-demo ()
