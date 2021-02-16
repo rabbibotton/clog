@@ -80,8 +80,7 @@
 	      (populate-dirs (truename (value dirs)))))
       (set-on-double-click files
 	    (lambda (obj)
-	      (click ok)))
-      )
+	      (click ok))))
     (set-on-click ok (lambda (obj)
 		       (declare (ignore obj))
 		       (window-close win)
