@@ -467,7 +467,7 @@ nil unbind all event handlers. (Private)"))
 is nil unbind the event."))
 
 (defmethod set-on-resize ((obj clog-obj) handler)
-  (set-on-event "resize" handler))
+  (set-on-event obj "resize" handler))
 
 
 ;;;;;;;;;;;;;;;;;;
@@ -479,7 +479,7 @@ is nil unbind the event."))
 is nil unbind the event."))
 
 (defmethod set-on-focus ((obj clog-obj) handler)
-  (set-on-event "focus" handler))
+  (set-on-event obj "focus" handler))
 
 ;;;;;;;;;;;;;;;;;
 ;; set-on-blur ;;
@@ -490,7 +490,7 @@ is nil unbind the event."))
 is nil unbind the event."))
 
 (defmethod set-on-blur ((obj clog-obj) handler)
-  (set-on-event "blur" handler))
+  (set-on-event obj "blur" handler))
 
 ;;;;;;;;;;;;;;;;;;;
 ;; set-on-change ;;
@@ -501,7 +501,7 @@ is nil unbind the event."))
 is nil unbind the event."))
 
 (defmethod set-on-change ((obj clog-obj) handler)
-  (set-on-event "change" handler))
+  (set-on-event obj "change" handler))
 
 ;;;;;;;;;;;;;;;;;;;;;;;
 ;; set-on-drag-start ;;
@@ -533,7 +533,7 @@ If ON-DRAG-START-HANDLER is nil unbind the event."))
 is nil unbind the event."))
 
 (defmethod set-on-drag ((obj clog-obj) handler)
-  (set-on-event "drag" handler))
+  (set-on-event obj "drag" handler))
 
 ;;;;;;;;;;;;;;;;;;;;;
 ;; set-on-drag-end ;;
@@ -544,7 +544,7 @@ is nil unbind the event."))
 is nil unbind the event."))
 
 (defmethod set-on-drag-end ((obj clog-obj) handler)
-  (set-on-event "dragend" handler))
+  (set-on-event obj "dragend" handler))
 
 ;;;;;;;;;;;;;;;;;;;;;;;
 ;; set-on-drag-enter ;;
@@ -555,7 +555,7 @@ is nil unbind the event."))
 is nil unbind the event."))
 
 (defmethod set-on-drag-enter ((obj clog-obj) handler)
-  (set-on-event "dragenter" handler))
+  (set-on-event obj "dragenter" handler))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;
@@ -567,7 +567,7 @@ is nil unbind the event."))
 is nil unbind the event."))
 
 (defmethod set-on-drag-leave ((obj clog-obj) handler)
-  (set-on-event "dragleave" handler))
+  (set-on-event obj "dragleave" handler))
 
 ;;;;;;;;;;;;;;;;;;;;;;
 ;; set-on-drag-over ;;
@@ -612,7 +612,7 @@ is nil unbind the event."))
 ON-FOCUS-IN-HANDLER is nil unbind the event."))
 
 (defmethod set-on-focus-in ((obj clog-obj) handler)
-  (set-on-event "focusin" handler))
+  (set-on-event obj "focusin" handler))
 
 ;;;;;;;;;;;;;;;;;;;;;;
 ;; set-on-focus-out ;;
@@ -623,7 +623,7 @@ ON-FOCUS-IN-HANDLER is nil unbind the event."))
 If ON-FOCUS-OUT-HANDLER is nil unbind the event."))
 
 (defmethod set-on-focus-out ((obj clog-obj) handler)
-  (set-on-event "focusout" handler))
+  (set-on-event obj "focusout" handler))
 
 ;;;;;;;;;;;;;;;;;;
 ;; set-on-reset ;;
@@ -651,7 +651,7 @@ this even is bound, you must call the form reset manually."))
 is nil unbind the event."))
 
 (defmethod set-on-search ((obj clog-obj) handler)
-  (set-on-event "search" handler))
+  (set-on-event obj "search" handler))
 
 ;;;;;;;;;;;;;;;;;;;
 ;; set-on-select ;;
@@ -662,7 +662,7 @@ is nil unbind the event."))
 is nil unbind the event."))
 
 (defmethod set-on-select ((obj clog-obj) handler)
-  (set-on-event "select" handler))
+  (set-on-event obj "select" handler))
 
 ;;;;;;;;;;;;;;;;;;;
 ;; set-on-submit ;;
@@ -801,7 +801,7 @@ replace on an on-context-menu event."))
 is nil unbind the event."))
 
 (defmethod set-on-mouse-enter ((obj clog-obj) handler)
-  (set-on-event "mouseenter" handler))
+  (set-on-event obj "mouseenter" handler))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;
 ;; set-on-mouse-leave ;;
@@ -812,7 +812,7 @@ is nil unbind the event."))
 is nil unbind the event."))
 
 (defmethod set-on-mouse-leave ((obj clog-obj) handler)
-  (set-on-event "mouseleave" handler))
+  (set-on-event obj "mouseleave" handler))
 
 ;;;;;;;;;;;;;;;;;;;;;;;
 ;; set-on-mouse-over ;;
@@ -823,7 +823,7 @@ is nil unbind the event."))
 is nil unbind the event."))
 
 (defmethod set-on-mouse-over ((obj clog-obj) handler)
-  (set-on-event "mouseover" handler))
+  (set-on-event obj "mouseover" handler))
 
 ;;;;;;;;;;;;;;;;;;;;;;
 ;; set-on-mouse-out ;;
@@ -834,7 +834,7 @@ is nil unbind the event."))
 is nil unbind the event."))
 
 (defmethod set-on-mouse-out ((obj clog-obj) handler)
-  (set-on-event "mouseout" handler))
+  (set-on-event obj "mouseout" handler))
 
 ;;;;;;;;;;;;;;;;;;;;;;;
 ;; set-on-mouse-down ;;
@@ -891,7 +891,7 @@ ON-MOUSE-MOVE-HANDLER is nil unbind the event."))
 is nil unbind the event."))
 
 (defmethod set-on-pointer-enter ((obj clog-obj) handler)
-  (set-on-event "pointerenter" handler))
+  (set-on-event obj "pointerenter" handler))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; set-on-pointer-leave ;;
@@ -902,7 +902,7 @@ is nil unbind the event."))
 is nil unbind the event."))
 
 (defmethod set-on-pointer-leave ((obj clog-obj) handler)
-  (set-on-event "pointerleave" handler))
+  (set-on-event obj "pointerleave" handler))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; set-on-pointer-over ;;
@@ -913,7 +913,7 @@ is nil unbind the event."))
 is nil unbind the event."))
 
 (defmethod set-on-pointer-over ((obj clog-obj) handler)
-  (set-on-event "pointerover" handler))
+  (set-on-event obj "pointerover" handler))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;
 ;; set-on-pointer-out ;;
@@ -924,7 +924,7 @@ is nil unbind the event."))
 is nil unbind the event."))
 
 (defmethod set-on-pointer-out ((obj clog-obj) handler)
-  (set-on-event "pointerout" handler))
+  (set-on-event obj "pointerout" handler))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; set-on-pointer-down ;;
@@ -1116,7 +1116,7 @@ ON-KEY-PRESS-HANDLER is nil unbind the event."))
 is nil unbind the event."))
 
 (defmethod set-on-copy ((obj clog-obj) handler)
-  (set-on-event "copy" handler))
+  (set-on-event obj "copy" handler))
 
 ;;;;;;;;;;;;;;;;
 ;; set-on-cut ;;
@@ -1127,7 +1127,7 @@ is nil unbind the event."))
 is nil unbind the event."))
 
 (defmethod set-on-cut ((obj clog-obj) handler)
-  (set-on-event "cut" handler))
+  (set-on-event obj "cut" handler))
 
 ;;;;;;;;;;;;;;;;;;
 ;; set-on-paste ;;
@@ -1138,4 +1138,4 @@ is nil unbind the event."))
 is nil unbind the event."))
 
 (defmethod set-on-paste ((obj clog-obj) handler)
-  (set-on-event "paste" handler))
+  (set-on-event obj "paste" handler))
