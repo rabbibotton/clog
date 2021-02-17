@@ -7,6 +7,7 @@
   :license  "BSD"
   :version "0.9.0"
   :serial t
+  :pathname "source/"
   :depends-on (#:clack #:websocket-driver #:alexandria #:hunchentoot #:cl-ppcre
 	       #:bordeaux-threads #:trivial-open-browser #:cl-dbi #:parse-float
 		       #:lack-middleware-static #:mgl-pax #:quri)
@@ -28,3 +29,8 @@
 	       (:file "clog-body")
 	       (:file "clog-gui")
 	       (:file "clog-helpers")))
+
+(asdf:defsystem #:clog/tools
+  :depends-on (#:clog)
+  :pathname "tools/"
+  :components ((:file "clog-db-admin")))
