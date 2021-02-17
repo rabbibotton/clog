@@ -4514,9 +4514,10 @@ clog-body.</p></li>
 <p><a id='x-28CLOG-3ACREATE-GUI-MENU-WINDOW-SELECT-20GENERIC-FUNCTION-29'></a></p>
 
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ACREATE-GUI-MENU-WINDOW-SELECT-20GENERIC-FUNCTION-29" >CREATE-GUI-MENU-WINDOW-SELECT</a></span></span> <span class="locative-args">CLOG-GUI-MENU-DROP-DOWN &amp;KEY CLASS HTML-ID</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ACREATE-GUI-MENU-WINDOW-SELECT-20GENERIC-FUNCTION-29" >CREATE-GUI-MENU-WINDOW-SELECT</a></span></span> <span class="locative-args">CLOG-OBJ &amp;KEY CLASS HTML-ID</span></span></p>
 
-<p>Attached a menu item to a <code>CLOG-GUI-MENU-DROP-DOWN</code></p></li>
+<p>Attached a clog-select as a menu item that auto updates
+with open windows and maximizes them. Only one instance allowed.</p></li>
 </ul>
 
 <p><a id='x-28CLOG-3ACREATE-GUI-MENU-FULL-SCREEN-20GENERIC-FUNCTION-29'></a></p>
@@ -4544,6 +4545,47 @@ icon ⤢ and full screen mode.</p></li>
 <li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ACURRENT-WINDOW-20GENERIC-FUNCTION-29" >CURRENT-WINDOW</a></span></span> <span class="locative-args">CLOG-OBJ</span></span></p>
 
 <p>Get the current selected clog-gui-window</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3AMENU-BAR-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3AMENU-BAR-20GENERIC-FUNCTION-29" >MENU-BAR</a></span></span> <span class="locative-args">CLOG-OBJ</span></span></p>
+
+<p>Get/setf window menu-bar. This is set buy
+create-gui-menu-bar.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3AMENU-BAR-HEIGHT-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3AMENU-BAR-HEIGHT-20GENERIC-FUNCTION-29" >MENU-BAR-HEIGHT</a></span></span> <span class="locative-args">CLOG-OBJ</span></span></p>
+
+<p>Get menu-bar height</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3AWINDOW-COLLECTION-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3AWINDOW-COLLECTION-20GENERIC-FUNCTION-29" >WINDOW-COLLECTION</a></span></span> <span class="locative-args">CLOG-OBJ</span></span></p>
+
+<p>Get hash table of open windows</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3AMAXIMIZE-ALL-WINDOWS-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3AMAXIMIZE-ALL-WINDOWS-20GENERIC-FUNCTION-29" >MAXIMIZE-ALL-WINDOWS</a></span></span> <span class="locative-args">CLOG-OBJ</span></span></p>
+
+<p>Maximize all windows</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3ANORMALIZE-ALL-WINDOWS-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ANORMALIZE-ALL-WINDOWS-20GENERIC-FUNCTION-29" >NORMALIZE-ALL-WINDOWS</a></span></span> <span class="locative-args">CLOG-OBJ</span></span></p>
+
+<p>Normalize all windows</p></li>
 </ul>
 
 <p><a id='x-28CLOG-3ASET-ON-WINDOW-CHANGE-20GENERIC-FUNCTION-29'></a></p>
@@ -4607,6 +4649,14 @@ on-window-resize-done at end of resize.</p></li>
 <p>Close <code>CLOG-GUI-WINDOW</code>. on-window-can-close is not called.</p></li>
 </ul>
 
+<p><a id='x-28CLOG-3AWINDOW-MAXIMIZED-P-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3AWINDOW-MAXIMIZED-P-20GENERIC-FUNCTION-29" >WINDOW-MAXIMIZED-P</a></span></span> <span class="locative-args">CLOG-GUI-WINDOW</span></span></p>
+
+<p>Set <code>CLOG-GUI-WINDOW</code> as maximized window.</p></li>
+</ul>
+
 <p><a id='x-28CLOG-3AWINDOW-MAXIMIZE-20GENERIC-FUNCTION-29'></a></p>
 
 <ul>
@@ -4629,6 +4679,31 @@ on-window-resize-done at end of resize.</p></li>
 <li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3AWINDOW-TOGGLE-MAXIMIZE-20GENERIC-FUNCTION-29" >WINDOW-TOGGLE-MAXIMIZE</a></span></span> <span class="locative-args">CLOG-GUI-WINDOW</span></span></p>
 
 <p>Toggle <code>CLOG-GUI-WINDOW</code> as maximize window.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3AWINDOW-KEEP-ON-TOP-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3AWINDOW-KEEP-ON-TOP-20GENERIC-FUNCTION-29" >WINDOW-KEEP-ON-TOP</a></span></span> <span class="locative-args">CLOG-GUI-WINDOW</span></span></p>
+
+<p>Set <code>CLOG-GUI-WINDOW</code> to stay on top. Use window-focus to undue.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3AWINDOW-MAKE-MODAL-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3AWINDOW-MAKE-MODAL-20GENERIC-FUNCTION-29" >WINDOW-MAKE-MODAL</a></span></span> <span class="locative-args">CLOG-GUI-WINDOW</span></span></p>
+
+<p>Set <code>CLOG-GUI-WINDOW</code> to stay on top and prevent all other
+interactions. Use window-end-modal to undo.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3AWINDOW-END-MODAL-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3AWINDOW-END-MODAL-20GENERIC-FUNCTION-29" >WINDOW-END-MODAL</a></span></span> <span class="locative-args">CLOG-GUI-WINDOW</span></span></p>
+
+<p>Set <code>CLOG-GUI-WINDOW</code> to end modal state.</p></li>
 </ul>
 
 <p><a id='x-28CLOG-3ASET-ON-WINDOW-CAN-CLOSE-20GENERIC-FUNCTION-29'></a></p>
@@ -4693,6 +4768,17 @@ on-window-resize-done at end of resize.</p></li>
 <li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ASET-ON-WINDOW-SIZE-DONE-20GENERIC-FUNCTION-29" >SET-ON-WINDOW-SIZE-DONE</a></span></span> <span class="locative-args">CLOG-GUI-WINDOW HANDLER</span></span></p>
 
 <p>Set the on-window-size-done <code>HANDLER</code></p></li>
+</ul>
+
+<p><code>CLOG-GUI</code> - Dialog Boxes</p>
+
+<p><a id='x-28CLOG-3ASERVER-FILE-DIALOG-20FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#x-28CLOG-3ASERVER-FILE-DIALOG-20FUNCTION-29" >SERVER-FILE-DIALOG</a></span></span> <span class="locative-args">OBJ TITLE INITIAL-DIR ON-FILE-NAME &amp;KEY (LEFT <code>NIL</code>) (TOP <code>NIL</code>) (WIDTH 400) (HEIGHT 375) (MAXIMIZE <code>NIL</code>) (INITIAL-FILENAME <code>NIL</code>)</span></span></p>
+
+<p>Create a local file dialog box called <code>TITLE</code> using <code>INITIAL-DIR</code> on server
+machine, upon close <code>ON-FILE-NAME</code> called with filename or nil if failure.</p></li>
 </ul>
 
 <p><a id='x-28CLOG-3A-40CLOG-BODY-20MGL-PAX-3ASECTION-29'></a></p>
@@ -5043,8 +5129,9 @@ is nil unbind the event.</p></li>
 <ul>
 <li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ASET-ON-BEFORE-UNLOAD-20GENERIC-FUNCTION-29" >SET-ON-BEFORE-UNLOAD</a></span></span> <span class="locative-args">CLOG-WINDOW ON-BEFORE-UNLOAD-HANDLER</span></span></p>
 
-<p>Set the <code>ON-BEFORE-UNLOAD-HANDLER</code> for <a href="#x-28CLOG-3ACLOG-OBJ-20CLASS-29" title="(CLOG:CLOG-OBJ CLASS)"><code>CLOG-OBJ</code></a>. If
-<code>ON-BEFORE-UNLOAD-HANDLER</code> is nil unbind the event.</p></li>
+<p>Set the <code>ON-BEFORE-UNLOAD-HANDLER</code> for <code>CLOG-WINDOW</code>.
+Return and empty string in order to prevent navigation off page.
+If <code>ON-BEFORE-UNLOAD-HANDLER</code> is nil unbind the event.</p></li>
 </ul>
 
 <p><a id='x-28CLOG-3ASET-ON-HASH-CHANGE-20GENERIC-FUNCTION-29'></a></p>
