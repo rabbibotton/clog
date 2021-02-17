@@ -173,7 +173,8 @@
 	                                 <center>The Common Lisp Omnificent GUI</center></div>
 			                 <div><p><center>Demo 3</center>
                                          <center>(c) 2021 - David Botton</center></p></div>"
-				   :left    (- (/ (width (body app)) 2) 100)
+				   :left (- (/ (inner-width (window (body app))) 2.0) 100)
+				   :top (- (/ (inner-height (window (body app))) 2.0) 100)
 				   :width   200
 				   :height  200)))
     (set-on-window-can-size about (lambda (obj)
