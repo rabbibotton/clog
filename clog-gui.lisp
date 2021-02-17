@@ -644,19 +644,19 @@ on-window-resize-done at end of resize."))
 				    (declare (ignore obj) (ignore data))
 	    			    (setf (z-index win) (incf (last-z app)))
 	    			    (fire-on-window-change win app)))
-	     (set-on-event win "dragstart" 
+	     (set-on-event "dragstart" win
 			   (lambda (obj)
 			     (declare (ignore obj))
 			     (fire-on-window-move win)))
-	     (set-on-event win "dragstop" 
+	     (set-on-event "dragstop" win
 			   (lambda (obj)
 			     (declare (ignore obj))
 			     (fire-on-window-move-done win)))
-	     (set-on-event win "resizestart"
+	     (set-on-event "resizestart" win
 			   (lambda (obj)
 			     (declare (ignore obj))
 			     (fire-on-window-size win)))
-	     (set-on-event win "resizestop" 
+	     (set-on-event "resizestop" win
 			   (lambda (obj)
 			     (declare (ignore obj))
 			     (fire-on-window-size-done win))))
