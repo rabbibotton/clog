@@ -38,10 +38,10 @@
     :accessor last-y
     :initform 0
     :documentation "Last default open y point")
-   (copy-buf
-    :accessor copy-buf
-    :initform ""
-    :documentation "Copy buffer")
+   (modal-background
+    :accessor modal-background
+    :initform nil
+    :documentation "Modal Background")
    (in-drag
     :accessor in-drag
     :initform nil
@@ -425,6 +425,10 @@ The on-window-change clog-obj received is the new window"))
     :accessor last-y
     :initform nil
     :documentation "Last y before maximize")
+   (keep-on-top
+    :accessor keep-on-top
+    :initform nil
+    :documentation "If t don't change z-order")
    (window-select-item
     :accessor window-select-item
     :initform nil
@@ -489,9 +493,10 @@ The on-window-change clog-obj received is the new window"))
 		 (setf obj-top  (height (drag-obj app)))
 		 (setf obj-left (width (drag-obj app)))
 		 (setf perform-drag (fire-on-window-can-size (drag-obj app))))
-	(t
+		(t
 		 (format t "Warning - invalid data-drag-type attribute")))
-	  (setf (z-index (drag-obj app)) (incf (last-z app)))
+	  (unless (keep-on-top (drag-obj app))
+	    (setf (z-index (drag-obj app)) (incf (last-z app))))
 	  (fire-on-window-change (drag-obj app) app)
 	  (setf (drag-y app) (- pointer-y obj-top))
 	  (setf (drag-x app) (- pointer-x obj-left)))
@@ -699,6 +704,8 @@ on-window-resize-done at end of resize."))
 
 (defmethod window-focus ((obj clog-gui-window))
   (let ((app (connection-data-item obj "clog-gui")))
+    (when (keep-on-top obj)
+      (setf (keep-on-top obj) nil))
     (setf (z-index obj) (incf (last-z app)))
     (fire-on-window-change obj app)))
 
@@ -766,6 +773,44 @@ on-window-resize-done at end of resize."))
     (setf (last-width obj) nil)
     (fire-on-window-size-done obj)))
 
+;;;;;;;;;;;;;;;;;;;;;;;;
+;; window-keep-on-top ;;
+;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric window-keep-on-top (clog-gui-window)
+  (:documentation "Set CLOG-GUI-WINDOW to stay on top. Use window-focus to undue."))
+
+(defmethod window-keep-on-top ((obj clog-gui-window))
+  (setf (keep-on-top obj) t)
+  (setf (z-index obj) 1))
+
+;;;;;;;;;;;;;;;;;;;;;;;
+;; window-make-modal ;;
+;;;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric window-make-modal (clog-gui-window)
+  (:documentation "Set CLOG-GUI-WINDOW to stay on top and prevent all other
+interactions. Use window-end-modal to undo."))
+
+(defmethod window-make-modal ((obj clog-gui-window))
+  (let ((app (connection-data-item obj "clog-gui")))
+    (setf (modal-background app) (create-div (body app) :class "w3-overlay"))
+    (setf (display (modal-background app)) :block)
+    (setf (keep-on-top obj) t)
+    (setf (z-index obj) 4)))
+
+;;;;;;;;;;;;;;;;;;;;;;
+;; window-end-modal ;;
+;;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric window-end-modal (clog-gui-window)
+  (:documentation "Set CLOG-GUI-WINDOW to end modal state."))
+
+(defmethod window-end-modal ((obj clog-gui-window))
+  (let ((app (connection-data-item obj "clog-gui")))
+    (remove-from-dom (modal-background app))
+    (window-focus obj)))
+  
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; window-toggle-maximize ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -933,15 +978,17 @@ on-window-resize-done at end of resize."))
 
 (defun server-file-dialog (obj title initial-dir on-file-name
 			   &key (left nil) (top nil) (width 400) (height 375)
+			     (maximize nil)
 			     (initial-filename nil))
   "Create a local file dialog box called TITLE using INITIAL-DIR on server
 machine, upon close ON-FILE-NAME called with filename or nil if failure."
   (let* ((win   (create-gui-window obj
-				   :title  title
-				   :top    top
-				   :left   left
-				   :width  width
-				   :height height))
+				   :title    title
+				   :maximize maximize
+				   :top      top
+				   :left     left
+				   :width    width
+				   :height   height))
 	 (box   (create-div (window-content win) :class "w3-panel"))
 	 (form  (create-form box))
 	 (dirs  (create-select form))
@@ -954,6 +1001,7 @@ machine, upon close ON-FILE-NAME called with filename or nil if failure."
     (setf (size files) 8)
     (setf (box-width files) "100%")
     (setf (box-width input) "100%")
+    (window-make-modal win)
     (flet ((populate-dirs (dir)
 	     (setf (inner-html dirs) "")
 	     (add-select-option dirs (format nil "~A" dir) ".")
@@ -995,9 +1043,11 @@ machine, upon close ON-FILE-NAME called with filename or nil if failure."
 				   (click ok))))
     (set-on-window-close win (lambda (obj)
 			       (declare (ignore obj))
+			       (window-end-modal win)
 			       (funcall on-file-name nil)))
     (set-on-click ok (lambda (obj)
 		       (declare (ignore obj))
 		       (set-on-window-close win nil)
+		       (window-end-modal win)
 		       (window-close win)
 		       (funcall on-file-name (value input))))))
