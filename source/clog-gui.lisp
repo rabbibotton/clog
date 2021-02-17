@@ -391,7 +391,8 @@ The on-window-change clog-obj received is the new window"))
   (setf (current-win app) obj)
   (when (on-window-change app)
     (funcall (on-window-change app) obj))
-  (fire-on-window-focused obj))
+  (when obj
+    (fire-on-window-focused obj)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Implementation - Individual Windows

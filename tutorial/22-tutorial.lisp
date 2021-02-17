@@ -36,8 +36,11 @@
     (path-fill cx)))
 
 (defun on-file-movies (body)
-  (let ((win (create-gui-window body :title "Movie")))
-    (create-video (window-content win) :source "https://www.w3schools.com/html/mov_bbb.mp4")))
+  (let* ((win  (create-gui-window body :title "Movie"))
+	 (movie (create-video (window-content win)
+			      :source "https://www.w3schools.com/html/mov_bbb.mp4")))
+    (setf (box-width movie) "100%")
+    (setf (box-height movie) "100%")))
 
 (defun on-file-pinned (body)
   (let ((win (create-gui-window body :title "Pinned"
