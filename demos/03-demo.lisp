@@ -75,8 +75,9 @@
 				   (format nil "editor_~A.setValue('~A');editor_~A.moveCursorTo(0,0);"
 					   (html-id (current-window obj))
 					   (escape-string (read-file fname))
-					   (html-id (current-window obj)))))
-			      :left (- (/ (width (body app)) 2) 200)))))
+					   (html-id (current-window obj))))))
+			      :top 10
+			      :left (- (/ (width (body app)) 2) 200))))
 
 (defun do-ide-file-save-as (obj)
   (let* ((app (connection-data-item obj "app-data"))
@@ -90,8 +91,9 @@
 			      (write-file (js-query obj (format nil "editor_~A.getValue()"
 								(html-id cw)))
 					  fname)))
-			    :left (- (/ (width (body app)) 2) 200)
-			    :initial-filename (window-title cw)))))
+			  :top 10
+			  :left (- (/ (width (body app)) 2) 200)
+			  :initial-filename (window-title cw)))))
 
 (defun do-ide-file-save (obj)
   (if (equalp (window-title (current-window obj)) "New Window")

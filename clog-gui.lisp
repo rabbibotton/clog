@@ -983,25 +983,28 @@ interactions. Use window-end-modal to undo."))
 			     (initial-filename nil))
   "Create a local file dialog box called TITLE using INITIAL-DIR on server
 machine, upon close ON-FILE-NAME called with filename or nil if failure."
-  (let* ((win   (create-gui-window obj
+  (let* ((win    (create-gui-window obj
 				   :title    title
 				   :maximize maximize
 				   :top      top
 				   :left     left
 				   :width    width
 				   :height   height))
-	 (box   (create-div (window-content win) :class "w3-panel"))
-	 (form  (create-form box))
-	 (dirs  (create-select form))
-	 (files (create-select form))
-	 (input (create-form-element form :input :label
+	 (box    (create-div (window-content win) :class "w3-panel"))
+	 (form   (create-form box))
+	 (dirs   (create-select form))
+	 (files  (create-select form))
+	 (input  (create-form-element form :input :label
 				     (create-label form :content "File Name:")))
-	 (ok    (create-button form :content "&nbsp;&nbsp;OK&nbsp;&nbsp;")))
+	 (ok     (create-button form :content "OK"))
+	 (cancel (create-button form :content "Cancel")))
     (setf (size dirs) 4)
     (setf (box-width dirs) "100%")
     (setf (size files) 8)
     (setf (box-width files) "100%")
     (setf (box-width input) "100%")
+    (setf (width ok) "7em")
+    (setf (width cancel) "7em")
     (window-make-modal win)
     (flet ((populate-dirs (dir)
 	     (setf (inner-html dirs) "")
@@ -1046,6 +1049,9 @@ machine, upon close ON-FILE-NAME called with filename or nil if failure."
 			       (declare (ignore obj))
 			       (window-end-modal win)
 			       (funcall on-file-name nil)))
+    (set-on-click cancel (lambda (obj)
+			   (declare (ignore obj))
+			   (window-close win)))
     (set-on-click ok (lambda (obj)
 		       (declare (ignore obj))
 		       (set-on-window-close win nil)
