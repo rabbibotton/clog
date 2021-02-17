@@ -446,8 +446,8 @@ for internal use of clog."))
 ;; set-on-event ;;
 ;;;;;;;;;;;;;;;;;;
 
-(defgeneric set-on-event (clog-obj event-name on-resize-handler)
-  (:documentation "Set a generic event for CLOG-OBJ. (Private)"))
+(defgeneric set-on-event (clog-obj event-name handler)
+  (:documentation "Set an event EVENT-NAME for CLOG-OBJ. (Private)"))
 
 (defmethod set-on-event ((obj clog-obj) event-name handler)
   (set-event obj event-name
