@@ -7,20 +7,20 @@
 ;; For web oriented apps consider using the :client-movement option.
 ;; See clog-gui-initialize documentation.
 
-(defun on-file-count (body)
-  (let ((win (create-gui-window body :title "Count")))
+(defun on-file-count (obj)
+  (let ((win (create-gui-window obj :title "Count")))
     (dotimes (n 100)
       ;; window-content is the root element for the clog-gui
       ;; windows
       (create-div (window-content win) :content n))))
 
-(defun on-file-browse (body)
-  (let* ((win (create-gui-window body :title "Browse"))
+(defun on-file-browse (obj)
+  (let* ((win (create-gui-window obj :title "Browse"))
 	 (browser (create-child (window-content win)
 	    "<iframe width=100% height=98% src='https://common-lisp.net/'></iframe>")))))
 
-(defun on-file-drawing (body)
-  (let* ((win (create-gui-window body :title "Drawing"))
+(defun on-file-drawing (obj)
+  (let* ((win (create-gui-window obj :title "Drawing"))
 	 (canvas (create-canvas (window-content win) :width 600 :height 400))
 	 (cx     (create-context2d canvas)))
     (set-border canvas :thin :solid :black)    
@@ -35,15 +35,15 @@
     (path-stroke cx)
     (path-fill cx)))
 
-(defun on-file-movies (body)
-  (let* ((win  (create-gui-window body :title "Movie"))
+(defun on-file-movies (obj)
+  (let* ((win  (create-gui-window obj :title "Movie"))
 	 (movie (create-video (window-content win)
 			      :source "https://www.w3schools.com/html/mov_bbb.mp4")))
     (setf (box-width movie) "100%")
     (setf (box-height movie) "100%")))
 
-(defun on-file-pinned (body)
-  (let ((win (create-gui-window body :title "Pinned"
+(defun on-file-pinned (obj)
+  (let ((win (create-gui-window obj :title "Pinned"
 				     :top (unit :px 50)
 				     :left (unit :px 0)
 				     :width 100
