@@ -37,6 +37,7 @@
   (let* ((menu  (create-gui-menu-bar body))
 	 (tmp   (create-gui-menu-icon menu :on-click #'on-help-about))
 	 (file  (create-gui-menu-drop-down menu :content "File"))
+	 (tmp   (create-gui-menu-drop-down menu :content "Open Database Connection"))
 	 (win   (create-gui-menu-drop-down menu :content "Window"))
 	 (tmp   (create-gui-menu-item win :content "Maximize All" :on-click #'maximize-all-windows))
 	 (tmp   (create-gui-menu-item win :content "Normalize All" :on-click #'normalize-all-windows))
