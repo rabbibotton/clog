@@ -447,7 +447,8 @@ for internal use of clog."))
 ;;;;;;;;;;;;;;;;;;
 
 (defgeneric set-on-event (clog-obj event-name handler)
-  (:documentation "Set an event EVENT-NAME for CLOG-OBJ. (Private)"))
+  (:documentation "Set a HANDLER for EVENT-NAME on CLOG-OBJ. If handler is
+nil unbind all event handlers. (Private)"))
 
 (defmethod set-on-event ((obj clog-obj) event-name handler)
   (set-event obj event-name
@@ -466,11 +467,8 @@ for internal use of clog."))
 is nil unbind the event."))
 
 (defmethod set-on-resize ((obj clog-obj) handler)
-  (set-event obj "resize"
-	     (when handler
-	       (lambda (data)
-		 (declare (ignore data))
-		 (funcall handler obj)))))
+  (set-on-event "resize" handler))
+
 
 ;;;;;;;;;;;;;;;;;;
 ;; set-on-focus ;;
@@ -481,11 +479,7 @@ is nil unbind the event."))
 is nil unbind the event."))
 
 (defmethod set-on-focus ((obj clog-obj) handler)
-  (set-event obj "focus"
-	     (when handler
-	       (lambda (data)
-		 (declare (ignore data))
-		 (funcall handler obj)))))
+  (set-on-event "focus" handler))
 
 ;;;;;;;;;;;;;;;;;
 ;; set-on-blur ;;
@@ -496,11 +490,7 @@ is nil unbind the event."))
 is nil unbind the event."))
 
 (defmethod set-on-blur ((obj clog-obj) handler)
-  (set-event obj "blur"
-	     (when handler
-	       (lambda (data)
-		 (declare (ignore data))
-		 (funcall handler obj)))))
+  (set-on-event "blur" handler))
 
 ;;;;;;;;;;;;;;;;;;;
 ;; set-on-change ;;
@@ -511,11 +501,7 @@ is nil unbind the event."))
 is nil unbind the event."))
 
 (defmethod set-on-change ((obj clog-obj) handler)
-  (set-event obj "change"
-	     (when handler
-	       (lambda (data)
-		 (declare (ignore data))
-		 (funcall handler obj)))))
+  (set-on-event "change" handler))
 
 ;;;;;;;;;;;;;;;;;;;;;;;
 ;; set-on-drag-start ;;
@@ -547,11 +533,7 @@ If ON-DRAG-START-HANDLER is nil unbind the event."))
 is nil unbind the event."))
 
 (defmethod set-on-drag ((obj clog-obj) handler)
-  (set-event obj "drag"
-	     (when handler
-	       (lambda (data)
-		 (declare (ignore data))
-		 (funcall handler obj)))))
+  (set-on-event "drag" handler))
 
 ;;;;;;;;;;;;;;;;;;;;;
 ;; set-on-drag-end ;;
@@ -562,11 +544,7 @@ is nil unbind the event."))
 is nil unbind the event."))
 
 (defmethod set-on-drag-end ((obj clog-obj) handler)
-  (set-event obj "dragend"
-	     (when handler
-	       (lambda (data)
-		 (declare (ignore data))
-		 (funcall handler obj)))))
+  (set-on-event "dragend" handler))
 
 ;;;;;;;;;;;;;;;;;;;;;;;
 ;; set-on-drag-enter ;;
@@ -577,11 +555,8 @@ is nil unbind the event."))
 is nil unbind the event."))
 
 (defmethod set-on-drag-enter ((obj clog-obj) handler)
-  (set-event obj "dragenter"
-	     (when handler
-	       (lambda (data)
-		 (declare (ignore data))
-		 (funcall handler obj)))))
+  (set-on-event "dragenter" handler))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;
 ;; set-on-drag-leave ;;
@@ -592,11 +567,7 @@ is nil unbind the event."))
 is nil unbind the event."))
 
 (defmethod set-on-drag-leave ((obj clog-obj) handler)
-  (set-event obj "dragleave"
-	     (when handler
-	       (lambda (data)
-		 (declare (ignore data))
-		 (funcall handler obj)))))
+  (set-on-event "dragleave" handler))
 
 ;;;;;;;;;;;;;;;;;;;;;;
 ;; set-on-drag-over ;;
@@ -641,11 +612,7 @@ is nil unbind the event."))
 ON-FOCUS-IN-HANDLER is nil unbind the event."))
 
 (defmethod set-on-focus-in ((obj clog-obj) handler)
-  (set-event obj "focusin"
-	     (when handler
-	       (lambda (data)
-		 (declare (ignore data))
-		 (funcall handler obj)))))
+  (set-on-event "focusin" handler))
 
 ;;;;;;;;;;;;;;;;;;;;;;
 ;; set-on-focus-out ;;
@@ -656,11 +623,7 @@ ON-FOCUS-IN-HANDLER is nil unbind the event."))
 If ON-FOCUS-OUT-HANDLER is nil unbind the event."))
 
 (defmethod set-on-focus-out ((obj clog-obj) handler)
-  (set-event obj "focusout"
-	     (when handler
-	       (lambda (data)
-		 (declare (ignore data))
-		 (funcall handler obj)))))
+  (set-on-event "focusout" handler))
 
 ;;;;;;;;;;;;;;;;;;
 ;; set-on-reset ;;
@@ -688,11 +651,7 @@ this even is bound, you must call the form reset manually."))
 is nil unbind the event."))
 
 (defmethod set-on-search ((obj clog-obj) handler)
-  (set-event obj "search"
-	     (when handler
-	       (lambda (data)
-		 (declare (ignore data))
-		 (funcall handler obj)))))
+  (set-on-event "search" handler))
 
 ;;;;;;;;;;;;;;;;;;;
 ;; set-on-select ;;
@@ -703,11 +662,7 @@ is nil unbind the event."))
 is nil unbind the event."))
 
 (defmethod set-on-select ((obj clog-obj) handler)
-  (set-event obj "select"
-	     (when handler
-	       (lambda (data)
-		 (declare (ignore data))
-		 (funcall handler obj)))))
+  (set-on-event "select" handler))
 
 ;;;;;;;;;;;;;;;;;;;
 ;; set-on-submit ;;
@@ -846,11 +801,7 @@ replace on an on-context-menu event."))
 is nil unbind the event."))
 
 (defmethod set-on-mouse-enter ((obj clog-obj) handler)
-  (set-event obj "mouseenter"
-	     (when handler
-	       (lambda (data)
-		 (declare (ignore data))
-		 (funcall handler obj)))))
+  (set-on-event "mouseenter" handler))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;
 ;; set-on-mouse-leave ;;
@@ -861,11 +812,7 @@ is nil unbind the event."))
 is nil unbind the event."))
 
 (defmethod set-on-mouse-leave ((obj clog-obj) handler)
-  (set-event obj "mouseleave"
-	     (when handler
-	       (lambda (data)
-		 (declare (ignore data))
-		 (funcall handler obj)))))
+  (set-on-event "mouseleave" handler))
 
 ;;;;;;;;;;;;;;;;;;;;;;;
 ;; set-on-mouse-over ;;
@@ -876,11 +823,7 @@ is nil unbind the event."))
 is nil unbind the event."))
 
 (defmethod set-on-mouse-over ((obj clog-obj) handler)
-  (set-event obj "mouseover"
-	     (when handler
-	       (lambda (data)
-		 (declare (ignore data))
-		 (funcall handler obj)))))
+  (set-on-event "mouseover" handler))
 
 ;;;;;;;;;;;;;;;;;;;;;;
 ;; set-on-mouse-out ;;
@@ -891,11 +834,7 @@ is nil unbind the event."))
 is nil unbind the event."))
 
 (defmethod set-on-mouse-out ((obj clog-obj) handler)
-  (set-event obj "mouseout"
-	     (when handler
-	       (lambda (data)
-		 (declare (ignore data))
-		 (funcall handler obj)))))
+  (set-on-event "mouseout" handler))
 
 ;;;;;;;;;;;;;;;;;;;;;;;
 ;; set-on-mouse-down ;;
@@ -952,11 +891,7 @@ ON-MOUSE-MOVE-HANDLER is nil unbind the event."))
 is nil unbind the event."))
 
 (defmethod set-on-pointer-enter ((obj clog-obj) handler)
-  (set-event obj "pointerenter"
-	     (when handler
-	       (lambda (data)
-		 (declare (ignore data))
-		 (funcall handler obj)))))
+  (set-on-event "pointerenter" handler))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; set-on-pointer-leave ;;
@@ -967,11 +902,7 @@ is nil unbind the event."))
 is nil unbind the event."))
 
 (defmethod set-on-pointer-leave ((obj clog-obj) handler)
-  (set-event obj "pointerleave"
-	     (when handler
-	       (lambda (data)
-		 (declare (ignore data))
-		 (funcall handler obj)))))
+  (set-on-event "pointerleave" handler))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; set-on-pointer-over ;;
@@ -982,11 +913,7 @@ is nil unbind the event."))
 is nil unbind the event."))
 
 (defmethod set-on-pointer-over ((obj clog-obj) handler)
-  (set-event obj "pointerover"
-	     (when handler
-	       (lambda (data)
-		 (declare (ignore data))
-		 (funcall handler obj)))))
+  (set-on-event "pointerover" handler))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;
 ;; set-on-pointer-out ;;
@@ -997,11 +924,7 @@ is nil unbind the event."))
 is nil unbind the event."))
 
 (defmethod set-on-pointer-out ((obj clog-obj) handler)
-  (set-event obj "pointerout"
-	     (when handler
-	       (lambda (data)
-		 (declare (ignore data))
-		 (funcall handler obj)))))
+  (set-on-event "pointerout" handler))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; set-on-pointer-down ;;
@@ -1193,11 +1116,7 @@ ON-KEY-PRESS-HANDLER is nil unbind the event."))
 is nil unbind the event."))
 
 (defmethod set-on-copy ((obj clog-obj) handler)
-  (set-event obj "copy"
-	     (when handler
-	       (lambda (data)
-		 (declare (ignore data))
-		 (funcall handler obj)))))
+  (set-on-event "copy" handler))
 
 ;;;;;;;;;;;;;;;;
 ;; set-on-cut ;;
@@ -1208,11 +1127,7 @@ is nil unbind the event."))
 is nil unbind the event."))
 
 (defmethod set-on-cut ((obj clog-obj) handler)
-  (set-event obj "cut"
-	     (when handler
-	       (lambda (data)
-		 (declare (ignore data))
-		 (funcall handler obj)))))
+  (set-on-event "cut" handler))
 
 ;;;;;;;;;;;;;;;;;;
 ;; set-on-paste ;;
@@ -1223,8 +1138,4 @@ is nil unbind the event."))
 is nil unbind the event."))
 
 (defmethod set-on-paste ((obj clog-obj) handler)
-  (set-event obj "paste"
-	     (when handler
-	       (lambda (data)
-		 (declare (ignore data))
-		 (funcall handler obj)))))
+  (set-on-event "paste" handler))

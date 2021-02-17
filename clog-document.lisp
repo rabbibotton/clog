@@ -219,8 +219,4 @@ clog-document object. (Private)"))
 If ON-FULL-SCREEN-CHANGE-HANDLER is nil unbind the event."))
 
 (defmethod set-on-full-screen-change ((obj clog-document) handler)
-  (set-event obj "fullscreenchange"
-	     (when handler
-	       (lambda (data)
-		 (declare (ignore data))
-		 (funcall handler obj)))))
+  (set-on-event "fullscreenchange" handler))

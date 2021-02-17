@@ -397,11 +397,7 @@ events and messages may not be trasmitted on most browsers."))
 is nil unbind the event."))
 
 (defmethod set-on-abort ((obj clog-window) handler)
-  (set-event obj "abort"
-	     (when handler
-	       (lambda (data)
-		 (declare (ignore data))
-		 (funcall handler obj)))))
+  (set-on-event "abort" handler))
 
 ;;;;;;;;;;;;;;;;;;
 ;; set-on-error ;;
@@ -412,11 +408,7 @@ is nil unbind the event."))
 is nil unbind the event."))
 
 (defmethod set-on-error ((obj clog-window) handler)
-  (set-event obj "error"
-	     (when handler
-	       (lambda (data)
-		 (declare (ignore data))
-		 (funcall handler obj)))))
+  (set-on-event "error" handler))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; set-on-before-unload ;;
@@ -428,11 +420,7 @@ Return and empty string in order to prevent navigation off page.
 If ON-BEFORE-UNLOAD-HANDLER is nil unbind the event."))
 
 (defmethod set-on-before-unload ((obj clog-window) handler)
-  (set-event obj "beforeunload"
-	     (when handler
-	       (lambda (data)
-		 (declare (ignore data))
-		 (funcall handler obj)))))
+  (set-on-event "beforeunload" handler))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;
 ;; set-on-hash-change ;;
@@ -443,11 +431,7 @@ If ON-BEFORE-UNLOAD-HANDLER is nil unbind the event."))
 ON-HASH-CHANGE-HANDLER is nil unbind the event."))
 
 (defmethod set-on-hash-change ((obj clog-window) handler)
-  (set-event obj "hashchange"
-	     (when handler
-	       (lambda (data)
-		 (declare (ignore data))
-		 (funcall handler obj)))))
+  (set-on-event "hashchange" handler))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; set-on-orientation-change ;;
@@ -459,11 +443,7 @@ ON-HASH-CHANGE-HANDLER is nil unbind the event."))
 If ON-ORIENTATION-CHANGE-HANDLER is nil unbind the event."))
 
 (defmethod set-on-orientation-change ((obj clog-window) handler)
-  (set-event obj "orientationchange"
-	     (when handler
-	       (lambda (data)
-		 (declare (ignore data))
-		 (funcall handler obj)))))
+  (set-on-event "orientationchange" handler))
 
 ;;;;;;;;;;;;;;;;;;;;
 ;; set-on-storage ;;
