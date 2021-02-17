@@ -299,7 +299,8 @@ with open windows and maximizes them. Only one instance allowed."))
     (set-on-change window-select (lambda (obj)
 				   (let ((win (gethash (value obj) (windows app))))
 				     (when win
-				       (window-maximize win)))))
+				       (unless (keep-on-top win)
+					 (window-maximize win))))))
     (create-option window-select :content "Select Window")
     window-select))
 

@@ -49,7 +49,7 @@
       (set-on-window-can-close win #'can-do)
       (set-on-window-can-move win #'can-do)
       (set-on-window-can-size win #'can-do))
-
+    (window-keep-on-top win)
     (create-div win :content "I am pinned")))    
 
 (defun on-help-about (body)
