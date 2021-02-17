@@ -35,8 +35,10 @@ same as the clog directy this overides the relative paths used in them.")
 	   (on-new-window (or (gethash path *url-to-on-new-window*)
 			      (gethash "default" *url-to-on-new-window*)
 			      (gethash "/" *url-to-on-new-window*))))
-      (if on-new-window  
-	  (funcall on-new-window body)
+      (if on-new-window
+	  (progn
+	    (setf (connection-data-item body "clog-body") body)
+	    (funcall on-new-window body))
 	  (put-br (html-document body) "No route to on-new-window")))))
 
 (defun initialize

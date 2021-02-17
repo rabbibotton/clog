@@ -14,7 +14,6 @@
   :components ((:file "clog-connection")
 	       (:file "clog")
 	       (:file "clog-docs")
-	       (:file "clog-system")
 	       (:file "clog-utilities")
 	       (:file "clog-base")
 	       (:file "clog-element")
@@ -27,6 +26,7 @@
 	       (:file "clog-location")
 	       (:file "clog-navigator")	       
 	       (:file "clog-body")
+	       (:file "clog-system")
 	       (:file "clog-gui")
 	       (:file "clog-helpers")))
 

@@ -52,8 +52,9 @@
     (window-keep-on-top win)
     (create-div win :content "I am pinned")))    
 
-(defun on-help-about (body)
-  (let* ((about (create-gui-window body
+(defun on-help-about (obj)
+  (let* ((body  (connection-data-item obj "clog-body"))
+	 (about (create-gui-window obj
 				   :title   "About"
 				   :content "<div class='w3-black'>
                                          <center><img src='/img/clogwicon.png'></center>
@@ -61,6 +62,8 @@
 	                                 <center>The Common Lisp Omnificent GUI</center></div>
 			                 <div><p><center>Tutorial 22</center>
                                          <center>(c) 2021 - David Botton</center></p></div>"
+				   :left (- (/ (inner-width (window body)) 2.0) 100)
+				   :top (- (/ (inner-height (window body)) 2.0) 100)
 				   :width   200
 				   :height  200)))
     (set-on-window-can-size about (lambda (obj)
