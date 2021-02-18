@@ -27,7 +27,7 @@
    (cc:query (connection-id clog-obj) "clog['post-data']")))
 
 (defun form-data-item (form-data item)
-  "Return value for ITEM from a FROM-DATA a-list"
+  "Return value for ITEM from FROM-DATA a-list"
   (cdr (assoc item form-data :test #'equalp)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
