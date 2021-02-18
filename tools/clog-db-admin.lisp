@@ -53,24 +53,65 @@
 		    (format t "open db : ~A" (name-value obj "db-name"))
 		    (setf (db-connection app)
 			  (dbi:connect :sqlite3
-				       :database-name (name-value obj "db-name")))))
+				       :database-name (name-value obj "db-name")))
+		    (setf (title (html-document (body app)))
+			  (format nil "CLOG DB Admin - ~A" (name-value obj "db-name")))
+		    (window-close win)))
+
     (set-on-click (attach-as-child obj "odb-cancel") (lambda (obj)
 						       (window-close win)))))
-	 
+(defun on-db-close (obj)
+  (let ((app (connection-data-item obj "app-data")))
+    (when (db-connection app)
+      (dbi:disconnect (db-connection app)))
+    (print "db disconnected")
+    (setf (title (html-document (body app))) "CLOG DB Admin")))
 
+(defun on-query-results (obj)
+  (let ((app (connection-data-item obj "app-data"))
+	(win (create-gui-window obj
+				:title "Enter query:"
+				:content
+"<form id=odb-form class='w3-container' onSubmit='return false;'>
 
+<label class='w3-text-black'><b>Query</b></label>
+<input class='w3-input w3-border' type='text' name='db-query'>
+<button class='w3-btn w3-black' id=odb-open >Open</button>
+<button class='w3-btn w3-black' id=odb-cancel>Cancel</button>
+ 
+</form>"
+				 :width  400
+				 :height 200)))
+    (window-center win)
+    (set-on-click (attach-as-child obj "odb-open")
+		  (lambda (obj)
+		    (format t "open query : ~A~%~%" (name-value obj "db-query"))
+		    (print (dbi:fetch-all
+		     (dbi:execute
+		      (dbi:prepare (db-connection app)
+				   (name-value obj "db-query"))
+                      ())))
+		    ;; (let* ((query (dbi:prepare (db-connection app) (name-value obj "db-query")))
+		    ;; 	   (query (dbi:execute query)))
+		    ;;   (loop for row = (dbi:fetch query)
+		    ;; 	    while row
+		    ;; 	    do (format t "~A~%" row)))
+		    (window-close win)))
+
+    (set-on-click (attach-as-child obj "odb-cancel") (lambda (obj)
+						       (window-close win)))))
+				
 (defun on-help-about (obj)
-  (let* ((app (connection-data-item obj "app-data"))
-	 (about (create-gui-window obj
-				   :title   "About"
-				   :content "<div class='w3-black'>
+  (let ((about (create-gui-window obj
+				  :title   "About"
+				  :content "<div class='w3-black'>
                                          <center><img src='/img/clogwicon.png'></center>
 	                                 <center>CLOG</center>
 	                                 <center>The Common Lisp Omnificent GUI</center></div>
 			                 <div><p><center>CLOG DB Admin</center>
                                          <center>(c) 2021 - David Botton</center></p></div>"
-				   :width   200
-				   :height  200)))
+				  :width   200
+				  :height  200)))
     (window-center about)
     (set-on-window-can-size about (lambda (obj)
 				    (declare (ignore obj))()))))
@@ -78,22 +119,28 @@
 (defun on-new-window (body)
   (let ((app (make-instance 'app-data)))
     (setf (connection-data-item body "app-data") app)
-    (setf (body app) body))
-  (setf (title (html-document body)) "CLOG DB Admin")
-  (clog-gui-initialize body)
-  (add-class body "w3-blue-grey")  
-  (let* ((menu  (create-gui-menu-bar body))
-	 (tmp   (create-gui-menu-icon menu :on-click #'on-help-about))
-	 (file  (create-gui-menu-drop-down menu :content "Database"))
-	 (tmp   (create-gui-menu-item file :content "Open Connection" :on-click #'on-db-open))
-	 (win   (create-gui-menu-drop-down menu :content "Window"))
-	 (tmp   (create-gui-menu-item win :content "Maximize All" :on-click #'maximize-all-windows))
-	 (tmp   (create-gui-menu-item win :content "Normalize All" :on-click #'normalize-all-windows))
-	 (tmp   (create-gui-menu-window-select win))
-	 (help  (create-gui-menu-drop-down menu :content "Help"))
-	 (tmp   (create-gui-menu-item help :content "About" :on-click #'on-help-about))
-	 (tmp   (create-gui-menu-full-screen menu))))
-  (run body))
+    (setf (body app) body)
+    (setf (title (html-document body)) "CLOG DB Admin")
+    (clog-gui-initialize body)
+    (add-class body "w3-blue-grey")  
+    (let* ((menu  (create-gui-menu-bar body))
+	   (tmp   (create-gui-menu-icon menu :on-click #'on-help-about))
+	   (file  (create-gui-menu-drop-down menu :content "Database"))
+	   (tmp   (create-gui-menu-item file :content "Open Connection" :on-click #'on-db-open))
+	   (tmp   (create-gui-menu-item file :content "Close Connection" :on-click #'on-db-close))
+	   (qry   (create-gui-menu-drop-down menu :content "Queries"))
+	   (tmp   (create-gui-menu-item qry :content "Results Query" :on-click #'on-query-results))
+	   (win   (create-gui-menu-drop-down menu :content "Window"))
+	   (tmp   (create-gui-menu-item win :content "Maximize All" :on-click #'maximize-all-windows))
+	   (tmp   (create-gui-menu-item win :content "Normalize All" :on-click #'normalize-all-windows))
+	   (tmp   (create-gui-menu-window-select win))
+	   (help  (create-gui-menu-drop-down menu :content "Help"))
+	   (tmp   (create-gui-menu-item help :content "About" :on-click #'on-help-about))
+	   (tmp   (create-gui-menu-full-screen menu))))
+    (run body)
+    (when (db-connection app)
+      (dbi:disconnect (db-connection app))
+      (print "db disconnected"))))
 
 (defun clog-db-admin ()
   "Start clog-db-admin."
