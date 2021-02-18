@@ -689,6 +689,7 @@ embedded in a native template application.)"
   (window-keep-on-top          generic-function)
   (window-make-modal           generic-function)
   (window-end-modal            generic-function)
+  (window-center               generic-function)
   (set-on-window-focused       generic-function)
   (set-on-window-blurred       generic-function)
   (set-on-window-can-close     generic-function)

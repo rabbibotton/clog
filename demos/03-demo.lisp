@@ -8,10 +8,7 @@
 (in-package :clog-user)
 
 (defclass app-data ()
-  ((body
-    :accessor body
-    :documentation "Top level access to browser window")
-   (copy-buf
+  ((copy-buf
     :accessor copy-buf
     :initform ""
     :documentation "Copy buffer")))
@@ -65,35 +62,32 @@
 			  (html-id win)))))
 
 (defun do-ide-file-open (obj)
-  (let ((app (connection-data-item obj "app-data")))
-	(server-file-dialog obj "Open..." "./"
-			    (lambda (fname)
-			      (when fname
-				(do-ide-file-new obj)
-				(setf (window-title (current-window obj)) fname)
-				(js-execute obj
-				   (format nil "editor_~A.setValue('~A');editor_~A.moveCursorTo(0,0);"
-					   (html-id (current-window obj))
-					   (escape-string (read-file fname))
-					   (html-id (current-window obj))))))
-			      :top 10
-			      :left (- (/ (width (body app)) 2) 200))))
+  (server-file-dialog obj "Open..." "./"
+		      (lambda (fname)
+			(when fname
+			  (do-ide-file-new obj)
+			  (setf (window-title (current-window obj)) fname)
+			  (js-execute obj
+				      (format nil
+					      "editor_~A.setValue('~A');editor_~A.moveCursorTo(0,0);"
+					      (html-id (current-window obj))
+					      (escape-string (read-file fname))
+					      (html-id (current-window obj))))))))
 
 (defun do-ide-file-save-as (obj)
-  (let* ((app (connection-data-item obj "app-data"))
-  	 (cw  (current-window obj))
+  (let* ((cw  (current-window obj))
 	 (dir (directory-namestring (window-title cw))))
     (when cw
       (server-file-dialog obj "Save As.." dir
 			  (lambda (fname)
+			    (window-focus cw)
 			    (when fname
 			      (setf (window-title cw) fname)
 			      (write-file (js-query obj (format nil "editor_~A.getValue()"
 								(html-id cw)))
 					  fname)))
-			  :top 10
-			  :left (- (/ (width (body app)) 2) 200)
-			  :initial-filename (window-title cw)))))
+			  :initial-filename (when (equal (window-title cw) "New Window")
+					      (window-title cw))))))
 
 (defun do-ide-file-save (obj)
   (if (equalp (window-title (current-window obj)) "New Window")
@@ -124,7 +118,7 @@
 (defun do-ide-edit-copy (obj)
   (let ((cw (current-window obj)))
     (when cw
-      (let* ((app (connection-data-item obj "app-data")))
+      (let ((app (connection-data-item obj "app-data")))
 	(setf (copy-buf app) (js-query obj
 		    (format nil "editor_~A.execCommand('copy');~
                                  navigator.clipboard.writeText(editor_~A.getCopyText());~
@@ -141,13 +135,12 @@
 (defun do-ide-edit-paste (obj)
   (let ((cw (current-window obj)))
     (when cw
-      (let ((app (connection-data-item obj "app-data")))
-	;; Note this methods uses the global clip buffer and not (copy-buf app)
-	;; on copy and paste we set both the global and local buffer.
-	(js-execute obj (format nil "navigator.clipboard.readText().then(function(text) {~
+      ;; Note this methods uses the global clip buffer and not (copy-buf app)
+      ;; on copy and paste we set both the global and local buffer.
+      (js-execute obj (format nil "navigator.clipboard.readText().then(function(text) {~
                                         editor_~A.execCommand('paste', text)~
                                      })"
-				(html-id cw)))))))
+			      (html-id cw))))))
 
 (defun do-ide-lisp-eval-file (obj)
   (let ((cw (current-window obj)))
@@ -164,26 +157,23 @@
 				(html-id cw)))))))
 
 (defun do-ide-help-about (obj)
-  (let* ((app (connection-data-item obj "app-data"))
-	 (about (create-gui-window obj
-				   :title   "About"
-				   :content "<div class='w3-black'>
+  (let ((about (create-gui-window obj
+				  :title   "About"
+				  :content "<div class='w3-black'>
                                          <center><img src='/img/clogwicon.png'></center>
 	                                 <center>CLOG</center>
 	                                 <center>The Common Lisp Omnificent GUI</center></div>
 			                 <div><p><center>Demo 3</center>
                                          <center>(c) 2021 - David Botton</center></p></div>"
-				   :left (- (/ (inner-width (window (body app))) 2.0) 100)
-				   :top (- (/ (inner-height (window (body app))) 2.0) 100)
-				   :width   200
-				   :height  200)))
+				  :width   200
+				  :height  200)))
+    (window-center about)
     (set-on-window-can-size about (lambda (obj)
 				    (declare (ignore obj))()))))
 
 (defun on-new-window (body)
   (let ((app (make-instance 'app-data)))
-    (setf (connection-data-item body "app-data") app)
-    (setf (body app) body))  
+    (setf (connection-data-item body "app-data") app))
   (clog-gui-initialize body)
   (load-script (html-document body) "https://pagecdn.io/lib/ace/1.4.12/ace.js")
   (add-class body "w3-teal")

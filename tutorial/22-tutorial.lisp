@@ -44,20 +44,18 @@
 
 (defun on-file-pinned (obj)
   (let ((win (create-gui-window obj :title "Pinned"
-				     :top (unit :px 50)
-				     :left (unit :px 0)
+				     :top 200
+				     :left 0
 				     :width 100
 				     :height 100)))
     (flet ((can-do (obj)()))
       (set-on-window-can-close win #'can-do)
-      (set-on-window-can-move win #'can-do)
       (set-on-window-can-size win #'can-do))
     (window-keep-on-top win)
     (create-div win :content "I am pinned")))    
 
 (defun on-help-about (obj)
-  (let* ((body  (connection-data-item obj "clog-body"))
-	 (about (create-gui-window obj
+  (let* ((about (create-gui-window obj
 				   :title   "About"
 				   :content "<div class='w3-black'>
                                          <center><img src='/img/clogwicon.png'></center>
@@ -65,10 +63,9 @@
 	                                 <center>The Common Lisp Omnificent GUI</center></div>
 			                 <div><p><center>Tutorial 22</center>
                                          <center>(c) 2021 - David Botton</center></p></div>"
-				   :left (- (/ (inner-width (window body)) 2.0) 100)
-				   :top (- (/ (inner-height (window body)) 2.0) 100)
 				   :width   200
 				   :height  200)))
+    (window-center about)
     (set-on-window-can-size about (lambda (obj)
 				    (declare (ignore obj))()))))
 

@@ -823,7 +823,21 @@ interactions. Use window-end-modal to undo."))
   (let ((app (connection-data-item obj "clog-gui")))
     (remove-from-dom (modal-background app))
     (window-focus obj)))
-  
+
+;;;;;;;;;;;;;;;;;;;
+;; window-center ;;
+;;;;;;;;;;;;;;;;;;;
+
+(defgeneric window-center (clog-gui-window)
+  (:documentation "Center CLOG-GUI-WINDOW in browser."))
+
+(defmethod window-center ((obj clog-gui-window))
+  (let ((body (connection-data-item obj "clog-body")))
+    (setf (top obj) (unit :px (- (/ (inner-height (window body)) 2.0)
+				 (/ (height obj) 2.0))))
+    (setf (left obj) (unit :px (- (/ (inner-width (window body)) 2.0)
+				  (/ (width obj) 2.0))))))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; window-toggle-maximize ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -1029,7 +1043,8 @@ interactions. Use window-end-modal to undo."))
 			     (initial-filename nil))
   "Create a local file dialog box called TITLE using INITIAL-DIR on server
 machine, upon close ON-FILE-NAME called with filename or nil if failure."
-  (let* ((win    (create-gui-window obj
+  (let* ((body (connection-data-item obj "clog-body"))
+	 (win    (create-gui-window obj
 				   :title    title
 				   :maximize maximize
 				   :top      top
@@ -1044,6 +1059,12 @@ machine, upon close ON-FILE-NAME called with filename or nil if failure."
 				     (create-label form :content "File Name:")))
 	 (ok     (create-button form :content "OK"))
 	 (cancel (create-button form :content "Cancel")))
+    (unless top
+      (setf (top win) (unit :px (- (/ (inner-height (window body)) 2.0)
+				   (/ (height win) 2.0)))))
+    (unless left
+      (setf (left win) (unit :px (- (/ (inner-width (window body)) 2.0)
+				    (/ (width win) 2.0)))))
     (setf (size dirs) 4)
     (setf (box-width dirs) "100%")
     (setf (size files) 8)

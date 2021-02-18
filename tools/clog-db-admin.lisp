@@ -7,7 +7,11 @@
 (defclass app-data ()
   ((body
     :accessor body
-    :documentation "Top level access to browser window")))
+    :documentation "Top level access to browser window")
+   (db-connection
+    :accessor db-connection
+    :initform nil
+    :documentation "Access to database connection")))
 
 (defun on-db-open (obj)
   (let* ((app (connection-data-item obj "app-data"))
@@ -41,12 +45,15 @@
 <button class='w3-btn w3-black' id=odb-cancel>Cancel</button>
  
 </form>"
-				 :left (- (/ (inner-width (window (body app))) 2.0) 200)
-				 :top (- (/ (inner-height (window (body app))) 2.0) 225)
-				 :width   400
-				 :height  450)))
-    (set-on-click (attach-as-child obj "odb-open") (lambda (obj)
-						     (print "submit")))
+				 :width  400
+				 :height 450)))
+    (window-center win)
+    (set-on-click (attach-as-child obj "odb-open")
+		  (lambda (obj)
+		    (format t "open db : ~A" (name-value obj "db-name"))
+		    (setf (db-connection app)
+			  (dbi:connect :sqlite3
+				       :database-name (name-value obj "db-name")))))
     (set-on-click (attach-as-child obj "odb-cancel") (lambda (obj)
 						       (window-close win)))))
 	 
@@ -62,11 +69,9 @@
 	                                 <center>The Common Lisp Omnificent GUI</center></div>
 			                 <div><p><center>CLOG DB Admin</center>
                                          <center>(c) 2021 - David Botton</center></p></div>"
-				   :left (- (/ (inner-width (window (body app))) 2.0) 100)
-				   :top (- (/ (inner-height (window (body app))) 2.0) 100)
 				   :width   200
 				   :height  200)))
-    (print (- (/ (inner-width (window (body app))) 2.0) 100))
+    (window-center about)
     (set-on-window-can-size about (lambda (obj)
 				    (declare (ignore obj))()))))
 
