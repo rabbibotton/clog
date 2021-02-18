@@ -2,7 +2,7 @@
 ;;; This app gives access to its users your local files.
 
 (defpackage #:clog-user
-  (:use #:cl #:clog)
+  (:use #:cl #:clog #:clog-gui)
   (:export start-demo))
 
 (in-package :clog-user)

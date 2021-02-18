@@ -16,7 +16,7 @@
   (:local-nicknames (:cc :clog-connection))
   (:use #:cl #:parse-float #:mgl-pax))
 
-(in-package :clog)
+(cl:in-package :clog)
 
 (defsection @clog-manual (:title "The CLOG manual")
   "The Common Lisp Omnificient GUI, CLOG for short, uses web technology to
@@ -650,59 +650,6 @@ embedded in a native template application.)"
   "Clog-Video - Class for CLOG Video Control"
   (clog-video     class)
   (create-video   generic-function))
-
-(defsection @clog-gui (:title "CLOG GUI Objects")
-  "CLOG-GUI -  Desktop GUI abstraction for CLOG"
-  (clog-gui-initialize function)
-
-  "CLOG-GUI - Menus"
-  (clog-gui-menu-bar             class)
-  (create-gui-menu-bar           generic-function)
-  (clog-gui-menu-drop-down       class)
-  (create-gui-menu-drop-down     generic-function)
-  (clog-gui-menu-item            class)
-  (create-gui-menu-item          generic-function)
-  (create-gui-menu-window-select generic-function)
-  (create-gui-menu-full-screen   generic-function)
-  (create-gui-menu-icon          generic-function)
-
-  "CLOG-GUI - Window System"
-  (current-window              generic-function)
-  (menu-bar                    generic-function)
-  (menu-bar-height             generic-function)
-  (window-collection           generic-function)
-  (maximize-all-windows        generic-function)
-  (normalize-all-windows       generic-function)
-  (set-on-window-change        generic-function)
-  
-  "CLOG-GUI - Individual Windows"
-  (clog-gui-window             class)
-  (create-gui-window           generic-function)
-  (window-title                generic-function)
-  (window-content              generic-function)
-  (window-focus                generic-function)
-  (window-close                generic-function)
-  (window-maximized-p          generic-function)
-  (window-maximize             generic-function)
-  (window-normalize            generic-function)
-  (window-toggle-maximize      generic-function)
-  (window-keep-on-top          generic-function)
-  (window-make-modal           generic-function)
-  (window-end-modal            generic-function)
-  (window-center               generic-function)
-  (set-on-window-focused       generic-function)
-  (set-on-window-blurred       generic-function)
-  (set-on-window-can-close     generic-function)
-  (set-on-window-close         generic-function)
-  (set-on-window-can-move      generic-function)
-  (set-on-window-can-size      generic-function)
-  (set-on-window-move          generic-function)
-  (set-on-window-size          generic-function)
-  (set-on-window-move-done     generic-function)
-  (set-on-window-size-done     generic-function)
-
-  "CLOG-GUI - Dialog Boxes"
-  (server-file-dialog          function))
   
 (defsection @clog-body (:title "CLOG Body Objects")
   "CLOG-Body - CLOG Body Objects"

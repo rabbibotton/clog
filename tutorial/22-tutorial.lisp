@@ -1,5 +1,5 @@
 (defpackage #:clog-user
-  (:use #:cl #:clog)
+  (:use #:cl #:clog #:clog-gui) ; For this tutorial we include clog-gui
   (:export start-tutorial))
 
 (in-package :clog-user)
