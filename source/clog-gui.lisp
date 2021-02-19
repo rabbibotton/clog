@@ -906,16 +906,17 @@ on-window-resize-done at end of resize."))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defgeneric window-toggle-pin (clog-gui-window)
-  (:documentation "Toggle the pinned state of a CLOG-GUI-WINDOW. A pinned window
-cannot be moved, closed, resized, maximized or normalized. A new window is
-always unpinned."))
+  (:documentation "Toggle the pinned state of a CLOG-GUI-WINDOW. A pinned
+window cannot be moved, closed, resized, maximized or normalized and is
+always on top. A new window is always unpinned."))
 
 (defmethod window-toggle-pin ((win clog-gui-window))
   (if (pinnedp win)
-      ;; Toggle the pinned state of this window
       (progn
 	(when (pinner win)
 	  (setf (inner-html (pinner win)) "☐"))
+	(setf (keep-on-top win) nil)
+	(window-focus win)
 	(setf (pinnedp win) nil)
 	(set-on-window-can-close win nil)
 	(set-on-window-can-size win nil)
@@ -925,6 +926,8 @@ always unpinned."))
       (flet ((no-op (obj) (declare (ignore obj))))
 	(when (pinner win)
 	  (setf (inner-html (pinner win)) "☑"))
+	(setf (keep-on-top win) t)
+	(setf (z-index win) 1)	
 	(setf (pinnedp win) t)
 	(set-on-window-can-close win #'no-op)
 	(set-on-window-can-size win #'no-op)
