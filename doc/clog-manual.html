@@ -4520,7 +4520,8 @@ clog-body.</p></li>
 <li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-GUI-3ACREATE-GUI-MENU-WINDOW-SELECT-20GENERIC-FUNCTION-29" >CREATE-GUI-MENU-WINDOW-SELECT</a></span></span> <span class="locative-args">CLOG-OBJ &amp;KEY CLASS HTML-ID</span></span></p>
 
 <p>Attached a clog-select as a menu item that auto updates
-with open windows and maximizes them. Only one instance allowed.</p></li>
+with open windows and maximizes them unless is a keep-on-top window or
+on-window-can-maximize returns nil. Only one instance allowed.</p></li>
 </ul>
 
 <p><a id='x-28CLOG-GUI-3ACREATE-GUI-MENU-FULL-SCREEN-20GENERIC-FUNCTION-29'></a></p>
@@ -4749,6 +4750,22 @@ interactions. Use window-end-modal to undo.</p></li>
 <li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-GUI-3ASET-ON-WINDOW-CLOSE-20GENERIC-FUNCTION-29" >SET-ON-WINDOW-CLOSE</a></span></span> <span class="locative-args">CLOG-GUI-WINDOW HANDLER</span></span></p>
 
 <p>Set the on-window-close <code>HANDLER</code></p></li>
+</ul>
+
+<p><a id='x-28CLOG-GUI-3ASET-ON-WINDOW-CAN-MAXIMIZE-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-GUI-3ASET-ON-WINDOW-CAN-MAXIMIZE-20GENERIC-FUNCTION-29" >SET-ON-WINDOW-CAN-MAXIMIZE</a></span></span> <span class="locative-args">CLOG-GUI-WINDOW HANDLER</span></span></p>
+
+<p>Set the on-window-can-maximize <code>HANDLER</code></p></li>
+</ul>
+
+<p><a id='x-28CLOG-GUI-3ASET-ON-WINDOW-CAN-NORMALIZE-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-GUI-3ASET-ON-WINDOW-CAN-NORMALIZE-20GENERIC-FUNCTION-29" >SET-ON-WINDOW-CAN-NORMALIZE</a></span></span> <span class="locative-args">CLOG-GUI-WINDOW HANDLER</span></span></p>
+
+<p>Set the on-window-can-normalize <code>HANDLER</code></p></li>
 </ul>
 
 <p><a id='x-28CLOG-GUI-3ASET-ON-WINDOW-CAN-MOVE-20GENERIC-FUNCTION-29'></a></p>

@@ -1317,7 +1317,7 @@ machine, upon close ON-FILE-NAME called with filename or nil if failure."
 				  :width           width
 				  :height          height
 				  :client-movement client-movement
-				  :html-id         nil))
+				  :html-id         html-id))
 	 (box    (create-div (window-content win) :class "w3-panel"))
 	 (form   (create-form box))
 	 (dirs   (create-select form))
@@ -1393,7 +1393,6 @@ machine, upon close ON-FILE-NAME called with filename or nil if failure."
 		  :one-time t)
     (set-on-click ok (lambda (obj)
 		       (declare (ignore obj))
-		       (setf (disabledp obj) t)
 		       (set-on-window-close win nil)
 		       (when modal
 			 (window-end-modal win))
