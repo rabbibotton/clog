@@ -476,7 +476,8 @@ The on-window-change clog-obj received is the new window"))
     :documentation "Window body clog-element")
    (pinner
     :accessor pinner
-    :documentation "Window pinner clog-element")
+    :initform nil
+    :documentation "Window pinner clog-element if created with has-pinner")
    (closer
     :accessor closer
     :documentation "Window closer clog-element")
@@ -499,10 +500,10 @@ The on-window-change clog-obj received is the new window"))
     :accessor last-y
     :initform nil
     :documentation "Last y before maximize")
-   (pinned-p
-    :accessor pinned-p
+   (pinnedp
+    :accessor pinnedp
     :initform nil
-    :documentation "Returns true if this window is pinned and false otherwise")
+    :documentation "True if this window is pinned and nil otherwise")
    (keep-on-top
     :accessor keep-on-top
     :initform nil
@@ -646,6 +647,7 @@ The on-window-change clog-obj received is the new window"))
 					  content
 					  left top width height
 					  maximize
+					  has-pinner
 					  hidden
 					  client-movement
 					  html-id)
@@ -662,6 +664,7 @@ on-window-resize-done at end of resize."))
 					       (width 300)
 					       (height 200)
 					       (maximize nil)
+			                       (has-pinner nil)
 					       (hidden nil)
 					       (client-movement nil)
 					       (html-id nil))
@@ -693,9 +696,7 @@ on-window-resize-done at end of resize."))
                   <div id='~A-title-bar' class='w3-container w3-black'
                        style='flex-container;display:flex;align-items:stretch;'>
                     <span data-drag-obj='~A' data-drag-type='m' id='~A-title'
-                      style='flex-grow:9;user-select:none;cursor:move;'>~A</span>
-                    <span id='~A-pinner'
-                      style='cursor:pointer;user-select:none;'>(Un)pin&nbsp;&nbsp;&nbsp;</span>
+                      style='flex-grow:9;user-select:none;cursor:move;'>~A</span>~A
                     <span id='~A-closer'
                       style='cursor:pointer;user-select:none;'>&times;</span>
                   </div>
@@ -704,20 +705,25 @@ on-window-resize-done at end of resize."))
                        cursor:se-resize;opacity:0'
                        class='w3-right' data-drag-obj='~A' data-drag-type='s'>+</div>
              </div>"
-	    top left width height (incf (last-z app)) ; outer div
-	    html-id html-id html-id                   ; title bar
-	    title                                     ; title
-	    html-id                                   ; pinner
-	    html-id                                   ; closer
-	    html-id content                           ; body
-	    html-id html-id)                          ; size
+	    top left width height (incf (last-z app))   ; outer div
+	    html-id html-id html-id                     ; title bar
+	    title                                       ; title
+	    (if has-pinner                              ; pinner
+	      (format nil "<span id='~A-pinner'
+                 style='cursor:pointer;user-select:none;'>
+                 (Un)pin&nbsp;&nbsp;&nbsp;</span>" html-id)
+	      "")
+	    html-id                                     ; closer
+	    html-id content                             ; body
+	    html-id html-id)                            ; size
 			    :clog-type 'clog-gui-window
 			    :html-id html-id)))
       (setf (win-title win)
 	    (attach-as-child win (format nil "~A-title" html-id)))
       (setf (title-bar win)
 	    (attach-as-child win (format nil "~A-title-bar" html-id)))
-      (setf (pinner win) (attach-as-child win (format nil "~A-pinner" html-id)))
+      (when has-pinner
+	(setf (pinner win) (attach-as-child win (format nil "~A-pinner" html-id))))
       (setf (closer win) (attach-as-child win (format nil "~A-closer" html-id)))
       (setf (sizer win) (attach-as-child win (format nil "~A-sizer" html-id)))
       (setf (content win) (attach-as-child win (format nil "~A-body"  html-id)))
@@ -734,9 +740,10 @@ on-window-resize-done at end of resize."))
       (set-on-double-click (win-title win) (lambda (obj)
 					     (declare (ignore obj))
 					     (window-toggle-maximize win)))
-      (set-on-click (pinner win) (lambda (obj)
-       				   (declare (ignore obj))
-       				   (window-toggle-pin win)))
+      (when has-pinner
+	(set-on-click (pinner win) (lambda (obj)
+       				     (declare (ignore obj))
+       				     (window-toggle-pin win))))
       (set-on-click (closer win) (lambda (obj)
 				   (declare (ignore obj))
 				   (when (fire-on-window-can-close win)
@@ -904,17 +911,17 @@ cannot be moved, closed, resized, maximized or normalized. A new window is
 always unpinned."))
 
 (defmethod window-toggle-pin ((win clog-gui-window))
-  (if (pinned-p win)
+  (if (pinnedp win)
       ;; Toggle the pinned state of this window
       (progn
-	(setf (pinned-p win) nil)
+	(setf (pinnedp win) nil)
 	(set-on-window-can-close win nil)
 	(set-on-window-can-size win nil)
 	(set-on-window-can-move win nil)
 	(set-on-window-can-maximize win nil)
 	(set-on-window-can-normalize win nil))
       (flet ((no-op (obj) (declare (ignore obj))))
-	(setf (pinned-p win) t)
+	(setf (pinnedp win) t)
 	(set-on-window-can-close win #'no-op)
 	(set-on-window-can-size win #'no-op)
 	(set-on-window-can-move win #'no-op)

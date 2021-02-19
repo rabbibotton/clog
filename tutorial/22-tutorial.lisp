@@ -43,17 +43,13 @@
     (setf (box-height movie) "100%")))
 
 (defun on-file-pinned (obj)
-  (let ((win (create-gui-window obj :title "Pinned"
+  (let ((win (create-gui-window obj :title "Pin me!"
+				     :has-pinner t
 				     :top 200
 				     :left 0
-				     :width 100
-				     :height 100)))
-    (flet ((can-not-do (obj)(declare (ignore obj))()))
-      (set-on-window-can-maximize win #'can-not-do)
-      (set-on-window-can-close win #'can-not-do)
-      (set-on-window-can-size win #'can-not-do))
-    (window-keep-on-top win)
-    (create-div win :content "I am pinned")))    
+				     :width 200
+				     :height 200)))
+    (create-div win :content "I can be pinned. Just click the pin on window bar.")))
 
 (defun on-dlg-alert (obj)
   (alert-dialog obj "This is a modal alert box"))
