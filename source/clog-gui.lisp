@@ -1268,7 +1268,7 @@ Calls on-input with t if confirmed or nil if canceled."
 
 (defun server-file-dialog (obj title initial-dir on-file-name
 			   &key (modal t)
-			     (left nil) (top nil) (width 400) (height 375)
+			     (left nil) (top nil) (width 375) (height 420)
 			     (maximize nil)
 			     (initial-filename nil)
 			     (client-movement nil)
@@ -1291,8 +1291,10 @@ machine, upon close ON-FILE-NAME called with filename or nil if failure."
 	 (files  (create-select form))
 	 (input  (create-form-element form :input :label
 				     (create-label form :content "File Name:")))
-	 (ok     (create-button form :content "OK"))
-	 (cancel (create-button form :content "Cancel")))
+	 (ok     (create-button form :content "OK"
+				     :class "w3-button w3-black w3-margin"))
+	 (cancel (create-button form :content "Cancel"
+				     :class "w3-button w3-black w3-margin")))
     (unless top
       (setf (top win) (unit :px (- (/ (inner-height (window body)) 2.0)
 				   (/ (height win) 2.0)))))
