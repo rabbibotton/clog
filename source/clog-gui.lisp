@@ -711,7 +711,7 @@ on-window-resize-done at end of resize."))
 	    (if has-pinner                              ; pinner
 	      (format nil "<span id='~A-pinner'
                  style='cursor:pointer;user-select:none;'>
-                 (Un)pin&nbsp;&nbsp;&nbsp;</span>" html-id)
+                 ☐</span><span>&nbsp;&nbsp;&nbsp;</span>" html-id)
 	      "")
 	    html-id                                     ; closer
 	    html-id content                             ; body
@@ -914,6 +914,8 @@ always unpinned."))
   (if (pinnedp win)
       ;; Toggle the pinned state of this window
       (progn
+	(when (pinner win)
+	  (setf (inner-html (pinner win)) "☐"))
 	(setf (pinnedp win) nil)
 	(set-on-window-can-close win nil)
 	(set-on-window-can-size win nil)
@@ -921,6 +923,8 @@ always unpinned."))
 	(set-on-window-can-maximize win nil)
 	(set-on-window-can-normalize win nil))
       (flet ((no-op (obj) (declare (ignore obj))))
+	(when (pinner win)
+	  (setf (inner-html (pinner win)) "☑"))
 	(setf (pinnedp win) t)
 	(set-on-window-can-close win #'no-op)
 	(set-on-window-can-size win #'no-op)
