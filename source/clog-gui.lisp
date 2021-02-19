@@ -52,6 +52,8 @@
   (window-make-modal           generic-function)
   (window-end-modal            generic-function)
   (window-center               generic-function)
+
+  "CLOG-GUI - Individual Window Events"
   (set-on-window-focused       generic-function)
   (set-on-window-blurred       generic-function)
   (set-on-window-can-close     generic-function)
@@ -1095,6 +1097,8 @@ interactions. Use window-end-modal to undo."))
 ;; Implementation - Dialog Boxes
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+;; to add - alert box, input box, form by list
+
 (defun server-file-dialog (obj title initial-dir on-file-name
 			   &key (left nil) (top nil) (width 400) (height 375)
 			     (maximize nil)
@@ -1179,7 +1183,9 @@ machine, upon close ON-FILE-NAME called with filename or nil if failure."
 			   (window-close win)))
     (set-on-click ok (lambda (obj)
 		       (declare (ignore obj))
+		       (setf (disabledp obj) t)
 		       (set-on-window-close win nil)
 		       (window-end-modal win)
 		       (window-close win)
-		       (funcall on-file-name (value input))))))
+		       (funcall on-file-name (value input)))
+		  :one-time t)))

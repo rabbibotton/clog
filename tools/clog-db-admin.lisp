@@ -1,5 +1,5 @@
 (defpackage #:clog-tools
-  (:use #:cl #:clog)
+  (:use #:cl #:clog #:clog-gui)
   (:export clog-db-admin))
 
 (in-package :clog-tools)
@@ -56,7 +56,8 @@
 				       :database-name (name-value obj "db-name")))
 		    (setf (title (html-document (body app)))
 			  (format nil "CLOG DB Admin - ~A" (name-value obj "db-name")))
-		    (window-close win)))
+		    (window-close win))
+		  :one-time t)
 
     (set-on-click (attach-as-child obj "odb-cancel") (lambda (obj)
 						       (window-close win)))))
