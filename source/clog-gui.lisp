@@ -7,7 +7,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (mgl-pax:define-package :clog-gui
-  (:documentation "CLOG-GUI a desktop GUI abstraction for CLOG")  
+  (:documentation "CLOG-GUI a desktop GUI abstraction for CLOG")
   (:local-nicknames (:cc :clog-connection))
   (:use #:cl #:parse-float #:clog #:mgl-pax))
 
@@ -36,7 +36,7 @@
   (maximize-all-windows        generic-function)
   (normalize-all-windows       generic-function)
   (set-on-window-change        generic-function)
-  
+
   "CLOG-GUI - Individual Windows"
   (clog-gui-window             class)
   (create-gui-window           generic-function)
@@ -431,7 +431,7 @@ icon ⤢ and full screen mode."))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; set-on-window-change ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;
-  
+
 (defgeneric set-on-window-change (clog-obj handler)
   (:documentation "Set the on-window-change HANDLER.
 The on-window-change clog-obj received is the new window"))
@@ -445,7 +445,7 @@ The on-window-change clog-obj received is the new window"))
   (when (current-win app)
     (fire-on-window-blur (current-win app)))
   (unless obj
-    (let (new-order 
+    (let (new-order
 	  (order -9999))
       (maphash (lambda (key value)
 		 (declare (ignore key))
@@ -474,6 +474,9 @@ The on-window-change clog-obj received is the new window"))
    (content
     :accessor content
     :documentation "Window body clog-element")
+   (pinner
+    :accessor pinner
+    :documentation "Window pinner clog-element")
    (closer
     :accessor closer
     :documentation "Window closer clog-element")
@@ -496,6 +499,10 @@ The on-window-change clog-obj received is the new window"))
     :accessor last-y
     :initform nil
     :documentation "Last y before maximize")
+   (pinned-p
+    :accessor pinned-p
+    :initform nil
+    :documentation "Returns true if this window is pinned and false otherwise")
    (keep-on-top
     :accessor keep-on-top
     :initform nil
@@ -685,10 +692,12 @@ on-window-resize-done at end of resize."))
                   class='w3-card-4 w3-white w3-border'>
                   <div id='~A-title-bar' class='w3-container w3-black'
                        style='flex-container;display:flex;align-items:stretch;'>
-                       <span data-drag-obj='~A' data-drag-type='m' id='~A-title'
-                             style='flex-grow:9;user-select:none;cursor:move;'>~A</span>
-                              <span id='~A-closer'
-                                    style='cursor:pointer;user-select:none;'>&times;</span>
+                    <span data-drag-obj='~A' data-drag-type='m' id='~A-title'
+                      style='flex-grow:9;user-select:none;cursor:move;'>~A</span>
+                    <span id='~A-pinner'
+                      style='cursor:pointer;user-select:none;'>(Un)pin&nbsp;&nbsp;&nbsp;</span>
+                    <span id='~A-closer'
+                      style='cursor:pointer;user-select:none;'>&times;</span>
                   </div>
                   <div id='~A-body' style='flex-grow:9;overflow:auto'>~A</div>
                   <div id='~A-sizer' style='user-select:none;height:3px;
@@ -697,7 +706,9 @@ on-window-resize-done at end of resize."))
              </div>"
 	    top left width height (incf (last-z app)) ; outer div
 	    html-id html-id html-id                   ; title bar
-	    title html-id                             ; title
+	    title                                     ; title
+	    html-id                                   ; pinner
+	    html-id                                   ; closer
 	    html-id content                           ; body
 	    html-id html-id)                          ; size
 			    :clog-type 'clog-gui-window
@@ -706,6 +717,7 @@ on-window-resize-done at end of resize."))
 	    (attach-as-child win (format nil "~A-title" html-id)))
       (setf (title-bar win)
 	    (attach-as-child win (format nil "~A-title-bar" html-id)))
+      (setf (pinner win) (attach-as-child win (format nil "~A-pinner" html-id)))
       (setf (closer win) (attach-as-child win (format nil "~A-closer" html-id)))
       (setf (sizer win) (attach-as-child win (format nil "~A-sizer" html-id)))
       (setf (content win) (attach-as-child win (format nil "~A-body"  html-id)))
@@ -718,10 +730,13 @@ on-window-resize-done at end of resize."))
       (when (window-select app)
 	(setf (window-select-item win) (create-option (window-select app)
 						      :content title
-						      :value html-id)))      
+						      :value html-id)))
       (set-on-double-click (win-title win) (lambda (obj)
 					     (declare (ignore obj))
 					     (window-toggle-maximize win)))
+      (set-on-click (pinner win) (lambda (obj)
+       				   (declare (ignore obj))
+       				   (window-toggle-pin win)))
       (set-on-click (closer win) (lambda (obj)
 				   (declare (ignore obj))
 				   (when (fire-on-window-can-close win)
@@ -735,11 +750,11 @@ on-window-resize-done at end of resize."))
 				    (declare (ignore obj) (ignore data))
 	    			    (setf (z-index win) (incf (last-z app)))
 	    			    (fire-on-window-change win app)))
-	     (set-on-event win "dragstart" 
+	     (set-on-event win "dragstart"
 			   (lambda (obj)
 			     (declare (ignore obj))
 			     (fire-on-window-move win)))
-	     (set-on-event win "dragstop" 
+	     (set-on-event win "dragstop"
 			   (lambda (obj)
 			     (declare (ignore obj))
 			     (fire-on-window-move-done win)))
@@ -747,7 +762,7 @@ on-window-resize-done at end of resize."))
 			   (lambda (obj)
 			     (declare (ignore obj))
 			     (fire-on-window-size win)))
-	     (set-on-event win "resizestop" 
+	     (set-on-event win "resizestop"
 			   (lambda (obj)
 			     (declare (ignore obj))
 			     (fire-on-window-size-done win))))
@@ -878,6 +893,33 @@ on-window-resize-done at end of resize."))
   (if (window-maximized-p obj)
       (window-normalize obj)
       (window-maximize obj)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; window-toggle-pinned ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric window-toggle-pin (clog-gui-window)
+  (:documentation "Toggle the pinned state of a CLOG-GUI-WINDOW. A pinned window
+cannot be moved, closed, resized, maximized or normalized. A new window is
+always unpinned."))
+
+(defmethod window-toggle-pin ((win clog-gui-window))
+  (if (pinned-p win)
+      ;; Toggle the pinned state of this window
+      (progn
+	(setf (pinned-p win) nil)
+	(set-on-window-can-close win nil)
+	(set-on-window-can-size win nil)
+	(set-on-window-can-move win nil)
+	(set-on-window-can-maximize win nil)
+	(set-on-window-can-normalize win nil))
+      (flet ((no-op (obj) (declare (ignore obj))))
+	(setf (pinned-p win) t)
+	(set-on-window-can-close win #'no-op)
+	(set-on-window-can-size win #'no-op)
+	(set-on-window-can-move win #'no-op)
+	(set-on-window-can-maximize win #'no-op)
+	(set-on-window-can-normalize win #'no-op))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;
 ;; window-keep-on-top ;;
@@ -1141,7 +1183,7 @@ interactions. Use window-end-modal to undo."))
 ;; to add -  form by list
 
 (defun alert-dialog (obj content &key (modal t)
-				   (title "About") 
+				   (title "About")
 				   (left nil) (top nil)
 				   (width 300) (height 200)
 				   (client-movement nil)
@@ -1185,7 +1227,7 @@ interactions. Use window-end-modal to undo."))
 				 (window-end-modal win))))))
 
 (defun input-dialog (obj content on-input &key (modal t)
-					    (title "Input") 
+					    (title "Input")
 					    (left nil) (top nil)
 					    (width 300) (height 200)
 					    (client-movement nil)
