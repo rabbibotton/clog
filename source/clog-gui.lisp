@@ -58,6 +58,8 @@
   (set-on-window-blur          generic-function)
   (set-on-window-can-close     generic-function)
   (set-on-window-close         generic-function)
+  (set-on-window-can-maximize  generic-function)
+  (set-on-window-can-normalize generic-function)
   (set-on-window-can-move      generic-function)
   (set-on-window-can-size      generic-function)
   (set-on-window-move          generic-function)
@@ -349,7 +351,8 @@ will maximize it on top."))
 					   &key class
 					     html-id)
   (:documentation "Attached a clog-select as a menu item that auto updates
-with open windows and maximizes them. Only one instance allowed."))
+with open windows and maximizes them unless is a keep-on-top window or
+on-window-can-maximize returns nil. Only one instance allowed."))
 
 (defmethod create-gui-menu-window-select
     ((obj clog-obj)
@@ -504,15 +507,23 @@ The on-window-change clog-obj received is the new window"))
    (on-window-can-close
     :accessor on-window-can-close
     :initform nil
-    :documentation "Return t to allow close of window")
+    :documentation "Return t to allow closing of window")
    (on-window-can-move
     :accessor on-window-can-move
     :initform nil
-    :documentation "Return t to allow move of window")
+    :documentation "Return t to allow moving of window")
    (on-window-can-size
     :accessor on-window-can-size
     :initform nil
-    :documentation "Return t to allow close of window")
+    :documentation "Return t to allow sizing of window")
+   (on-window-can-maximize
+    :accessor on-window-can-maximize
+    :initform nil
+    :documentation "Return t to allow maximizing of window")
+   (on-window-can-normalize
+    :accessor on-window-can-normalize
+    :initform nil
+    :documentation "Return t to allow normalizing of window")
    (on-window-focus
     :accessor on-window-focus
     :initform nil
@@ -820,11 +831,12 @@ on-window-resize-done at end of resize."))
 (defmethod window-maximize ((obj clog-gui-window))
   (let ((app (connection-data-item obj "clog-gui")))
     (window-focus obj)
-    (unless (window-maximized-p obj)
-      (setf (last-x obj) (left obj))
-      (setf (last-y obj) (top obj))
-      (setf (last-height obj) (height obj))
-      (setf (last-width obj) (width obj))
+    (when (fire-on-window-can-maximize obj)
+      (unless (window-maximized-p obj)
+	(setf (last-x obj) (left obj))
+	(setf (last-y obj) (top obj))
+	(setf (last-height obj) (height obj))
+	(setf (last-width obj) (width obj)))
       (setf (top obj) (unit :px (menu-bar-height obj)))
       (setf (left obj) (unit :px 0))
       (setf (width obj) (unit :vw 100))
@@ -841,13 +853,26 @@ on-window-resize-done at end of resize."))
 
 (defmethod window-normalize ((obj clog-gui-window))
   (window-focus obj)
-  (when (window-maximized-p obj)
-    (setf (width obj) (last-width obj))
-    (setf (height obj) (last-height obj))
-    (setf (top obj) (last-y obj))
-    (setf (left obj) (last-x obj))
-    (setf (last-width obj) nil)
-    (fire-on-window-size-done obj)))
+  (when (fire-on-window-can-normalize obj)
+    (when (window-maximized-p obj)
+      (setf (width obj) (last-width obj))
+      (setf (height obj) (last-height obj))
+      (setf (top obj) (last-y obj))
+      (setf (left obj) (last-x obj))
+      (setf (last-width obj) nil)
+      (fire-on-window-size-done obj))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; window-toggle-maximize ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric window-toggle-maximize (clog-gui-window)
+  (:documentation "Toggle CLOG-GUI-WINDOW as maximize window."))
+
+(defmethod window-toggle-maximize ((obj clog-gui-window))
+  (if (window-maximized-p obj)
+      (window-normalize obj)
+      (window-maximize obj)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;
 ;; window-keep-on-top ;;
@@ -900,34 +925,6 @@ interactions. Use window-end-modal to undo."))
 				 (/ (height obj) 2.0))))
     (setf (left obj) (unit :px (- (/ (inner-width (window body)) 2.0)
 				  (/ (width obj) 2.0))))))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; window-toggle-maximize ;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(defgeneric window-toggle-maximize (clog-gui-window)
-  (:documentation "Toggle CLOG-GUI-WINDOW as maximize window."))
-
-(defmethod window-toggle-maximize ((obj clog-gui-window))
-  (let ((app (connection-data-item obj "clog-gui")))
-    (window-focus obj)
-    (cond ((window-maximized-p obj)
-	   (setf (width obj) (last-width obj))
-	   (setf (height obj) (last-height obj))
-	   (setf (top obj) (last-y obj))
-	   (setf (left obj) (last-x obj))
-	   (setf (last-width obj) nil))
-	  (t
-	   (setf (last-x obj) (left obj))
-	   (setf (last-y obj) (top obj))
-	   (setf (last-height obj) (height obj))
-	   (setf (last-width obj) (width obj))
-	   (setf (top obj) (unit :px (menu-bar-height obj)))
-	   (setf (left obj) (unit :px 0))
-	   (setf (width obj) (unit :vw 100))
-	   (setf (height obj)
-		 (- (inner-height (window (body app))) (menu-bar-height obj)))))
-    (fire-on-window-size-done obj)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; set-on-window-focus ;;
@@ -1014,6 +1011,42 @@ interactions. Use window-end-modal to undo."))
 (defmethod fire-on-window-can-size ((obj clog-gui-window))
   (if (on-window-can-size obj)
       (funcall (on-window-can-size obj) obj)
+      t))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; set-on-window-can-maximize ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric set-on-window-can-maximize (clog-gui-window handler)
+  (:documentation "Set the on-window-can-maximize HANDLER"))
+
+(defmethod set-on-window-can-maximize ((obj clog-gui-window) handler)
+  (setf (on-window-can-maximize obj) handler))
+
+(defgeneric fire-on-window-can-maximize (clog-gui-window)
+  (:documentation "Fire handler if set. (Private)"))
+
+(defmethod fire-on-window-can-maximize ((obj clog-gui-window))
+  (if (on-window-can-maximize obj)
+      (funcall (on-window-can-maximize obj) obj)
+      t))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; set-on-window-can-normalize ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric set-on-window-can-normalize (clog-gui-window handler)
+  (:documentation "Set the on-window-can-normalize HANDLER"))
+
+(defmethod set-on-window-can-normalize ((obj clog-gui-window) handler)
+  (setf (on-window-can-normalize obj) handler))
+
+(defgeneric fire-on-window-can-normalize (clog-gui-window)
+  (:documentation "Fire handler if set. (Private)"))
+
+(defmethod fire-on-window-can-normalize ((obj clog-gui-window))
+  (if (on-window-can-normalize obj)
+      (funcall (on-window-can-normalize obj) obj)
       t))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;

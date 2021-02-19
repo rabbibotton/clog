@@ -48,9 +48,10 @@
 				     :left 0
 				     :width 100
 				     :height 100)))
-    (flet ((can-do (obj)(declare (ignore obj))()))
-      (set-on-window-can-close win #'can-do)
-      (set-on-window-can-size win #'can-do))
+    (flet ((can-not-do (obj)(declare (ignore obj))()))
+      (set-on-window-can-maximize win #'can-not-do)
+      (set-on-window-can-close win #'can-not-do)
+      (set-on-window-can-size win #'can-not-do))
     (window-keep-on-top win)
     (create-div win :content "I am pinned")))    
 
