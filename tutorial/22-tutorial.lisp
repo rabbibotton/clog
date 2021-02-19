@@ -15,9 +15,9 @@
       (create-div (window-content win) :content n))))
 
 (defun on-file-browse (obj)
-  (let* ((win (create-gui-window obj :title "Browse"))
-	 (browser (create-child (window-content win)
-	    "<iframe width=100% height=98% src='https://common-lisp.net/'></iframe>")))))
+  (let* ((win (create-gui-window obj :title "Browse")))
+    (create-child (window-content win)
+		  "<iframe width=100% height=98% src='https://common-lisp.net/'></iframe>")))
 
 (defun on-file-drawing (obj)
   (let* ((win (create-gui-window obj :title "Drawing"))
@@ -48,11 +48,31 @@
 				     :left 0
 				     :width 100
 				     :height 100)))
-    (flet ((can-do (obj)()))
+    (flet ((can-do (obj)(declare (ignore obj))()))
       (set-on-window-can-close win #'can-do)
       (set-on-window-can-size win #'can-do))
     (window-keep-on-top win)
     (create-div win :content "I am pinned")))    
+
+(defun on-dlg-alert (obj)
+  (alert-dialog obj "This is a modal alert box"))
+
+(defun on-dlg-confirm (obj)
+  (confirm-dialog obj "Shall we play a game?"		  
+		(lambda (input)
+		  (if input
+		      (alert-dialog obj "How about Global Thermonuclear War.")
+		      (alert-dialog obj "You are no fun!")))
+		:ok-text "Yes" :cancel-text "No"))
+
+(defun on-dlg-input (obj)
+  (input-dialog obj "Would you like to play a game?"
+		(lambda (input)
+		  (alert-dialog obj input))))
+
+(defun on-dlg-file (obj)
+  (server-file-dialog obj "Server files" "./" (lambda (fname)
+						(alert-dialog obj fname))))
 
 (defun on-help-about (obj)
   (let* ((about (create-gui-window obj
@@ -85,9 +105,19 @@
 	 (tmp   (create-gui-menu-item win :content "Maximize All" :on-click #'maximize-all-windows))
 	 (tmp   (create-gui-menu-item win :content "Normalize All" :on-click #'normalize-all-windows))
 	 (tmp   (create-gui-menu-window-select win))
+	 (dlg   (create-gui-menu-drop-down menu :content "Dialogs"))
+	 (tmp   (create-gui-menu-item dlg :content "Alert Dialog Box" :on-click #'on-dlg-alert))	 
+	 (tmp   (create-gui-menu-item dlg :content "Input Dialog Box" :on-click #'on-dlg-input))
+	 (tmp   (create-gui-menu-item dlg :content "Confirm Dialog Box" :on-click #'on-dlg-confirm))
+	 (tmp   (create-gui-menu-item dlg :content "Server File Dialog Box" :on-click #'on-dlg-file))
 	 (help  (create-gui-menu-drop-down menu :content "Help"))
 	 (tmp   (create-gui-menu-item help :content "About" :on-click #'on-help-about))
-	 (tmp   (create-gui-menu-full-screen menu))))
+	 (tmp   (create-gui-menu-full-screen menu)))
+    (declare (ignore tmp)))
+  (set-on-before-unload (window body) (lambda(obj)
+					(declare (ignore obj))
+					;; return empty string to prevent nav off page
+					""))
   (run body))
 
 (defun start-tutorial ()

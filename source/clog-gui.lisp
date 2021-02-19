@@ -66,6 +66,9 @@
   (set-on-window-size-done     generic-function)
 
   "CLOG-GUI - Dialog Boxes"
+  (alert-dialog                function)
+  (input-dialog                function)
+  (confirm-dialog              function)
   (server-file-dialog          function))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -1097,22 +1100,191 @@ interactions. Use window-end-modal to undo."))
 ;; Implementation - Dialog Boxes
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; to add - alert box, input box, form by list
+;; to add -  form by list
+
+(defun alert-dialog (obj content &key (modal t)
+				   (title "About") 
+				   (left nil) (top nil)
+				   (width 300) (height 200)
+				   (client-movement nil)
+				   (html-id nil))
+  "Create an alert dialog box with CONTENT centered."
+  (unless html-id
+      (setf html-id (clog-connection:generate-id)))
+  (let* ((body (connection-data-item obj "clog-body"))
+	 (win  (create-gui-window obj
+				  :title    title
+				  :content  (format nil
+"<div class='w3-panel'>
+<center>~A<br><br>
+<button class='w3-button w3-black' id='~A-btn'>OK</button>
+</center>
+</div>" content html-id)
+				  :top             top
+				  :left            left
+				  :width           width
+				  :height          height
+				  :client-movement client-movement
+				  :html-id         html-id))
+	 (btn  (attach-as-child win (format nil "~A-btn" html-id))))
+    (unless top
+      (setf (top win) (unit :px (- (/ (inner-height (window body)) 2.0)
+				   (/ (height win) 2.0)))))
+    (unless left
+      (setf (left win) (unit :px (- (/ (inner-width (window body)) 2.0)
+				    (/ (width win) 2.0)))))
+    (when modal
+      (window-make-modal win))
+    (set-on-click btn (lambda (obj)
+			(declare (ignore obj))
+			(window-end-modal win)
+			(window-close win)))
+    (set-on-window-close win (lambda (obj)
+			       (declare (ignore obj))
+			       (when modal
+				 (window-end-modal win))))))
+
+(defun input-dialog (obj content on-input &key (modal t)
+					    (title "Input") 
+					    (left nil) (top nil)
+					    (width 300) (height 200)
+					    (client-movement nil)
+					    (html-id nil))
+  "Create an input dialog box with CONTENT centered and an input box.
+Calls on-input with input box contents or nil if canceled."
+  (unless html-id
+      (setf html-id (clog-connection:generate-id)))
+  (let* ((body (connection-data-item obj "clog-body"))
+	 (win  (create-gui-window obj
+				  :title          title
+				  :content        (format nil
+"<div class='w3-panel'>
+<center>~A<br><br>
+<form class='w3-container' onSubmit='return false;'>
+<input type='text' id='~A-input' size='20'><br><br>
+<button class='w3-button w3-black' style='width:7em' id='~A-ok'>OK</button>
+<button class='w3-button w3-black' style='width:7em' id='~A-cancel'>Cancel</button>
+</form>
+</center>
+</div>" content
+        html-id  ; input
+	html-id  ; ok
+	html-id) ; cancel
+				  :top             top
+				  :left            left
+				  :width           width
+				  :height          height
+				  :client-movement client-movement
+				  :html-id         html-id))
+	 (input  (attach-as-child win (format nil "~A-input" html-id)
+				  :clog-type 'clog:clog-form-element))
+	 (ok     (attach-as-child win (format nil "~A-ok" html-id)))
+	 (cancel (attach-as-child win (format nil "~A-cancel" html-id))))
+    (unless top
+      (setf (top win) (unit :px (- (/ (inner-height (window body)) 2.0)
+				   (/ (height win) 2.0)))))
+    (unless left
+      (setf (left win) (unit :px (- (/ (inner-width (window body)) 2.0)
+				    (/ (width win) 2.0)))))
+    (when modal
+      (window-make-modal win))
+    (set-on-click cancel (lambda (obj)
+			   (declare (ignore obj))
+			   (window-close win))
+		  :one-time t)
+    (set-on-click ok (lambda (obj)
+		       (declare (ignore obj))
+		       (set-on-window-close win nil)
+		       (when modal
+			 (window-end-modal win))
+		       (window-close win)
+		       (funcall on-input (value input)))
+		  :one-time t)
+    (set-on-window-close win (lambda (obj)
+			       (declare (ignore obj))
+			       (when modal
+				 (window-end-modal win))
+			       (funcall on-input nil)))))
+
+(defun confirm-dialog (obj content on-input &key (modal t)
+					      (title "Confirm")
+					      (ok-text "OK")
+					      (cancel-text "Cancel")
+					      (left nil) (top nil)
+					      (width 300) (height 200)
+					      (client-movement nil)
+					      (html-id nil))
+  "Create a confirmation dialog box with CONTENT centered.
+Calls on-input with t if confirmed or nil if canceled."
+  (unless html-id
+      (setf html-id (clog-connection:generate-id)))
+  (let* ((body (connection-data-item obj "clog-body"))
+	 (win  (create-gui-window obj
+				  :title          title
+				  :content        (format nil
+"<div class='w3-panel'>
+<center>~A<br><br>
+<form class='w3-container' onSubmit='return false;'>
+<button class='w3-button w3-black' style='width:7em' id='~A-ok'>~A</button>
+<button class='w3-button w3-black' style='width:7em' id='~A-cancel'>~A</button>
+</form>
+</center>
+</div>" content
+	html-id ok-text      ; ok
+	html-id cancel-text) ; cancel
+				  :top             top
+				  :left            left
+				  :width           width
+				  :height          height
+				  :client-movement client-movement
+				  :html-id         html-id))
+	 (ok     (attach-as-child win (format nil "~A-ok" html-id)))
+	 (cancel (attach-as-child win (format nil "~A-cancel" html-id))))
+    (unless top
+      (setf (top win) (unit :px (- (/ (inner-height (window body)) 2.0)
+				   (/ (height win) 2.0)))))
+    (unless left
+      (setf (left win) (unit :px (- (/ (inner-width (window body)) 2.0)
+				    (/ (width win) 2.0)))))
+    (when modal
+      (window-make-modal win))
+    (set-on-click cancel (lambda (obj)
+			   (declare (ignore obj))
+			   (window-close win))
+		  :one-time t)
+    (set-on-click ok (lambda (obj)
+		       (declare (ignore obj))
+		       (set-on-window-close win nil)
+		       (when modal
+			 (window-end-modal win))
+		       (window-close win)
+		       (funcall on-input t))
+		  :one-time t)
+    (set-on-window-close win (lambda (obj)
+			       (declare (ignore obj))
+			       (when modal
+				 (window-end-modal win))
+			       (funcall on-input nil)))))
 
 (defun server-file-dialog (obj title initial-dir on-file-name
-			   &key (left nil) (top nil) (width 400) (height 375)
+			   &key (modal t)
+			     (left nil) (top nil) (width 400) (height 375)
 			     (maximize nil)
-			     (initial-filename nil))
+			     (initial-filename nil)
+			     (client-movement nil)
+			     (html-id nil))
   "Create a local file dialog box called TITLE using INITIAL-DIR on server
 machine, upon close ON-FILE-NAME called with filename or nil if failure."
   (let* ((body (connection-data-item obj "clog-body"))
-	 (win    (create-gui-window obj
-				   :title    title
-				   :maximize maximize
-				   :top      top
-				   :left     left
-				   :width    width
-				   :height   height))
+	 (win  (create-gui-window obj
+				  :title           title
+				  :maximize        maximize
+				  :top             top
+				  :left            left
+				  :width           width
+				  :height          height
+				  :client-movement client-movement
+				  :html-id         nil))
 	 (box    (create-div (window-content win) :class "w3-panel"))
 	 (form   (create-form box))
 	 (dirs   (create-select form))
@@ -1134,7 +1306,8 @@ machine, upon close ON-FILE-NAME called with filename or nil if failure."
     (setf (box-width input) "100%")
     (setf (width ok) "7em")
     (setf (width cancel) "7em")
-    (window-make-modal win)
+    (when modal
+      (window-make-modal win))
     (flet ((populate-dirs (dir)
 	     (setf (inner-html dirs) "")
 	     (add-select-option dirs (format nil "~A" dir) ".")
@@ -1176,16 +1349,19 @@ machine, upon close ON-FILE-NAME called with filename or nil if failure."
 				   (click ok))))
     (set-on-window-close win (lambda (obj)
 			       (declare (ignore obj))
-			       (window-end-modal win)
+			       (when modal
+				 (window-end-modal win))
 			       (funcall on-file-name nil)))
     (set-on-click cancel (lambda (obj)
 			   (declare (ignore obj))
-			   (window-close win)))
+			   (window-close win))
+		  :one-time t)
     (set-on-click ok (lambda (obj)
 		       (declare (ignore obj))
 		       (setf (disabledp obj) t)
 		       (set-on-window-close win nil)
-		       (window-end-modal win)
+		       (when modal
+			 (window-end-modal win))
 		       (window-close win)
 		       (funcall on-file-name (value input)))
 		  :one-time t)))
