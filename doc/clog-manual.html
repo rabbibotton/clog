@@ -4717,20 +4717,22 @@ interactions. Use window-end-modal to undo.</p></li>
 <p>Center <code>CLOG-GUI-WINDOW</code> in browser.</p></li>
 </ul>
 
-<p><a id='x-28CLOG-GUI-3ASET-ON-WINDOW-FOCUSED-20GENERIC-FUNCTION-29'></a></p>
+<p><code>CLOG-GUI</code> - Individual Window Events</p>
+
+<p><a id='x-28CLOG-GUI-3ASET-ON-WINDOW-FOCUS-20GENERIC-FUNCTION-29'></a></p>
 
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-GUI-3ASET-ON-WINDOW-FOCUSED-20GENERIC-FUNCTION-29" >SET-ON-WINDOW-FOCUSED</a></span></span> <span class="locative-args">CLOG-GUI-WINDOW HANDLER</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-GUI-3ASET-ON-WINDOW-FOCUS-20GENERIC-FUNCTION-29" >SET-ON-WINDOW-FOCUS</a></span></span> <span class="locative-args">CLOG-GUI-WINDOW HANDLER</span></span></p>
 
-<p>Set the on-window-focused <code>HANDLER</code></p></li>
+<p>Set the on-window-focus <code>HANDLER</code></p></li>
 </ul>
 
-<p><a id='x-28CLOG-GUI-3ASET-ON-WINDOW-BLURRED-20GENERIC-FUNCTION-29'></a></p>
+<p><a id='x-28CLOG-GUI-3ASET-ON-WINDOW-BLUR-20GENERIC-FUNCTION-29'></a></p>
 
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-GUI-3ASET-ON-WINDOW-BLURRED-20GENERIC-FUNCTION-29" >SET-ON-WINDOW-BLURRED</a></span></span> <span class="locative-args">CLOG-GUI-WINDOW HANDLER</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-GUI-3ASET-ON-WINDOW-BLUR-20GENERIC-FUNCTION-29" >SET-ON-WINDOW-BLUR</a></span></span> <span class="locative-args">CLOG-GUI-WINDOW HANDLER</span></span></p>
 
-<p>Set the on-window-blurred <code>HANDLER</code></p></li>
+<p>Set the on-window-blur <code>HANDLER</code></p></li>
 </ul>
 
 <p><a id='x-28CLOG-GUI-3ASET-ON-WINDOW-CAN-CLOSE-20GENERIC-FUNCTION-29'></a></p>
@@ -4799,10 +4801,36 @@ interactions. Use window-end-modal to undo.</p></li>
 
 <p><code>CLOG-GUI</code> - Dialog Boxes</p>
 
+<p><a id='x-28CLOG-GUI-3AALERT-DIALOG-20FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#x-28CLOG-GUI-3AALERT-DIALOG-20FUNCTION-29" >ALERT-DIALOG</a></span></span> <span class="locative-args">OBJ CONTENT &amp;KEY (MODAL <code>T</code>) (TITLE &quot;About&quot;) (LEFT <code>NIL</code>) (TOP <code>NIL</code>) (WIDTH 300) (HEIGHT 200) (CLIENT-MOVEMENT <code>NIL</code>) (HTML-ID <code>NIL</code>)</span></span></p>
+
+<p>Create an alert dialog box with <code>CONTENT</code> centered.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-GUI-3AINPUT-DIALOG-20FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#x-28CLOG-GUI-3AINPUT-DIALOG-20FUNCTION-29" >INPUT-DIALOG</a></span></span> <span class="locative-args">OBJ CONTENT ON-INPUT &amp;KEY (MODAL <code>T</code>) (TITLE &quot;Input&quot;) (LEFT <code>NIL</code>) (TOP <code>NIL</code>) (WIDTH 300) (HEIGHT 200) (CLIENT-MOVEMENT <code>NIL</code>) (HTML-ID <code>NIL</code>)</span></span></p>
+
+<p>Create an input dialog box with <code>CONTENT</code> centered and an input box.
+Calls on-input with input box contents or nil if canceled.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-GUI-3ACONFIRM-DIALOG-20FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#x-28CLOG-GUI-3ACONFIRM-DIALOG-20FUNCTION-29" >CONFIRM-DIALOG</a></span></span> <span class="locative-args">OBJ CONTENT ON-INPUT &amp;KEY (MODAL <code>T</code>) (TITLE &quot;Confirm&quot;) (OK-TEXT &quot;OK&quot;) (CANCEL-TEXT &quot;Cancel&quot;) (LEFT <code>NIL</code>) (TOP <code>NIL</code>) (WIDTH 300) (HEIGHT 200) (CLIENT-MOVEMENT <code>NIL</code>) (HTML-ID <code>NIL</code>)</span></span></p>
+
+<p>Create a confirmation dialog box with <code>CONTENT</code> centered.
+Calls on-input with t if confirmed or nil if canceled.</p></li>
+</ul>
+
 <p><a id='x-28CLOG-GUI-3ASERVER-FILE-DIALOG-20FUNCTION-29'></a></p>
 
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#x-28CLOG-GUI-3ASERVER-FILE-DIALOG-20FUNCTION-29" >SERVER-FILE-DIALOG</a></span></span> <span class="locative-args">OBJ TITLE INITIAL-DIR ON-FILE-NAME &amp;KEY (LEFT <code>NIL</code>) (TOP <code>NIL</code>) (WIDTH 400) (HEIGHT 375) (MAXIMIZE <code>NIL</code>) (INITIAL-FILENAME <code>NIL</code>)</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#x-28CLOG-GUI-3ASERVER-FILE-DIALOG-20FUNCTION-29" >SERVER-FILE-DIALOG</a></span></span> <span class="locative-args">OBJ TITLE INITIAL-DIR ON-FILE-NAME &amp;KEY (MODAL <code>T</code>) (LEFT <code>NIL</code>) (TOP <code>NIL</code>) (WIDTH 375) (HEIGHT 420) (MAXIMIZE <code>NIL</code>) (INITIAL-FILENAME <code>NIL</code>) (CLIENT-MOVEMENT <code>NIL</code>) (HTML-ID <code>NIL</code>)</span></span></p>
 
 <p>Create a local file dialog box called <code>TITLE</code> using <code>INITIAL-DIR</code> on server
 machine, upon close <code>ON-FILE-NAME</code> called with filename or nil if failure.</p></li>

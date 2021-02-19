@@ -54,8 +54,8 @@
   (window-center               generic-function)
 
   "CLOG-GUI - Individual Window Events"
-  (set-on-window-focused       generic-function)
-  (set-on-window-blurred       generic-function)
+  (set-on-window-focus         generic-function)
+  (set-on-window-blur          generic-function)
   (set-on-window-can-close     generic-function)
   (set-on-window-close         generic-function)
   (set-on-window-can-move      generic-function)
@@ -440,7 +440,7 @@ The on-window-change clog-obj received is the new window"))
 (defmethod fire-on-window-change (obj app)
   "Fire handler if set. Change the value of current-win to clog-obj (Private)"
   (when (current-win app)
-    (fire-on-window-blurred (current-win app)))
+    (fire-on-window-blur (current-win app)))
   (unless obj
     (let (new-order 
 	  (order -9999))
@@ -455,7 +455,7 @@ The on-window-change clog-obj received is the new window"))
   (when (on-window-change app)
     (funcall (on-window-change app) obj))
   (when obj
-    (fire-on-window-focused obj)))
+    (fire-on-window-focus obj)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Implementation - Individual Windows
@@ -513,12 +513,12 @@ The on-window-change clog-obj received is the new window"))
     :accessor on-window-can-size
     :initform nil
     :documentation "Return t to allow close of window")
-   (on-window-focused
-    :accessor on-window-focused
+   (on-window-focus
+    :accessor on-window-focus
     :initform nil
     :documentation "Fired on window focused")
-   (on-window-blurred
-    :accessor on-window-blurred
+   (on-window-blur
+    :accessor on-window-blur
     :initform nil
     :documentation "Fired on window blurred")
    (on-window-close
@@ -929,39 +929,39 @@ interactions. Use window-end-modal to undo."))
 		 (- (inner-height (window (body app))) (menu-bar-height obj)))))
     (fire-on-window-size-done obj)))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; set-on-window-focused ;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;
+;; set-on-window-focus ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defgeneric set-on-window-focused (clog-gui-window handler)
-  (:documentation "Set the on-window-focused HANDLER"))
+(defgeneric set-on-window-focus (clog-gui-window handler)
+  (:documentation "Set the on-window-focus HANDLER"))
 
-(defmethod set-on-window-focused ((obj clog-gui-window) handler)
-  (setf (on-window-focused obj) handler))
+(defmethod set-on-window-focus ((obj clog-gui-window) handler)
+  (setf (on-window-focus obj) handler))
 
-(defgeneric fire-on-window-focused (clog-gui-window)
+(defgeneric fire-on-window-focus (clog-gui-window)
   (:documentation "Fire handler if set. (Private)"))
 
-(defmethod fire-on-window-focused ((obj clog-gui-window))
-  (when (on-window-focused obj)
-    (funcall (on-window-focused obj) obj)))
+(defmethod fire-on-window-focus ((obj clog-gui-window))
+  (when (on-window-focus obj)
+    (funcall (on-window-focus obj) obj)))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; set-on-window-blurred ;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;
+;; set-on-window-blur ;;
+;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defgeneric set-on-window-blurred (clog-gui-window handler)
-  (:documentation "Set the on-window-blurred HANDLER"))
+(defgeneric set-on-window-blur (clog-gui-window handler)
+  (:documentation "Set the on-window-blur HANDLER"))
 
-(defmethod set-on-window-blurred ((obj clog-gui-window) handler)
-  (setf (on-window-blurred obj) handler))
+(defmethod set-on-window-blur ((obj clog-gui-window) handler)
+  (setf (on-window-blur obj) handler))
 
-(defgeneric fire-on-window-blurred (clog-gui-window)
+(defgeneric fire-on-window-blur (clog-gui-window)
   (:documentation "Fire handler if set. (Private)"))
 
-(defmethod fire-on-window-blurred ((obj clog-gui-window))
-  (when (on-window-blurred obj)
-    (funcall (on-window-blurred obj) obj)))
+(defmethod fire-on-window-blur ((obj clog-gui-window))
+  (when (on-window-blur obj)
+    (funcall (on-window-blur obj) obj)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; set-on-window-can-close ;;
