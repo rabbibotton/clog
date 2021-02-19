@@ -639,6 +639,7 @@ The on-window-change clog-obj received is the new window"))
 					  content
 					  left top width height
 					  maximize
+					  hidden
 					  client-movement
 					  html-id)
   (:documentation "Create a clog-gui-window. If client-movement is t then
@@ -654,6 +655,7 @@ on-window-resize-done at end of resize."))
 					       (width 300)
 					       (height 200)
 					       (maximize nil)
+					       (hidden nil)
 					       (client-movement nil)
 					       (html-id nil))
   (let ((app (connection-data-item obj "clog-gui")))
@@ -678,7 +680,8 @@ on-window-resize-done at end of resize."))
     (let ((win (create-child (body app)
 			    (format nil
 	    "<div style='position:fixed;top:~Apx;left:~Apx;width:~Apx;height:~Apx;
-                  flex-container;display:flex;flex-direction:column;z-index:~A'
+                  flex-container;display:flex;flex-direction:column;z-index:~A;
+                  visibility:hidden'
                   class='w3-card-4 w3-white w3-border'>
                   <div id='~A-title-bar' class='w3-container w3-black'
                        style='flex-container;display:flex;align-items:stretch;'>
@@ -710,6 +713,8 @@ on-window-resize-done at end of resize."))
       (if maximize
 	  (window-maximize win)
 	  (fire-on-window-change win app))
+      (unless hidden
+	(setf (visiblep win) t))
       (when (window-select app)
 	(setf (window-select-item win) (create-option (window-select app)
 						      :content title
@@ -1157,6 +1162,7 @@ interactions. Use window-end-modal to undo."))
 				  :left            left
 				  :width           width
 				  :height          height
+				  :hidden          t
 				  :client-movement client-movement
 				  :html-id         html-id))
 	 (btn  (attach-as-child win (format nil "~A-btn" html-id))))
@@ -1166,6 +1172,7 @@ interactions. Use window-end-modal to undo."))
     (unless left
       (setf (left win) (unit :px (- (/ (inner-width (window body)) 2.0)
 				    (/ (width win) 2.0)))))
+    (setf (visiblep win) t)
     (when modal
       (window-make-modal win))
     (set-on-click btn (lambda (obj)
@@ -1207,6 +1214,7 @@ Calls on-input with input box contents or nil if canceled."
 				  :left            left
 				  :width           width
 				  :height          height
+				  :hidden          t
 				  :client-movement client-movement
 				  :html-id         html-id))
 	 (input  (attach-as-child win (format nil "~A-input" html-id)
@@ -1219,6 +1227,7 @@ Calls on-input with input box contents or nil if canceled."
     (unless left
       (setf (left win) (unit :px (- (/ (inner-width (window body)) 2.0)
 				    (/ (width win) 2.0)))))
+    (setf (visiblep win) t)
     (when modal
       (window-make-modal win))
     (set-on-click cancel (lambda (obj)
@@ -1269,6 +1278,7 @@ Calls on-input with t if confirmed or nil if canceled."
 				  :left            left
 				  :width           width
 				  :height          height
+				  :hidden          t
 				  :client-movement client-movement
 				  :html-id         html-id))
 	 (ok     (attach-as-child win (format nil "~A-ok" html-id)))
@@ -1279,6 +1289,7 @@ Calls on-input with t if confirmed or nil if canceled."
     (unless left
       (setf (left win) (unit :px (- (/ (inner-width (window body)) 2.0)
 				    (/ (width win) 2.0)))))
+    (setf (visible win) t)
     (when modal
       (window-make-modal win))
     (set-on-click cancel (lambda (obj)
@@ -1316,6 +1327,7 @@ machine, upon close ON-FILE-NAME called with filename or nil if failure."
 				  :left            left
 				  :width           width
 				  :height          height
+				  :hidden          t
 				  :client-movement client-movement
 				  :html-id         html-id))
 	 (box    (create-div (window-content win) :class "w3-panel"))
@@ -1341,6 +1353,7 @@ machine, upon close ON-FILE-NAME called with filename or nil if failure."
     (setf (box-width input) "100%")
     (setf (width ok) "7em")
     (setf (width cancel) "7em")
+    (setf (visiblep win) t)
     (when modal
       (window-make-modal win))
     (flet ((populate-dirs (dir)

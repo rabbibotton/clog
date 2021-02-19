@@ -338,15 +338,15 @@ Note: that each property, visiblep, hiddenp and display (None) all work
       would require checking all three properties."))
 
 (defmethod visiblep ((obj clog-element))
-  (equalp (property obj "visibility") "visible"))
+  (equalp (style obj "visibility") "visible"))
 
 (defgeneric set-visiblep (clog-element value)
   (:documentation "Set visiblep VALUE for CLOG-ELEMENT"))
 
 (defmethod set-visiblep ((obj clog-element) value)
   (if value
-      (setf (property obj "visibility") "visible")
-      (setf (property obj "visibility") "hidden")))
+      (setf (style obj "visibility") "visible")
+      (setf (style obj "visibility") "hidden")))
 (defsetf visiblep set-visiblep)
 
 ;;;;;;;;;;;;;;;;
