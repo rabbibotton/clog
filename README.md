@@ -106,6 +106,7 @@ to be a CLOGer.
 ![Image of demo1](https://rabbibotton.github.io/images/clog-demo1.png)
 ![Image of demo2](https://rabbibotton.github.io/images/clog-demo2.png)
 ![Image of demo3](https://rabbibotton.github.io/images/clog-demo3.png)
+![Image of clog-db-admin](https://rabbibotton.github.io/images/clog-db-admin.png)
 
 
 Here is a sample CLOG app:
