@@ -46,14 +46,15 @@
  
 </form>"
 				 :width  400
-				 :height 450)))
+				 :height 450
+				 :hidden t)))
     (window-center win)
+    (setf (visiblep win) t)
     (set-on-click (attach-as-child obj "odb-open")
 		  (lambda (obj)
 		    (format t "open db : ~A" (name-value obj "db-name"))
 		    (setf (db-connection app)
-			  (dbi:connect :sqlite3
-				       :database-name (name-value obj "db-name")))
+			  (sqlite:connect (name-value obj "db-name")))
 		    (setf (title (html-document (body app)))
 			  (format nil "CLOG DB Admin - ~A" (name-value obj "db-name")))
 		    (window-close win))
@@ -64,7 +65,7 @@
 (defun on-db-close (obj)
   (let ((app (connection-data-item obj "app-data")))
     (when (db-connection app)
-      (dbi:disconnect (db-connection app)))
+      (sqlite:disconnect (db-connection app)))
     (print "db disconnected")
     (setf (title (html-document (body app))) "CLOG DB Admin")))
 
@@ -81,22 +82,17 @@
 <button class='w3-btn w3-black' id=odb-cancel>Cancel</button>
  
 </form>"
-				 :width  400
-				 :height 200)))
+				:width  400
+				:height 200
+				:hidden t)))
     (window-center win)
+    (setf (visiblep win) t)
     (set-on-click (attach-as-child obj "odb-open")
 		  (lambda (obj)
 		    (format t "open query : ~A~%~%" (name-value obj "db-query"))
-		    (print (dbi:fetch-all
-		     (dbi:execute
-		      (dbi:prepare (db-connection app)
-				   (name-value obj "db-query"))
-                      ())))
-		    ;; (let* ((query (dbi:prepare (db-connection app) (name-value obj "db-query")))
-		    ;; 	   (query (dbi:execute query)))
-		    ;;   (loop for row = (dbi:fetch query)
-		    ;; 	    while row
-		    ;; 	    do (format t "~A~%" row)))
+		    (print (sqlite:execute-to-list
+			    (db-connection app)
+			    (name-value obj "db-query")))
 		    (window-close win)))
 
     (set-on-click (attach-as-child obj "odb-cancel") (lambda (obj)
@@ -112,8 +108,10 @@
 			                 <div><p><center>CLOG DB Admin</center>
                                          <center>(c) 2021 - David Botton</center></p></div>"
 				  :width   200
-				  :height  200)))
+				  :height  200
+				  :hidden  t)))
     (window-center about)
+    (setf (visiblep about) t)    
     (set-on-window-can-size about (lambda (obj)
 				    (declare (ignore obj))()))))
 
@@ -140,7 +138,7 @@
 	   (tmp   (create-gui-menu-full-screen menu))))
     (run body)
     (when (db-connection app)
-      (dbi:disconnect (db-connection app))
+      (sqlite:disconnect (db-connection app))
       (print "db disconnected"))))
 
 (defun clog-db-admin ()

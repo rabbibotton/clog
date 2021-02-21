@@ -828,12 +828,14 @@ on-window-resize-done at end of resize."))
 ;;;;;;;;;;;;;;;;;;
 
 (defgeneric window-close (clog-gui-window)
-  (:documentation "Close CLOG-GUI-WINDOW. on-window-can-close is not called."))
+  (:documentation "Close CLOG-GUI-WINDOW. on-window-can-close is not called.
+CLOG-GUI-WINDOW is removed from DOM but still present in the CLOG cache on
+the browser."))
 
 (defmethod window-close ((obj clog-gui-window))
   (let ((app (connection-data-item obj "clog-gui")))
     (remhash (format nil "~A" (html-id obj)) (windows app))
-    (remove-from-dom (window-select-item obj))
+    (destroy (window-select-item obj))
     (remove-from-dom obj)
     (fire-on-window-change nil app)
     (fire-on-window-close obj)))
@@ -970,7 +972,7 @@ interactions. Use window-end-modal to undo."))
 
 (defmethod window-end-modal ((obj clog-gui-window))
   (let ((app (connection-data-item obj "clog-gui")))
-    (remove-from-dom (modal-background app))
+    (destroy (modal-background app))
     (window-focus obj)))
 
 ;;;;;;;;;;;;;;;;;;;

@@ -270,12 +270,15 @@ path by querying the browser. See PATH-NAME (CLOG-LOCATION)."
 				        (format nil "<script>clog['post-data']='~A'</script>"
 						post-data))
 				      page-data)))))))
-		     ;; Pass the handling on next rule
+		     ;; Pass the handling on to next rule
 		     (t (funcall app env))))))
 	 (:static :path (lambda (path)
+			  ;; Request is static path if not the websocket connection.
+			  ;; Websocket url is /clog
 			  (cond ((ppcre:scan "^(?:/clog$)" path) nil)
 				(t path)))
 		  :root static-root)
+	 ;; Handle Websocket connection
 	 (lambda (env)
 	   (clog-server env))))
   (setf *client-handler* (clack:clackup *app* :address host :port port))

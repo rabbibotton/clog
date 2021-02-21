@@ -315,6 +315,7 @@ embedded in a native template application.)"
   (toggle-class     generic-function)
   (remove-from-dom  generic-function)
   (remove-from-clog generic-function)
+  (destroy          generic-function)
   (click            generic-function)
 
   "CLOG-Element - DOM Traversal Methods"
