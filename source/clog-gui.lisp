@@ -648,6 +648,7 @@ The on-window-change clog-obj received is the new window"))
 					  left top width height
 					  maximize
 					  has-pinner
+					  keep-on-top
 					  hidden
 					  client-movement
 					  html-id)
@@ -655,7 +656,10 @@ The on-window-change clog-obj received is the new window"))
 use jquery-ui to move/resize and will not work on mobile. When client-movement
 is t only on-window-move is fired once at start of drag and on-window-move-done
 at end of drag and on-window-resize at start of resize and
-on-window-resize-done at end of resize."))
+on-window-resize-done at end of resize. If has-pinner a toggle wil appear on 
+title bar to allow pinning the window in place, if keep-on-top t then when
+pinned also will keep-on-top. If had-pinned is nil and keep-on-top t then
+the window will be set to keep-on-top always."))
 
 (defmethod create-gui-window ((obj clog-obj) &key (title "New Window")
 					       (content "")
@@ -665,6 +669,7 @@ on-window-resize-done at end of resize."))
 					       (height 200)
 					       (maximize nil)
 			                       (has-pinner nil)
+					       (keep-on-top nil)
 					       (hidden nil)
 					       (client-movement nil)
 					       (html-id nil))
@@ -740,10 +745,12 @@ on-window-resize-done at end of resize."))
       (set-on-double-click (win-title win) (lambda (obj)
 					     (declare (ignore obj))
 					     (window-toggle-maximize win)))
-      (when has-pinner
-	(set-on-click (pinner win) (lambda (obj)
-       				     (declare (ignore obj))
-       				     (window-toggle-pin win))))
+      (if has-pinner
+	  (set-on-click (pinner win) (lambda (obj)
+       				       (declare (ignore obj))
+       				       (window-toggle-pin win keep-on-top)))
+	  (when keep-on-top
+	    (window-keep-on-top win)))      
       (set-on-click (closer win) (lambda (obj)
 				   (declare (ignore obj))
 				   (when (fire-on-window-can-close win)
@@ -907,18 +914,19 @@ the browser."))
 ;; window-toggle-pinned ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defgeneric window-toggle-pin (clog-gui-window)
+(defgeneric window-toggle-pin (clog-gui-window keep-on-top)
   (:documentation "Toggle the pinned state of a CLOG-GUI-WINDOW. A pinned
-window cannot be moved, closed, resized, maximized or normalized and is
-always on top. A new window is always unpinned."))
+window cannot be moved, closed, resized, maximized or normalized and if
+keep-on-top t when pinned is always on top. A new window is always unpinned."))
 
-(defmethod window-toggle-pin ((win clog-gui-window))
+(defmethod window-toggle-pin ((win clog-gui-window) keep-on-top)
   (if (pinnedp win)
       (progn
 	(when (pinner win)
 	  (setf (inner-html (pinner win)) "☐"))
-	(setf (keep-on-top win) nil)
-	(window-focus win)
+	(when keep-on-top
+	  (setf (keep-on-top win) nil)
+	  (window-focus win))
 	(setf (pinnedp win) nil)
 	(set-on-window-can-close win nil)
 	(set-on-window-can-size win nil)
@@ -928,8 +936,9 @@ always on top. A new window is always unpinned."))
       (flet ((no-op (obj) (declare (ignore obj))))
 	(when (pinner win)
 	  (setf (inner-html (pinner win)) "☑"))
-	(setf (keep-on-top win) t)
-	(setf (z-index win) 1)	
+	(when keep-on-top
+	  (setf (keep-on-top win) t)
+	  (setf (z-index win) 1))
 	(setf (pinnedp win) t)
 	(set-on-window-can-close win #'no-op)
 	(set-on-window-can-size win #'no-op)

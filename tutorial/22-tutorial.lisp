@@ -44,11 +44,12 @@
 
 (defun on-file-pinned (obj)
   (let ((win (create-gui-window obj :title "Pin me!"
-				     :has-pinner t
-				     :top 200
-				     :left 0
-				     :width 200
-				     :height 200)))
+				    :has-pinner t
+				    :keep-on-top t
+				    :top 200
+				    :left 0
+				    :width 200
+				    :height 200)))
     (create-div win :content "I can be pinned. Just click the pin on window bar.")))
 
 (defun on-dlg-alert (obj)
