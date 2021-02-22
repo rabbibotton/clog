@@ -842,7 +842,8 @@ the browser."))
 (defmethod window-close ((obj clog-gui-window))
   (let ((app (connection-data-item obj "clog-gui")))
     (remhash (format nil "~A" (html-id obj)) (windows app))
-    (destroy (window-select-item obj))
+    (when (window-select app)
+      (destroy (window-select-item obj)))
     (remove-from-dom obj)
     (fire-on-window-change nil app)
     (fire-on-window-close obj)))
@@ -1356,7 +1357,7 @@ Calls on-input with t if confirmed or nil if canceled."
     (unless left
       (setf (left win) (unit :px (- (/ (inner-width (window body)) 2.0)
 				    (/ (width win) 2.0)))))
-    (setf (visible win) t)
+    (setf (visiblep win) t)
     (when modal
       (window-make-modal win))
     (set-on-click cancel (lambda (obj)
