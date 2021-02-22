@@ -32,7 +32,8 @@
   (set-on-click (create-button body :content
 			       "Click for my question. You have 10 seconds to answer.")
 		(lambda (obj)
-		  (declare (ignore obj))		  
+		  (declare (ignore obj))
+		  (setf (disabledp obj) t)
 		  ;; ask returns once an answer is given or times out
 		  (create-div body :content (ask body))
 		  ;; once ask returns with its answer (yes no or nil for timeout)
@@ -45,7 +46,8 @@
 					  (create-div body :content "Next time be sure!"))
 				      (bordeaux-threads:signal-semaphore hold)))
 		    (bordeaux-threads:wait-on-semaphore hold :timeout 60)
-		    (create-div body :content "Thank you for answering!"))))
+		    (create-div body :content "Thank you for answering!")))
+		:one-time t)
   (run body))
 
 (defun start-tutorial ()
