@@ -177,6 +177,11 @@
   (let ((app (make-instance 'app-data)))
     (setf (connection-data-item body "app-data") app))
   (clog-gui-initialize body)
+  ;; This is the Ace js code editor. This cdn works for most, if fails (getting
+  ;; New as a blank window,etc) you can cd clog/static-files/ and run
+  ;; git clone https://github.com/ajaxorg/ace-builds/
+  ;; and uncomment this line and comment out the next:
+  ;; (load-script (html-document body) "/ace-builds/src-noconflict/ace.js")
   (load-script (html-document body) "https://pagecdn.io/lib/ace/1.4.12/ace.js")
   (add-class body "w3-teal")
   (let* ((menu  (create-gui-menu-bar body))
