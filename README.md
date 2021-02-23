@@ -205,6 +205,7 @@ High Order Extensions to CLOG (so far)
   - Modal windows, Keep-on-top windows
   - File Load / Save dialogs
   - Alert, Input and Confirmation dialogs
+  - Form dialogs
 - clog-data
   - clog-db-admin - Basic database administration 
   - In progress - Database integrations
