@@ -29,6 +29,7 @@
   ;; clog-gui can be mixed in to non-desktop environments, but
   ;; to use you must call first clog-gui-initialize
   (clog-gui-initialize body)
+  (setf (title (html-document body)) "Tutorial 23")
   (set-on-click (create-button body :content
 			       "Click for my question. You have 10 seconds to answer.")
 		(lambda (obj)
