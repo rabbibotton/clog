@@ -73,7 +73,11 @@
 						(alert-dialog obj fname))))
 
 (defun on-dlg-form (obj)
-  (form-dialog obj "Please enter your information." '(("Name" "name")
+  (form-dialog obj "Please enter your information." '(("Title" "title" (("Mr." "mr")
+								       ("Mrs." "mrs")
+								       ("Ms." "ms")
+								       ("Other" "other")))
+						      ("Name" "name")
 						      ("Address" "address")
 						      ("City" "city")
 						      ("State" "st")

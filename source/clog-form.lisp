@@ -382,6 +382,17 @@ group called NAME."))
   (cc:query (connection-id obj)
 	    (format nil "$('input:radio[name=~A]:checked').val()"
 		    name)))
+;;;;;;;;;;;;;;;;;;
+;; select-value ;;
+;;;;;;;;;;;;;;;;;;
+
+(defgeneric select-value (clog-obj name)
+  (:documentation "Returns the value of select item called NAME and must
+be unique name on entire document."))
+
+(defmethod select-value ((obj clog-obj) name)
+  (cc:query (connection-id obj)
+	    (format nil "$('select[name=~A] option:selected').val()" name)))
 
 ;;;;;;;;;;;;;;;;
 ;; name-value ;;

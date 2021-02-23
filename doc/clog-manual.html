@@ -2362,6 +2362,15 @@ A list of standard cursor types can be found at:
 <p>Remove CLOG-Element from the clog cache on browser.</p></li>
 </ul>
 
+<p><a id='x-28CLOG-3ADESTROY-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ADESTROY-20GENERIC-FUNCTION-29" >DESTROY</a></span></span> <span class="locative-args">CLOG-ELEMENT</span></span></p>
+
+<p>Remove CLOG-Element from the DOM on browser and clog cache
+on browser.</p></li>
+</ul>
+
 <p><a id='x-28CLOG-3ACLICK-20GENERIC-FUNCTION-29'></a></p>
 
 <ul>
@@ -2519,7 +2528,7 @@ line break and if <code>:AUTO-PLACE</code> (default t) place-inside-bottom-of <c
 <p><a id='x-28CLOG-3ACREATE-IMG-20GENERIC-FUNCTION-29'></a></p>
 
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ACREATE-IMG-20GENERIC-FUNCTION-29" >CREATE-IMG</a></span></span> <span class="locative-args">CLOG-OBJ &amp;KEY URL-SRC ALT-TEXT CLASS HTML-ID AUTO-PLACE</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ACREATE-IMG-20GENERIC-FUNCTION-29" >CREATE-IMG</a></span></span> <span class="locative-args">CLOG-OBJ &amp;KEY URL-SRC ALT-TEXT HIDDEN CLASS HTML-ID AUTO-PLACE</span></span></p>
 
 <p>Create a new CLOG-Img as child of <code>CLOG-OBJ</code> with <code>:URL-SRC</code>
 (default &quot;&quot;) and <code>:ALT-TEXT</code> (default &quot;&quot;) if <code>:AUTO-PLACE</code> (default t)
@@ -2548,11 +2557,11 @@ placing image to constrain image size.</p></li>
 <p><a id='x-28CLOG-3ACREATE-DIV-20GENERIC-FUNCTION-29'></a></p>
 
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ACREATE-DIV-20GENERIC-FUNCTION-29" >CREATE-DIV</a></span></span> <span class="locative-args">CLOG-OBJ &amp;KEY CONTENT CLASS HTML-ID AUTO-PLACE</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ACREATE-DIV-20GENERIC-FUNCTION-29" >CREATE-DIV</a></span></span> <span class="locative-args">CLOG-OBJ &amp;KEY CONTENT HIDDEN CLASS HTML-ID AUTO-PLACE</span></span></p>
 
 <p>Create a new CLOG-Div as child of <code>CLOG-OBJ</code> with <code>:CONTENT</code>
 (default &quot;&quot;) and if <code>:AUTO-PLACE</code> (default t) place-inside-bottom-of
-<code>CLOG-OBJ</code></p></li>
+<code>CLOG-OBJ</code>. If hidden it true visiblep is set to nil.</p></li>
 </ul>
 
 <p><a href="#x-28CLOG-3ACLOG-HR-20CLASS-29" title="(CLOG:CLOG-HR CLASS)"><code>CLOG-HR</code></a> - Class for <code>CLOG</code> Hortizontal Rules</p>
@@ -2697,7 +2706,7 @@ instead through the value property.</p></li>
 <p><a id='x-28CLOG-3ACREATE-P-20GENERIC-FUNCTION-29'></a></p>
 
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ACREATE-P-20GENERIC-FUNCTION-29" >CREATE-P</a></span></span> <span class="locative-args">CLOG-OBJ &amp;KEY CONTENT CLASS HTML-ID AUTO-PLACE</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ACREATE-P-20GENERIC-FUNCTION-29" >CREATE-P</a></span></span> <span class="locative-args">CLOG-OBJ &amp;KEY CONTENT HIDDEN CLASS HTML-ID AUTO-PLACE</span></span></p>
 
 <p>Create a new <a href="#x-28CLOG-3ACLOG-P-20CLASS-29" title="(CLOG:CLOG-P CLASS)"><code>CLOG-P</code></a> as child of <code>CLOG-OBJ</code> with <code>:CONTENT</code>
 (default &quot;&quot;) and if <code>:AUTO-PLACE</code> (default t) place-inside-bottom-of
@@ -2717,7 +2726,7 @@ instead through the value property.</p></li>
 <p><a id='x-28CLOG-3ACREATE-SPAN-20GENERIC-FUNCTION-29'></a></p>
 
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ACREATE-SPAN-20GENERIC-FUNCTION-29" >CREATE-SPAN</a></span></span> <span class="locative-args">CLOG-OBJ &amp;KEY CONTENT CLASS HTML-ID AUTO-PLACE</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ACREATE-SPAN-20GENERIC-FUNCTION-29" >CREATE-SPAN</a></span></span> <span class="locative-args">CLOG-OBJ &amp;KEY CONTENT HIDDEN CLASS HTML-ID AUTO-PLACE</span></span></p>
 
 <p>Create a new CLOG-Span as child of <code>CLOG-OBJ</code> with <code>CONTENT</code>
 and if <code>:AUTO-PLACE</code> (default t) place-inside-bottom-of <code>CLOG-OBJ</code></p></li>
@@ -2742,7 +2751,7 @@ and if <code>:AUTO-PLACE</code> (default t) place-inside-bottom-of <code>CLOG-OB
 <p><a id='x-28CLOG-3ACREATE-SECTION-20GENERIC-FUNCTION-29'></a></p>
 
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ACREATE-SECTION-20GENERIC-FUNCTION-29" >CREATE-SECTION</a></span></span> <span class="locative-args">CLOG-OBJ SECTION &amp;KEY CONTENT CLASS HTML-ID AUTO-PLACE</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ACREATE-SECTION-20GENERIC-FUNCTION-29" >CREATE-SECTION</a></span></span> <span class="locative-args">CLOG-OBJ SECTION &amp;KEY CONTENT HIDDEN CLASS HTML-ID AUTO-PLACE</span></span></p>
 
 <p>Create a new CLOG-Section of section type  as child of
 <code>CLOG-OBJ</code> with <code>CONTENT</code> and if <code>:AUTO-PLACE</code> (default t) place-inside-bottom-of
@@ -2768,7 +2777,7 @@ and if <code>:AUTO-PLACE</code> (default t) place-inside-bottom-of <code>CLOG-OB
 <p><a id='x-28CLOG-3ACREATE-PHRASE-20GENERIC-FUNCTION-29'></a></p>
 
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ACREATE-PHRASE-20GENERIC-FUNCTION-29" >CREATE-PHRASE</a></span></span> <span class="locative-args">CLOG-OBJ PHRASE &amp;KEY CONTENT CLASS HTML-ID AUTO-PLACE</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ACREATE-PHRASE-20GENERIC-FUNCTION-29" >CREATE-PHRASE</a></span></span> <span class="locative-args">CLOG-OBJ PHRASE &amp;KEY CONTENT HIDDEN CLASS HTML-ID AUTO-PLACE</span></span></p>
 
 <p>Create a new CLOG-Phrase of phrase type  as child of
 <code>CLOG-OBJ</code> with <code>CONTENT</code> and if <code>:AUTO-PLACE</code> (default t) place-inside-bottom-of
@@ -2939,7 +2948,7 @@ and if <code>:AUTO-PLACE</code> (default t) place-inside-bottom-of <a href="#x-2
 <p><a id='x-28CLOG-3ACREATE-TABLE-20GENERIC-FUNCTION-29'></a></p>
 
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ACREATE-TABLE-20GENERIC-FUNCTION-29" >CREATE-TABLE</a></span></span> <span class="locative-args">CLOG-OBJ &amp;KEY CLASS HTML-ID AUTO-PLACE</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ACREATE-TABLE-20GENERIC-FUNCTION-29" >CREATE-TABLE</a></span></span> <span class="locative-args">CLOG-OBJ &amp;KEY HIDDEN CLASS HTML-ID AUTO-PLACE</span></span></p>
 
 <p>Create a new CLOG-Table as child of <code>CLOG-OBJ</code>
 and if <code>:AUTO-PLACE</code> (default t) place-inside-bottom-of <code>CLOG-OBJ</code></p></li>
@@ -3363,6 +3372,15 @@ instead through the value property.</p></li>
 
 <p>Returns the value of the selected radio button in a
 group called <code>NAME</code>.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3ASELECT-VALUE-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ASELECT-VALUE-20GENERIC-FUNCTION-29" >SELECT-VALUE</a></span></span> <span class="locative-args">CLOG-OBJ NAME</span></span></p>
+
+<p>Returns the value of select item called <code>NAME</code> and must
+be unique name on entire document.</p></li>
 </ul>
 
 <p><a id='x-28CLOG-3ANAME-VALUE-20GENERIC-FUNCTION-29'></a></p>
@@ -4612,13 +4630,16 @@ The on-window-change clog-obj received is the new window</p></li>
 <p><a id='x-28CLOG-GUI-3ACREATE-GUI-WINDOW-20GENERIC-FUNCTION-29'></a></p>
 
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-GUI-3ACREATE-GUI-WINDOW-20GENERIC-FUNCTION-29" >CREATE-GUI-WINDOW</a></span></span> <span class="locative-args">CLOG-OBJ &amp;KEY TITLE CONTENT LEFT TOP WIDTH HEIGHT MAXIMIZE CLIENT-MOVEMENT HTML-ID</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-GUI-3ACREATE-GUI-WINDOW-20GENERIC-FUNCTION-29" >CREATE-GUI-WINDOW</a></span></span> <span class="locative-args">CLOG-OBJ &amp;KEY TITLE CONTENT LEFT TOP WIDTH HEIGHT MAXIMIZE HAS-PINNER KEEP-ON-TOP HIDDEN CLIENT-MOVEMENT HTML-ID</span></span></p>
 
 <p>Create a clog-gui-window. If client-movement is t then
 use jquery-ui to move/resize and will not work on mobile. When client-movement
 is t only on-window-move is fired once at start of drag and on-window-move-done
 at end of drag and on-window-resize at start of resize and
-on-window-resize-done at end of resize.</p></li>
+on-window-resize-done at end of resize. If has-pinner a toggle wil appear on 
+title bar to allow pinning the window in place, if keep-on-top t then when
+pinned also will keep-on-top. If had-pinned is nil and keep-on-top t then
+the window will be set to keep-on-top always.</p></li>
 </ul>
 
 <p><a id='x-28CLOG-GUI-3AWINDOW-TITLE-20GENERIC-FUNCTION-29'></a></p>
@@ -4650,7 +4671,9 @@ on-window-resize-done at end of resize.</p></li>
 <ul>
 <li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-GUI-3AWINDOW-CLOSE-20GENERIC-FUNCTION-29" >WINDOW-CLOSE</a></span></span> <span class="locative-args">CLOG-GUI-WINDOW</span></span></p>
 
-<p>Close <code>CLOG-GUI-WINDOW</code>. on-window-can-close is not called.</p></li>
+<p>Close <code>CLOG-GUI-WINDOW</code>. on-window-can-close is not called.
+<code>CLOG-GUI-WINDOW</code> is removed from DOM but still present in the <code>CLOG</code> cache on
+the browser.</p></li>
 </ul>
 
 <p><a id='x-28CLOG-GUI-3AWINDOW-MAXIMIZED-P-20GENERIC-FUNCTION-29'></a></p>
@@ -4842,6 +4865,16 @@ Calls on-input with input box contents or nil if canceled.</p></li>
 
 <p>Create a confirmation dialog box with <code>CONTENT</code> centered.
 Calls on-input with t if confirmed or nil if canceled.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-GUI-3AFORM-DIALOG-20FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#x-28CLOG-GUI-3AFORM-DIALOG-20FUNCTION-29" >FORM-DIALOG</a></span></span> <span class="locative-args">OBJ CONTENT FIELDS ON-INPUT &amp;KEY (MODAL <code>T</code>) (TITLE &quot;Form&quot;) (OK-TEXT &quot;OK&quot;) (CANCEL-TEXT &quot;Cancel&quot;) (LEFT <code>NIL</code>) (TOP <code>NIL</code>) (WIDTH 400) (HEIGHT 500) (CLIENT-MOVEMENT <code>NIL</code>) (HTML-ID <code>NIL</code>)</span></span></p>
+
+<p>Create a form dialog box with <code>CONTENT</code> followed by <code>FIELDS</code> centered.
+Fields is an alist of field names to field descriptions. Calls on-input
+with t if confirmed or nil if canceled.</p></li>
 </ul>
 
 <p><a id='x-28CLOG-GUI-3ASERVER-FILE-DIALOG-20FUNCTION-29'></a></p>

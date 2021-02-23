@@ -1388,17 +1388,28 @@ Calls on-input with t if confirmed or nil if canceled."
 						  (client-movement nil)
 						  (html-id nil))
   "Create a form dialog box with CONTENT followed by FIELDS centered.
-Fields is an alist of field names to field descriptions. Calls on-input
-with t if confirmed or nil if canceled."
+Fields is an a-list of field names to field descriptions, a third element
+can be added of another a-list of option Text to Value. Calls on-input
+with a-list of field name to value if confirmed or nil if canceled."
   (unless html-id
     (setf html-id (clog-connection:generate-id)))
   (let* ((body (connection-data-item obj "clog-body"))
 	 (fls (format nil "~{~A~}"
 		      (mapcar (lambda (l)
-				(format nil
-"<div><label class='w3-text-black'><b>~A</b></label>~
- <input class='w3-input w3-border' type='text' name='~A-~A'></div>"
-                                          (first l) html-id (second l)))
+				(if (third l)
+				    (format nil
+					    "<div><label class='w3-text-black'><b>~A</b></label>~
+			       <select class='w3-select w3-border' name='~A-~A'>~A</select>"
+					    (first l) html-id (second l)
+					    (format nil "~{~A~}"
+						    (mapcar (lambda (s)
+							      (format nil
+					     "<option value='~A'>~A</option>" (second s) (first s)))
+							    (third l))))
+				    (format nil
+					    "<div><label class='w3-text-black'><b>~A</b></label>~
+                               <input class='w3-input w3-border' type='text' name='~A-~A'></div>"
+                                            (first l) html-id (second l))))
 			      fields)))
 	 (win  (create-gui-window obj
 				  :title          title
@@ -1445,9 +1456,13 @@ with t if confirmed or nil if canceled."
 			 (window-end-modal win))
 		       (let ((result (mapcar (lambda (l)
 					       `(,(second l)
-						 ,(name-value win (format nil "~A-~A"
-									  html-id
-									  (second l)))))
+						 ,(if (third l)
+						      (select-value win (format nil "~A-~A"
+										html-id
+										(second l)))
+						      (name-value win (format nil "~A-~A"
+									      html-id
+									      (second l))))))
 					     fields)))
 			 (window-close win)
 			 (funcall on-input result)))
