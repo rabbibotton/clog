@@ -72,6 +72,15 @@
   (server-file-dialog obj "Server files" "./" (lambda (fname)
 						(alert-dialog obj fname))))
 
+(defun on-dlg-form (obj)
+  (form-dialog obj "Please enter your information." '(("Name" "name")
+						      ("Address" "address")
+						      ("City" "city")
+						      ("State" "st")
+						      ("Zip" "zip"))
+	       (lambda (results)
+		 (alert-dialog obj results))))
+
 (defun on-help-about (obj)
   (let* ((about (create-gui-window obj
 				   :title   "About"
@@ -109,6 +118,7 @@
 	 (tmp   (create-gui-menu-item dlg :content "Alert Dialog Box" :on-click #'on-dlg-alert))	 
 	 (tmp   (create-gui-menu-item dlg :content "Input Dialog Box" :on-click #'on-dlg-input))
 	 (tmp   (create-gui-menu-item dlg :content "Confirm Dialog Box" :on-click #'on-dlg-confirm))
+	 (tmp   (create-gui-menu-item dlg :content "Form Dialog Box" :on-click #'on-dlg-form))
 	 (tmp   (create-gui-menu-item dlg :content "Server File Dialog Box" :on-click #'on-dlg-file))
 	 (help  (create-gui-menu-drop-down menu :content "Help"))
 	 (tmp   (create-gui-menu-item help :content "About" :on-click #'on-help-about))

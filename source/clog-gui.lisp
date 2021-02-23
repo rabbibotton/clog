@@ -71,6 +71,7 @@
   (alert-dialog                function)
   (input-dialog                function)
   (confirm-dialog              function)
+  (form-dialog                 function)
   (server-file-dialog          function))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -1371,6 +1372,86 @@ Calls on-input with t if confirmed or nil if canceled."
 			 (window-end-modal win))
 		       (window-close win)
 		       (funcall on-input t))
+		  :one-time t)
+    (set-on-window-close win (lambda (obj)
+			       (declare (ignore obj))
+			       (when modal
+				 (window-end-modal win))
+			       (funcall on-input nil)))))
+
+(defun form-dialog (obj content fields on-input &key (modal t)
+						  (title "Form")
+						  (ok-text "OK")
+						  (cancel-text "Cancel")
+						  (left nil) (top nil)
+						  (width 400) (height 500)
+						  (client-movement nil)
+						  (html-id nil))
+  "Create a form dialog box with CONTENT followed by FIELDS centered.
+Fields is an alist of field names to field descriptions. Calls on-input
+with t if confirmed or nil if canceled."
+  (unless html-id
+    (setf html-id (clog-connection:generate-id)))
+  (let* ((body (connection-data-item obj "clog-body"))
+	 (fls (format nil "~{~A~}"
+		      (mapcar (lambda (l)
+				(format nil
+"<div><label class='w3-text-black'><b>~A</b></label>~
+ <input class='w3-input w3-border' type='text' name='~A-~A'></div>"
+                                          (first l) html-id (second l)))
+			      fields)))
+	 (win  (create-gui-window obj
+				  :title          title
+				  :content        (format nil
+"<div class='w3-panel'>
+<center>~A</center><br>
+<form class='w3-container' onSubmit='return false;'>
+~A
+<br><center>
+<button class='w3-button w3-black' style='width:7em' id='~A-ok'>~A</button>
+<button class='w3-button w3-black' style='width:7em' id='~A-cancel'>~A</button>
+</center>
+</form>
+</div>" content
+        fls
+	html-id ok-text      ; ok
+	html-id cancel-text) ; cancel
+				  :top             top
+				  :left            left
+				  :width           width
+				  :height          height
+				  :hidden          t
+				  :client-movement client-movement
+				  :html-id         html-id))
+	 (ok     (attach-as-child win (format nil "~A-ok" html-id)))
+	 (cancel (attach-as-child win (format nil "~A-cancel" html-id))))
+    (unless top
+      (setf (top win) (unit :px (- (/ (inner-height (window body)) 2.0)
+				   (/ (height win) 2.0)))))
+    (unless left
+      (setf (left win) (unit :px (- (/ (inner-width (window body)) 2.0)
+				    (/ (width win) 2.0)))))
+    (setf (visiblep win) t)
+    (when modal
+      (window-make-modal win))
+    (set-on-click cancel (lambda (obj)
+			   (declare (ignore obj))
+			   (window-close win))
+		  :one-time t)
+    (set-on-click ok (lambda (obj)
+		       (declare (ignore obj))
+		       (set-on-window-close win nil)
+		       (when modal
+			 (window-end-modal win))
+		       (let ((result (mapcar (lambda (l)
+					       `(,(second l)
+						 ,(name-value win (format nil "~A-~A"
+									  html-id
+									  (second l)))))
+					     fields)))
+			 (window-close win)
+			 (funcall on-input result)))
+
 		  :one-time t)
     (set-on-window-close win (lambda (obj)
 			       (declare (ignore obj))
