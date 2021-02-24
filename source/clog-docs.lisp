@@ -139,7 +139,7 @@ NIL
 At this point CLOG should open a browser window to
  http://127.0.0.1:8008/repl
 
-We can new enter the clog-user package and hack a way.
+We can now enter the clog-user package and hack a way.
 
 ```lisp
 CL-USER> (in-package clog-user)
