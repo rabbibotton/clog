@@ -1419,6 +1419,21 @@ with a-list of field name to value if confirmed or nil if canceled."
 							     (format nil
 			      "<option value='~A'>~A</option>" (second s) (first s)))
 							   (fourth l)))))
+				  ((eq (third l) :radio)
+				   (format nil
+					   "<div><label class='w3-text-black'><b>~A</b></label>~A"
+					   (first l)
+					   (format nil "~{~A~}"
+						   (mapcar (lambda (s)
+							     (format nil
+			       "<div><input type=radio name='~A-~A' id='~A-~A-~A' value='~A'>~
+                                     <label for='~A-~A-~A'>~A</label></div>"
+			                                      html-id (second l)
+							      html-id (second l) (second s)
+							      (second s)
+							      html-id (second l) (second s)
+							      (first s)))
+							   (fourth l)))))
 				  (t
 				   (format nil
 					    "<div><label class='w3-text-black'><b>~A</b></label>~
@@ -1485,19 +1500,19 @@ with a-list of field name to value if confirmed or nil if canceled."
 		       (set-on-window-close win nil)
 		       (when modal
 			 (window-end-modal win))
-		       (let ((result (mapcar (lambda (l)
-					       `(,(second l)
-						 ,(if (eq (third l) :select)
-						      (select-value win (format nil "~A-~A"
-										html-id
-										(second l)))
-						      (name-value win (format nil "~A-~A"
-									      html-id
-									      (second l))))))
-					     fields)))
+		       (let ((result (mapcar
+				      (lambda (l)
+					`(,(second l)
+					  ,(let ((name (format nil "~A-~A" html-id (second l))))
+					     (cond ((eq (third l) :select)
+						    (select-value win name))
+						   ((eq (third l) :radio)
+						    (radio-value win name))
+						   (t
+						    (name-value win name))))))
+				      fields)))
 			 (window-close win)
 			 (funcall on-input result)))
-
 		  :one-time t)
     (set-on-window-close win (lambda (obj)
 			       (declare (ignore obj))
