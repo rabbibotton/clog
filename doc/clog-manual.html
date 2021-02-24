@@ -4873,8 +4873,9 @@ Calls on-input with t if confirmed or nil if canceled.</p></li>
 <li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#x-28CLOG-GUI-3AFORM-DIALOG-20FUNCTION-29" >FORM-DIALOG</a></span></span> <span class="locative-args">OBJ CONTENT FIELDS ON-INPUT &amp;KEY (MODAL <code>T</code>) (TITLE &quot;Form&quot;) (OK-TEXT &quot;OK&quot;) (CANCEL-TEXT &quot;Cancel&quot;) (LEFT <code>NIL</code>) (TOP <code>NIL</code>) (WIDTH 400) (HEIGHT 500) (CLIENT-MOVEMENT <code>NIL</code>) (HTML-ID <code>NIL</code>)</span></span></p>
 
 <p>Create a form dialog box with <code>CONTENT</code> followed by <code>FIELDS</code> centered.
-Fields is an alist of field names to field descriptions. Calls on-input
-with t if confirmed or nil if canceled.</p></li>
+Fields is an a-list of field names to field descriptions, a third element
+can be added of another a-list of option Text to Value. Calls on-input
+with a-list of field name to value if confirmed or nil if canceled.</p></li>
 </ul>
 
 <p><a id='x-28CLOG-GUI-3ASERVER-FILE-DIALOG-20FUNCTION-29'></a></p>
