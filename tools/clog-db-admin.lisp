@@ -35,18 +35,46 @@
     (print "db disconnected")
     (setf (title (html-document (body app))) "CLOG DB Admin")))
 
+(defun results-window (app sql &key (title nil))
+  (unless title
+    (setf title sql))
+  (let* ((prep (sqlite:prepare-statement (db-connection app) sql))
+	 (st   (sqlite:execute-to-list (db-connection app) sql))
+	 (win  (create-gui-window (body app)
+				  :width 500
+				  :hieght 400
+				  :title title))
+	 (body (window-content win))
+	 (rt   (create-table body :class "w3-table-all"))
+	 (th   (create-table-head rt :class "w3-green"))
+	 (cr))
+    (dolist (name (sqlite:statement-column-names prep))
+      (create-table-heading th :content name))
+    (dolist (row st)
+      (setf cr (create-table-row rt))
+      (dolist (value row)
+	(create-table-column cr :content value)))))
+
 (defun on-query-results (obj)
   (let ((app (connection-data-item obj "app-data")))
     (form-dialog obj nil
 		 '(("Query" :db-query))
 		 (lambda (results)
 		   (when results
-		    (format t "open query : ~A~%~%" (cadr (assoc :db-query results)))
-		    (print (sqlite:execute-to-list
-			    (db-connection app)
-			    (cadr (assoc :db-query results))))))
+		     (results-window app (cadr (assoc :db-query results)))))
 		 :title "Run Database Query" :height 200)))
-				
+
+(defun on-query-non (obj)
+  (let ((app (connection-data-item obj "app-data")))
+    (form-dialog obj nil
+		 '(("Non-Query" :db-query))
+		 (lambda (results)
+		   (when results
+		     (sqlite:execute-non-query (db-connection app)
+					       (cadr (assoc :db-query results)))
+		     (results-window app "select changes()" :title (cadr (assoc :db-query results)))))
+		 :title "Run Database Query" :height 200)))
+
 (defun on-help-about (obj)
   (let ((about (create-gui-window obj
 				  :title   "About"
@@ -78,6 +106,7 @@
 	   (tmp   (create-gui-menu-item file :content "Close Connection" :on-click #'on-db-close))
 	   (qry   (create-gui-menu-drop-down menu :content "Queries"))
 	   (tmp   (create-gui-menu-item qry :content "Results Query" :on-click #'on-query-results))
+	   (tmp   (create-gui-menu-item qry :content "Execute Non Query" :on-click #'on-query-non))
 	   (win   (create-gui-menu-drop-down menu :content "Window"))
 	   (tmp   (create-gui-menu-item win :content "Maximize All" :on-click #'maximize-all-windows))
 	   (tmp   (create-gui-menu-item win :content "Normalize All" :on-click #'normalize-all-windows))
