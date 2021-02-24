@@ -83,7 +83,8 @@
 						      ("State" "st")
 						      ("Zip" "zip"))
 	       (lambda (results)
-		 (alert-dialog obj results))))
+		 (alert-dialog obj results))
+	       :height 550))
 
 (defun on-help-about (obj)
   (let* ((about (create-gui-window obj

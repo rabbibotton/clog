@@ -14,89 +14,38 @@
     :documentation "Access to database connection")))
 
 (defun on-db-open (obj)
-  (let* ((app (connection-data-item obj "app-data"))
-	 (win (create-gui-window obj
-				 :title "Open Database"
-				 :content
-"<form id=odb-form class='w3-container' onSubmit='return false;'>
-<label class='w3-text-black'><b>Database Type</b></label>
-<select class='w3-select w3-border' name='db-type'>
-<option value='sqlite3'>SQLite3</option>
-<option disabled value='mysql'>MySQL</option>
-<option disabled value='postgres'>Postgres</option>
-</select>
-
-<label class='w3-text-black'><b>Database Name</b></label>
-<input class='w3-input w3-border' type='text' name='db-name'>
- 
-<label class='w3-text-black'><b>User Name</b></label>
-<input class='w3-input w3-border' type='text' name='db-user' disabled>
-
-<label class='w3-text-black'><b>Password</b></label>
-<input class='w3-input w3-border' type='password' name='db-pass' disabled>
-
-<label class='w3-text-black'><b>Host</b></label>
-<input class='w3-input w3-border' type='password' name='db-host' disabled>
-
-<label class='w3-text-black'><b>Port</b></label>
-<input class='w3-input w3-border' type='password' name='db-port' disabled>
-
-<button class='w3-btn w3-black' id=odb-open >Open</button>
-<button class='w3-btn w3-black' id=odb-cancel>Cancel</button>
- 
-</form>"
-				 :width  400
-				 :height 450
-				 :hidden t)))
-    (window-center win)
-    (setf (visiblep win) t)
-    (set-on-click (attach-as-child obj "odb-open")
-		  (lambda (obj)
-		    (format t "open db : ~A" (name-value obj "db-name"))
-		    (setf (db-connection app)
-			  (sqlite:connect (name-value obj "db-name")))
-		    (setf (title (html-document (body app)))
-			  (format nil "CLOG DB Admin - ~A" (name-value obj "db-name")))
-		    (window-close win))
-		  :one-time t)
-
-    (set-on-click (attach-as-child obj "odb-cancel") (lambda (obj)
-						       (window-close win)))))
+  (let* ((app (connection-data-item obj "app-data")))
+    (form-dialog obj nil
+		 '(("Database Type" :db-type (("SQLite3" :sqlite3)))
+		   ("Database Name" :db-name))
+		 (lambda (results)
+		   (when results
+		     (format t "open db : ~A" (cadr (assoc :db-name results)))
+		     (setf (db-connection app)
+			   (sqlite:connect (cadr (assoc :db-name results))))
+		     (setf (title (html-document (body app)))
+			   (format nil "CLOG DB Admin - ~A" (cadr (assoc :db-name results))))))
+		 :title "Open Database" :height 250)))
+		   
 (defun on-db-close (obj)
   (let ((app (connection-data-item obj "app-data")))
     (when (db-connection app)
-      (sqlite:disconnect (db-connection app)))
+      (sqlite:disconnect (db-connection app))
+      (setf (db-connection app) nil))
     (print "db disconnected")
     (setf (title (html-document (body app))) "CLOG DB Admin")))
 
 (defun on-query-results (obj)
-  (let ((app (connection-data-item obj "app-data"))
-	(win (create-gui-window obj
-				:title "Enter query:"
-				:content
-"<form id=odb-form class='w3-container' onSubmit='return false;'>
-
-<label class='w3-text-black'><b>Query</b></label>
-<input class='w3-input w3-border' type='text' name='db-query'>
-<button class='w3-btn w3-black' id=odb-open >Open</button>
-<button class='w3-btn w3-black' id=odb-cancel>Cancel</button>
- 
-</form>"
-				:width  400
-				:height 200
-				:hidden t)))
-    (window-center win)
-    (setf (visiblep win) t)
-    (set-on-click (attach-as-child obj "odb-open")
-		  (lambda (obj)
-		    (format t "open query : ~A~%~%" (name-value obj "db-query"))
+  (let ((app (connection-data-item obj "app-data")))
+    (form-dialog obj nil
+		 '(("Query" :db-query))
+		 (lambda (results)
+		   (when results
+		    (format t "open query : ~A~%~%" (cadr (assoc :db-query results)))
 		    (print (sqlite:execute-to-list
 			    (db-connection app)
-			    (name-value obj "db-query")))
-		    (window-close win)))
-
-    (set-on-click (attach-as-child obj "odb-cancel") (lambda (obj)
-						       (window-close win)))))
+			    (cadr (assoc :db-query results))))))
+		 :title "Run Database Query" :height 200)))
 				
 (defun on-help-about (obj)
   (let ((about (create-gui-window obj

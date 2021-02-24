@@ -1209,8 +1209,6 @@ interactions. Use window-end-modal to undo."))
 ;; Implementation - Dialog Boxes
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; to add -  form by list
-
 (defun alert-dialog (obj content &key (modal t)
 				   (title "About")
 				   (left nil) (top nil)
@@ -1246,6 +1244,7 @@ interactions. Use window-end-modal to undo."))
     (setf (visiblep win) t)
     (when modal
       (window-make-modal win))
+    (focus btn)
     (set-on-click btn (lambda (obj)
 			(declare (ignore obj))
 			(window-end-modal win)
@@ -1301,6 +1300,7 @@ Calls on-input with input box contents or nil if canceled."
     (setf (visiblep win) t)
     (when modal
       (window-make-modal win))
+    (focus input)
     (set-on-click cancel (lambda (obj)
 			   (declare (ignore obj))
 			   (window-close win))
@@ -1363,6 +1363,7 @@ Calls on-input with t if confirmed or nil if canceled."
     (setf (visiblep win) t)
     (when modal
       (window-make-modal win))
+    (focus ok)
     (set-on-click cancel (lambda (obj)
 			   (declare (ignore obj))
 			   (window-close win))
@@ -1417,7 +1418,7 @@ with a-list of field name to value if confirmed or nil if canceled."
 				  :title          title
 				  :content        (format nil
 "<div class='w3-panel'>
-<center>~A</center><br>
+~A
 <form class='w3-container' onSubmit='return false;'>
 ~A
 <br><center>
@@ -1425,7 +1426,9 @@ with a-list of field name to value if confirmed or nil if canceled."
 <button class='w3-button w3-black' style='width:7em' id='~A-cancel'>~A</button>
 </center>
 </form>
-</div>" content
+</div>" (if content
+	    (format nil "<center>~A</center><br>" content)
+	    "")
         fls
 	html-id ok-text      ; ok
 	html-id cancel-text) ; cancel
@@ -1447,6 +1450,9 @@ with a-list of field name to value if confirmed or nil if canceled."
     (setf (visiblep win) t)
     (when modal
       (window-make-modal win))
+    (js-execute obj (format nil "$('[name=~A-~A]').focus()"
+			    html-id
+			    (cadar fields)))
     (set-on-click cancel (lambda (obj)
 			   (declare (ignore obj))
 			   (window-close win))
