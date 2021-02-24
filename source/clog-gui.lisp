@@ -1412,7 +1412,7 @@ with a-list of field name to value if confirmed or nil if canceled."
 				  ((eq (third l) :select)
 				   (format nil
 					   "<div><label class='w3-text-black'><b>~A</b></label>~
-			       <select class='w3-select w3-border' name='~A-~A'>~A</select>"
+			       <select class='w3-select w3-border' name='~A-~A'>~A</select></div>"
 					   (first l) html-id (second l)
 					   (format nil "~{~A~}"
 						   (mapcar (lambda (s)
@@ -1421,12 +1421,13 @@ with a-list of field name to value if confirmed or nil if canceled."
 							   (fourth l)))))
 				  ((eq (third l) :radio)
 				   (format nil
-					   "<div><label class='w3-text-black'><b>~A</b></label>~A"
+					   "<div><label class='w3-text-black'><b>~A</b></label>~A</div>"
 					   (first l)
 					   (format nil "~{~A~}"
 						   (mapcar (lambda (s)
 							     (format nil
-			       "<div><input type=radio name='~A-~A' id='~A-~A-~A' value='~A'>~
+			       "<div><input type=radio class='w3-radio' name='~A-~A'~
+                                      id='~A-~A-~A' value='~A'> ~
                                      <label for='~A-~A-~A'>~A</label></div>"
 			                                      html-id (second l)
 							      html-id (second l) (second s)
@@ -1434,6 +1435,22 @@ with a-list of field name to value if confirmed or nil if canceled."
 							      html-id (second l) (second s)
 							      (first s)))
 							   (fourth l)))))
+				  ((eq (third l) :checkbox)
+				   (format nil
+					   "<div><input class='w3-check' type='checkbox' ~
+                                                  name='~A-~A' id='~A-~A'> ~
+                                                  <label class='w3-text-black' for='~A-~A'>~
+                                                  <b>~A</b></label>~
+                                            </div>"
+					   html-id (second l) html-id (second l)
+					   html-id (second l)
+					   (first l)))
+				  ((third l)
+				   (format nil
+					   "<div><label class='w3-text-black'><b>~A</b></label>~
+                               <input class='w3-input w3-border' type='~A' name='~A-~A' id='~A-~A'></div>"
+                                   (first l) (third l)
+				   html-id (second l) html-id (second l)))
 				  (t
 				   (format nil
 					    "<div><label class='w3-text-black'><b>~A</b></label>~
@@ -1508,6 +1525,8 @@ with a-list of field name to value if confirmed or nil if canceled."
 						    (select-value win name))
 						   ((eq (third l) :radio)
 						    (radio-value win name))
+						   ((eq (third l) :checkbox)
+						    (checkbox-value win name))
 						   (t
 						    (name-value win name))))))
 				      fields)))

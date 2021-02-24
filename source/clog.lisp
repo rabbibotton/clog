@@ -494,6 +494,7 @@ embedded in a native template application.)"
   (default-value       generic-function)
   (value               generic-function)
   (radio-value         generic-function)
+  (checkbox-value      generic-function)
   (select-value        generic-function)
   (name-value          generic-function)
   (pattern             generic-function)

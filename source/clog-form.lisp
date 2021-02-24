@@ -382,6 +382,19 @@ group called NAME."))
   (cc:query (connection-id obj)
 	    (format nil "$('input:radio[name=~A]:checked').val()"
 		    name)))
+
+;;;;;;;;;;;;;;;;;;;;
+;; checkbox-value ;;
+;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric checkbox-value (clog-obj name)
+  (:documentation "Returns t or nil on the selected checkbox button."))
+
+(defmethod checkbox-value ((obj clog-obj) name)
+  (js-on-p (cc:query (connection-id obj)
+		     (format nil "$('input:checkbox[name=~A]:checked').val()"
+			     name))))
+
 ;;;;;;;;;;;;;;;;;;
 ;; select-value ;;
 ;;;;;;;;;;;;;;;;;;
