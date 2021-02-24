@@ -8,6 +8,10 @@
   ((body
     :accessor body
     :documentation "Top level access to browser window")
+   (db-type
+    :accessor db-type
+    :initform nil
+    :documentation "Database type")
    (db-connection
     :accessor db-connection
     :initform nil
@@ -16,11 +20,12 @@
 (defun on-db-open (obj)
   (let* ((app (connection-data-item obj "app-data")))
     (form-dialog obj nil
-		 '(("Database Type" :db-type (("SQLite3" :sqlite3)))
-		   ("Database Name" :db-name))
+		 '(("Database Type" :db-type :select (("SQLite3" :sqlite3)))
+		   ("Database Name" :db-name :filename "./"))
 		 (lambda (results)
 		   (when results
 		     (format t "open db : ~A" (cadr (assoc :db-name results)))
+		     (setf (db-type app) (cadr (assoc :db-type results)))
 		     (setf (db-connection app)
 			   (sqlite:connect (cadr (assoc :db-name results))))
 		     (setf (title (html-document (body app)))
@@ -30,7 +35,7 @@
 (defun on-db-close (obj)
   (let ((app (connection-data-item obj "app-data")))
     (when (db-connection app)
-      (sqlite:disconnect (db-connection app))
+      (sqlite:disconnect (db-connection app))      
       (setf (db-connection app) nil))
     (print "db disconnected")
     (setf (title (html-document (body app))) "CLOG DB Admin")))

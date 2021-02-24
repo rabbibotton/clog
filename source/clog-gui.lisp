@@ -108,6 +108,10 @@
     :accessor modal-background
     :initform nil
     :documentation "Modal Background")
+   (modal-count
+    :accessor modal-count
+    :initform 0
+    :documentation "Count of nested modal windows")
    (in-drag
     :accessor in-drag
     :initform nil
@@ -971,8 +975,10 @@ interactions. Use window-end-modal to undo."))
 
 (defmethod window-make-modal ((obj clog-gui-window))
   (let ((app (connection-data-item obj "clog-gui")))
-    (setf (modal-background app) (create-div (body app) :class "w3-overlay"))
-    (setf (display (modal-background app)) :block)
+    (when (= (modal-count app) 0)
+      (setf (modal-background app) (create-div (body app) :class "w3-overlay"))
+      (setf (display (modal-background app)) :block))
+    (incf (modal-count app))
     (setf (keep-on-top obj) t)
     (setf (z-index obj) 4)))
 
@@ -985,7 +991,9 @@ interactions. Use window-end-modal to undo."))
 
 (defmethod window-end-modal ((obj clog-gui-window))
   (let ((app (connection-data-item obj "clog-gui")))
-    (destroy (modal-background app))
+    (decf (modal-count app))
+    (when (<= (modal-count app) 0)
+      (destroy (modal-background app)))
     (window-focus obj)))
 
 ;;;;;;;;;;;;;;;;;;;
@@ -1392,27 +1400,30 @@ Calls on-input with t if confirmed or nil if canceled."
 						  (html-id nil))
   "Create a form dialog box with CONTENT followed by FIELDS centered.
 Fields is an a-list of field names to field descriptions, a third element
-can be added of another a-list of option Text to Value. Calls on-input
+can be added to state field is :filename followed by default dir or
+is a select followed by an a-list of option Text to Value. Calls on-input
 with a-list of field name to value if confirmed or nil if canceled."
   (unless html-id
     (setf html-id (clog-connection:generate-id)))
   (let* ((body (connection-data-item obj "clog-body"))
 	 (fls (format nil "~{~A~}"
 		      (mapcar (lambda (l)
-				(if (third l)
-				    (format nil
-					    "<div><label class='w3-text-black'><b>~A</b></label>~
+				(cond
+				  ((eq (third l) :select)
+				   (format nil
+					   "<div><label class='w3-text-black'><b>~A</b></label>~
 			       <select class='w3-select w3-border' name='~A-~A'>~A</select>"
-					    (first l) html-id (second l)
-					    (format nil "~{~A~}"
-						    (mapcar (lambda (s)
-							      (format nil
-					     "<option value='~A'>~A</option>" (second s) (first s)))
-							    (third l))))
-				    (format nil
+					   (first l) html-id (second l)
+					   (format nil "~{~A~}"
+						   (mapcar (lambda (s)
+							     (format nil
+			      "<option value='~A'>~A</option>" (second s) (first s)))
+							   (fourth l)))))
+				  (t
+				   (format nil
 					    "<div><label class='w3-text-black'><b>~A</b></label>~
-                               <input class='w3-input w3-border' type='text' name='~A-~A'></div>"
-                                            (first l) html-id (second l))))
+                               <input class='w3-input w3-border' type='text' name='~A-~A' id='~A-~A'></div>"
+                                            (first l) html-id (second l) html-id (second l)))))
 			      fields)))
 	 (win  (create-gui-window obj
 				  :title          title
@@ -1450,6 +1461,18 @@ with a-list of field name to value if confirmed or nil if canceled."
     (setf (visiblep win) t)
     (when modal
       (window-make-modal win))
+    (mapcar (lambda (l)
+	      (when (eq (third l) :filename)
+		(let ((fld (attach-as-child body (format nil "~A-~A"
+							    html-id
+							    (second l))
+					    :clog-type 'clog:clog-form-element)))
+		  (set-on-click fld (lambda (obj)
+				      (declare (ignore obj))
+				      (server-file-dialog body (first l) (fourth l)
+							  (lambda (fname)
+							    (setf (value fld) fname))))))))
+	    fields)
     (js-execute obj (format nil "$('[name=~A-~A]').focus()"
 			    html-id
 			    (cadar fields)))
@@ -1464,7 +1487,7 @@ with a-list of field name to value if confirmed or nil if canceled."
 			 (window-end-modal win))
 		       (let ((result (mapcar (lambda (l)
 					       `(,(second l)
-						 ,(if (third l)
+						 ,(if (eq (third l) :select)
 						      (select-value win (format nil "~A-~A"
 										html-id
 										(second l)))
