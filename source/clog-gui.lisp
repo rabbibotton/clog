@@ -1439,8 +1439,8 @@ Special field types
    =============  ==================
    :filename      default dir -- NOTE: This is _server_ side!
    :checkbox      t if checked
-   :radiobox      a-list ((label name))
-   :select        a-list ((label name))
+   :radiobox      a-list ((label name)) a third value can be used to select
+   :select        a-list ((label name)) a third value can be used to select 
    :text          value
      (any text input types also work :email, :tel, etc.
       see FORM-ELEMENT-TYPE)
@@ -1461,7 +1461,12 @@ if confirmed or nil if canceled."
 					   (format nil "~{~A~}"
 						   (mapcar (lambda (s)
 							     (format nil
-			      "<option value='~A'>~A</option>" (second s) (first s)))
+								     "<option value='~A' ~A>~A</option>"
+								     (second s)
+								     (if (third s)
+									 (third s)
+									 "")
+								     (first s)))
 							   (fourth l)))))
 				  ((eq (third l) :radio)
 				   (format nil
@@ -1471,11 +1476,14 @@ if confirmed or nil if canceled."
 						   (mapcar (lambda (s)
 							     (format nil
 			       "<div><input type=radio class='w3-radio' name='~A-~A'~
-                                      id='~A-~A-~A' value='~A'> ~
+                                      id='~A-~A-~A' value='~A' ~A> ~
                                      <label for='~A-~A-~A'>~A</label></div>"
 			                                      html-id (second l)
 							      html-id (second l) (second s)
 							      (second s)
+							      (if (third s)
+								  (third s)
+								  "")
 							      html-id (second l) (second s)
 							      (first s)))
 							   (fourth l)))))
