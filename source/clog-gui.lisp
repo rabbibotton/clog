@@ -1425,11 +1425,28 @@ Calls on-input with t if confirmed or nil if canceled."
 						  (width 400) (height 500)
 						  (client-movement nil)
 						  (html-id nil))
-  "Create a form dialog box with CONTENT followed by FIELDS centered.
-Fields is an a-list of field names to field descriptions, a third element
-can be added to state field is :filename followed by default dir or
-is a select followed by an a-list of option Text to Value. Calls on-input
-with a-list of field name to value if confirmed or nil if canceled."
+  "Create a form dialog box with CONTENT followed by FIELDS.
+Fields is a list of lists each list has:
+
+    (1) Field name         - Used for (name attribute)
+    (2) Field description  - Used for label
+    (3) Field type         - Optional (defaults to :text)
+    (4) Field type options - Optional
+
+Special field types
+
+   Field Type     Field Type Options
+   =============  ==================
+   :filename      default dir -- NOTE: This is _server_ side!
+   :checkbox      t if checked
+   :radiobox      a-list ((label name))
+   :select        a-list ((label name))
+   :text          value
+     (any text input types also work :email, :tel, etc.
+      see FORM-ELEMENT-TYPE)
+
+Calls on-input after OK or Cancel with a-list of field name to value
+if confirmed or nil if canceled."
   (unless html-id
     (setf html-id (clog-connection:generate-id)))
   (let* ((body (connection-data-item obj "clog-body"))
@@ -1465,19 +1482,26 @@ with a-list of field name to value if confirmed or nil if canceled."
 				  ((eq (third l) :checkbox)
 				   (format nil
 					   "<div><input class='w3-check' type='checkbox' ~
-                                                  name='~A-~A' id='~A-~A'> ~
+                                                  name='~A-~A' id='~A-~A' ~A> ~
                                                   <label class='w3-text-black' for='~A-~A'>~
                                                   <b>~A</b></label>~
                                             </div>"
 					   html-id (second l) html-id (second l)
+					   (if (fourth l)
+					       "checked"
+					       "")
 					   html-id (second l)
 					   (first l)))
 				  ((third l)
 				   (format nil
 					   "<div><label class='w3-text-black'><b>~A</b></label>~
-                               <input class='w3-input w3-border' type='~A' name='~A-~A' id='~A-~A'></div>"
+                                                 <input class='w3-input w3-border' type='~A'~
+                                                  name='~A-~A' id='~A-~A' value='~A'></div>"
                                    (first l) (third l)
-				   html-id (second l) html-id (second l)))
+				   html-id (second l) html-id (second l)
+				   (if (fourth l)
+				       (fourth l)
+				       "")))
 				  (t
 				   (format nil
 					    "<div><label class='w3-text-black'><b>~A</b></label>~

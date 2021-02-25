@@ -54,23 +54,27 @@
       (setf (db-connection app) nil))
     (setf (title (html-document (body app))) "CLOG DB Admin")))
 
-(defun results-window (app sql &key (title nil))
+(defun results-window (app sql &key (title nil) (on-click-row nil))
   (unless title
     (setf title sql))
-  (let* ((prep (sqlite:prepare-statement (db-connection app) sql))
-	 (st   (sqlite:execute-to-list (db-connection app) sql))
-	 (win  (create-gui-window (body app)
-				  :width 500
-				  :height 400
-				  :title title))
-	 (body (window-content win))
-	 (rt   (create-table body :class "w3-table-all"))
-	 (th   (create-table-head rt :class "w3-green"))
+  (let* ((prep  (sqlite:prepare-statement (db-connection app) sql))
+	 (st    (sqlite:execute-to-list (db-connection app) sql))
+	 (win   (create-gui-window (body app)
+				   :width 500
+				   :height 400
+				   :title title))
+	 (body  (window-content win))
+	 (rt    (create-table body :class "w3-table-all w3-hover"))
+	 (th    (create-table-head rt :class "w3-green"))
+	 (names (sqlite:statement-column-names prep))
 	 (cr))
-    (dolist (name (sqlite:statement-column-names prep))
+    (dolist (name names)
       (create-table-heading th :content name))
     (dolist (row st)
       (setf cr (create-table-row rt))
+      (when on-click-row
+	(set-on-click cr (lambda (obj)
+			   (funcall on-click-row obj names row))))
       (dolist (value row)
 	(create-table-column cr :content value)))))
 
@@ -96,12 +100,22 @@
 		       (results-window app "select changes()" :title (cadr (assoc :db-query results)))))
 		   :title "Run Database Query" :height 200))))
 
+(defun edit-record (obj names data)
+  
+
 (defun on-query-tables (obj)
   (let ((app (connection-data-item obj "app-data")))
     (when (db-connection app)
       (results-window app "select tbl_name as 'Table', sql as SQL from sqlite_master where type='table'"
-		      :title "Double Click for Table"))))
-      
+		      :title "Click for Table"
+		      :on-click-row (lambda (obj names data)
+				      (results-window app
+						      (format nil "select rowid,* from ~A"
+							      (car data))
+						      :title (format nil "Click to Edit Row of ~A"
+								     (car data))
+						      :on-click-row #'edit-record))))))
+				      
 (defun on-help-about (obj)
   (let ((about (create-gui-window obj
 				  :title   "About"
