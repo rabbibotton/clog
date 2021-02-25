@@ -17,7 +17,7 @@
 (defun on-file-browse (obj)
   (let* ((win (create-gui-window obj :title "Browse")))
     (create-child (window-content win)
-		  "<iframe width=100% height=98% src='https://common-lisp.net/'></iframe>")))
+		  "<iframe style='width:100%;height:98%;' src='https://common-lisp.net/'></iframe>")))
 
 (defun on-file-drawing (obj)
   (let* ((win (create-gui-window obj :title "Drawing"))

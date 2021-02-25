@@ -12,6 +12,10 @@
     :accessor db-type
     :initform nil
     :documentation "Database type")
+   (indicator
+    :accessor indicator
+    :initform nil
+    :documentation "Indicate connection")
    (db-connection
     :accessor db-connection
     :initform nil
@@ -24,20 +28,30 @@
 		   ("Database Name" :db-name :filename "./"))
 		 (lambda (results)
 		   (when results
-		     (format t "open db : ~A" (cadr (assoc :db-name results)))
 		     (setf (db-type app) (cadr (assoc :db-type results)))
 		     (setf (db-connection app)
 			   (sqlite:connect (cadr (assoc :db-name results))))
-		     (setf (title (html-document (body app)))
+		     (remove-class (body app) "w3-blue-grey")
+		     (add-class (body app) "w3-teal")
+		     (setf (indicator app)
+			   (create-child (body app)
+					 "<div style='position:fixed;z-index:-9999;
+                                                      bottom:0px;right:0px'><div>"))
+		     (setf (inner-html (indicator app))
+			   (cadr (assoc :db-name results)))
+		     (setf (title (html-document (body app))) 
 			   (format nil "CLOG DB Admin - ~A" (cadr (assoc :db-name results))))))
 		 :title "Open Database" :height 250)))
 		   
 (defun on-db-close (obj)
   (let ((app (connection-data-item obj "app-data")))
     (when (db-connection app)
+      (remove-class (body app) "w3-teal")
+      (add-class (body app) "w3-blue-grey")
+      (destroy (indicator app))
+      (setf (indicatory app) nil)
       (sqlite:disconnect (db-connection app))      
       (setf (db-connection app) nil))
-    (print "db disconnected")
     (setf (title (html-document (body app))) "CLOG DB Admin")))
 
 (defun results-window (app sql &key (title nil))
@@ -47,7 +61,7 @@
 	 (st   (sqlite:execute-to-list (db-connection app) sql))
 	 (win  (create-gui-window (body app)
 				  :width 500
-				  :hieght 400
+				  :height 400
 				  :title title))
 	 (body (window-content win))
 	 (rt   (create-table body :class "w3-table-all"))
@@ -62,24 +76,32 @@
 
 (defun on-query-results (obj)
   (let ((app (connection-data-item obj "app-data")))
-    (form-dialog obj nil
-		 '(("Query" :db-query))
-		 (lambda (results)
-		   (when results
-		     (results-window app (cadr (assoc :db-query results)))))
-		 :title "Run Database Query" :height 200)))
+    (when (db-connection app)
+      (form-dialog obj nil
+		   '(("Query" :db-query))
+		   (lambda (results)
+		     (when results
+		       (results-window app (cadr (assoc :db-query results)))))
+		   :title "Run Database Query" :height 200))))
 
 (defun on-query-non (obj)
   (let ((app (connection-data-item obj "app-data")))
-    (form-dialog obj nil
-		 '(("Non-Query" :db-query))
-		 (lambda (results)
-		   (when results
-		     (sqlite:execute-non-query (db-connection app)
-					       (cadr (assoc :db-query results)))
-		     (results-window app "select changes()" :title (cadr (assoc :db-query results)))))
-		 :title "Run Database Query" :height 200)))
+    (when (db-connection app)
+      (form-dialog obj nil
+		   '(("Non-Query" :db-query))
+		   (lambda (results)
+		     (when results
+		       (sqlite:execute-non-query (db-connection app)
+						 (cadr (assoc :db-query results)))
+		       (results-window app "select changes()" :title (cadr (assoc :db-query results)))))
+		   :title "Run Database Query" :height 200))))
 
+(defun on-query-tables (obj)
+  (let ((app (connection-data-item obj "app-data")))
+    (when (db-connection app)
+      (results-window app "select tbl_name as 'Table', sql as SQL from sqlite_master where type='table'"
+		      :title "Double Click Row for Table"))))
+      
 (defun on-help-about (obj)
   (let ((about (create-gui-window obj
 				  :title   "About"
@@ -105,24 +127,25 @@
     (clog-gui-initialize body)
     (add-class body "w3-blue-grey")  
     (let* ((menu  (create-gui-menu-bar body))
-	   (tmp   (create-gui-menu-icon menu :on-click #'on-help-about))
+	   (icon  (create-gui-menu-icon menu :on-click #'on-help-about))
 	   (file  (create-gui-menu-drop-down menu :content "Database"))
-	   (tmp   (create-gui-menu-item file :content "Open Connection" :on-click #'on-db-open))
-	   (tmp   (create-gui-menu-item file :content "Close Connection" :on-click #'on-db-close))
 	   (qry   (create-gui-menu-drop-down menu :content "Queries"))
-	   (tmp   (create-gui-menu-item qry :content "Results Query" :on-click #'on-query-results))
-	   (tmp   (create-gui-menu-item qry :content "Execute Non Query" :on-click #'on-query-non))
 	   (win   (create-gui-menu-drop-down menu :content "Window"))
-	   (tmp   (create-gui-menu-item win :content "Maximize All" :on-click #'maximize-all-windows))
-	   (tmp   (create-gui-menu-item win :content "Normalize All" :on-click #'normalize-all-windows))
-	   (tmp   (create-gui-menu-window-select win))
-	   (help  (create-gui-menu-drop-down menu :content "Help"))
-	   (tmp   (create-gui-menu-item help :content "About" :on-click #'on-help-about))
-	   (tmp   (create-gui-menu-full-screen menu))))
+	   (help  (create-gui-menu-drop-down menu :content "Help")))
+      (declare (ignore icon))
+      (create-gui-menu-item file :content "Open Connection" :on-click #'on-db-open)
+      (create-gui-menu-item file :content "Close Connection" :on-click #'on-db-close)
+      (create-gui-menu-item qry :content "Tables" :on-click #'on-query-tables)
+      (create-gui-menu-item qry :content "Results Query" :on-click #'on-query-results)
+      (create-gui-menu-item qry :content "Execute Non Query" :on-click #'on-query-non)
+      (create-gui-menu-item win :content "Maximize All" :on-click #'maximize-all-windows)
+      (create-gui-menu-item win :content "Normalize All" :on-click #'normalize-all-windows)
+      (create-gui-menu-window-select win)
+      (create-gui-menu-item help :content "About" :on-click #'on-help-about)
+      (create-gui-menu-full-screen menu))
     (run body)
     (when (db-connection app)
-      (sqlite:disconnect (db-connection app))
-      (print "db disconnected"))))
+      (sqlite:disconnect (db-connection app)))))
 
 (defun clog-db-admin ()
   "Start clog-db-admin."
