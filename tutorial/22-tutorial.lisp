@@ -93,6 +93,17 @@
 		 (alert-dialog obj results))
 	       :height 550))
 
+(defun on-toast-alert (obj)
+  (alert-toast obj "Stop!" "To get rid of me, click the X. I have no time-out"))
+
+(defun on-toast-warn (obj)
+  (alert-toast obj "Warning!" "To get rid of me, click the X. I time-out in 5 seconds"
+	       :color-class "w3-yellow" :time-out 5))
+
+(defun on-toast-success (obj)
+  (alert-toast obj "Success!" "To get rid of me, click the X. I time-out in 2 seconds"
+	       :color-class "w3-green" :time-out 2))
+
 (defun on-help-about (obj)
   (let* ((about (create-gui-window obj
 				   :title   "About"
@@ -132,6 +143,10 @@
 	 (tmp   (create-gui-menu-item dlg :content "Confirm Dialog Box" :on-click #'on-dlg-confirm))
 	 (tmp   (create-gui-menu-item dlg :content "Form Dialog Box" :on-click #'on-dlg-form))
 	 (tmp   (create-gui-menu-item dlg :content "Server File Dialog Box" :on-click #'on-dlg-file))
+	 (tst   (create-gui-menu-drop-down menu :content "Toasts"))
+	 (tmp   (create-gui-menu-item tst :content "Alert Toast" :on-click #'on-toast-alert))
+	 (tmp   (create-gui-menu-item tst :content "Warning Toast" :on-click #'on-toast-warn))
+	 (tmp   (create-gui-menu-item tst :content "Success Toast" :on-click #'on-toast-success))
 	 (help  (create-gui-menu-drop-down menu :content "Help"))
 	 (tmp   (create-gui-menu-item help :content "About" :on-click #'on-help-about))
 	 (tmp   (create-gui-menu-full-screen menu)))

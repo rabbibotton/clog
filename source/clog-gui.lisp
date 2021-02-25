@@ -68,6 +68,7 @@
   (set-on-window-size-done     generic-function)
 
   "CLOG-GUI - Dialog Boxes"
+  (alert-toast                 function)
   (alert-dialog                function)
   (input-dialog                function)
   (confirm-dialog              function)
@@ -1216,6 +1217,32 @@ interactions. Use window-end-modal to undo."))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Implementation - Dialog Boxes
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defun alert-toast (obj title content &key
+					(color-class "w3-red")
+					(time-out nil)
+					(html-id nil))
+  "Create an alert toast with option :TIME-OUT"
+  (unless html-id
+      (setf html-id (clog-connection:generate-id)))
+  (let* ((body   (connection-data-item obj "clog-body"))
+	 (win    (create-child body
+			     (format nil
+"  <div class='w3-panel ~A w3-animate-right w3-display-container'>~
+   <span id=~A-close class='w3-button w3-large w3-display-topright'>&times;</span>~
+   <h3>~A</h3>~
+   <p>~A</p>~
+</div>"
+                              color-class
+			      html-id
+			      title
+			      content)))
+	 (closer (attach-as-child body (format nil "~A-close" html-id))))
+    (set-on-click closer (lambda (obj)
+			   (destroy win)))
+    (when time-out
+      (sleep time-out)
+      (destroy win))))
 
 (defun alert-dialog (obj content &key (modal t)
 				   (title "About")
