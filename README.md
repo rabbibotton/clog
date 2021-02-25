@@ -83,6 +83,13 @@ CL-USER> (ql:quickload :clog)
 CL-USER> (clog:run-demo 1)
 ```
 
+The clog-db-admin tool (currently being worked on) can be run with:
+
+```
+CL-USER> (ql:quickload :clog/tools)
+CL-USER> (clog-tools:clog-db-admin)
+```
+
 You can also open a "clog-repl" window in your browser to play
 from the common-lisp repl:
 

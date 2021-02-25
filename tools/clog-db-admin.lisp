@@ -49,7 +49,7 @@
       (remove-class (body app) "w3-teal")
       (add-class (body app) "w3-blue-grey")
       (destroy (indicator app))
-      (setf (indicatory app) nil)
+      (setf (indicator app) nil)
       (sqlite:disconnect (db-connection app))      
       (setf (db-connection app) nil))
     (setf (title (html-document (body app))) "CLOG DB Admin")))
@@ -100,7 +100,7 @@
   (let ((app (connection-data-item obj "app-data")))
     (when (db-connection app)
       (results-window app "select tbl_name as 'Table', sql as SQL from sqlite_master where type='table'"
-		      :title "Double Click Row for Table"))))
+		      :title "Double Click for Table"))))
       
 (defun on-help-about (obj)
   (let ((about (create-gui-window obj
