@@ -100,8 +100,29 @@
 		       (results-window app "select changes()" :title (cadr (assoc :db-query results)))))
 		   :title "Run Database Query" :height 200))))
 
-(defun edit-record (obj names data)
-  
+(defun edit-record (obj app table names data)
+  (form-dialog obj "Edit Record"
+	       (loop for x in names for z in data append (list (list x x :text z)))
+	       (lambda (data)
+		 (when data
+		   (flet ((trim-last (s)
+			    (subseq s 0 (- (length s) 1))))
+		     (sqlite:execute-non-query
+		      (db-connection app)
+		      (format nil
+			      "update ~A set ~A where rowid=~A"
+			      table
+			      (trim-last (format nil "~{~A~}"
+						 (mapcar (lambda (l)
+							   (if (equalp "rowid"
+								       (first l))
+							       ""
+							       (format nil "~A='~A',"
+								       (first l)
+								       (second l))))
+							 data)))
+			      (cadar data))))
+		   (results-window app "select changes()" :title table)))))
 
 (defun on-query-tables (obj)
   (let ((app (connection-data-item obj "app-data")))
@@ -114,7 +135,9 @@
 							      (car data))
 						      :title (format nil "Click to Edit Row of ~A"
 								     (car data))
-						      :on-click-row #'edit-record))))))
+						      :on-click-row
+						      (lambda (obj names row)
+							(edit-record obj app (car data) names row))))))))
 				      
 (defun on-help-about (obj)
   (let ((about (create-gui-window obj
