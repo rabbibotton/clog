@@ -204,6 +204,10 @@ Demo Summary
 - 03-demo.lisp - IDE - A very simple common lisp IDE
                        (see source if editor dosen't load)
 
+Tool Summary
+
+- clog-db-admin  - SQLite3 admin tool
+
 High Order Extensions to CLOG (so far)
 
 - clog-gui - Desktop over the web
