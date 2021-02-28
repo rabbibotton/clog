@@ -15,7 +15,7 @@
       (create-div (window-content win) :content n))))
 
 (defun on-file-browse (obj)
-  (let* ((win (create-gui-window obj :title "Browse")))
+  (let ((win (create-gui-window obj :title "Browse")))
     (create-child (window-content win)
 		  "<iframe style='width:100%;height:98%;' src='https://common-lisp.net/'></iframe>")))
 

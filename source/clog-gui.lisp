@@ -6,9 +6,15 @@
 ;;;; clog-gui.lisp                                                         ;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+;;; Like clog-web, clog-gui uses w3.css as the underlying framework. w3.css is
+;;; a public domain css only framework for layouts, is cast and efficient and
+;;; does not require additional components by the css file. In addition
+;;; clog-gui uses jQueryUI and its default css file to provide client side
+;;; movement when needed, if clien side movement is not used it is possible
+;;; to pass nil to the initilization function for both.
+
 (mgl-pax:define-package :clog-gui
   (:documentation "CLOG-GUI a desktop GUI abstraction for CLOG")
-  (:local-nicknames (:cc :clog-connection))
   (:use #:cl #:parse-float #:clog #:mgl-pax))
 
 (cl:in-package :clog-gui)
