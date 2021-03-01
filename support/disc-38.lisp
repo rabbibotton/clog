@@ -19,7 +19,7 @@
     ;; CLOG object? This would help with matching in the if-statment.
 
     ;; DB: The answer is to use the rgb function. Although I would keep
-    ;;     state in lisp on not worry about the browser in this case/
+    ;;     state in lisp and not worry about the browser values.
     
     (print obj-color)
     ;;    (if (string-equal obj-color "purple")
