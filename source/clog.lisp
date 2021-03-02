@@ -39,6 +39,7 @@ embedded in a native template application.)"
   (@clog-canvas          section)
   (@clog-multimedia      section)
   (@clog-gui             section)
+  (@clog-web             section)
   (@clog-body            section)
   (@clog-window          section)
   (@clog-document        section)

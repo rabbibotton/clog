@@ -196,6 +196,7 @@ Tutorial Summary
 - 21-tutorial.lisp - New CLOG plugin in Common-Lisp
 - 22-tutorial.lisp - CLOG GUI Menus and Desktop Look and Feel
 - 23-tutorial.lisp - Using semaphores to wait for input
+- 24-tutorial.lisp - CLOG WEB containers (in progress)
 
 Demo Summary
 
@@ -208,6 +209,10 @@ Tool Summary
 
 - clog-db-admin  - SQLite3 admin tool
 
+Template Summary 
+
+clog-gui-template.lisp - Basic CLOG-GUI app
+
 High Order Extensions to CLOG (so far)
 
 - clog-gui - Desktop over the web
@@ -217,6 +222,14 @@ High Order Extensions to CLOG (so far)
   - File Load / Save dialogs
   - Alert, Input and Confirmation dialogs
   - Form dialogs
+  
+- clog-web - Webpage creation
+  - Auto column layouts
+  - 12 Point Grid System layouts
+  - Content containers
+  - Panels
+  - More coming _daily_
+  
 - clog-data
   - clog-db-admin - Basic database administration 
   - In progress - Database integrations

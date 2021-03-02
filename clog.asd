@@ -9,7 +9,7 @@
   :serial t
   :pathname "source/"
   :depends-on (#:clack #:websocket-driver #:alexandria #:hunchentoot #:cl-ppcre
-	       #:bordeaux-threads #:trivial-open-browser #:cl-dbi #:parse-float
+	       #:bordeaux-threads #:trivial-open-browser #:parse-float
 	       #:sqlite #:lack-middleware-static #:mgl-pax #:quri)
   :components ((:file "clog-connection")
 	       (:file "clog")
@@ -28,6 +28,7 @@
 	       (:file "clog-body")
 	       (:file "clog-system")
 	       (:file "clog-gui")
+	       (:file "clog-web")
 	       (:file "clog-helpers")))
 
 (asdf:defsystem #:clog/tools
