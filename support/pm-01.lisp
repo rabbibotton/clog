@@ -28,7 +28,7 @@
   (let ((ta (create-text-area body)) ;; Returns a clog-text-area
 	(gv (create-button body :content "Show me the value")))
     
-    ;; This code is the idea using a clog-text-area returned
+    ;; This code is the ideal as using a clog-text-area
     (set-on-click gv (lambda (obj)
 		       (alert-dialog body (value ta)))))
     
