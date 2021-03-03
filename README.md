@@ -230,8 +230,17 @@ High Order Extensions to CLOG (so far)
   - Content containers
   - Panels
   - Sidebar menus
-  - More coming _daily_
-  
+  - Compositor containers
+  - More coming _daily_ :) Mar 2 2021
+
 - clog-data
   - clog-db-admin - Basic database administration 
   - In progress - Database integrations
+
+Post 1.0 (~ April time)
+- clog-auth
+  - coming soon - tiered authorization, user profiles, etc
+
+- clog-monitor
+  - coming soon - logging, usage, etc.
+
