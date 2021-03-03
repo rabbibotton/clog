@@ -44,6 +44,7 @@
   (clog-web-compositor     class)
   (create-web-compositor   generic-function)
   (web-padding-class-type  type)
+  (composite-on-hover      generic-function)
   (composite-top-middle    generic-function)
   (composite-top-left      generic-function)
   (composite-top-right     generic-function)
@@ -247,6 +248,12 @@ then the visiblep propetery will be set to nil on creation."))
   '(member :padding-small :padding :padding-large :padding-16 :padding-24
     :padding-32 :padding-48 :padding-64	:padding-top-64 :padding-top-48
     :padding-top-48 :padding-top-32))
+
+(defgeneric composite-on-hover (clog-element)
+  (:documentation "Composite CLOG-ELEMENT on on-hover."))
+
+(defmethod composite-on-hover ((obj clog-element))
+  (add-class obj "w3-display-hover"))
 
 (defgeneric composite-top-middle (clog-element &key padding-class)
   (:documentation "Composite CLOG-ELEMENT on top-middle."))
