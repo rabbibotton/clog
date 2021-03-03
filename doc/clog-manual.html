@@ -46,13 +46,14 @@
 <li><a href="#x-28CLOG-3A-40CLOG-CANVAS-20MGL-PAX-3ASECTION-29" title="CLOG Canvas Objects">10 CLOG Canvas Objects</a></li>
 <li><a href="#x-28CLOG-3A-40CLOG-MULTIMEDIA-20MGL-PAX-3ASECTION-29" title="CLOG Multimedia Objects">11 CLOG Multimedia Objects</a></li>
 <li><a href="#x-28CLOG-3A-40CLOG-GUI-20MGL-PAX-3ASECTION-29" title="CLOG GUI Objects">12 CLOG GUI Objects</a></li>
-<li><a href="#x-28CLOG-3A-40CLOG-BODY-20MGL-PAX-3ASECTION-29" title="CLOG Body Objects">13 CLOG Body Objects</a></li>
-<li><a href="#x-28CLOG-3A-40CLOG-WINDOW-20MGL-PAX-3ASECTION-29" title="CLOG Window Objects">14 CLOG Window Objects</a></li>
-<li><a href="#x-28CLOG-3A-40CLOG-DOCUMENT-20MGL-PAX-3ASECTION-29" title="CLOG Document Objects">15 CLOG Document Objects</a></li>
-<li><a href="#x-28CLOG-3A-40CLOG-LOCATION-20MGL-PAX-3ASECTION-29" title="CLOG Location Objects">16 CLOG Location Objects</a></li>
-<li><a href="#x-28CLOG-3A-40CLOG-NAVIGATOR-20MGL-PAX-3ASECTION-29" title="CLOG Navigator Objects">17 CLOG Navigator Objects</a></li>
-<li><a href="#x-28CLOG-3A-40CLOG-HELPERS-20MGL-PAX-3ASECTION-29" title="CLOG Helper Functions">18 CLOG Helper Functions</a></li>
-<li><a href="#x-28CLOG-3A-40CLOG-INTERNALS-20MGL-PAX-3ASECTION-29" title="CLOG Framework internals and extensions">19 CLOG Framework internals and extensions</a></li>
+<li><a href="#x-28CLOG-3A-40CLOG-WEB-20MGL-PAX-3ASECTION-29" title="CLOG Web Objects">13 CLOG Web Objects</a></li>
+<li><a href="#x-28CLOG-3A-40CLOG-BODY-20MGL-PAX-3ASECTION-29" title="CLOG Body Objects">14 CLOG Body Objects</a></li>
+<li><a href="#x-28CLOG-3A-40CLOG-WINDOW-20MGL-PAX-3ASECTION-29" title="CLOG Window Objects">15 CLOG Window Objects</a></li>
+<li><a href="#x-28CLOG-3A-40CLOG-DOCUMENT-20MGL-PAX-3ASECTION-29" title="CLOG Document Objects">16 CLOG Document Objects</a></li>
+<li><a href="#x-28CLOG-3A-40CLOG-LOCATION-20MGL-PAX-3ASECTION-29" title="CLOG Location Objects">17 CLOG Location Objects</a></li>
+<li><a href="#x-28CLOG-3A-40CLOG-NAVIGATOR-20MGL-PAX-3ASECTION-29" title="CLOG Navigator Objects">18 CLOG Navigator Objects</a></li>
+<li><a href="#x-28CLOG-3A-40CLOG-HELPERS-20MGL-PAX-3ASECTION-29" title="CLOG Helper Functions">19 CLOG Helper Functions</a></li>
+<li><a href="#x-28CLOG-3A-40CLOG-INTERNALS-20MGL-PAX-3ASECTION-29" title="CLOG Framework internals and extensions">20 CLOG Framework internals and extensions</a></li>
 </ul>
 
 <h6>[in package CLOG]</h6>
@@ -3374,6 +3375,14 @@ instead through the value property.</p></li>
 group called <code>NAME</code>.</p></li>
 </ul>
 
+<p><a id='x-28CLOG-3ACHECKBOX-VALUE-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ACHECKBOX-VALUE-20GENERIC-FUNCTION-29" >CHECKBOX-VALUE</a></span></span> <span class="locative-args">CLOG-OBJ NAME</span></span></p>
+
+<p>Returns t or nil on the selected checkbox button.</p></li>
+</ul>
+
 <p><a id='x-28CLOG-3ASELECT-VALUE-20GENERIC-FUNCTION-29'></a></p>
 
 <ul>
@@ -4465,7 +4474,7 @@ is nil unbind the event.</p></li>
 
 <p><a id='x-28CLOG-3A-40CLOG-GUI-20MGL-PAX-3ASECTION-29'></a></p>
 
-<p><span class="outer-navigation"><span class="navigation"> <a href="#x-28CLOG-3A-40CLOG-MULTIMEDIA-20MGL-PAX-3ASECTION-29" title="CLOG Multimedia Objects">&#8592;</a> <a href="#x-28CLOG-3A-40CLOG-MANUAL-20MGL-PAX-3ASECTION-29" title="The CLOG manual">&#8593;</a> <a href="#x-28CLOG-3A-40CLOG-BODY-20MGL-PAX-3ASECTION-29" title="CLOG Body Objects">&#8594;</a> <a href="#x-28CLOG-3A-40CLOG-GUI-20MGL-PAX-3ASECTION-29" title="CLOG GUI Objects">&#8634;</a></span></span></p>
+<p><span class="outer-navigation"><span class="navigation"> <a href="#x-28CLOG-3A-40CLOG-MULTIMEDIA-20MGL-PAX-3ASECTION-29" title="CLOG Multimedia Objects">&#8592;</a> <a href="#x-28CLOG-3A-40CLOG-MANUAL-20MGL-PAX-3ASECTION-29" title="The CLOG manual">&#8593;</a> <a href="#x-28CLOG-3A-40CLOG-WEB-20MGL-PAX-3ASECTION-29" title="CLOG Web Objects">&#8594;</a> <a href="#x-28CLOG-3A-40CLOG-GUI-20MGL-PAX-3ASECTION-29" title="CLOG GUI Objects">&#8634;</a></span></span></p>
 
 <h2><a href="#x-28CLOG-3A-40CLOG-GUI-20MGL-PAX-3ASECTION-29">12 CLOG GUI Objects</a></h2>
 
@@ -4841,6 +4850,14 @@ interactions. Use window-end-modal to undo.</p></li>
 
 <p><code>CLOG-GUI</code> - Dialog Boxes</p>
 
+<p><a id='x-28CLOG-GUI-3AALERT-TOAST-20FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#x-28CLOG-GUI-3AALERT-TOAST-20FUNCTION-29" >ALERT-TOAST</a></span></span> <span class="locative-args">OBJ TITLE CONTENT &amp;KEY (COLOR-CLASS &quot;w3-red&quot;) (TIME-OUT <code>NIL</code>) (HTML-ID <code>NIL</code>)</span></span></p>
+
+<p>Create an alert toast with option <code>:TIME-OUT</code></p></li>
+</ul>
+
 <p><a id='x-28CLOG-GUI-3AALERT-DIALOG-20FUNCTION-29'></a></p>
 
 <ul>
@@ -4872,10 +4889,29 @@ Calls on-input with t if confirmed or nil if canceled.</p></li>
 <ul>
 <li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#x-28CLOG-GUI-3AFORM-DIALOG-20FUNCTION-29" >FORM-DIALOG</a></span></span> <span class="locative-args">OBJ CONTENT FIELDS ON-INPUT &amp;KEY (MODAL <code>T</code>) (TITLE &quot;Form&quot;) (OK-TEXT &quot;OK&quot;) (CANCEL-TEXT &quot;Cancel&quot;) (LEFT <code>NIL</code>) (TOP <code>NIL</code>) (WIDTH 400) (HEIGHT 500) (CLIENT-MOVEMENT <code>NIL</code>) (HTML-ID <code>NIL</code>)</span></span></p>
 
-<p>Create a form dialog box with <code>CONTENT</code> followed by <code>FIELDS</code> centered.
-Fields is an a-list of field names to field descriptions, a third element
-can be added of another a-list of option Text to Value. Calls on-input
-with a-list of field name to value if confirmed or nil if canceled.</p></li>
+<p>Create a form dialog box with <code>CONTENT</code> followed by <code>FIELDS</code>.
+Fields is a list of lists each list has:</p>
+
+<pre><code>(1) Field name         - Used for (name attribute)
+(2) Field description  - Used for label
+(3) Field type         - Optional (defaults to :text)
+(4) Field type options - Optional
+</code></pre>
+
+<p>Special field types</p>
+
+<p>Field Type     Field Type Options
+   =============  ==================
+   :filename      default dir -- NOTE: This is <em>server</em> side!
+   :checkbox      t if checked
+   :radiobox      a-list ((label name)) a third value can be used to select
+   :select        a-list ((label name)) a third value can be used to select 
+   :text          value
+     (any text input types also work :email, :tel, etc.
+      see <a href="#x-28CLOG-3AFORM-ELEMENT-TYPE-20-28TYPE-29-29" title="(CLOG:FORM-ELEMENT-TYPE (TYPE))"><code>FORM-ELEMENT-TYPE</code></a>)</p>
+
+<p>Calls on-input after OK or Cancel with a-list of field name to value
+if confirmed or nil if canceled.</p></li>
 </ul>
 
 <p><a id='x-28CLOG-GUI-3ASERVER-FILE-DIALOG-20FUNCTION-29'></a></p>
@@ -4887,11 +4923,373 @@ with a-list of field name to value if confirmed or nil if canceled.</p></li>
 machine, upon close <code>ON-FILE-NAME</code> called with filename or nil if failure.</p></li>
 </ul>
 
+<p><a id='x-28CLOG-3A-40CLOG-WEB-20MGL-PAX-3ASECTION-29'></a></p>
+
+<p><span class="outer-navigation"><span class="navigation"> <a href="#x-28CLOG-3A-40CLOG-GUI-20MGL-PAX-3ASECTION-29" title="CLOG GUI Objects">&#8592;</a> <a href="#x-28CLOG-3A-40CLOG-MANUAL-20MGL-PAX-3ASECTION-29" title="The CLOG manual">&#8593;</a> <a href="#x-28CLOG-3A-40CLOG-BODY-20MGL-PAX-3ASECTION-29" title="CLOG Body Objects">&#8594;</a> <a href="#x-28CLOG-3A-40CLOG-WEB-20MGL-PAX-3ASECTION-29" title="CLOG Web Objects">&#8634;</a></span></span></p>
+
+<h2><a href="#x-28CLOG-3A-40CLOG-WEB-20MGL-PAX-3ASECTION-29">13 CLOG Web Objects</a></h2>
+
+<h6>[in package CLOG-WEB]</h6>
+
+<p><code>CLOG-WEB</code> - Web page abstraction for <code>CLOG</code></p>
+
+<p><a id='x-28CLOG-WEB-3ACLOG-WEB-INITIALIZE-20FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#x-28CLOG-WEB-3ACLOG-WEB-INITIALIZE-20FUNCTION-29" >CLOG-WEB-INITIALIZE</a></span></span> <span class="locative-args">CLOG-BODY &amp;KEY (W3-CSS-URL &quot;/css/w3.css&quot;)</span></span></p>
+
+<p>Initializes clog-web and installs a clog-web object on connection.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-WEB-3ASET-MAXIMUM-PAGE-WIDTH-IN-PIXELS-20FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#x-28CLOG-WEB-3ASET-MAXIMUM-PAGE-WIDTH-IN-PIXELS-20FUNCTION-29" >SET-MAXIMUM-PAGE-WIDTH-IN-PIXELS</a></span></span> <span class="locative-args">CLOG-BODY WIDTH</span></span></p>
+
+<p>The default width is 980 pixels.</p></li>
+</ul>
+
+<p><code>CLOG-WEB</code> - General Containers</p>
+
+<p><a id='x-28CLOG-WEB-3ACLOG-WEB-PANEL-20CLASS-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[class]</span> <span class="reference-object"><a href="#x-28CLOG-WEB-3ACLOG-WEB-PANEL-20CLASS-29" >CLOG-WEB-PANEL</a></span></span> <span class="locative-args"><a href="#x-28CLOG-3ACLOG-DIV-20CLASS-29" title="(CLOG:CLOG-DIV CLASS)">CLOG-DIV</a></span></span></p>
+
+<p>Panel for web content</p></li>
+</ul>
+
+<p><a id='x-28CLOG-WEB-3ACREATE-WEB-PANEL-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-WEB-3ACREATE-WEB-PANEL-20GENERIC-FUNCTION-29" >CREATE-WEB-PANEL</a></span></span> <span class="locative-args">CLOG-OBJ &amp;KEY CONTENT HIDDEN CLASS HTML-ID</span></span></p>
+
+<p>Create a clog-web-panel. General container with 16px left
+and right padding and 16x top and bottom margin. If hidden is t then then the
+visiblep propetery will be set to nil on creation.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-WEB-3ACLOG-WEB-CONTENT-20CLASS-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[class]</span> <span class="reference-object"><a href="#x-28CLOG-WEB-3ACLOG-WEB-CONTENT-20CLASS-29" >CLOG-WEB-CONTENT</a></span></span> <span class="locative-args"><a href="#x-28CLOG-3ACLOG-DIV-20CLASS-29" title="(CLOG:CLOG-DIV CLASS)">CLOG-DIV</a></span></span></p>
+
+<p>Content for web content</p></li>
+</ul>
+
+<p><a id='x-28CLOG-WEB-3ACREATE-WEB-CONTENT-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-WEB-3ACREATE-WEB-CONTENT-20GENERIC-FUNCTION-29" >CREATE-WEB-CONTENT</a></span></span> <span class="locative-args">CLOG-OBJ &amp;KEY CONTENT MAXIMUM-WIDTH HIDDEN CLASS HTML-ID</span></span></p>
+
+<p>Create a clog-web-content. General container with 16px left
+and right padding. If hidden is t then then the visiblep propetery will be set
+to nil on creation.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-WEB-3ACLOG-WEB-CODE-20CLASS-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[class]</span> <span class="reference-object"><a href="#x-28CLOG-WEB-3ACLOG-WEB-CODE-20CLASS-29" >CLOG-WEB-CODE</a></span></span> <span class="locative-args"><a href="#x-28CLOG-3ACLOG-DIV-20CLASS-29" title="(CLOG:CLOG-DIV CLASS)">CLOG-DIV</a></span></span></p>
+
+<p>Code for web code</p></li>
+</ul>
+
+<p><a id='x-28CLOG-WEB-3ACREATE-WEB-CODE-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-WEB-3ACREATE-WEB-CODE-20GENERIC-FUNCTION-29" >CREATE-WEB-CODE</a></span></span> <span class="locative-args">CLOG-OBJ &amp;KEY CONTENT HIDDEN CLASS HTML-ID</span></span></p>
+
+<p>Create a clog-web-code. Code content container.
+If hidden is t then then the visiblep propetery will be set
+to nil on creation.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-WEB-3ACLOG-WEB-MAIN-20CLASS-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[class]</span> <span class="reference-object"><a href="#x-28CLOG-WEB-3ACLOG-WEB-MAIN-20CLASS-29" >CLOG-WEB-MAIN</a></span></span> <span class="locative-args"><a href="#x-28CLOG-3ACLOG-DIV-20CLASS-29" title="(CLOG:CLOG-DIV CLASS)">CLOG-DIV</a></span></span></p>
+
+<p>Main for web content</p></li>
+</ul>
+
+<p><a id='x-28CLOG-WEB-3ACREATE-WEB-MAIN-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-WEB-3ACREATE-WEB-MAIN-20GENERIC-FUNCTION-29" >CREATE-WEB-MAIN</a></span></span> <span class="locative-args">CLOG-OBJ &amp;KEY CONTENT HIDDEN CLASS HTML-ID</span></span></p>
+
+<p>Create a clog-web-main. Container for main content when
+using a collapsable sidebar  or other whole page shifting technique.
+If hidden is t then then the visiblep propetery will be set to nil on
+creation.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-WEB-3ACLOG-WEB-SIDEBAR-20CLASS-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[class]</span> <span class="reference-object"><a href="#x-28CLOG-WEB-3ACLOG-WEB-SIDEBAR-20CLASS-29" >CLOG-WEB-SIDEBAR</a></span></span> <span class="locative-args"><a href="#x-28CLOG-3ACLOG-DIV-20CLASS-29" title="(CLOG:CLOG-DIV CLASS)">CLOG-DIV</a></span></span></p>
+
+<p>Sidebar for web content</p></li>
+</ul>
+
+<p><a id='x-28CLOG-WEB-3ACREATE-WEB-SIDEBAR-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-WEB-3ACREATE-WEB-SIDEBAR-20GENERIC-FUNCTION-29" >CREATE-WEB-SIDEBAR</a></span></span> <span class="locative-args">CLOG-OBJ &amp;KEY CONTENT HIDDEN CLASS HTML-ID</span></span></p>
+
+<p>Create a clog-web-sidebar. Container for sidebar content.
+If hidden is t then then the visiblep propetery will be set to nil on
+creation.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-WEB-3ACLOG-WEB-SIDEBAR-ITEM-20CLASS-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[class]</span> <span class="reference-object"><a href="#x-28CLOG-WEB-3ACLOG-WEB-SIDEBAR-ITEM-20CLASS-29" >CLOG-WEB-SIDEBAR-ITEM</a></span></span> <span class="locative-args"><a href="#x-28CLOG-3ACLOG-BUTTON-20CLASS-29" title="(CLOG:CLOG-BUTTON CLASS)">CLOG-BUTTON</a></span></span></p>
+
+<p>Sidebar-Item for web content</p></li>
+</ul>
+
+<p><a id='x-28CLOG-WEB-3ACREATE-WEB-SIDEBAR-ITEM-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-WEB-3ACREATE-WEB-SIDEBAR-ITEM-20GENERIC-FUNCTION-29" >CREATE-WEB-SIDEBAR-ITEM</a></span></span> <span class="locative-args">CLOG-OBJ &amp;KEY CONTENT HIDDEN CLASS HTML-ID</span></span></p>
+
+<p>Create a clog-web-sidebar-item. A sidebar menu bar item.
+If hidden is t then then the visiblep propetery will be set to nil on
+creation.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-WEB-3ACLOG-WEB-SIDEBAR-ITEM-20CLASS-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[class]</span> <span class="reference-object"><a href="#x-28CLOG-WEB-3ACLOG-WEB-SIDEBAR-ITEM-20CLASS-29" >CLOG-WEB-SIDEBAR-ITEM</a></span></span> <span class="locative-args"><a href="#x-28CLOG-3ACLOG-BUTTON-20CLASS-29" title="(CLOG:CLOG-BUTTON CLASS)">CLOG-BUTTON</a></span></span></p>
+
+<p>Sidebar-Item for web content</p></li>
+</ul>
+
+<p><a id='x-28CLOG-WEB-3ACREATE-WEB-SIDEBAR-ITEM-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-WEB-3ACREATE-WEB-SIDEBAR-ITEM-20GENERIC-FUNCTION-29" >CREATE-WEB-SIDEBAR-ITEM</a></span></span> <span class="locative-args">CLOG-OBJ &amp;KEY CONTENT HIDDEN CLASS HTML-ID</span></span></p>
+
+<p>Create a clog-web-sidebar-item. A sidebar menu bar item.
+If hidden is t then then the visiblep propetery will be set to nil on
+creation.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-WEB-3ACLOG-WEB-COMPOSITOR-20CLASS-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[class]</span> <span class="reference-object"><a href="#x-28CLOG-WEB-3ACLOG-WEB-COMPOSITOR-20CLASS-29" >CLOG-WEB-COMPOSITOR</a></span></span> <span class="locative-args"><a href="#x-28CLOG-3ACLOG-DIV-20CLASS-29" title="(CLOG:CLOG-DIV CLASS)">CLOG-DIV</a></span></span></p>
+
+<p>Compositor for compositing layers of web content</p></li>
+</ul>
+
+<p><a id='x-28CLOG-WEB-3ACREATE-WEB-COMPOSITOR-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-WEB-3ACREATE-WEB-COMPOSITOR-20GENERIC-FUNCTION-29" >CREATE-WEB-COMPOSITOR</a></span></span> <span class="locative-args">CLOG-OBJ &amp;KEY CONTENT HIDDEN CLASS HTML-ID</span></span></p>
+
+<p>Create a clog-web-compositor. Allows compositing of content
+on top of other content. Content is added as children and then
+composit-location is called on the object of that content. If hidden is t then
+then the visiblep propetery will be set to nil on creation.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-WEB-3AWEB-PADDING-CLASS-TYPE-20-28TYPE-29-29'></a></p>
+
+<ul>
+<li><span class=reference-bullet><span class=reference><span class="locative-type">[type]</span> <span class="reference-object"><a href="#x-28CLOG-WEB-3AWEB-PADDING-CLASS-TYPE-20-28TYPE-29-29" >WEB-PADDING-CLASS-TYPE</a></span></span></span></li>
+</ul>
+
+<p><a id='x-28CLOG-WEB-3ACOMPOSITE-TOP-MIDDLE-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-WEB-3ACOMPOSITE-TOP-MIDDLE-20GENERIC-FUNCTION-29" >COMPOSITE-TOP-MIDDLE</a></span></span> <span class="locative-args">CLOG-ELEMENT &amp;KEY PADDING-CLASS</span></span></p>
+
+<p>Composite <code>CLOG-ELEMENT</code> on top-middle.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-WEB-3ACOMPOSITE-TOP-LEFT-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-WEB-3ACOMPOSITE-TOP-LEFT-20GENERIC-FUNCTION-29" >COMPOSITE-TOP-LEFT</a></span></span> <span class="locative-args">CLOG-ELEMENT &amp;KEY PADDING-CLASS</span></span></p>
+
+<p>Composite <code>CLOG-ELEMENT</code> on top-left.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-WEB-3ACOMPOSITE-TOP-RIGHT-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-WEB-3ACOMPOSITE-TOP-RIGHT-20GENERIC-FUNCTION-29" >COMPOSITE-TOP-RIGHT</a></span></span> <span class="locative-args">CLOG-ELEMENT &amp;KEY PADDING-CLASS</span></span></p>
+
+<p>Composite <code>CLOG-ELEMENT</code> on top-right.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-WEB-3ACOMPOSITE-BOTTOM-MIDDLE-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-WEB-3ACOMPOSITE-BOTTOM-MIDDLE-20GENERIC-FUNCTION-29" >COMPOSITE-BOTTOM-MIDDLE</a></span></span> <span class="locative-args">CLOG-ELEMENT &amp;KEY PADDING-CLASS</span></span></p>
+
+<p>Composite <code>CLOG-ELEMENT</code> on bottom-middle.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-WEB-3ACOMPOSITE-BOTTOM-LEFT-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-WEB-3ACOMPOSITE-BOTTOM-LEFT-20GENERIC-FUNCTION-29" >COMPOSITE-BOTTOM-LEFT</a></span></span> <span class="locative-args">CLOG-ELEMENT &amp;KEY PADDING-CLASS</span></span></p>
+
+<p>Composite <code>CLOG-ELEMENT</code> on bottom-left.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-WEB-3ACOMPOSITE-BOTTOM-RIGHT-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-WEB-3ACOMPOSITE-BOTTOM-RIGHT-20GENERIC-FUNCTION-29" >COMPOSITE-BOTTOM-RIGHT</a></span></span> <span class="locative-args">CLOG-ELEMENT &amp;KEY PADDING-CLASS</span></span></p>
+
+<p>Composite <code>CLOG-ELEMENT</code> on bottom-right.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-WEB-3ACOMPOSITE-MIDDLE-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-WEB-3ACOMPOSITE-MIDDLE-20GENERIC-FUNCTION-29" >COMPOSITE-MIDDLE</a></span></span> <span class="locative-args">CLOG-ELEMENT &amp;KEY PADDING-CLASS</span></span></p>
+
+<p>Composite <code>CLOG-ELEMENT</code> on middle.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-WEB-3ACOMPOSITE-LEFT-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-WEB-3ACOMPOSITE-LEFT-20GENERIC-FUNCTION-29" >COMPOSITE-LEFT</a></span></span> <span class="locative-args">CLOG-ELEMENT &amp;KEY PADDING-CLASS</span></span></p>
+
+<p>Composite <code>CLOG-ELEMENT</code> on left.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-WEB-3ACOMPOSITE-RIGHT-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-WEB-3ACOMPOSITE-RIGHT-20GENERIC-FUNCTION-29" >COMPOSITE-RIGHT</a></span></span> <span class="locative-args">CLOG-ELEMENT &amp;KEY PADDING-CLASS</span></span></p>
+
+<p>Composite <code>CLOG-ELEMENT</code> on right.</p></li>
+</ul>
+
+<p><code>CLOG-WEB</code> - Auto Layout System</p>
+
+<p><a id='x-28CLOG-WEB-3ACLOG-WEB-AUTO-ROW-20CLASS-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[class]</span> <span class="reference-object"><a href="#x-28CLOG-WEB-3ACLOG-WEB-AUTO-ROW-20CLASS-29" >CLOG-WEB-AUTO-ROW</a></span></span> <span class="locative-args"><a href="#x-28CLOG-3ACLOG-DIV-20CLASS-29" title="(CLOG:CLOG-DIV CLASS)">CLOG-DIV</a></span></span></p>
+
+<p>Content for web content</p></li>
+</ul>
+
+<p><a id='x-28CLOG-WEB-3ACREATE-WEB-AUTO-ROW-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-WEB-3ACREATE-WEB-AUTO-ROW-20GENERIC-FUNCTION-29" >CREATE-WEB-AUTO-ROW</a></span></span> <span class="locative-args">CLOG-OBJ &amp;KEY HIDDEN CLASS HTML-ID</span></span></p>
+
+<p>Create a clog-web-auto-row. Container for auto-columns
+If hidden is t then then the visiblep propetery will be set to nil on
+creation.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-WEB-3ACLOG-WEB-AUTO-COLUMN-20CLASS-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[class]</span> <span class="reference-object"><a href="#x-28CLOG-WEB-3ACLOG-WEB-AUTO-COLUMN-20CLASS-29" >CLOG-WEB-AUTO-COLUMN</a></span></span> <span class="locative-args"><a href="#x-28CLOG-3ACLOG-DIV-20CLASS-29" title="(CLOG:CLOG-DIV CLASS)">CLOG-DIV</a></span></span></p>
+
+<p>Content for web content</p></li>
+</ul>
+
+<p><a id='x-28CLOG-WEB-3ACREATE-WEB-AUTO-COLUMN-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-WEB-3ACREATE-WEB-AUTO-COLUMN-20GENERIC-FUNCTION-29" >CREATE-WEB-AUTO-COLUMN</a></span></span> <span class="locative-args">CLOG-OBJ &amp;KEY CONTENT VERTICAL-ALIGN HIDDEN CLASS HTML-ID</span></span></p>
+
+<p>Create a clog-web-auto-column. Container for auto-columns
+If hidden is t then then the visiblep propetery will be set to nil on
+creation.</p></li>
+</ul>
+
+<p><code>CLOG-WEB</code> - 12 Column Grid Layout System</p>
+
+<p><a id='x-28CLOG-WEB-3ACLOG-WEB-ROW-20CLASS-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[class]</span> <span class="reference-object"><a href="#x-28CLOG-WEB-3ACLOG-WEB-ROW-20CLASS-29" >CLOG-WEB-ROW</a></span></span> <span class="locative-args"><a href="#x-28CLOG-3ACLOG-DIV-20CLASS-29" title="(CLOG:CLOG-DIV CLASS)">CLOG-DIV</a></span></span></p>
+
+<p>Row to contain columns of web content in 12 column grid</p></li>
+</ul>
+
+<p><a id='x-28CLOG-WEB-3ACREATE-WEB-ROW-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-WEB-3ACREATE-WEB-ROW-20GENERIC-FUNCTION-29" >CREATE-WEB-ROW</a></span></span> <span class="locative-args">CLOG-OBJ &amp;KEY PADDING HIDDEN CLASS HTML-ID</span></span></p>
+
+<p>Create a clog-web-row. If padding is true 8px left and
+right padding is addded. If hidden is t then then the visiblep propetery will
+be set to nil on creation.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-WEB-3ACLOG-WEB-CONTAINER-20CLASS-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[class]</span> <span class="reference-object"><a href="#x-28CLOG-WEB-3ACLOG-WEB-CONTAINER-20CLASS-29" >CLOG-WEB-CONTAINER</a></span></span> <span class="locative-args"><a href="#x-28CLOG-3ACLOG-DIV-20CLASS-29" title="(CLOG:CLOG-DIV CLASS)">CLOG-DIV</a></span></span></p>
+
+<p>Container cells for web content in 12 column grid</p></li>
+</ul>
+
+<p><a id='x-28CLOG-WEB-3ACREATE-WEB-CONTAINER-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-WEB-3ACREATE-WEB-CONTAINER-20GENERIC-FUNCTION-29" >CREATE-WEB-CONTAINER</a></span></span> <span class="locative-args">CLOG-OBJ &amp;KEY CONTENT COLUMN-SIZE HIDDEN CLASS HTML-ID</span></span></p>
+
+<p>Create a clog-web-container. <code>COLUMN-SIZE</code> can be of type
+container-size-type when to set size displayed on medium and large screens
+or can use a string of &quot;s1-12 m1-12 l1-12&quot; s m or l followed by how many
+columns this container uses on small, medium or large screens. Small screens
+are always displayed full row. Total columns must add to 12 or one needs to
+be of type :w3-rest to fill space. If hidden is t then then the visiblep
+propetery will be set to nil on creation.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-WEB-3AFULL-ROW-ON-MOBILE-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-WEB-3AFULL-ROW-ON-MOBILE-20GENERIC-FUNCTION-29" >FULL-ROW-ON-MOBILE</a></span></span> <span class="locative-args">OBJ</span></span></li>
+</ul>
+
+<p><a id='x-28CLOG-WEB-3AHIDE-ON-SMALL-SCREENS-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-WEB-3AHIDE-ON-SMALL-SCREENS-20GENERIC-FUNCTION-29" >HIDE-ON-SMALL-SCREENS</a></span></span> <span class="locative-args">CLOG-ELEMENT</span></span></p>
+
+<p>Hide element on screens smaller then 601 pixels DP</p></li>
+</ul>
+
+<p><a id='x-28CLOG-WEB-3AHIDE-ON-MEDIUM-SCREENS-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-WEB-3AHIDE-ON-MEDIUM-SCREENS-20GENERIC-FUNCTION-29" >HIDE-ON-MEDIUM-SCREENS</a></span></span> <span class="locative-args">CLOG-ELEMENT</span></span></p>
+
+<p>Hide element on screens smaller then 993 pixels DP</p></li>
+</ul>
+
+<p><a id='x-28CLOG-WEB-3AHIDE-ON-LARGE-SCREENS-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-WEB-3AHIDE-ON-LARGE-SCREENS-20GENERIC-FUNCTION-29" >HIDE-ON-LARGE-SCREENS</a></span></span> <span class="locative-args">CLOG-ELEMENT</span></span></p>
+
+<p>Hide element on screens smaller then 993 pixels DP</p></li>
+</ul>
+
 <p><a id='x-28CLOG-3A-40CLOG-BODY-20MGL-PAX-3ASECTION-29'></a></p>
 
-<p><span class="outer-navigation"><span class="navigation"> <a href="#x-28CLOG-3A-40CLOG-GUI-20MGL-PAX-3ASECTION-29" title="CLOG GUI Objects">&#8592;</a> <a href="#x-28CLOG-3A-40CLOG-MANUAL-20MGL-PAX-3ASECTION-29" title="The CLOG manual">&#8593;</a> <a href="#x-28CLOG-3A-40CLOG-WINDOW-20MGL-PAX-3ASECTION-29" title="CLOG Window Objects">&#8594;</a> <a href="#x-28CLOG-3A-40CLOG-BODY-20MGL-PAX-3ASECTION-29" title="CLOG Body Objects">&#8634;</a></span></span></p>
+<p><span class="outer-navigation"><span class="navigation"> <a href="#x-28CLOG-3A-40CLOG-WEB-20MGL-PAX-3ASECTION-29" title="CLOG Web Objects">&#8592;</a> <a href="#x-28CLOG-3A-40CLOG-MANUAL-20MGL-PAX-3ASECTION-29" title="The CLOG manual">&#8593;</a> <a href="#x-28CLOG-3A-40CLOG-WINDOW-20MGL-PAX-3ASECTION-29" title="CLOG Window Objects">&#8594;</a> <a href="#x-28CLOG-3A-40CLOG-BODY-20MGL-PAX-3ASECTION-29" title="CLOG Body Objects">&#8634;</a></span></span></p>
 
-<h2><a href="#x-28CLOG-3A-40CLOG-BODY-20MGL-PAX-3ASECTION-29">13 CLOG Body Objects</a></h2>
+<h2><a href="#x-28CLOG-3A-40CLOG-BODY-20MGL-PAX-3ASECTION-29">14 CLOG Body Objects</a></h2>
 
 <p>CLOG-Body - <code>CLOG</code> Body Objects</p>
 
@@ -4951,7 +5349,7 @@ or global objects.</p></li>
 
 <p><span class="outer-navigation"><span class="navigation"> <a href="#x-28CLOG-3A-40CLOG-BODY-20MGL-PAX-3ASECTION-29" title="CLOG Body Objects">&#8592;</a> <a href="#x-28CLOG-3A-40CLOG-MANUAL-20MGL-PAX-3ASECTION-29" title="The CLOG manual">&#8593;</a> <a href="#x-28CLOG-3A-40CLOG-DOCUMENT-20MGL-PAX-3ASECTION-29" title="CLOG Document Objects">&#8594;</a> <a href="#x-28CLOG-3A-40CLOG-WINDOW-20MGL-PAX-3ASECTION-29" title="CLOG Window Objects">&#8634;</a></span></span></p>
 
-<h2><a href="#x-28CLOG-3A-40CLOG-WINDOW-20MGL-PAX-3ASECTION-29">14 CLOG Window Objects</a></h2>
+<h2><a href="#x-28CLOG-3A-40CLOG-WINDOW-20MGL-PAX-3ASECTION-29">15 CLOG Window Objects</a></h2>
 
 <p>CLOG-Window - <code>CLOG</code> Window Objects</p>
 
@@ -5303,7 +5701,7 @@ on-storage event is fired for changes to :local storage keys.</p></li>
 
 <p><span class="outer-navigation"><span class="navigation"> <a href="#x-28CLOG-3A-40CLOG-WINDOW-20MGL-PAX-3ASECTION-29" title="CLOG Window Objects">&#8592;</a> <a href="#x-28CLOG-3A-40CLOG-MANUAL-20MGL-PAX-3ASECTION-29" title="The CLOG manual">&#8593;</a> <a href="#x-28CLOG-3A-40CLOG-LOCATION-20MGL-PAX-3ASECTION-29" title="CLOG Location Objects">&#8594;</a> <a href="#x-28CLOG-3A-40CLOG-DOCUMENT-20MGL-PAX-3ASECTION-29" title="CLOG Document Objects">&#8634;</a></span></span></p>
 
-<h2><a href="#x-28CLOG-3A-40CLOG-DOCUMENT-20MGL-PAX-3ASECTION-29">15 CLOG Document Objects</a></h2>
+<h2><a href="#x-28CLOG-3A-40CLOG-DOCUMENT-20MGL-PAX-3ASECTION-29">16 CLOG Document Objects</a></h2>
 
 <p>CLOG-Document - <code>CLOG</code> Document Objects</p>
 
@@ -5456,7 +5854,7 @@ If <code>ON-FULL-SCREEN-CHANGE-HANDLER</code> is nil unbind the event.</p></li>
 
 <p><span class="outer-navigation"><span class="navigation"> <a href="#x-28CLOG-3A-40CLOG-DOCUMENT-20MGL-PAX-3ASECTION-29" title="CLOG Document Objects">&#8592;</a> <a href="#x-28CLOG-3A-40CLOG-MANUAL-20MGL-PAX-3ASECTION-29" title="The CLOG manual">&#8593;</a> <a href="#x-28CLOG-3A-40CLOG-NAVIGATOR-20MGL-PAX-3ASECTION-29" title="CLOG Navigator Objects">&#8594;</a> <a href="#x-28CLOG-3A-40CLOG-LOCATION-20MGL-PAX-3ASECTION-29" title="CLOG Location Objects">&#8634;</a></span></span></p>
 
-<h2><a href="#x-28CLOG-3A-40CLOG-LOCATION-20MGL-PAX-3ASECTION-29">16 CLOG Location Objects</a></h2>
+<h2><a href="#x-28CLOG-3A-40CLOG-LOCATION-20MGL-PAX-3ASECTION-29">17 CLOG Location Objects</a></h2>
 
 <p>Clog-Location - <code>CLOG</code> Location Objects</p>
 
@@ -5572,7 +5970,7 @@ If <code>ON-FULL-SCREEN-CHANGE-HANDLER</code> is nil unbind the event.</p></li>
 
 <p><span class="outer-navigation"><span class="navigation"> <a href="#x-28CLOG-3A-40CLOG-LOCATION-20MGL-PAX-3ASECTION-29" title="CLOG Location Objects">&#8592;</a> <a href="#x-28CLOG-3A-40CLOG-MANUAL-20MGL-PAX-3ASECTION-29" title="The CLOG manual">&#8593;</a> <a href="#x-28CLOG-3A-40CLOG-HELPERS-20MGL-PAX-3ASECTION-29" title="CLOG Helper Functions">&#8594;</a> <a href="#x-28CLOG-3A-40CLOG-NAVIGATOR-20MGL-PAX-3ASECTION-29" title="CLOG Navigator Objects">&#8634;</a></span></span></p>
 
-<h2><a href="#x-28CLOG-3A-40CLOG-NAVIGATOR-20MGL-PAX-3ASECTION-29">17 CLOG Navigator Objects</a></h2>
+<h2><a href="#x-28CLOG-3A-40CLOG-NAVIGATOR-20MGL-PAX-3ASECTION-29">18 CLOG Navigator Objects</a></h2>
 
 <p>CLOG-Navigator - <code>CLOG</code> Navigator Objects</p>
 
@@ -5622,7 +6020,7 @@ If <code>ON-FULL-SCREEN-CHANGE-HANDLER</code> is nil unbind the event.</p></li>
 
 <p><span class="outer-navigation"><span class="navigation"> <a href="#x-28CLOG-3A-40CLOG-NAVIGATOR-20MGL-PAX-3ASECTION-29" title="CLOG Navigator Objects">&#8592;</a> <a href="#x-28CLOG-3A-40CLOG-MANUAL-20MGL-PAX-3ASECTION-29" title="The CLOG manual">&#8593;</a> <a href="#x-28CLOG-3A-40CLOG-INTERNALS-20MGL-PAX-3ASECTION-29" title="CLOG Framework internals and extensions">&#8594;</a> <a href="#x-28CLOG-3A-40CLOG-HELPERS-20MGL-PAX-3ASECTION-29" title="CLOG Helper Functions">&#8634;</a></span></span></p>
 
-<h2><a href="#x-28CLOG-3A-40CLOG-HELPERS-20MGL-PAX-3ASECTION-29">18 CLOG Helper Functions</a></h2>
+<h2><a href="#x-28CLOG-3A-40CLOG-HELPERS-20MGL-PAX-3ASECTION-29">19 CLOG Helper Functions</a></h2>
 
 <p>Tutorial and demo helpers</p>
 
@@ -5713,7 +6111,7 @@ clog-user:<em>body</em> to last window openned to /repl.</p></li>
 
 <p><span class="outer-navigation"><span class="navigation"> <a href="#x-28CLOG-3A-40CLOG-HELPERS-20MGL-PAX-3ASECTION-29" title="CLOG Helper Functions">&#8592;</a> <a href="#x-28CLOG-3A-40CLOG-MANUAL-20MGL-PAX-3ASECTION-29" title="The CLOG manual">&#8593;</a> <a href="#x-28CLOG-3A-40CLOG-INTERNALS-20MGL-PAX-3ASECTION-29" title="CLOG Framework internals and extensions">&#8634;</a></span></span></p>
 
-<h2><a href="#x-28CLOG-3A-40CLOG-INTERNALS-20MGL-PAX-3ASECTION-29">19 CLOG Framework internals and extensions</a></h2>
+<h2><a href="#x-28CLOG-3A-40CLOG-INTERNALS-20MGL-PAX-3ASECTION-29">20 CLOG Framework internals and extensions</a></h2>
 
 <p><em>* Introduction to Internals *</em></p>
 
