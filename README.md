@@ -229,6 +229,7 @@ High Order Extensions to CLOG (so far)
   - 12 Point Grid System layouts
   - Content containers
   - Panels
+  - Sidebar menus
   - More coming _daily_
   
 - clog-data
