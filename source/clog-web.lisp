@@ -45,6 +45,7 @@
   (create-web-compositor   generic-function)
   (web-padding-class-type  type)
   (composite-on-hover      generic-function)
+  (composite-position      generic-function)
   (composite-top-middle    generic-function)
   (composite-top-left      generic-function)
   (composite-top-right     generic-function)
@@ -67,6 +68,11 @@
   (clog-web-container   class)
   (create-web-container generic-function)
 
+  "CLOG-WEB - Look and Feel"
+  (add-card-look       generic-function)
+  (add-hard-card-look  generic-function)
+  
+  "CLOG-WEB - Mobile"
   (full-row-on-mobile     generic-function)
   (hide-on-small-screens  generic-function)
   (hide-on-medium-screens generic-function)
@@ -112,11 +118,31 @@
   (add-class clog-body "w3-content")
   (setf (maximum-width clog-body) (unit "px" width)))
 
+;;;;;;;;;;;;;;;;;;;
+;; add-card-look ;;
+;;;;;;;;;;;;;;;;;;;
+
+(defgeneric add-card-look (clog-element)
+  (:documentation "Change clog-element to use 2px card look"))
+
+(defmethod add-card-look ((obj clog-element))
+  (add-class obj "w3-card-2"))
+
+;;;;;;;;;;;;;;;;;;;;;;;;
+;; add-hard-card-look ;;
+;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric add-hard-card-look (clog-element)
+  (:documentation "Change clog-element to use 4px card look"))
+
+(defmethod add-hard-card-look ((obj clog-element))
+  (add-class obj "w3-card-4"))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;
 ;; full-row-on-mobile ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defgeneric full-row-on-mobiile (clog-element)
+(defgeneric full-row-on-mobile (clog-element)
   (:documentation "Change element to display:block, take up the full row, when
 screen size smaller then 601 pixels DP"))
 
@@ -254,6 +280,21 @@ then the visiblep propetery will be set to nil on creation."))
 
 (defmethod composite-on-hover ((obj clog-element))
   (add-class obj "w3-display-hover"))
+
+(defgeneric composite-position (clog-element &key top left padding-class)
+  (:documentation "Composite CLOG-ELEMENT to coordinate top left."))
+
+(defmethod composite-position ((obj clog-element)
+			       &key
+				 (top 0) (left 0)
+				 (padding-class nil))
+  (add-class obj
+     (format nil "w3-display-position~A"
+	     (if padding-class
+		 (format nil " w3-~A" (string-downcase padding-class))
+		 "")))
+  (setf (top obj) (unit :px top))
+  (setf (left obj) (unit :px left)))
 
 (defgeneric composite-top-middle (clog-element &key padding-class)
   (:documentation "Composite CLOG-ELEMENT on top-middle."))
@@ -411,8 +452,12 @@ creation."))
 
 (defgeneric create-web-sidebar (clog-obj &key content hidden class html-id)
   (:documentation "Create a clog-web-sidebar. Container for sidebar content.
-If hidden is t then then the visiblep propetery will be set to nil on
-creation."))
+sidebars are create with the display property set to :none if hidden it t
+and :block if nil. In general the visiblep property is used in clog, however
+in clog-web-sidebar the block property is needed to activate its animations
+if used. If using a sidebar that will take space on not collapse, make sure
+to set the sidebar's size and set a margin equal to the size on the main
+container."))
 
 (defmethod create-web-sidebar ((obj clog-obj) &key (content "")
 		 				  (hidden nil)
@@ -420,9 +465,11 @@ creation."))
 						  (html-id nil))
   (let ((div (create-div obj :content content
 			     :hidden t :class class :html-id html-id)))
+    (setf (display div) :none)
+    (setf (visiblep div) t)
     (add-class div "w3-sidebar w3-bar-block")
     (unless hidden
-      (setf (visiblep div) t))
+      (setf (display div) :block))
     (change-class div 'clog-web-sidebar)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
