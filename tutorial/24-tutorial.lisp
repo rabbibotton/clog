@@ -60,6 +60,12 @@
                       \"Start turtorial.\"<br>
                       (initialize #'on-new-window)<br>
                       (open-browser))")
+    (let* ((com (create-web-compositor main))
+	   (img (create-img com :url-src "/img/kiarash-mansouri-fzoSNcxqtp8-unsplash.jpg"))
+	   (txt (create-div com :content "Beyond!")))
+      (setf (box-width img) "100%")
+      (composite-middle txt)
+      (add-class txt "w3-text-white w3-cursive w3-xxxlarge"))
     (run body)))
 
 (defun start-tutorial ()

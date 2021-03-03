@@ -39,6 +39,20 @@
   (create-web-sidebar      generic-function)
   (clog-web-sidebar-item   class)
   (create-web-sidebar-item generic-function)
+  (clog-web-sidebar-item   class)
+  (create-web-sidebar-item generic-function)
+  (clog-web-compositor     class)
+  (create-web-compositor   generic-function)
+  (web-padding-class-type  type)
+  (composite-top-middle    generic-function)
+  (composite-top-left      generic-function)
+  (composite-top-right     generic-function)
+  (composite-bottom-middle generic-function)
+  (composite-bottom-left   generic-function)
+  (composite-bottom-right  generic-function)
+  (composite-middle        generic-function)
+  (composite-left          generic-function)
+  (composite-right         generic-function)
   
   "CLOG-WEB - Auto Layout System"
   (clog-web-auto-row      class)
@@ -201,6 +215,138 @@ to nil on creation."))
       (setf (visiblep div) t))
     (change-class div 'clog-web-content)))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; create-web-compositor ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defclass clog-web-compositor (clog-div)()
+  (:documentation "Compositor for compositing layers of web content"))
+
+(defgeneric create-web-compositor (clog-obj &key content hidden class html-id)
+  (:documentation "Create a clog-web-compositor. Allows compositing of content
+on top of other content. Content is added as children and then
+composit-location is called on the object of that content. If hidden is t then
+then the visiblep propetery will be set to nil on creation."))
+
+(defmethod create-web-compositor ((obj clog-obj) &key (content "")
+		 				  (hidden nil)
+						  (class nil)
+						  (html-id nil))
+  (let ((div (create-div obj :content content
+			     :hidden t :class class :html-id html-id)))
+    (add-class div "w3-display-container")
+    (unless hidden
+      (setf (visiblep div) t))
+    (change-class div 'clog-web-compositor)))
+
+;;;;;;;;;;;;;;;;;
+;; composite-* ;;
+;;;;;;;;;;;;;;;;;
+
+(deftype web-padding-class-type ()
+  '(member :padding-small :padding :padding-large :padding-16 :padding-24
+    :padding-32 :padding-48 :padding-64	:padding-top-64 :padding-top-48
+    :padding-top-48 :padding-top-32))
+
+(defgeneric composite-top-middle (clog-element &key padding-class)
+  (:documentation "Composite CLOG-ELEMENT on top-middle."))
+
+(defmethod composite-top-middle ((obj clog-element)
+				    &key (padding-class nil))
+  (add-class obj
+     (format nil "w3-display-topmiddle~A"
+	     (if padding-class
+		 (format nil " w3-~A" (string-downcase padding-class))
+		 ""))))
+
+(defgeneric composite-bottom-middle (clog-element &key padding-class)
+  (:documentation "Composite CLOG-ELEMENT on bottom-middle."))
+
+(defmethod composite-bottom-middle ((obj clog-element)
+				    &key (padding-class nil))
+  (add-class obj
+     (format nil "w3-display-bottommiddle~A"
+	     (if padding-class
+		 (format nil " w3-~A" (string-downcase padding-class))
+		 ""))))
+
+(defgeneric composite-bottom-right (clog-element &key padding-class)
+  (:documentation "Composite CLOG-ELEMENT on bottom-right."))
+
+(defmethod composite-bottom-right ((obj clog-element)
+				    &key (padding-class nil))
+  (add-class obj
+     (format nil "w3-display-bottomright~A"
+	     (if padding-class
+		 (format nil " w3-~A" (string-downcase padding-class))
+		 ""))))
+
+(defgeneric composite-bottom-left (clog-element &key padding-class)
+  (:documentation "Composite CLOG-ELEMENT on bottom-left."))
+
+(defmethod composite-bottom-left ((obj clog-element)
+				    &key (padding-class nil))
+  (add-class obj
+     (format nil "w3-display-bottomleft~A"
+	     (if padding-class
+		 (format nil " w3-~A" (string-downcase padding-class))
+		 ""))))
+
+(defgeneric composite-top-right (clog-element &key padding-class)
+  (:documentation "Composite CLOG-ELEMENT on top-right."))
+
+(defmethod composite-top-right ((obj clog-element)
+				    &key (padding-class nil))
+  (add-class obj
+     (format nil "w3-display-topright~A"
+	     (if padding-class
+		 (format nil " w3-~A" (string-downcase padding-class))
+		 ""))))
+
+(defgeneric composite-top-left (clog-element &key padding-class)
+  (:documentation "Composite CLOG-ELEMENT on top-left."))
+
+(defmethod composite-top-left ((obj clog-element)
+				    &key (padding-class nil))
+  (add-class obj
+     (format nil "w3-display-topleft~A"
+	     (if padding-class
+		 (format nil " w3-~A" (string-downcase padding-class))
+		 ""))))
+
+(defgeneric composite-left (clog-element &key padding-class)
+  (:documentation "Composite CLOG-ELEMENT on left."))
+
+(defmethod composite-left ((obj clog-element)
+				    &key (padding-class nil))
+  (add-class obj
+     (format nil "w3-display-left~A"
+	     (if padding-class
+		 (format nil " w3-~A" (string-downcase padding-class))
+		 ""))))
+
+(defgeneric composite-middle (clog-element &key padding-class)
+  (:documentation "Composite CLOG-ELEMENT on middle."))
+
+(defmethod composite-middle ((obj clog-element)
+				    &key (padding-class nil))
+  (add-class obj
+     (format nil "w3-display-middle~A"
+	     (if padding-class
+		 (format nil " w3-~A" (string-downcase padding-class))
+		 ""))))
+
+(defgeneric composite-right (clog-element &key padding-class)
+  (:documentation "Composite CLOG-ELEMENT on right."))
+
+(defmethod composite-right ((obj clog-element)
+				    &key (padding-class nil))
+  (add-class obj
+     (format nil "w3-display-right~A"
+	     (if padding-class
+		 (format nil " w3-~A" (string-downcase padding-class))
+		 ""))))
+
 ;;;;;;;;;;;;;;;;;;;;;
 ;; create-web-code ;;
 ;;;;;;;;;;;;;;;;;;;;;
@@ -330,7 +476,7 @@ creation."))
 ;; create-web-auto-column ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(deftype vertical-align-type () '(member :top :middle :bottom))
+(deftype web-vertical-align-type () '(member :top :middle :bottom))
 
 (defclass clog-web-auto-column (clog-div)()
   (:documentation "Content for web content"))
@@ -393,8 +539,8 @@ be set to nil on creation."))
 ;; create-web-container ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(deftype container-size-type () '(member :half :third :twothird :quarter
-				  :threequarter :rest :col))
+(deftype web-container-size-type () '(member :half :third :twothird :quarter
+				      :threequarter :rest :col))
 
 (defclass clog-web-container (clog-div)()
   (:documentation "Container cells for web content in 12 column grid"))
