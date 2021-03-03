@@ -190,7 +190,7 @@ screen size smaller then 601 pixels DP"))
 ;; Display-Container  -  Image text overlays
 ;; Code               -  Code blocks
 ;; Sidebar            -  Sidebar to main content, optional collapsable
-;; Main               -  Mark main contact when using a side-bar
+;; Main               -  Mark main contact when using a sidebar
 
 ;;;;;;;;;;;;;;;;;;;;;;
 ;; create-web-panel ;;

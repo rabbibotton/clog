@@ -121,20 +121,24 @@ line break and if :AUTO-PLACE (default t) place-inside-bottom-of CLOG-OBJ"))
 ;; create-button ;;
 ;;;;;;;;;;;;;;;;;;;
 
-(defgeneric create-button (clog-obj &key content class html-id auto-place)
+(defgeneric create-button (clog-obj &key content hidden class html-id auto-place)
   (:documentation "Create a new CLOG-Button as child of CLOG-OBJ with :CONTENT
 (default \"\") and if :AUTO-PLACE (default t) place-inside-bottom-of
 CLOG-OBJ"))
 
 (defmethod create-button ((obj clog-obj) &key (content "")
+					   (hidden nil)
 					   (class nil)
 					   (html-id nil)
 					   (auto-place t))
-  (create-child obj (format nil "<button~A>~A</button>"
+  (create-child obj (format nil "<button~A~A>~A</button>"
 			    (if class
 				(format nil " class='~A'"
 					(escape-string class))
 				"")
+			    (if hidden
+				(format nil " style='visibility:hidden;'")
+				"")			    
 			    (escape-string content))
 		:clog-type  'clog-button
 		:html-id    html-id
