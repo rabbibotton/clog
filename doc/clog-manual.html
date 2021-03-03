@@ -5038,8 +5038,12 @@ creation.</p></li>
 <li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-WEB-3ACREATE-WEB-SIDEBAR-20GENERIC-FUNCTION-29" >CREATE-WEB-SIDEBAR</a></span></span> <span class="locative-args">CLOG-OBJ &amp;KEY CONTENT HIDDEN CLASS HTML-ID</span></span></p>
 
 <p>Create a clog-web-sidebar. Container for sidebar content.
-If hidden is t then then the visiblep propetery will be set to nil on
-creation.</p></li>
+sidebars are create with the display property set to :none if hidden it t
+and :block if nil. In general the visiblep property is used in clog, however
+in clog-web-sidebar the block property is needed to activate its animations
+if used. If using a sidebar that will take space on not collapse, make sure
+to set the sidebar's size and set a margin equal to the size on the main
+container.</p></li>
 </ul>
 
 <p><a id='x-28CLOG-WEB-3ACLOG-WEB-SIDEBAR-ITEM-20CLASS-29'></a></p>
@@ -5101,6 +5105,22 @@ then the visiblep propetery will be set to nil on creation.</p></li>
 
 <ul>
 <li><span class=reference-bullet><span class=reference><span class="locative-type">[type]</span> <span class="reference-object"><a href="#x-28CLOG-WEB-3AWEB-PADDING-CLASS-TYPE-20-28TYPE-29-29" >WEB-PADDING-CLASS-TYPE</a></span></span></span></li>
+</ul>
+
+<p><a id='x-28CLOG-WEB-3ACOMPOSITE-ON-HOVER-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-WEB-3ACOMPOSITE-ON-HOVER-20GENERIC-FUNCTION-29" >COMPOSITE-ON-HOVER</a></span></span> <span class="locative-args">CLOG-ELEMENT</span></span></p>
+
+<p>Composite <code>CLOG-ELEMENT</code> on on-hover.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-WEB-3ACOMPOSITE-POSITION-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-WEB-3ACOMPOSITE-POSITION-20GENERIC-FUNCTION-29" >COMPOSITE-POSITION</a></span></span> <span class="locative-args">CLOG-ELEMENT &amp;KEY TOP LEFT PADDING-CLASS</span></span></p>
+
+<p>Composite <code>CLOG-ELEMENT</code> to coordinate top left.</p></li>
 </ul>
 
 <p><a id='x-28CLOG-WEB-3ACOMPOSITE-TOP-MIDDLE-20GENERIC-FUNCTION-29'></a></p>
@@ -5255,10 +5275,33 @@ be of type :w3-rest to fill space. If hidden is t then then the visiblep
 propetery will be set to nil on creation.</p></li>
 </ul>
 
+<p><code>CLOG-WEB</code> - Look and Feel</p>
+
+<p><a id='x-28CLOG-WEB-3AADD-CARD-LOOK-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-WEB-3AADD-CARD-LOOK-20GENERIC-FUNCTION-29" >ADD-CARD-LOOK</a></span></span> <span class="locative-args">CLOG-ELEMENT</span></span></p>
+
+<p>Change clog-element to use 2px card look</p></li>
+</ul>
+
+<p><a id='x-28CLOG-WEB-3AADD-HARD-CARD-LOOK-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-WEB-3AADD-HARD-CARD-LOOK-20GENERIC-FUNCTION-29" >ADD-HARD-CARD-LOOK</a></span></span> <span class="locative-args">CLOG-ELEMENT</span></span></p>
+
+<p>Change clog-element to use 4px card look</p></li>
+</ul>
+
+<p><code>CLOG-WEB</code> - Mobile</p>
+
 <p><a id='x-28CLOG-WEB-3AFULL-ROW-ON-MOBILE-20GENERIC-FUNCTION-29'></a></p>
 
 <ul>
-<li><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-WEB-3AFULL-ROW-ON-MOBILE-20GENERIC-FUNCTION-29" >FULL-ROW-ON-MOBILE</a></span></span> <span class="locative-args">OBJ</span></span></li>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-WEB-3AFULL-ROW-ON-MOBILE-20GENERIC-FUNCTION-29" >FULL-ROW-ON-MOBILE</a></span></span> <span class="locative-args">CLOG-ELEMENT</span></span></p>
+
+<p>Change element to display:block, take up the full row, when
+screen size smaller then 601 pixels DP</p></li>
 </ul>
 
 <p><a id='x-28CLOG-WEB-3AHIDE-ON-SMALL-SCREENS-20GENERIC-FUNCTION-29'></a></p>
