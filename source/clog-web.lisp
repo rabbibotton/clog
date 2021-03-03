@@ -27,11 +27,19 @@
   (set-maximum-page-width-in-pixels function)
 
   "CLOG-WEB - General Containers"
-  (clog-web-panel     class)
-  (create-web-panel   generic-function)
-  (clog-web-content   class)
-  (create-web-content generic-function)
-
+  (clog-web-panel          class)
+  (create-web-panel        generic-function)
+  (clog-web-content        class)
+  (create-web-content      generic-function)
+  (clog-web-code           class)
+  (create-web-code         generic-function)
+  (clog-web-main           class)
+  (create-web-main         generic-function)
+  (clog-web-sidebar        class)
+  (create-web-sidebar      generic-function)
+  (clog-web-sidebar-item   class)
+  (create-web-sidebar-item generic-function)
+  
   "CLOG-WEB - Auto Layout System"
   (clog-web-auto-row      class)
   (create-web-auto-row    generic-function)
@@ -140,7 +148,7 @@ screen size smaller then 601 pixels DP"))
 ;; Panel              -  Notes, Quote boxes, Notifications
 ;; Display-Container  -  Image text overlays
 ;; Code               -  Code blocks
-;; Side-Bar           -  Sidebar to main content, optional collapsable
+;; Sidebar            -  Sidebar to main content, optional collapsable
 ;; Main               -  Mark main contact when using a side-bar
 
 ;;;;;;;;;;;;;;;;;;;;;;
@@ -192,6 +200,100 @@ to nil on creation."))
     (unless hidden
       (setf (visiblep div) t))
     (change-class div 'clog-web-content)))
+
+;;;;;;;;;;;;;;;;;;;;;
+;; create-web-code ;;
+;;;;;;;;;;;;;;;;;;;;;
+
+(defclass clog-web-code (clog-div)()
+  (:documentation "Code for web code"))
+
+(defgeneric create-web-code (clog-obj &key content
+					   hidden class html-id)
+  (:documentation "Create a clog-web-code. Code content container.
+If hidden is t then then the visiblep propetery will be set
+to nil on creation."))
+
+(defmethod create-web-code ((obj clog-obj) &key (content "")
+		 				(hidden nil)
+						(class nil)
+						(html-id nil))
+  (let ((div (create-div obj :content content
+			     :hidden t :class class :html-id html-id)))
+    (add-class div "w3-code")
+    (unless hidden
+      (setf (visiblep div) t))
+    (change-class div 'clog-web-code)))
+
+;;;;;;;;;;;;;;;;;;;;;
+;; create-web-main ;;
+;;;;;;;;;;;;;;;;;;;;;
+
+(defclass clog-web-main (clog-div)()
+  (:documentation "Main for web content"))
+
+(defgeneric create-web-main (clog-obj &key content hidden class html-id)
+  (:documentation "Create a clog-web-main. Container for main content when
+using a collapsable sidebar  or other whole page shifting technique.
+If hidden is t then then the visiblep propetery will be set to nil on
+creation."))
+
+(defmethod create-web-main ((obj clog-obj) &key (content "")
+		 				  (hidden nil)
+						  (class nil)
+						  (html-id nil))
+  (let ((div (create-div obj :content content
+			     :hidden t :class class :html-id html-id)))
+    (add-class div "w3-main")
+    (unless hidden
+      (setf (visiblep div) t))
+    (change-class div 'clog-web-main)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;
+;; create-web-sidebar ;;
+;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defclass clog-web-sidebar (clog-div)()
+  (:documentation "Sidebar for web content"))
+
+(defgeneric create-web-sidebar (clog-obj &key content hidden class html-id)
+  (:documentation "Create a clog-web-sidebar. Container for sidebar content.
+If hidden is t then then the visiblep propetery will be set to nil on
+creation."))
+
+(defmethod create-web-sidebar ((obj clog-obj) &key (content "")
+		 				  (hidden nil)
+						  (class nil)
+						  (html-id nil))
+  (let ((div (create-div obj :content content
+			     :hidden t :class class :html-id html-id)))
+    (add-class div "w3-sidebar w3-bar-block")
+    (unless hidden
+      (setf (visiblep div) t))
+    (change-class div 'clog-web-sidebar)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; create-web-sidebar-item ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defclass clog-web-sidebar-item (clog-button)()
+  (:documentation "Sidebar-Item for web content"))
+
+(defgeneric create-web-sidebar-item (clog-obj &key content hidden class html-id)
+  (:documentation "Create a clog-web-sidebar-item. A sidebar menu bar item.
+If hidden is t then then the visiblep propetery will be set to nil on
+creation."))
+
+(defmethod create-web-sidebar-item ((obj clog-obj) &key (content "")
+		 				  (hidden nil)
+						  (class nil)
+						  (html-id nil))
+  (let ((item (create-button obj :content content
+				 :hidden t :class class :html-id html-id)))
+    (add-class item "w3-bar-item w3-button")
+    (unless hidden
+      (setf (visiblep item) t))
+    (change-class item 'clog-web-sidebar-item)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Implementation - Auto Layout
