@@ -53,6 +53,7 @@
 	 (tmp (create-hr data-area))
 	 (footer (create-section body :footer :class "w3-container w3-theme"))
 	 (tmp    (create-section footer :p :content "(c) All's well that ends well")))
+    (declare (ignore tmp) (ignore finput) (ignore fsubmit))
 
     (set-on-click fsubmit3
       (lambda (obj)

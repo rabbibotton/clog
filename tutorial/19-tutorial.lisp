@@ -22,6 +22,7 @@
 	 (item       (create-list-item list-b :content "Item 2"))
 	 (item       (create-list-item list-b :content "Item 3"))
 	 (item       (create-list-item list-b :content "Item 4")))
+    (declare (ignore item))
     (js-execute body (format nil "JSLists.applyToList('~A', 'ALL');"
 			     (html-id list-top))))
   (run body))

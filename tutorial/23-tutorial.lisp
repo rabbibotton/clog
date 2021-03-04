@@ -33,7 +33,6 @@
   (set-on-click (create-button body :content
 			       "Click for my question. You have 10 seconds to answer.")
 		(lambda (obj)
-		  (declare (ignore obj))
 		  (setf (disabledp obj) t)
 		  ;; ask returns once an answer is given or times out
 		  (create-div body :content (ask body))

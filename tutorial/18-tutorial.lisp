@@ -39,15 +39,17 @@
     ;; 1 object is draggable
     (setf (draggablep object) t)
     ;; 2 the on-drag-start event is set
-    (set-on-drag-start object (lambda (obj)()) :drag-data "some data")
+    (set-on-drag-start object (lambda (obj)(declare (ignore obj))()) :drag-data "some data")
     ;; 4 the target on-drag-over event is sett
-    (set-on-drag-over target1 (lambda (obj)()))
+    (set-on-drag-over target1 (lambda (obj)(declare (ignore obj))()))
     ;; 5 the target on-drop event is set
     (set-on-drop target1 (lambda (obj data)
+			   (declare (ignore obj) (ignore data))
 			   (place-inside-bottom-of target1 object)))
     ;; Set up other box 1 also as target for returning drag box
-    (set-on-drag-over target2 (lambda (obj)()))
+    (set-on-drag-over target2 (lambda (obj)(declare (ignore obj))()))
     (set-on-drop target2 (lambda (obj data)
+			   (declare (ignore obj))
 			   (print (getf data :drag-data))
 			   (place-inside-bottom-of target2 object)))
   (run body)))
