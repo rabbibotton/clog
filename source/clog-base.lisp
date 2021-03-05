@@ -254,7 +254,7 @@ result or if time out DEFAULT-ANSWER (Private)"))
 
 (defparameter keyboard-event-script
   "+ e.keyCode + ':' + e.charCode + ':' + e.altKey + ':' + e.ctrlKey + ':' +
-     e.shiftKey + ':' + e.metaKey"
+     e.shiftKey + ':' + e.metaKey + ':' + e.key"
   "JavaScript to collect keyboard event data from browser.")
 
 (defun parse-keyboard-event (data)
@@ -266,7 +266,8 @@ result or if time out DEFAULT-ANSWER (Private)"))
      :alt-key    (js-true-p (nth 2 f))
      :ctrl-key   (js-true-p (nth 3 f))
      :shift-key  (js-true-p (nth 4 f))
-     :meta-key   (js-true-p (nth 5 f)))))
+     :meta-key   (js-true-p (nth 5 f))
+     :key        (nth 6 f))))
 
 ;;;;;;;;;;;;;;;;;;;;;;
 ;; parse-drop-event ;;
