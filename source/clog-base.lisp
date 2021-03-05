@@ -253,11 +253,13 @@ result or if time out DEFAULT-ANSWER (Private)"))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defparameter keyboard-event-script
-  "+ e.keyCode + ':' + e.charCode + ':' + e.altKey + ':' + e.ctrlKey + ':' +
-     e.shiftKey + ':' + e.metaKey + ':' + e.key"
+  "+ e.key.charCodeAt(0) + ':' + e.charCode + ':' + e.altKey + ':' +
+     e.ctrlKey + ':' + e.shiftKey + ':' + e.metaKey + ':' +
+     (e.key == ':' ? 'colon' : e.key)"
   "JavaScript to collect keyboard event data from browser.")
 
 (defun parse-keyboard-event (data)
+  (print data)
   (let ((f (ppcre:split ":" data)))
     (list
      :event-type :keyboard
@@ -267,7 +269,9 @@ result or if time out DEFAULT-ANSWER (Private)"))
      :ctrl-key   (js-true-p (nth 3 f))
      :shift-key  (js-true-p (nth 4 f))
      :meta-key   (js-true-p (nth 5 f))
-     :key        (nth 6 f))))
+     :key        (if (equal (nth 6 f) "colon")
+		     ":"
+		     (nth 6 f)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;
 ;; parse-drop-event ;;
