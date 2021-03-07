@@ -282,8 +282,9 @@ properties (to use for :property) are based on the event type.</p>
  :meta-key       t or nil if meta-key held down
 
  :event-type :keyboard
- :key-code   A key code sometimes called a scan code for the key pressed
- :char-code  UTF-8 representation for key pressed when possible
+ :key        String of key pressed, with out modifiers like ctrl characters
+ :key-code   The utf-16 value of :key
+ :char-code  UTF-8 representation for key pressed when possible - deprecated
  :alt-key    t or nil if alt-key held down
  :ctrl-key   t or nil if ctrl-key held down
  :shift-key  t or nil if shift-key held down
@@ -1004,8 +1005,8 @@ is nil unbind the event.</p></li>
 <li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ASET-ON-CHARACTER-20GENERIC-FUNCTION-29" >SET-ON-CHARACTER</a></span></span> <span class="locative-args">CLOG-OBJ ON-CHARACTER-HANDLER &amp;KEY ONE-TIME</span></span></p>
 
 <p>Set the <code>ON-CHARACTER-HANDLER</code> for <code>CLOG-OBJ</code>. If
-<code>ON-CHARACTER-HANDLER</code> is nil unbind the event. Setting this event
-will replace a on-key-down</p></li>
+<code>ON-CHARACTER-HANDLER</code> is nil unbind the event. Setting this event to
+nil will unbind on-key-press also.</p></li>
 </ul>
 
 <p><a id='x-28CLOG-3ASET-ON-KEY-DOWN-20GENERIC-FUNCTION-29'></a></p>

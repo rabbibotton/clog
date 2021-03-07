@@ -101,6 +101,16 @@
 	(sleep 2)
 	(setf (window-title cw) fname))))
 
+(defun do-ide-edit-copy (obj)
+  (let ((cw (current-window obj)))
+    (when cw
+      (let ((app (connection-data-item obj "app-data")))
+	(setf (copy-buf app) (js-query obj
+		    (format nil "editor_~A.execCommand('copy');~
+                                 navigator.clipboard.writeText(editor_~A.getCopyText());~
+                                 editor_~A.getCopyText();"
+			    (html-id cw) (html-id cw) (html-id cw))))))))
+
 (defun do-ide-edit-undo (obj)
   (let ((cw (current-window obj)))
     (when cw
@@ -111,19 +121,8 @@
 (defun do-ide-edit-redo (obj)
   (let ((cw (current-window obj)))
     (when cw
-      (do-ide-edit-copy obj)
       (js-execute obj (format nil "editor_~A.execCommand('redo')"
 			      (html-id cw))))))
-
-(defun do-ide-edit-copy (obj)
-  (let ((cw (current-window obj)))
-    (when cw
-      (let ((app (connection-data-item obj "app-data")))
-	(setf (copy-buf app) (js-query obj
-		    (format nil "editor_~A.execCommand('copy');~
-                                 navigator.clipboard.writeText(editor_~A.getCopyText());~
-                                 editor_~A.getCopyText();"
-			    (html-id cw) (html-id cw) (html-id cw))))))))
 
 (defun do-ide-edit-cut (obj)
   (let ((cw (current-window obj)))

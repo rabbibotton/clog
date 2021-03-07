@@ -234,8 +234,9 @@ Events in clog-base
      :meta-key       t or nil if meta-key held down
 
      :event-type :keyboard
-     :key-code   A key code sometimes called a scan code for the key pressed
-     :char-code  UTF-8 representation for key pressed when possible
+     :key        String of key pressed, with out modifiers like ctrl characters
+     :key-code   The utf-16 value of :key
+     :char-code  UTF-8 representation for key pressed when possible - deprecated
      :alt-key    t or nil if alt-key held down
      :ctrl-key   t or nil if ctrl-key held down
      :shift-key  t or nil if shift-key held down
