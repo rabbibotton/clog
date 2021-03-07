@@ -153,7 +153,9 @@ the default answer. (Private)"
 				(format nil "clog['connection_id']=~A" id))
 	 (bordeaux-threads:make-thread
 	  (lambda ()
-	    (funcall *on-connect-handler* id))))))
+	    (funcall *on-connect-handler* id))
+          :name (format nil "CLOG connection ~A"
+                        id)))))
 
 ;;;;;;;;;;;;;;;;;;;;
 ;; handle-message ;;
@@ -166,16 +168,21 @@ the default answer. (Private)"
 	   (when *verbose-output*
 	     (format t "~A Ping~%" id)))
 	  ((equal (first ml) "E")
-	   (let ((em (ppcre:split " " (second ml) :limit 2)))
+	   (let* ((em (ppcre:split " " (second ml) :limit 2))
+                  (event-id (first em))
+                  (data (second em)))
 	     (when *verbose-output*
 	       (format t "Channel ~A Hook ~A Data ~A~%"
-		       id (first em) (second em)))
+		       id event-id data))
 	     (bordeaux-threads:make-thread
 	      (lambda ()
 		(let* ((event-hash (get-connection-data id))
 		       (event      (when event-hash
-				     (gethash (first em) event-hash))))
-		  (when event (funcall event (second em))))))))
+				     (gethash event-id event-hash))))
+		  (when event
+                    (funcall event data))))
+              :name (format nil "CLOG event handler ~A"
+                            event-id))))
 	  (t
 	   (when *verbose-output*
 	     (format t "~A ~A = ~A~%" id (first ml) (second ml)))
