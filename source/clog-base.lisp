@@ -1053,8 +1053,8 @@ ON-TOUCH-CANCEL-HANDLER is nil unbind the event."))
 
 (defgeneric set-on-character (clog-obj on-character-handler &key one-time)
   (:documentation "Set the ON-CHARACTER-HANDLER for CLOG-OBJ. If
-ON-CHARACTER-HANDLER is nil unbind the event. Setting this event
-will replace a on-key-down"))
+ON-CHARACTER-HANDLER is nil unbind the event. Setting this event to
+nil will unbind on-key-press also."))
 
 (defmethod set-on-character ((obj clog-obj) handler &key (one-time nil))
   (set-event obj "keypress"
