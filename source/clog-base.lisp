@@ -259,7 +259,6 @@ result or if time out DEFAULT-ANSWER (Private)"))
   "JavaScript to collect keyboard event data from browser.")
 
 (defun parse-keyboard-event (data)
-  (print data)
   (let ((f (ppcre:split ":" data)))
     (list
      :event-type :keyboard
