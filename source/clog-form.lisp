@@ -61,7 +61,7 @@ action."))
 			  (class nil)
 			  (html-id nil)
 			  (auto-place t))
-  (create-child obj (format nil "<form action='~A' ~A target='~A'/>"
+  (create-child obj (format nil "<form action='~A' ~A target='~A'~A/>"
 			    action
 			    (if (eq method :none)
 				"onSubmit='return false;'"

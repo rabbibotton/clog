@@ -33,7 +33,7 @@ CLOG-OBJ unless :NAME is set and is used instead."))
 		(html-id clog-obj))))
     (setf (gethash id (controls group)) clog-obj)))
 
-(defmethod obj (clog-group name)
+(defgeneric obj (clog-group name)
   (:documentation "Retrieve from CLOG-GROUP the CLOG-OBJ with name"))
 
 (defmethod obj ((group clog-group) name)

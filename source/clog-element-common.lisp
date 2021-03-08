@@ -854,11 +854,10 @@ and if :AUTO-PLACE (default t) place-inside-bottom-of CLOG-OBJ"))
 						    (auto-place t))
   (create-child obj (format nil "<dl~A~A/>"
 			    (if hidden
-				(format nil " style='visibility:hidden;'")
+				" style='visibility:hidden;'"
 				"")			    
 			    (if class
-				(format nil " class='~A'"
-					(escape-string class))
+				(format nil " class='~A'" (escape-string class))
 				""))			    
 		:clog-type  'clog-definition-list
 		:html-id    html-id
@@ -886,16 +885,18 @@ and if :AUTO-PLACE (default t) place-inside-bottom-of CLOG-OBJ"))
 			  (content "")
 			  (class nil)
 			  (html-id nil) (auto-place t))
-  (create-child obj (format nil "<dt~A>~A</dt>"
+  (create-child obj (format nil "<dt~A~A>~A</dt>"
 			    (if hidden
-				(format nil " style='visibility:hidden;'")
+				" style='visibility:hidden;'"
 				"")			    
-			    (escape-string content)
 			    (if class
 				(format nil " class='~A'"
 					(escape-string class))
-				""))			    
-		:clog-type  'clog-term :html-id    html-id :auto-place auto-place))
+				"")
+			    (escape-string content))			    
+		:clog-type  'clog-term
+		:html-id    html-id
+		:auto-place auto-place))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Implementation - clog-description
@@ -1193,14 +1194,14 @@ and if :AUTO-PLACE (default t) place-inside-bottom-of CLOG-OBJ"))
 (defmethod create-table-footer ((obj clog-obj)
 				&key (hidden nil)
 				  (class nil) (html-id nil) (auto-place t))
-  (create-child obj (format nil "<tfoot~A/>"
+  (create-child obj (format nil "<tfoot~A~A/>"
 			    (if hidden
-				(format nil " style='visibility:hidden;'")
+				" style='visibility:hidden;'"
 				"")			    
 			    (if class
 				(format nil " class='~A'"
 					(escape-string class))
-				""))			    
+				""))	    
 		:clog-type  'clog-table-footer
 		:html-id    html-id
 		:auto-place auto-place))

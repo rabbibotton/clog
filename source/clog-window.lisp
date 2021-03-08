@@ -328,24 +328,24 @@ events and messages may not be trasmitted on most browsers."))
 (defmethod scroll-to ((obj clog-window) x y)
   (execute obj (format nil "scrollTo(~A,~A)" x y)))
 
-;;;;;;;;;;;;;
-;; move-by ;;
-;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;
+;; move-window-by ;;
+;;;;;;;;;;;;;;;;;;;;
 
-(defgeneric move-by (clog-window x y)
+(defgeneric move-window-by (clog-window x y)
   (:documentation "Move browser window by x y."))
 
-(defmethod move-by ((obj clog-window) x y)
+(defmethod move-window-by ((obj clog-window) x y)
   (execute obj (format nil "moveBy(~A,~A)" x y)))
 
-;;;;;;;;;;;;;
-;; move-to ;;
-;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;
+;; move-window-to ;;
+;;;;;;;;;;;;;;;;;;;;
 
-(defgeneric move-to (clog-window x y)
+(defgeneric move-window-to (clog-window x y)
   (:documentation "Move browser window to x y."))
 
-(defmethod move-to ((obj clog-window) x y)
+(defmethod move-window-to ((obj clog-window) x y)
   (execute obj (format nil "moveTo(~A,~A)" x y)))
 
 ;;;;;;;;;;;;;;;
@@ -484,7 +484,7 @@ on-storage event is fired for changes to :local storage keys."))
 (local = persistant or session)"))
 
 (defmethod storage-length ((obj clog-window) storage-type)
-  (parse-integer (query obj "~(~a~)Storage.length" storage-type)))
+  (parse-integer (query obj (format "~(~a~)Storage.length" storage-type))))
 
 ;;;;;;;;;;;;;;;;;
 ;; storage-key ;;
