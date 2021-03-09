@@ -70,6 +70,7 @@ embedded in a native template application.)"
   (js-on-p       function)
   (p-on-js       function)
   (escape-string function)
+  (lf-to-br      function)
   
   "CLOG Color utilities"
   (rgb           function)

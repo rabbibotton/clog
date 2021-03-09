@@ -93,6 +93,14 @@ CLOG-OBJ unless :NAME is set and is used instead."))
     (setf res (ppcre:regex-replace-all "\\x0D" res "\\x0D"))
     res))
 
+;;;;;;;;;;;;;;
+;; lf-to-br ;;
+;;;;;;;;;;;;;;
+
+(defun lf-to-br (str)
+  "Change line feeds to <br>."
+  (ppcre:regex-replace-all "\\x0A" str "<br>"))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Implementation - Color Utilities
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
