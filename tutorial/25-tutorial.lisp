@@ -19,7 +19,7 @@
 ;;;; ---------------------------------------------------------
 
 (defpackage #:clog-user
-  (:use #:cl #:clog)
+  (:use #:cl #:clog #:clog-web)
   (:export start-tutorial))
 
 (in-package :clog-user)
@@ -29,7 +29,7 @@
   (setf (title (html-document body)) "Tutorial 25")
   ;; Setup two sections = command and result
   (let ((command-section (create-web-content body))
-	(results-section (create-web-content body)))
+	(results-section (create-web-content body :class "w3-monospace")))
     ;; Setup command section
     (let* ((form    (create-form command-section))
 	   (command (create-form-element form :text
