@@ -41,9 +41,9 @@
     (set-on-mouse-move *last-obj*
 		       (lambda (obj data)
 			 (format t "x=~A Y=~A~%" (getf data ':x) (getf data ':y))))
-    (set-on-key-press win
+    (set-on-key-down win
 		      (lambda (obj data)
-			(print data)))
+			(print data)) :disable-default t)
     (create-div win :content "Hello World! p")
     (create-div win :content "Hello World! div")
     (create-br win) 
