@@ -70,6 +70,7 @@ embedded in a native template application.)"
   (js-on-p       function)
   (p-on-js       function)
   (escape-string function)
+  (lf-to-br      function)
   
   "CLOG Color utilities"
   (rgb           function)
@@ -711,8 +712,8 @@ embedded in a native template application.)"
   (set-on-hash-change        generic-function)
   (set-on-orientation-change generic-function)
   (set-on-storage            generic-function)
-  (move-by                   generic-function)
-  (move-to                   generic-function)
+  (move-window-by            generic-function)
+  (move-window-to            generic-function)
   (resize-by                 generic-function)
   (resize-to                 generic-function))
 

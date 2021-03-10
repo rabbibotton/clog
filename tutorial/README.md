@@ -57,3 +57,4 @@ Tutorial Summary
 - 22-tutorial.lisp - CLOG GUI Menus and Desktop Look and Feel
 - 23-tutorial.lisp - Using semaphores to wait for input
 - 24-tutorial.lisp - CLOG WEB containers (in progress)
+- 25-tutorial.lisp - A "local" web app using CLOG WEB

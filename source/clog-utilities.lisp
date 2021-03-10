@@ -33,7 +33,7 @@ CLOG-OBJ unless :NAME is set and is used instead."))
 		(html-id clog-obj))))
     (setf (gethash id (controls group)) clog-obj)))
 
-(defmethod obj (clog-group name)
+(defgeneric obj (clog-group name)
   (:documentation "Retrieve from CLOG-GROUP the CLOG-OBJ with name"))
 
 (defmethod obj ((group clog-group) name)
@@ -92,6 +92,14 @@ CLOG-OBJ unless :NAME is set and is used instead."))
     (setf res (ppcre:regex-replace-all "\\x0A" res "\\x0A"))
     (setf res (ppcre:regex-replace-all "\\x0D" res "\\x0D"))
     res))
+
+;;;;;;;;;;;;;;
+;; lf-to-br ;;
+;;;;;;;;;;;;;;
+
+(defun lf-to-br (str)
+  "Change line feeds to <br>."
+  (ppcre:regex-replace-all "\\x0A" str "<br>"))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Implementation - Color Utilities

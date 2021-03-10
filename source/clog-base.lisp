@@ -295,7 +295,11 @@ result or if time out DEFAULT-ANSWER (Private)"))
 ;;;;;;;;;;;;;;;
 
 (defgeneric set-event (clog-obj event handler
-		       &key call-back-script eval-script one-time)
+		       &key call-back-script
+			 eval-script
+			 post-eval
+			 cancel-event
+			 one-time)
   (:documentation "Create the hook for incoming events. (Private)"))
 
 (defmethod set-event ((obj clog-obj) event handler
@@ -1050,34 +1054,42 @@ ON-TOUCH-CANCEL-HANDLER is nil unbind the event."))
 ;; set-on-character ;;
 ;;;;;;;;;;;;;;;;;;;;;;
 
-(defgeneric set-on-character (clog-obj on-character-handler &key one-time)
+(defgeneric set-on-character (clog-obj on-character-handler
+			      &key one-time disable-default)
   (:documentation "Set the ON-CHARACTER-HANDLER for CLOG-OBJ. If
-ON-CHARACTER-HANDLER is nil unbind the event. Setting this event to
+ON-CHARACTER-HANDLER is nil unbind the event. If disable-default is t
+default key bindings in browser will not occur. Setting this event to
 nil will unbind on-key-press also."))
 
-(defmethod set-on-character ((obj clog-obj) handler &key (one-time nil))
+(defmethod set-on-character ((obj clog-obj) handler
+			     &key (one-time nil) (disable-default nil))
   (set-event obj "keypress"
 	     (when handler
 	       (lambda (data)
 	       (let ((f (parse-keyboard-event data)))
 		 (funcall handler obj (code-char (getf f :char-code))))))
 	     :one-time one-time
+	     :cancel-event disable-default
 	     :call-back-script keyboard-event-script))
 
 ;;;;;;;;;;;;;;;;;;;;;
 ;; set-on-key-down ;;
 ;;;;;;;;;;;;;;;;;;;;;
 
-(defgeneric set-on-key-down (clog-obj on-key-down-handler &key one-time)
+(defgeneric set-on-key-down (clog-obj on-key-down-handler
+			     &key one-time disable-default)
   (:documentation "Set the ON-KEY-DOWN-HANDLER for CLOG-OBJ. If
-ON-KEY-DOWN-HANDLER is nil unbind the event."))
+disable-default is t default key bindings in browser will not occur.
+If ON-KEY-DOWN-HANDLER is nil unbind the event."))
 
-(defmethod set-on-key-down ((obj clog-obj) handler &key (one-time nil))
+(defmethod set-on-key-down ((obj clog-obj) handler
+			    &key (one-time nil) (disable-default nil))
   (set-event obj "keydown"
 	     (when handler
 	       (lambda (data)
 		 (funcall handler obj (parse-keyboard-event data))))
 	     :one-time one-time
+	     :cancel-event disable-default
 	     :call-back-script keyboard-event-script))   
 
 ;;;;;;;;;;;;;;;;;;;
@@ -1100,16 +1112,19 @@ ON-KEY-UP-HANDLER is nil unbind the event."))
 ;; set-on-key-press ;;
 ;;;;;;;;;;;;;;;;;;;;;;
 
-(defgeneric set-on-key-press (clog-obj on-key-press-handler &key one-time)
+(defgeneric set-on-key-press (clog-obj on-key-press-handler
+			      &key one-time disable-default)
   (:documentation "Set the ON-KEY-PRESS-HANDLER for CLOG-OBJ. If
 ON-KEY-PRESS-HANDLER is nil unbind the event."))
 
-(defmethod set-on-key-press ((obj clog-obj) handler &key (one-time nil))
+(defmethod set-on-key-press ((obj clog-obj) handler
+			     &key (one-time nil) (disable-default nil))
   (set-event obj "keypress"
 	     (when handler
 	       (lambda (data)
 		 (funcall handler obj (parse-keyboard-event data))))
 	     :one-time one-time
+	     :cancel-event disable-default
 	     :call-back-script keyboard-event-script))
 
 ;;;;;;;;;;;;;;;;;
