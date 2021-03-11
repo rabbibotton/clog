@@ -1227,8 +1227,10 @@ interactions. Use window-end-modal to undo."))
 (defun alert-toast (obj title content &key
 					(color-class "w3-red")
 					(time-out nil)
+					(place-top nil)
 					(html-id nil))
-  "Create an alert toast with option :TIME-OUT"
+  "Create an alert toast with option :TIME-OUT. If place-top is t then alert
+is placed in DOM at top of html body instead of bottom of html body."
   (unless html-id
       (setf html-id (clog-connection:generate-id)))
   (let* ((body   (connection-data-item obj "clog-body"))
@@ -1242,8 +1244,12 @@ interactions. Use window-end-modal to undo."))
                               color-class
 			      html-id
 			      title
-			      content)))
+			      content)
+			     :auto-place nil))
 	 (closer (attach-as-child body (format nil "~A-close" html-id))))
+    (if place-top
+	(place-inside-top-of body win)
+	(place-inside-bottom-of body win))
     (set-on-click closer (lambda (obj)
 			   (destroy win)))
     (when time-out

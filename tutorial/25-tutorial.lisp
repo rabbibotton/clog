@@ -19,7 +19,7 @@
 ;;;; ---------------------------------------------------------
 
 (defpackage #:clog-user
-  (:use #:cl #:clog #:clog-web)
+  (:use #:cl #:clog #:clog-web #:clog-gui)
   (:export start-tutorial))
 
 (in-package :clog-user)
@@ -40,14 +40,18 @@
       (set-on-submit form
 	  (lambda (obj)
 	    (declare (ignore obj))
-	    (setf (inner-html results-section)
-		  (format nil "~A<br>~A"
-			  (inner-html results-section)
-			  (lf-to-br (uiop/run-program:run-program
-				     (value command)
-				     :force-shell t :output :string))))
-	    (setf (scroll-top results-section)
-		  (scroll-height results-section))
+	    (handler-case
+		(progn
+		  (setf (inner-html results-section)
+			(format nil "~A<br>~A"
+				(inner-html results-section)
+				(lf-to-br (uiop/run-program:run-program
+					   (value command)
+					   :force-shell t :output :string))))
+		  (setf (scroll-top results-section)
+			(scroll-height results-section)))
+	      (error (c)
+		(alert-toast body "Error" c :time-out 2 :place-top t)))
 	    (setf (value command) ""))))
     (setf (overflow results-section) :scroll)
     (set-border results-section :thin :solid :black)
