@@ -1,6 +1,4 @@
-;;;; In this tutorial we are going to use clog-web for a local app, then
-;;;; in the next tutorial we will redo the same app using an html "binding"
-;;;; technique.
+;;;; In this tutorial we are going to use clog-web for a local app.
 ;;;;
 ;;;; --------------------------         -------
 ;;;; |ls -l                   |         | Run |
