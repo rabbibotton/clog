@@ -76,7 +76,10 @@
   (full-row-on-mobile     generic-function)
   (hide-on-small-screens  generic-function)
   (hide-on-medium-screens generic-function)
-  (hide-on-large-screens  generic-function))
+  (hide-on-large-screens  generic-function)
+
+  "CLOG-WEB - Interactions"
+  (clog-web-alert         function))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Implementation - clog-web - CLOG Web page abstraction
@@ -624,3 +627,40 @@ propetery will be set to nil on creation."))
       (setf (visiblep div) t))
     (change-class div 'clog-web-container)))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Implementation - clog-web Interactions
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+(defun clog-web-alert (obj title content &key
+					   (color-class "w3-red")
+					   (time-out nil)
+					   (place-top nil)
+					   (html-id nil))
+  "Create an alert toast with option :TIME-OUT. If place-top is t then alert
+is placed in DOM at top of obj instead of bottom of obj."
+  (unless html-id
+      (setf html-id (clog-connection:generate-id)))
+  (let* ((panel    (create-child obj
+				 (format nil
+"  <div class='w3-panel ~A w3-animate-right w3-display-container'>~
+   <span id='~A-closer' class='w3-button w3-large w3-display-topright'>&times;</span>~
+   <h3>~A</h3>~
+   <p>~A</p>~
+</div>"
+                              color-class
+			      html-id
+			      title
+			      content)
+				 :html-id html-id
+				 :auto-place nil)))
+    (if place-top
+	(place-inside-top-of obj panel)
+	(place-inside-bottom-of obj panel))
+    (set-on-click
+     (attach-as-child obj (format nil "~A-closer" html-id))
+     (lambda (obj)
+       (destroy panel)))
+    (when time-out
+      (sleep time-out)
+      (destroy panel))))

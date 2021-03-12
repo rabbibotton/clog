@@ -1245,13 +1245,15 @@ is placed in DOM at top of html body instead of bottom of html body."
 			      html-id
 			      title
 			      content)
-			     :auto-place nil))
-	 (closer (attach-as-child body (format nil "~A-close" html-id))))
+			     :html-id html-id
+			     :auto-place nil)))
     (if place-top
 	(place-inside-top-of body win)
 	(place-inside-bottom-of body win))
-    (set-on-click closer (lambda (obj)
-			   (destroy win)))
+    (set-on-click
+     (attach-as-child obj (format nil "~A-close" html-id))
+     (lambda (obj)
+       (destroy win)))
     (when time-out
       (sleep time-out)
       (destroy win))))

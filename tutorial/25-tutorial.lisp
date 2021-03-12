@@ -17,7 +17,7 @@
 ;;;; ---------------------------------------------------------
 
 (defpackage #:clog-user
-  (:use #:cl #:clog #:clog-web #:clog-gui)
+  (:use #:cl #:clog #:clog-web)
   (:export start-tutorial))
 
 (in-package :clog-user)
@@ -30,7 +30,7 @@
 	(results-section (create-web-content body :class "w3-monospace")))
     ;; Setup command section
     (let* ((form    (create-form command-section))
-	   (command (create-form-element form :text
+	   (command (create-form-element form :text :class "w3-input w3-border"
 					 :label (create-label form
 						   :content "Enter Command: ")))
 	   (button  (create-form-element form :submit)))
@@ -50,7 +50,7 @@
 		  (setf (scroll-top results-section)
 			(scroll-height results-section)))
 	      (error (c)
-		(alert-toast body "Error" c :time-out 2 :place-top t)))
+		(clog-web-alert command-section "Error" c :time-out 5)))
 	    (setf (value command) ""))))
     (setf (overflow results-section) :scroll)
     (set-border results-section :thin :solid :black)

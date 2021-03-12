@@ -87,7 +87,8 @@ CLOG-OBJ. If HTML-ID is nil one will be generated."))
 
 (defgeneric attach-as-child (clog-obj html-id &key clog-type)
   (:documentation "Create a new CLOG-Element or sub-type of CLOG-TYPE and
-attach an existing element with HTML-ID. The HTML-ID must be unique."))
+attach an existing element with HTML-ID. The HTML-ID must be unique and
+must be in DOM, ie placed or auto-placed."))
 
 (defmethod attach-as-child ((obj clog-obj) html-id
 			    &key (clog-type 'clog-element))
