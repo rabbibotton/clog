@@ -42,9 +42,10 @@
 	    (declare (ignore obj))
 	    (handler-case
 		(progn
-		  (setf (inner-html results-section)
-			(format nil "~A<br>~A"
+		  (setf (inner-html results-section)			
+			(format nil "~A<br><span style='color:blue'>~A</span><br>~A"
 				(inner-html results-section)
+				(value command)
 				(lf-to-br (uiop/run-program:run-program
 					   (value command)
 					   :force-shell t :output :string))))
@@ -55,7 +56,14 @@
 	    (setf (value command) ""))))
     (setf (overflow results-section) :scroll)
     (set-border results-section :thin :solid :black)
-    (setf (height results-section) (unit :px 500)))
+    (flet ((set-height ()
+	     (setf (height results-section) (- (inner-height (window body))
+					       (height command-section)
+					       20))))
+      (set-height)
+      (set-on-resize (window body) (lambda (obj)
+				     (declare (ignore obj))
+				     (set-height)))))
   (run body))
 
 (defun start-tutorial ()
