@@ -178,7 +178,7 @@ Tutorial Summary
 - 01-tutorial.lisp - Hello World
 - 02-tutorial.lisp - Closures in CLOG
 - 03-tutorial.lisp - Events fire in parallel
-- 05-tutorial.lisp - The event target, reusing event handlers
+- 04-tutorial.lisp - The event target, reusing event handlers
 - 05-tutorial.lisp - Using connection-data-item
 - 06-tutorial.lisp - Tasking and events
 - 07-tutorial.lisp - My first CLOG video game (and handling disconnects)
