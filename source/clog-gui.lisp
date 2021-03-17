@@ -189,6 +189,10 @@ If W3-CSS-URL has not been loaded before is installed unless is nil."
   (when jquery-ui
     (load-script (html-document clog-body) jquery-ui)))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Implementation - Menus
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 ;;;;;;;;;;;;;;
 ;; menu-bar ;;
 ;;;;;;;;;;;;;;
@@ -260,10 +264,6 @@ create-gui-menu-bar."))
 	       (declare (ignore key))
 	       (window-normalize value))
 	     (windows app))))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Implementation - Menus
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; create-gui-menu-bar ;;

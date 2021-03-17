@@ -78,6 +78,18 @@
   (hide-on-medium-screens generic-function)
   (hide-on-large-screens  generic-function)
 
+  "CLOG-WEB - Menus"
+  (clog-web-menu-bar             class)
+  (create-web-menu-bar           generic-function)
+  (web-menu-bar                  generic-function)
+  (web-menu-bar-height           generic-function)  
+  (clog-web-menu-drop-down       class)
+  (create-web-menu-drop-down     generic-function)
+  (clog-web-menu-item            class)
+  (create-web-menu-item          generic-function)
+  (create-web-menu-full-screen   generic-function)
+  (create-web-menu-icon          generic-function)
+
   "CLOG-WEB - Interactions"
   (clog-web-alert         function)
   (clog-web-form          function))
@@ -89,7 +101,11 @@
 (defclass clog-web ()
   ((body
     :accessor body
-    :documentation "Top level access to browser window")))
+    :documentation "Top level access to browser window")
+   (web-menu
+    :accessor web-menu
+    :initform nil
+    :documentation "Installed menu bar if installed")))
 
 ;;;;;;;;;;;;;;;;;;;;;
 ;; create-clog-web ;;
@@ -115,6 +131,172 @@ If W3-CSS-URL has not been loaded before is installed unless is nil."
     (when w3-css-url
       (setf (connection-data-item clog-body "w3-css") t)
       (load-css (html-document clog-body) w3-css-url))))
+
+;;;;;;;;;;;;;;;;;;
+;; web-menu-bar ;;
+;;;;;;;;;;;;;;;;;;
+
+(defgeneric web-menu-bar (clog-obj)
+  (:documentation "Get/setf window web-menu-bar. This is set buy
+create-web-menu-bar."))
+
+(defmethod web-menu-bar ((obj clog-obj))
+  (let ((app (connection-data-item obj "clog-web")))
+    (web-menu app)))
+
+(defgeneric set-web-menu-bar (clog-obj value)
+  (:documentation "Set window web-menu-bar"))
+
+(defmethod set-web-menu-bar ((obj clog-obj) value)
+  (let ((app (connection-data-item obj "clog-web")))
+    (setf (web-menu app) value)))
+(defsetf web-menu-bar set-web-menu-bar)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;
+;; web-menu-bar-height ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric web-menu-bar-height (clog-obj)
+  (:documentation "Get web-menu-bar height"))
+
+(defmethod web-menu-bar-height ((obj clog-obj))
+  (let ((app (connection-data-item obj "clog-web")))
+    (if (web-menu app)
+	(height (web-menu app))
+	0)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;
+;; create-web-menu-bar ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defclass clog-web-menu-bar (clog-div)()
+  (:documentation "Menu bar"))
+
+(defgeneric create-web-menu-bar (clog-obj &key class html-id)
+  (:documentation "Attached a menu bar to a CLOG-OBJ in general a
+clog-body."))
+
+(defmethod create-web-menu-bar ((obj clog-obj)
+				&key (class "w3-bar w3-black w3-card-4")
+				  (html-id nil))
+  (let ((div (create-div obj :class class :html-id html-id))
+	(app (connection-data-item obj "clog-web")))
+    (change-class div 'clog-web-menu-bar)
+    (setf (web-menu app) div)
+    div))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; create-web-menu-drop-down ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defclass clog-web-menu-drop-down (clog-div)()
+  (:documentation "Drop down menu"))
+
+(defgeneric create-web-menu-drop-down (clog-web-menu-bar
+				       &key content class html-id)
+  (:documentation "Attached a menu bar drop-down to a CLOG-WEB-MENU-BAR"))
+
+(defmethod create-web-menu-drop-down ((obj clog-web-menu-bar)
+	          &key (content "")
+		    (class "w3-dropdown-content w3-bar-block w3-card-4")
+		    (html-id nil))
+  (let* ((hover  (create-div obj :class "w3-dropdown-hover"))
+	 (button (create-button hover :class "w3-button" :content content))
+	 (div    (create-div hover :class class :html-id html-id)))
+    (declare (ignore button))
+    (change-class div 'clog-web-menu-drop-down)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; create-web-menu-item ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defclass clog-web-menu-item (clog-span)()
+  (:documentation "Menu item"))
+
+(defgeneric create-web-menu-item (clog-web-menu-drop-down
+				  &key content
+				    on-click
+				    class
+				    html-id)
+  (:documentation "Attached a menu item to a CLOG-WEB-MENU-DROP-DOWN"))
+
+(defmethod create-web-menu-item ((obj clog-obj)
+				 &key (content "")
+				   (on-click nil)
+				   (class "w3-bar-item w3-button")
+				   (html-id nil))
+  (let ((span
+	  (create-span obj :content content :class class :html-id html-id)))
+    (set-on-click span on-click)
+    (change-class span 'clog-web-menu-item)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; create-web-menu-item ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defclass clog-web-menu-item (clog-span)()
+  (:documentation "Menu item"))
+
+(defgeneric create-web-menu-item (clog-web-menu-drop-down
+				  &key content
+				    on-click
+				    class
+				    html-id)
+  (:documentation "Attached a menu item to a CLOG-WEB-MENU-DROP-DOWN"))
+
+(defmethod create-web-menu-item ((obj clog-obj)
+				 &key (content "")
+				   (on-click nil)
+				   (class "w3-bar-item w3-button")
+				   (html-id nil))
+  (let ((span
+	  (create-span obj :content content :class class :html-id html-id)))
+    (set-on-click span on-click)
+    (change-class span 'clog-web-menu-item)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; create-web-menu-full-screen ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric create-web-menu-full-screen (clog-web-menu-bar &key html-id)
+  (:documentation "Add as last item in menu bar to allow for a full screen
+icon ⤢ and full screen mode."))
+
+(defmethod create-web-menu-full-screen ((obj clog-web-menu-bar)
+					&key (html-id nil))
+  (create-child obj
+    	  " <span class='w3-bar-item w3-right' style='user-select:none;'
+	     onClick='if (document.fullscreenElement==null) {
+                         documentElement.requestFullscreen()
+                      } else {document.exitFullscreen();}'>⤢</span>"
+	  :html-id html-id
+	  :clog-type 'clog-web-menu-item))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; create-web-menu-icon ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric create-web-menu-icon (clog-web-menu-bar &key image-url
+						      on-click
+						      class
+						      html-id)
+  (:documentation "Add icon as menu bar item."))
+
+(defmethod create-web-menu-icon ((obj clog-web-menu-bar)
+				 &key (image-url "/img/clogwicon.png")
+				   (on-click nil)
+				   (class "w3-button w3-bar-item")
+				   (html-id nil))
+  (set-on-click
+   (create-child obj
+		 (format nil "<button class='~A'>~
+                                <img height=22 src='~A'></button>"
+			 class
+			 image-url)
+		 :html-id html-id
+		 :clog-type 'clog-web-menu-item)
+   on-click))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; set-maximum-page-width-in-pixels ;;

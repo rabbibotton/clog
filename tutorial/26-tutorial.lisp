@@ -9,23 +9,22 @@
 
 
 (defpackage #:clog-user
-  (:use #:cl #:clog #:clog-web #:clog-gui)
+  (:use #:cl #:clog #:clog-web)
   (:export start-tutorial))
 
 (in-package :clog-user)
 
 (defun on-new-window (body)
   (clog-web-initialize body)
-  (clog-gui-initialize body)
   (setf (title (html-document body)) "Tutorial 26")
   ;; Install a menu
-  (let* ((menu  (create-gui-menu-bar body))
-	 (tmp   (create-gui-menu-icon menu :on-click (lambda (obj)
+  (let* ((menu  (create-web-menu-bar body))
+	 (tmp   (create-web-menu-icon menu :on-click (lambda (obj)
 						       (setf (hash (location body)) "rung2"))))
-	 (tmp   (create-gui-menu-item menu :content  "About"
+	 (tmp   (create-web-menu-item menu :content  "About"
+					   :class    "w3-bar-item w3-button w3-right"
 					   :on-click (lambda (obj)
-						       (setf (hash (location body)) "rung2"))))
-	 (tmp   (create-gui-menu-full-screen menu)))
+						       (setf (hash (location body)) "rung2")))))
     (declare (ignore tmp)))
   ;; rung-1
   (let* ((first-rung (create-web-compositor body :html-id "rung1"))
