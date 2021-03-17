@@ -64,7 +64,7 @@ To load this package and work through tutorials (assuming you
 have Quicklisp configured):
 
 1. Start emacs then M-x slime
-2. In the REPL, run (tutorials currently 1 - 25):
+2. In the REPL, run (tutorials currently 1 - 26):
 
 ```
 CL-USER> (ql:quickload :clog)
@@ -200,6 +200,7 @@ Tutorial Summary
 - 23-tutorial.lisp - Using semaphores to wait for input
 - 24-tutorial.lisp - CLOG WEB containers
 - 25-tutorial.lisp - A "local" web app using CLOG WEB
+- 26-tutorial.lisp - A web page and form with CLOG WEB
 
 Demo Summary
 

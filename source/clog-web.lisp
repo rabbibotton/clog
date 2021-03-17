@@ -79,7 +79,8 @@
   (hide-on-large-screens  generic-function)
 
   "CLOG-WEB - Interactions"
-  (clog-web-alert         function))
+  (clog-web-alert         function)
+  (clog-web-form          function))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Implementation - clog-web - CLOG Web page abstraction
@@ -631,14 +632,13 @@ propetery will be set to nil on creation."))
 ;; Implementation - clog-web Interactions
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-
 (defun clog-web-alert (obj title content &key
 					   (color-class "w3-red")
 					   (time-out nil)
 					   (place-top nil)
 					   (html-id nil))
   "Create an alert toast with option :TIME-OUT. If place-top is t then alert
-is placed in DOM at top of obj instead of bottom of obj."
+is placed in DOM at top of OBJ instead of bottom of OBJ."
   (unless html-id
       (setf html-id (clog-connection:generate-id)))
   (let* ((panel    (create-child obj
@@ -664,3 +664,144 @@ is placed in DOM at top of obj instead of bottom of obj."
     (when time-out
       (sleep time-out)
       (destroy panel))))
+
+(defun clog-web-form (obj content fields on-input &key (modal nil)
+						    (ok-text "OK")
+						    (cancel-text "Cancel")
+						    (html-id nil))
+  "Create a form with CONTENT followed by FIELDS.
+FIELDS is a list of lists each list has:
+
+    (1) Field name         - Used for (name attribute)
+    (2) Field description  - Used for label
+    (3) Field type         - Optional (defaults to :text)
+    (4) Field type options - Optional
+
+Special field types
+
+   Field Type     Field Type Options
+   =============  ==================
+   :checkbox      t if checked
+   :radiobox      a-list ((label name)) a third value can be added \"checked\"
+   :select        a-list ((label name)) a third value can be added \"selected\"
+   :text          value
+     (any text input types also work :email, :tel, etc.
+      see FORM-ELEMENT-TYPE)
+
+Calls on-input after OK or Cancel with an a-list of field name to value
+if confirmed or nil if canceled. CANCEL-TEXT is only displayed if modal is t"
+  (unless html-id
+    (setf html-id (clog-connection:generate-id)))
+  (let* ((fls (format nil "~{~A~}"
+		      (mapcar (lambda (l)
+				(cond
+				  ((eq (third l) :select)
+				   (format nil
+					   "<div><label class='w3-text-black'><b>~A</b></label>~
+			       <select class='w3-select w3-border' name='~A-~A'>~A</select></div>"
+					   (first l) html-id (second l)
+					   (format nil "~{~A~}"
+						   (mapcar (lambda (s)
+							     (format nil
+								     "<option value='~A' ~A>~A</option>"
+								     (second s)
+								     (if (third s)
+									 (third s)
+									 "")
+								     (first s)))
+							   (fourth l)))))
+				  ((eq (third l) :radio)
+				   (format nil
+					   "<div><label class='w3-text-black'><b>~A</b></label>~A</div>"
+					   (first l)
+					   (format nil "~{~A~}"
+						   (mapcar (lambda (s)
+							     (format nil
+			       "<div><input type=radio class='w3-radio' name='~A-~A'~
+                                      id='~A-~A-~A' value='~A' ~A> ~
+                                     <label for='~A-~A-~A'>~A</label></div>"
+			                                      html-id (second l)
+							      html-id (second l) (second s)
+							      (second s)
+							      (if (third s)
+								  (third s)
+								  "")
+							      html-id (second l) (second s)
+							      (first s)))
+							   (fourth l)))))
+				  ((eq (third l) :checkbox)
+				   (format nil
+					   "<div><input class='w3-check' type='checkbox' ~
+                                                  name='~A-~A' id='~A-~A' ~A> ~
+                                                  <label class='w3-text-black' for='~A-~A'>~
+                                                  <b>~A</b></label>~
+                                            </div>"
+					   html-id (second l) html-id (second l)
+					   (if (fourth l)
+					       "checked"
+					       "")
+					   html-id (second l)
+					   (first l)))
+				  ((third l)
+				   (format nil
+					   "<div><label class='w3-text-black'><b>~A</b></label>~
+                                                 <input class='w3-input w3-border' type='~A'~
+                                                  name='~A-~A' id='~A-~A' value='~A'></div>"
+                                   (first l) (third l)
+				   html-id (second l) html-id (second l)
+				   (if (fourth l)
+				       (fourth l)
+				       "")))
+				  (t
+				   (format nil
+					    "<div><label class='w3-text-black'><b>~A</b></label>~
+                               <input class='w3-input w3-border' type='text' name='~A-~A' id='~A-~A'></div>"
+                                            (first l) html-id (second l) html-id (second l)))))
+			      fields)))
+	 (win  (create-web-content obj
+				  :content        (format nil
+"<div class='w3-panel'>
+~A
+<form class='w3-container' onSubmit='return false;'>
+~A
+<br><center>
+<button class='w3-button w3-black' style='width:7em' id='~A-ok'>~A</button>~A
+</center>
+</form>
+</div>" (if content
+	    (format nil "<center>~A</center><br>" content)
+	    "")
+        fls
+	html-id ok-text ; ok
+	(if modal
+	    (format nil "<button class='w3-button w3-black' style='width:7em' id='~A-cancel'>~A</button>"
+		    html-id cancel-text)
+	    ""))
+				  :hidden          t
+				  :html-id         html-id))
+	 (ok     (attach-as-child win (format nil "~A-ok" html-id)))
+	 (cancel (if modal
+		     (attach-as-child win (format nil "~A-cancel" html-id))
+		     nil)))
+    (setf (visiblep win) t)
+    (when modal
+      (js-execute obj (format nil "$('[name=~A-~A]').focus()"
+			      html-id
+			      (cadar fields))))
+    (set-on-click ok (lambda (obj)
+		       (declare (ignore obj))
+		       (let ((result (mapcar
+				      (lambda (l)
+					`(,(second l)
+					  ,(let ((name (format nil "~A-~A" html-id (second l))))
+					     (cond ((eq (third l) :select)
+						    (select-value win name))
+						   ((eq (third l) :radio)
+						    (radio-value win name))
+						   ((eq (third l) :checkbox)
+						    (checkbox-value win name))
+						   (t
+						    (name-value win name))))))
+				      fields)))
+			 (funcall on-input result)))
+		  :one-time t)))
