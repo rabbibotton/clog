@@ -1,8 +1,8 @@
 ;;;; In this tutorial we are going to use clog-web for a website.
 ;;;; It is possible, for many ideal, to only use CLOG when needed
 ;;;; for app oriented interactions. I find that I enjoy building
-;;;; websites as apps and that what CLOG-WEB is meant to help with.
-;;;; This entire sight could have been done in html and just adding
+;;;; websites as apps and that is what CLOG-WEB is meant to help with.
+;;;; This entire site could have been done in html and just adding
 ;;;; the boot.js file and then connecting to those form elements or
 ;;;; other areas desired to bring to life the page. CLOG is
 ;;;; completely flexible in how you choose to use it.
