@@ -440,6 +440,14 @@ their <a href="#x-28CLOG-3AHTML-ID-20GENERIC-FUNCTION-29" title="(CLOG:HTML-ID G
 <p>Escape <code>STR</code> for sending to browser script.</p></li>
 </ul>
 
+<p><a id='x-28CLOG-3ALF-TO-BR-20FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#x-28CLOG-3ALF-TO-BR-20FUNCTION-29" >LF-TO-BR</a></span></span> <span class="locative-args">STR</span></span></p>
+
+<p>Change line feeds to <br>.</p></li>
+</ul>
+
 <p><code>CLOG</code> Color utilities</p>
 
 <p><a id='x-28CLOG-3ARGB-20FUNCTION-29'></a></p>
@@ -1004,20 +1012,22 @@ is nil unbind the event.</p></li>
 <p><a id='x-28CLOG-3ASET-ON-CHARACTER-20GENERIC-FUNCTION-29'></a></p>
 
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ASET-ON-CHARACTER-20GENERIC-FUNCTION-29" >SET-ON-CHARACTER</a></span></span> <span class="locative-args">CLOG-OBJ ON-CHARACTER-HANDLER &amp;KEY ONE-TIME</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ASET-ON-CHARACTER-20GENERIC-FUNCTION-29" >SET-ON-CHARACTER</a></span></span> <span class="locative-args">CLOG-OBJ ON-CHARACTER-HANDLER &amp;KEY ONE-TIME DISABLE-DEFAULT</span></span></p>
 
 <p>Set the <code>ON-CHARACTER-HANDLER</code> for <code>CLOG-OBJ</code>. If
-<code>ON-CHARACTER-HANDLER</code> is nil unbind the event. Setting this event to
+<code>ON-CHARACTER-HANDLER</code> is nil unbind the event. If disable-default is t
+default key bindings in browser will not occur. Setting this event to
 nil will unbind on-key-press also.</p></li>
 </ul>
 
 <p><a id='x-28CLOG-3ASET-ON-KEY-DOWN-20GENERIC-FUNCTION-29'></a></p>
 
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ASET-ON-KEY-DOWN-20GENERIC-FUNCTION-29" >SET-ON-KEY-DOWN</a></span></span> <span class="locative-args">CLOG-OBJ ON-KEY-DOWN-HANDLER &amp;KEY ONE-TIME</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ASET-ON-KEY-DOWN-20GENERIC-FUNCTION-29" >SET-ON-KEY-DOWN</a></span></span> <span class="locative-args">CLOG-OBJ ON-KEY-DOWN-HANDLER &amp;KEY ONE-TIME DISABLE-DEFAULT</span></span></p>
 
 <p>Set the <code>ON-KEY-DOWN-HANDLER</code> for <code>CLOG-OBJ</code>. If
-<code>ON-KEY-DOWN-HANDLER</code> is nil unbind the event.</p></li>
+disable-default is t default key bindings in browser will not occur.
+If <code>ON-KEY-DOWN-HANDLER</code> is nil unbind the event.</p></li>
 </ul>
 
 <p><a id='x-28CLOG-3ASET-ON-KEY-UP-20GENERIC-FUNCTION-29'></a></p>
@@ -1032,7 +1042,7 @@ nil will unbind on-key-press also.</p></li>
 <p><a id='x-28CLOG-3ASET-ON-KEY-PRESS-20GENERIC-FUNCTION-29'></a></p>
 
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ASET-ON-KEY-PRESS-20GENERIC-FUNCTION-29" >SET-ON-KEY-PRESS</a></span></span> <span class="locative-args">CLOG-OBJ ON-KEY-PRESS-HANDLER &amp;KEY ONE-TIME</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ASET-ON-KEY-PRESS-20GENERIC-FUNCTION-29" >SET-ON-KEY-PRESS</a></span></span> <span class="locative-args">CLOG-OBJ ON-KEY-PRESS-HANDLER &amp;KEY ONE-TIME DISABLE-DEFAULT</span></span></p>
 
 <p>Set the <code>ON-KEY-PRESS-HANDLER</code> for <code>CLOG-OBJ</code>. If
 <code>ON-KEY-PRESS-HANDLER</code> is nil unbind the event.</p></li>
@@ -1100,7 +1110,8 @@ as child of <code>CLOG-OBJ</code> and if <code>:AUTO-PLACE</code> (default t) pl
 <li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3AATTACH-AS-CHILD-20GENERIC-FUNCTION-29" >ATTACH-AS-CHILD</a></span></span> <span class="locative-args">CLOG-OBJ HTML-ID &amp;KEY CLOG-TYPE</span></span></p>
 
 <p>Create a new CLOG-Element or sub-type of <code>CLOG-TYPE</code> and
-attach an existing element with <code>HTML-ID</code>. The <code>HTML-ID</code> must be unique.</p></li>
+attach an existing element with <code>HTML-ID</code>. The <code>HTML-ID</code> must be unique and
+must be in DOM, ie placed or auto-placed.</p></li>
 </ul>
 
 <p>CLOG-Element - DOM Placement</p>
@@ -2193,6 +2204,14 @@ line-width - size or medium|thin|thick|length|initial|inherit</p></li>
 <li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ABOX-SHADOW-20GENERIC-FUNCTION-29" >BOX-SHADOW</a></span></span> <span class="locative-args">CLOG-ELEMENT</span></span></p>
 
 <p>Get/Setf box-shadow.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3ATEXT-SHADOW-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ATEXT-SHADOW-20GENERIC-FUNCTION-29" >TEXT-SHADOW</a></span></span> <span class="locative-args">CLOG-ELEMENT</span></span></p>
+
+<p>Get/Setf text-shadow.</p></li>
 </ul>
 
 <p><a id='x-28CLOG-3AOUTLINE-STYLE-TYPE-20-28TYPE-29-29'></a></p>
@@ -4856,9 +4875,10 @@ interactions. Use window-end-modal to undo.</p></li>
 <p><a id='x-28CLOG-GUI-3AALERT-TOAST-20FUNCTION-29'></a></p>
 
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#x-28CLOG-GUI-3AALERT-TOAST-20FUNCTION-29" >ALERT-TOAST</a></span></span> <span class="locative-args">OBJ TITLE CONTENT &amp;KEY (COLOR-CLASS &quot;w3-red&quot;) (TIME-OUT <code>NIL</code>) (HTML-ID <code>NIL</code>)</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#x-28CLOG-GUI-3AALERT-TOAST-20FUNCTION-29" >ALERT-TOAST</a></span></span> <span class="locative-args">OBJ TITLE CONTENT &amp;KEY (COLOR-CLASS &quot;w3-red&quot;) (TIME-OUT <code>NIL</code>) (PLACE-TOP <code>NIL</code>) (HTML-ID <code>NIL</code>)</span></span></p>
 
-<p>Create an alert toast with option <code>:TIME-OUT</code></p></li>
+<p>Create an alert toast with option <code>:TIME-OUT</code>. If place-top is t then alert
+is placed in DOM at top of html body instead of bottom of html body.</p></li>
 </ul>
 
 <p><a id='x-28CLOG-GUI-3AALERT-DIALOG-20FUNCTION-29'></a></p>
@@ -4893,7 +4913,7 @@ Calls on-input with t if confirmed or nil if canceled.</p></li>
 <li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#x-28CLOG-GUI-3AFORM-DIALOG-20FUNCTION-29" >FORM-DIALOG</a></span></span> <span class="locative-args">OBJ CONTENT FIELDS ON-INPUT &amp;KEY (MODAL <code>T</code>) (TITLE &quot;Form&quot;) (OK-TEXT &quot;OK&quot;) (CANCEL-TEXT &quot;Cancel&quot;) (LEFT <code>NIL</code>) (TOP <code>NIL</code>) (WIDTH 400) (HEIGHT 500) (CLIENT-MOVEMENT <code>NIL</code>) (HTML-ID <code>NIL</code>)</span></span></p>
 
 <p>Create a form dialog box with <code>CONTENT</code> followed by <code>FIELDS</code>.
-Fields is a list of lists each list has:</p>
+<code>FIELDS</code> is a list of lists each list has:</p>
 
 <pre><code>(1) Field name         - Used for (name attribute)
 (2) Field description  - Used for label
@@ -4907,13 +4927,13 @@ Fields is a list of lists each list has:</p>
    =============  ==================
    :filename      default dir -- NOTE: This is <em>server</em> side!
    :checkbox      t if checked
-   :radiobox      a-list ((label name)) a third value can be used to select
-   :select        a-list ((label name)) a third value can be used to select 
+   :radiobox      a-list ((label name)) a third value can be added &quot;checked&quot;
+   :select        a-list ((label name)) a third value can be added &quot;selected&quot;
    :text          value
      (any text input types also work :email, :tel, etc.
       see <a href="#x-28CLOG-3AFORM-ELEMENT-TYPE-20-28TYPE-29-29" title="(CLOG:FORM-ELEMENT-TYPE (TYPE))"><code>FORM-ELEMENT-TYPE</code></a>)</p>
 
-<p>Calls on-input after OK or Cancel with a-list of field name to value
+<p>Calls on-input after OK or Cancel with an a-list of field name to value
 if confirmed or nil if canceled.</p></li>
 </ul>
 
@@ -5329,6 +5349,46 @@ screen size smaller then 601 pixels DP</p></li>
 <li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-WEB-3AHIDE-ON-LARGE-SCREENS-20GENERIC-FUNCTION-29" >HIDE-ON-LARGE-SCREENS</a></span></span> <span class="locative-args">CLOG-ELEMENT</span></span></p>
 
 <p>Hide element on screens smaller then 993 pixels DP</p></li>
+</ul>
+
+<p><code>CLOG-WEB</code> - Interactions</p>
+
+<p><a id='x-28CLOG-WEB-3ACLOG-WEB-ALERT-20FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#x-28CLOG-WEB-3ACLOG-WEB-ALERT-20FUNCTION-29" >CLOG-WEB-ALERT</a></span></span> <span class="locative-args">OBJ TITLE CONTENT &amp;KEY (COLOR-CLASS &quot;w3-red&quot;) (TIME-OUT <code>NIL</code>) (PLACE-TOP <code>NIL</code>) (HTML-ID <code>NIL</code>)</span></span></p>
+
+<p>Create an alert toast with option <code>:TIME-OUT</code>. If place-top is t then alert
+is placed in DOM at top of <code>OBJ</code> instead of bottom of <code>OBJ</code>.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-WEB-3ACLOG-WEB-FORM-20FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#x-28CLOG-WEB-3ACLOG-WEB-FORM-20FUNCTION-29" >CLOG-WEB-FORM</a></span></span> <span class="locative-args">OBJ CONTENT FIELDS ON-INPUT &amp;KEY (MODAL <code>NIL</code>) (OK-TEXT &quot;OK&quot;) (CANCEL-TEXT &quot;Cancel&quot;) (HTML-ID <code>NIL</code>)</span></span></p>
+
+<p>Create a form with <code>CONTENT</code> followed by <code>FIELDS</code>.
+<code>FIELDS</code> is a list of lists each list has:</p>
+
+<pre><code>(1) Field name         - Used for (name attribute)
+(2) Field description  - Used for label
+(3) Field type         - Optional (defaults to :text)
+(4) Field type options - Optional
+</code></pre>
+
+<p>Special field types</p>
+
+<p>Field Type     Field Type Options
+   =============  ==================
+   :checkbox      t if checked
+   :radiobox      a-list ((label name)) a third value can be added &quot;checked&quot;
+   :select        a-list ((label name)) a third value can be added &quot;selected&quot;
+   :text          value
+     (any text input types also work :email, :tel, etc.
+      see <a href="#x-28CLOG-3AFORM-ELEMENT-TYPE-20-28TYPE-29-29" title="(CLOG:FORM-ELEMENT-TYPE (TYPE))"><code>FORM-ELEMENT-TYPE</code></a>)</p>
+
+<p>Calls on-input after OK or Cancel with an a-list of field name to value
+if confirmed or nil if canceled. <code>CANCEL-TEXT</code> is only displayed if modal is t</p></li>
 </ul>
 
 <p><a id='x-28CLOG-3A-40CLOG-BODY-20MGL-PAX-3ASECTION-29'></a></p>
