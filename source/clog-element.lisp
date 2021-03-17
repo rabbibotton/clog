@@ -1889,6 +1889,23 @@ line-width - size or medium|thin|thick|length|initial|inherit"))
   (setf (style obj "box-shadow") value))
 (defsetf box-shadow set-box-shadow)
 
+;;;;;;;;;;;;;;;;;
+;; text-shadow ;;
+;;;;;;;;;;;;;s;;;
+
+(defgeneric text-shadow (clog-element)
+  (:documentation "Get/Setf text-shadow."))
+
+(defmethod text-shadow ((obj clog-element))
+  (style obj "text-shadow"))
+
+(defgeneric set-text-shadow (clog-element value)
+  (:documentation "Set text-shadow. See https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Background_and_Borders/Text-shadow_generator"))
+
+(defmethod set-text-shadow ((obj clog-element) value)
+  (setf (style obj "text-shadow") value))
+(defsetf text-shadow set-text-shadow)
+
 ;;;;;;;;;;;;;
 ;; outline ;;
 ;;;;;;;;;;;;;

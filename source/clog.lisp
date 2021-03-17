@@ -293,6 +293,7 @@ embedded in a native template application.)"
   (set-border                 generic-function)
   (border-radius              generic-function)
   (box-shadow                 generic-function)
+  (text-shadow                generic-function)
   (outline-style-type         type)
   (outline                    generic-function)
   (set-outline                generic-function)

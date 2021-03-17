@@ -1440,7 +1440,7 @@ Calls on-input with t if confirmed or nil if canceled."
 						  (client-movement nil)
 						  (html-id nil))
   "Create a form dialog box with CONTENT followed by FIELDS.
-Fields is a list of lists each list has:
+FIELDS is a list of lists each list has:
 
     (1) Field name         - Used for (name attribute)
     (2) Field description  - Used for label
@@ -1453,13 +1453,13 @@ Special field types
    =============  ==================
    :filename      default dir -- NOTE: This is _server_ side!
    :checkbox      t if checked
-   :radiobox      a-list ((label name)) a third value can be used to select
-   :select        a-list ((label name)) a third value can be used to select 
+   :radiobox      a-list ((label name)) a third value can be added \"checked\"
+   :select        a-list ((label name)) a third value can be added \"selected\"
    :text          value
      (any text input types also work :email, :tel, etc.
       see FORM-ELEMENT-TYPE)
 
-Calls on-input after OK or Cancel with a-list of field name to value
+Calls on-input after OK or Cancel with an a-list of field name to value
 if confirmed or nil if canceled."
   (unless html-id
     (setf html-id (clog-connection:generate-id)))

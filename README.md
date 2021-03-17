@@ -22,7 +22,7 @@ STATUS: CLOG is complete and all work is on higher order additions,
 such as full desktop over the web, database tools,etc. See below for
 some enhacements being worked on. CLOG is actually based on GNOGA, a
 framework I wrote for Ada in 2013 and used in commercial production
-code for the last 8 years, i.e. the techiniques CLOG uses are solid
+code for the last 8+ years, i.e. the techiniques CLOG uses are solid
 and proven.
 
 CLOG is being actively extended daily. Check the github discussion
