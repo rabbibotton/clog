@@ -660,6 +660,7 @@ is placed in DOM at top of OBJ instead of bottom of OBJ."
     (set-on-click
      (attach-as-child obj (format nil "~A-closer" html-id))
      (lambda (obj)
+       (declare (ignore obj))
        (destroy panel)))
     (when time-out
       (sleep time-out)
@@ -783,6 +784,7 @@ if confirmed or nil if canceled. CANCEL-TEXT is only displayed if modal is t"
 	 (cancel (if modal
 		     (attach-as-child win (format nil "~A-cancel" html-id))
 		     nil)))
+    (declare (ignore cancel))
     (setf (visiblep win) t)
     (when modal
       (js-execute obj (format nil "$('[name=~A-~A]').focus()"
