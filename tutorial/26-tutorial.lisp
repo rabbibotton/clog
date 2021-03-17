@@ -9,14 +9,24 @@
 
 
 (defpackage #:clog-user
-  (:use #:cl #:clog #:clog-web)
+  (:use #:cl #:clog #:clog-web #:clog-gui)
   (:export start-tutorial))
 
 (in-package :clog-user)
 
 (defun on-new-window (body)
   (clog-web-initialize body)
+  (clog-gui-initialize body)
   (setf (title (html-document body)) "Tutorial 26")
+  ;; Install a menu
+  (let* ((menu  (create-gui-menu-bar body))
+	 (tmp   (create-gui-menu-icon menu :on-click (lambda (obj)
+						       (setf (hash (location body)) "rung2"))))
+	 (tmp   (create-gui-menu-item menu :content  "About"
+					   :on-click (lambda (obj)
+						       (setf (hash (location body)) "rung2"))))
+	 (tmp   (create-gui-menu-full-screen menu)))
+    (declare (ignore tmp)))
   ;; rung-1
   (let* ((first-rung (create-web-compositor body :html-id "rung1"))
 	 (image      (create-img first-rung :url-src "/img/windmills.jpg"

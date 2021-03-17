@@ -165,7 +165,8 @@
 (defun clog-gui-initialize (clog-body &key (w3-css-url "/css/w3.css")
 					(jquery-ui-css "/css/jquery-ui.css")
 					(jquery-ui "/js/jquery-ui.js"))
-  "Initializes clog-gui and installs a clog-gui object on connection."
+  "Initializes clog-gui and installs a clog-gui object on connection.
+If W3-CSS-URL has not been loaded before is installed unless is nil."
   (create-clog-gui clog-body)
   (set-on-full-screen-change (html-document clog-body)
 			     (lambda (obj)
@@ -179,8 +180,10 @@
 				 (when (window-maximized-p (current-window obj))
 				   (window-normalize (current-window obj))
 				   (window-maximize (current-window obj))))))
-  (when w3-css-url
-    (load-css (html-document clog-body) w3-css-url))
+  (unless (connection-data-item clog-body "w3-css")
+    (when w3-css-url
+      (setf (connection-data-item clog-body "w3-css") t)
+      (load-css (html-document clog-body) w3-css-url)))
   (when jquery-ui-css
     (load-css (html-document clog-body) jquery-ui-css))
   (when jquery-ui

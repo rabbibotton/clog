@@ -108,10 +108,13 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defun clog-web-initialize (clog-body &key (w3-css-url "/css/w3.css"))
-  "Initializes clog-web and installs a clog-web object on connection."
+  "Initializes clog-web and installs a clog-web object on connection.
+If W3-CSS-URL has not been loaded before is installed unless is nil."
   (create-clog-web clog-body)
-  (when w3-css-url
-    (load-css (html-document clog-body) w3-css-url)))
+  (unless (connection-data-item clog-body "w3-css")
+    (when w3-css-url
+      (setf (connection-data-item clog-body "w3-css") t)
+      (load-css (html-document clog-body) w3-css-url))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; set-maximum-page-width-in-pixels ;;
