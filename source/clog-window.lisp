@@ -484,7 +484,7 @@ on-storage event is fired for changes to :local storage keys."))
 (local = persistant or session)"))
 
 (defmethod storage-length ((obj clog-window) storage-type)
-  (parse-integer (query obj (format "~(~a~)Storage.length" storage-type))))
+  (parse-integer (query obj (format nil "~(~a~)Storage.length" storage-type))))
 
 ;;;;;;;;;;;;;;;;;
 ;; storage-key ;;
