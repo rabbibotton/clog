@@ -50,7 +50,7 @@ TEXT method to access blocks content."))
 (defgeneric add-style (clog-style-block selector-type selector style-alist)
   (:documentation "Add to style-block an alist of css styles to affect
 selector. For example:
-     (add-style :element \"a\" ((text-decoration none)))"))
+     (add-style :element \"a\" '((\"text-decoration\" :none)))"))
 
 (defmethod add-style ((obj clog-style-block) selector-type selector style-alist)
   (let ((old-text (text obj)))
