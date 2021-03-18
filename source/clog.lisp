@@ -35,6 +35,7 @@ embedded in a native template application.)"
   (@clog-obj             section)
   (@clog-element         section)
   (@clog-element-common  section)
+  (@clog-style-block     section)
   (@clog-form            section)
   (@clog-canvas          section)
   (@clog-multimedia      section)
@@ -458,6 +459,12 @@ embedded in a native template application.)"
   "CLOG-Table-Column-Group-Item - Class for CLOG Table-Column-Group-Items"
   (clog-table-column-group-item   class)
   (create-table-column-group-item generic-function))
+
+(defsection @clog-style-block (:title "CLOG Style Blocks")
+  "CLOG-Style-Block - CLOG Style Blocks"
+  (clog-style-block    class)
+  (create-style-block  generic-function)
+  (add-style           generic-function))
 
 (defsection @clog-form (:title "CLOG Form Objects")
   "CLOG-Form-Data"

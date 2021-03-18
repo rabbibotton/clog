@@ -1,3 +1,4 @@
+
 ;;;; clog.asd
 
 (asdf:defsystem #:clog
@@ -18,6 +19,7 @@
 	       (:file "clog-base")
 	       (:file "clog-element")
 	       (:file "clog-element-common")
+	       (:file "clog-style")
 	       (:file "clog-canvas")
 	       (:file "clog-form")
 	       (:file "clog-multimedia")

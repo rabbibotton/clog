@@ -24,6 +24,10 @@
 (in-package :clog-user)
 
 (defun on-main (body)
+  (let ((sb (create-style-block body)))
+    (add-style sb :element "a"       '(("color"           :orange)
+				       ("text-decoration" :none)))
+    (add-style sb :element "a:hover" '(("background-color" :gray))))
   (create-div body :content
      "We are in on-main<br><br>
       <h1>Pick a link</h1>

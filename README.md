@@ -47,7 +47,7 @@ programming logic, events and decisions are done on the server
 which can be local, or remote over the web.
 
 CLOG is developed on an M1 MacBook with ECL, it is tested fairly
-regulary with SCBL on Linux, Windows and Intel MacBook. It should
+regulary with SBCL on Linux, Windows and an Intel MacBook. It should
 in theory work on any system Quicklisp and CLACK will load on to.
 
 CLOG is in Quicklisp, but because I am still adding code daily,
