@@ -30,10 +30,14 @@
   (let* ((first-rung (create-web-compositor body :html-id "rung1"))
 	 (image      (create-img first-rung :url-src "/img/windmills.jpg"
 					    :class "w3-sepia"))
-	 (clog-txt   (create-div first-rung :content "<a href='#rung2' style='text-decoration:none;'>
-CLOG<br><u>The omnificient gui</u><br>
-desktop<br>web<br>mobile<br>iot</a>"
+	 (clog-txt   (create-div first-rung :content "CLOG<br><u>The omnificient gui</u><br>
+                                                      desktop<br>web<br>mobile<br>iot"
 					    :class   "w3-text-white w3-xxlarge")))
+    (setf (cursor clog-txt) :pointer)
+    (set-on-click clog-txt (lambda (obj)
+			     (declare (ignore obj))
+			     (setf (display first-rung) :none)
+			     (setf (hash (location body)) "rung2")))
     (setf (box-width image) "100%")
     (setf (text-shadow clog-txt) "2px 2px black")
     (composite-top-left clog-txt :padding-class :padding-64))
@@ -54,9 +58,11 @@ desktop<br>web<br>mobile<br>iot</a>"
 		      ("Name"   :name)
 		      ("E-mail" :email))
 		   (lambda (data)
+		     (setf (display second-rung) :none)
 		     (setf (hash (location body)) "rung3")
 		     (setf (inner-html (attach-as-child body "rung3-answer"))
-			   (format nil "<br><br>Thank you ~A<br>Your information will be sent shortly."
+			   (format nil "<br><br>Thank you ~A<br>Your information NOT
+                                                will be sent shortly.(DEMO)"
 				   (cadr (assoc :name data)))))))
   ;; rung-3
   (let* ((third-rung (create-web-compositor body :html-id "rung3"))
