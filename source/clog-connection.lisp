@@ -248,7 +248,7 @@ the default answer. (Private)"
 the default route for '/' to establish web-socket connections and static files
 located at STATIC-ROOT. If BOOT-FILE is nil no initial clog-path's will be
 setup, use clog-path to add. The on-connect-handler needs to indentify the
-path by querying the browser. See PATH-NAME (CLOG-LOCATION)."
+path by querying the browser. See PATH-NAME (in CLOG-LOCATION)."
   (set-on-connect on-connect-handler)
   (when boot-file
     (set-clog-path "/" boot-file))
