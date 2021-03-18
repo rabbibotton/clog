@@ -47,6 +47,7 @@ same as the clog directy this overides the relative paths used in them.")
        (host           "0.0.0.0")
        (port           8080)
        (boot-file      "/boot.html")
+       (static-boot-js nil)       
        (static-root    (merge-pathnames "./static-files/"
 			  (asdf:system-source-directory :clog))))
   "Inititalize CLOG on a socket using HOST and PORT to serve BOOT-FILE
@@ -56,19 +57,20 @@ shut down, this function does the same as set-on-new-window (does not
 change the static-root). STATIC-ROOT by default is the \"directory CLOG
 is installed in ./static-files\" If the variable clog:*overide-static-root*
 is set STATIC-ROOT will be ignored. If BOOT-FILE is nil no default
-boot-file will be set for root path, i.e. /."
-
+boot-file will be set for root path, i.e. /. If static-boot-js is t
+then boot.js is served from the file /js/boot.js instead of the
+compiled version."
   (set-on-new-window on-new-window-handler :path "/" :boot-file boot-file)
-
   (unless *clog-running*
     (setf *clog-running* t)
     (cc:initialize #'on-connect
-		   :host host
-		   :port port
-		   :boot-file boot-file
-		   :static-root (if *overide-static-root*
-				    *overide-static-root*
-				    static-root))))
+		   :host           host
+		   :port           port
+		   :boot-file      boot-file
+		   :static-boot-js static-boot-js
+		   :static-root    (if *overide-static-root*
+				       *overide-static-root*
+				       static-root))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;
 ;; set-on-new-window ;;
