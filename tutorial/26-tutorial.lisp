@@ -61,8 +61,8 @@
 		     (setf (display second-rung) :none)
 		     (setf (hash (location body)) "rung3")
 		     (setf (inner-html (attach-as-child body "rung3-answer"))
-			   (format nil "<br><br>Thank you ~A<br>Your information NOT
-                                                will be sent shortly.(DEMO)"
+			   (format nil "<br><br>Thank you ~A<br>Your information will
+                                                NOT be sent shortly.(DEMO)"
 				   (cadr (assoc :name data)))))))
   ;; rung-3
   (let* ((third-rung (create-web-compositor body :html-id "rung3"))
