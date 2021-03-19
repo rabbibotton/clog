@@ -76,12 +76,16 @@
 		      ("Name"   :name)
 		      ("E-mail" :email))
 		   (lambda (data)
-		     (setf (display second-rung) :none)
-		     (setf (hash (location body)) "rung3")
-		     (setf (inner-html (attach-as-child body "rung3-answer"))
-			   (format nil "<br><br>Thank you ~A<br>Your information will
+		     (if (equal (cadr (assoc :email data)) "")		 
+			 (clog-web-alert second-rung "Missing E-Mail"
+					 "Please fill out E-mail" :time-out 2)
+			 (progn
+			   (setf (display second-rung) :none)
+			   (setf (hash (location body)) "rung3")
+			   (setf (inner-html (attach-as-child body "rung3-answer"))
+				 (format nil "<br><br>Thank you ~A<br>Your information will
                                                 NOT be sent shortly.(DEMO)"
-				   (cadr (assoc :name data)))))))
+					 (cadr (assoc :name data)))))))))
   ;; rung-3
   (let* ((third-rung (create-web-compositor body :html-id "rung3"))
 	 (image      (create-img third-rung :url-src "/img/yellow-clogs.jpg"))

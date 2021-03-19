@@ -991,4 +991,4 @@ if confirmed or nil if canceled. CANCEL-TEXT is only displayed if modal is t"
 						    (name-value win name))))))
 				      fields)))
 			 (funcall on-input result)))
-		  :one-time t)))
+		  :one-time nil)))
