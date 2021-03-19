@@ -311,7 +311,7 @@ properties (to use for :property) are based on the event type.</p>
 <p><a id='x-28CLOG-3AINITIALIZE-20FUNCTION-29'></a></p>
 
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#x-28CLOG-3AINITIALIZE-20FUNCTION-29" >INITIALIZE</a></span></span> <span class="locative-args">ON-NEW-WINDOW-HANDLER &amp;KEY (HOST &quot;0.0.0.0&quot;) (PORT 8080) (BOOT-FILE &quot;/boot.html&quot;) (STATIC-ROOT (<code>MERGE-PATHNAMES</code> &quot;./static-files/&quot; (<code>ASDF/SYSTEM:SYSTEM-SOURCE-DIRECTORY</code> <code>:CLOG</code>)))</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#x-28CLOG-3AINITIALIZE-20FUNCTION-29" >INITIALIZE</a></span></span> <span class="locative-args">ON-NEW-WINDOW-HANDLER &amp;KEY (HOST &quot;0.0.0.0&quot;) (PORT 8080) (BOOT-FILE &quot;/boot.html&quot;) (STATIC-BOOT-JS <code>NIL</code>) (STATIC-ROOT (<code>MERGE-PATHNAMES</code> &quot;./static-files/&quot; (<code>ASDF/SYSTEM:SYSTEM-SOURCE-DIRECTORY</code> <code>:CLOG</code>)))</span></span></p>
 
 <p>Inititalize <code>CLOG</code> on a socket using <code>HOST</code> and <code>PORT</code> to serve <code>BOOT-FILE</code>
 as the default route to establish web-socket connections and static
@@ -320,7 +320,9 @@ shut down, this function does the same as set-on-new-window (does not
 change the static-root). <code>STATIC-ROOT</code> by default is the &quot;directory <code>CLOG</code>
 is installed in ./static-files&quot; If the variable clog:<em>overide-static-root</em>
 is set <code>STATIC-ROOT</code> will be ignored. If <code>BOOT-FILE</code> is nil no default
-boot-file will be set for root path, i.e. /.</p></li>
+boot-file will be set for root path, i.e. /. If static-boot-js is t
+then boot.js is served from the file /js/boot.js instead of the
+compiled version.</p></li>
 </ul>
 
 <p><a id='x-28CLOG-3ASET-ON-NEW-WINDOW-20FUNCTION-29'></a></p>
@@ -3185,7 +3187,7 @@ clog-document. The add-style method can be used or can directly use the
 
 <p>Add to style-block an alist of css styles to affect
 selector. For example:
-     (add-style :element &quot;a&quot; ((text-decoration none)))</p></li>
+     (add-style :element &quot;a&quot; '((&quot;text-decoration&quot; :none)))</p></li>
 </ul>
 
 <p><a id='x-28CLOG-3A-40CLOG-FORM-20MGL-PAX-3ASECTION-29'></a></p>
