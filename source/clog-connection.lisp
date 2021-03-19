@@ -123,95 +123,113 @@ with DEFAULT-ANSWER in case of a time out. (Private)"
 (defun wait-for-answer (id &key (timeout *query-time-out*))
   "Block after prep-query and sending the query script with ID and TIMEOUT with
 the default answer. (Private)"
-  (bordeaux-threads:wait-on-semaphore (gethash id *queries-sems*) :timeout timeout)
-  (let ((answer (gethash id *queries*)))
-    (bordeaux-threads:with-lock-held (*queries-lock*)
-      (remhash id *queries*)
-      (remhash id *queries-sems*))
-    answer))
+  (handler-case
+      (progn
+	(bordeaux-threads:wait-on-semaphore (gethash id *queries-sems*) :timeout timeout)
+	(let ((answer (gethash id *queries*)))
+	  (bordeaux-threads:with-lock-held (*queries-lock*)
+	    (remhash id *queries*)
+	    (remhash id *queries-sems*))
+	  answer))
+    (t (c)
+      (format t "Condition caught in wait-for-answer - ~A.~&" c)
+      (values 0 c))))    
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; handle-new-connection ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defun handle-new-connection (connection id)
-  (cond (id
-	 (format t "Reconnection id - ~A to ~A~%" id connection)
-	 (bordeaux-threads:with-lock-held (*connection-lock*)
-	   (setf (gethash id *connection-ids*) connection)
-	   (setf (gethash connection *connections*) id)))
-	(t
-	 (setf id (generate-id))
-	 (bordeaux-threads:with-lock-held (*connection-lock*)
-	   (setf (gethash connection *connections*) id)
-	   (setf (gethash id *connection-ids*) connection)
-	   (setf (gethash id *connection-data*) (make-hash-table :test #'equal))
-	   (setf (gethash "connection-id" (get-connection-data id)) id))
-	 (format t "New connection id - ~A - ~A~%" id connection)
-	 (websocket-driver:send connection
-				(format nil "clog['connection_id']=~A" id))
-	 (bordeaux-threads:make-thread
-	  (lambda ()
-	    (funcall *on-connect-handler* id))
-          :name (format nil "CLOG connection ~A"
-                        id)))))
+  (handler-case
+      (cond (id
+	   (format t "Reconnection id - ~A to ~A~%" id connection)
+	   (bordeaux-threads:with-lock-held (*connection-lock*)
+	     (setf (gethash id *connection-ids*) connection)
+	     (setf (gethash connection *connections*) id)))
+	    (t
+	     (setf id (generate-id))
+	     (bordeaux-threads:with-lock-held (*connection-lock*)
+	       (setf (gethash connection *connections*) id)
+	       (setf (gethash id *connection-ids*) connection)
+	       (setf (gethash id *connection-data*) (make-hash-table :test #'equal))
+	       (setf (gethash "connection-id" (get-connection-data id)) id))
+	     (format t "New connection id - ~A - ~A~%" id connection)
+	     (websocket-driver:send connection
+				  (format nil "clog['connection_id']=~A" id))
+	     (bordeaux-threads:make-thread
+	      (lambda ()
+		(funcall *on-connect-handler* id))
+              :name (format nil "CLOG connection ~A"
+                            id))))
+    (t (c)
+      (format t "Condition caught in handle-new-connection - ~A.~&" c)
+      (values 0 c))))
 
 ;;;;;;;;;;;;;;;;;;;;
 ;; handle-message ;;
 ;;;;;;;;;;;;;;;;;;;;
 
 (defun handle-message (connection message)
-  (let ((id (gethash connection *connections*))
-	(ml (ppcre:split ":" message :limit 2)))
-    (cond ((equal (first ml) "0")
-	   (when *verbose-output*
-	     (format t "~A Ping~%" id)))
-	  ((equal (first ml) "E")
-	   (let* ((em (ppcre:split " " (second ml) :limit 2))
-                  (event-id (first em))
-                  (data (second em)))
-	     (when *verbose-output*
-	       (format t "Channel ~A Hook ~A Data ~A~%"
-		       id event-id data))
-	     (bordeaux-threads:make-thread
-	      (lambda ()
-		(let* ((event-hash (get-connection-data id))
-		       (event      (when event-hash
-				     (gethash event-id event-hash))))
-		  (when event
-                    (funcall event data))))
-              :name (format nil "CLOG event handler ~A"
-                            event-id))))
-	  (t
-	   (when *verbose-output*
-	     (format t "~A ~A = ~A~%" id (first ml) (second ml)))
-	   (bordeaux-threads:with-lock-held (*queries-lock*)
-	     (setf (gethash (parse-integer (first ml)) *queries*) (second ml)))
-	   (bordeaux-threads:signal-semaphore
-	    (gethash (parse-integer (first ml)) *queries-sems*))))))
+  (handler-case
+      (let ((id (gethash connection *connections*))
+	    (ml (ppcre:split ":" message :limit 2)))
+	(cond ((equal (first ml) "0")
+	       (when *verbose-output*
+		 (format t "~A Ping~%" id)))
+	      ((equal (first ml) "E")
+	       (let* ((em (ppcre:split " " (second ml) :limit 2))
+                      (event-id (first em))
+                      (data (second em)))
+		 (when *verbose-output*
+		   (format t "Channel ~A Hook ~A Data ~A~%"
+			   id event-id data))
+		 (bordeaux-threads:make-thread
+		  (lambda ()
+		    (let* ((event-hash (get-connection-data id))
+			   (event      (when event-hash
+					 (gethash event-id event-hash))))
+		      (when event
+			(funcall event data))))
+		  :name (format nil "CLOG event handler ~A"
+				event-id))))
+	      (t
+	       (when *verbose-output*
+		 (format t "~A ~A = ~A~%" id (first ml) (second ml)))
+	       (bordeaux-threads:with-lock-held (*queries-lock*)
+		 (setf (gethash (parse-integer (first ml)) *queries*) (second ml)))
+	       (bordeaux-threads:signal-semaphore
+		(gethash (parse-integer (first ml)) *queries-sems*)))))
+    (t (c)
+      (format t "Condition caught in handle-message - ~A.~&" c)
+      (values 0 c))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; handle-close-connection ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defun handle-close-connection (connection)
-  (let ((id (gethash connection *connections*)))
-    (when id
-      (when *verbose-output*
-	(format t "Connection id ~A has closed. ~A~%" id connection))
-      (bordeaux-threads:with-lock-held (*connection-lock*)
-	(remhash id *connection-data*)
-	(remhash id *connection-ids*)
-	(remhash connection *connections*)))))
+  (handler-case
+      (let ((id (gethash connection *connections*)))
+	(when id
+	  (when *verbose-output*
+	    (format t "Connection id ~A has closed. ~A~%" id connection))
+	  (bordeaux-threads:with-lock-held (*connection-lock*)
+	    (remhash id *connection-data*)
+	    (remhash id *connection-ids*)
+	    (remhash connection *connections*))))
+    (t (c)
+      (format t "Condition caught in handle-message - ~A.~&" c)
+      (values 0 c))))
 
 ;;;;;;;;;;;;;;;;;
 ;; clog-server ;;
 ;;;;;;;;;;;;;;;;;
 
 (defun clog-server (env)
-  (let ((ws (websocket-driver:make-server env)))
-    (websocket-driver:on :open ws
-                         (lambda ()
+  (handler-case
+      (let ((ws (websocket-driver:make-server env)))
+	(websocket-driver:on :open ws
+                             (lambda ()
 			   (let* ((query (getf env :query-string))
 				  (items (when query
 					   (quri:url-decode-params query)))
@@ -221,17 +239,21 @@ the default answer. (Private)"
 			     (when (typep id 'string)
 			       (setf id (parse-integer id :junk-allowed t)))
 			     (handle-new-connection ws id))))
-    
-    (websocket-driver:on :message ws
-                         (lambda (msg) (handle-message ws msg)))
+	
+	(websocket-driver:on :message ws
+                             (lambda (msg) (handle-message ws msg)))
+	
+	(websocket-driver:on :close ws
+                             (lambda (&key code reason)
+                               (declare (ignore code reason))
+                               (handle-close-connection ws)))
+	(lambda (responder)
+	  (declare (ignore responder))
+	  (websocket-driver:start-connection ws)))
+    (t (c)
+      (format t "Condition caught in clog-server - ~A.~&" c)
+      (values 0 c))))
 
-    (websocket-driver:on :close ws
-                         (lambda (&key code reason)
-                           (declare (ignore code reason))
-                           (handle-close-connection ws)))
-    (lambda (responder)
-      (declare (ignore responder))
-      (websocket-driver:start-connection ws))))
 
 ;;;;;;;;;;;;;;;;
 ;; initialize ;;
