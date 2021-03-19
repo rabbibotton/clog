@@ -23,11 +23,11 @@
 						       (declare (ignore obj))
 						       (setf (hash (location body)) "rung2"))))
 	 (about (create-web-menu-item menu :content  "About"
-					   :class    "w3-bar-item w3-button w3-right"
 					   :on-click (lambda (obj)
 						       (declare (ignore obj))
 						       (setf (hash (location body)) "rung2")))))
-    (declare (ignore icon) (ignore about)))
+    (declare (ignore icon))
+    (add-class about "w3-right"))
   ;; rung-1
   (let* ((first-rung (create-web-compositor body :html-id "rung1"))
 	 (image      (create-img first-rung :url-src "/img/windmills.jpg"
