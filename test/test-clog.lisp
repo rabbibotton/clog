@@ -83,6 +83,6 @@
 
 (defun test ()
   (print "Init connection")
-  (initialize #'on-new-window :boot-file "/debug.html")
+  (initialize #'on-new-window :boot-file "/debug.html" :static-boot-js t)
   (print "Open browser")
   (open-browser))

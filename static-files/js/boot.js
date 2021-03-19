@@ -1,6 +1,6 @@
+/*static version*/
 var ws;
 var adr;
-var params={};
 var clog={};
 var pingerid;
 
@@ -10,7 +10,7 @@ if (typeof clog_debug == 'undefined') {
 
 function Ping_ws() {
     if (ws.readyState == 1) {
-        ws.send ("0");
+        ws.send ('0');
     }
 }
 
@@ -22,7 +22,7 @@ function Shutdown_ws(event) {
 	ws = null;
     }
     clearInterval (pingerid);
-    if (clog['html_on_close'] != "") {
+    if (clog['html_on_close'] != '') {
         $(document.body).html(clog['html_on_close']);
     }
 }
@@ -31,7 +31,7 @@ function Setup_ws() {
     ws.onmessage = function (event) {
         try {
             if (clog_debug == true) {
-		console.log ("eval data = " + event.data);
+		console.log ('eval data = ' + event.data);
             }
             eval (event.data);
         } catch (e) {
@@ -40,29 +40,29 @@ function Setup_ws() {
     }
     
     ws.onerror = function (event) {
-        console.log ("onerror: reconnect");
+        console.log ('onerror: reconnect');
         ws = null;
-        ws = new WebSocket (adr  + "?r=" + clog['connection_id']);
+        ws = new WebSocket (adr  + '?r=' + clog['connection_id']);
         ws.onopen = function (event) {
-            console.log ("onerror: reconnect successful");
+            console.log ('onerror: reconnect successful');
             Setup_ws();
         }
         ws.onclose = function (event) {
-            console.log ("onerror: reconnect failure");
+            console.log ('onerror: reconnect failure');
             Shutdown_ws(event);
         }
     }
     
     ws.onclose = function (event) {
-        console.log ("onclose: reconnect");
+        console.log ('onclose: reconnect');
         ws = null;
-        ws = new WebSocket (adr  + "?r=" + clog['connection_id']);
+        ws = new WebSocket (adr  + '?r=' + clog['connection_id']);
         ws.onopen = function (event) {
-            console.log ("onclose: reconnect successful");
+            console.log ('onclose: reconnect successful');
             Setup_ws();
         }
         ws.onclose = function (event) {
-            console.log ("onclose: reconnect failure");
+            console.log ('onclose: reconnect failure');
             Shutdown_ws(event);
         }
     }
@@ -81,36 +81,30 @@ $( document ).ready(function() {
     clog['document']=window.document;
     clog['location']=window.location;
     
-    s = s.split("+").join(" ");
-    
-    while (tokens = r.exec(s)) {
-        params[decodeURIComponent(tokens[1])] = decodeURIComponent(tokens[2]);
-    }
-    
-    if (location.protocol == "https:") {
-        adr = "wss://" + location.hostname;
+    if (location.protocol == 'https:') {
+        adr = 'wss://' + location.hostname;
     } else {
-        adr = "ws://" + location.hostname;
+        adr = 'ws://' + location.hostname;
     }
     
-    if (location.port != "") { adr = adr + ":" + location.port; }
-    adr = adr + "/clog";
+    if (location.port != '') { adr = adr + ':' + location.port; }
+    adr = adr + '/clog';
     
     try {
-        console.log ("connecting to " + adr);
+        console.log ('connecting to ' + adr);
         ws = new WebSocket (adr);
     } catch (e) {
-        console.log ("trying again, connecting to " + adr);
+        console.log ('trying again, connecting to ' + adr);
         ws = new WebSocket (adr);
     }
     
     if (ws != null) {
         ws.onopen = function (event) {
-            console.log ("connection successful");
+            console.log ('connection successful');
             Setup_ws();
         }
         pingerid = setInterval (function () {Ping_ws ();}, 10000);
     } else {
-        document.writeln ("If you are seeing this your browser or your connection to the internet is blocking websockets.");
+        document.writeln ('If you are seeing this your browser or your connection to the internet is blocking websockets.');
     }
 });

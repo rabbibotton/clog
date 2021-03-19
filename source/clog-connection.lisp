@@ -51,7 +51,6 @@ script."
   (debug-mode        function)
   (set-html-on-close function))
 
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Implemetation - clog-connection
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -470,7 +469,6 @@ the browser contents in case of connection loss."
   "Returns a compiled version of current version of boot.js (private)"
 "var ws;
 var adr;
-var params={};
 var clog={};
 var pingerid;
 
@@ -550,12 +548,6 @@ $( document ).ready(function() {
     clog['navigator']=navigator;
     clog['document']=window.document;
     clog['location']=window.location;
-    
-    s = s.split('+').join(' ');
-    
-    while (tokens = r.exec(s)) {
-        params[decodeURIComponent(tokens[1])] = decodeURIComponent(tokens[2]);
-    }
     
     if (location.protocol == 'https:') {
         adr = 'wss://' + location.hostname;
