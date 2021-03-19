@@ -38,11 +38,7 @@ same as the clog directy this overides the relative paths used in them.")
       (if on-new-window
 	  (progn
 	    (setf (connection-data-item body "clog-body") body)
-	    (funcall
-             (if (functionp on-new-window)
-                 on-new-window
-                 (symbol-function on-new-window))
-             body))
+	    (funcall on-new-window body))
 	  (put-br (html-document body) "No route to on-new-window")))))
 
 (defun initialize

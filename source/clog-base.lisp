@@ -455,14 +455,6 @@ clog-body of this connection."))
 ;; set-on-event ;;
 ;;;;;;;;;;;;;;;;;;
 
-(defun clog-call (handler &rest arguments)
-  "You can use it just like `funcall`, except it calls both functions and symbols"
-  (apply
-   (if (functionp handler)
-       handler
-       (symbol-function handler))
-   arguments))
-
 (defgeneric set-on-event (clog-obj event-name handler)
   (:documentation "Set a HANDLER for EVENT-NAME on CLOG-OBJ. If handler is
 nil unbind all event handlers. (Private)"))
@@ -472,7 +464,7 @@ nil unbind all event handlers. (Private)"))
 	     (when handler
 	       (lambda (data)
 		 (declare (ignore data))
-		 (clog-call handler obj)))))
+		 (funcall handler obj)))))
 
 
 ;;;;;;;;;;;;;;;;;;;
@@ -535,7 +527,7 @@ If ON-DRAG-START-HANDLER is nil unbind the event."))
 	     (when handler
 	       (lambda (data)
 		 (declare (ignore data))
-		 (clog-call handler obj)))
+		 (funcall handler obj)))
 	     :eval-script (format nil
 		 "e.originalEvent.dataTransfer.setData('~A','~A'); "
 				  drag-type
@@ -599,7 +591,7 @@ is nil unbind the event."))
 	     (when handler
 	       (lambda (data)
 		 (declare (ignore data))
-		 (clog-call handler obj)))
+		 (funcall handler obj)))
 	     :cancel-event t
 	     :eval-script "e.preventDefault(); "))
 
@@ -615,7 +607,7 @@ is nil unbind the event."))
   (set-event obj "drop"
 	     (when handler
 	       (lambda (data)
-		 (clog-call handler obj (parse-drop-event data))))
+		 (funcall handler obj (parse-drop-event data))))
 	     :call-back-script (format nil drop-event-script drag-type)
 	     :eval-script "e.preventDefault(); "
      	     :cancel-event t))
@@ -656,7 +648,7 @@ this even is bound, you must call the form reset manually."))
 	     (when handler
 	       (lambda (data)
 		 (declare (ignore data))
-		 (clog-call handler obj)))
+		 (funcall handler obj)))
 	     :cancel-event t))
 
 ;;;;;;;;;;;;;;;;;;;
@@ -696,7 +688,7 @@ form action to be run. See CLOG-Form SUBMIT for more details."))
 	     (when handler
 	       (lambda (data)
 		 (declare (ignore data))
-		 (clog-call handler obj)))
+		 (funcall handler obj)))
 	     :cancel-event t))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -715,7 +707,7 @@ event on right click."))
 	     (when handler
 	       (lambda (data)
 		 (declare (ignore data))
-		 (clog-call handler obj)))
+		 (funcall handler obj)))
 	     :one-time one-time
 	     :cancel-event t))
 
@@ -733,7 +725,7 @@ set. If :ONE-TIME unbind event on click."))
 	     (when handler
 	       (lambda (data)
 		 (declare (ignore data))
-		 (clog-call handler obj)))
+		 (funcall handler obj)))
 	     :one-time one-time))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -751,7 +743,7 @@ on-mouse-double-click event will replace this handler."))
 	     (when handler
 	       (lambda (data)
 		 (declare (ignore data))
-		 (clog-call handler obj)))
+		 (funcall handler obj)))
 	     :one-time one-time))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;
@@ -767,7 +759,7 @@ on an on-click event."))
   (set-event obj "click"
 	     (when handler
 	       (lambda (data)
-		 (clog-call handler obj (parse-mouse-event data))))
+		 (funcall handler obj (parse-mouse-event data))))
 	     :one-time one-time
 	     :call-back-script mouse-event-script))
 
@@ -785,7 +777,7 @@ replace on an on-double-click event."))
   (set-event obj "dblclick"
 	     (when handler
 	       (lambda (data)
-		 (clog-call handler obj (parse-mouse-event data))))
+		 (funcall handler obj (parse-mouse-event data))))
 	     :one-time one-time
 	     :call-back-script mouse-event-script))
 
@@ -804,7 +796,7 @@ replace on an on-context-menu event."))
   (set-event obj "contextmenu"
 	     (when handler
 	       (lambda (data)
-		 (clog-call handler obj (parse-mouse-event data))))
+		 (funcall handler obj (parse-mouse-event data))))
 	     :one-time one-time
 	     :call-back-script mouse-event-script
      	     :cancel-event t))
@@ -865,7 +857,7 @@ ON-MOUSE-DOWN-HANDLER is nil unbind the event."))
   (set-event obj "mousedown"
 	     (when handler
 	       (lambda (data)
-		 (clog-call handler obj (parse-mouse-event data))))
+		 (funcall handler obj (parse-mouse-event data))))
 	     :one-time one-time
 	     :call-back-script mouse-event-script))
 
@@ -881,7 +873,7 @@ ON-MOUSE-UP-HANDLER is nil unbind the event."))
   (set-event obj "mouseup"
 	     (when handler
 	       (lambda (data)
-		 (clog-call handler obj (parse-mouse-event data))))
+		 (funcall handler obj (parse-mouse-event data))))
 	     :call-back-script mouse-event-script))
 
 ;;;;;;;;;;;;;;;;;;;;;;;
@@ -896,7 +888,7 @@ ON-MOUSE-MOVE-HANDLER is nil unbind the event."))
   (set-event obj "mousemove"
 	     (when handler
 	       (lambda (data)
-		 (clog-call handler obj (parse-mouse-event data))))
+		 (funcall handler obj (parse-mouse-event data))))
 	     :call-back-script mouse-event-script))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -957,7 +949,7 @@ ON-POINTER-DOWN-HANDLER is nil unbind the event."))
   (set-event obj "pointerdown"
 	     (when handler
 	       (lambda (data)
-		 (clog-call handler obj (parse-pointer-event data))))
+		 (funcall handler obj (parse-pointer-event data))))
 	     :post-eval (if capture-pointer
 			    (format nil "; ~A.setPointerCapture(e.pointerId)"
 				    (script-id obj))
@@ -977,7 +969,7 @@ ON-POINTER-UP-HANDLER is nil unbind the event."))
   (set-event obj "pointerup"
 	     (when handler
 	       (lambda (data)
-		 (clog-call handler obj (parse-pointer-event data))))
+		 (funcall handler obj (parse-pointer-event data))))
 	     :post-eval (format nil "; ~A.releasePointerCapture(e.pointerId)"
 				(script-id obj))
 	     :call-back-script pointer-event-script))
@@ -994,7 +986,7 @@ ON-POINTER-MOVE-HANDLER is nil unbind the event."))
   (set-event obj "pointermove"
 	     (when handler
 	       (lambda (data)
-		 (clog-call handler obj (parse-pointer-event data))))
+		 (funcall handler obj (parse-pointer-event data))))
 	     :call-back-script pointer-event-script))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;
@@ -1009,7 +1001,7 @@ ON-TOUCH-START-HANDLER is nil unbind the event."))
   (set-event obj "touchstart"
 	     (when handler
 	       (lambda (data)
-		 (clog-call handler obj (parse-touch-event data))))
+		 (funcall handler obj (parse-touch-event data))))
 	     :one-time one-time
 	     :call-back-script touch-event-script))
 
@@ -1025,7 +1017,7 @@ ON-TOUCH-MOVE-HANDLER is nil unbind the event."))
   (set-event obj "touchmove"
 	     (when handler
 	       (lambda (data)
-		 (clog-call handler obj (parse-touch-event data))))
+		 (funcall handler obj (parse-touch-event data))))
 	     :call-back-script touch-event-script))
 
 ;;;;;;;;;;;;;;;;;;;;;;
@@ -1040,7 +1032,7 @@ ON-TOUCH-END-HANDLER is nil unbind the event."))
   (set-event obj "touchend"
 	     (when handler
 	       (lambda (data)
-		 (clog-call handler obj (parse-touch-event data))))
+		 (funcall handler obj (parse-touch-event data))))
 	     :call-back-script touch-event-script))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -1055,7 +1047,7 @@ ON-TOUCH-CANCEL-HANDLER is nil unbind the event."))
   (set-event obj "touchcancel"
 	     (when handler
 	       (lambda (data)
-		 (clog-call handler obj (parse-touch-event data))))
+		 (funcall handler obj (parse-touch-event data))))
 	     :call-back-script touch-event-script))
 
 ;;;;;;;;;;;;;;;;;;;;;;
@@ -1075,7 +1067,7 @@ nil will unbind on-key-press also."))
 	     (when handler
 	       (lambda (data)
 	       (let ((f (parse-keyboard-event data)))
-		 (clog-call handler obj (code-char (getf f :char-code))))))
+		 (funcall handler obj (code-char (getf f :char-code))))))
 	     :one-time one-time
 	     :cancel-event disable-default
 	     :call-back-script keyboard-event-script))
@@ -1095,7 +1087,7 @@ If ON-KEY-DOWN-HANDLER is nil unbind the event."))
   (set-event obj "keydown"
 	     (when handler
 	       (lambda (data)
-		 (clog-call handler obj (parse-keyboard-event data))))
+		 (funcall handler obj (parse-keyboard-event data))))
 	     :one-time one-time
 	     :cancel-event disable-default
 	     :call-back-script keyboard-event-script))   
@@ -1112,7 +1104,7 @@ ON-KEY-UP-HANDLER is nil unbind the event."))
   (set-event obj "keyup"
 	     (when handler
 	       (lambda (data)
-		 (clog-call handler obj (parse-keyboard-event data))))
+		 (funcall handler obj (parse-keyboard-event data))))
 	     :one-time one-time
 	     :call-back-script keyboard-event-script))      
 
@@ -1130,7 +1122,7 @@ ON-KEY-PRESS-HANDLER is nil unbind the event."))
   (set-event obj "keypress"
 	     (when handler
 	       (lambda (data)
-		 (clog-call handler obj (parse-keyboard-event data))))
+		 (funcall handler obj (parse-keyboard-event data))))
 	     :one-time one-time
 	     :cancel-event disable-default
 	     :call-back-script keyboard-event-script))
