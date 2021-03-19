@@ -19,13 +19,15 @@
   (setf (title (html-document body)) "Tutorial 26")
   ;; Install a menu
   (let* ((menu  (create-web-menu-bar body))
-	 (tmp   (create-web-menu-icon menu :on-click (lambda (obj)
+	 (icon  (create-web-menu-icon menu :on-click (lambda (obj)
+						       (declare (ignore obj))
 						       (setf (hash (location body)) "rung2"))))
-	 (tmp   (create-web-menu-item menu :content  "About"
+	 (about (create-web-menu-item menu :content  "About"
 					   :class    "w3-bar-item w3-button w3-right"
 					   :on-click (lambda (obj)
+						       (declare (ignore obj))
 						       (setf (hash (location body)) "rung2")))))
-    (declare (ignore tmp)))
+    (declare (ignore icon) (ignore about)))
   ;; rung-1
   (let* ((first-rung (create-web-compositor body :html-id "rung1"))
 	 (image      (create-img first-rung :url-src "/img/windmills.jpg"
