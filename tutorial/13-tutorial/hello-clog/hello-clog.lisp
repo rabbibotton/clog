@@ -9,7 +9,7 @@
   (run body))
 
 (defun start-app ()
-  (initialize #'on-new-window
+  (initialize 'on-new-window
 	      :static-root (merge-pathnames "./www/"
 			     (asdf:system-source-directory :hello-clog)))
   (open-browser))

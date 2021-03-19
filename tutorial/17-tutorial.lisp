@@ -82,7 +82,7 @@
 
 (defun start-tutorial ()
   "Start tutorial."
-  (initialize #'on-index)
-  (set-on-new-window #'on-page2 :path "/page2")
-  (set-on-new-window #'on-page3 :path "/page3")
+  (initialize 'on-index)
+  (set-on-new-window 'on-page2 :path "/page2")
+  (set-on-new-window 'on-page3 :path "/page3")
   (open-browser))

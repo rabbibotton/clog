@@ -86,26 +86,26 @@
 
 (defun start-tutorial ()
   "Start turtorial."
-  (initialize #'on-main)
+  (initialize 'on-main)
   ;; Navigating to http://127.0.0.1:8080/page1 executes on-page1
-  (set-on-new-window #'on-page1 :path "/page1")
+  (set-on-new-window 'on-page1 :path "/page1")
   ;; Navigating to http://127.0.0.1:8080/page1.html executes on-page1
   ;; There is no .html file - it is just a route to CLOG handler
   ;; but the user thinks it is like any other html file.
-  (set-on-new-window #'on-page1 :path "/page1.html")
+  (set-on-new-window 'on-page1 :path "/page1.html")
   ;; Here we add another page, page2. It uses a boot file that turns
   ;; on debugging to the browser console of communications with the
   ;; server.
-  (set-on-new-window #'on-page2 :path "/page2" :boot-file "/debug.html")
+  (set-on-new-window 'on-page2 :path "/page2" :boot-file "/debug.html")
   ;; Here we add another page, page3. But this time we use the html file
   ;; from tutorial 11 and make it the boot-file and execute the same code
   ;; in (on-tutorial11) as in tutorial 11.
-  (set-on-new-window #'on-tutorial11 :path "/page3"
+  (set-on-new-window 'on-tutorial11 :path "/page3"
 				     :boot-file "/tutorial/tut-11.html")
   ;; Setting a "default" path says that any use of an included boot.js
   ;; file will route to this function, in this case #'on-default
   ;; which will determine if this is coming from the path used in tutorial
   ;; 11 - "http://127.0.0.1:8080/tutorial/tut-11.html" and if it does
   ;; use on-tutorial11, and if not say "No Dice!"
-  (set-on-new-window #'on-default :path "default")
+  (set-on-new-window 'on-default :path "default")
   (open-browser))

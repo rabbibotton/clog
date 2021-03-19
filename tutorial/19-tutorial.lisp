@@ -29,5 +29,5 @@
 
 (defun start-tutorial ()
   "Start tutorial."
-  (initialize #'on-new-window)
+  (initialize 'on-new-window)
   (open-browser))

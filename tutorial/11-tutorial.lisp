@@ -70,5 +70,5 @@
 
 (defun start-tutorial ()
   "Start tutorial."
-  (initialize #'on-new-window)
+  (initialize 'on-new-window)
   (open-browser :url "http://127.0.0.1:8080/tutorial/tut-11.html"))

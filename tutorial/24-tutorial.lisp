@@ -104,5 +104,5 @@
 
 (defun start-tutorial ()
   "Start turtorial."
-  (initialize #'on-new-window)
+  (initialize 'on-new-window)
   (open-browser))

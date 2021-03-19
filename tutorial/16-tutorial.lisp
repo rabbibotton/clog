@@ -75,6 +75,6 @@
 
 (defun start-tutorial ()
   "Start turtorial."
-  (initialize #'on-index)
-  (set-on-new-window #'on-page2 :path "/page2")
+  (initialize 'on-index)
+  (set-on-new-window 'on-page2 :path "/page2")
   (open-browser))

@@ -29,5 +29,5 @@
 ;;; set the even again when done handling the event if want to again accept the event.
 (defun start-tutorial ()
   "Start turtorial."
-  (initialize #'on-new-window)
+  (initialize 'on-new-window)
   (open-browser))

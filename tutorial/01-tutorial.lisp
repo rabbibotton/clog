@@ -37,7 +37,7 @@
   "Start turtorial."       ; Optional docstring to describe function
 
   ;; Initialize the CLOG system
-  (initialize #'on-new-window)
+  (initialize 'on-new-window)
   ;; Set the function on-new-window to execute
   ;; everytime a browser connection to our app.
   ;; #' tells common lisp to pass the function
