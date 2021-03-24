@@ -705,6 +705,7 @@ embedded in a native template application.)"
   (print-window     generic-function)
   (scroll-by        generic-function)
   (scroll-to        generic-function)
+  (open-window      generic-function)
   (close-window     generic-function)
   (close-connection generic-function)
   (storage-type     type)

@@ -368,6 +368,21 @@ events and messages may not be trasmitted on most browsers."))
 (defmethod resize-to ((obj clog-window) x y)
   (execute obj (format nil "resizeTo(~A,~A)" x y)))
 
+;;;;;;;;;;;;;;;;;
+;; open-window ;;
+;;;;;;;;;;;;;;;;;
+
+(defgeneric open-window (clog-window url &key name specs replace)
+  (:documentation "This will launch a new window of current browser where
+CLOG-WINDOW is displayed (remote or local). In modern browsers it is
+very limitted to just open a new tab with url unless is a localhost url."))
+
+(defmethod open-window ((obj clog-window) url &key
+						(name "_blank")
+						(specs "")
+						(replace "false"))
+  (execute obj (format nil "open('~A','~A','~A',~A)" url name specs replace)))
+
 ;;;;;;;;;;;;;;;;;;
 ;; close-window ;;
 ;;;;;;;;;;;;;;;;;;
