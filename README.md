@@ -237,7 +237,7 @@ High Order Extensions to CLOG (so far)
   - Menus
   - Alerts
   - Forms
-  - More coming _daily_ :) Mar 19 2021
+  - More coming :) Apr 14 2021
 
 - clog-data
   - clog-db-admin - Basic database administration 
