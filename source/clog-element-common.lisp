@@ -166,7 +166,9 @@ CLOG-OBJ"))
   (:documentation "Set editable VALUE for CLOG-BUTTON"))
 
 (defmethod set-disabledp ((obj clog-button) value)
-  (setf (property obj "disabled") (p-true-js value)))
+  (if value
+      (setf (property obj "disabled") (p-true-js value))
+      ((remove-attribute obj "disabled")))
 (defsetf disabledp set-editable)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
