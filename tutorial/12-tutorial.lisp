@@ -3,7 +3,7 @@
 ;;; that works well, and combining your CLOG app embedded in an native app that
 ;;; provides a web control on desktop or mobile works well. CLOG apps of course
 ;;; are web apps right out of the box. However CLOG is also more than capable
-;;; of handling things in a more traditional website manor.
+;;; of handling things in a more traditional website manner.
 ;;;
 ;;; In the last tutorial it was demonstrated that one can take any HTML file
 ;;; add the boot.js file to it and then it becomes a dynamic interactive
