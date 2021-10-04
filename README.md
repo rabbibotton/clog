@@ -176,44 +176,44 @@ Work in progress:
 Tutorial Summary
 
 - [01-tutorial.lisp](tutorial/01-tutorial.lisp) - Hello World
-- 02-tutorial.lisp - Closures in CLOG
-- 03-tutorial.lisp - Events fire in parallel
-- 04-tutorial.lisp - The event target, reusing event handlers
-- 05-tutorial.lisp - Using connection-data-item
-- 06-tutorial.lisp - Tasking and events
-- 07-tutorial.lisp - My first CLOG video game (and handling disconnects)
-- 08-tutorial.lisp - Mice Love Containers
-- 09-tutorial.lisp - Tabs, panels, and forms
-- 10-tutorial.lisp - Canvas
-- 11-tutorial.lisp - Attaching to existing HTML
-- 12-tutorial.lisp - Running a website in CLOG (routing)
-- 13-tutorial/     - Flying Solo - A minimalist CLOG project
-- 14-tutorial.lisp - Local (persistent) and Session client-side storage
-- 15-tutorial.lisp - Multi-media
-- 16-tutorial.lisp - Bootstrap 4, Loading css files and javascript
-- 17-tutorial.lisp - W3.CSS layout example and Form submit methods
-- 18-tutorial.lisp - Drag and Drop
-- 19-tutorial.lisp - Using JavaScript components
-- 20-tutorial.lisp - New CLOG plugin from JavaScript component
-- 21-tutorial.lisp - New CLOG plugin in Common-Lisp
-- 22-tutorial.lisp - CLOG GUI Menus and Desktop Look and Feel
-- 23-tutorial.lisp - Using semaphores to wait for input
-- 24-tutorial.lisp - CLOG WEB containers
-- 25-tutorial.lisp - A "local" web app using CLOG WEB
-- 26-tutorial.lisp - A web page and form with CLOG WEB
+- [02-tutorial.lisp](tutorial/02-tutorial.lisp) - Closures in CLOG
+- [03-tutorial.lisp](tutorial/03-tutorial.lisp) - Events fire in parallel
+- [04-tutorial.lisp](tutorial/04-tutorial.lisp) - The event target, reusing event handlers
+- [05-tutorial.lisp](tutorial/05-tutorial.lisp) - Using connection-data-item
+- [06-tutorial.lisp](tutorial/06-tutorial.lisp) - Tasking and events
+- [07-tutorial.lisp](tutorial/07-tutorial.lisp) - My first CLOG video game (and handling disconnects)
+- [08-tutorial.lisp](tutorial/08-tutorial.lisp) - Mice Love Containers
+- [09-tutorial.lisp](tutorial/09-tutorial.lisp) - Tabs, panels, and forms
+- [10-tutorial.lisp](tutorial/10-tutorial.lisp) - Canvas
+- [11-tutorial.lisp](tutorial/11-tutorial.lisp) - Attaching to existing HTML
+- [12-tutorial.lisp](tutorial/12-tutorial.lisp) - Running a website in CLOG (routing)
+- [13-tutorial/](tutorial/13-tutorial) - Flying Solo - A minimalist CLOG project
+- [14-tutorial.lisp](tutorial/14-tutorial.lisp) - Local (persistent) and Session client-side storage
+- [15-tutorial.lisp](tutorial/15-tutorial.lisp) - Multi-media
+- [16-tutorial.lisp](tutorial/16-tutorial.lisp) - Bootstrap 4, Loading css files and javascript
+- [17-tutorial.lisp](tutorial/17-tutorial.lisp) - W3.CSS layout example and Form submit methods
+- [18-tutorial.lisp](tutorial/18-tutorial.lisp) - Drag and Drop
+- [19-tutorial.lisp](tutorial/19-tutorial.lisp) - Using JavaScript components
+- [20-tutorial.lisp](tutorial/20-tutorial.lisp) - New CLOG plugin from JavaScript component
+- [21-tutorial.lisp](tutorial/21-tutorial.lisp) - New CLOG plugin in Common-Lisp
+- [22-tutorial.lisp](tutorial/22-tutorial.lisp) - CLOG GUI Menus and Desktop Look and Feel
+- [23-tutorial.lisp](tutorial/23-tutorial.lisp) - Using semaphores to wait for input
+- [24-tutorial.lisp](tutorial/24-tutorial.lisp) - CLOG WEB containers
+- [25-tutorial.lisp](tutorial/25-tutorial.lisp) - A "local" web app using CLOG WEB
+- [26-tutorial.lisp](tutorial/26-tutorial.lisp) - A web page and form with CLOG WEB
 
 Demo Summary
 
 - 01-demo.lisp - Sparkey the Snake Game
 - 02-demo.lisp - Chat - Private instant messenger
 - 03-demo.lisp - IDE - A very simple common lisp IDE
-                       (see source if editor dosen't load)
+  (see source if editor dosen't load)
 
 Tool Summary
 
-- clog-db-admin  - SQLite3 admin tool
+- clog-db-admin - SQLite3 admin tool
 
-Template Summary 
+Template Summary
 
 clog-gui-template.lisp - Basic CLOG-GUI app
 
