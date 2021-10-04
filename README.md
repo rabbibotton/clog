@@ -175,7 +175,7 @@ Work in progress:
 
 Tutorial Summary
 
-- 01-tutorial.lisp - Hello World
+- [01-tutorial.lisp](tutorial/01-tutorial.lisp) - Hello World
 - 02-tutorial.lisp - Closures in CLOG
 - 03-tutorial.lisp - Events fire in parallel
 - 04-tutorial.lisp - The event target, reusing event handlers
