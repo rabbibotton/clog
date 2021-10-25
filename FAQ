@@ -1,3 +1,5 @@
+FAQ
+
 Q) I start my application and I don't see anything? It worked before!
 
 A) Make sure the :static-root key is set correctly on (clog:initialize)
