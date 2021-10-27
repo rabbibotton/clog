@@ -71,6 +71,9 @@ CL-USER> (ql:quickload :clog)
 CL-USER> (clog:run-tutorial 1)
 ```
 
+Tip for Windows WSL linux user. Create a symbolic link from wslview to xdg-open
+in /usr/local/bin so that run-tutorial uses the windows browser.
+
 To see where the source files are:
 
 ```
