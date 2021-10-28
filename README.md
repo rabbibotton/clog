@@ -61,7 +61,10 @@ git clone https://github.com/rabbibotton/clog.git
 ```
 
 To load this package and work through tutorials (assuming you
-have Quicklisp configured):
+have Quicklisp configured.)
+
+Note: If using portacle on windows v1.4 or below you need to
+update Quicklisp use (ql:update-dist "quicklisp")
 
 1. Start emacs then M-x slime
 2. In the REPL, run (tutorials currently 1 - 26):
