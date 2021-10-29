@@ -50,8 +50,8 @@ CLOG is developed on an M1 MacBook with ECL, it is tested fairly
 regulary with SBCL on Linux, Windows and an Intel MacBook. It should
 in theory work on any system Quicklisp and CLACK will load on to.
 
-CLOG is in Quicklisp, but because I am still adding code daily,
-it is currently preferable to clone the github repo into your
+CLOG is in Quicklisp, but you may want to live on the bleeding edge
+and use Ultralisp or clone the github repo into your
 ~/common-lisp directory (or other quicklisp/asdf findable
 directory):
 
