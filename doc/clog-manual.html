@@ -14,7 +14,7 @@
        }
      });
    </script>
-   <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML">
+   <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML">
    </script>
    </head>
 <body>
@@ -86,7 +86,7 @@ connectivity to the browser or other websocket client (often a browser
 embedded in a native template application.)</p>
 
 <p>STATUS: <code>CLOG</code> is complete enough for most uses. See below for some
-enhacements bing worked on, <code>CLOG</code> is actually based on GNOGA, a
+enhacements being worked on, <code>CLOG</code> is actually based on GNOGA, a
 framework I wrote for Ada in 2013 and used in commercial production
 code for the last 8 years, i.e. the techiniques <code>CLOG</code> uses are solid
 and proven.</p>
@@ -142,7 +142,8 @@ CL-USER&gt; <span class="paren1">(<span class="code">clog-user:run-tutorial 1</s
 <pre><code><span class="code">CL-USER&gt; <span class="paren1">(<span class="code">load <span class="string">"path to clog/demos/01-snake.lisp"</span></span>)</span>
 CL-USER&gt; <span class="paren1">(<span class="code">clog-user:start-demo</span>)</span></span></code></pre>
 
-<p>To open a browser with the <code>CLOG</code> manual:</p>
+<p>To open a browser with the <code>CLOG</code> manual (it is located
+at clog/doc/clog-manual.html):</p>
 
 <pre><code><span class="code">CL-USER&gt; <span class="paren1">(<span class="code">clog:open-manual</span>)</span></span></code></pre>
 
@@ -204,12 +205,6 @@ tutorials are a good place to start with make <code>CLOG</code> apps in code, so
 here we are going to demonstrate the concepts using some REPL tricks
 to help developing <code>CLOG</code> apps in general.</p>
 
-<p>Since we already initialized <code>CLOG</code> let's use <a href="#x-28CLOG-3ASET-ON-NEW-WINDOW-20FUNCTION-29" title="(CLOG:SET-ON-NEW-WINDOW FUNCTION)"><code>SET-ON-NEW-WINDOW</code></a> to change our
-on-new-window handler (handler is just a made up name for a function that
-will handle an event).</p>
-
-<pre><code><span class="code">CLOG-USER&gt; <span class="paren1">(<span class="code">set-on-new-window <span class="paren2">(<span class="code"><i><span class="symbol">lambda</span></i> <span class="paren3">(<span class="code">body</span>)</span> <span class="paren3">(<span class="code">create-div body <span class="keyword">:content</span> <span class="string">"Hello World!"</span></span>)</span></span>)</span></span>)</span></span></code></pre>
-
 <p>(From here on, we will leave out the prompts and responses in our quotes of
 code.)</p>
 
@@ -224,6 +219,14 @@ this line and you can watch it happen:</p>
 
 <pre><code><span class="code"><span class="paren1">(<span class="code"><i><span class="symbol">let</span></i> <span class="paren2">(<span class="code"><span class="paren3">(<span class="code">tmp <span class="paren4">(<span class="code">create-button <span class="special">*body*</span> <span class="keyword">:content</span> <span class="string">"Click Me"</span></span>)</span></span>)</span></span>)</span>
   <span class="paren2">(<span class="code">set-on-click tmp <span class="paren3">(<span class="code"><i><span class="symbol">lambda</span></i> <span class="paren4">(<span class="code">obj</span>)</span><span class="paren4">(<span class="code">setf <span class="paren5">(<span class="code">hiddenp tmp</span>)</span> t</span>)</span></span>)</span></span>)</span></span>)</span></span></code></pre>
+
+<p>Since we already initialized <code>CLOG</code> let's use <a href="#x-28CLOG-3ASET-ON-NEW-WINDOW-20FUNCTION-29" title="(CLOG:SET-ON-NEW-WINDOW FUNCTION)"><code>SET-ON-NEW-WINDOW</code></a> to change our
+on-new-window handler (handler is just a made up name for a function that
+will handle an event).</p>
+
+<pre><code><span class="code">CLOG-USER&gt; <span class="paren1">(<span class="code">set-on-new-window <span class="paren2">(<span class="code"><i><span class="symbol">lambda</span></i> <span class="paren3">(<span class="code">body</span>)</span> <span class="paren3">(<span class="code">create-div body <span class="keyword">:content</span> <span class="string">"Hello World!"</span></span>)</span></span>)</span></span>)</span></span></code></pre>
+
+<p>Now any new window opened will not be using <code>CLOG</code> REPL but instead will execute our handler.</p>
 
 <p>Important take aways to using <code>CLOG</code> from the REPL:</p>
 
@@ -358,7 +361,8 @@ function. If <code>BOOT-FILE</code> is nil path is removed.</p></li>
 <ul>
 <li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#x-28CLOG-3AOPEN-BROWSER-20FUNCTION-29" >OPEN-BROWSER</a></span></span> <span class="locative-args">&amp;KEY (URL &quot;http://127.0.0.1:8080&quot;)</span></span></p>
 
-<p>Open a web browser to <code>URL</code>.</p></li>
+<p>Launch on os a web browser on local machine to <code>URL</code>. See BROWSER-OPEN
+for openning windows on remote machines.</p></li>
 </ul>
 
 <p><a id='x-28CLOG-3A-40CLOG-UTILITIES-20MGL-PAX-3ASECTION-29'></a></p>
@@ -5784,6 +5788,16 @@ events and messages may not be trasmitted on most browsers.</p></li>
 <li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ASCROLL-TO-20GENERIC-FUNCTION-29" >SCROLL-TO</a></span></span> <span class="locative-args">CLOG-WINDOW X Y</span></span></p>
 
 <p>Scroll browser window to x y.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3AOPEN-WINDOW-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3AOPEN-WINDOW-20GENERIC-FUNCTION-29" >OPEN-WINDOW</a></span></span> <span class="locative-args">CLOG-WINDOW URL &amp;KEY NAME SPECS REPLACE</span></span></p>
+
+<p>This will launch a new window of current browser where
+<code>CLOG-WINDOW</code> is displayed (remote or local). In modern browsers it is
+very limitted to just open a new tab with url unless is a localhost url.</p></li>
 </ul>
 
 <p><a id='x-28CLOG-3ACLOSE-WINDOW-20GENERIC-FUNCTION-29'></a></p>
