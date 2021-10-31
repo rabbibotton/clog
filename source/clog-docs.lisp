@@ -87,7 +87,8 @@ CL-USER> (load \"path to clog/demos/01-snake.lisp\")
 CL-USER> (clog-user:start-demo)
 ```
 
-To open a browser with the CLOG manual:
+To open a browser with the CLOG manual (it is located
+at clog/doc/clog-manual.html):
 
 ```
 CL-USER> (clog:open-manual)
@@ -105,7 +106,6 @@ needed for mastering CLOG.")
     - You don't need to know HTML but it helps unless someone else is doing the
       design work.
     - You have installed CLOG and (ql:quickload :clog) is working for you.
-
 
 
 * Simple REPL techniques Tutorial
@@ -152,14 +152,6 @@ tutorials are a good place to start with make CLOG apps in code, so
 here we are going to demonstrate the concepts using some REPL tricks
 to help developing CLOG apps in general.
 
-Since we already initialized CLOG let's use SET-ON-NEW-WINDOW to change our
-on-new-window handler (handler is just a made up name for a function that
-will handle an event).
-
-```lisp
-CLOG-USER> (set-on-new-window (lambda (body) (create-div body :content \"Hello World!\")))
-```
-
 (From here on, we will leave out the prompts and responses in our quotes of
 code.)
 
@@ -180,6 +172,16 @@ We can also set and respond to events and set properties etc:
 (let ((tmp (create-button *body* :content \"Click Me\")))
   (set-on-click tmp (lambda (obj)(setf (hiddenp tmp) t))))
 ```
+
+Since we already initialized CLOG let's use SET-ON-NEW-WINDOW to change our
+on-new-window handler (handler is just a made up name for a function that
+will handle an event).
+
+```lisp
+CLOG-USER> (set-on-new-window (lambda (body) (create-div body :content \"Hello World!\")))
+```
+
+Now any new window opened will not be using CLOG REPL but instead will execute our handler.
 
 Important take aways to using CLOG from the REPL:
 
