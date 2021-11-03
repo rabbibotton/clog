@@ -7,13 +7,15 @@
 ;;;      <script src="/js/boot.js" type="text/javascript"></script>
 ;;;
 ;;; The first line adds jquery which CLOG uses to enhance browser compatability.
-;;; The second line adds the "boot" file.
+;;; The second line adds the CLOG "boot" file.
 ;;;
 ;;; For this tutorial we generated the clog/static-files/tutorial/tut-11.html
 ;;; by using the form generator at https://bootsnipp.com/forms?version=3
 ;;; then used the the template from https://getbootstrap.com/docs/3.3/
 ;;; and added CLOG's boot.js script line. It was neccesary to add an id to the
 ;;; form (id='form1') as the generator did not add one.
+;;;
+;;; In the code below:
 ;;;
 ;;;  - We set a blank on-submit to overide the behavior in the bootstrap
 ;;;          buttons to submit the form HTML style.
@@ -24,8 +26,8 @@
 ;;;  - We attach an on-click handler that resets the form to the
 ;;;          "Scary Button"
 ;;;
-;;;  - We go in the browser to the file
-;;;               "http://127.0.0.1:8080/tutorial/tut-11.html"
+;;;  We go in the browser to the file
+;;;          "http://127.0.0.1:8080/tutorial/tut-11.html"
 
 (defpackage #:clog-user
   (:use #:cl #:clog)

@@ -4,6 +4,7 @@
 
 (in-package :clog-user)
 
+;; Demonstrate drag and drop
 (defun on-new-window (body)
   (let* ((target1 (create-div body))
 	 (target2 (create-div body))

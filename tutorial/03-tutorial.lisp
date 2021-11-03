@@ -26,7 +26,7 @@
 ;;; and that events do not wait for previous event handlers to complete. One simple
 ;;; way to avoid issues is to use the key :one-time t on the set-on-click or other
 ;;; event, this will turn off the event immediately when the user clicks and can then
-;;; set the even again when done handling the event if want to again accept the event.
+;;; set the event again when done handling the event if want to again accept the event.
 (defun start-tutorial ()
   "Start turtorial."
   (initialize #'on-new-window)

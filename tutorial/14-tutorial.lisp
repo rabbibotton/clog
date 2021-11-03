@@ -4,6 +4,8 @@
 
 (in-package :clog-user)
 
+;;; HTML 5 local storage are the best way to stort client side data
+;;; and in general are a far better than cookies.
 (defun on-new-window (body)
   (setf (title (html-document body)) "Tutorial 14")
   (set-on-click (create-button body :content "Set Local Key")

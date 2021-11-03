@@ -10,10 +10,10 @@
   (setf (title (html-document body)) "Tutorial 2")
   ;; The CLOG-body object gives you access to a number of other CLOG-Objects
   ;;
-  ;; (html-document body) is the CLOG-Document object
-  ;; (window body) is the CLOG-Window object
-  ;; (location body) is the CLOG-Location object
-  ;; (navigator body) is the CLOG-Navigator object
+  ;; (html-document body) is the CLOG-Document object ~ These are aproximately
+  ;; (window body) is the CLOG-Window object          ~ the equivelant html
+  ;; (location body) is the CLOG-Location object      ~ objects of same name.
+  ;; (navigator body) is the CLOG-Navigator object    ~ See the manual or src.
   
   (let ((hello-element	  
 	  ;; CREATE-SECTION is a lispier way of creating any of the HTML 5
@@ -25,9 +25,9 @@
 	  ;; Take a look at clog-element-common.lisp or the clog-manual	  
 	  (create-section body :h1 :content "Hello World! (click me!)")))
     
-    (let ((x 0))                     ; A closure - each call to on-new-window will
-      (set-on-click hello-element    ; create a different version of this closer.
-		    (lambda (obj)
+    (let ((x 0))                     ; A closure - each call to on-new-window by 
+      (set-on-click hello-element    ; a new browser window or refresh will
+		    (lambda (obj)    ; create a different version of this closure.
 		      (declare (ignore obj))
 		      (incf x)
 		      (dotimes (n x)

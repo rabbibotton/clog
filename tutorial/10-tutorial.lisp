@@ -4,6 +4,7 @@
 
 (in-package :clog-user)
 
+;;; A very brief example of using the canvas control.
 (defun on-new-window (body)
   (setf (title (html-document body)) "Tutorial 10")
   (let* ((canvas (create-canvas body :width 600 :height 400))

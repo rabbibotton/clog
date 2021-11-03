@@ -49,7 +49,7 @@
 		   (sleep .2)
 		   (setf (text mover) "(-o-)"))
 	     (setf (inner-html mover) "<H1>GAME OVER</H1>"))
-           :name "Dragon event loop")
+           :name "Darth event loop")
 	  ;; Check of browser still connected while running game loop
 	  (loop
 	    (unless (validp body)

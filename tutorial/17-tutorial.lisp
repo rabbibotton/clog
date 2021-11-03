@@ -6,7 +6,8 @@
 
 ;;; In this tutorial we will use a CSS only alternative to bootstrap -
 ;;;   https://www.w3schools.com/w3css/default.asp
-
+;;;
+;;; It is also a demonstration of how various ways to use HTML Forms
 (defun on-index (body)
   ;; Load css files
   (load-css (html-document body) "https://www.w3schools.com/w3css/4/w3.css")

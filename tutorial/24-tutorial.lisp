@@ -1,5 +1,5 @@
 ;; In this tutorial we use clog-web to create a dynamic modern mobile
-;; compatible web page using various clog-web containers. (In progress)
+;; compatible web page using various clog-web containers.
 
 (defpackage #:clog-user
   (:use #:cl #:clog #:clog-web)

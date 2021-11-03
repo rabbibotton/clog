@@ -9,10 +9,10 @@
 ;;; add the boot.js file to it and then it becomes a dynamic interactive
 ;;; clog app. An entire site could be laid out using .html files and where
 ;;; desired a fully dynamic page can be created by copying the boot.html file
-;;; or some styled html template etc. (Look in the demos -coming soon- for
+;;; or some styled html template etc. (Look in the next few demos for
 ;;; examples using templates like bootstrap with CLOG, etc).
 ;;;
-;;; Here we demonstrate CLOG's routing to dynamic pages. Static pages are
+;;; Here we demonstrate how CLOG routs to dynamic pages. Static pages are
 ;;; placed in the directory set on initialization.
 ;;;
 ;;; See START-TUTORIAL below.
@@ -34,6 +34,7 @@
       <ul>
         <li><a href='/page1'>/page1</a> - a CLOG app
         <li><a href='/page1.html'>/page1.html</a> - a CLOG app mascarading as a .html
+        <li><a href='/somepath/hi/'>/somepath/hi/</a> - a CLOG app mascarading as a .html
         <li><a href='/page2'>/page2</a> - a CLOG app using an alternative boot file
         <li><a href='/page3'>/page3</a> - tutorial 11 as part of this tutorial
         <li><a href='/tutorial/tut-11.html'>/tutorial/tut-11.html</a> - an html file using boot.js
@@ -93,6 +94,9 @@
   ;; There is no .html file - it is just a route to CLOG handler
   ;; but the user thinks it is like any other html file.
   (set-on-new-window #'on-page1 :path "/page1.html")
+  ;; Navigating to http://127.0.0.1:8080/somepath/page1/ executes on-page1
+  ;; the path set can be any valid html path and has no meaning.
+  (set-on-new-window #'on-page1 :path "/somepath/hi/")
   ;; Here we add another page, page2. It uses a boot file that turns
   ;; on debugging to the browser console of communications with the
   ;; server.

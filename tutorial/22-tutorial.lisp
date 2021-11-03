@@ -4,9 +4,7 @@
 
 (in-package :clog-user)
 
-;; For web oriented apps consider using the :client-movement option.
-;; See clog-gui-initialize documentation.
-
+;;; Demostrate a virtual desktop using CLOG GUI
 (defun on-file-count (obj)
   (let ((win (create-gui-window obj :title "Count")))
     (dotimes (n 100)
@@ -123,6 +121,8 @@
 
 (defun on-new-window (body)
   (setf (title (html-document body)) "Tutorial 22")  
+  ;; For web oriented apps consider using the :client-movement option.
+  ;; See clog-gui-initialize documentation.
   (clog-gui-initialize body)
   (add-class body "w3-cyan")  
   (let* ((menu  (create-gui-menu-bar body))

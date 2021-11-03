@@ -4,6 +4,7 @@
 
 (in-package :clog-user)
 
+;;; Brief demonstration of multimedia
 (defun on-new-window (body)
   (let* ((vid (create-video body :source "https://www.w3schools.com/html/mov_bbb.mp4"))
 	 (tmp (create-br body))

@@ -8,7 +8,7 @@
   ;; Using connection-data-item it is possible to pass data that
   ;; is specific to an instance of a CLOG app. The connection
   ;; data items are accessible from every clog-object on the
-  ;; same connection.
+  ;; same connection and are thread safe.
   (setf (color (connection-data-item obj "changer")) "green"))
 
 (defun on-new-window (body)
