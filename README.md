@@ -46,9 +46,10 @@ an active soft realtime connection. For most CLOG applications all
 programming logic, events and decisions are done on the server
 which can be local, or remote over the web.
 
-CLOG is developed on an M1 MacBook with ECL, it is tested fairly
-regulary with SBCL on Linux, Windows and an Intel MacBook. It should
-in theory work on any system Quicklisp and CLACK will load on to.
+CLOG is developed on an M1 MacBook with ECL and SBCL,
+it is tested fairly regulary with SBCL on Linux, Windows and
+Intel MacBook. It should in theory work on any system with
+Quicklisp and CLACK.
 
 CLOG is in Quicklisp, but you may want to live on the bleeding edge
 and use Ultralisp or clone the github repo into your
@@ -79,7 +80,7 @@ CL-USER> (clog:run-tutorial 1)
 Tip for Windows WSL linux user. Create a symbolic link from wslview to xdg-open
 in /usr/local/bin so that run-tutorial uses the windows browser.
 
-To see where the source files are:
+To see where the source, tutorial and demo files are:
 
 ```
 CL-USER> (clog:clog-install-dir)
