@@ -3,7 +3,7 @@
 (asdf:defsystem #:hello-clog
   :description "Hello Clog - Flying Solo"
 
-  :author "someone@someplace.com"
+  :author "david@botton.com"
   :license  "BSD"
   :version "0.0.0"
   :serial t
