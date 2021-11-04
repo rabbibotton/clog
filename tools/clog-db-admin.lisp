@@ -85,7 +85,10 @@
 		   '(("Query" :db-query))
 		   (lambda (results)
 		     (when results
-		       (results-window app (cadr (assoc :db-query results)))))
+		       (handler-case
+			   (results-window app (cadr (assoc :db-query results)))
+			 (error (c)
+			   (alert-dialog obj c :title "Error")))))
 		   :title "Run Database Query" :height 200))))
 
 (defun on-query-non (obj)
@@ -103,7 +106,7 @@
 			     (results-window app "select changes()" :title (cadr (assoc :db-query results))))
 			 (error (c)
 			   (alert-dialog obj c :title "Error")))))
-		   :title "Run Database Query" :height 200))))
+		   :title "Run Database Non-Query" :height 200))))
 
 (defun edit-record (obj app table names data)
   (form-dialog obj "Edit Record"
