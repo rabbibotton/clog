@@ -40,8 +40,8 @@ clog[] but is not in the DOM. If HTML-ID is nil one is generated.
 (private)"
   (let ((web-id (if html-id
 		    html-id
-		    (cc:generate-id))))
-    (cc:execute
+		    (clog-connection:generate-id))))
+    (clog-connection:execute
      connection-id
      (format nil
 	     "clog['~A']=$(\"~A\").get(0); $(clog['~A']).first().prop('id','~A')"
@@ -55,7 +55,7 @@ clog[] but is not in the DOM. If HTML-ID is nil one is generated.
 (defun attach (connection-id html-id)
   "Create a new clog-obj and attach an existing element with HTML-ID on
 CONNECTION-ID to it and then return it. The HTML-ID must be unique. (private)"
-  (cc:execute connection-id
+  (clog-connection:execute connection-id
 	      (format nil "clog['~A']=$('#~A').get(0)" html-id html-id))
   (make-clog-element connection-id html-id))
 
@@ -93,7 +93,7 @@ must be in DOM, ie placed or auto-placed."))
 
 (defmethod attach-as-child ((obj clog-obj) html-id
 			    &key (clog-type 'clog-element))
-  (cc:execute (connection-id obj)
+  (clog-connection:execute (connection-id obj)
 	      (format nil "clog['~A']=$('#~A').get(0)" html-id html-id))
   (make-clog-element (connection-id obj) html-id :clog-type clog-type))
 

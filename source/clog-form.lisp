@@ -17,14 +17,14 @@
 
 (defmethod form-get-data (clog-obj)
   (quri:uri-query-params
-   (quri:uri (cc:query (connection-id clog-obj) "location.href"))))
+   (quri:uri (clog-connection:query (connection-id clog-obj) "location.href"))))
 
 (defgeneric form-post-data (clog-obj)
   (:documentation "Get the form data as an a-list sent by post method"))
 
 (defmethod form-post-data (clog-obj)
   (quri:url-decode-params
-   (cc:query (connection-id clog-obj) "clog['post-data']")))
+   (clog-connection:query (connection-id clog-obj) "clog['post-data']")))
 
 (defun form-data-item (form-data item)
   "Return value for ITEM from FROM-DATA a-list"
@@ -379,7 +379,7 @@ have this set true. Autofocus on element when form loaded. "))
 group called NAME."))
 
 (defmethod radio-value ((obj clog-obj) name)
-  (cc:query (connection-id obj)
+  (clog-connection:query (connection-id obj)
 	    (format nil "$('input:radio[name=~A]:checked').val()"
 		    name)))
 
@@ -391,7 +391,7 @@ group called NAME."))
   (:documentation "Returns t or nil on the selected checkbox button."))
 
 (defmethod checkbox-value ((obj clog-obj) name)
-  (js-on-p (cc:query (connection-id obj)
+  (js-on-p (clog-connection:query (connection-id obj)
 		     (format nil "$('input:checkbox[name=~A]:checked').val()"
 			     name))))
 
@@ -404,7 +404,7 @@ group called NAME."))
 be unique name on entire document."))
 
 (defmethod select-value ((obj clog-obj) name)
-  (cc:query (connection-id obj)
+  (clog-connection:query (connection-id obj)
 	    (format nil "$('select[name=~A] option:selected').val()" name)))
 
 ;;;;;;;;;;;;;;;;
@@ -416,7 +416,7 @@ be unique name on entire document."))
 be unique name on entire document."))
 
 (defmethod name-value ((obj clog-obj) name)
-  (cc:query (connection-id obj)
+  (clog-connection:query (connection-id obj)
 	    (format nil "$('input[name=~A]').val()" name)))
 
 ;;;;;;;;;;;;;

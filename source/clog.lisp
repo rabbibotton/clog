@@ -16,7 +16,6 @@
 
 (mgl-pax:define-package :clog
   (:documentation "The Common List Omnificent GUI - CLOG")  
-  (:local-nicknames (:cc :clog-connection))
   (:use #:cl #:parse-float #:mgl-pax))
 
 (cl:in-package :clog)

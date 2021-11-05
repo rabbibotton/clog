@@ -28,7 +28,7 @@ the same as the clog directy this overides the relative paths used in them.")
 ;;;;;;;;;;;;;;;;
 
 (defun on-connect (connection-id)
-  (when cc:*verbose-output*
+  (when clog-connection:*verbose-output*
     (format t "Start new window handler on connection-id - ~A" connection-id))
   (let ((body (make-clog-body connection-id)))
     (let* ((path          (path-name (location body)))
@@ -63,14 +63,14 @@ compiled version."
   (set-on-new-window on-new-window-handler :path "/" :boot-file boot-file)
   (unless *clog-running*
     (setf *clog-running* t)
-    (cc:initialize #'on-connect
-		   :host           host
-		   :port           port
-		   :boot-file      boot-file
-		   :static-boot-js static-boot-js
-		   :static-root    (if *overide-static-root*
-				       *overide-static-root*
-				       static-root))))
+    (clog-connection:initialize #'on-connect
+				:host           host
+				:port           port
+				:boot-file      boot-file
+				:static-boot-js static-boot-js
+				:static-root    (if *overide-static-root*
+						    *overide-static-root*
+						    static-root))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;
 ;; set-on-new-window ;;
@@ -83,7 +83,7 @@ using BOOT_FILE. Paths should always begin with a '/'. If PATH is set to
 \"default\" will use boot-file when the route can not be determined, ie
 a static html file including boot.js that has not been added with this
 function. If BOOT-FILE is nil path is removed."
-  (cc:set-clog-path path boot-file)
+  (clog-connection:set-clog-path path boot-file)
   (if boot-file
       (setf (gethash path *url-to-on-new-window*) on-new-window-handler)
       (remhash path *url-to-on-new-window*)))
@@ -96,7 +96,7 @@ function. If BOOT-FILE is nil path is removed."
   "Shutdown CLOG."
   (clrhash *url-to-on-new-window*)
   (setf *clog-running* nil)
-  (cc:shutdown-clog))
+  (clog-connection:shutdown-clog))
 
 ;;;;;;;;;;;;;;;;
 ;; debug-mode ;;
@@ -104,7 +104,7 @@ function. If BOOT-FILE is nil path is removed."
 
 (defun debug-mode (obj)
   "Turn on browser console debugging for OBJ's connection."
-  (cc:debug-mode (connection-id obj)))
+  (clog-connection:debug-mode (connection-id obj)))
 
 ;;;;;;;;;;;;;;;;;;
 ;; open-browser ;;

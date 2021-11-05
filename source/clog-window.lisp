@@ -401,7 +401,7 @@ very limitted to just open a new tab with url unless is a localhost url."))
   (:documentation "Close connection to browser with out closing browser."))
 
 (defmethod close-connection ((obj clog-window))
-  (cc:cclose (connection-id obj)))
+  (clog-connection:cclose (connection-id obj)))
 
 ;;;;;;;;;;;;;;;;;;
 ;; set-on-abort ;;

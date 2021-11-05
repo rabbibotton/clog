@@ -44,8 +44,8 @@
 
 
 (defmethod create-context2d ((obj clog-canvas))
-  (let ((web-id (cc:generate-id)))
-    (cc:execute (connection-id obj)
+  (let ((web-id (clog-connection:generate-id)))
+    (clog-connection:execute (connection-id obj)
 		(format nil "clog['~A']=clog['~A'].getContext('2d')"
 			web-id
 			(html-id obj)))

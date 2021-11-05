@@ -81,7 +81,7 @@ during attachment. (Private)"))
   (:documentation "Execure SCRIPT on browser. (Internal)"))
 
 (defmethod js-execute ((obj clog-obj) script)
-  (cc:execute (connection-id obj) script))
+  (clog-connection:execute (connection-id obj) script))
 
 ;;;;;;;;;;;;;;
 ;; js-query ;;
@@ -91,7 +91,7 @@ during attachment. (Private)"))
   (:documentation "Execure SCRIPT on browser and return result. (Internal)"))
 
 (defmethod js-query ((obj clog-obj) script &key (default-answer nil))
-  (cc:query (connection-id obj) script :default-answer default-answer))
+  (clog-connection:query (connection-id obj) script :default-answer default-answer))
 
 ;;;;;;;;;;;;
 ;; jquery ;;
@@ -414,7 +414,7 @@ result or if time out DEFAULT-ANSWER (Private)"))
   (:documentation "Returns true if connection is valid on this CLOG-OBJ."))
 
 (defmethod validp ((obj clog-obj))
-  (cc:validp (connection-id obj)))
+  (clog-connection:validp (connection-id obj)))
 
 ;;;;;;;;;;;;;;;;;;;;;
 ;; connection-data ;;
@@ -429,7 +429,7 @@ for internal use of clog. The key \"clog-body\" is set to the
 clog-body of this connection."))
 
 (defmethod connection-data ((obj clog-obj))
-  (cc:get-connection-data (connection-id obj)))
+  (clog-connection:get-connection-data (connection-id obj)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; connection-data-item ;;

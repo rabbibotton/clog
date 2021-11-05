@@ -87,7 +87,7 @@ clog-user:*body* to last window openned to /repl."
   (unless *clog-running*
     (initialize nil :boot-file "/debug.html"))
   (set-on-new-window (lambda (body)
-		       (cc:debug-mode (connection-id body))
+		       (clog-connection:debug-mode (connection-id body))
 		       (setf clog-user::*body* body))
 		     :path "/repl")
   (open-browser :url "http://127.0.0.1:8080/repl")
