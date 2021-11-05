@@ -6,6 +6,9 @@
 ;;;; clog.lisp                                                             ;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+;;; Defines the various exports using mgl-pax to auto generate documentation
+;;; for clog. The physical files map in most cases to the defsections with
+;;; the exception of clog-obj which is defined in clog-base.lisp
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Exports - clog

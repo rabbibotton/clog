@@ -8,6 +8,7 @@
 
 (cl:in-package :clog)
 
+;;; clog-elements represent the base object for visual html elements.
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Implementation - clog-element

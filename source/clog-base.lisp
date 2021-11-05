@@ -8,6 +8,11 @@
 
 (cl:in-package :clog)
 
+;;; Implements the base object clog-obj that encapsulates the communication
+;;; between the browser and the lisp code for each object in the HTML DOM.
+;;; This includes properties, methods and events. Each clog-obj also has
+;;; methods to retrieve connection-data (data that is associated with the
+;;; current page regardless of object or thread of execution is lisp).
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Implementation - clog-obj
@@ -24,7 +29,7 @@
     :reader connection-data-mutex
     :initform (bordeaux-threads:make-lock)))
   (:documentation "CLOG objects (clog-obj) encapsulate the connection between
-lisp and the HTML DOM element."))
+lisp and an HTML DOM element."))
 
 ;;;;;;;;;;;;;;;;;;;
 ;; connection-id ;;

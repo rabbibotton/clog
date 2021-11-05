@@ -8,14 +8,12 @@
 
 (cl:in-package :clog)
 
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Implementation - clog-canvas
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defclass clog-canvas (clog-element)()
   (:documentation "CLOG Canvas Objects."))
-
 
 ;;;;;;;;;;;;;;;;;;;
 ;; create-canvas ;;
@@ -30,7 +28,6 @@
   (create-child obj (format nil "<canvas width=~A height=~A/>"
 			    width height)
 		:clog-type 'clog-canvas :auto-place auto-place))
-
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Implementation - clog-context2d
@@ -479,5 +476,3 @@
 
 (defmethod canvas-restore ((obj clog-context2d))
   (execute obj "restore()"))
-
-

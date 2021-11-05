@@ -3,20 +3,21 @@
 ;;;; (c) 2020-2021 David Botton                                            ;;;;
 ;;;; License BSD 3 Clause                                                  ;;;;
 ;;;;                                                                       ;;;;
-;;;; clog-helpers.lisp  - Various helpers for learning                     ;;;;
+;;;; clog-helpers.lisp                                                     ;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;;; Various helpers for learning CLOG
 
 (cl:in-package :clog)
 
 (defpackage #:clog-user
   (:use #:cl #:clog))
 
-(defvar clog-user::*body* nil "clog-repl access to body")
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Implementation - CLOG Utilities
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(defvar clog-user::*body* nil "clog-repl access to body")
 
 ;;;;;;;;;;;;;;;;;;;;;;
 ;; clog-install-dir ;;

@@ -14,14 +14,14 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defvar *url-to-on-new-window* (make-hash-table :test 'equalp)
-  "URL to on-new-window handlers")
+  "URL to on-new-window handlers (private)")
 
 (defvar *clog-running* nil "If clog running.")
 
 (defvar *overide-static-root* nil
-  "Overide the static-root settings. This is not normally a good idea, but if
-trying to run the tutorials or demos and unable to have your local directy the
-same as the clog directy this overides the relative paths used in them.")
+  "Override the static-root settings. This is not normally a good idea, but if
+trying to run the tutorials or demos and unable to have your local directory
+the same as the clog directy this overides the relative paths used in them.")
 
 ;;;;;;;;;;;;;;;;
 ;; initialize ;;
@@ -113,8 +113,8 @@ function. If BOOT-FILE is nil path is removed."
 (defun open-browser (&key (url "http://127.0.0.1:8080"))
   "Launch on os a web browser on local machine to URL. See BROWSER-OPEN
 for openning windows on remote machines."
-  (handler-case (progn
-                  (trivial-open-browser:open-browser url))
+  (handler-case
+      (trivial-open-browser:open-browser url)
     (error (c)
       (format t "Unable to open browser.~%~%~A" c))))
 

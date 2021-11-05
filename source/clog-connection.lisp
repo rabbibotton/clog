@@ -6,6 +6,15 @@
 ;;;; clog-connection.lisp                                                  ;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+;;; clog-connection.lisp contains the clog-connection package that handles
+;;; the low level connectivity between lisp and the browser.
+;;;
+;;; clog <-> clog-connection <->
+;;;   clack <-> Hunchentoot (by default) <->
+;;;     internet/localhost <-> browser
+;;;
+;;; Normally users of clog do not interact with the exports of clog-connection
+;;; package. Shutdown and startup of clog are found in clog-system.lisp
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Exports - clog-connection
