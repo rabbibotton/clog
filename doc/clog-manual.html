@@ -514,7 +514,7 @@ alpha 0.0 - 1.0</p></li>
 <li><p><span class=reference-bullet><span class=reference><span class="locative-type">[class]</span> <span class="reference-object"><a href="#x-28CLOG-3ACLOG-OBJ-20CLASS-29" >CLOG-OBJ</a></span></span></span></p>
 
 <p><code>CLOG</code> objects (clog-obj) encapsulate the connection between
-lisp and the <code>HTML</code> DOM element.</p></li>
+lisp and an <code>HTML</code> DOM element.</p></li>
 </ul>
 
 <p>CLOG-Obj - General Properties</p>
@@ -6328,6 +6328,14 @@ If <code>ON-FULL-SCREEN-CHANGE-HANDLER</code> is nil unbind the event.</p></li>
 
 <p>Set a path /repl that opens a blank page and sets the global
 clog-user:<em>body</em> to last window openned to /repl.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3ASAVE-BODY-TO-FILE-20FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#x-28CLOG-3ASAVE-BODY-TO-FILE-20FUNCTION-29" >SAVE-BODY-TO-FILE</a></span></span> <span class="locative-args">FILE-NAME &amp;KEY (BODY <code>CLOG-USER::*BODY*</code>) (IF-EXISTS <code>:ERROR</code>) IF-DOES-NOT-EXIST EXTERNAL-FORMAT</span></span></p>
+
+<p>Save the current html of <code>BODY</code> in the current state to <code>FILE-NAME</code></p></li>
 </ul>
 
 <p>Functions for Compilation and Documentation</p>

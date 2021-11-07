@@ -92,7 +92,24 @@ clog-user:*body* to last window openned to /repl."
 		     :path "/repl")
   (open-browser :url "http://127.0.0.1:8080/repl")
   (format t "Use clog-user:*body* to access the clog-repl window."))
- 
+
+;;;;;;;;;;;;;;;;;;;;;;;
+;; save-body-to-file ;;
+;;;;;;;;;;;;;;;;;;;;;;;
+
+(defun save-body-to-file (file-name &key (body clog-user::*body*)
+				      (if-exists :error)
+				      if-does-not-exist
+				      external-format)
+  "Save the current html of BODY in the current state to FILE-NAME"
+  (when (alexandria:write-string-into-file
+	 (outer-html (document-element (html-document body)))
+	 file-name
+	 :if-exists if-exists
+	 :if-does-not-exist if-does-not-exist
+	 :external-format external-format)
+    t))
+
 ;;;;;;;;;;;;;;;;
 ;; load-world ;;
 ;;;;;;;;;;;;;;;;

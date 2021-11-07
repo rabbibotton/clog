@@ -8,13 +8,15 @@ Q) How do I turn my CLOG app in to a native Mac, Windows or Linux app?
 
 A) There are many ways, the simplest is just use Ceramic -
     http://ceramic.github.io/  which uses electron. You can of course use any
-tool the gives you a browser control. See clog/nativ-glues/gtk or an example
+tool the gives you a browser control. See clog/native-glues/gtk or an example
 with GTK in C, but you can use the cl-cffi-gtk to accomplish the same thing.
 
 Q) I want to take an HTML snapshot of a clog created page:
 
 (format t "=> ~A" (outer-html (document-element (html-document body))))
 
+or (save-body-to-file)
+
 Q) I want to know where the :CLOG tutorials, demos and sources.
 
-Use (asdf:system-source-directory :clog)
+Use (clog-install-dir)
