@@ -70,7 +70,7 @@ You will also likely need to copy the sqlite3 dll from
 https://www.sqlite.org/download.html to portacle\win\lib
 
 1. Start emacs then M-x slime
-2. In the REPL, run (tutorials currently 1 - 26):
+2. In the REPL, run:
 
 ```
 CL-USER> (ql:quickload :clog)
@@ -86,14 +86,14 @@ To see where the source, tutorial and demo files are:
 CL-USER> (clog:clog-install-dir)
 ```
 
-You can the run the demos with (currently 1 or 3):
+You can the run the demos with:
 
 ```
 CL-USER> (ql:quickload :clog)
 CL-USER> (clog:run-demo 1)
 ```
 
-The clog-db-admin tool (currently being worked on) can be run with:
+The clog-db-admin tool can be run with:
 
 ```
 CL-USER> (ql:quickload :clog/tools)
@@ -229,7 +229,7 @@ Template Summary
 
 clog-gui-template.lisp - Basic CLOG-GUI app
 
-High Order Extensions to CLOG (so far)
+High Order Extensions to CLOG
 
 - clog-gui - Desktop over the web
   - Menus
@@ -250,13 +250,4 @@ High Order Extensions to CLOG (so far)
   - Alerts
   - Forms
 
-- clog-data
-  - clog-db-admin - Basic database administration 
-
-Post 1.0
-- clog-auth
-  - coming soon - tiered authorization, user profiles, etc
-
-- clog-monitor
-  - coming soon - logging, usage, etc.
-
+(See FUTURE.md for future plans)
