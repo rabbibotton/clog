@@ -51,7 +51,7 @@ it is tested fairly regulary with SBCL on Linux, Windows and
 Intel MacBook. It should in theory work on any system with
 Quicklisp and CLACK.
 
-CLOG is in Quicklisp, but you may want to live on the bleeding edge
+CLOG is in Quicklisp (ql:quickload :clog), but you may want to live on the bleeding edge
 and use Ultralisp or clone the github repo into your
 ~/common-lisp directory (or other quicklisp/asdf findable
 directory):
