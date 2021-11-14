@@ -74,7 +74,7 @@ have Quicklisp configured):
 
 ```
 CL-USER> (ql:quickload :clog)
-CL-USER> (clog-user:run-tutorial 1)
+CL-USER> (clog:run-tutorial 1)
 ```
 
 To see where the source files are:
