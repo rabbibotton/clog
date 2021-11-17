@@ -7,8 +7,8 @@
 (in-package :clog-user)
 
 ;; Site Configuration
-(defconstant side-panel-size 200 "Size of menu")
-(defconstant sysop-password "admin")
+(defparameter side-panel-size 200 "Size of menu")
+(defparameter sysop-password "admin")
 
 (defvar *sql-connection*)
 (defvar *site-config*)
