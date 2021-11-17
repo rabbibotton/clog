@@ -616,10 +616,10 @@ to nil on creation."))
   (:documentation "Main for web content"))
 
 (defgeneric create-web-main (clog-obj &key content hidden class html-id)
-  (:documentation "Create a clog-web-main. Container for main content when
-using a collapsable sidebar  or other whole page shifting technique.
-If hidden is t then then the visiblep propetery will be set to nil on
-creation."))
+  (:documentation "Create a clog-web-main. Container for main content
+when using a collapsable sidebar or other whole page shifting
+technique. If hidden is t then then the visiblep propetery will be set
+to nil on creation."))
 
 (defmethod create-web-main ((obj clog-obj) &key (content "")
 		 				  (hidden nil)
@@ -644,7 +644,7 @@ creation."))
 sidebars are create with the display property set to :none if hidden it t
 and :block if nil. In general the visiblep property is used in clog, however
 in clog-web-sidebar the block property is needed to activate its animations
-if used. If using a sidebar that will take space on not collapse, make sure
+if used. If using a sidebar that will take space and not collapse, make sure
 to set the sidebar's size and set a margin equal to the size on the main
 container."))
 

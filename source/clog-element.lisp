@@ -1953,6 +1953,18 @@ line-width -  size or medium|thin|thick|length|initial|inherit"))
 (defmethod set-margin ((obj clog-element) top right bottom left)
   (setf (style obj "margin") (format nil "~A ~A ~A ~A" top right bottom left)))
 
+;;;;;;;;;;;;;;;;;;;;;
+;; set-margin-side ;;
+;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric set-margin-side (clog-element side value)
+  (:documentation "Set margin SIDE (:top :right :bottom or :left),
+VALUE can be - <length>|auto|initial|inherit"))
+
+(defmethod set-margin-side ((obj clog-element) side value)
+  (setf (style obj (format nil "margin-~A" (string-downcase side))) value))
+
+
 ;;;;;;;;;;;;;
 ;; padding ;;
 ;;;;;;;;;;;;;
@@ -1970,6 +1982,17 @@ line-width -  size or medium|thin|thick|length|initial|inherit"))
   (setf (style obj "padding") (format nil "~A ~A ~A ~A"
 				      top right bottom left)))
 (defsetf padding set-padding)
+
+;;;;;;;;;;;;;;;;;;;;;;
+;; set-padding-side ;;
+;;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric set-padding-side (clog-element side value)
+  (:documentation "Set padding SIDE (:top :right :bottom or :left),
+VALUE can be - <length>|auto|initial|inherit"))
+
+(defmethod set-padding-side ((obj clog-element) side value)
+  (setf (style obj (format nil "padding-~A" (string-downcase side))) value))
 
 ;;;;;;;;;;;;
 ;; cursor ;;
