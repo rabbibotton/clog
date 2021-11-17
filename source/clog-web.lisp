@@ -858,8 +858,8 @@ is placed in DOM at top of OBJ instead of bottom of OBJ."
   "Create a form with CONTENT followed by FIELDS.
 FIELDS is a list of lists each list has:
 
-    (1) Field name         - Used for (name attribute)
-    (2) Field description  - Used for label
+    (1) Field description  - Used for label
+    (2) Field name         - Used for (name attribute)
     (3) Field type         - Optional (defaults to :text)
     (4) Field type options - Optional
 
@@ -960,7 +960,7 @@ if confirmed or nil if canceled. CANCEL-TEXT is only displayed if modal is t"
         fls
 	html-id ok-text ; ok
 	(if modal
-	    (format nil "<button class='w3-button w3-black' style='width:7em' id='~A-cancel'>~A</button>"
+	    (format nil "&nbsp;<button class='w3-button w3-black' style='width:7em' id='~A-cancel'>~A</button>"
 		    html-id cancel-text)
 	    ""))
 				  :hidden          t
