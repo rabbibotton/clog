@@ -173,6 +173,7 @@
 				    (declare (ignore obj))()))))
 
 (defun on-new-window (body)
+  (set-html-on-close body "Connection Lost")
   (let ((app (make-instance 'app-data)))
     (setf (connection-data-item body "app-data") app))
   (clog-gui-initialize body)

@@ -159,6 +159,7 @@
 		      (id-me app)))))
 
 (defun on-new-window (body)
+  (set-html-on-close body "Connection Lost")
   ;; Create an app-data object for every connection
   (let ((app (make-instance 'app-data)))
     (setf (connection-data-item body "app-data") app)

@@ -15,6 +15,7 @@
 	   *global-list-box-hash*))
 
 (defun on-new-window (body)
+  (set-html-on-close body "Connection Lost")
   (load-css (html-document body) "/css/w3.css")
   (setf (title (html-document body)) "CLOG Chat")
 

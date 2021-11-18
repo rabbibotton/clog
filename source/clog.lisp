@@ -673,11 +673,12 @@ embedded in a native template application.)"
   (clog-body class)
 
   "CLOG-Body - Properties"
-  (run           generic-function)
-  (window        generic-function)
-  (html-document generic-function)
-  (location      generic-function)
-  (navigator     generic-function))
+  (run               generic-function)
+  (set-html-on-close generic-function)
+  (window            generic-function)
+  (html-document     generic-function)
+  (location          generic-function)
+  (navigator         generic-function))
 
 (defsection @clog-window (:title "CLOG Window Objects")
   "CLOG-Window - CLOG Window Objects"

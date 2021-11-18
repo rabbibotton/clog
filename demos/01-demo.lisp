@@ -169,6 +169,7 @@
       (sleep .1))))
 
 (defun on-new-window (body)
+  (set-html-on-close body "Connection Lost")
   (let ((app (make-instance 'app-data)))
     (setf (connection-data-item body "app-data") app))
   (display-splash body)

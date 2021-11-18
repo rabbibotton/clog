@@ -47,7 +47,7 @@
 ;;;;;;;;;
 
 (defgeneric run (clog-body)
-  (:documentation "Keeps the main thread alive to prevent garbage
+  (:documentation "Keeps the connection thread alive to prevent garbage
 collection of local objects when not using connection-data objects
 or global objects."))
 
@@ -56,6 +56,15 @@ or global objects."))
 	(if (validp obj)
 	    (sleep 10)
 	    (return))))
+
+;;;;;;;;;;;;;;;;;;;;;;;
+;; set-html-on-close ;;
+;;;;;;;;;;;;;;;;;;;;;;;
+
+(defun set-html-on-close (clog-body html)
+  "In case of connection loss to this CLOG-BODY, replace the browser contents
+with HTML."
+  (clog-connection:set-html-on-close (connection-id clog-body) html))
 
 ;;;;;;;;;;;;
 ;; window ;;

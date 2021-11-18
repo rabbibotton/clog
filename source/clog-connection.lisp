@@ -492,6 +492,7 @@ HTML <br />."
 the browser contents in case of connection loss."
   (execute connection-id (format nil "clog['html_on_close']='~A'"
 				 (escape-string html))))
+
 ;;;;;;;;;;;;;;;;;;;;;;
 ;; compiled-boot-js ;;
 ;;;;;;;;;;;;;;;;;;;;;;
