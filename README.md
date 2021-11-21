@@ -8,6 +8,11 @@ View the HTML Documentation:
 
 https://rabbibotton.github.io/clog/clog-manual.html
 
+Join the CLOG Maillist for latest updates:
+
+https://mailman.common-lisp.net/listinfo/clog-devel
+
+---
 
 ![Image of CLOG](https://rabbibotton.github.io/images/clog.png)
 
