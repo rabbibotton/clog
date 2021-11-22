@@ -577,7 +577,9 @@ CLOG-OBJ"))
 
 (defgeneric create-span (clog-obj &key content hidden class html-id auto-place)
   (:documentation "Create a new CLOG-Span as child of CLOG-OBJ with CONTENT
-and if :AUTO-PLACE (default t) place-inside-bottom-of CLOG-OBJ"))
+and if :AUTO-PLACE (default t) place-inside-bottom-of CLOG-OBJ. A span is
+an inline element while a div is a block element (one that takes up the entire
+browser width)."))
 
 (defmethod create-span ((obj clog-obj) &key (content "")
 					 (hidden nil)
