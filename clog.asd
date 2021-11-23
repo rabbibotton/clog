@@ -30,6 +30,7 @@
 	       (:file "clog-navigator")	       
 	       (:file "clog-body")
 	       (:file "clog-system")
+	       (:file "clog-panel")
 	       (:file "clog-gui")
 	       (:file "clog-web")
 	       (:file "clog-helpers")))

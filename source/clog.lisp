@@ -37,6 +37,7 @@ embedded in a native template application.)"
   (@clog-obj             section)
   (@clog-element         section)
   (@clog-element-common  section)
+  (@clog-panel           section)
   (@clog-style-block     section)
   (@clog-form            section)
   (@clog-canvas          section)
@@ -261,6 +262,7 @@ embedded in a native template application.)"
   (positioning                generic-function)
   (position-top               generic-function)
   (position-left              generic-function)
+  (geometry                   generic-function)
   (left                       generic-function)
   (top                        generic-function)
   (right                      generic-function)
@@ -463,6 +465,11 @@ embedded in a native template application.)"
   "CLOG-Table-Column-Group-Item - Class for CLOG Table-Column-Group-Items"
   (clog-table-column-group-item   class)
   (create-table-column-group-item generic-function))
+
+(defsection @clog-panel (:title "CLOG Panels")
+  "CLOG-Panel - CLOG Panels"
+  (clog-panel class)
+  (create-panel generic-function))
 
 (defsection @clog-style-block (:title "CLOG Style Blocks")
   "CLOG-Style-Block - CLOG Style Blocks"

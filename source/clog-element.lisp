@@ -1370,6 +1370,30 @@ parent in the DOM."))
 (defmethod offset-left ((obj clog-element))
   (parse-integer (jquery-query obj "offset().left" :default-answer 0) :junk-allowed t))
 
+
+;;;;;;;;;;;;;;
+;; geometry ;;
+;;;;;;;;;;;;;;
+
+(defgeneric geometry (clog-element &key x y width height units)
+  (:documentation "Change the geometry :X :Y :WIDTH :HEIGHT each optional
+in UNITS (default :px)"))
+
+(defmethod geometry ((obj clog-element) &key x y width height (units :px))
+  (jquery-execute obj (format nil "css({~A~A~A~A})"
+			      (if x
+				  (format nil "'left':'~A~A'," x units)
+				  "")
+			      (if y
+				  (format nil "'top':'~A~A'," y units)
+				  "")
+			      (if width
+				  (format nil "'width':'~A~A'," width units)
+				  "")
+			      (if height
+				  (format nil "'height':'~A~A'," height units)
+				  ""))))
+
 ;;;;;;;;;;
 ;; left ;;
 ;;;;;;;;;;

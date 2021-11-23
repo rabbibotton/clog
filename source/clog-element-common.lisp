@@ -185,7 +185,7 @@ CLOG-OBJ"))
 (defgeneric create-div (clog-obj &key content hidden class html-id auto-place)
   (:documentation "Create a new CLOG-Div as child of CLOG-OBJ with :CONTENT
 (default \"\") and if :AUTO-PLACE (default t) place-inside-bottom-of
-CLOG-OBJ. If hidden it true visiblep is set to nil."))
+CLOG-OBJ. If hidden is true visiblep is set to nil."))
 
 (defmethod create-div ((obj clog-obj) &key (content "")
 					(hidden nil)
