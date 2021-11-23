@@ -121,6 +121,18 @@ must be in DOM, ie placed or auto-placed."))
 			      style-name (escape-string value))))
 (defsetf style set-style)
 
+(defgeneric set-styles (clog-element style-list)
+  (:documentation "Set css styles using a list of list of name value pairs."))
+
+(defmethod set-styles ((obj clog-element) style-list)
+  (jquery-execute obj (format nil "css({~{~A~}})"
+			      (mapcar
+			       (lambda (n)
+				 (format nil "'~A':'~A',"
+					 (first n)
+					 (second n)))
+			       style-list))))
+
 ;;;;;;;;;;;;;;;
 ;; attribute ;;
 ;;;;;;;;;;;;;;;
@@ -1371,15 +1383,15 @@ parent in the DOM."))
   (parse-integer (jquery-query obj "offset().left" :default-answer 0) :junk-allowed t))
 
 
-;;;;;;;;;;;;;;
-;; geometry ;;
-;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;
+;; set-geometry ;;
+;;;;;;;;;;;;;;;;;;
 
-(defgeneric geometry (clog-element &key x y width height units)
+(defgeneric set-geometry (clog-element &key x y width height units)
   (:documentation "Change the geometry :X :Y :WIDTH :HEIGHT each optional
 in UNITS (default :px)"))
 
-(defmethod geometry ((obj clog-element) &key x y width height (units :px))
+(defmethod set-geometry ((obj clog-element) &key x y width height (units :px))
   (jquery-execute obj (format nil "css({~A~A~A~A})"
 			      (if x
 				  (format nil "'left':'~A~A'," x units)

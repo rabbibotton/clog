@@ -176,6 +176,7 @@ embedded in a native template application.)"
 
   "CLOG-Element - General Properties"
   (style            generic-function)
+  (set-styles       generic-function)
   (attribute        generic-function)
   (remove-attribute generic-function)
 
@@ -262,7 +263,7 @@ embedded in a native template application.)"
   (positioning                generic-function)
   (position-top               generic-function)
   (position-left              generic-function)
-  (geometry                   generic-function)
+  (set-geometry               generic-function)
   (left                       generic-function)
   (top                        generic-function)
   (right                      generic-function)
