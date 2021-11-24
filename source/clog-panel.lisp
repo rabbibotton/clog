@@ -24,16 +24,19 @@
 
 (defgeneric create-panel (clog-obj &key x y width height units
 				     border-style border-width border-color
-				     positioning content
+				     background-color
+				     positioning overflow resizable content
 				     style hidden class html-id auto-place)
   (:documentation "Create a new CLOG-Panel as child of
 CLOG-OBJ. Optionally you can set the :X, :Y, :WIDTH and :HEIGHT (in
-:UNITS defulting to :px), BORDER-STYLE (see BORDER-STYLE-TYPE),
-BORDER-WIDTH, BORDER-COLOR and the :POSITIONING (default is
-:FIXED) (see POSITIONING-TYPE) with :CONTENT (default
-\"\"). Additional css styles can be set in :STYLE (default \"\") if
-:AUTO-PLACE (default t) place-inside-bottom-of CLOG-OBJ. If hidden is
-true visiblep is set to nil."))
+:UNITS defulting to :px, if set to nil unit type must be provided for
+x,y,width and height), BORDER-STYLE (see BORDER-STYLE-TYPE),
+BORDER-WIDTH, BORDER-COLOR, :POSITIONING (default is :FIXED) (see
+POSITIONING-TYPE), :OVERFLOW (default is :CLIP) with :CONTENT (default
+\"\") and :RESIZABLE defaults to :NONE. Additional css styles can be
+set in :STYLE (default \"\") if :AUTO-PLACE (default t)
+place-inside-bottom-of CLOG-OBJ. If hidden is true visiblep is set to
+nil. Resizable only works if overflow is set to :SCROLL"))
 
 (defmethod create-panel ((obj clog-obj) &key
 					  (x nil)
@@ -43,15 +46,19 @@ true visiblep is set to nil."))
 					  (units :px)
 					  (border-style nil)
 					  (border-width nil)
-					  (border-color nil)			 
+					  (border-color nil)
+					  (background-color nil)
 					  (positioning :fixed)
+					  (overflow :clip)
+					  (display nil)
+					  (resizable nil)
 					  (content "")
 					  (style "")			 
 					  (hidden nil)
 					  (class nil)
 					  (html-id nil)
 					  (auto-place t))
-  (create-child obj (format nil "<div~A style='~A~A~A~A~A~A~A~A~A~A'>~A</div>"
+  (create-child obj (format nil "<span~A style='~A~A~A~A~A~A~A~A~A~A~A~A~A~A'>~A</span>"
 			    (if class
 				(format nil " class='~A'" (escape-string class))
 				"")
@@ -79,6 +86,18 @@ true visiblep is set to nil."))
 			    (if border-color
 				(format nil "border-color:~A;" border-color)
 				"")
+			    (if background-color
+				(format nil "background-color:~A;" background-color)
+				"")
+			    (if overflow
+				(format nil "overflow:~A;" overflow)
+				"")
+			    (if display
+				(format nil "display:~A;" display)
+				"")
+			    (if resizable
+				(format nil "resize:~A;" resizable)
+				"")
 			    (if positioning
 				(format nil "position:~A;"
 					(escape-string positioning))
@@ -90,4 +109,3 @@ true visiblep is set to nil."))
 		:clog-type  'clog-panel
 		:html-id    html-id
 		:auto-place auto-place))
-

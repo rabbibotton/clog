@@ -646,7 +646,6 @@ content not visible on the screen due to overflow."))
 (defmethod html-tag ((obj clog-element))
   (property obj "tagName"))
 
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Styles - clog-element
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -787,8 +786,7 @@ handles how elements are treated by the browser layout engine.
                       align-self
                       justify-self
 
-    inline-grid   - Turn this item in to a grid container inline level.
-"))
+    inline-grid   - Turn this item in to a grid container inline level."))
 
 (defmethod display ((obj clog-element))
   (style obj "display"))
