@@ -16,7 +16,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defclass clog-panel (clog-element)()
-  (:documentation "CLOG Panels objects."))
+  (:documentation "CLOG Panel objects."))
 
 ;;;;;;;;;;;;;;;;;;
 ;; create-panel ;;
@@ -136,3 +136,83 @@ nil. Resizable only works if overflow is set to :SCROLL"))
 		:clog-type  'clog-panel
 		:html-id    html-id
 		:auto-place auto-place))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Implementation - clog-panel-box-layout
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defclass clog-panel-box-layout ()
+  ((center-panel
+    :accessor center-panel
+    :documentation "Center Panel")
+   (top-panel
+    :accessor top-panel
+    :documentation "Top Panel")
+   (left-panel
+    :accessor left-panel
+    :documentation "Left Panel")
+   (bottom-panel
+    :accessor bottom-panel
+    :documentation "Bottom Panel")
+   (right-panel
+    :accessor right-panel
+    :documentation "Right Panel"))
+  (:documentation "CLOG Panel Box Layout Objects."))
+
+;;;;;;;;;;;;;;;;;;
+;; center-panel ;;
+;;;;;;;;;;;;;;;;;;
+
+(defgeneric center-panel (clog-panel-box-layout)
+  (:documentation "Returns the center panel of a clog-panel-box-layout object."))
+
+;;;;;;;;;;;;;;;
+;; top-panel ;;
+;;;;;;;;;;;;;;;
+
+(defgeneric top-panel (clog-panel-box-layout)
+  (:documentation "Returns the top panel of a clog-panel-box-layout object."))
+
+;;;;;;;;;;;;;;;
+;; top-panel ;;
+;;;;;;;;;;;;;;;
+
+(defgeneric top-panel (clog-panel-box-layout)
+  (:documentation "Returns the top panel of a clog-panel-box-layout object."))
+
+;;;;;;;;;;;;;;;;
+;; left-panel ;;
+;;;;;;;;;;;;;;;;
+
+(defgeneric left-panel (clog-panel-box-layout)
+  (:documentation "Returns the left panel of a clog-panel-box-layout object."))
+
+;;;;;;;;;;;;;;;;;;
+;; bottom-panel ;;
+;;;;;;;;;;;;;;;;;;
+
+(defgeneric bottom-panel (clog-panel-box-layout)
+  (:documentation "Returns the bottom panel of a clog-panel-box-layout object."))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; create-panel-box-layout ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defun create-panel-box-layout (clog-obj &key (top-height 50) (left-width 50)
+					   (bottom-height 50) (right-width 50))
+  (let ((panel-box (make-instance 'clog-panel-box-layout)))
+    (setf (top-panel panel-box)
+	  (create-panel clog-obj :left 0 :top 0 :right 0 :height top-height))
+    (setf (bottom-panel panel-box)
+	  (create-panel clog-obj :left 0 :bottom 0 :right 0 :height bottom-height))
+    (setf (left-panel panel-box)
+	  (create-panel clog-obj :left 0 :top 0 :bottom 0 :width left-width
+				 :margin-top top-height :margin-bottom bottom-height))
+    (setf (right-panel panel-box)
+	  (create-panel clog-obj :right 0 :top 0 :bottom 0 :width right-width
+				 :margin-top top-height :margin-bottom bottom-height))
+    (setf (center-panel panel-box)
+	  (create-panel clog-obj :left 0 :top 0 :right 0 :bottom 0
+				 :margin-left left-width :margin-top top-height
+				 :margin-right right-width :margin-bottom bottom-height))
+    panel-box))

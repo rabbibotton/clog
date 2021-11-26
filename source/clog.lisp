@@ -470,7 +470,16 @@ embedded in a native template application.)"
 (defsection @clog-panel (:title "CLOG Panels")
   "CLOG-Panel - CLOG Panels"
   (clog-panel class)
-  (create-panel generic-function))
+  (create-panel generic-function)
+
+  "CLOG-Panel-Box-Layout"
+  (clog-panel-box-layout   class)
+  (create-panel-box-layout function)
+  (center-panel            generic-function)
+  (top-panel               generic-function)
+  (left-panel              generic-function)
+  (right-panel             generic-function)
+  (bottom-panel            generic-function))
 
 (defsection @clog-style-block (:title "CLOG Style Blocks")
   "CLOG-Style-Block - CLOG Style Blocks"
