@@ -8,8 +8,8 @@
 
 (cl:in-package :clog)
 
-;;; clog-panels are for doing layouts specializing in fixed or absolute
-;;; positioning.
+;;; clog-panels are for doing layouts, base class for pluggins and custom
+;;; widgets.
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Implementation - clog-panel
@@ -97,7 +97,7 @@ nil. Resizable only works if overflow is set to :SCROLL"))
 				"")
 			    (if margin-bottom
 				(format nil "margin-bottom:~A~A;" margin-bottom units)
-				""
+				"")
 			    (if width
 				(format nil "width:~A~A;" width units)
 				"")
