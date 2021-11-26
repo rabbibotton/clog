@@ -44,7 +44,7 @@ place-inside-bottom-of CLOG-OBJ.
 					(escape-string class))
 				"")
 			    (if hidden
-				(format nil " style='visibility:hidden;'")
+				" style='visibility:hidden;'"
 				"")			    
 			    (escape-string target)
 			    (escape-string link)
@@ -108,7 +108,7 @@ line break and if :AUTO-PLACE (default t) place-inside-bottom-of CLOG-OBJ"))
 				       (auto-place t))
   (create-child obj (format nil "<br~A~A/>"
 			    (if hidden
-				(format nil " style='visibility:hidden;'")
+				" style='visibility:hidden;'"
 				"")			    
 			    (if class
 				(format nil " class='~A'"
@@ -145,7 +145,7 @@ CLOG-OBJ"))
 					(escape-string class))
 				"")
 			    (if hidden
-				(format nil " style='visibility:hidden;'")
+				" style='visibility:hidden;'"
 				"")			    
 			    (escape-string content))
 		:clog-type  'clog-button
@@ -197,7 +197,7 @@ CLOG-OBJ. If hidden is true visiblep is set to nil."))
 				(format nil " class='~A'" (escape-string class))
 				"")
 			    (if hidden
-				(format nil " style='visibility:hidden;'")
+				" style='visibility:hidden;'"
 				"")
 			    (escape-string content))
 		:clog-type  'clog-div
@@ -226,7 +226,7 @@ CLOG-OBJ"))
 				       (auto-place t))
   (create-child obj (format nil "<hr~A~A/>"
 			    (if hidden
-				(format nil " style='visibility:hidden;'")
+				" style='visibility:hidden;'"
 				"")			    
 			    (if class
 				(format nil " class='~A'"
@@ -264,7 +264,7 @@ placing image to constrain image size."))
 					(auto-place t))
   (create-child obj (format nil "<img~A~A src='~A' alt='~A'>)"
 			    (if hidden
-				(format nil " style='visibility:hidden;'")
+				" style='visibility:hidden;'"
 				"")
 			    (if class
 				(format nil " class='~A'"
@@ -346,7 +346,7 @@ place-inside-bottom-of CLOG-OBJ."))
 	    "<meter value=~A high=~A low=~A max=~A min=~A optimum=~A~A~A/>"
 			    value high low maximum minimum optimum
 			    (if hidden
-				(format nil " style='visibility:hidden;'")
+				" style='visibility:hidden;'"
 				"")			    
 			    (if class
 				(format nil " class='~A'"
@@ -485,7 +485,7 @@ place-inside-bottom-of CLOG-OBJ."))
   (create-child obj (format nil "<progress value=~A max=~A ~A~A/>"
 			    value maximum
 			    (if hidden
-				(format nil " style='visibility:hidden;'")
+				" style='visibility:hidden;'"
 				"")			    
 			    (if class
 				(format nil " class='~A'"
@@ -552,7 +552,7 @@ CLOG-OBJ"))
 				      (auto-place t))
   (create-child obj (format nil "<p~A~A>~A</p>"
 			    (if hidden
-				(format nil " style='visibility:hidden;'")
+				" style='visibility:hidden;'"
 				"")
 			    (if class
 				(format nil " class='~A'"
@@ -588,7 +588,7 @@ browser width)."))
 					 (auto-place t))
   (create-child obj (format nil "<span~A~A>~A</span>"
 			    (if hidden
-				(format nil " style='visibility:hidden;'")
+				" style='visibility:hidden;'"
 				"")
 			    (if class
 				(format nil " class='~A'"
@@ -628,7 +628,7 @@ CLOG-OBJ"))
   (create-child obj (format nil "<~A~A~A>~A</~A>"
 			    section
 			    (if hidden
-				(format nil " style='visibility:hidden;'")
+				" style='visibility:hidden;'"
 				"")
 			    (if class
 				(format nil " class='~A'"
@@ -670,7 +670,7 @@ CLOG-OBJ"))
   (create-child obj (format nil "<~A~A~A>~A</~A>"
 			    phrase
 			    (if hidden
-				(format nil " style='visibility:hidden;'")
+				" style='visibility:hidden;'"
 				"")
 			    (if class
 				(format nil " class='~A'"
@@ -705,7 +705,7 @@ and if :AUTO-PLACE (default t) place-inside-bottom-of CLOG-OBJ"))
 				  (auto-place t))
   (create-child obj (format nil "<ol~A~A/>"
 			    (if hidden
-				(format nil " style='visibility:hidden;'")
+				" style='visibility:hidden;'"
 				"")			    
 			    (if class
 				(format nil " class='~A'"
@@ -781,7 +781,7 @@ and if :AUTO-PLACE (default t) place-inside-bottom-of CLOG-OBJ"))
 						   (auto-place t))
   (create-child obj (format nil "<ul~A~A/>"
 			    (if hidden
-				(format nil " style='visibility:hidden;'")
+				" style='visibility:hidden;'"
 				"")			    
 			    (if class
 				(format nil " class='~A'"
@@ -926,7 +926,7 @@ and if :AUTO-PLACE (default t) place-inside-bottom-of CLOG-OBJ"))
 				 (auto-place t))
   (create-child obj (format nil "<dd~A~A>~A</dd>"
 			    (if hidden
-				(format nil " style='visibility:hidden;'")
+				" style='visibility:hidden;'"
 				"")			    
 			    (if class
 				(format nil " class='~A'"
@@ -957,7 +957,7 @@ and if :AUTO-PLACE (default t) place-inside-bottom-of CLOG-OBJ"))
 			   (class nil) (html-id nil) (auto-place t))
   (create-child obj (format nil "<table~A~A/>"
 			    (if hidden
-				(format nil " style='visibility:hidden;'")
+				" style='visibility:hidden;'"
 				"")
 			    (if class
 				(format nil " class='~A'"
@@ -987,7 +987,7 @@ and if :AUTO-PLACE (default t) place-inside-bottom-of CLOG-OBJ"))
 			       (class nil) (html-id nil) (auto-place t))
   (create-child obj (format nil "<tr~A~A/>"
 			    (if hidden
-				(format nil " style='visibility:hidden;'")
+				" style='visibility:hidden;'"
 				"")			    
 			    (if class
 				(format nil " class='~A'"
@@ -1029,7 +1029,7 @@ and if :AUTO-PLACE (default t) place-inside-bottom-of CLOG-OBJ"))
 			    column-span
 			    row-span
 			    (if hidden
-				(format nil " style='visibility:hidden;'")
+				" style='visibility:hidden;'"
 				"")			    
 			    (if class
 				(format nil " class='~A'"
@@ -1072,7 +1072,7 @@ and if :AUTO-PLACE (default t) place-inside-bottom-of CLOG-OBJ"))
 			    column-span
 			    row-span
 			    (if hidden
-				(format nil " style='visibility:hidden;'")
+				" style='visibility:hidden;'"
 				"")			    
 			    (if class
 				(format nil " class='~A'"
@@ -1103,7 +1103,7 @@ and if :AUTO-PLACE (default t) place-inside-bottom-of CLOG-OBJ"))
 				(class nil) (html-id nil) (auto-place t))
   (create-child obj (format nil "<thead~A~A/>"
 			    (if hidden
-				(format nil " style='visibility:hidden;'")
+				" style='visibility:hidden;'"
 				"")			    
 			    (if class
 				(format nil " class='~A'"
@@ -1133,7 +1133,7 @@ and if :AUTO-PLACE (default t) place-inside-bottom-of CLOG-OBJ"))
 				(class nil) (html-id nil) (auto-place t))
   (create-child obj (format nil "<tbody~A~A/>"
 			    (if hidden
-				(format nil " style='visibility:hidden;'")
+				" style='visibility:hidden;'"
 				"")			    
 			    (if class
 				(format nil " class='~A'"
@@ -1168,7 +1168,7 @@ and if :AUTO-PLACE (default t) place-inside-bottom-of CLOG-OBJ"))
 				   (auto-place t))
   (create-child obj (format nil "<caption~A~A/>~A</caption>"
 			    (if hidden
-				(format nil " style='visibility:hidden;'")
+				" style='visibility:hidden;'"
 				"")			    
 			    (if class
 				(format nil " class='~A'"
@@ -1231,7 +1231,7 @@ and if :AUTO-PLACE (default t) place-inside-bottom-of CLOG-OBJ"))
 					(class nil) (html-id nil) (auto-place t))
   (create-child obj (format nil "<colgroup~A~A/>"
 			    (if hidden
-				(format nil " style='visibility:hidden;'")
+				" style='visibility:hidden;'"
 				"")			    
 			    (if class
 				(format nil " class='~A'"
@@ -1267,7 +1267,7 @@ and if :AUTO-PLACE (default t) place-inside-bottom-of CLOG-OBJ"))
   (create-child obj (format nil "<col span=~A~A~A/>"
 			    column-span
 			    (if hidden
-				(format nil " style='visibility:hidden;'")
+				" style='visibility:hidden;'"
 				"")			    
 			    (if class
 				(format nil " class='~A'"
