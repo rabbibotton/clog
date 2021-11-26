@@ -22,7 +22,10 @@
 ;; create-panel ;;
 ;;;;;;;;;;;;;;;;;;
 
-(defgeneric create-panel (clog-obj &key x y width height units
+(defgeneric create-panel (clog-obj &key left top right bottom
+				     width height units
+				     margin-left margin-top
+				     margin-right margin-bottom
 				     border-style border-width border-color
 				     background-color
 				     positioning overflow resizable content
@@ -39,16 +42,22 @@ place-inside-bottom-of CLOG-OBJ. If hidden is true visiblep is set to
 nil. Resizable only works if overflow is set to :SCROLL"))
 
 (defmethod create-panel ((obj clog-obj) &key
-					  (x nil)
-					  (y nil)
+					  (left nil)
+					  (top nil)
+					  (right nil)
+					  (bottom nil)
 					  (width nil)
 					  (height nil)
 					  (units :px)
+					  (margin-left nil)
+					  (margin-top nil)
+					  (margin-right nil)
+					  (margin-bottom nil)
 					  (border-style nil)
 					  (border-width nil)
 					  (border-color nil)
 					  (background-color nil)
-					  (positioning :fixed)
+					  (positioning :absolute)
 					  (overflow :clip)
 					  (display nil)
 					  (resizable nil)
@@ -58,19 +67,37 @@ nil. Resizable only works if overflow is set to :SCROLL"))
 					  (class nil)
 					  (html-id nil)
 					  (auto-place t))
-  (create-child obj (format nil "<span~A style='~A~A~A~A~A~A~A~A~A~A~A~A~A~A'>~A</span>"
+  (create-child obj (format nil "<span~A style='~A~A~A~A~A~A~A~A~A~A~A~A~A~A~A~A~A~A~A~A'>~A</span>"
 			    (if class
 				(format nil " class='~A'" (escape-string class))
 				"")
 			    (if style
 				(format nil "~A;" (escape-string style))
 				"")
-			    (if x
-				(format nil "left:~A~A;" x units)
+			    (if left
+				(format nil "left:~A~A;" left units)
 				"")
-			    (if y
-				(format nil "top:~A~A;" y units)
+			    (if top
+				(format nil "top:~A~A;" top units)
 				"")
+			    (if right
+				(format nil "right:~A~A;" right units)
+				"")
+			    (if bottom
+				(format nil "bottom:~A~A;" bottom units)
+				"")
+			    (if margin-left
+				(format nil "margin-left:~A~A;" margin-left units)
+				"")
+			    (if margin-top
+				(format nil "margin-top:~A~A;" margin-top units)
+				"")
+			    (if margin-right
+				(format nil "margin-right:~A~A;" margin-right units)
+				"")
+			    (if margin-bottom
+				(format nil "margin-bottom:~A~A;" margin-bottom units)
+				""
 			    (if width
 				(format nil "width:~A~A;" width units)
 				"")
