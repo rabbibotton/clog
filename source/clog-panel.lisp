@@ -67,75 +67,90 @@ nil. Resizable only works if overflow is set to :SCROLL"))
 					  (class nil)
 					  (html-id nil)
 					  (auto-place t))
-  (create-child obj (format nil "<div~A style='~A~A~A~A~A~A~A~A~A~A~A~A~A~A~A~A~A~A~A~A'>~A</div>"
-			    (if class
-				(format nil " class='~A'" (escape-string class))
-				"")
-			    (if style
-				(format nil "~A;" (escape-string style))
-				"")
-			    (if left
-				(format nil "left:~A~A;" left units)
-				"")
-			    (if top
-				(format nil "top:~A~A;" top units)
-				"")
-			    (if right
-				(format nil "right:~A~A;" right units)
-				"")
-			    (if bottom
-				(format nil "bottom:~A~A;" bottom units)
-				"")
-			    (if margin-left
-				(format nil "margin-left:~A~A;" margin-left units)
-				"")
-			    (if margin-top
-				(format nil "margin-top:~A~A;" margin-top units)
-				"")
-			    (if margin-right
-				(format nil "margin-right:~A~A;" margin-right units)
-				"")
-			    (if margin-bottom
-				(format nil "margin-bottom:~A~A;" margin-bottom units)
-				"")
-			    (if width
-				(format nil "width:~A~A;" width units)
-				"")
-			    (if height
-				(format nil "height:~A~A;" height units)
-				"")
-			    (if border-style
-				(format nil "border-style:~A;" border-style)
-				"")
-			    (if border-width
-				(format nil "border-width:~A;" border-width)
-				"")
-			    (if border-color
-				(format nil "border-color:~A;" border-color)
-				"")
-			    (if background-color
-				(format nil "background-color:~A;" background-color)
-				"")
-			    (if overflow
-				(format nil "overflow:~A;" overflow)
-				"")
-			    (if display
-				(format nil "display:~A;" display)
-				"")
-			    (if resizable
-				(format nil "resize:~A;" resizable)
-				"")
-			    (if positioning
-				(format nil "position:~A;"
-					(escape-string positioning))
-				"")
-			    (if hidden
-				"visibility:hidden;"
-				"")
-			    (escape-string content))
-		:clog-type  'clog-panel
-		:html-id    html-id
-		:auto-place auto-place))
+  (create-child obj
+     (format nil "<div~A style='~A~A~A~A~A~A~A~A~A~A~A~A~A~A~A~A~A~A~A~A'>~A</div>"
+	     (if class
+		 (format nil " class='~A'" (escape-string class))
+		 "")
+	     (if style
+		 (format nil "~A;" (escape-string style))
+		 "")
+	     (if left
+		 (format nil "left:~A~A;" left units)
+		 "")
+	     (if top
+		 (format nil "top:~A~A;" top units)
+		 "")
+	     (if right
+		 (format nil "right:~A~A;" right units)
+		 "")
+	     (if bottom
+		 (format nil "bottom:~A~A;" bottom units)
+		 "")
+	     (if margin-left
+		 (format nil "margin-left:~A~A;" margin-left units)
+		 "")
+	     (if margin-top
+		 (format nil "margin-top:~A~A;" margin-top units)
+		 "")
+	     (if margin-right
+		 (format nil "margin-right:~A~A;" margin-right units)
+		 "")
+	     (if margin-bottom
+		 (format nil "margin-bottom:~A~A;" margin-bottom units)
+		 "")
+	     (if width
+		 (format nil "width:~A~A;" width units)
+		 "")
+	     (if height
+		 (format nil "height:~A~A;" height units)
+		 "")
+	     (if border-style
+		 (format nil "border-style:~A;" border-style)
+		 "")
+	     (if border-width
+		 (format nil "border-width:~A;" border-width)
+		 "")
+	     (if border-color
+		 (format nil "border-color:~A;" border-color)
+		 "")
+	     (if background-color
+		 (format nil "background-color:~A;" background-color)
+		 "")
+	     (if overflow
+		 (format nil "overflow:~A;" overflow)
+		 "")
+	     (if display
+		 (format nil "display:~A;" display)
+		 "")
+	     (if resizable
+		 (format nil "resize:~A;" resizable)
+		 "")
+	     (if positioning
+		 (format nil "position:~A;"
+			 (escape-string positioning))
+		 "")
+	     (if hidden
+		 "visibility:hidden;"
+		 "")
+	     (escape-string content))
+     :clog-type  'clog-panel
+     :html-id    html-id
+     :auto-place auto-place))
+
+;;;;;;;;;;;;;;;;;;;;;
+;; center-children ;;
+;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric center-children (clog-element &key vertical horizontal)
+  (:documentation "Align children of CLOG-ELEMENT VERTICAL (default t)
+and/or HORIZONTAL (default t). This will set the DISPLAY property of
+CLOG-ELEMENT to :FLEX."))
+
+(defmethod center-children ((obj clog-element) &key (vertical t) (horizontal t))
+  (set-styles obj `(("display" "flex")
+		   ,(when vertical '("align-items" "center"))
+		   ,(when horizontal '("justify-content" "center")))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Implementation - clog-panel-box-layout

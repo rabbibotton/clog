@@ -14,9 +14,7 @@
     (declare (ignore footer))
     ;; Setup Top
     (setf (background-color (top-panel console)) :teal)
-    (setf (display (top-panel console)) :flex)
-    (setf (justify-content (top-panel console)) :center)
-    (setf (align-items (top-panel console)) :center)
+    (center-children (top-panel console))
     (setf (color head) :white)
     ;; Setup viewer
     (setf (width viewer) "100%")
@@ -34,8 +32,7 @@
 			  (setf (url-src viewer) (format nil "/img/~A"
 							 (value lbox)))))
     ;; Setup Bottom
-    (setf (display (bottom-panel console)) :flex)
-    (setf (align-items (bottom-panel console)) :center)
+    (center-children (bottom-panel console) :horizontal nil)
     (run body)))
 
 (defun start-tutorial ()

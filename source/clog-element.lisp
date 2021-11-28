@@ -128,9 +128,11 @@ must be in DOM, ie placed or auto-placed."))
   (jquery-execute obj (format nil "css({~{~A~}})"
 			      (mapcar
 			       (lambda (n)
-				 (format nil "'~A':'~A',"
-					 (first n)
-					 (second n)))
+				 (if n
+				     (format nil "'~A':'~A',"
+					     (first n)
+					     (second n))
+				     ""))
 			       style-list))))
 
 ;;;;;;;;;;;;;;;
