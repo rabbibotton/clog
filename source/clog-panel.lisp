@@ -67,7 +67,7 @@ nil. Resizable only works if overflow is set to :SCROLL"))
 					  (class nil)
 					  (html-id nil)
 					  (auto-place t))
-  (create-child obj (format nil "<span~A style='~A~A~A~A~A~A~A~A~A~A~A~A~A~A~A~A~A~A~A~A'>~A</span>"
+  (create-child obj (format nil "<div~A style='~A~A~A~A~A~A~A~A~A~A~A~A~A~A~A~A~A~A~A~A'>~A</div>"
 			    (if class
 				(format nil " class='~A'" (escape-string class))
 				"")
@@ -199,20 +199,22 @@ nil. Resizable only works if overflow is set to :SCROLL"))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defun create-panel-box-layout (clog-obj &key (top-height 50) (left-width 50)
-					   (bottom-height 50) (right-width 50))
+					   (bottom-height 50) (right-width 50)
+					   (units "px"))
+  "Create a five panel app layout that fills entire contents of CLOG-OBJ."
   (let ((panel-box (make-instance 'clog-panel-box-layout)))
     (setf (top-panel panel-box)
-	  (create-panel clog-obj :left 0 :top 0 :right 0 :height top-height))
-    (setf (bottom-panel panel-box)
-	  (create-panel clog-obj :left 0 :bottom 0 :right 0 :height bottom-height))
+	  (create-panel clog-obj :left 0 :top 0 :right 0 :height top-height :units units))
     (setf (left-panel panel-box)
 	  (create-panel clog-obj :left 0 :top 0 :bottom 0 :width left-width
-				 :margin-top top-height :margin-bottom bottom-height))
+				 :margin-top top-height :margin-bottom bottom-height :units units))
     (setf (right-panel panel-box)
 	  (create-panel clog-obj :right 0 :top 0 :bottom 0 :width right-width
-				 :margin-top top-height :margin-bottom bottom-height))
+				 :margin-top top-height :margin-bottom bottom-height :units units))
     (setf (center-panel panel-box)
 	  (create-panel clog-obj :left 0 :top 0 :right 0 :bottom 0
 				 :margin-left left-width :margin-top top-height
-				 :margin-right right-width :margin-bottom bottom-height))
+				 :margin-right right-width :margin-bottom bottom-height :units units))
+    (setf (bottom-panel panel-box)
+	  (create-panel clog-obj :left 0 :bottom 0 :right 0 :height bottom-height :units units))
     panel-box))

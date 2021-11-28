@@ -59,3 +59,4 @@ Tutorial Summary
 - 24-tutorial.lisp - CLOG WEB containers
 - 25-tutorial.lisp - A "local" web app using CLOG WEB
 - 26-tutorial.lisp - A web page and form with CLOG WEB
+- 27-tutorial.lisp - Panel Box Layouts

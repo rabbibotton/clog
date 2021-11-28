@@ -1385,17 +1385,23 @@ parent in the DOM."))
 ;; set-geometry ;;
 ;;;;;;;;;;;;;;;;;;
 
-(defgeneric set-geometry (clog-element &key x y width height units)
-  (:documentation "Change the geometry :X :Y :WIDTH :HEIGHT each optional
+(defgeneric set-geometry (clog-element &key left top right bottom width height units)
+  (:documentation "Change the geometry :LEFT :TOP :RIGHT :BOTTOM :WIDTH :HEIGHT each optional
 in UNITS (default :px)"))
 
-(defmethod set-geometry ((obj clog-element) &key x y width height (units :px))
-  (jquery-execute obj (format nil "css({~A~A~A~A})"
-			      (if x
-				  (format nil "'left':'~A~A'," x units)
+(defmethod set-geometry ((obj clog-element) &key left top right bottom width height (units :px))
+  (jquery-execute obj (format nil "css({~A~A~A~A~A~A})"
+			      (if left
+				  (format nil "'left':'~A~A'," left units)
 				  "")
-			      (if y
-				  (format nil "'top':'~A~A'," y units)
+			      (if top
+				  (format nil "'top':'~A~A'," top units)
+				  "")
+			      (if right
+				  (format nil "'right':'~A~A'," right units)
+				  "")
+			      (if bottom
+				  (format nil "'bottom':'~A~A'," bottom units)
 				  "")
 			      (if width
 				  (format nil "'width':'~A~A'," width units)
@@ -2112,7 +2118,8 @@ A list of standard cursor types can be found at:
   '(member :baseline :sub :super :text-top :text-bottom :middle :top :bottom))
 
 (defgeneric vertical-align (clog-element)
-  (:documentation "Get/Setf vertical-align."))
+  (:documentation "Get/Setf vertical-align in table cells or if display
+is set to :table-cell or for labels on form elements."))
 
 (defmethod vertical-align ((obj clog-element))
   (style obj "vertical-align"))

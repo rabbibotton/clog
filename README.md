@@ -218,6 +218,7 @@ Tutorial Summary
 - [24-tutorial.lisp](tutorial/24-tutorial.lisp) - CLOG WEB containers
 - [25-tutorial.lisp](tutorial/25-tutorial.lisp) - A "local" web app using CLOG WEB
 - [26-tutorial.lisp](tutorial/26-tutorial.lisp) - A web page and form with CLOG WEB
+- [27-tutorial.lisp](tutorial/27-tutorial.lisp) - Panel Box Layouts
 
 Demo Summary
 
@@ -225,7 +226,7 @@ Demo Summary
 - [02-demo.lisp](demos/02-demo.lisp) - Chat - Private instant messenger
 - [03-demo.lisp](demos/03-demo.lisp) - IDE - A very simple common lisp IDE
   (see source if editor dosen't load)
-- [04-demo.lisp](demos/04-demo.lisp) - CMS Website - A very simple database driver website
+- [04-demo.lisp](demos/04-demo.lisp) - CMS Website - A very simple database driven website
 
 Tool Summary
 
