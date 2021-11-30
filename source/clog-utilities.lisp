@@ -83,15 +83,18 @@ CLOG-OBJ unless :NAME is set and is used instead."))
 ;; escape-string ;;
 ;;;;;;;;;;;;;;;;;;;
 
-(defun escape-string (str)
-  "Escape STR for sending to browser script."
-  (let ((res))
-    (setf res (format nil "~A" str))
-    (setf res (ppcre:regex-replace-all "\\x22" res "\\x22"))
-    (setf res (ppcre:regex-replace-all "\\x27" res "\\x27"))
-    (setf res (ppcre:regex-replace-all "\\x0A" res "\\x0A"))
-    (setf res (ppcre:regex-replace-all "\\x0D" res "\\x0D"))
-    res))
+(defun escape-string (str &key (no-nil nil))
+  "Escape STR for sending to browser script. If no-nil is t (default is nil)
+if str is NIL returns empty string otherwise returns nil."
+  (if (and (not str) (not no-nil))
+      nil
+      (let ((res))
+	(setf res (format nil "~@[~A~]" str))
+	(setf res (ppcre:regex-replace-all "\\x22" res "\\x22"))
+	(setf res (ppcre:regex-replace-all "\\x27" res "\\x27"))
+	(setf res (ppcre:regex-replace-all "\\x0A" res "\\x0A"))
+	(setf res (ppcre:regex-replace-all "\\x0D" res "\\x0D"))
+	res)))
 
 ;;;;;;;;;;;;;;
 ;; lf-to-br ;;
