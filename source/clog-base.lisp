@@ -176,8 +176,8 @@ result or if time out DEFAULT-ANSWER (Private)"))
 ;;;;;;;;;;;;;;;;;;;;;;;
 
 (defparameter mouse-event-script
-  "+ (e.clientX - e.target.getBoundingClientRect().left) + ':' + 
-     (e.clientY - e.target.getBoundingClientRect().top) + ':' + 
+  "+ (e.clientX - e.currentTarget.getBoundingClientRect().left) + ':' + 
+     (e.clientY - e.currentTarget.getBoundingClientRect().top) + ':' + 
      e.screenX + ':' + e.screenY + ':' + e.which + ':' + e.altKey + ':' +
      e.ctrlKey + ':' + e.shiftKey + ':' + e.metaKey + ':' +
      e.clientX + ':' + e.clientY + ':' + e.pageX + ':' + e.pageY"
@@ -210,8 +210,8 @@ result or if time out DEFAULT-ANSWER (Private)"))
 ;;;;;;;;;;;;;;;;;;;;;;;
 
 (defparameter touch-event-script
-  "+ (e.touches[0].clientX - e.touches[0].target.getBoundingClientRect().left) + ':' + 
-     (e.touches[0].clientY - e.touches[0].target.getBoundingClientRect().top) + ':' + 
+  "+ (e.touches[0].clientX - e.touches[0].currentTarget.getBoundingClientRect().left) + ':' + 
+     (e.touches[0].clientY - e.touches[0].currentTarget.getBoundingClientRect().top) + ':' + 
      e.touches[0].screenX + ':' + e.touches[0].screenY + ':' + e.touches.length + ':' +
      e.altKey + ':' +
      e.ctrlKey + ':' +
@@ -244,8 +244,8 @@ result or if time out DEFAULT-ANSWER (Private)"))
 ;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defparameter pointer-event-script
-  "+ (e.clientX - e.target.getBoundingClientRect().left) + ':' + 
-     (e.clientY - e.target.getBoundingClientRect().top) + ':' + 
+  "+ (e.clientX - e.currentTarget.getBoundingClientRect().left) + ':' + 
+     (e.clientY - e.currentTarget.getBoundingClientRect().top) + ':' + 
      e.screenX + ':' + e.screenY + ':' + e.which + ':' + e.altKey + ':' +
      e.ctrlKey + ':' + e.shiftKey + ':' + e.metaKey + ':' +
      e.clientX + ':' + e.clientY + ':' + e.pageX + ':' + e.pageY"
@@ -298,8 +298,8 @@ result or if time out DEFAULT-ANSWER (Private)"))
 ;;;;;;;;;;;;;;;;;;;;;;
 
 (defparameter drop-event-script
-  "+ (e.clientX - e.target.getBoundingClientRect().left) + ':' + 
-     (e.clientY - e.target.getBoundingClientRect().top) + ':' +
+  "+ (e.clientX - e.currentTarget.getBoundingClientRect().left) + ':' + 
+     (e.clientY - e.currentTarget.getBoundingClientRect().top) + ':' +
      encodeURIComponent(e.originalEvent.dataTransfer.getData('~A'))"
   "JavaScript to collect drop event data from browser.")
 
