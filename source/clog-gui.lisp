@@ -713,7 +713,8 @@ the window will be set to keep-on-top always."))
                   z-index:~A;visibility:hidden'
                   class='w3-card-4 w3-white w3-border'>
                   <div id='~A-title-bar' class='w3-container w3-black'
-                       style='position:absolute;top:0;right:0;left:0;height:25px'>
+                       style='position:absolute;top:0;right:0;left:0;height:25px;
+                              overflow:clip'>
                     <span data-drag-obj='~A' data-drag-type='m' id='~A-title'
                       style='position:absolute;top:0;right:20px;left:5px;
                              user-select:none;cursor:move;'>~A</span>~A
