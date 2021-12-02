@@ -176,8 +176,8 @@ result or if time out DEFAULT-ANSWER (Private)"))
 ;;;;;;;;;;;;;;;;;;;;;;;
 
 (defparameter mouse-event-script
-  "+ e.clientX + ':' +
-     e.clientY + ':' +
+  "+ (e.clientX - e.target.getBoundingClientRect().left) + ':' + 
+     (e.clientY - e.target.getBoundingClientRect().top) + ':' + 
      e.screenX + ':' + e.screenY + ':' + e.which + ':' + e.altKey + ':' +
      e.ctrlKey + ':' + e.shiftKey + ':' + e.metaKey"
   "JavaScript to collect mouse event data from browser.")
@@ -205,8 +205,8 @@ result or if time out DEFAULT-ANSWER (Private)"))
 ;;;;;;;;;;;;;;;;;;;;;;;
 
 (defparameter touch-event-script
-  "+ e.touches[0].clientX + ':' + 
-     e.touches[0].clientY + ':' + 
+  "+ (e.touches[0].clientX - e.touches[0].target.getBoundingClientRect().left) + ':' + 
+     (e.touches[0].clientY - e.touches[0].target.getBoundingClientRect().top) + ':' + 
      e.touches[0].screenX + ':' + e.touches[0].screenY + ':' + e.touches.length + ':' +
      e.altKey + ':' +
      e.ctrlKey + ':' +
@@ -233,8 +233,8 @@ result or if time out DEFAULT-ANSWER (Private)"))
 ;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defparameter pointer-event-script
-  "+ e.clientX + ':' + 
-     e.clientY + ':' + 
+  "+ (e.clientX - e.target.getBoundingClientRect().left) + ':' + 
+     (e.clientY - e.target.getBoundingClientRect().top) + ':' + 
      e.screenX + ':' + e.screenY + ':' + e.which + ':' + e.altKey + ':' +
      e.ctrlKey + ':' + e.shiftKey + ':' + e.metaKey"
   "JavaScript to collect pointer event data from browser.")
@@ -282,8 +282,8 @@ result or if time out DEFAULT-ANSWER (Private)"))
 ;;;;;;;;;;;;;;;;;;;;;;
 
 (defparameter drop-event-script
-  "+ e.clientX + ':' + 
-     e.clientY + ':' +
+  "+ (e.clientX - e.target.getBoundingClientRect().left) + ':' + 
+     (e.clientY - e.target.getBoundingClientRect().top) + ':' +
      encodeURIComponent(e.originalEvent.dataTransfer.getData('~A'))"
   "JavaScript to collect drop event data from browser.")
 
