@@ -179,7 +179,8 @@ result or if time out DEFAULT-ANSWER (Private)"))
   "+ (e.clientX - e.target.getBoundingClientRect().left) + ':' + 
      (e.clientY - e.target.getBoundingClientRect().top) + ':' + 
      e.screenX + ':' + e.screenY + ':' + e.which + ':' + e.altKey + ':' +
-     e.ctrlKey + ':' + e.shiftKey + ':' + e.metaKey"
+     e.ctrlKey + ':' + e.shiftKey + ':' + e.metaKey + ':' +
+     e.clientX + ':' + e.clientY + ':' + e.pageX + ':' + e.pageY"
   "JavaScript to collect mouse event data from browser.")
 ;; e.buttons would be better but not supported currently outside
 ;; of firefox and would always return 0 on Mac so using e.which.
@@ -198,7 +199,11 @@ result or if time out DEFAULT-ANSWER (Private)"))
      :alt-key      (js-true-p (nth 5 f))
      :ctrl-key     (js-true-p (nth 6 f))
      :shift-key    (js-true-p (nth 7 f))
-     :meta-key     (js-true-p (nth 8 f)))))
+     :meta-key     (js-true-p (nth 8 f))
+     :client-x     (parse-integer (nth 9 f) :junk-allowed t)
+     :client-Y     (parse-integer (nth 10 f) :junk-allowed t)
+     :page-x       (parse-integer (nth 11 f) :junk-allowed t)
+     :page-Y       (parse-integer (nth 12 f) :junk-allowed t))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;
 ;; parse-touch-event ;;
@@ -211,7 +216,9 @@ result or if time out DEFAULT-ANSWER (Private)"))
      e.altKey + ':' +
      e.ctrlKey + ':' +
      e.shiftKey + ':' +
-     e.metaKey"
+     e.metaKey + ':' +
+     e.touches[0].clientX + ':' + e.touches[0].clientY + ':' +
+     e..touches[0].pageX + ':' + e.touches[0].pageY"
     "JavaScript to collect touch event data from browser.")
 
 (defun parse-touch-event (data)
@@ -226,7 +233,11 @@ result or if time out DEFAULT-ANSWER (Private)"))
      :alt-key        (js-true-p (nth 5 f))
      :ctrl-key       (js-true-p (nth 6 f))
      :shift-key      (js-true-p (nth 7 f))
-     :meta-key       (js-true-p (nth 8 f)))))
+     :meta-key       (js-true-p (nth 8 f))
+     :client-x       (parse-integer (nth 9 f) :junk-allowed t)
+     :client-Y       (parse-integer (nth 10 f) :junk-allowed t)
+     :page-x         (parse-integer (nth 11 f) :junk-allowed t)
+     :page-Y         (parse-integer (nth 12 f) :junk-allowed t))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; parse-pointer-event ;;
@@ -236,7 +247,8 @@ result or if time out DEFAULT-ANSWER (Private)"))
   "+ (e.clientX - e.target.getBoundingClientRect().left) + ':' + 
      (e.clientY - e.target.getBoundingClientRect().top) + ':' + 
      e.screenX + ':' + e.screenY + ':' + e.which + ':' + e.altKey + ':' +
-     e.ctrlKey + ':' + e.shiftKey + ':' + e.metaKey"
+     e.ctrlKey + ':' + e.shiftKey + ':' + e.metaKey + ':' +
+     e.clientX + ':' + e.clientY + ':' + e.pageX + ':' + e.pageY"
   "JavaScript to collect pointer event data from browser.")
 
 (defun parse-pointer-event (data)
@@ -251,7 +263,11 @@ result or if time out DEFAULT-ANSWER (Private)"))
      :alt-key      (js-true-p (nth 5 f))
      :ctrl-key     (js-true-p (nth 6 f))
      :shift-key    (js-true-p (nth 7 f))
-     :meta-key     (js-true-p (nth 8 f)))))
+     :meta-key     (js-true-p (nth 8 f))
+     :client-x     (parse-integer (nth 9 f) :junk-allowed t)
+     :client-Y     (parse-integer (nth 10 f) :junk-allowed t)
+     :page-x       (parse-integer (nth 11 f) :junk-allowed t)
+     :page-Y       (parse-integer (nth 12 f) :junk-allowed t))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; parse-keyboard-event ;;

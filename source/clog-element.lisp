@@ -589,7 +589,7 @@ horizontal scrollbar (if present) + Border"))
 content is scrolled to the left. For RTL languages is negative."))
 
 (defmethod scroll-left ((obj clog-element))
-  (property obj "scrollLeft"))
+  (parse-integer (property obj "scrollLeft" :default-answer 0) :junk-allowed t))
 
 (defgeneric set-scroll-left (clog-element value)
   (:documentation "Set scroll-left VALUE for CLOG-ELEMENT"))
@@ -607,7 +607,7 @@ content is scrolled to the left. For RTL languages is negative."))
 content has been scrolled upward."))
 
 (defmethod scroll-top ((obj clog-element))
-  (property obj "scrollTop"))
+  (parse-integer (property obj "scrollTop" :default-answer 0) :junk-allowed t))
 
 (defgeneric set-scroll-top (clog-element value)
   (:documentation "Set scroll-top VALUE for CLOG-ELEMENT"))
