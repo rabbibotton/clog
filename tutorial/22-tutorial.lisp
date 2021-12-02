@@ -15,7 +15,7 @@
 (defun on-file-browse (obj)
   (let ((win (create-gui-window obj :title "Browse")))
     (create-child (window-content win)
-		  "<iframe style='width:100%;height:98%;' src='https://common-lisp.net/'></iframe>")))
+		  "<iframe style='width:100%;height:97%;' src='https://common-lisp.net/'></iframe>")))
 
 (defun on-file-drawing (obj)
   (let* ((win (create-gui-window obj :title "Drawing"))
@@ -37,8 +37,7 @@
   (let* ((win  (create-gui-window obj :title "Movie"))
 	 (movie (create-video (window-content win)
 			      :source "https://www.w3schools.com/html/mov_bbb.mp4")))
-    (setf (box-width movie) "100%")
-    (setf (box-height movie) "100%")))
+    (set-geometry movie :units "%" :width 100 :height 100)))
 
 (defun on-file-pinned (obj)
   (let ((win (create-gui-window obj :title "Pin me!"
@@ -113,7 +112,7 @@
                                          <center>(c) 2021 - David Botton</center></p></div>"
 				   :hidden  t
 				   :width   200
-				   :height  200)))
+				   :height  215)))
     (window-center about)
     (setf (visiblep about) t)
     (set-on-window-can-size about (lambda (obj)

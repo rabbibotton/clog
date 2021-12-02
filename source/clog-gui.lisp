@@ -710,18 +710,18 @@ the window will be set to keep-on-top always."))
     (let ((win (create-child (body app)
 			    (format nil
 	    "<div style='position:fixed;top:~Apx;left:~Apx;width:~Apx;height:~Apx;
-                  flex-container;display:flex;flex-direction:column;z-index:~A;
-                  visibility:hidden'
+                  z-index:~A;visibility:hidden'
                   class='w3-card-4 w3-white w3-border'>
                   <div id='~A-title-bar' class='w3-container w3-black'
-                       style='flex-container;display:flex;align-items:stretch;'>
+                       style='position:absolute;top:0;right:0;left:0;height:25px'>
                     <span data-drag-obj='~A' data-drag-type='m' id='~A-title'
-                      style='flex-grow:9;user-select:none;cursor:move;'>~A</span>~A
+                      style='position:absolute;top:0;right:20px;left:5px;
+                             user-select:none;cursor:move;'>~A</span>~A
                     <span id='~A-closer'
-                      style='cursor:pointer;user-select:none;'>&times;</span>
+                      style='position:absolute;top:0;right:5px;cursor:pointer;user-select:none;'>&times;</span>
                   </div>
-                  <div id='~A-body' style='flex-grow:9;overflow:auto'>~A</div>
-                  <div id='~A-sizer' style='user-select:none;height:3px;
+                  <div id='~A-body' style='position:absolute;top:25px;left:0;right:0;bottom:3px;overflow:auto'>~A</div>
+                  <div id='~A-sizer' style='position:absolute;right:0;bottom:0;left:0;user-select:none;height:3px;
                        cursor:se-resize;opacity:0'
                        class='w3-right' data-drag-obj='~A' data-drag-type='s'>+</div>
              </div>"
@@ -730,7 +730,8 @@ the window will be set to keep-on-top always."))
 	    title                                       ; title
 	    (if has-pinner                              ; pinner
 	      (format nil "<span id='~A-pinner'
-                 style='cursor:pointer;user-select:none;'>
+                 style='position:absolute;top:0;right:20px;
+                        cursor:pointer;user-select:none;'>
                  ☐</span><span>&nbsp;&nbsp;&nbsp;</span>" html-id)
 	      "")
 	    html-id                                     ; closer
@@ -1617,7 +1618,7 @@ if confirmed or nil if canceled."
 
 (defun server-file-dialog (obj title initial-dir on-file-name
 			   &key (modal t)
-			     (left nil) (top nil) (width 375) (height 420)
+			     (left nil) (top nil) (width 390) (height 425)
 			     (maximize nil)
 			     (initial-filename nil)
 			     (client-movement nil)

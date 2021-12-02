@@ -157,7 +157,7 @@
 			                 <div><p><center>CLOG DB Admin</center>
                                          <center>(c) 2021 - David Botton</center></p></div>"
 				  :width   200
-				  :height  200
+				  :height  215
 				  :hidden  t)))
     (window-center about)
     (setf (visiblep about) t)    

@@ -166,7 +166,7 @@
                                          <center>(c) 2021 - David Botton</center></p></div>"
 				  :hidden  t
 				  :width   200
-				  :height  200)))
+				  :height  215)))
     (window-center about)
     (setf (visiblep about) t)
     (set-on-window-can-size about (lambda (obj)
