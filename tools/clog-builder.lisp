@@ -4,7 +4,7 @@
 
 (in-package :clog-tools)
 
-(defclass builder-builder-app-data ()
+(defclass builder-app-data ()
   ((copy-buf
     :accessor copy-buf
     :initform ""
