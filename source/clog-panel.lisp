@@ -215,21 +215,41 @@ CLOG-ELEMENT to :FLEX."))
 
 (defun create-panel-box-layout (clog-obj &key (top-height 50) (left-width 50)
 					   (bottom-height 50) (right-width 50)
-					   (units "px"))
-  "Create a five panel app layout that fills entire contents of CLOG-OBJ."
+					   (units "px")
+					   (html-id nil))
+  "Create a five panel app layout that fills entire contents of CLOG-OBJ.
+HTML-ID if set is the base and top,left,right,center, bottom are added e.g.
+if :HTML-ID \"myid\" then the HTML-ID for center will be: myid-center"
   (let ((panel-box (make-instance 'clog-panel-box-layout)))
+    (unless html-id
+      (setf html-id (clog-connection:generate-id)))    
     (setf (top-panel panel-box)
-	  (create-panel clog-obj :left 0 :top 0 :right 0 :height top-height :units units))
+	  (create-panel clog-obj :left 0 :top 0 :right 0 :height top-height
+				 :units units
+				 :html-id (format nil "~A-top" html-id)))
     (setf (left-panel panel-box)
 	  (create-panel clog-obj :left 0 :top 0 :bottom 0 :width left-width
-				 :margin-top top-height :margin-bottom bottom-height :units units))
+				 :margin-top top-height
+				 :margin-bottom bottom-height
+				 :units units
+				 :html-id (format nil "~A-left" html-id)))
     (setf (right-panel panel-box)
 	  (create-panel clog-obj :right 0 :top 0 :bottom 0 :width right-width
-				 :margin-top top-height :margin-bottom bottom-height :units units))
+				 :margin-top top-height
+				 :margin-bottom bottom-height
+				 :units units
+				 :html-id (format nil "~A-right" html-id)))
     (setf (center-panel panel-box)
 	  (create-panel clog-obj :left 0 :top 0 :right 0 :bottom 0
-				 :margin-left left-width :margin-top top-height
-				 :margin-right right-width :margin-bottom bottom-height :units units))
+				 :margin-left left-width
+				 :margin-top top-height
+				 :margin-right right-width
+				 :margin-bottom bottom-height
+				 :units units
+				 :html-id (format nil "~A-center" html-id)))
     (setf (bottom-panel panel-box)
-	  (create-panel clog-obj :left 0 :bottom 0 :right 0 :height bottom-height :units units))
+	  (create-panel clog-obj :left 0 :bottom 0 :right 0
+				 :height bottom-height
+				 :units units
+				 :html-id (format nil "~A-bottom" html-id)))
     panel-box))
