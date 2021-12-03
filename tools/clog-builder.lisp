@@ -82,12 +82,20 @@
 	(alert-dialog obj result :title "Eval Result")))))
 
 (defun on-show-code (obj)
-  (let* ((win       (create-gui-window obj :title  "Code"
-					   :height 400
-					   :width  650))
-	 (box       (create-panel-box-layout (window-content win)))
-	 (center    (center-panel box))
-	 (center-id (html-id center)))
+  (let* ((win         (create-gui-window obj :title  "Code"
+					     :height 400
+					     :width  650))
+	 (box         (create-panel-box-layout (window-content win)
+					       :left-width 0 :right-width 9
+					       :top-height 30 :bottom-height 0))
+	 (center      (center-panel box))
+	 (center-id   (html-id center))
+	 ;;top panel
+	 (event-drop  (create-select (top-panel box)
+			 :label (create-label (top-panel box)
+					      :content " Event: "))))
+    (setf (width event-drop) (unit :px 200))
+    (add-select-options event-drop '("on-focus" "on-blur"))
     (set-on-window-size win (lambda (obj)
 			      (js-execute obj
 					  (format nil "editor_~A.resize()" (html-id win)))))

@@ -948,11 +948,11 @@ optionally fill in with contents of data-list."))
 ;; add-select-options ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defgeneric add-select-options (clog-select select)
+(defgeneric add-select-options (clog-select content)
   (:documentation "Add group of options to select."))
 
-(defmethod add-select-options ((obj clog-select) select)
-  (dolist (value select)
+(defmethod add-select-options ((obj clog-select) content)
+  (dolist (value content)
     (add-select-option obj value value)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
