@@ -4,11 +4,43 @@
 
 (in-package :clog-tools)
 
+(defvar supported-controls
+  (list
+   '(:name        "select"
+     :description "Selection Tool"
+     :create       nil
+     :create-type  nil
+     :properties   nil
+     :events       nil)
+   '(:name        "label"
+     :description "Text Label"
+     :create       clog:create-label
+     :create-type  :label
+     :properties  (list
+		   (:name "text"
+		    :prop  clog:text)
+		   (:name "background-color"
+		    :prop  clog:background-color)))
+   '(:name         "input"
+     :description  "Text Input"
+     :create       clog:create-form-element
+     :create-type  :form
+     :create-param :input
+     :properties  (list
+		   (:name "value"
+		    :prop  clog:value)
+		   (:name "background-color"
+		    :prop  clog:background-color)))))
+
 (defclass builder-app-data ()
   ((copy-buf
     :accessor copy-buf
     :initform ""
-    :documentation "Copy buffer")))
+    :documentation "Copy buffer")
+   (selected-tool
+    :accessor selected-tool
+    :initform nil
+    :documentation "Currently selected tool")))
 
 (defun read-file (infile)
   (with-open-file (instream infile :direction :input :if-does-not-exist nil)
@@ -118,7 +150,9 @@
 			(html-id win)))))
 
 (defun on-show-properties (obj)
-  (let* ((win          (create-gui-window obj :title "Properties" :height 300 :width 200 :has-pinner t))
+  (let* ((win          (create-gui-window obj :title "Properties"
+					      :height 300 :width 200
+					      :has-pinner t))
 	 (content      (window-content win))
 	 (control-list (create-select content)))
     (setf (positioning control-list) :absolute)
@@ -135,9 +169,8 @@
     (setf (positioning control-list) :absolute)
     (setf (size control-list) 2)
     (set-geometry control-list :left 0 :top 0 :bottom 0 :width 190)
-    (add-select-options control-list '("select"
-				       "label"
-				       "text input"))))
+    (dolist (control supported-controls)
+      (add-select-option control-list (getf control :name) (getf control :description)))))
 
 (defun on-new-builder-window (obj)
   ;; add menu items for save, etc
@@ -212,5 +245,6 @@
 
 (defun clog-builder ()
   "Start clog-builder."
-  (initialize 'on-new-builder)
-  (open-browser))
+  (initialize nil)
+  (set-on-new-window 'on-new-builder :path "/builder")
+  (open-browser :url "http://127.0.0.1:8080/builder"))
