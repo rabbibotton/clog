@@ -54,13 +54,15 @@ the same as the clog directy this overides the relative paths used in them.")
 as the default route to establish web-socket connections and static
 files located at STATIC-ROOT. If CLOG was already initialized and not
 shut down, this function does the same as set-on-new-window (does not
-change the static-root). STATIC-ROOT by default is the \"directory CLOG
+change the static-root). If ON-NEW-WINDOW-HANDLER is nil no handler is
+set and none is removed. STATIC-ROOT by default is the \"directory CLOG
 is installed in ./static-files\" If the variable clog:*overide-static-root*
 is set STATIC-ROOT will be ignored. If BOOT-FILE is nil no default
 boot-file will be set for root path, i.e. /. If static-boot-js is t
 then boot.js is served from the file /js/boot.js instead of the
 compiled version."
-  (set-on-new-window on-new-window-handler :path "/" :boot-file boot-file)
+  (when on-new-window-handler
+    (set-on-new-window on-new-window-handler :path "/" :boot-file boot-file))
   (unless *clog-running*
     (setf *clog-running* t)
     (clog-connection:initialize #'on-connect
