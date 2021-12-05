@@ -26,13 +26,13 @@
     (bordeaux-threads:with-lock-held ((drag-mutex app)) ; Ensure the first event received
       (unless (in-drag-p app)                           ; to drag is the only one, ie only
 	(setf (in-drag-p app) t)                        ; the innermost box is dragged.
-      (let* ((mouse-x  (getf data ':screen-x))          ; Use the screen coordinates not
-	     (mouse-y  (getf data ':screen-y))          ; the coordinates relative to the obj
+      (let* ((mouse-x  (getf data :screen-x))          ; Use the screen coordinates not
+	     (mouse-y  (getf data :screen-y))          ; the coordinates relative to the obj
 	     (obj-top  (parse-integer (top obj) :junk-allowed t))
 	     (obj-left (parse-integer (left obj) :junk-allowed t)))	
 	(setf (drag-x app) (- mouse-x obj-left))
 	(setf (drag-y app) (- mouse-y obj-top))
-	(if (eq (getf data ':event-type) :touch)
+	(if (eq (getf data :event-type) :touch)
 	    (progn
 	      (set-on-touch-move obj 'on-mouse-move)
 	      (set-on-touch-end obj 'stop-obj-grab)
@@ -44,8 +44,8 @@
 
 (defun on-mouse-move (obj data)
   (let* ((app (connection-data-item obj "app-data"))
-	 (x   (getf data ':screen-x))
-	 (y   (getf data ':screen-y)))    
+	 (x   (getf data :screen-x))
+	 (y   (getf data :screen-y)))
     (setf (top obj) (unit :px (- y (drag-y app))))
     (setf (left obj) (unit :px (- x (drag-x app))))))
 
