@@ -53,6 +53,10 @@
     :accessor copy-buf
     :initform ""
     :documentation "Copy buffer")
+   (control-pallete
+    :accessor control-pallete
+    :initform nil
+    :documentation "Current control pallete")
    (selected-tool
     :accessor selected-tool
     :initform nil
@@ -179,17 +183,23 @@
 				       "text    : ''"))))
   
 (defun on-show-control-pallete (obj)
-  (let* ((win          (create-gui-window obj :title "Controls" :height 300 :width 200 :has-pinner t))
-	 (content      (window-content win))
-	 (control-list (create-select content)))
-    (setf (positioning control-list) :absolute)
-    (setf (size control-list) 2)
-    (set-geometry control-list :left 0 :top 0 :bottom 0 :width 190)
-    (set-on-change control-list (lambda (obj)
-				  (let ((app (connection-data-item obj "builder-app-data")))
-				    (setf (selected-tool app) (control-info (value control-list))))))
-    (dolist (control supported-controls)
-      (add-select-option control-list (getf control :name) (getf control :description)))))
+  (let ((app (connection-data-item obj "builder-app-data")))
+    (if (control-pallete app)
+	(current-window  (control-pallete app))
+	(let* ((win          (create-gui-window obj :title "Controls" :height 300 :width 200 :has-pinner t))
+	       (content      (window-content win))
+	       (control-list (create-select content)))
+	  (setf (control-pallete app) win)
+	  (set-on-window-close win (lambda (obj) (setf (control-pallete app) nil)))
+	  (setf (positioning control-list) :absolute)
+	  (setf (size control-list) 2)
+	  (set-geometry control-list :left 0 :top 0 :bottom 0 :width 190)
+	  (set-on-change control-list (lambda (obj)				  
+					(setf (selected-tool app) (control-info (value control-list)))))
+	  (set-on-focus control-list (lambda (obj)
+				       (setf (selected-tool app) (control-info (value control-list)))))				 
+	  (dolist (control supported-controls)
+	    (add-select-option control-list (getf control :name) (getf control :description)))))))
 
 (defun on-new-builder-window (obj)
   (let* ((win (create-gui-window obj :title "New Panel"))
@@ -223,7 +233,7 @@
 						       (let ((x (position-left handle))
 							     (y (position-top handle)))
 							 (set-border handle "initial" "" "")
-							 (set-geometry handle :left (+ x 12) :top (+ y 12)))))							 
+							 (set-geometry handle :left (+ x 12) :top (+ y 12)))))
 			   (setf (selected-tool app) nil)
 			   (clog::jquery-execute handle "draggable().resizable()")
 			   (set-geometry element :units "%" :width 100 :height 100)
