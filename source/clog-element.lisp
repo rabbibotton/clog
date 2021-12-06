@@ -490,6 +490,28 @@ spell checking if Editable is also true."))
   (setf (property obj "lang") value))
 (defsetf language-code set-language-code)
 
+;;;;;;;;;;;;;;;;;;;
+;; position-left ;;
+;;;;;;;;;;;;;;;;;;;
+
+(defgeneric position-left (clog-element)
+  (:documentation "Get position-left. The relative left border of an element
+in pixels (css left in pixels)."))
+
+(defmethod position-left ((obj clog-element))
+  (parse-integer (jquery-query obj "position().left" :default-answer 0) :junk-allowed t))
+
+;;;;;;;;;;;;;;;;;;
+;; position-top ;;
+;;;;;;;;;;;;;;;;;;
+
+(defgeneric position-top (clog-element)
+  (:documentation "Get position-top. The relative top border of an element
+in pixels (css top in pixels)."))
+
+(defmethod position-top ((obj clog-element))
+  (parse-integer (jquery-query obj "position().top" :default-answer 0) :junk-allowed t))
+
 ;;;;;;;;;;;;;;;;;
 ;; client-left ;;
 ;;;;;;;;;;;;;;;;;
