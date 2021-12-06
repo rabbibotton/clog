@@ -6,31 +6,47 @@
 
 (defvar supported-controls
   (list
-   '(:name        "select"
-     :description "Selection Tool"
-     :create       nil
-     :create-type  nil
-     :properties   nil
-     :events       nil)
-   '(:name        "label"
-     :description "Text Label"
-     :create       clog:create-label
-     :create-type  :label
-     :properties  (list
-		   (:name "text"
-		    :prop  clog:text)
-		   (:name "background-color"
-		    :prop  clog:background-color)))
-   '(:name         "input"
-     :description  "Text Input"
-     :create       clog:create-form-element
-     :create-type  :form
-     :create-param :input
-     :properties  (list
-		   (:name "value"
-		    :prop  clog:value)
-		   (:name "background-color"
-		    :prop  clog:background-color)))))
+   '(:name          "select"
+     :description   "Selection Tool"
+     :create         nil
+     :create-type    nil
+     :properties     nil
+     :events         nil)
+   '(:name           "label"
+     :description    "Text Label"
+     :create         clog:create-label
+     :create-type    :label
+     :create-content "label"
+     :properties     (list
+		      (:name "text"
+		       :prop  clog:text)
+		      (:name "background-color"
+		       :prop  clog:background-color)))
+   '(:name            "button"
+     :description     "Button"
+     :create          clog:create-form-element
+     :create-type     :form
+     :create-param    :button
+     :create-value    "button"
+     :properties      (list
+		       (:name "value"
+			:prop  clog:value)
+		       (:name "background-color"
+			:prop  clog:background-color)))
+   '(:name            "input"
+     :description     "Text Input"
+     :create          clog:create-form-element
+     :create-type     :form
+     :create-param    :input
+     :create-value    ""
+     :properties      (list
+		       (:name "value"
+			:prop  clog:value)
+		       (:name "background-color"
+			:prop  clog:background-color)))))
+
+(defun control-info (control-name)
+  (find-if (lambda (x) (equal (getf x :name) control-name)) supported-controls))
 
 (defclass builder-app-data ()
   ((copy-buf
@@ -169,26 +185,52 @@
     (setf (positioning control-list) :absolute)
     (setf (size control-list) 2)
     (set-geometry control-list :left 0 :top 0 :bottom 0 :width 190)
+    (set-on-change control-list (lambda (obj)
+				  (let ((app (connection-data-item obj "builder-app-data")))
+				    (setf (selected-tool app) (control-info (value control-list))))))
     (dolist (control supported-controls)
       (add-select-option control-list (getf control :name) (getf control :description)))))
 
 (defun on-new-builder-window (obj)
-  ;; add menu items for save, etc
-  ;; add tool bar
-  ;; add on close to remove hooks
-  ;; add hooks to drop controls,add actions
   (let* ((win (create-gui-window obj :title "New Panel"))
 	 (content (window-content win)))
     (set-on-mouse-up content
 		     (lambda (obj data)
-		       ;; check what tool
-		       ;; apply tool or add control
-		       
-		       (let* ((element (create-form-element obj :input)))
-			 (setf (positioning element) :absolute)
-			 (set-geometry element
-				       :left (getf data ':x)
-				       :top (getf data ':y)))))))
+		       (let* ((app         (connection-data-item obj "builder-app-data"))
+			      (control     (selected-tool app))
+			      (create-type (getf control :create-type))
+			      (handle      (create-div obj))
+			      (element     (cond ((eq create-type :label)
+						  (funcall (getf control :create) handle
+							   :content (getf control :create-content)))
+						 ((eq create-type :form)				 
+						  (funcall (getf control :create) handle
+							   (getf control :create-param)
+							   :value (getf control :create-value)))
+						 (t nil))))
+			 (when element
+			   (setf (box-sizing element) :content-box)
+			   (setf (box-sizing handle) :content-box)
+			   (set-padding handle "0px" "16px" "0px" "0px")							
+			   (set-on-focus-in element (lambda (obj)
+			   			      (declare (ignore obj))
+						      (let ((x (position-left handle))
+							    (y (position-top handle)))
+							(set-geometry handle :left (- x 12) :top (- y 12))
+							(set-border handle "12px" :solid :blue))))
+			   (set-on-focus-out element (lambda (obj)
+			   			       (declare (ignore obj))
+						       (let ((x (position-left handle))
+							     (y (position-top handle)))
+							 (set-border handle "initial" "" "")
+							 (set-geometry handle :left (+ x 12) :top (+ y 12)))))							 
+			   (setf (selected-tool app) nil)
+			   (clog::jquery-execute handle "draggable().resizable()")
+			   (set-geometry element :units "%" :width 100 :height 100)
+			   (setf (positioning handle) :absolute)
+			   (set-geometry handle
+					 :left (getf data :x)
+					 :top (getf data :y))))))))
 
 (defun on-help-about-builder (obj)
   (let ((about (create-gui-window obj
@@ -222,20 +264,20 @@
 	   (win   (create-gui-menu-drop-down menu :content "Window"))
 	   (help  (create-gui-menu-drop-down menu :content "Help")))
       (declare (ignore icon))
-      (create-gui-menu-item file :content "Open Panel" :on-click 'on-new-builder-window)
+      (create-gui-menu-item file  :content "Open Panel"      :on-click 'on-new-builder-window)
       (create-gui-menu-item tools :content "Control Pallete" :on-click 'on-show-control-pallete)
-      (create-gui-menu-item tools :content "Properties" :on-click 'on-show-properties)
-      (create-gui-menu-item tools :content "Code" :on-click 'on-show-code)
-      (create-gui-menu-item tools :content "Eval Code" :on-click 'do-eval)
-      (create-gui-menu-item edit :content "Undo"          :on-click #'do-ide-edit-undo)
-      (create-gui-menu-item edit :content "Redo"          :on-click #'do-ide-edit-redo)
-      (create-gui-menu-item edit :content "Copy"          :on-click #'do-ide-edit-copy)
-      (create-gui-menu-item edit :content "Cut"           :on-click #'do-ide-edit-cut)
-      (create-gui-menu-item edit :content "Paste"         :on-click #'do-ide-edit-paste)
-      (create-gui-menu-item win :content "Maximize All" :on-click #'maximize-all-windows)
-      (create-gui-menu-item win :content "Normalize All" :on-click #'normalize-all-windows)
+      (create-gui-menu-item tools :content "Properties"      :on-click 'on-show-properties)
+      (create-gui-menu-item tools :content "Code"            :on-click 'on-show-code)
+      (create-gui-menu-item tools :content "Eval Code"       :on-click 'do-eval)
+      (create-gui-menu-item edit  :content "Undo"            :on-click #'do-ide-edit-undo)
+      (create-gui-menu-item edit  :content "Redo"            :on-click #'do-ide-edit-redo)
+      (create-gui-menu-item edit  :content "Copy"            :on-click #'do-ide-edit-copy)
+      (create-gui-menu-item edit  :content "Cut"             :on-click #'do-ide-edit-cut)
+      (create-gui-menu-item edit  :content "Paste"           :on-click #'do-ide-edit-paste)
+      (create-gui-menu-item win   :content "Maximize All"    :on-click #'maximize-all-windows)
+      (create-gui-menu-item win   :content "Normalize All"   :on-click #'normalize-all-windows)
       (create-gui-menu-window-select win)
-      (create-gui-menu-item help :content "About" :on-click #'on-help-about-builder)
+      (create-gui-menu-item help  :content "About"           :on-click #'on-help-about-builder)
       (create-gui-menu-full-screen menu))    
     (set-on-before-unload (window body) (lambda(obj)
 					  (declare (ignore obj))
