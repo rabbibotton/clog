@@ -53,10 +53,22 @@
     :accessor copy-buf
     :initform ""
     :documentation "Copy buffer")
+   (current-control
+    :accessor current-control
+    :initform nil
+    :documentation "Current selected control")
+   (control-properties
+    :accessor control-properties
+    :initform nil
+    :documentation "Current control properties window")
+   (properties-list
+    :accessor properties-list
+    :initform nil
+    :documentation "Property list")
    (control-pallete
     :accessor control-pallete
     :initform nil
-    :documentation "Current control pallete")
+    :documentation "Current control pallete window")
    (selected-tool
     :accessor selected-tool
     :initform nil
@@ -169,23 +181,41 @@
 			(html-id win)
 			(html-id win)))))
 
+(defun on-populate-control-properties (obj)
+  (let* ((app     (connection-data-item obj "builder-app-data"))
+	 (win     (control-properties app))
+	 (control (current-control app)))
+    (when win
+      (setf (text (properties-list app)) "")
+      (add-select-options (properties-list app)
+			  `(,(format nil "name    : ~A" (html-id control))
+			    ,(format nil "top     : ~A" (top control))
+			    ,(format nil "left    : ~A" (left control))
+			    ,(format nil "bottom  : ~A" (bottom control))
+			    ,(format nil "right   : ~A" (right control))
+			    ,(format nil "value   : ~A" (value control)))))))
+
 (defun on-show-properties (obj)
-  (let* ((win          (create-gui-window obj :title "Properties"
-					      :height 300 :width 200
-					      :has-pinner t))
-	 (content      (window-content win))
-	 (control-list (create-select content)))
-    (setf (positioning control-list) :absolute)
-    (setf (size control-list) 2)
-    (set-geometry control-list :left 0 :top 0 :bottom 0 :width 190)
-    (add-select-options control-list '("name    : var-1"
-				       "visible : true"
-				       "text    : ''"))))
-  
+  (let ((app (connection-data-item obj "builder-app-data")))
+    (if (control-properties app)
+	(window-focus (control-properties app))	
+	(let* ((win          (create-gui-window obj :title "Properties"
+						    :height 300 :width 200
+						    :has-pinner t))
+	       (content      (window-content win))
+	       (control-list (create-select content)))
+	  (setf (control-properties app) win)
+	  (setf (properties-list app) control-list)
+	  (set-on-window-close win (lambda (obj) (setf (control-properties app) nil)))
+	  (setf (positioning control-list) :absolute)
+	  (setf (size control-list) 2)
+	  (set-geometry control-list :left 0 :top 0 :bottom 0 :width 190)
+	  (on-populate-control-properties obj)))))
+
 (defun on-show-control-pallete (obj)
   (let ((app (connection-data-item obj "builder-app-data")))
     (if (control-pallete app)
-	(current-window  (control-pallete app))
+	(window-focus (control-pallete app))
 	(let* ((win          (create-gui-window obj :title "Controls" :height 300 :width 200 :has-pinner t))
 	       (content      (window-content win))
 	       (control-list (create-select content)))
@@ -202,12 +232,15 @@
 	    (add-select-option control-list (getf control :name) (getf control :description)))))))
 
 (defun on-new-builder-window (obj)
-  (let* ((win (create-gui-window obj :title "New Panel"))
+  (let* ((app (connection-data-item obj "builder-app-data"))
+	 (win (create-gui-window obj :title "New Panel"))
 	 (content (window-content win)))
+    (set-on-window-close win
+			 (lambda (obj)
+			   (setf (current-control app) nil)))
     (set-on-mouse-up content
 		     (lambda (obj data)
-		       (let* ((app         (connection-data-item obj "builder-app-data"))
-			      (control     (selected-tool app))
+		       (let* ((control     (selected-tool app))
 			      (create-type (getf control :create-type))
 			      (handle      (create-div obj))
 			      (element     (cond ((eq create-type :label)
@@ -219,11 +252,14 @@
 							   :value (getf control :create-value)))
 						 (t nil))))
 			 (when element
+			   (setf (current-control app) element)
 			   (setf (box-sizing element) :content-box)
 			   (setf (box-sizing handle) :content-box)
 			   (set-padding handle "0px" "16px" "0px" "0px")							
 			   (set-on-focus-in element (lambda (obj)
 			   			      (declare (ignore obj))
+						      (setf (current-control app) element)
+						      (on-populate-control-properties win)
 						      (let ((x (position-left handle))
 							    (y (position-top handle)))
 							(set-geometry handle :left (- x 12) :top (- y 12))
