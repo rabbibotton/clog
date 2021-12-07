@@ -57,6 +57,10 @@
     :accessor control-pallete
     :initform nil
     :documentation "Current control pallete")
+   (properties-window
+    :accessor properties-window
+    :initform nil
+    :documentation "Current properties window")
    (selected-tool
     :accessor selected-tool
     :initform nil
@@ -170,17 +174,22 @@
 			(html-id win)))))
 
 (defun on-show-properties (obj)
-  (let* ((win          (create-gui-window obj :title "Properties"
-					      :height 300 :width 200
-					      :has-pinner t))
-	 (content      (window-content win))
-	 (control-list (create-select content)))
-    (setf (positioning control-list) :absolute)
-    (setf (size control-list) 2)
-    (set-geometry control-list :left 0 :top 0 :bottom 0 :width 190)
-    (add-select-options control-list '("name    : var-1"
-				       "visible : true"
-				       "text    : ''"))))
+  (let ((app (connection-data-item obj "builder-app-data")))
+    (if (properties-window app)
+	(current-window (properties-window app))
+	(let* ((win          (create-gui-window obj :title "Properties"
+						    :height 300 :width 200
+						    :has-pinner t))
+	       (content      (window-content win))
+	       (control-list (create-select content)))
+	  (setf (properties-window app) win)
+	  (set-on-window-close win (lambda (obj) (setf (properties-window app) nil)))
+	  (setf (positioning control-list) :absolute)
+	  (setf (size control-list) 2)
+	  (set-geometry control-list :left 0 :top 0 :bottom 0 :width 190)
+	  (add-select-options control-list '("name    : var-1"
+					     "visible : true"
+					     "text    : ''"))))))
   
 (defun on-show-control-pallete (obj)
   (let ((app (connection-data-item obj "builder-app-data")))
