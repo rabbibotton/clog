@@ -185,7 +185,7 @@
   (let* ((app     (connection-data-item obj "builder-app-data"))
 	 (win     (control-properties app))
 	 (control (current-control app)))
-    (when win
+    (when (and win control)
       (setf (text (properties-list app)) "")
       (add-select-options (properties-list app)
 			  `(,(format nil "name    : ~A" (html-id control))
@@ -234,7 +234,17 @@
 (defun on-new-builder-window (obj)
   (let* ((app (connection-data-item obj "builder-app-data"))
 	 (win (create-gui-window obj :title "New Panel"))
-	 (content (window-content win)))
+	 (box (create-panel-box-layout (window-content win)
+				       :left-width 0 :right-width 9
+				       :top-height 30 :bottom-height 0))
+	 (tool-bar (top-panel box))
+	 (btn-save (create-button tool-bar :content "Save"))
+	 (btn-load (create-button tool-bar :content "Load"))
+	 (content  (center-panel box)))
+    (setf (background-color tool-bar) :silver)
+    (set-on-click btn-save (lambda (obj)
+			     (declare (ignore obj))
+			     (format t "~A" (inner-html content))))
     (set-on-window-close win
 			 (lambda (obj)
 			   (setf (current-control app) nil)))
