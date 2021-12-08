@@ -2244,7 +2244,7 @@ on browser."))
 CLOG-ELEMENT."))
 
 (defmethod parent-element ((obj clog-element))
-  (attach-as-child obj (jquery-execute obj (format nil "parent().attr('id');"))))
+  (attach-as-child obj (jquery-query obj (format nil "parent().prop('id')"))))
 
 
 ;;;;;;;;;;;;;;;;;
@@ -2257,7 +2257,7 @@ html id than Element_Type will have an ID of undefined and therefore attached
 to no actual HTML element."))
 
 (defmethod first-child ((obj clog-element))
-  (attach-as-child obj (jquery-query obj "children().first().prop('id');")))
+  (attach-as-child obj (jquery-query obj "children().first().prop('id')")))
 
 ;;;;;;;;;;;;;;;;;;
 ;; next-sibling ;;
@@ -2269,7 +2269,7 @@ html id than Element_Type will have an ID of undefined and therefore attached
 to no actual HTML elemen."))
 
 (defmethod next-sibling ((obj clog-element))
-  (attach-as-child obj (jquery-query obj "next().prop('id');")))
+  (attach-as-child obj (jquery-query obj "next().prop('id')")))
 
 ;;;;;;;;;;;;;;;;;;;;;;
 ;; previous-sibling ;;
@@ -2281,4 +2281,4 @@ html id than Element_Type will have an ID of undefined and therefore attached
 to no actual HTML elemen."))
 
 (defmethod previous-sibling ((obj clog-element))
-  (attach-as-child obj (jquery-query obj "previous().prop('id');")))
+  (attach-as-child obj (jquery-query obj "previous().prop('id')")))
