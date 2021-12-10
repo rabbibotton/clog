@@ -123,7 +123,8 @@ clog-document object. (Private)"))
   
 (defmethod set-title ((obj clog-document) value)
   (execute obj
-	   (format nil "title='~A'" (clog-connection:escape-string value))))
+	   (format nil "title='~A'" (clog-connection:escape-string value)))
+  value)
 (defsetf title set-title)
 
 ;;;;;;;;;;;;;;;;;;

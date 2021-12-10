@@ -118,7 +118,8 @@ must be in DOM, ie placed or auto-placed."))
 
 (defmethod set-style ((obj clog-element) style-name value)
   (jquery-execute obj (format nil "css('~A','~A')"
-			      style-name (escape-string value))))
+			      style-name (escape-string value)))
+  value)
 (defsetf style set-style)
 
 (defgeneric set-styles (clog-element style-list)
@@ -148,17 +149,19 @@ must be in DOM, ie placed or auto-placed."))
 		:default-answer default-answer))
 
 (defgeneric remove-attribute (clog-element attribute-name)
-  (:documentation "Get/Setf html tag attribute. (eg. src on img tag)"))
+  (:documentation "Remove html tag attribute. (eg. src on img tag)"))
 
 (defmethod remove-attribute ((obj clog-element) attribute-name)
-  (jquery-execute obj (format nil "removeAttr('~A')" attribute-name)))
+  (jquery-execute obj (format nil "removeAttr('~A')" attribute-name))
+  attribute-name)
 
 (defgeneric set-attribute (clog-element attribute-name value)
   (:documentation "Set html tag attribute."))
 
 (defmethod set-attribute ((obj clog-element) attribute-name value)
   (jquery-execute obj (format nil "attr('~A','~A')"
-			      attribute-name (escape-string value))))
+			      attribute-name (escape-string value)))
+  value)
 (defsetf attribute set-attribute)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -384,7 +387,8 @@ lost forever."))
   (:documentation "Set inner-html VALUE for CLOG-ELEMENT"))
 
 (defmethod set-inner-html ((obj clog-element) value)
-  (jquery-execute obj (format nil "html('~A')" (escape-string value))))
+  (jquery-execute obj (format nil "html('~A')" (escape-string value)))
+  value)
 (defsetf inner-html set-inner-html)
 
 ;;;;;;;;;;;;;;;;
@@ -451,7 +455,8 @@ spell checking if Editable is also true."))
   (:documentation "Set text VALUE for CLOG-ELEMENT"))
 
 (defmethod set-text ((obj clog-element) value)
-  (jquery-execute obj (format nil "text('~A')" (escape-string value))))
+  (jquery-execute obj (format nil "text('~A')" (escape-string value)))
+  value)
 (defsetf text set-text)
 
 ;;;;;;;;;;;;;;;;;;;;
@@ -1642,7 +1647,8 @@ in UNITS (default :px)"))
   (:documentation "Set inner-height VALUE for CLOG-ELEMENT"))
 
 (defmethod set-inner-height ((obj clog-element) value)
-  (jquery-execute obj (format nil "innerHeight('~A')" (escape-string value))))
+  (jquery-execute obj (format nil "innerHeight('~A')" (escape-string value)))
+  value)
 (defsetf inner-height set-inner-height)
 
 ;;;;;;;;;;;;;;;;;
@@ -1659,7 +1665,8 @@ in UNITS (default :px)"))
   (:documentation "Set inner-width VALUE for CLOG-ELEMENT"))
 
 (defmethod set-inner-width ((obj clog-element) value)
-  (jquery-execute obj (format nil "innerWidth('~A')" (escape-string value))))
+  (jquery-execute obj (format nil "innerWidth('~A')" (escape-string value)))
+  value)
 (defsetf inner-width set-inner-width)
 
 ;;;;;;;;;;;;;;;;;;
