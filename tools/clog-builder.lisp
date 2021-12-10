@@ -181,6 +181,40 @@
 			(html-id win)
 			(html-id win)))))
 
+(defun on-show-layout-code (obj)
+  (let* ((win         (create-gui-window obj :title  "Layout Code"
+					     :height 400
+					     :width  650))
+	 (box         (create-panel-box-layout (window-content win)
+					       :left-width 0 :right-width 9
+					       :top-height 30 :bottom-height 0))
+	 (center      (center-panel box))
+	 (center-id   (html-id center))
+	 (tool-bar (top-panel box))
+	 (btn-save (create-button tool-bar :content "Save")))
+    (setf (background-color tool-bar) :silver)
+    (set-on-window-size win (lambda (obj)
+			      (js-execute obj
+					  (format nil "editor_~A.resize()" (html-id win)))))
+    (set-on-window-size-done win (lambda (obj)
+				   (js-execute obj
+					       (format nil "editor_~A.resize()" (html-id win)))))
+    (create-child win
+		  (format nil
+			  "<script>
+                            var editor_~A = ace.edit('~A');
+                            editor_~A.setTheme('ace/theme/xcode');
+                            editor_~A.session.setMode('ace/mode/lisp');
+                            editor_~A.session.setTabSize(3);
+                            editor_~A.focus();
+                           </script>"
+			(html-id win) center-id
+			(html-id win)
+			(html-id win)
+			(html-id win)
+			(html-id win)))
+    win))
+
 (defun on-populate-control-properties (obj)
   (let* ((app     (connection-data-item obj "builder-app-data"))
 	 (win     (control-properties app))
@@ -245,7 +279,12 @@
     (setf (background-color tool-bar) :silver)
     (set-on-click btn-save (lambda (obj)
 			     (declare (ignore obj))
-			     (format t "~A" (inner-html content))))
+			     (let ((cw     (on-show-layout-code obj))
+				   (result (format nil "~A" (inner-html content))))
+			       (js-execute obj (format nil "editor_~A.setValue('~A');editor_~A.moveCursorTo(0,0);"
+						       (html-id cw)
+						       (escape-string result)
+						       (html-id cw))))))
     (set-on-window-close win
 			 (lambda (obj)
 			   (setf (current-control app) nil)))
