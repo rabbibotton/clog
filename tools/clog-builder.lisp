@@ -191,8 +191,11 @@
 	 (center      (center-panel box))
 	 (center-id   (html-id center))
 	 (tool-bar (top-panel box))
-	 (btn-save (create-button tool-bar :content "Save")))
+	 (btn-save (create-button tool-bar :content "Save"))
+	 (btn-eval (create-button tool-bar :content "Run")))
     (setf (background-color tool-bar) :silver)
+    (set-on-click btn-eval (lambda (obj)
+			     (do-eval obj)))
     (set-on-window-size win (lambda (obj)
 			      (js-execute obj
 					  (format nil "editor_~A.resize()" (html-id win)))))
@@ -279,12 +282,18 @@
     (set-on-click btn-save (lambda (obj)
 			     (declare (ignore obj))
 			     (let* ((cw     (on-show-layout-code obj))
-				    (result (format nil "(defvar form_~A \"~A\")"
+				    (result (format nil
+						    "(defvar *form_~A* \"~A\")~%~
+(clog:set-on-new-window (lambda (body) (clog:create-div body :content *form_~A*)) :path \"/form_~A\")~%~
+(clog:open-browser :url \"http://127.0.0.1:8080/form_~A\")~%"
 						    (html-id cw)
 						    (escape-string
 						     (ppcre:regex-replace-all "\\x22"
 									      (inner-html content)
-									      "\\\\\\\"")))))
+									      "\\\\\\\""))
+						    (html-id cw)
+						    (html-id cw)
+						    (html-id cw))))
 			       (js-execute obj (format nil
 						       "editor_~A.setValue('~A');editor_~A.moveCursorTo(0,0);"
 						       (html-id cw)
@@ -379,7 +388,8 @@
       (create-gui-menu-item win   :content "Normalize All"   :on-click #'normalize-all-windows)
       (create-gui-menu-window-select win)
       (create-gui-menu-item help  :content "About"           :on-click #'on-help-about-builder)
-      (create-gui-menu-full-screen menu))    
+      (create-gui-menu-full-screen menu))
+    (on-show-control-pallete body)
     (set-on-before-unload (window body) (lambda(obj)
 					  (declare (ignore obj))
 					  ;; return empty string to prevent nav off page
