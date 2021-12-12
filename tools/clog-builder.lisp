@@ -188,6 +188,7 @@
 	 (box         (create-panel-box-layout (window-content win)
 					       :left-width 0 :right-width 9
 					       :top-height 30 :bottom-height 0))
+	 (file-name   ".")
 	 (center      (center-panel box))
 	 (center-id   (html-id center))
 	 (tool-bar (top-panel box))
@@ -196,6 +197,17 @@
     (setf (background-color tool-bar) :silver)
     (set-on-click btn-eval (lambda (obj)
 			     (do-eval obj)))
+    (set-on-click btn-save (lambda (obj)
+			     (server-file-dialog obj "Save As.." file-name
+						 (lambda (fname)
+						   (window-focus win)
+						   (when fname
+						     (setf (window-title win) fname)
+						     (setf file-name fname)
+						     (write-file (js-query obj (format nil "editor_~A.getValue()"
+										       (html-id win)))
+								 fname)))
+						 :initial-filename file-name)))
     (set-on-window-size win (lambda (obj)
 			      (js-execute obj
 					  (format nil "editor_~A.resize()" (html-id win)))))
@@ -374,7 +386,7 @@
 	   (win   (create-gui-menu-drop-down menu :content "Window"))
 	   (help  (create-gui-menu-drop-down menu :content "Help")))
       (declare (ignore icon))
-      (create-gui-menu-item file  :content "Open Panel"      :on-click 'on-new-builder-window)
+      (create-gui-menu-item file  :content "New Panel"      :on-click 'on-new-builder-window)
       (create-gui-menu-item tools :content "Control Pallete" :on-click 'on-show-control-pallete)
       (create-gui-menu-item tools :content "Properties"      :on-click 'on-show-properties)
       (create-gui-menu-item tools :content "Code"            :on-click 'on-show-code)
