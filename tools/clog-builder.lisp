@@ -273,15 +273,20 @@
 				       :left-width 0 :right-width 9
 				       :top-height 30 :bottom-height 0))
 	 (tool-bar (top-panel box))
-	 (btn-save (create-button tool-bar :content "Save"))
-	 (btn-load (create-button tool-bar :content "Load"))
+	 (btn-save (create-button tool-bar :content "Render"))
 	 (content  (center-panel box)))
     (setf (background-color tool-bar) :silver)
     (set-on-click btn-save (lambda (obj)
 			     (declare (ignore obj))
-			     (let ((cw     (on-show-layout-code obj))
-				   (result (format nil "~A" (inner-html content))))
-			       (js-execute obj (format nil "editor_~A.setValue('~A');editor_~A.moveCursorTo(0,0);"
+			     (let* ((cw     (on-show-layout-code obj))
+				    (result (format nil "(defvar form_~A \"~A\")"
+						    (html-id cw)
+						    (escape-string
+						     (ppcre:regex-replace-all "\\x22"
+									      (inner-html content)
+									      "\\\\\\\"")))))
+			       (js-execute obj (format nil
+						       "editor_~A.setValue('~A');editor_~A.moveCursorTo(0,0);"
 						       (html-id cw)
 						       (escape-string result)
 						       (html-id cw))))))
