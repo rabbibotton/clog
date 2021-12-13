@@ -1910,7 +1910,7 @@ auto | w h | % = cover of parent | contain"))
     :double :groove :ridge :inset :outset))
 
 (defgeneric border (clog-element)
-  (:documentation "Get border. <line-width> <line-style> <line-color>"))
+  (:documentation "Get border. <line-width> <border-style> <line-color>"))
 
 (defmethod border ((obj clog-element))
   (style obj "border"))
@@ -1919,13 +1919,13 @@ auto | w h | % = cover of parent | contain"))
 ;; set-border ;;
 ;;;;;;;;;;;;;;;;
 
-(defgeneric set-border (clog-element line-width line-style line-color)
+(defgeneric set-border (clog-element line-width border-style line-color)
   (:documentation "Set border width style and color.
 line-width - size or medium|thin|thick|length|initial|inherit"))
 
-(defmethod set-border ((obj clog-element) line-width line-style line-color)
+(defmethod set-border ((obj clog-element) line-width border-style line-color)
   (setf (style obj "border") (format nil "~A ~A ~A"
-				     line-width line-style line-color)))
+				     line-width border-style line-color)))
 
 ;;;;;;;;;;;;;;;;;;;
 ;; border-radius ;;
@@ -1987,7 +1987,7 @@ line-width - size or medium|thin|thick|length|initial|inherit"))
     :groove :ridge :inset :outset))
 
 (defgeneric outline (clog-element) 
-  (:documentation "Get outline. <line-color> <line-style> <line-width>"))
+  (:documentation "Get outline. <line-color> <outline-style> <line-width>"))
 
 (defmethod outline ((obj clog-element))
   (style obj "outline"))
@@ -1996,13 +1996,13 @@ line-width - size or medium|thin|thick|length|initial|inherit"))
 ;; set-outline ;;
 ;;;;;;;;;;;;;;;;;
 
-(defgeneric set-outline (clog-element line-color line-style line-width)
-  (:documentation "Set outline <line-color> <line-style> <line-width>
+(defgeneric set-outline (clog-element line-color outline-style line-width)
+  (:documentation "Set outline <line-color> <outline-style> <line-width>
 line-width -  size or medium|thin|thick|length|initial|inherit"))
 
-(defmethod set-outline ((obj clog-element) line-color line-style line-width)
+(defmethod set-outline ((obj clog-element) line-color outline-style line-width)
   (setf (style obj "outline") (format nil "~A ~A ~A"
-				      line-color line-style line-width)))
+				      line-color outline-style line-width)))
 
 ;;;;;;;;;;;;
 ;; margin ;;

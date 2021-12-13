@@ -18,8 +18,8 @@
      :create-type    :label
      :create-content "label"
      :properties     (list
-		      (:name "text"
-		       :prop  clog:text)
+		      (:name "color"
+		       :prop  clog:color)
 		      (:name "background-color"
 		       :prop  clog:background-color)))
    '(:name            "button"
@@ -29,8 +29,8 @@
      :create-param    :button
      :create-value    "button"
      :properties      (list
-		       (:name "value"
-			:prop  clog:value)
+		       (:name "color"
+			:prop  clog:color)
 		       (:name "background-color"
 			:prop  clog:background-color)))
    '(:name            "input"
@@ -40,8 +40,8 @@
      :create-param    :input
      :create-value    ""
      :properties      (list
-		       (:name "value"
-			:prop  clog:value)
+		       (:name "color"
+			:prop  clog:color)
 		       (:name "background-color"
 			:prop  clog:background-color)))))
 
@@ -234,16 +234,27 @@
   (let* ((app     (connection-data-item obj "builder-app-data"))
 	 (win     (control-properties app))
 	 (control (current-control app))
+	 (table   (properties-list app))
 	 (parent  (when control (parent-element control))))
-    (when (and win control)
-      (setf (text (properties-list app)) "")
-      (add-select-options (properties-list app)
-			  `(,(format nil "name    : ~A" (html-id control))
-			    ,(format nil "top     : ~A" (top parent))
-			    ,(format nil "left    : ~A" (left parent))
-			    ,(format nil "bottom  : ~A" (bottom parent))
-			    ,(format nil "right   : ~A" (right parent))
-			    ,(format nil "value   : ~A" (value control)))))))
+    (when (and win control)      
+      (setf (inner-html table) "")
+      (let ((props `(("Name"   ,(html-id control) nil)
+		     ("Top"    ,(top parent) t ,(lambda (obj)
+						      (setf (top parent) (text obj))))
+		     ("Left"   ,(left parent) t ,(lambda (obj)
+						       (setf (left parent) (text obj))))
+		     ("Value"  ,(value control) t ,(lambda (obj)
+						     (setf (value control) (text obj))))
+		     ("Text"   ,(text control) t ,(lambda (obj)
+						    (setf (text control) (text obj)))))))
+	(dolist (item props)	  
+	  (let* ((tr (create-table-row table))
+		 (td1 (create-table-column tr :content (first item)))
+		 (td2 (create-table-column tr :content (second item))))
+	    (set-border td1 "1px" :dotted :black)
+	    (when (third item)
+	      (setf (editablep td2) t)
+	      (set-on-blur td2 (fourth item)))))))))
 
 (defun on-show-properties (obj)
   (let ((app (connection-data-item obj "builder-app-data")))
@@ -253,13 +264,12 @@
 						    :height 300 :width 200
 						    :has-pinner t))
 	       (content      (window-content win))
-	       (control-list (create-select content)))
+	       (control-list (create-table content)))
 	  (setf (control-properties app) win)
 	  (setf (properties-list app) control-list)
 	  (set-on-window-close win (lambda (obj) (setf (control-properties app) nil)))
 	  (setf (positioning control-list) :absolute)
-	  (setf (size control-list) 2)
-	  (set-geometry control-list :left 0 :top 0 :bottom 0 :width 190)
+	  (set-geometry control-list :left 0 :top 0 :bottom 0 :right 0)
 	  (on-populate-control-properties obj)))))
 
 (defun on-show-control-pallete (obj)
