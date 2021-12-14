@@ -78,10 +78,12 @@ during attachment. (Private)"))
 ;;;;;;;;;;;;;;;;
 
 (defgeneric js-execute (clog-obj script)
-  (:documentation "Execure SCRIPT on browser. (Internal)"))
+  (:documentation "Execure SCRIPT on browser. Result is
+dicarded, return CLOG-OBJ. (Internal)"))
 
 (defmethod js-execute ((obj clog-obj) script)
-  (clog-connection:execute (connection-id obj) script))
+  (clog-connection:execute (connection-id obj) script)
+  obj)
 
 ;;;;;;;;;;;;;;
 ;; js-query ;;
@@ -109,7 +111,7 @@ during attachment. (Private)"))
 
 (defgeneric jquery-execute (clog-obj method)
   (:documentation "Execute the jquery METHOD on OBJ. Result is
-dicarded. (Private)"))
+dicarded, return CLOG-OBJ. (Private)"))
 
 (defmethod jquery-execute ((obj clog-obj) method)
   (js-execute obj (format nil "~A.~A" (jquery obj) method)))
@@ -369,7 +371,8 @@ result or if time out DEFAULT-ANSWER (Private)"))
   (:documentation "Set html property."))
 
 (defmethod set-property ((obj clog-obj) property-name value)
-  (jquery-execute obj (format nil "prop('~A','~A')" property-name (escape-string value))))
+  (jquery-execute obj (format nil "prop('~A','~A')" property-name (escape-string value)))
+  value)
 (defsetf property set-property)
 
 ;;;;;;;;;;;;
@@ -386,7 +389,8 @@ result or if time out DEFAULT-ANSWER (Private)"))
   (:documentation "Set height VALUE for CLOG-OBJ"))
 
 (defmethod set-height ((obj clog-obj) value)
-  (jquery-execute obj (format nil "height('~A')" (escape-string value))))
+  (jquery-execute obj (format nil "height('~A')" (escape-string value)))
+  value)
 (defsetf height set-height)
 
 ;;;;;;;;;;;
@@ -403,7 +407,8 @@ result or if time out DEFAULT-ANSWER (Private)"))
   (:documentation "Set width VALUE for CLOG-OBJ"))
 
 (defmethod set-width ((obj clog-obj) value)
-  (jquery-execute obj (format nil "width('~A')" (escape-string value))))
+  (jquery-execute obj (format nil "width('~A')" (escape-string value)))
+  value)
 (defsetf width set-width)
 
 ;;;;;;;;;;;
@@ -466,7 +471,8 @@ clog-body of this connection."))
 
 (defmethod set-connection-data-item ((obj clog-obj) item-name value)
   (bordeaux-threads:with-lock-held ((connection-data-mutex obj))
-    (setf (gethash item-name (connection-data obj)) value)))
+    (setf (gethash item-name (connection-data obj)) value))
+  value)
 (defsetf connection-data-item set-connection-data-item)
 
 (defgeneric remove-connection-data-item (clog-obj item-name)

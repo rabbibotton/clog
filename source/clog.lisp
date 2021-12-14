@@ -196,6 +196,8 @@ embedded in a native template application.)"
   (text-direction-type type)
   (text-direction      generic-function)
   (language-code       generic-function)
+  (position-left       generic-function)
+  (position-top        generic-function)
   (client-left         generic-function)
   (client-top          generic-function)
   (client-width        generic-function)

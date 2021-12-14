@@ -118,7 +118,8 @@ must be in DOM, ie placed or auto-placed."))
 
 (defmethod set-style ((obj clog-element) style-name value)
   (jquery-execute obj (format nil "css('~A','~A')"
-			      style-name (escape-string value))))
+			      style-name (escape-string value)))
+  value)
 (defsetf style set-style)
 
 (defgeneric set-styles (clog-element style-list)
@@ -148,17 +149,19 @@ must be in DOM, ie placed or auto-placed."))
 		:default-answer default-answer))
 
 (defgeneric remove-attribute (clog-element attribute-name)
-  (:documentation "Get/Setf html tag attribute. (eg. src on img tag)"))
+  (:documentation "Remove html tag attribute. (eg. src on img tag)"))
 
 (defmethod remove-attribute ((obj clog-element) attribute-name)
-  (jquery-execute obj (format nil "removeAttr('~A')" attribute-name)))
+  (jquery-execute obj (format nil "removeAttr('~A')" attribute-name))
+  attribute-name)
 
 (defgeneric set-attribute (clog-element attribute-name value)
   (:documentation "Set html tag attribute."))
 
 (defmethod set-attribute ((obj clog-element) attribute-name value)
   (jquery-execute obj (format nil "attr('~A','~A')"
-			      attribute-name (escape-string value))))
+			      attribute-name (escape-string value)))
+  value)
 (defsetf attribute set-attribute)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -384,7 +387,8 @@ lost forever."))
   (:documentation "Set inner-html VALUE for CLOG-ELEMENT"))
 
 (defmethod set-inner-html ((obj clog-element) value)
-  (jquery-execute obj (format nil "html('~A')" (escape-string value))))
+  (jquery-execute obj (format nil "html('~A')" (escape-string value)))
+  value)
 (defsetf inner-html set-inner-html)
 
 ;;;;;;;;;;;;;;;;
@@ -451,7 +455,8 @@ spell checking if Editable is also true."))
   (:documentation "Set text VALUE for CLOG-ELEMENT"))
 
 (defmethod set-text ((obj clog-element) value)
-  (jquery-execute obj (format nil "text('~A')" (escape-string value))))
+  (jquery-execute obj (format nil "text('~A')" (escape-string value)))
+  value)
 (defsetf text set-text)
 
 ;;;;;;;;;;;;;;;;;;;;
@@ -489,6 +494,28 @@ spell checking if Editable is also true."))
 (defmethod set-language-code ((obj clog-element) value)
   (setf (property obj "lang") value))
 (defsetf language-code set-language-code)
+
+;;;;;;;;;;;;;;;;;;;
+;; position-left ;;
+;;;;;;;;;;;;;;;;;;;
+
+(defgeneric position-left (clog-element)
+  (:documentation "Get position-left. The relative left border of an element
+in pixels (css left in pixels)."))
+
+(defmethod position-left ((obj clog-element))
+  (parse-integer (jquery-query obj "position().left" :default-answer 0) :junk-allowed t))
+
+;;;;;;;;;;;;;;;;;;
+;; position-top ;;
+;;;;;;;;;;;;;;;;;;
+
+(defgeneric position-top (clog-element)
+  (:documentation "Get position-top. The relative top border of an element
+in pixels (css top in pixels)."))
+
+(defmethod position-top ((obj clog-element))
+  (parse-integer (jquery-query obj "position().top" :default-answer 0) :junk-allowed t))
 
 ;;;;;;;;;;;;;;;;;
 ;; client-left ;;
@@ -1620,7 +1647,8 @@ in UNITS (default :px)"))
   (:documentation "Set inner-height VALUE for CLOG-ELEMENT"))
 
 (defmethod set-inner-height ((obj clog-element) value)
-  (jquery-execute obj (format nil "innerHeight('~A')" (escape-string value))))
+  (jquery-execute obj (format nil "innerHeight('~A')" (escape-string value)))
+  value)
 (defsetf inner-height set-inner-height)
 
 ;;;;;;;;;;;;;;;;;
@@ -1637,7 +1665,8 @@ in UNITS (default :px)"))
   (:documentation "Set inner-width VALUE for CLOG-ELEMENT"))
 
 (defmethod set-inner-width ((obj clog-element) value)
-  (jquery-execute obj (format nil "innerWidth('~A')" (escape-string value))))
+  (jquery-execute obj (format nil "innerWidth('~A')" (escape-string value)))
+  value)
 (defsetf inner-width set-inner-width)
 
 ;;;;;;;;;;;;;;;;;;
@@ -1881,7 +1910,7 @@ auto | w h | % = cover of parent | contain"))
     :double :groove :ridge :inset :outset))
 
 (defgeneric border (clog-element)
-  (:documentation "Get border. <line-width> <line-style> <line-color>"))
+  (:documentation "Get border. <line-width> <border-style> <line-color>"))
 
 (defmethod border ((obj clog-element))
   (style obj "border"))
@@ -1890,13 +1919,13 @@ auto | w h | % = cover of parent | contain"))
 ;; set-border ;;
 ;;;;;;;;;;;;;;;;
 
-(defgeneric set-border (clog-element line-width line-style line-color)
+(defgeneric set-border (clog-element line-width border-style line-color)
   (:documentation "Set border width style and color.
 line-width - size or medium|thin|thick|length|initial|inherit"))
 
-(defmethod set-border ((obj clog-element) line-width line-style line-color)
+(defmethod set-border ((obj clog-element) line-width border-style line-color)
   (setf (style obj "border") (format nil "~A ~A ~A"
-				     line-width line-style line-color)))
+				     line-width border-style line-color)))
 
 ;;;;;;;;;;;;;;;;;;;
 ;; border-radius ;;
@@ -1958,7 +1987,7 @@ line-width - size or medium|thin|thick|length|initial|inherit"))
     :groove :ridge :inset :outset))
 
 (defgeneric outline (clog-element) 
-  (:documentation "Get outline. <line-color> <line-style> <line-width>"))
+  (:documentation "Get outline. <line-color> <outline-style> <line-width>"))
 
 (defmethod outline ((obj clog-element))
   (style obj "outline"))
@@ -1967,13 +1996,13 @@ line-width - size or medium|thin|thick|length|initial|inherit"))
 ;; set-outline ;;
 ;;;;;;;;;;;;;;;;;
 
-(defgeneric set-outline (clog-element line-color line-style line-width)
-  (:documentation "Set outline <line-color> <line-style> <line-width>
+(defgeneric set-outline (clog-element line-color outline-style line-width)
+  (:documentation "Set outline <line-color> <outline-style> <line-width>
 line-width -  size or medium|thin|thick|length|initial|inherit"))
 
-(defmethod set-outline ((obj clog-element) line-color line-style line-width)
+(defmethod set-outline ((obj clog-element) line-color outline-style line-width)
   (setf (style obj "outline") (format nil "~A ~A ~A"
-				      line-color line-style line-width)))
+				      line-color outline-style line-width)))
 
 ;;;;;;;;;;;;
 ;; margin ;;
@@ -2222,7 +2251,7 @@ on browser."))
 CLOG-ELEMENT."))
 
 (defmethod parent-element ((obj clog-element))
-  (attach-as-child obj (jquery-execute obj (format nil "parent().attr('id');"))))
+  (attach-as-child obj (jquery-query obj (format nil "parent().prop('id')"))))
 
 
 ;;;;;;;;;;;;;;;;;
@@ -2235,7 +2264,7 @@ html id than Element_Type will have an ID of undefined and therefore attached
 to no actual HTML element."))
 
 (defmethod first-child ((obj clog-element))
-  (attach-as-child obj (jquery-query obj "children().first().prop('id');")))
+  (attach-as-child obj (jquery-query obj "children().first().prop('id')")))
 
 ;;;;;;;;;;;;;;;;;;
 ;; next-sibling ;;
@@ -2247,7 +2276,7 @@ html id than Element_Type will have an ID of undefined and therefore attached
 to no actual HTML elemen."))
 
 (defmethod next-sibling ((obj clog-element))
-  (attach-as-child obj (jquery-query obj "next().prop('id');")))
+  (attach-as-child obj (jquery-query obj "next().prop('id')")))
 
 ;;;;;;;;;;;;;;;;;;;;;;
 ;; previous-sibling ;;
@@ -2259,4 +2288,4 @@ html id than Element_Type will have an ID of undefined and therefore attached
 to no actual HTML elemen."))
 
 (defmethod previous-sibling ((obj clog-element))
-  (attach-as-child obj (jquery-query obj "previous().prop('id');")))
+  (attach-as-child obj (jquery-query obj "previous().prop('id')")))
