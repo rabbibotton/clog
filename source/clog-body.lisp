@@ -61,10 +61,12 @@ or global objects."))
 ;; set-html-on-close ;;
 ;;;;;;;;;;;;;;;;;;;;;;;
 
-(defun set-html-on-close (clog-body html)
-  "In case of connection loss to this CLOG-BODY, replace the browser contents
-with HTML."
-  (clog-connection:set-html-on-close (connection-id clog-body) html))
+(defgeneric set-html-on-close (clog-body html)
+  (:documentation "In case of connection loss to this CLOG-BODY, replace the browser contents
+with HTML."))
+
+(defmethod set-html-on-close ((obj clog-body) html)
+  (clog-connection:set-html-on-close (connection-id obj) html))
 
 ;;;;;;;;;;;;
 ;; window ;;
