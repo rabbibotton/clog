@@ -389,6 +389,7 @@
 				    (declare (ignore obj))()))))
 
 (defun on-new-builder (body)
+  (set-html-on-close body "Connection Lost")  
   (let ((app (make-instance 'builder-app-data)))
     (setf (connection-data-item body "builder-app-data") app)
     (setf (title (html-document body)) "CLOG Builder")
@@ -406,8 +407,7 @@
       (create-gui-menu-item file  :content "New Panel"      :on-click 'on-new-builder-window)
       (create-gui-menu-item tools :content "Control Pallete" :on-click 'on-show-control-pallete)
       (create-gui-menu-item tools :content "Properties"      :on-click 'on-show-properties)
-      (create-gui-menu-item tools :content "Code"            :on-click 'on-show-code)
-      (create-gui-menu-item tools :content "Eval Code"       :on-click 'do-eval)
+;;      (create-gui-menu-item tools :content "Code"            :on-click 'on-show-code)
       (create-gui-menu-item edit  :content "Undo"            :on-click #'do-ide-edit-undo)
       (create-gui-menu-item edit  :content "Redo"            :on-click #'do-ide-edit-redo)
       (create-gui-menu-item edit  :content "Copy"            :on-click #'do-ide-edit-copy)
