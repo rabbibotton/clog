@@ -76,13 +76,13 @@
 
 (defun read-file (infile)
   (with-open-file (instream infile :direction :input :if-does-not-exist nil)
-    (when instream 
+    (when instream
       (let ((string (make-string (file-length instream))))
         (read-sequence string instream)
         string))))
 
 (defun write-file (string outfile &key (action-if-exists :rename))
-   (check-type action-if-exists (member nil :error :new-version :rename :rename-and-delete 
+   (check-type action-if-exists (member nil :error :new-version :rename :rename-and-delete
                                         :overwrite :append :supersede))
    (with-open-file (outstream outfile :direction :output :if-exists action-if-exists)
      (write-sequence string outstream)))
@@ -95,7 +95,7 @@
       (let ((*standard-output* stream)
 	    (*error-output* stream))
 	(setf eval-result (eval (read-from-string (format nil "(progn ~A)" form))))))
-    (format nil "~A~%=>~A~%" result eval-result)))    
+    (format nil "~A~%=>~A~%" result eval-result)))
 
 (defun do-ide-edit-copy (obj)
   (let ((cw (current-window obj)))
@@ -113,7 +113,7 @@
       (do-ide-edit-copy obj)
       (js-execute obj (format nil "editor_~A.execCommand('undo')"
 			      (html-id cw))))))
-			      
+
 (defun do-ide-edit-redo (obj)
   (let ((cw (current-window obj)))
     (when cw
@@ -236,13 +236,16 @@
 	 (control (current-control app))
 	 (table   (properties-list app))
 	 (parent  (when control (parent-element control))))
-    (when (and win control)      
+    (when (and win control)
       (setf (inner-html table) "")
-      (let ((props `(("Name"   ,(html-id control) nil)
+      (let ((props `(("ID"      ,(html-id control) nil)
+		     ("Name"    ,(attribute control "data-lisp-name") t
+				,(lambda (obj)
+				   (setf  (attribute control "data-lisp-name") (text obj))))
 		     ("Top"    ,(top parent) t ,(lambda (obj)
-						      (setf (top parent) (text obj))))
+						  (setf (top parent) (text obj))))
 		     ("Left"   ,(left parent) t ,(lambda (obj)
-						       (setf (left parent) (text obj))))
+						   (setf (left parent) (text obj))))
 		     ("Width"   ,(width parent) t ,(lambda (obj)
 						     (setf (width parent) (text obj))))
 		     ("Height"   ,(height parent) t ,(lambda (obj)
@@ -252,7 +255,7 @@
 							   (setf (value control) (text obj))))
 			  `("Text"   ,(text control) t ,(lambda (obj)
 							  (setf (text control) (text obj))))))))
-	(dolist (item props)	  
+	(dolist (item props)
 	  (let* ((tr (create-table-row table))
 		 (td1 (create-table-column tr :content (first item)))
 		 (td2 (create-table-column tr :content (second item))))
@@ -264,7 +267,7 @@
 (defun on-show-properties (obj)
   (let ((app (connection-data-item obj "builder-app-data")))
     (if (control-properties app)
-	(window-focus (control-properties app))	
+	(window-focus (control-properties app))
 	(let* ((win          (create-gui-window obj :title "Properties"
 						    :height 300 :width 200
 						    :has-pinner t))
@@ -289,10 +292,10 @@
 	  (setf (positioning control-list) :absolute)
 	  (setf (size control-list) 2)
 	  (set-geometry control-list :left 0 :top 0 :bottom 0 :width 190)
-	  (set-on-change control-list (lambda (obj)				  
+	  (set-on-change control-list (lambda (obj)
 					(setf (selected-tool app) (control-info (value control-list)))))
 	  (set-on-focus control-list (lambda (obj)
-				       (setf (selected-tool app) (control-info (value control-list)))))				 
+				       (setf (selected-tool app) (control-info (value control-list)))))
 	  (dolist (control supported-controls)
 	    (add-select-option control-list (getf control :name) (getf control :description)))))))
 
@@ -303,11 +306,17 @@
 				       :left-width 0 :right-width 9
 				       :top-height 30 :bottom-height 0))
 	 (tool-bar (top-panel box))
+	 (btn-del  (create-button tool-bar :content "Delete"))
 	 (btn-save (create-button tool-bar :content "Render"))
 	 (content  (center-panel box)))
     (setf (background-color tool-bar) :silver)
+    (setf (attribute content "data-lisp-name")
+	  (format nil "form-~A" (html-id content)))
+    (set-on-click btn-del (lambda (obj)
+			    (when (current-control app)
+			      (destroy (parent-element (current-control app)))
+			      (setf (current-control app) nil))))
     (set-on-click btn-save (lambda (obj)
-			     (declare (ignore obj))
 			     (let* ((cw     (on-show-layout-code obj))
 				    (result (format nil
 						    "(defvar *form_~A* \"~A\")~%~
@@ -337,16 +346,18 @@
 			      (element     (cond ((eq create-type :label)
 						  (funcall (getf control :create) handle
 							   :content (getf control :create-content)))
-						 ((eq create-type :form)				 
+						 ((eq create-type :form)
 						  (funcall (getf control :create) handle
 							   (getf control :create-param)
 							   :value (getf control :create-value)))
 						 (t nil))))
 			 (when element
 			   (setf (current-control app) element)
+			   (setf (attribute element "data-lisp-name")
+				 (format nil "control-~A" (html-id element)))
 			   (setf (box-sizing element) :content-box)
 			   (setf (box-sizing handle) :content-box)
-			   (set-padding handle "0px" "16px" "0px" "0px")			   
+			   (set-padding handle "0px" "16px" "0px" "0px")
 			   (set-on-mouse-up element (lambda (obj data)
 						      (setf (current-control app) element)
 						      (on-populate-control-properties win)))
@@ -389,13 +400,13 @@
 				    (declare (ignore obj))()))))
 
 (defun on-new-builder (body)
-  (set-html-on-close body "Connection Lost")  
+  (set-html-on-close body "Connection Lost")
   (let ((app (make-instance 'builder-app-data)))
     (setf (connection-data-item body "builder-app-data") app)
     (setf (title (html-document body)) "CLOG Builder")
-    (clog-gui-initialize body) 
-    (load-script (html-document body) "https://pagecdn.io/lib/ace/1.4.12/ace.js")   
-    (add-class body "w3-blue-grey")  
+    (clog-gui-initialize body)
+    (load-script (html-document body) "https://pagecdn.io/lib/ace/1.4.12/ace.js")
+    (add-class body "w3-blue-grey")
     (let* ((menu  (create-gui-menu-bar body))
 	   (icon  (create-gui-menu-icon menu :on-click #'on-help-about-builder))
 	   (file  (create-gui-menu-drop-down menu :content "Builder"))
@@ -422,7 +433,7 @@
     (set-on-before-unload (window body) (lambda(obj)
 					  (declare (ignore obj))
 					  ;; return empty string to prevent nav off page
-					  ""))    
+					  ""))
     (run body)))
 
 (defun clog-builder ()
