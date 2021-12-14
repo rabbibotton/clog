@@ -105,6 +105,13 @@ CL-USER> (ql:quickload :clog/tools)
 CL-USER> (clog-tools:clog-db-admin)
 ```
 
+The clog-builder GUI Builder tool can be run with:
+
+```
+CL-USER> (ql:quickload :clog/tools)
+CL-USER> (clog-tools:clog-builder)
+```
+
 You can also open a "clog-repl" window in your browser to play
 from the common-lisp repl:
 
@@ -132,6 +139,7 @@ to be a CLOGer.
 ![Image of demo2](https://rabbibotton.github.io/images/clog-demo2.png)
 ![Image of demo3](https://rabbibotton.github.io/images/clog-demo3.png)
 ![Image of clog-db-admin](https://rabbibotton.github.io/images/clog-db-admin.png)
+![Image of clog-builder](https://rabbibotton.github.io/images/clog-builder.png)
 ![Image of clog-web-containers](https://rabbibotton.github.io/images/clog-web-containers.png)
 
 
@@ -231,6 +239,7 @@ Demo Summary
 Tool Summary
 
 - clog-db-admin - SQLite3 admin tool
+- clog-builder  - GUI Builder
 
 Template Summary
 
