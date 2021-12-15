@@ -17,8 +17,7 @@
      :create         clog:create-label
      :create-type    :label
      :create-content "label"
-     :properties     (list
-		      (:name "color"
+     :properties     ((:name "color"
 		       :prop  clog:color)
 		      (:name "background-color"
 		       :prop  clog:background-color)))
@@ -28,19 +27,17 @@
      :create-type     :form
      :create-param    :button
      :create-value    "button"
-     :properties      (list
-		       (:name "color"
-			:prop  clog:color)
-		       (:name "background-color"
-			:prop  clog:background-color)))
+     :properties      ((:name "color"
+			 :prop  clog:color)
+			(:name "background-color"
+			 :prop  clog:background-color)))
    '(:name            "input"
      :description     "Text Input"
      :create          clog:create-form-element
      :create-type     :form
      :create-param    :input
      :create-value    ""
-     :properties      (list
-		       (:name "color"
+     :properties      ((:name "color"
 			:prop  clog:color)
 		       (:name "background-color"
 			:prop  clog:background-color)))))
@@ -238,23 +235,32 @@
 	 (parent  (when control (parent-element control))))
     (when (and win control)
       (setf (inner-html table) "")
-      (let ((props `(("ID"      ,(html-id control) nil)
-		     ("Name"    ,(attribute control "data-lisp-name") t
+      (let ((info  (control-info (attribute control "data-clog-type")))
+	    (props `(("id"      ,(html-id control) nil)
+		     ("name"    ,(attribute control "data-lisp-name") t
 				,(lambda (obj)
 				   (setf  (attribute control "data-lisp-name") (text obj))))
-		     ("Top"    ,(top parent) t ,(lambda (obj)
+		     ("top"    ,(top parent) t ,(lambda (obj)
 						  (setf (top parent) (text obj))))
-		     ("Left"   ,(left parent) t ,(lambda (obj)
+		     ("left"   ,(left parent) t ,(lambda (obj)
 						   (setf (left parent) (text obj))))
-		     ("Width"   ,(width parent) t ,(lambda (obj)
+		     ("width"   ,(width parent) t ,(lambda (obj)
 						     (setf (width parent) (text obj))))
-		     ("Height"   ,(height parent) t ,(lambda (obj)
+		     ("height"   ,(height parent) t ,(lambda (obj)
 						       (setf (height parent) (text obj))))
 		     ,(if (typep control 'clog:clog-form-element)
-			  `("Value"  ,(value control) t ,(lambda (obj)
+			  `("value"  ,(value control) t ,(lambda (obj)
 							   (setf (value control) (text obj))))
-			  `("Text"   ,(text control) t ,(lambda (obj)
+			  `("text"   ,(text control) t ,(lambda (obj)
 							  (setf (text control) (text obj))))))))
+	(when info
+	  (let (col)
+	    (dolist (prop (getf info :properties))
+	      (push `(,(getf prop :name) ,(funcall (getf prop :prop) control) t
+		      ,(lambda (obj)
+			 (funcall (find-symbol (format nil "SET-~A" (getf prop :prop)) :clog) control (text obj))))
+		    col))
+	    (setf props (append props col))))
 	(dolist (item props)
 	  (let* ((tr (create-table-row table))
 		 (td1 (create-table-column tr :content (first item)))
@@ -355,6 +361,7 @@
 			   (setf (current-control app) element)
 			   (setf (attribute element "data-lisp-name")
 				 (format nil "control-~A" (html-id element)))
+			   (setf (attribute element "data-clog-type") (getf control :name))
 			   (setf (box-sizing element) :content-box)
 			   (setf (box-sizing handle) :content-box)
 			   (set-padding handle "0px" "16px" "0px" "0px")
