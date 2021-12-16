@@ -58,6 +58,10 @@
     :accessor control-properties
     :initform nil
     :documentation "Current control properties window")
+   (control-list
+    :accessor control-list
+    :initform nil
+    :documentation "List of controls to bind to lisp symbols")
    (properties-list
     :accessor properties-list
     :initform nil
@@ -325,8 +329,12 @@
     (set-on-click btn-save (lambda (obj)
 			     (let* ((cw     (on-show-layout-code obj))
 				    (result (format nil
-						    "(defvar *form_~A* \"~A\")~%~
-(clog:set-on-new-window (lambda (body) (clog:create-div body :content *form_~A*)) :path \"/form_~A\")~%~
+						    "~
+(clog:set-on-new-window (lambda (body)~%
+                          (let* ((form_~A \"~A\")~%
+                                 (panel (clog:create-div body :content form_~A))~{~A~})~%
+                            ))
+   :path \"/form_~A\")~%~
 (clog:open-browser :url \"http://127.0.0.1:8080/form_~A\")~%"
 						    (html-id cw)
 						    (escape-string
@@ -334,6 +342,12 @@
 									      (inner-html content)
 									      "\\\\\\\""))
 						    (html-id cw)
+						    (mapcar (lambda (e)
+							      (let ((vname (attribute e "data-lisp-name")))
+								(when vname
+								  (format nil "~%                                 (~A (clog:attach-as-child body \"~A\" :clog-type '~A))"
+									  vname (html-id e) (format nil "CLOG:~A" (type-of e))))))
+							    (control-list app))
 						    (html-id cw)
 						    (html-id cw))))
 			       (js-execute obj (format nil
@@ -359,6 +373,7 @@
 						 (t nil))))
 			 (when element
 			   (setf (current-control app) element)
+			   (push element (control-list app))
 			   (setf (attribute element "data-lisp-name")
 				 (format nil "control-~A" (html-id element)))
 			   (setf (attribute element "data-clog-type") (getf control :name))
