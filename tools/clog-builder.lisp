@@ -1,8 +1,5 @@
-(defpackage #:clog-tools
-  (:use #:cl #:clog #:clog-gui)
-  (:export clog-builder))
-
 (in-package :clog-tools)
+(export 'clog-builder)
 
 (defvar supported-controls
   (list

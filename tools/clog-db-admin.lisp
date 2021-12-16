@@ -1,8 +1,5 @@
-(defpackage #:clog-tools
-  (:use #:cl #:clog #:clog-gui)
-  (:export clog-db-admin))
-
 (in-package :clog-tools)
+(export 'clog-db-admin)
 
 (defclass app-data ()
   ((body

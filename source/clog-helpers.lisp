@@ -13,6 +13,9 @@
 (defpackage #:clog-user
   (:use #:cl #:clog))
 
+(defpackage #:clog-tools
+  (:use #:cl #:clog #:clog-gui))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Implementation - CLOG Utilities
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
