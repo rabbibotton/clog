@@ -449,6 +449,8 @@
       (create-gui-menu-item help  :content "About"           :on-click #'on-help-about-builder)
       (create-gui-menu-full-screen menu))
     (on-show-control-pallete body)
+    (on-show-properties body)
+    (on-new-builder-window body)
     (set-on-before-unload (window body) (lambda(obj)
 					  (declare (ignore obj))
 					  ;; return empty string to prevent nav off page
