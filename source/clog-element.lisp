@@ -126,15 +126,14 @@ must be in DOM, ie placed or auto-placed."))
   (:documentation "Set css styles using a list of list of name value pairs."))
 
 (defmethod set-styles ((obj clog-element) style-list)
-  (jquery-execute obj (format nil "css({~{~A~}})"
-			      (mapcar
-			       (lambda (n)
-				 (if n
-				     (format nil "'~A':'~A',"
-					     (first n)
-					     (second n))
-				     ""))
-			       style-list))))
+  (jquery-execute obj (format nil "css({~{~A~^,~}})"
+			      (remove nil (mapcar
+					   (lambda (n)
+					     (when n
+					       (format nil "'~A':'~A'"
+						       (first n)
+						       (second n))))
+					   style-list)))))
 
 ;;;;;;;;;;;;;;;
 ;; attribute ;;
