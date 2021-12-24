@@ -256,12 +256,12 @@
 							  (setf (text control) (text obj))))))))
 	(when info
 	  (let (col)
-	    (dolist (prop (getf info :properties))
+	    (dolist (prop (reverse (getf info :properties)))
 	      (push `(,(getf prop :name) ,(funcall (getf prop :prop) control) t
 		      ,(lambda (obj)
 			 (funcall (find-symbol (format nil "SET-~A" (getf prop :prop)) :clog) control (text obj))))
 		    col))
-	    (setf props (append props col))))
+	    (alexandria:appendf props col)))
 	(dolist (item props)
 	  (let* ((tr (create-table-row table))
 		 (td1 (create-table-column tr :content (first item)))
