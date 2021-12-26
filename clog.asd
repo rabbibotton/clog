@@ -6,7 +6,7 @@
 
   :author "David Botton <david@botton.com>"
   :license  "BSD"
-  :version "0.9.0"
+  :version "1.0.0"
   :serial t
   :pathname "source/"
   :depends-on (#:clack #:websocket-driver #:alexandria #:hunchentoot #:cl-ppcre
