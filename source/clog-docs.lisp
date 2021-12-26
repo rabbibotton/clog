@@ -9,7 +9,52 @@
 (in-package :clog)
 
 ;;; Various defsections defined in clog.lisp that are specific to
-;;; documentation.
+;;; documentation and documentation helpers
+
+;;;;;;;;;;;;;;;;
+;; load-world ;;
+;;;;;;;;;;;;;;;;
+
+(defun load-world ()
+  (load "source/clog.lisp")
+  (load "source/clog-docs.lisp")
+  (load "source/clog-base.lisp")
+  (load "source/clog-element.lisp")
+  (load "source/clog-element-common.lisp")
+  (load "source/clog-canvas.lisp")
+  (load "source/clog-form.lisp")
+  (load "source/clog-window.lisp")
+  (load "source/clog-navigator.lisp")
+  (load "source/clog-document.lisp")
+  (load "source/clog-location.lisp")
+  (load "source/clog-system.lisp")
+  (load "source/clog-utilities.lisp")
+  (load "source/clog-body.lisp")
+  (load "source/clog-helpers.lisp"))
+
+;;;;;;;;;;;;;;;;;;;;
+;; make-mark-down ;;
+;;;;;;;;;;;;;;;;;;;;
+
+(defun make-mark-down ()
+  (load-world)
+  (describe clog:@CLOG-MANUAL))
+
+;;;;;;;;;;;;;;;
+;; make-html ;;
+;;;;;;;;;;;;;;;
+
+(defun make-html ()
+  (load-world)
+  (mgl-pax:update-asdf-system-html-docs clog:@CLOG-MANUAL :clog))
+
+;;;;;;;;;;;;;;;;
+;; make-world ;;
+;;;;;;;;;;;;;;;;
+
+(defun make-world ()
+  (make-html)
+  (asdf:compile-system :clog))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Exports - clog documentation sections

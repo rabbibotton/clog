@@ -261,7 +261,7 @@ embedded in a native template application.)"
   (z-index                    generic-function)
   (resizable-type             type)
   (resizable                  generic-function)
-  (position-type              type)
+  (positioning-type           type)
   (positioning                generic-function)
   (position-top               generic-function)
   (position-left              generic-function)
@@ -817,6 +817,7 @@ embedded in a native template application.)"
   (save-body-to-file function)
 
   "Functions for Compilation and Documentation"
+  ;; contained in clog-docs.lisp
   (load-world       function)
   (make-mark-down   function)
   (make-html        function)

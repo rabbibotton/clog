@@ -41,7 +41,7 @@
 ;; create-form ;;
 ;;;;;;;;;;;;;;;;;
 
-(deftype from-method-type () '(members :get :post :none))
+(deftype form-method-type () '(members :get :post :none))
 
 (defgeneric create-form (clog-obj
 			 &key action method target class html-id auto-place)

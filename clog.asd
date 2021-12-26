@@ -11,11 +11,9 @@
   :pathname "source/"
   :depends-on (#:clack #:websocket-driver #:alexandria #:hunchentoot #:cl-ppcre
 		       #:bordeaux-threads #:trivial-open-browser #:parse-float
-		       #:3BMD #:colorize
 		       #:sqlite #:lack-middleware-static #:mgl-pax #:quri)
   :components ((:file "clog-connection")
 	       (:file "clog")
-	       (:file "clog-docs")
 	       (:file "clog-utilities")
 	       (:file "clog-base")
 	       (:file "clog-element")
@@ -34,6 +32,11 @@
 	       (:file "clog-gui")
 	       (:file "clog-web")
 	       (:file "clog-helpers")))
+
+(asdf:defsystem #:clog/docs
+  :depends-on (#:clog #:3BMD #:colorize)
+  :pathname "source/"
+  :components ((:file "clog-docs")))
 
 (asdf:defsystem #:clog/tools
   :depends-on (#:clog)
