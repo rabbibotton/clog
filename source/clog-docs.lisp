@@ -16,20 +16,26 @@
 ;;;;;;;;;;;;;;;;
 
 (defun load-world ()
+  "Load source files for creating documentation"
   (load "source/clog.lisp")
-  (load "source/clog-docs.lisp")
+  (load "source/clog-utilities.lisp")
   (load "source/clog-base.lisp")
   (load "source/clog-element.lisp")
   (load "source/clog-element-common.lisp")
+  (load "source/clog-style.lisp")
   (load "source/clog-canvas.lisp")
   (load "source/clog-form.lisp")
+  (load "source/clog-multimedia.lisp")  
   (load "source/clog-window.lisp")
-  (load "source/clog-navigator.lisp")
   (load "source/clog-document.lisp")
   (load "source/clog-location.lisp")
-  (load "source/clog-system.lisp")
-  (load "source/clog-utilities.lisp")
+  (load "source/clog-navigator.lisp")
   (load "source/clog-body.lisp")
+  (load "source/clog-system.lisp")
+  (load "source/clog-panel.lisp")
+  (load "source/clog-gui.lisp")
+  (load "source/clog-web.lisp")    
+  (load "source/clog-docs.lisp")
   (load "source/clog-helpers.lisp"))
 
 ;;;;;;;;;;;;;;;;;;;;
@@ -37,6 +43,7 @@
 ;;;;;;;;;;;;;;;;;;;;
 
 (defun make-mark-down ()
+  "Create manual in Mark Down format"
   (load-world)
   (describe clog:@CLOG-MANUAL))
 
@@ -45,6 +52,7 @@
 ;;;;;;;;;;;;;;;
 
 (defun make-html ()
+  "Create manual in HTML"
   (load-world)
   (mgl-pax:update-asdf-system-html-docs clog:@CLOG-MANUAL :clog))
 

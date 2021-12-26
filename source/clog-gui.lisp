@@ -1257,6 +1257,7 @@ is placed in DOM at top of html body instead of bottom of html body."
     (set-on-click
      (attach-as-child obj (format nil "~A-close" html-id))
      (lambda (obj)
+       (declare (ignore obj))
        (destroy win)))
     (when time-out
       (sleep time-out)
