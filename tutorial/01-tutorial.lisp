@@ -2,7 +2,7 @@
   (:use #:cl #:clog)                  ; Use the Common Lisp language and CLOG
   (:export start-tutorial))           ; Export as public the start-tutorial function
 
-(in-package :clog-tut-1)              ; Tell the "reader" we are in the clog-user package
+(in-package :clog-tut-1)              ; Tell the "reader" we are in the clog-tut-1 package
 
 
 ;; Define our CLOG application
