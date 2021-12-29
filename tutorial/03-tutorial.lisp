@@ -1,8 +1,8 @@
-(defpackage #:clog-user
+(defpackage #:clog-tut-3
   (:use #:cl #:clog)
   (:export start-tutorial))
 
-(in-package :clog-user)
+(in-package :clog-tut-3)
 
 (defun on-new-window (body)
   "On-new-window handler."

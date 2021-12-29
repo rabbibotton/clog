@@ -15,14 +15,7 @@ To load "clog":
 Load the demo:
 
 ```
-CL-USER> (load "/Users/dbotton/common-lisp/clog/demos/01-demo.lisp")
-#P"/Users/dbotton/common-lisp/clog/demos/01-demo.lisp"
-```
-
-Start the demo:
-
-```
-CL-USER> (clog-user:start-demo)
+CL-USER> (clog:run-demo 1)
 Hunchentoot server is started.
 Listening on 0.0.0.0:8080.
 HTTP listening on : 0.0.0.0:8080

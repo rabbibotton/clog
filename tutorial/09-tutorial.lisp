@@ -1,8 +1,8 @@
-(defpackage #:clog-user
+(defpackage #:clog-tut-9
   (:use #:cl #:clog)
   (:export start-tutorial))
 
-(in-package :clog-user)
+(in-package :clog-tut-9)
 
 (defun on-new-window (body)
   (setf (title (html-document body)) "Tutorial 9")

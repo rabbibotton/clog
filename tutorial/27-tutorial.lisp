@@ -1,8 +1,10 @@
-(defpackage #:clog-user
+;; This tutorial demonstrates the panel box layout method
+
+(defpackage #:clog-tut-27
   (:use #:cl #:clog)
   (:export start-tutorial))
 
-(in-package :clog-user)
+(in-package :clog-tut-27)
 
 (defun on-new-window (body)
   (let* ((console (create-panel-box-layout body :left-width 200 :right-width 0))

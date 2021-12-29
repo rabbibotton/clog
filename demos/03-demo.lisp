@@ -1,11 +1,11 @@
 ;;; As this demo uses eval do not run over the internet.
 ;;; This app gives access to its users your local files.
 
-(defpackage #:clog-user
+(defpackage #:clog-demo-3
   (:use #:cl #:clog #:clog-gui)
   (:export start-demo))
 
-(in-package :clog-user)
+(in-package :clog-demo-3)
 
 (defclass app-data ()
   ((copy-buf

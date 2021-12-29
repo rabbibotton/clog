@@ -17,11 +17,11 @@
 ;;;
 ;;; See START-TUTORIAL below.
 
-(defpackage #:clog-user
+(defpackage #:clog-tut-12
   (:use #:cl #:clog)
   (:export start-tutorial))
 
-(in-package :clog-user)
+(in-package :clog-tut-12)
 
 (defun on-main (body)
   (let ((sb (create-style-block body)))

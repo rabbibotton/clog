@@ -47,11 +47,11 @@
   (js-execute obj (format nil "JSLists.applyToList('~A', 'ALL');"
 			  (html-id obj))))
   
-(defpackage #:clog-user
+(defpackage #:clog-tut-20
   (:use #:cl #:clog)
   (:export start-tutorial))
 
-(in-package :clog-user)
+(in-package :clog-tut-20)
 
 (defun on-new-window (body)
   (clog-toggler:init-toggler body)

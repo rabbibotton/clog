@@ -1,8 +1,8 @@
-(defpackage #:clog-user
+(defpackage #:clog-tut-14
   (:use #:cl #:clog)
   (:export start-tutorial))
 
-(in-package :clog-user)
+(in-package :clog-tut-14)
 
 ;;; HTML 5 local storage are the best way to stort client side data
 ;;; and in general are a far better than cookies.

@@ -16,11 +16,11 @@
 ;;;; |                                                       |
 ;;;; ---------------------------------------------------------
 
-(defpackage #:clog-user
+(defpackage #:clog-tut-25
   (:use #:cl #:clog #:clog-web)
   (:export start-tutorial))
 
-(in-package :clog-user)
+(in-package :clog-tut-25)
 
 (defun on-new-window (body)
   (clog-web-initialize body)

@@ -1,8 +1,8 @@
-(defpackage #:clog-user
+(defpackage #:clog-tut-15
   (:use #:cl #:clog)
   (:export start-tutorial))
 
-(in-package :clog-user)
+(in-package :clog-tut-15)
 
 ;;; Brief demonstration of multimedia
 (defun on-new-window (body)

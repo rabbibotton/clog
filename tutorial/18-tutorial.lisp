@@ -1,8 +1,8 @@
-(defpackage #:clog-user
+(defpackage #:clog-tut-18
   (:use #:cl #:clog)
   (:export start-tutorial))
 
-(in-package :clog-user)
+(in-package :clog-tut-18)
 
 ;; Demonstrate drag and drop
 (defun on-new-window (body)

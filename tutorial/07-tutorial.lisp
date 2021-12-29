@@ -1,8 +1,8 @@
-(defpackage #:clog-user
+(defpackage #:clog-tut-7
   (:use #:cl #:clog)
   (:export start-tutorial))
 
-(in-package :clog-user)
+(in-package :clog-tut-7)
 
 (defun on-click (obj)
   (setf (text obj) "DEAD")

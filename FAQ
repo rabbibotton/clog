@@ -15,8 +15,8 @@ Q) I want to take an HTML snapshot of a clog created page:
 
 (format t "=> ~A" (outer-html (document-element (html-document body))))
 
-or (save-body-to-file)
+or see CLOG:SAVE-BODY-TO-FILE
 
 Q) I want to know where the :CLOG tutorials, demos and sources.
 
-Use (clog-install-dir)
+Use (clog:clog-install-dir)

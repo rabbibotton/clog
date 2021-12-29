@@ -8,11 +8,11 @@
 ;;;; completely flexible in how you choose to use it.
 
 
-(defpackage #:clog-user
+(defpackage #:clog-tut-26
   (:use #:cl #:clog #:clog-web)
   (:export start-tutorial))
 
-(in-package :clog-user)
+(in-package :clog-tut-26)
 
 (defun on-new-window (body)
   (clog-web-initialize body)

@@ -1,8 +1,8 @@
-(defpackage #:clog-user
+(defpackage #:clog-tut-19
   (:use #:cl #:clog)
   (:export start-tutorial))
 
-(in-package :clog-user)
+(in-package :clog-tut-19)
 
 ;;; In this tutorial we will see how to easily use a JavaScript
 ;;; component. In the static-files directory there is a simple

@@ -1,8 +1,8 @@
-(defpackage #:clog-user
+(defpackage #:clog-tut-4
   (:use #:cl #:clog)
   (:export start-tutorial))
 
-(in-package :clog-user)
+(in-package :clog-tut-4)
 
 (defun my-on-click (obj)             ; obj in any event is the target of the event
   (setf (color obj) (rgb 0 255 0)))  ; this makes it possible to reuse event handlers

@@ -1,8 +1,8 @@
-(defpackage #:clog-user
+(defpackage #:clog-tut-5
   (:use #:cl #:clog)
   (:export start-tutorial))
 
-(in-package :clog-user)
+(in-package :clog-tut-5)
 
 (defun my-on-click (obj)
   ;; Using connection-data-item it is possible to pass data that

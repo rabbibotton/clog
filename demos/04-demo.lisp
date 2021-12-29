@@ -1,10 +1,10 @@
 ;;;; Demo 4 - CMS Website
 
-(defpackage #:clog-user
+(defpackage #:clog-demo-4
   (:use #:cl #:clog #:clog-web)
   (:export start-demo))
 
-(in-package :clog-user)
+(in-package :clog-demo-4)
 
 ;; Site Configuration
 (defparameter side-panel-size 200 "Size of menu")

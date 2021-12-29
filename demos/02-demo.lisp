@@ -1,8 +1,8 @@
-(defpackage #:clog-user
+(defpackage #:clog-demo-2
   (:use #:cl #:clog)
   (:export start-demo))
 
-(in-package :clog-user)
+(in-package :clog-demo-2)
 
 (defvar *global-list-box-hash* (make-hash-table :test 'equalp)
   "Username to update function")

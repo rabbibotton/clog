@@ -1,8 +1,8 @@
-(defpackage #:clog-user
+(defpackage #:clog-tut-6
   (:use #:cl #:clog)
   (:export start-tutorial))
 
-(in-package :clog-user)
+(in-package :clog-tut-6)
 
 (defun my-on-click (obj)
   (print "Event thread started")                    ; Every click will add a thread

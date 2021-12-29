@@ -1,8 +1,8 @@
-(defpackage #:clog-user
+(defpackage #:clog-tut-17
   (:use #:cl #:clog)
   (:export start-tutorial))
 
-(in-package :clog-user)
+(in-package :clog-tut-17)
 
 ;;; In this tutorial we will use a CSS only alternative to bootstrap -
 ;;;   https://www.w3schools.com/w3css/default.asp

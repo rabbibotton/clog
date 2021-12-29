@@ -1,8 +1,8 @@
-(defpackage #:clog-user
+(defpackage #:clog-tut-13
   (:use #:cl #:clog)
   (:export start-tutorial))
 
-(in-package :clog-user)
+(in-package :clog-tut-13)
 
 (defun start-tutorial ()
   "Start tutorial."

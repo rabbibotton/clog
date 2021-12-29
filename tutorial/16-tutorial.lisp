@@ -1,8 +1,8 @@
-(defpackage #:clog-user
+(defpackage #:clog-tut-16
   (:use #:cl #:clog)
   (:export start-tutorial))
 
-(in-package :clog-user)
+(in-package :clog-tut-16)
 
 ;;; In previous tutorials we attached to an html file using bootstrap. For this tutorial we
 ;;; are going to create a bootstrap 4.0 page just using CLOG.

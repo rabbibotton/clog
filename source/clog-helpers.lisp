@@ -47,7 +47,9 @@
 (defun run-tutorial (num)
   "Run tutorial NUM"
   (load-tutorial num)
-  (funcall (symbol-function (find-symbol "START-TUTORIAL" "CLOG-USER"))))
+  (funcall (symbol-function (find-symbol
+			     "START-TUTORIAL"
+			     (format nil "CLOG-TUT-~A" num)))))
 
 ;;;;;;;;;;;;;;;;;;;
 ;; load-tutorial ;;
@@ -67,7 +69,9 @@
 (defun run-demo (num)
   "Run demo NUM"
   (load-demo num)
-  (funcall (symbol-function (find-symbol "START-DEMO" "CLOG-USER"))))
+  (funcall (symbol-function (find-symbol
+			     "START-DEMO"
+			     (format nil "CLOG-DEMO-~A" num)))))
 
 ;;;;;;;;;;;;;;;
 ;; load-demo ;;

@@ -29,11 +29,11 @@
 ;;;  We go in the browser to the file
 ;;;          "http://127.0.0.1:8080/tutorial/tut-11.html"
 
-(defpackage #:clog-user
+(defpackage #:clog-tut-11
   (:use #:cl #:clog)
   (:export start-tutorial))
 
-(in-package :clog-user)
+(in-package :clog-tut-11)
 
 (defun on-new-window (body)
   ;; This will turn on debug output in the browser console.

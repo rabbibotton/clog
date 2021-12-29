@@ -1,8 +1,8 @@
-(defpackage #:clog-user
+(defpackage #:clog-tut-22
   (:use #:cl #:clog #:clog-gui) ; For this tutorial we include clog-gui
   (:export start-tutorial))
 
-(in-package :clog-user)
+(in-package :clog-tut-22)
 
 ;;; Demostrate a virtual desktop using CLOG GUI
 (defun on-file-count (obj)

@@ -1,8 +1,8 @@
-(defpackage #:clog-user
+(defpackage #:clog-demo-1
   (:use #:cl #:clog)
   (:export start-demo))
 
-(in-package :clog-user)
+(in-package :clog-demo-1)
 
 ;; Game Display
 (defconstant display-width 375)

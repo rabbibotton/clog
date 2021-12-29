@@ -42,11 +42,11 @@ on the drop-root."))
 			(setf (hiddenp (drop-root new-obj)) t))))
     new-obj))
 
-(defpackage #:clog-user
+(defpackage #:clog-tut-21
   (:use #:cl #:clog)
   (:export start-tutorial))
 
-(in-package :clog-user)
+(in-package :clog-tut-21)
 
 (defun on-new-window (body)
   (let* ((drop-list  (clog-drop-list:create-drop-list body :content "Top of tree"))
