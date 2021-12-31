@@ -1,7 +1,7 @@
 (in-package :clog-tools)
 (export 'clog-builder)
 
-(defvar supported-controls
+(defparameter supported-controls
   (list
    '(:name          "select"
      :description   "Selection Tool"
@@ -241,13 +241,13 @@
 		     ("name"    ,(attribute control "data-lisp-name") t
 				,(lambda (obj)
 				   (setf  (attribute control "data-lisp-name") (text obj))))
-		     ("top"    ,(top parent) t ,(lambda (obj)
+		     ("top"     ,(top parent) t ,(lambda (obj)
 						  (setf (top parent) (text obj))))
-		     ("left"   ,(left parent) t ,(lambda (obj)
+		     ("left"    ,(left parent) t ,(lambda (obj)
 						   (setf (left parent) (text obj))))
 		     ("width"   ,(width parent) t ,(lambda (obj)
 						     (setf (width parent) (text obj))))
-		     ("height"   ,(height parent) t ,(lambda (obj)
+		     ("height"  ,(height parent) t ,(lambda (obj)
 						       (setf (height parent) (text obj))))
 		     ,(if (typep control 'clog:clog-form-element)
 			  `("value"  ,(value control) t ,(lambda (obj)
@@ -327,12 +327,13 @@
 			     (let* ((cw     (on-show-layout-code obj))
 				    (result (format nil
 						    "~
-(clog:set-on-new-window (lambda (body)~%
-                          (let* ((form_~A \"~A\")~%
-                                 (panel (clog:create-div body :content form_~A))~{~A~})~%
-                            ))
+(in-package :clog-user)~%
+(set-on-new-window (lambda (body)~%
+                     (let* ((form_~A \"~A\")~%
+                            (panel (clog:create-div body :content form_~A))~{~A~})~%
+                       ))
    :path \"/form_~A\")~%~
-(clog:open-browser :url \"http://127.0.0.1:8080/form_~A\")~%"
+(open-browser :url \"http://127.0.0.1:8080/form_~A\")~%"
 						    (html-id cw)
 						    (escape-string
 						     (ppcre:regex-replace-all "\\x22"
@@ -342,7 +343,7 @@
 						    (mapcar (lambda (e)
 							      (let ((vname (attribute e "data-lisp-name")))
 								(when vname
-								  (format nil "~%                                 (~A (clog:attach-as-child body \"~A\" :clog-type '~A))"
+								  (format nil "~%                            (~A (attach-as-child body \"~A\" :clog-type '~A))"
 									  vname (html-id e) (format nil "CLOG:~A" (type-of e))))))
 							    (control-list app))
 						    (html-id cw)
