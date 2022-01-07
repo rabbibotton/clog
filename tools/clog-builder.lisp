@@ -47,6 +47,10 @@
     :accessor copy-buf
     :initform ""
     :documentation "Copy buffer")
+   (current-placer
+    :accessor current-placer
+    :initform nil
+    :documentation "Current selected placer")
    (current-control
     :accessor current-control
     :initform nil
@@ -143,42 +147,6 @@
 	     (result      (capture-eval form-string)))
 	(alert-dialog obj result :title "Eval Result")))))
 
-(defun on-show-code (obj)
-  (let* ((win         (create-gui-window obj :title  "Code"
-					     :height 400
-					     :width  650))
-	 (box         (create-panel-box-layout (window-content win)
-					       :left-width 0 :right-width 9
-					       :top-height 30 :bottom-height 0))
-	 (center      (center-panel box))
-	 (center-id   (html-id center))
-	 ;;top panel
-	 (event-drop  (create-select (top-panel box)
-			 :label (create-label (top-panel box)
-					      :content " Event: "))))
-    (setf (width event-drop) (unit :px 200))
-    (add-select-options event-drop '("on-focus" "on-blur"))
-    (set-on-window-size win (lambda (obj)
-			      (js-execute obj
-					  (format nil "editor_~A.resize()" (html-id win)))))
-    (set-on-window-size-done win (lambda (obj)
-				   (js-execute obj
-					       (format nil "editor_~A.resize()" (html-id win)))))
-    (create-child win
-		  (format nil
-			  "<script>
-                            var editor_~A = ace.edit('~A');
-                            editor_~A.setTheme('ace/theme/xcode');
-                            editor_~A.session.setMode('ace/mode/lisp');
-                            editor_~A.session.setTabSize(3);
-                            editor_~A.focus();
-                           </script>"
-			(html-id win) center-id
-			(html-id win)
-			(html-id win)
-			(html-id win)
-			(html-id win)))))
-
 (defun on-show-layout-code (obj)
   (let* ((win         (create-gui-window obj :title  "Layout Code"
 					     :height 400
@@ -232,10 +200,12 @@
   (let* ((app     (connection-data-item obj "builder-app-data"))
 	 (win     (control-properties app))
 	 (control (current-control app))
+	 (placer  (current-placer app))
 	 (table   (properties-list app))
 	 (parent  (when control (parent-element control))))
+    (when win
+      (setf (inner-html table) ""))
     (when (and win control)
-      (setf (inner-html table) "")
       (let ((info  (control-info (attribute control "data-clog-type")))
 	    (props `(("id"      ,(html-id control) nil)
 		     ("name"    ,(attribute control "data-lisp-name") t
@@ -269,7 +239,21 @@
 	    (set-border td1 "1px" :dotted :black)
 	    (when (third item)
 	      (setf (editablep td2) t)
-	      (set-on-blur td2 (fourth item)))))))))
+	      (set-on-blur td2
+			   (lambda (obj)
+			     (funcall (fourth item) obj)
+			     (when control
+			       (if (> (client-width control) 0)
+				   (set-geometry placer :units ""
+							:top (top parent)
+							:left (left parent)
+							:width (client-width control)
+							:height (client-height control))
+				   (set-geometry placer :units ""
+							:top (top parent)
+							:left (left parent)
+							:width (width control)
+							:height (height control)))))))))))))
 
 (defun on-show-properties (obj)
   (let ((app (connection-data-item obj "builder-app-data")))
@@ -306,6 +290,17 @@
 	  (dolist (control supported-controls)
 	    (add-select-option control-list (getf control :name) (getf control :description)))))))
 
+(defparameter *builder-template1* "\(in-package :clog-user)~%~
+\(set-on-new-window \(lambda \(body)~%
+                      \(let* \(\(form_~A \"~A\")~%
+                            \(panel (create-div body :content form_~A))~{~A~})~%
+                       ))~%~
+   :path \"/form_~A\")~%~
+\(open-browser :url \"http://127.0.0.1:8080/form_~A\")~%")
+
+(defparameter *builder-template2*
+  "~%                            (~A (attach-as-child body \"~A\" :clog-type '~A))")
+
 (defun on-new-builder-window (obj)
   (let* ((app (connection-data-item obj "builder-app-data"))
 	 (win (create-gui-window obj :title "New Panel"))
@@ -326,13 +321,7 @@
     (set-on-click btn-save (lambda (obj)
 			     (let* ((cw     (on-show-layout-code obj))
 				    (result (format nil
-						    "~
-(clog:set-on-new-window (lambda (body)~%
-                          (let* ((form_~A \"~A\")~%
-                                 (panel (clog:create-div body :content form_~A))~{~A~})~%
-                            ))
-   :path \"/form_~A\")~%~
-(clog:open-browser :url \"http://127.0.0.1:8080/form_~A\")~%"
+						    *builder-template1*
 						    (html-id cw)
 						    (escape-string
 						     (ppcre:regex-replace-all "\\x22"
@@ -342,8 +331,10 @@
 						    (mapcar (lambda (e)
 							      (let ((vname (attribute e "data-lisp-name")))
 								(when vname
-								  (format nil "~%                                 (~A (clog:attach-as-child body \"~A\" :clog-type '~A))"
-									  vname (html-id e) (format nil "CLOG:~A" (type-of e))))))
+								  (format nil *builder-template2*
+									  vname
+									  (html-id e)
+									  (format nil "CLOG:~A" (type-of e))))))
 							    (control-list app))
 						    (html-id cw)
 						    (html-id cw))))
@@ -355,51 +346,78 @@
     (set-on-window-close win
 			 (lambda (obj)
 			   (setf (current-control app) nil)))
-    (set-on-mouse-up content
-		     (lambda (obj data)
-		       (let* ((control     (selected-tool app))
-			      (create-type (getf control :create-type))
-			      (handle      (create-div obj))
-			      (element     (cond ((eq create-type :label)
-						  (funcall (getf control :create) handle
-							   :content (getf control :create-content)))
-						 ((eq create-type :form)
-						  (funcall (getf control :create) handle
-							   (getf control :create-param)
-							   :value (getf control :create-value)))
-						 (t nil))))
-			 (when element
-			   (setf (current-control app) element)
-			   (push element (control-list app))
-			   (setf (attribute element "data-lisp-name")
-				 (format nil "control-~A" (html-id element)))
-			   (setf (attribute element "data-clog-type") (getf control :name))
-			   (setf (box-sizing element) :content-box)
-			   (setf (box-sizing handle) :content-box)
-			   (set-padding handle "0px" "16px" "0px" "0px")
-			   (set-on-mouse-up element (lambda (obj data)
-						      (setf (current-control app) element)
-						      (on-populate-control-properties win)))
-			   (set-on-focus-in element (lambda (obj)
-			   			      (declare (ignore obj))
-			   			      (setf (current-control app) element)
-			   			      (let ((x (position-left handle))
-			   				    (y (position-top handle)))
-			   				(set-geometry handle :left (- x 12) :top (- y 12))
-			   				(set-border handle "12px" :solid :blue))))
-			   (set-on-focus-out element (lambda (obj)
-			   			       (declare (ignore obj))
-			   			       (let ((x (position-left handle))
-			   				     (y (position-top handle)))
-			   				 (set-border handle "initial" "" "")
-			   				 (set-geometry handle :left (+ x 12) :top (+ y 12)))))
-			   (setf (selected-tool app) nil)
-			   (clog::jquery-execute handle "draggable().resizable()")
-			   (set-geometry element :units "%" :width 100 :height 100)
-			   (setf (positioning handle) :absolute)
-			   (set-geometry handle
-					 :left (getf data :x)
-					 :top (getf data :y))))))))
+    (set-on-mouse-down content
+		       (lambda (obj data)
+			 (let* ((control     (selected-tool app))
+				(create-type (getf control :create-type))
+				(handle      (create-div obj))
+				(element     (cond ((eq create-type :label)
+						    (funcall (getf control :create) handle
+							     :content (getf control :create-content)))
+						   ((eq create-type :form)
+						    (funcall (getf control :create) handle
+							     (getf control :create-param)
+							     :value (getf control :create-value)))
+						   (t nil)))
+				(placer      (when element
+					       (create-div obj))))
+			   (when element
+			     (setf (current-control app) element)
+			     (push element (control-list app))
+			     (setf (attribute element "data-lisp-name")
+				   (format nil "control-~A" (html-id element)))
+			     (setf (attribute element "data-clog-type") (getf control :name))
+			     (setf (box-sizing element) :content-box)
+			     (setf (box-sizing handle) :content-box)
+			     (setf (box-sizing placer) :content-box)
+			     (set-on-mouse-down placer (lambda (obj data)
+							 (when (current-placer app)
+							   (set-border (current-placer app) (unit "px" 0) :none :blue))
+							 (setf (current-control app) element)
+							 (setf (current-placer app) placer)
+							 (set-border placer (unit "px" 2) :solid :blue)
+							 (on-populate-control-properties win)))
+			     (setf (selected-tool app) nil)
+			     (set-geometry element :units "%" :width 100 :height 100)
+			     (setf (positioning handle) :absolute)
+			     (set-geometry handle
+					   :left (getf data :x)
+					   :top (getf data :y))
+			     (setf (positioning placer) :absolute)
+			     (when (current-placer app)
+			       (set-border (current-placer app) (unit "px" 0) :none :blue))
+			     (set-border placer (unit "px" 2) :solid :blue)
+			     (setf (current-placer app) placer)
+			     (clog::jquery-execute placer "draggable().resizable()")
+			     (set-geometry placer
+					   :left (getf data :x)
+					   :top (getf data :y))
+			     (if (> (client-width element) 0)
+				 (set-geometry placer :units ""
+						      :width (client-width element)
+						      :height (client-height element))
+				 (set-geometry placer :units ""
+						      :width (width element)
+						      :height (height element)))
+			     (setf (current-control app) element)
+			     (on-populate-control-properties win)
+			     (clog::set-on-event placer "resizestop"
+						 (lambda (obj)
+						   (set-geometry handle :units ""
+									:width (width placer)
+									:height (height placer))
+						   (if (> (client-width element) 0)
+						       (set-geometry placer :units ""
+									    :width (client-width element)
+									    :height (client-height element))
+						       (set-geometry placer :units ""
+									    :width (width element)
+									    :height (height element)))))
+			     (clog::set-on-event placer "dragstop"
+						 (lambda (obj)
+						   (set-geometry handle :units ""
+									:top (top placer)
+									:left (left placer))))))))))
 
 (defun on-help-about-builder (obj)
   (let ((about (create-gui-window obj
@@ -437,7 +455,6 @@
       (create-gui-menu-item file  :content "New Panel"      :on-click 'on-new-builder-window)
       (create-gui-menu-item tools :content "Control Pallete" :on-click 'on-show-control-pallete)
       (create-gui-menu-item tools :content "Properties"      :on-click 'on-show-properties)
-;;      (create-gui-menu-item tools :content "Code"            :on-click 'on-show-code)
       (create-gui-menu-item edit  :content "Undo"            :on-click #'do-ide-edit-undo)
       (create-gui-menu-item edit  :content "Redo"            :on-click #'do-ide-edit-redo)
       (create-gui-menu-item edit  :content "Copy"            :on-click #'do-ide-edit-copy)
