@@ -1,7 +1,7 @@
 (in-package :clog-tools)
 (export 'clog-builder)
 
-(defvar supported-controls
+(defparameter supported-controls
   (list
    '(:name          "select"
      :description   "Selection Tool"
@@ -211,13 +211,13 @@
 		     ("name"    ,(attribute control "data-lisp-name") t
 				,(lambda (obj)
 				   (setf  (attribute control "data-lisp-name") (text obj))))
-		     ("top"    ,(top parent) t ,(lambda (obj)
+		     ("top"     ,(top parent) t ,(lambda (obj)
 						  (setf (top parent) (text obj))))
-		     ("left"   ,(left parent) t ,(lambda (obj)
+		     ("left"    ,(left parent) t ,(lambda (obj)
 						   (setf (left parent) (text obj))))
 		     ("width"   ,(width parent) t ,(lambda (obj)
 						     (setf (width parent) (text obj))))
-		     ("height"   ,(height parent) t ,(lambda (obj)
+		     ("height"  ,(height parent) t ,(lambda (obj)
 						       (setf (height parent) (text obj))))
 		     ,(if (typep control 'clog:clog-form-element)
 			  `("value"  ,(value control) t ,(lambda (obj)
