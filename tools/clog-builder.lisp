@@ -201,8 +201,7 @@
 	 (win     (control-properties app))
 	 (control (current-control app))
 	 (placer  (current-placer app))
-	 (table   (properties-list app))
-	 (parent  (when control (parent-element control))))
+	 (table   (properties-list app)))
     (when win
       (setf (inner-html table) ""))
     (when (and win control)
@@ -211,14 +210,14 @@
 		     ("name"    ,(attribute control "data-lisp-name") t
 				,(lambda (obj)
 				   (setf  (attribute control "data-lisp-name") (text obj))))
-		     ("top"     ,(top parent) t ,(lambda (obj)
-						  (setf (top parent) (text obj))))
-		     ("left"    ,(left parent) t ,(lambda (obj)
-						   (setf (left parent) (text obj))))
-		     ("width"   ,(width parent) t ,(lambda (obj)
-						     (setf (width parent) (text obj))))
-		     ("height"  ,(height parent) t ,(lambda (obj)
-						       (setf (height parent) (text obj))))
+		     ("top"     ,(top control) t ,(lambda (obj)
+						  (setf (top control) (text obj))))
+		     ("left"    ,(left control) t ,(lambda (obj)
+						   (setf (left control) (text obj))))
+		     ("width"   ,(width control) t ,(lambda (obj)
+						     (setf (width control) (text obj))))
+		     ("height"  ,(height control) t ,(lambda (obj)
+						       (setf (height control) (text obj))))
 		     ,(if (typep control 'clog:clog-form-element)
 			  `("value"  ,(value control) t ,(lambda (obj)
 							   (setf (value control) (text obj))))
@@ -243,17 +242,11 @@
 			   (lambda (obj)
 			     (funcall (fourth item) obj)
 			     (when control
-			       (if (> (client-width control) 0)
-				   (set-geometry placer :units ""
-							:top (top parent)
-							:left (left parent)
-							:width (client-width control)
-							:height (client-height control))
-				   (set-geometry placer :units ""
-							:top (top parent)
-							:left (left parent)
-							:width (width control)
-							:height (height control)))))))))))))
+			       (set-geometry placer :units ""
+						    :top (top control)
+						    :left (left control)
+						    :width (client-width control)
+						    :height (client-height control))))))))))))
 
 (defun on-show-properties (obj)
   (let ((app (connection-data-item obj "builder-app-data")))
@@ -316,7 +309,8 @@
 	  (format nil "form-~A" (html-id content)))
     (set-on-click btn-del (lambda (obj)
 			    (when (current-control app)
-			      (destroy (parent-element (current-control app)))
+			      (destroy (current-placer app))
+			      (destroy (current-control app))
 			      (setf (current-control app) nil))))
     (set-on-click btn-save (lambda (obj)
 			     (let* ((cw     (on-show-layout-code obj))
@@ -350,12 +344,11 @@
 		       (lambda (obj data)
 			 (let* ((control     (selected-tool app))
 				(create-type (getf control :create-type))
-				(handle      (create-div obj))
 				(element     (cond ((eq create-type :label)
-						    (funcall (getf control :create) handle
+						    (funcall (getf control :create) content
 							     :content (getf control :create-content)))
 						   ((eq create-type :form)
-						    (funcall (getf control :create) handle
+						    (funcall (getf control :create) content
 							     (getf control :create-param)
 							     :value (getf control :create-value)))
 						   (t nil)))
@@ -368,7 +361,6 @@
 				   (format nil "control-~A" (html-id element)))
 			     (setf (attribute element "data-clog-type") (getf control :name))
 			     (setf (box-sizing element) :content-box)
-			     (setf (box-sizing handle) :content-box)
 			     (setf (box-sizing placer) :content-box)
 			     (set-on-mouse-down placer (lambda (obj data)
 							 (when (current-placer app)
@@ -378,9 +370,8 @@
 							 (set-border placer (unit "px" 2) :solid :blue)
 							 (on-populate-control-properties win)))
 			     (setf (selected-tool app) nil)
-			     (set-geometry element :units "%" :width 100 :height 100)
-			     (setf (positioning handle) :absolute)
-			     (set-geometry handle
+			     (setf (positioning element) :absolute)
+			     (set-geometry element
 					   :left (getf data :x)
 					   :top (getf data :y))
 			     (setf (positioning placer) :absolute)
@@ -399,25 +390,20 @@
 				 (set-geometry placer :units ""
 						      :width (width element)
 						      :height (height element)))
-			     (setf (current-control app) element)
 			     (on-populate-control-properties win)
 			     (clog::set-on-event placer "resizestop"
 						 (lambda (obj)
-						   (set-geometry handle :units ""
-									:width (width placer)
-									:height (height placer))
-						   (if (> (client-width element) 0)
+						   (set-geometry element :units ""
+									 :width (width placer)
+									 :height (height placer))
 						       (set-geometry placer :units ""
 									    :width (client-width element)
-									    :height (client-height element))
-						       (set-geometry placer :units ""
-									    :width (width element)
-									    :height (height element)))))
+									    :height (client-height element))))
 			     (clog::set-on-event placer "dragstop"
 						 (lambda (obj)
-						   (set-geometry handle :units ""
-									:top (top placer)
-									:left (left placer))))))))))
+						   (set-geometry element :units ""
+									 :top (top placer)
+									 :left (left placer))))))))))
 
 (defun on-help-about-builder (obj)
   (let ((about (create-gui-window obj
