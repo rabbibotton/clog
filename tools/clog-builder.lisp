@@ -396,14 +396,16 @@
 						   (set-geometry element :units ""
 									 :width (width placer)
 									 :height (height placer))
-						       (set-geometry placer :units ""
-									    :width (client-width element)
-									    :height (client-height element))))
+						   (set-geometry placer :units ""
+									:width (client-width element)
+									:height (client-height element))
+						   (on-populate-control-properties win)))
 			     (clog::set-on-event placer "dragstop"
 						 (lambda (obj)
 						   (set-geometry element :units ""
 									 :top (top placer)
-									 :left (left placer))))))))))
+									 :left (left placer))
+						   (on-populate-control-properties win)))))))))
 
 (defun on-help-about-builder (obj)
   (let ((about (create-gui-window obj
