@@ -311,7 +311,9 @@
 			    (when (current-control app)
 			      (destroy (current-placer app))
 			      (destroy (current-control app))
-			      (setf (current-control app) nil))))
+			      (setf (current-control app) nil)
+			      (setf (current-placer app) nil)
+			      (on-populate-control-properties win))))
     (set-on-click btn-save (lambda (obj)
 			     (let* ((cw     (on-show-layout-code obj))
 				    (result (format nil
@@ -339,7 +341,9 @@
 						       (html-id cw))))))
     (set-on-window-close win
 			 (lambda (obj)
-			   (setf (current-control app) nil)))
+			   (setf (current-control app) nil)
+			   (setf (current-placer app) nil)
+			   (on-populate-control-properties win)))
     (set-on-mouse-down content
 		       (lambda (obj data)
 			 (let* ((control     (selected-tool app))
@@ -354,6 +358,12 @@
 						   (t nil)))
 				(placer      (when element
 					       (create-div obj))))
+			   (unless element
+			     (when (current-placer app)
+			       (set-border (current-placer app) (unit "px" 0) :none :blue))
+			     (setf (current-control app) nil)
+			     (setf (current-placer app) nil)
+			     (on-populate-control-properties win))
 			   (when element
 			     (setf (current-control app) element)
 			     (push element (control-list app))
@@ -368,7 +378,8 @@
 							 (setf (current-control app) element)
 							 (setf (current-placer app) placer)
 							 (set-border placer (unit "px" 2) :solid :blue)
-							 (on-populate-control-properties win)))
+							 (on-populate-control-properties win))
+						:cancel-event t)
 			     (setf (selected-tool app) nil)
 			     (setf (positioning element) :absolute)
 			     (set-geometry element
