@@ -59,14 +59,6 @@
     :accessor control-properties
     :initform nil
     :documentation "Current control properties window")
-   (control-list
-    :accessor control-list
-    :initform nil
-    :documentation "List of controls to bind to lisp symbols")
-   (placer-list
-    :accessor placer-list
-    :initform nil
-    :documentation "List of placers to hide before renders and restore after")
    (properties-list
     :accessor properties-list
     :initform nil
@@ -161,9 +153,9 @@
 	 (file-name   ".")
 	 (center      (center-panel box))
 	 (center-id   (html-id center))
-	 (tool-bar (top-panel box))
-	 (btn-save (create-button tool-bar :content "Save"))
-	 (btn-eval (create-button tool-bar :content "Run")))
+	 (tool-bar    (top-panel box))
+	 (btn-save    (create-button tool-bar :content "Save"))
+	 (btn-eval    (create-button tool-bar :content "Run")))
     (setf (background-color tool-bar) :silver)
     (set-on-click btn-eval (lambda (obj)
 			     (do-eval obj)))
@@ -265,8 +257,7 @@
 	  (setf (properties-list app) control-list)
 	  (set-on-window-close win (lambda (obj) (setf (control-properties app) nil)))
 	  (setf (positioning control-list) :absolute)
-	  (set-geometry control-list :left 0 :top 0 :bottom 0 :right 0)
-	  (on-populate-control-properties obj)))))
+	  (set-geometry control-list :left 0 :top 0 :bottom 0 :right 0)))))
 
 (defun on-show-control-pallete (obj)
   (let ((app (connection-data-item obj "builder-app-data")))
@@ -307,7 +298,9 @@
 	 (tool-bar (top-panel box))
 	 (btn-del  (create-button tool-bar :content "Delete"))
 	 (btn-save (create-button tool-bar :content "Render"))
-	 (content  (center-panel box)))
+	 (content  (center-panel box))
+	 control-list
+	 placer-list)
     (setf (background-color tool-bar) :silver)
     (setf (attribute content "data-lisp-name")
 	  (format nil "form-~A" (html-id content)))
@@ -319,7 +312,7 @@
 			      (setf (current-placer app) nil)
 			      (on-populate-control-properties win))))
     (set-on-click btn-save (lambda (obj)
-			     (dolist (placer (placer-list app))
+			     (dolist (placer placer-list)
 			       (setf (hiddenp placer) t))
 			     (let* ((cw     (on-show-layout-code obj))
 				    (result (format nil
@@ -337,7 +330,7 @@
 									  vname
 									  (html-id e)
 									  (format nil "CLOG:~A" (type-of e))))))
-							    (control-list app))
+							    control-list)
 						    (html-id cw)
 						    (html-id cw))))
 			       (js-execute obj (format nil
@@ -345,7 +338,7 @@
 						       (html-id cw)
 						       (escape-string result)
 						       (html-id cw))))
-			     (dolist (placer (placer-list app))
+			     (dolist (placer placer-list)
 			       (setf (hiddenp placer) nil))))
     (set-on-window-close win
 			 (lambda (obj)
@@ -374,8 +367,8 @@
 			     (on-populate-control-properties win))
 			   (when element
 			     (setf (current-control app) element)
-			     (push element (control-list app))
-			     (push placer (placer-list app))
+			     (push element control-list)
+			     (push placer placer-list)
 			     (setf (attribute element "data-lisp-name")
 				   (format nil "control-~A" (html-id element)))
 			     (setf (attribute element "data-clog-type") (getf control :name))
