@@ -244,11 +244,13 @@
 						    :width (client-width control)
 						    :height (client-height control))))))))))))
 
-(defun on-show-properties (obj)
+(defun on-show-control-properties (obj)
   (let ((app (connection-data-item obj "builder-app-data")))
     (if (control-properties app)
 	(window-focus (control-properties app))
-	(let* ((win          (create-gui-window obj :title "Properties"
+	(let* ((win          (create-gui-window obj :title "Control Properties"
+						    :left 220
+						    :top 250
 						    :height 300 :width 400
 						    :has-pinner t))
 	       (content      (window-content win))
@@ -263,7 +265,10 @@
   (let ((app (connection-data-item obj "builder-app-data")))
     (if (control-pallete app)
 	(window-focus (control-pallete app))
-	(let* ((win          (create-gui-window obj :title "Controls" :height 300 :width 200 :has-pinner t))
+	(let* ((win          (create-gui-window obj :title "Controls"
+						    :top 40
+						    :left 0
+						    :height 300 :width 200 :has-pinner t))
 	       (content      (window-content win))
 	       (control-list (create-select content)))
 	  (setf (control-pallete app) win)
@@ -280,8 +285,8 @@
 
 (defparameter *builder-template1* "\(in-package :clog-user)~%~
 \(set-on-new-window \(lambda \(body)~%
-                      \(let* \(\(form_~A \"~A\")~%
-                            \(panel (create-div body :content form_~A))~{~A~})~%
+                      \(let* \(\(~A \"~A\")~%
+                            \(panel (create-div body :content ~A))~{~A~})~%
                        ))~%~
    :path \"/form_~A\")~%~
 \(open-browser :url \"http://127.0.0.1:8080/form_~A\")~%")
@@ -291,7 +296,7 @@
 
 (defun on-new-builder-window (obj)
   (let* ((app (connection-data-item obj "builder-app-data"))
-	 (win (create-gui-window obj :title "New Panel"))
+	 (win (create-gui-window obj :top 40 :left 220 :width 400))
 	 (box (create-panel-box-layout (window-content win)
 				       :left-width 0 :right-width 9
 				       :top-height 30 :bottom-height 0))
@@ -299,13 +304,15 @@
 	 (btn-del  (create-button tool-bar :content "Delete"))
 	 (btn-sim  (create-button tool-bar :content "Simulate"))
 	 (btn-save (create-button tool-bar :content "Render"))
+	 (btn-prop (create-button tool-bar :content "Properties"))
 	 (content  (center-panel box))
 	 (in-simulation nil)
+	 (panel-name (format nil "panel-~A" (clog-connection:generate-id)))
 	 control-list
 	 placer-list)
     (setf (background-color tool-bar) :silver)
-    (setf (attribute content "data-lisp-name")
-	  (format nil "form-~A" (html-id content)))
+    (setf (attribute content "data-lisp-name") panel-name)
+    (setf (window-title win) panel-name)
     (set-on-click btn-del (lambda (obj)
 			    (declare (ignore obj))
 			    (when (current-control app)
@@ -337,12 +344,12 @@
 			     (let* ((cw     (on-show-layout-code obj))
 				    (result (format nil
 						    *builder-template1*
-						    (html-id cw)
+						    panel-name
 						    (escape-string
 						     (ppcre:regex-replace-all "\\x22"
 									      (inner-html content)
 									      "\\\\\\\""))
-						    (html-id cw)
+						    panel-name
 						    (mapcar (lambda (e)
 							      (let ((vname (attribute e "data-lisp-name")))
 								(when vname
@@ -360,6 +367,16 @@
 						       (html-id cw))))
 			     (dolist (placer placer-list)
 			       (setf (hiddenp placer) nil))))
+    (set-on-click btn-prop
+		  (lambda (obj)
+		    (input-dialog obj
+				  "Panel Name"
+				  (lambda (result)
+				    (when result
+				      (setf panel-name result)
+				      (setf (attribute content "data-lisp-name") panel-name)
+				      (setf (window-title win) panel-name)))
+				  :title "Panel Properties")))
     (set-on-window-close win
 			 (lambda (obj)
 			   (declare (ignore obj))
@@ -478,21 +495,21 @@
 	   (win   (create-gui-menu-drop-down menu :content "Window"))
 	   (help  (create-gui-menu-drop-down menu :content "Help")))
       (declare (ignore icon))
-      (create-gui-menu-item file  :content "New Panel"      :on-click 'on-new-builder-window)
-      (create-gui-menu-item tools :content "Control Pallete" :on-click 'on-show-control-pallete)
-      (create-gui-menu-item tools :content "Properties"      :on-click 'on-show-properties)
-      (create-gui-menu-item edit  :content "Undo"            :on-click #'do-ide-edit-undo)
-      (create-gui-menu-item edit  :content "Redo"            :on-click #'do-ide-edit-redo)
-      (create-gui-menu-item edit  :content "Copy"            :on-click #'do-ide-edit-copy)
-      (create-gui-menu-item edit  :content "Cut"             :on-click #'do-ide-edit-cut)
-      (create-gui-menu-item edit  :content "Paste"           :on-click #'do-ide-edit-paste)
-      (create-gui-menu-item win   :content "Maximize All"    :on-click #'maximize-all-windows)
-      (create-gui-menu-item win   :content "Normalize All"   :on-click #'normalize-all-windows)
+      (create-gui-menu-item file  :content "New Panel"          :on-click 'on-new-builder-window)
+      (create-gui-menu-item tools :content "Control Pallete"    :on-click 'on-show-control-pallete)
+      (create-gui-menu-item tools :content "Control Properties" :on-click 'on-show-control-properties)
+      (create-gui-menu-item edit  :content "Undo"               :on-click #'do-ide-edit-undo)
+      (create-gui-menu-item edit  :content "Redo"               :on-click #'do-ide-edit-redo)
+      (create-gui-menu-item edit  :content "Copy"               :on-click #'do-ide-edit-copy)
+      (create-gui-menu-item edit  :content "Cut"                :on-click #'do-ide-edit-cut)
+      (create-gui-menu-item edit  :content "Paste"              :on-click #'do-ide-edit-paste)
+      (create-gui-menu-item win   :content "Maximize All"       :on-click #'maximize-all-windows)
+      (create-gui-menu-item win   :content "Normalize All"      :on-click #'normalize-all-windows)
       (create-gui-menu-window-select win)
-      (create-gui-menu-item help  :content "About"           :on-click #'on-help-about-builder)
+      (create-gui-menu-item help  :content "About"              :on-click #'on-help-about-builder)
       (create-gui-menu-full-screen menu))
     (on-show-control-pallete body)
-    (on-show-properties body)
+    (on-show-control-properties body)
     (on-new-builder-window body)
     (set-on-before-unload (window body) (lambda(obj)
 					  (declare (ignore obj))
