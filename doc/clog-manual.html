@@ -86,11 +86,15 @@ frameworks and website frameworks. The <code>CLOG</code> package starts up the
 connectivity to the browser or other websocket client (often a browser
 embedded in a native template application.)</p>
 
-<p>STATUS: <code>CLOG</code> is complete enough for most uses. See below for some
-enhacements being worked on, <code>CLOG</code> is actually based on GNOGA, a
+<p>STATUS: <code>CLOG</code> is complete and all work is on higher order additions, 
+such as full desktop over the web, database tools,etc. See below for
+some enhacements being worked on. <code>CLOG</code> is actually based on GNOGA, a
 framework I wrote for Ada in 2013 and used in commercial production
-code for the last 8 years, i.e. the techiniques <code>CLOG</code> uses are solid
+code for the last 8+ years, i.e. the techiniques <code>CLOG</code> uses are solid
 and proven.</p>
+
+<p><code>CLOG</code> is being actively extended daily. Check the github discussion
+boards for the latest.</p>
 
 <p>Some potential applications for <code>CLOG</code>:</p>
 
@@ -110,21 +114,28 @@ or Browser control compiled to native code. <code>CLOG</code> uses websockets
 for communications and the browser to render a GUI that maintains
 an active soft realtime connection. For most <code>CLOG</code> applications all
 programming logic, events and decisions are done on the server
-which can be local or remote over the web.</p>
+which can be local, or remote over the web.</p>
 
-<p><code>CLOG</code> is developed on an M1 MacBook with ECL, it is tested fairly
-regulary with SCBL on Linux, Windows and Intel MacBook. It should
-in theory work on any system Quicklisp and <code>CLACK</code> will load on to.</p>
+<p><code>CLOG</code> is developed on an M1 MacBook with ECL and SBCL,
+it is tested fairly regulary with SBCL on Linux, Windows and
+Intel MacBook. It should in theory work on any system with
+Quicklisp and <code>CLACK</code>.</p>
 
-<p><code>CLOG</code> will be in Quicklisp in the next update, but because I am still 
-adding code daily, it is currently preferable to clone the github repo
-into your ~/common-lisp directory:</p>
+<p><code>CLOG</code> is in Quicklisp (ql:quickload :clog), but you may want to live on the bleeding edge
+and use Ultralisp or clone the github repo into your
+~/common-lisp directory (or other quicklisp/asdf findable
+directory):</p>
 
 <pre><code><span class="code">cd ~/common-lisp
 git clone https://github.com/rabbibotton/clog.git</span></code></pre>
 
 <p>To load this package and work through tutorials (assuming you
-have Quicklisp configured):</p>
+have Quicklisp configured.)</p>
+
+<p>Note: If using portacle for Windows you will need to
+update Quicklisp use (ql:update-dist &quot;quicklisp&quot;)
+You will also likely need to copy the sqlite3 dll from
+https://www.sqlite.org/download.html to portaclewinlib</p>
 
 <ol>
 <li><p>Start emacs then M-x slime</p></li>
@@ -134,17 +145,40 @@ have Quicklisp configured):</p>
 <pre><code><span class="code">CL-USER&gt; <span class="paren1">(<span class="code">ql:quickload <span class="keyword">:clog</span></span>)</span>
 CL-USER&gt; <span class="paren1">(<span class="code">clog:run-tutorial 1</span>)</span></span></code></pre>
 
-<p>To see where the source files are:</p>
+<p>Tip for Windows WSL linux user. Create a symbolic link from wslview to xdg-open
+in /usr/local/bin so that run-tutorial uses the windows browser.</p>
+
+<p>To see where the source, tutorial and demo files are:</p>
 
 <pre><code><span class="code">CL-USER&gt; <span class="paren1">(<span class="code">clog:clog-install-dir</span>)</span></span></code></pre>
 
-<p>You can the load the demos with:</p>
+<p>You can the run the demos with:</p>
 
-<pre><code><span class="code">CL-USER&gt; <span class="paren1">(<span class="code">load <span class="string">"path to clog/demos/01-snake.lisp"</span></span>)</span>
-CL-USER&gt; <span class="paren1">(<span class="code">clog-user:start-demo</span>)</span></span></code></pre>
+<pre><code><span class="code">CL-USER&gt; <span class="paren1">(<span class="code">ql:quickload <span class="keyword">:clog</span></span>)</span>
+CL-USER&gt; <span class="paren1">(<span class="code">clog:run-demo 1</span>)</span></span></code></pre>
 
-<p>To open a browser with the <code>CLOG</code> manual (it is located
-at clog/doc/clog-manual.html):</p>
+<p>The clog-db-admin tool can be run with:</p>
+
+<pre><code><span class="code">CL-USER&gt; <span class="paren1">(<span class="code">ql:quickload <span class="keyword">:clog/tools</span></span>)</span>
+CL-USER&gt; <span class="paren1">(<span class="code">clog-tools:clog-db-admin</span>)</span></span></code></pre>
+
+<p>The clog-builder GUI Builder tool can be run with:</p>
+
+<pre><code><span class="code">CL-USER&gt; <span class="paren1">(<span class="code">ql:quickload <span class="keyword">:clog/tools</span></span>)</span>
+CL-USER&gt; <span class="paren1">(<span class="code">clog-tools:clog-builder</span>)</span></span></code></pre>
+
+<p>You can also open a &quot;clog-repl&quot; window in your browser to play
+from the common-lisp repl:</p>
+
+<pre><code><span class="code">CL-USER&gt; <span class="paren1">(<span class="code">in-package clog-user</span>)</span>
+CLOG-USER&gt; <span class="paren1">(<span class="code">clog-repl</span>)</span>
+CLOG-USER&gt; <span class="paren1">(<span class="code">setf <span class="paren2">(<span class="code">background-color <span class="special">*body*</span></span>)</span> <span class="string">"beige"</span></span>)</span>
+CLOG-USER&gt; <span class="paren1">(<span class="code">create-div <span class="special">*body*</span> <span class="keyword">:content</span> <span class="string">"Hello World!"</span></span>)</span></span></code></pre>
+
+<p>The clog-repl <a href="#x-28CLOG-3AURL-20GENERIC-FUNCTION-29" title="(CLOG:URL GENERIC-FUNCTION)"><code>URL</code></a> is http://127.0.0.1/repl <em>body</em> will always refer to the
+last access of that <a href="#x-28CLOG-3AURL-20GENERIC-FUNCTION-29" title="(CLOG:URL GENERIC-FUNCTION)"><code>URL</code></a>.</p>
+
+<p>To open a browser with the <code>CLOG</code> manual:</p>
 
 <pre><code><span class="code">CL-USER&gt; <span class="paren1">(<span class="code">clog:open-manual</span>)</span></span></code></pre>
 

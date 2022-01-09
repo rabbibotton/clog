@@ -82,11 +82,15 @@ frameworks and website frameworks. The CLOG package starts up the
 connectivity to the browser or other websocket client (often a browser
 embedded in a native template application.)
 
-STATUS: CLOG is complete enough for most uses. See below for some
-enhacements being worked on, CLOG is actually based on GNOGA, a
+STATUS: CLOG is complete and all work is on higher order additions, 
+such as full desktop over the web, database tools,etc. See below for
+some enhacements being worked on. CLOG is actually based on GNOGA, a
 framework I wrote for Ada in 2013 and used in commercial production
-code for the last 8 years, i.e. the techiniques CLOG uses are solid
+code for the last 8+ years, i.e. the techiniques CLOG uses are solid
 and proven.
+
+CLOG is being actively extended daily. Check the github discussion
+boards for the latest.
 
 Some potential applications for CLOG:
 
@@ -104,15 +108,17 @@ or Browser control compiled to native code. CLOG uses websockets
 for communications and the browser to render a GUI that maintains
 an active soft realtime connection. For most CLOG applications all
 programming logic, events and decisions are done on the server
-which can be local or remote over the web.
+which can be local, or remote over the web.
 
-CLOG is developed on an M1 MacBook with ECL, it is tested fairly
-regulary with SCBL on Linux, Windows and Intel MacBook. It should
-in theory work on any system Quicklisp and CLACK will load on to.
+CLOG is developed on an M1 MacBook with ECL and SBCL,
+it is tested fairly regulary with SBCL on Linux, Windows and
+Intel MacBook. It should in theory work on any system with
+Quicklisp and CLACK.
 
-CLOG will be in Quicklisp in the next update, but because I am still 
-adding code daily, it is currently preferable to clone the github repo
-into your ~/common-lisp directory:
+CLOG is in Quicklisp (ql:quickload :clog), but you may want to live on the bleeding edge
+and use Ultralisp or clone the github repo into your
+~/common-lisp directory (or other quicklisp/asdf findable
+directory):
 
 ```
 cd ~/common-lisp
@@ -120,7 +126,12 @@ git clone https://github.com/rabbibotton/clog.git
 ```
 
 To load this package and work through tutorials (assuming you
-have Quicklisp configured):
+have Quicklisp configured.)
+
+Note: If using portacle for Windows you will need to
+update Quicklisp use (ql:update-dist \"quicklisp\")
+You will also likely need to copy the sqlite3 dll from
+https://www.sqlite.org/download.html to portacle\win\lib
 
 1. Start emacs then M-x slime
 2. In the REPL, run:
@@ -130,21 +141,50 @@ CL-USER> (ql:quickload :clog)
 CL-USER> (clog:run-tutorial 1)
 ```
 
-To see where the source files are:
+Tip for Windows WSL linux user. Create a symbolic link from wslview to xdg-open
+in /usr/local/bin so that run-tutorial uses the windows browser.
+
+To see where the source, tutorial and demo files are:
 
 ```
 CL-USER> (clog:clog-install-dir)
 ```
 
-You can the load the demos with:
+You can the run the demos with:
 
 ```
-CL-USER> (load \"path to clog/demos/01-snake.lisp\")
-CL-USER> (clog-user:start-demo)
+CL-USER> (ql:quickload :clog)
+CL-USER> (clog:run-demo 1)
 ```
 
-To open a browser with the CLOG manual (it is located
-at clog/doc/clog-manual.html):
+The clog-db-admin tool can be run with:
+
+```
+CL-USER> (ql:quickload :clog/tools)
+CL-USER> (clog-tools:clog-db-admin)
+```
+
+The clog-builder GUI Builder tool can be run with:
+
+```
+CL-USER> (ql:quickload :clog/tools)
+CL-USER> (clog-tools:clog-builder)
+```
+
+You can also open a \"clog-repl\" window in your browser to play
+from the common-lisp repl:
+
+```
+CL-USER> (in-package clog-user)
+CLOG-USER> (clog-repl)
+CLOG-USER> (setf (background-color *body*) \"beige\")
+CLOG-USER> (create-div *body* :content \"Hello World!\")
+```
+
+The clog-repl URL is http://127.0.0.1/repl *body* will always refer to the
+last access of that URL.
+
+To open a browser with the CLOG manual:
 
 ```
 CL-USER> (clog:open-manual)
