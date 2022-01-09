@@ -249,7 +249,7 @@
     (if (control-properties app)
 	(window-focus (control-properties app))
 	(let* ((win          (create-gui-window obj :title "Properties"
-						    :height 300 :width 200
+						    :height 300 :width 400
 						    :has-pinner t))
 	       (content      (window-content win))
 	       (control-list (create-table content)))
@@ -297,20 +297,40 @@
 				       :top-height 30 :bottom-height 0))
 	 (tool-bar (top-panel box))
 	 (btn-del  (create-button tool-bar :content "Delete"))
+	 (btn-sim  (create-button tool-bar :content "Simulate"))
 	 (btn-save (create-button tool-bar :content "Render"))
 	 (content  (center-panel box))
+	 (in-simulation nil)
 	 control-list
 	 placer-list)
     (setf (background-color tool-bar) :silver)
     (setf (attribute content "data-lisp-name")
 	  (format nil "form-~A" (html-id content)))
     (set-on-click btn-del (lambda (obj)
+			    (declare (ignore obj))
 			    (when (current-control app)
 			      (destroy (current-placer app))
 			      (destroy (current-control app))
 			      (setf (current-control app) nil)
 			      (setf (current-placer app) nil)
 			      (on-populate-control-properties win))))
+    (set-on-click btn-sim (lambda (obj)
+			    (declare (ignore obj))
+			    (cond (in-simulation
+				   (setf (text btn-sim) "Simulate")
+				   (setf in-simulation nil)
+				   (dolist (placer placer-list)
+				     (setf (hiddenp placer) nil)))
+				  (t
+				   (setf (text btn-sim) "Develop")
+				   (when (current-control app)
+				     (set-border (current-placer app) (unit "px" 0) :none :blue)
+				     (setf (current-control app) nil)
+				     (setf (current-placer app) nil)
+				     (on-populate-control-properties win))
+				   (setf in-simulation t)
+				   (dolist (placer placer-list)
+				     (setf (hiddenp placer) t))))))
     (set-on-click btn-save (lambda (obj)
 			     (dolist (placer placer-list)
 			       (setf (hiddenp placer) t))
@@ -342,83 +362,88 @@
 			       (setf (hiddenp placer) nil))))
     (set-on-window-close win
 			 (lambda (obj)
+			   (declare (ignore obj))
 			   (setf (current-control app) nil)
 			   (setf (current-placer app) nil)
 			   (on-populate-control-properties win)))
     (set-on-mouse-down content
 		       (lambda (obj data)
-			 (let* ((control     (selected-tool app))
-				(create-type (getf control :create-type))
-				(element     (cond ((eq create-type :label)
-						    (funcall (getf control :create) content
-							     :content (getf control :create-content)))
-						   ((eq create-type :form)
-						    (funcall (getf control :create) content
-							     (getf control :create-param)
-							     :value (getf control :create-value)))
-						   (t nil)))
-				(placer      (when element
-					       (create-div obj))))
-			   (unless element
-			     (when (current-placer app)
-			       (set-border (current-placer app) (unit "px" 0) :none :blue))
-			     (setf (current-control app) nil)
-			     (setf (current-placer app) nil)
-			     (on-populate-control-properties win))
-			   (when element
-			     (setf (current-control app) element)
-			     (push element control-list)
-			     (push placer placer-list)
-			     (setf (attribute element "data-lisp-name")
-				   (format nil "control-~A" (html-id element)))
-			     (setf (attribute element "data-clog-type") (getf control :name))
-			     (setf (box-sizing element) :content-box)
-			     (setf (box-sizing placer) :content-box)
-			     (set-on-mouse-down placer (lambda (obj data)
-							 (when (current-placer app)
-							   (set-border (current-placer app) (unit "px" 0) :none :blue))
-							 (setf (current-control app) element)
-							 (setf (current-placer app) placer)
-							 (set-border placer (unit "px" 2) :solid :blue)
-							 (on-populate-control-properties win))
-						:cancel-event t)
-			     (setf (selected-tool app) nil)
-			     (setf (positioning element) :absolute)
-			     (set-geometry element
-					   :left (getf data :x)
-					   :top (getf data :y))
-			     (setf (positioning placer) :absolute)
-			     (when (current-placer app)
-			       (set-border (current-placer app) (unit "px" 0) :none :blue))
-			     (set-border placer (unit "px" 2) :solid :blue)
-			     (setf (current-placer app) placer)
-			     (clog::jquery-execute placer "draggable().resizable()")
-			     (set-geometry placer
-					   :left (getf data :x)
-					   :top (getf data :y))
-			     (if (> (client-width element) 0)
-				 (set-geometry placer :units ""
-						      :width (client-width element)
-						      :height (client-height element))
-				 (set-geometry placer :units ""
-						      :width (width element)
-						      :height (height element)))
-			     (on-populate-control-properties win)
-			     (clog::set-on-event placer "resizestop"
-						 (lambda (obj)
-						   (set-geometry element :units ""
-									 :width (width placer)
-									 :height (height placer))
-						   (set-geometry placer :units ""
-									:width (client-width element)
-									:height (client-height element))
-						   (on-populate-control-properties win)))
-			     (clog::set-on-event placer "dragstop"
-						 (lambda (obj)
-						   (set-geometry element :units ""
-									 :top (top placer)
-									 :left (left placer))
-						   (on-populate-control-properties win)))))))))
+			 (unless in-simulation
+			   (let* ((control     (selected-tool app))
+				  (create-type (getf control :create-type))
+				  (element     (cond ((eq create-type :label)
+						      (funcall (getf control :create) content
+							       :content (getf control :create-content)))
+						     ((eq create-type :form)
+						      (funcall (getf control :create) content
+							       (getf control :create-param)
+							       :value (getf control :create-value)))
+						     (t nil)))
+				  (placer      (when element
+						 (create-div obj))))
+			     (unless element
+			       (when (current-placer app)
+				 (set-border (current-placer app) (unit "px" 0) :none :blue))
+			       (setf (current-control app) nil)
+			       (setf (current-placer app) nil)
+			       (on-populate-control-properties win))
+			     (when element
+			       (setf (current-control app) element)
+			       (push element control-list)
+			       (push placer placer-list)
+			       (setf (attribute element "data-lisp-name")
+				     (format nil "control-~A" (html-id element)))
+			       (setf (attribute element "data-clog-type") (getf control :name))
+			       (setf (box-sizing element) :content-box)
+			       (setf (box-sizing placer) :content-box)
+			       (set-on-mouse-down placer (lambda (obj data)
+							   (declare (ignore obj) (ignore data))
+							   (when (current-placer app)
+							     (set-border (current-placer app) (unit "px" 0) :none :blue))
+							   (setf (current-control app) element)
+							   (setf (current-placer app) placer)
+							   (set-border placer (unit "px" 2) :solid :blue)
+							   (on-populate-control-properties win))
+						  :cancel-event t)
+			       (setf (selected-tool app) nil)
+			       (setf (positioning element) :absolute)
+			       (set-geometry element
+					     :left (getf data :x)
+					     :top (getf data :y))
+			       (setf (positioning placer) :absolute)
+			       (when (current-placer app)
+				 (set-border (current-placer app) (unit "px" 0) :none :blue))
+			       (set-border placer (unit "px" 2) :solid :blue)
+			       (setf (current-placer app) placer)
+			       (clog::jquery-execute placer "draggable().resizable()")
+			       (set-geometry placer
+					     :left (getf data :x)
+					     :top (getf data :y))
+			       (if (> (client-width element) 0)
+				   (set-geometry placer :units ""
+							:width (client-width element)
+							:height (client-height element))
+				   (set-geometry placer :units ""
+							:width (width element)
+							:height (height element)))
+			       (on-populate-control-properties win)
+			       (clog::set-on-event placer "resizestop"
+						   (lambda (obj)
+						     (declare (ignore obj))
+						     (set-geometry element :units ""
+									   :width (width placer)
+									   :height (height placer))
+						     (set-geometry placer :units ""
+									  :width (client-width element)
+									  :height (client-height element))
+						     (on-populate-control-properties win)))
+			       (clog::set-on-event placer "dragstop"
+						   (lambda (obj)
+						     (declare (ignore obj))
+						     (set-geometry element :units ""
+									   :top (top placer)
+									   :left (left placer))
+						     (on-populate-control-properties win))))))))))
 
 (defun on-help-about-builder (obj)
   (let ((about (create-gui-window obj
