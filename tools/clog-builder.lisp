@@ -376,6 +376,7 @@
 				      (setf panel-name result)
 				      (setf (attribute content "data-lisp-name") panel-name)
 				      (setf (window-title win) panel-name)))
+				  :default-value panel-name
 				  :title "Panel Properties")))
     (set-on-window-close win
 			 (lambda (obj)

@@ -1228,6 +1228,10 @@ interactions. Use window-end-modal to undo."))
 ;; Implementation - Dialog Boxes
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+;;;;;;;;;;;;;;;;;
+;; alert-toast ;;
+;;;;;;;;;;;;;;;;;
+
 (defun alert-toast (obj title content &key
 					(color-class "w3-red")
 					(time-out nil)
@@ -1262,6 +1266,10 @@ is placed in DOM at top of html body instead of bottom of html body."
     (when time-out
       (sleep time-out)
       (destroy win))))
+
+;;;;;;;;;;;;;;;;;;
+;; alert-dialog ;;
+;;;;;;;;;;;;;;;;;;
 
 (defun alert-dialog (obj content &key (modal t)
 				   (title "About")
@@ -1308,8 +1316,14 @@ is placed in DOM at top of html body instead of bottom of html body."
 			       (when modal
 				 (window-end-modal win))))))
 
+;;;;;;;;;;;;;;;;;;
+;; input-dialog ;;
+;;;;;;;;;;;;;;;;;;
+
 (defun input-dialog (obj content on-input &key (modal t)
 					    (title "Input")
+					    (size 20)
+					    (default-value "")
 					    (left nil) (top nil)
 					    (width 300) (height 200)
 					    (client-movement nil)
@@ -1325,13 +1339,15 @@ Calls on-input with input box contents or nil if canceled."
 "<div class='w3-panel'>
 <center>~A<br><br>
 <form class='w3-container' onSubmit='return false;'>
-<input type='text' id='~A-input' size='20'><br><br>
+<input type='text' id='~A-input' size='~A' value='~A'><br><br>
 <button class='w3-button w3-black' style='width:7em' id='~A-ok'>OK</button>
 <button class='w3-button w3-black' style='width:7em' id='~A-cancel'>Cancel</button>
 </form>
 </center>
 </div>" content
         html-id  ; input
+	size
+	(escape-string default-value)
 	html-id  ; ok
 	html-id) ; cancel
 				  :top             top
@@ -1372,6 +1388,10 @@ Calls on-input with input box contents or nil if canceled."
 			       (when modal
 				 (window-end-modal win))
 			       (funcall on-input nil)))))
+
+;;;;;;;;;;;;;;;;;;;;
+;; confirm-dialog ;;
+;;;;;;;;;;;;;;;;;;;;
 
 (defun confirm-dialog (obj content on-input &key (modal t)
 					      (title "Confirm")
@@ -1435,6 +1455,10 @@ Calls on-input with t if confirmed or nil if canceled."
 			       (when modal
 				 (window-end-modal win))
 			       (funcall on-input nil)))))
+
+;;;;;;;;;;;;;;;;;
+;; form-dialog ;;
+;;;;;;;;;;;;;;;;;
 
 (defun form-dialog (obj content fields on-input &key (modal t)
 						  (title "Form")
@@ -1616,6 +1640,10 @@ if confirmed or nil if canceled."
 			       (when modal
 				 (window-end-modal win))
 			       (funcall on-input nil)))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;
+;; server-file-dialog ;;
+;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defun server-file-dialog (obj title initial-dir on-file-name
 			   &key (modal t)
