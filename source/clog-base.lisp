@@ -307,7 +307,7 @@ result or if time out DEFAULT-ANSWER (Private)"))
 
 (defparameter drop-event-script
   "+ (e.clientX - e.currentTarget.getBoundingClientRect().left + e.currentTarget.scrollLeft) + ':' + 
-     (e.clientY - e.currentTarget.getBoundingClientRect().top + e.currentTarget.scrollTop + ':' +
+     (e.clientY - e.currentTarget.getBoundingClientRect().top + e.currentTarget.scrollTop) + ':' +
      encodeURIComponent(e.originalEvent.dataTransfer.getData('~A'))"
   "JavaScript to collect drop event data from browser.")
 
