@@ -316,6 +316,8 @@
     (set-on-click btn-del (lambda (obj)
 			    (declare (ignore obj))
 			    (when (current-control app)
+			      (alexandria:removef control-list (current-control app))
+			      (alexandria:removef placer-list (current-placer app))
 			      (destroy (current-placer app))
 			      (destroy (current-control app))
 			      (setf (current-control app) nil)
@@ -339,38 +341,34 @@
 				   (dolist (placer placer-list)
 				     (setf (hiddenp placer) t))))))
     (set-on-click btn-save (lambda (obj)
-			     (let ((cache (inner-html content)))
-			       (dolist (placer placer-list)
-				 (clog::jquery-execute placer "draggable('destroy').resizable('destroy').remove()")
-				 (setf (hiddenp placer) t))
-			       (let* ((cw     (on-show-layout-code obj))
-				      (result (format nil
-						      *builder-template1*
-						      panel-name
-						      (escape-string
-						       (ppcre:regex-replace-all "\\x22"
-										(inner-html content)
-										"\\\\\\\""))
-						      panel-name
-						      (mapcar (lambda (e)
-								(let ((vname (attribute e "data-lisp-name")))
-								  (when vname
-								    (format nil *builder-template2*
-									    vname
-									    (html-id e)
-									    (format nil "CLOG:~A" (type-of e))))))
-							      control-list)
-						      (html-id cw)
-						      (html-id cw))))
-				 (js-execute obj (format nil
-							 "editor_~A.setValue('~A');editor_~A.moveCursorTo(0,0);"
-							 (html-id cw)
-							 (escape-string result)
-							 (html-id cw))))
-			       (setf (inner-html content) cache)
-			       (dolist (placer placer-list)
-				 (setf (hiddenp placer) nil)
-				 (clog::jquery-execute placer "draggable().resizable()")))))
+			     (dolist (placer placer-list)
+			       (place-inside-bottom-of (bottom-panel box) placer))
+			     (let* ((cw     (on-show-layout-code obj))
+				    (result (format nil
+						    *builder-template1*
+						    panel-name
+						    (escape-string
+						     (ppcre:regex-replace-all "\\x22"
+									      (inner-html content)
+									      "\\\\\\\""))
+						    panel-name
+						    (mapcar (lambda (e)
+							      (let ((vname (attribute e "data-lisp-name")))
+								(when vname
+								  (format nil *builder-template2*
+									  vname
+									  (html-id e)
+									  (format nil "CLOG:~A" (type-of e))))))
+							    control-list)
+						    (html-id cw)
+						    (html-id cw))))
+			       (js-execute obj (format nil
+						       "editor_~A.setValue('~A');editor_~A.moveCursorTo(0,0);"
+						       (html-id cw)
+						       (escape-string result)
+						       (html-id cw))))
+			     (dolist (placer placer-list)
+			       (place-inside-bottom-of content placer))))
     (set-on-click btn-prop
 		  (lambda (obj)
 		    (input-dialog obj
