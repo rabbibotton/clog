@@ -445,8 +445,10 @@
 							 (html-id cw)
 							 (escape-string result)
 							 (html-id cw))))
-			       (dolist (placer placer-list)
-				 (place-inside-bottom-of content placer))))
+			       (dolist (control control-list)
+				 (let* ((id (html-id control))
+					(placer (attach-as-child control (format nil "p-~A" id))))
+				   (place-after control placer)))))
       (set-on-click btn-prop
 		    (lambda (obj)
 		      (input-dialog obj
