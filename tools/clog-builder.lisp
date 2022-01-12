@@ -291,7 +291,10 @@
   (let ((app (connection-data-item obj "builder-app-data")))
     (if (control-list-win app)
 	(window-focus (control-list-win app))
-	(let* ((win (create-gui-window obj :title "Control List")))
+	(let* ((win (create-gui-window obj :title "Control List"
+					   :top 350
+					   :left 0
+					   :width 200)))
 	  (setf (control-list-win app) win)
 	  (set-on-window-close win (lambda (obj) (setf (control-list-win app) nil)))))))
 
@@ -326,197 +329,204 @@
 	 (file-name  ".")
 	 control-list
 	 placer-list)
-    (setf (background-color tool-bar) :silver)
-    (setf (attribute content "data-lisp-name") panel-name)
-    (setf (window-title win) panel-name)
-    (set-on-click btn-del (lambda (obj)
-			    (declare (ignore obj))
-			    (when (current-control app)
-			      (alexandria:removef control-list (current-control app))
-			      (alexandria:removef placer-list (current-placer app))
-			      (destroy (current-placer app))
-			      (destroy (current-control app))
-			      (setf (current-control app) nil)
-			      (setf (current-placer app) nil)
-			      (on-populate-control-properties win))))
-    (set-on-click btn-sim (lambda (obj)
-			    (declare (ignore obj))
-			    (cond (in-simulation
-				   (setf (text btn-sim) "Simulate")
-				   (setf in-simulation nil)
-				   (dolist (placer placer-list)
-				     (setf (hiddenp placer) nil)))
-				  (t
-				   (setf (text btn-sim) "Develop")
-				   (when (current-control app)
-				     (set-border (current-placer app) (unit "px" 0) :none :blue)
-				     (setf (current-control app) nil)
-				     (setf (current-placer app) nil)
-				     (on-populate-control-properties win))
-				   (setf in-simulation t)
-				   (dolist (placer placer-list)
-				     (setf (hiddenp placer) t))
-				   (focus (first-child content))))))
-    (set-on-click btn-save (lambda (obj)
-			     (server-file-dialog obj "Save Panel As.." file-name
-						 (lambda (fname)
-						   (window-focus win)
-						   (when fname
-						     (setf file-name fname)
+    (labels ((populate-control-list-win ()
+	       (when (control-list-win app)
+		 (let* ((c (control-list-win app))
+			(w (window-content c))
+			(p (first-child content))
+			dln)
+		   (setf (inner-html w) "")
+		   (loop
+		     (when (equal (html-id p) "undefined") (return))
+		     (setf dln (attribute p "data-lisp-name"))
+		     (unless (equal dln "undefined")
+		       (let ((n (create-div w :content dln)))
+			 (setf (color n) :blue)
+			 (setf (draggablep n) t)
+			 (setf (attribute n "data-clog-control") (html-id p))
+			 (set-on-drag-over n (lambda (obj)(declare (ignore obj))()))
+			 (set-on-drop n (lambda (obj data)
+					  (declare (ignore obj))
+					  (let ((id (attribute n "data-clog-control")))
+					    (place-before
+					     (attach-as-child n id)
+					     (attach-as-child n
+							      (getf data :drag-data)))
+					    (populate-control-list-win))))
+			 (set-on-drag-start n (lambda (obj)
+						(declare (ignore obj))())
+					    :drag-data (html-id p))))
+		     (setf p (next-sibling p)))))))
+      (setf (background-color tool-bar) :silver)
+      (setf (attribute content "data-lisp-name") panel-name)
+      (setf (window-title win) panel-name)
+      (set-on-click btn-del (lambda (obj)
+			      (declare (ignore obj))
+			      (when (current-control app)
+				(alexandria:removef control-list (current-control app))
+				(alexandria:removef placer-list (current-placer app))
+				(destroy (current-placer app))
+				(destroy (current-control app))
+				(setf (current-control app) nil)
+				(setf (current-placer app) nil)
+				(on-populate-control-properties win)
+				(populate-control-list-win))))
+      (set-on-click btn-sim (lambda (obj)
+			      (declare (ignore obj))
+			      (cond (in-simulation
+				     (setf (text btn-sim) "Simulate")
+				     (setf in-simulation nil)
+				     (dolist (placer placer-list)
+				       (setf (hiddenp placer) nil)))
+				    (t
+				     (setf (text btn-sim) "Develop")
+				     (when (current-control app)
+				       (set-border (current-placer app) (unit "px" 0) :none :blue)
+				       (setf (current-control app) nil)
+				       (setf (current-placer app) nil)
+				       (on-populate-control-properties win))
+				     (setf in-simulation t)
+				     (dolist (placer placer-list)
+				       (setf (hiddenp placer) t))
+				     (focus (first-child content))))))
+      (set-on-click btn-save (lambda (obj)
+			       (server-file-dialog obj "Save Panel As.." file-name
+						   (lambda (fname)
+						     (window-focus win)
+						     (when fname
+						       (setf file-name fname)
+						       (dolist (placer placer-list)
+							 (place-inside-bottom-of (bottom-panel box) placer))
+						       (write-file (inner-html content) fname))
 						     (dolist (placer placer-list)
-						       (place-inside-bottom-of (bottom-panel box) placer))
-						     (write-file (inner-html content) fname))
-						   (dolist (placer placer-list)
-						     (place-inside-bottom-of content placer)))
-						 :initial-filename file-name)))
-    (set-on-click btn-rndr (lambda (obj)
-			     (dolist (placer placer-list)
-			       (place-inside-bottom-of (bottom-panel box) placer))
-			     (let* ((cw     (on-show-layout-code obj))
-				    (result (format nil
-						    *builder-template1*
-						    panel-name
-						    (escape-string
-						     (ppcre:regex-replace-all "\\x22"
-									      (inner-html content)
-									      "\\\\\\\""))
-						    panel-name
-						    (mapcar (lambda (e)
-							      (let ((vname (attribute e "data-lisp-name")))
-								(when vname
-								  (format nil *builder-template2*
-									  vname
-									  (html-id e)
-									  (format nil "CLOG:~A" (type-of e))))))
-							    control-list)
-						    (html-id cw)
-						    (html-id cw))))
-			       (js-execute obj (format nil
-						       "editor_~A.setValue('~A');editor_~A.moveCursorTo(0,0);"
-						       (html-id cw)
-						       (escape-string result)
-						       (html-id cw))))
-			     (dolist (placer placer-list)
-			       (place-inside-bottom-of content placer))))
-    (set-on-click btn-prop
-		  (lambda (obj)
-		    (input-dialog obj
-				  "Panel Name"
-				  (lambda (result)
-				    (when result
-				      (setf panel-name result)
-				      (setf (attribute content "data-lisp-name") panel-name)
-				      (setf (window-title win) panel-name)))
-				  :default-value panel-name
-				  :title "Panel Properties")))
-    (set-on-window-close win
-			 (lambda (obj)
-			   (declare (ignore obj))
-			   (setf (current-control app) nil)
-			   (setf (current-placer app) nil)
-			   (on-populate-control-properties win)))
-    (set-on-mouse-down content
-		       (lambda (obj data)
-			 (unless in-simulation
-			   (let* ((control     (selected-tool app))
-				  (create-type (getf control :create-type))
-				  (element     (cond ((eq create-type :label)
-						      (funcall (getf control :create) content
-							       :content (getf control :create-content)))
-						     ((eq create-type :form)
-						      (funcall (getf control :create) content
-							       (getf control :create-param)
-							       :value (getf control :create-value)))
-						     (t nil)))
-				  (placer      (when element
-						 (create-div obj))))
-			     (unless element
-			       (when (current-placer app)
-				 (set-border (current-placer app) (unit "px" 0) :none :blue))
-			       (setf (current-control app) nil)
-			       (setf (current-placer app) nil)
-			       (on-populate-control-properties win)
-			       (when (control-list-win app)
-				 (let* ((c (control-list-win app))
-					(w (window-content c))
-					(p (first-child content))
-					dln)
-				   (setf (inner-html w) "")
-				   (loop
-				     (when (equal (html-id p) "undefined") (return))
-				     (setf dln (attribute p "data-lisp-name"))
-				     (unless (equal dln "undefined")
-				       (let ((n (create-div w :content dln)))
-					 (setf (color n) :blue)
-					 (setf (draggablep n) t)
-					 (setf (attribute n "data-clog-control") (html-id p))
-					 (set-on-drag-over n (lambda (obj)(declare (ignore obj))()))
-					 (set-on-drop n (lambda (obj data)
-							  (declare (ignore obj))
-							  (let ((id (attribute n "data-clog-control")))
-							    (place-before (attach-as-child n id)
-									  (attach-as-child n (getf data :drag-data))))))
-					 (set-on-drag-start n (lambda (obj)
-								(declare (ignore obj))())
-							    :drag-data (html-id p))))
-				     (setf p (next-sibling p))))))
-			     (when element
-			       (setf (current-control app) element)
-			       (push element control-list)
-			       (push placer placer-list)
-			       (setf (attribute element "data-lisp-name")
-				     (format nil "control-~A" (html-id element)))
-			       (setf (attribute element "data-clog-type") (getf control :name))
-			       (setf (box-sizing element) :content-box)
-			       (setf (box-sizing placer) :content-box)
-			       (set-on-mouse-down placer (lambda (obj data)
-							   (declare (ignore obj) (ignore data))
-							   (when (current-placer app)
-							     (set-border (current-placer app) (unit "px" 0) :none :blue))
-							   (setf (current-control app) element)
-							   (setf (current-placer app) placer)
-							   (set-border placer (unit "px" 2) :solid :blue)
-							   (on-populate-control-properties win))
-						  :cancel-event t)
-			       (setf (selected-tool app) nil)
-			       (setf (positioning element) :absolute)
-			       (set-geometry element
-					     :left (getf data :x)
-					     :top (getf data :y))
-			       (setf (positioning placer) :absolute)
-			       (when (current-placer app)
-				 (set-border (current-placer app) (unit "px" 0) :none :blue))
-			       (set-border placer (unit "px" 2) :solid :blue)
-			       (setf (current-placer app) placer)
-			       (clog::jquery-execute placer "draggable().resizable()")
-			       (set-geometry placer
-					     :left (getf data :x)
-					     :top (getf data :y))
-			       (if (> (client-width element) 0)
-				   (set-geometry placer :units ""
-							:width (client-width element)
-							:height (client-height element))
-				   (set-geometry placer :units ""
-							:width (width element)
-							:height (height element)))
-			       (on-populate-control-properties win)
-			       (clog::set-on-event placer "resizestop"
-						   (lambda (obj)
-						     (declare (ignore obj))
-						     (set-geometry element :units ""
-									   :width (width placer)
-									   :height (height placer))
-						     (set-geometry placer :units ""
-									  :width (client-width element)
-									  :height (client-height element))
-						     (on-populate-control-properties win)))
-			       (clog::set-on-event placer "dragstop"
-						   (lambda (obj)
-						     (declare (ignore obj))
-						     (set-geometry element :units ""
-									   :top (top placer)
-									   :left (left placer))
-						     (on-populate-control-properties win))))))))))
+						       (place-inside-bottom-of content placer)))
+						   :initial-filename file-name)))
+      (set-on-click btn-rndr (lambda (obj)
+			       (dolist (placer placer-list)
+				 (place-inside-bottom-of (bottom-panel box) placer))
+			       (let* ((cw     (on-show-layout-code obj))
+				      (result (format nil
+						      *builder-template1*
+						      panel-name
+						      (escape-string
+						       (ppcre:regex-replace-all "\\x22"
+										(inner-html content)
+										"\\\\\\\""))
+						      panel-name
+						      (mapcar (lambda (e)
+								(let ((vname (attribute e "data-lisp-name")))
+								  (when vname
+								    (format nil *builder-template2*
+									    vname
+									    (html-id e)
+									    (format nil "CLOG:~A" (type-of e))))))
+							      control-list)
+						      (html-id cw)
+						      (html-id cw))))
+				 (js-execute obj (format nil
+							 "editor_~A.setValue('~A');editor_~A.moveCursorTo(0,0);"
+							 (html-id cw)
+							 (escape-string result)
+							 (html-id cw))))
+			       (dolist (placer placer-list)
+				 (place-inside-bottom-of content placer))))
+      (set-on-click btn-prop
+		    (lambda (obj)
+		      (input-dialog obj
+				    "Panel Name"
+				    (lambda (result)
+				      (when result
+					(setf panel-name result)
+					(setf (attribute content "data-lisp-name") panel-name)
+					(setf (window-title win) panel-name)))
+				    :default-value panel-name
+				    :title "Panel Properties")))
+      (set-on-window-close win
+			   (lambda (obj)
+			     (declare (ignore obj))
+			     (setf (current-control app) nil)
+			     (setf (current-placer app) nil)
+			     (on-populate-control-properties win)
+			     (populate-control-list-win)))
+      (set-on-mouse-down content
+			 (lambda (obj data)
+			   (unless in-simulation
+			     (let* ((control     (selected-tool app))
+				    (create-type (getf control :create-type))
+				    (element     (cond ((eq create-type :label)
+							(funcall (getf control :create) content
+								 :content (getf control :create-content)))
+						       ((eq create-type :form)
+							(funcall (getf control :create) content
+								 (getf control :create-param)
+								 :value (getf control :create-value)))
+						       (t nil)))
+				    (placer      (when element
+						   (create-div obj))))
+			       (unless element
+				 (when (current-placer app)
+				   (set-border (current-placer app) (unit "px" 0) :none :blue))
+				 (setf (current-control app) nil)
+				 (setf (current-placer app) nil)
+				 (on-populate-control-properties win))
+			       (when element
+				 (setf (current-control app) element)
+				 (push element control-list)
+				 (push placer placer-list)
+				 (setf (attribute element "data-lisp-name")
+				       (format nil "~A-~A" (getf control :name) (html-id element)))
+				 (setf (attribute element "data-clog-type") (getf control :name))
+				 (setf (box-sizing element) :content-box)
+				 (setf (box-sizing placer) :content-box)
+				 (set-on-mouse-down placer (lambda (obj data)
+							     (declare (ignore obj) (ignore data))
+							     (when (current-placer app)
+							       (set-border (current-placer app) (unit "px" 0) :none :blue))
+							     (setf (current-control app) element)
+							     (setf (current-placer app) placer)
+							     (set-border placer (unit "px" 2) :solid :blue)
+							     (on-populate-control-properties win))
+						    :cancel-event t)
+				 (setf (selected-tool app) nil)
+				 (setf (positioning element) :absolute)
+				 (set-geometry element
+					       :left (getf data :x)
+					       :top (getf data :y))
+				 (setf (positioning placer) :absolute)
+				 (when (current-placer app)
+				   (set-border (current-placer app) (unit "px" 0) :none :blue))
+				 (set-border placer (unit "px" 2) :solid :blue)
+				 (setf (current-placer app) placer)
+				 (clog::jquery-execute placer "draggable().resizable()")
+				 (set-geometry placer
+					       :left (getf data :x)
+					       :top (getf data :y))
+				 (if (> (client-width element) 0)
+				     (set-geometry placer :units ""
+							  :width (client-width element)
+							  :height (client-height element))
+				     (set-geometry placer :units ""
+							  :width (width element)
+							  :height (height element)))
+				 (on-populate-control-properties win)
+				 (clog::set-on-event placer "resizestop"
+						     (lambda (obj)
+						       (declare (ignore obj))
+						       (set-geometry element :units ""
+									     :width (width placer)
+									     :height (height placer))
+						       (set-geometry placer :units ""
+									    :width (client-width element)
+									    :height (client-height element))
+						       (on-populate-control-properties win)))
+				 (clog::set-on-event placer "dragstop"
+						     (lambda (obj)
+						       (declare (ignore obj))
+						       (set-geometry element :units ""
+									     :top (top placer)
+									     :left (left placer))
+						       (on-populate-control-properties win)))
+				 (populate-control-list-win)))))))))
 
 (defun on-help-about-builder (obj)
   (let ((about (create-gui-window obj
@@ -566,6 +576,7 @@
       (create-gui-menu-item help  :content "About"              :on-click #'on-help-about-builder)
       (create-gui-menu-full-screen menu))
     (on-show-control-pallete body)
+    (on-show-control-list body)
     (on-show-control-properties body)
     (on-new-builder-window body)
     (set-on-before-unload (window body) (lambda(obj)
