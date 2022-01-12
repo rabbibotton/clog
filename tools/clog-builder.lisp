@@ -59,6 +59,10 @@
     :accessor control-properties
     :initform nil
     :documentation "Current control properties window")
+   (control-list-win
+    :accessor control-list-win
+    :initform nil
+    :documentation "Current control list window")
    (properties-list
     :accessor properties-list
     :initform nil
@@ -265,7 +269,7 @@
   (let ((app (connection-data-item obj "builder-app-data")))
     (if (control-pallete app)
 	(window-focus (control-pallete app))
-	(let* ((win          (create-gui-window obj :title "Controls"
+	(let* ((win          (create-gui-window obj :title "Control Pallete"
 						    :top 40
 						    :left 0
 						    :height 300 :width 200 :has-pinner t))
@@ -283,6 +287,16 @@
 	  (dolist (control supported-controls)
 	    (add-select-option control-list (getf control :name) (getf control :description)))))))
 
+(defun on-show-control-list (obj)
+  (let ((app (connection-data-item obj "builder-app-data")))
+    (if (control-list-win app)
+	(window-focus (control-list-win app))
+	(let* ((win (create-gui-window obj :title "Control List")))
+	  (setf (control-list-win app) win)
+	  (set-on-window-close win (lambda (obj) (setf (control-list-win app) nil)))))))
+
+;; These templates are here due to compiler or slime bug,
+;; I don't have time to hunt down at moment.
 (defparameter *builder-template1* "\(in-package :clog-user)~%~
 \(set-on-new-window \(lambda \(body)~%
                       \(let* \(\(~A \"~A\")~%
@@ -303,11 +317,13 @@
 	 (tool-bar (top-panel box))
 	 (btn-del  (create-button tool-bar :content "Delete"))
 	 (btn-sim  (create-button tool-bar :content "Simulate"))
-	 (btn-save (create-button tool-bar :content "Render"))
+	 (btn-rndr (create-button tool-bar :content "Render"))
 	 (btn-prop (create-button tool-bar :content "Properties"))
+	 (btn-save (create-button tool-bar :content "Save"))
 	 (content  (center-panel box))
 	 (in-simulation nil)
 	 (panel-name (format nil "panel-~A" (clog-connection:generate-id)))
+	 (file-name  ".")
 	 control-list
 	 placer-list)
     (setf (background-color tool-bar) :silver)
@@ -339,8 +355,21 @@
 				     (on-populate-control-properties win))
 				   (setf in-simulation t)
 				   (dolist (placer placer-list)
-				     (setf (hiddenp placer) t))))))
+				     (setf (hiddenp placer) t))
+				   (focus (first-child content))))))
     (set-on-click btn-save (lambda (obj)
+			     (server-file-dialog obj "Save Panel As.." file-name
+						 (lambda (fname)
+						   (window-focus win)
+						   (when fname
+						     (setf file-name fname)
+						     (dolist (placer placer-list)
+						       (place-inside-bottom-of (bottom-panel box) placer))
+						     (write-file (inner-html content) fname))
+						   (dolist (placer placer-list)
+						     (place-inside-bottom-of content placer)))
+						 :initial-filename file-name)))
+    (set-on-click btn-rndr (lambda (obj)
 			     (dolist (placer placer-list)
 			       (place-inside-bottom-of (bottom-panel box) placer))
 			     (let* ((cw     (on-show-layout-code obj))
@@ -406,7 +435,31 @@
 				 (set-border (current-placer app) (unit "px" 0) :none :blue))
 			       (setf (current-control app) nil)
 			       (setf (current-placer app) nil)
-			       (on-populate-control-properties win))
+			       (on-populate-control-properties win)
+			       (when (control-list-win app)
+				 (let* ((c (control-list-win app))
+					(w (window-content c))
+					(p (first-child content))
+					dln)
+				   (setf (inner-html w) "")
+				   (loop
+				     (when (equal (html-id p) "undefined") (return))
+				     (setf dln (attribute p "data-lisp-name"))
+				     (unless (equal dln "undefined")
+				       (let ((n (create-div w :content dln)))
+					 (setf (color n) :blue)
+					 (setf (draggablep n) t)
+					 (setf (attribute n "data-clog-control") (html-id p))
+					 (set-on-drag-over n (lambda (obj)(declare (ignore obj))()))
+					 (set-on-drop n (lambda (obj data)
+							  (declare (ignore obj))
+							  (let ((id (attribute n "data-clog-control")))
+							    (place-before (attach-as-child n id)
+									  (attach-as-child n (getf data :drag-data))))))
+					 (set-on-drag-start n (lambda (obj)
+								(declare (ignore obj))())
+							    :drag-data (html-id p))))
+				     (setf p (next-sibling p))))))
 			     (when element
 			       (setf (current-control app) element)
 			       (push element control-list)
@@ -501,6 +554,7 @@
       (create-gui-menu-item file  :content "New Panel"          :on-click 'on-new-builder-window)
       (create-gui-menu-item tools :content "Control Pallete"    :on-click 'on-show-control-pallete)
       (create-gui-menu-item tools :content "Control Properties" :on-click 'on-show-control-properties)
+      (create-gui-menu-item tools :content "Control List"       :on-click 'on-show-control-list)
       (create-gui-menu-item edit  :content "Undo"               :on-click #'do-ide-edit-undo)
       (create-gui-menu-item edit  :content "Redo"               :on-click #'do-ide-edit-redo)
       (create-gui-menu-item edit  :content "Copy"               :on-click #'do-ide-edit-copy)
