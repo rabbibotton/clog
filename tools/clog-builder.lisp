@@ -55,26 +55,26 @@
     :accessor current-control
     :initform nil
     :documentation "Current selected control")
-   (control-properties
-    :accessor control-properties
+   (selected-tool
+    :accessor selected-tool
+    :initform nil
+    :documentation "Currently selected tool")
+   (properties-list
+    :accessor properties-list
+    :initform nil
+    :documentation "Property list in properties window")
+   (control-properties-win
+    :accessor control-properties-win
     :initform nil
     :documentation "Current control properties window")
    (control-list-win
     :accessor control-list-win
     :initform nil
     :documentation "Current control list window")
-   (properties-list
-    :accessor properties-list
+   (control-pallete-win
+    :accessor control-pallete-win
     :initform nil
-    :documentation "Property list")
-   (control-pallete
-    :accessor control-pallete
-    :initform nil
-    :documentation "Current control pallete window")
-   (selected-tool
-    :accessor selected-tool
-    :initform nil
-    :documentation "Currently selected tool")))
+    :documentation "Current control pallete window")))
 
 (defun read-file (infile)
   (with-open-file (instream infile :direction :input :if-does-not-exist nil)
@@ -196,9 +196,9 @@
 			(html-id win)))
     win))
 
-(defun on-populate-control-properties (obj)
+(defun on-populate-control-properties-win (obj)
   (let* ((app     (connection-data-item obj "builder-app-data"))
-	 (win     (control-properties app))
+	 (win     (control-properties-win app))
 	 (control (current-control app))
 	 (placer  (current-placer app))
 	 (table   (properties-list app)))
@@ -248,10 +248,10 @@
 						    :width (client-width control)
 						    :height (client-height control))))))))))))
 
-(defun on-show-control-properties (obj)
+(defun on-show-control-properties-win (obj)
   (let ((app (connection-data-item obj "builder-app-data")))
-    (if (control-properties app)
-	(window-focus (control-properties app))
+    (if (control-properties-win app)
+	(window-focus (control-properties-win app))
 	(let* ((win          (create-gui-window obj :title "Control Properties"
 						    :left 220
 						    :top 250
@@ -259,24 +259,24 @@
 						    :has-pinner t))
 	       (content      (window-content win))
 	       (control-list (create-table content)))
-	  (setf (control-properties app) win)
+	  (setf (control-properties-win app) win)
 	  (setf (properties-list app) control-list)
-	  (set-on-window-close win (lambda (obj) (setf (control-properties app) nil)))
+	  (set-on-window-close win (lambda (obj) (setf (control-properties-win app) nil)))
 	  (setf (positioning control-list) :absolute)
 	  (set-geometry control-list :left 0 :top 0 :bottom 0 :right 0)))))
 
-(defun on-show-control-pallete (obj)
+(defun on-show-control-pallete-win (obj)
   (let ((app (connection-data-item obj "builder-app-data")))
-    (if (control-pallete app)
-	(window-focus (control-pallete app))
+    (if (control-pallete-win app)
+	(window-focus (control-pallete-win app))
 	(let* ((win          (create-gui-window obj :title "Control Pallete"
 						    :top 40
 						    :left 0
 						    :height 300 :width 200 :has-pinner t))
 	       (content      (window-content win))
 	       (control-list (create-select content)))
-	  (setf (control-pallete app) win)
-	  (set-on-window-close win (lambda (obj) (setf (control-pallete app) nil)))
+	  (setf (control-pallete-win app) win)
+	  (set-on-window-close win (lambda (obj) (setf (control-pallete-win app) nil)))
 	  (setf (positioning control-list) :absolute)
 	  (setf (size control-list) 2)
 	  (set-geometry control-list :left 0 :top 0 :bottom 0 :width 190)
@@ -287,7 +287,7 @@
 	  (dolist (control supported-controls)
 	    (add-select-option control-list (getf control :name) (getf control :description)))))))
 
-(defun on-show-control-list (obj)
+(defun on-show-control-list-win (obj)
   (let ((app (connection-data-item obj "builder-app-data")))
     (if (control-list-win app)
 	(window-focus (control-list-win app))
@@ -297,6 +297,46 @@
 					   :width 200 :has-pinner t)))
 	  (setf (control-list-win app) win)
 	  (set-on-window-close win (lambda (obj) (setf (control-list-win app) nil)))))))
+
+(defun on-populate-control-list-win (content)
+  "Populate the control-list-window"
+  (let* ((app (connection-data-item content "builder-app-data")))
+    (when (control-list-win app)
+      (let* ((c (control-list-win app))
+	     (w (window-content c))
+	     (p (first-child content))
+	     dln)
+	(setf (inner-html w) "")
+	(loop
+	  (when (equal (html-id p) "undefined") (return))
+	  (setf dln (attribute p "data-lisp-name"))
+	  (unless (equal dln "undefined")
+	    (let ((n (create-div w :content (format nil "&#8597; ~A" dln))))
+	      (setf (background-color n) :lightgray)
+	      (setf (draggablep n) t)
+	      (setf (attribute n "data-clog-control") (html-id p))
+	      (set-on-double-click n (lambda (obj)
+				       (let* ((id      (attribute obj "data-clog-control"))
+					      (element (attach-as-child obj id))
+					      (placer  (attach-as-child obj (format nil "p-~A" id))))
+					 (when (current-placer app)
+					   (set-border (current-placer app) (unit "px" 0) :none :blue))
+					 (setf (current-control app) element)
+					 (setf (current-placer app) placer)
+					 (set-border placer (unit "px" 2) :solid :blue)
+					 (on-populate-control-properties-win obj))))
+	      (set-on-drag-over n (lambda (obj)(declare (ignore obj))()))
+	      (set-on-drop n (lambda (obj data)
+			       (declare (ignore obj))
+			       (let* ((id (attribute n "data-clog-control"))
+				      (c1 (attach-as-child n id))
+				      (c2 (attach-as-child n (getf data :drag-data))))
+				 (place-before c1 c2)
+				 (on-populate-control-list-win content))))
+	      (set-on-drag-start n (lambda (obj)
+				     (declare (ignore obj))())
+				 :drag-data (html-id p))))
+	  (setf p (next-sibling p)))))))
 
 ;; These templates are here due to compiler or slime bug,
 ;; I don't have time to hunt down at moment.
@@ -330,39 +370,11 @@
 	 (file-name  ".")
 	 control-list
 	 placer-list)
-    (labels ((populate-control-list-win ()
-	       (when (control-list-win app)
-		 (let* ((c (control-list-win app))
-			(w (window-content c))
-			(p (first-child content))
-			dln)
-		   (setf (inner-html w) "")
-		   (loop
-		     (when (equal (html-id p) "undefined") (return))
-		     (setf dln (attribute p "data-lisp-name"))
-		     (unless (equal dln "undefined")
-		       (let ((n (create-div w :content (format nil "&#8597; ~A" dln))))
-			 (setf (background-color n) :lightgray)
-			 (setf (draggablep n) t)
-			 (setf (attribute n "data-clog-control") (html-id p))
-			 (set-on-drag-over n (lambda (obj)(declare (ignore obj))()))
-			 (set-on-drop n (lambda (obj data)
-					  (declare (ignore obj))
-					  (let ((id (attribute n "data-clog-control")))
-					    (place-before
-					     (attach-as-child n id)
-					     (attach-as-child n
-							      (getf data :drag-data)))
-					    (populate-control-list-win))))
-			 (set-on-drag-start n (lambda (obj)
-						(declare (ignore obj))())
-					    :drag-data (html-id p))))
-		     (setf p (next-sibling p)))))))
       (setf (background-color tool-bar) :silver)
       (setf (attribute content "data-lisp-name") panel-name)
       (setf (window-title win) panel-name)
-      (populate-control-list-win)
-      (set-on-window-focus win (lambda (obj) (declare (ignore obj)) (populate-control-list-win)))
+      (on-populate-control-list-win content)
+      (set-on-window-focus win (lambda (obj) (declare (ignore obj)) (on-populate-control-list-win content)))
       (set-on-click btn-del (lambda (obj)
 			      (declare (ignore obj))
 			      (when (current-control app)
@@ -372,8 +384,8 @@
 				(destroy (current-control app))
 				(setf (current-control app) nil)
 				(setf (current-placer app) nil)
-				(on-populate-control-properties win)
-				(populate-control-list-win))))
+				(on-populate-control-properties-win win)
+				(on-populate-control-list-win content))))
       (set-on-click btn-sim (lambda (obj)
 			      (declare (ignore obj))
 			      (cond (in-simulation
@@ -387,7 +399,7 @@
 				       (set-border (current-placer app) (unit "px" 0) :none :blue)
 				       (setf (current-control app) nil)
 				       (setf (current-placer app) nil)
-				       (on-populate-control-properties win))
+				       (on-populate-control-properties-win win))
 				     (setf in-simulation t)
 				     (dolist (placer placer-list)
 				       (setf (hiddenp placer) t))
@@ -449,8 +461,8 @@
 			     (declare (ignore obj))
 			     (setf (current-control app) nil)
 			     (setf (current-placer app) nil)
-			     (on-populate-control-properties win)
-			     (populate-control-list-win)))
+			     (on-populate-control-properties-win win)
+			     (on-populate-control-list-win content)))
       (set-on-mouse-down content
 			 (lambda (obj data)
 			   (unless in-simulation
@@ -465,15 +477,15 @@
 								 :value (getf control :create-value)))
 						       (t nil)))
 				    (placer      (when element
-						   (create-div obj))))
+						   (create-div obj :html-id (format nil "p-~A" (html-id element))))))
 			       (window-focus win)
 			       (unless element
 				 (when (current-placer app)
 				   (set-border (current-placer app) (unit "px" 0) :none :blue))
 				 (setf (current-control app) nil)
 				 (setf (current-placer app) nil)
-				 (on-populate-control-properties win)
-				 (populate-control-list-win))
+				 (on-populate-control-properties-win win)
+				 (on-populate-control-list-win content))
 			       (when element
 				 (setf (current-control app) element)
 				 (push element control-list)
@@ -490,7 +502,7 @@
 							     (setf (current-control app) element)
 							     (setf (current-placer app) placer)
 							     (set-border placer (unit "px" 2) :solid :blue)
-							     (on-populate-control-properties win)
+							     (on-populate-control-properties-win win)
 							     (window-focus win))
 						    :cancel-event t)
 				 (setf (selected-tool app) nil)
@@ -514,7 +526,7 @@
 				     (set-geometry placer :units ""
 							  :width (width element)
 							  :height (height element)))
-				 (on-populate-control-properties win)
+				 (on-populate-control-properties-win win)
 				 (clog::set-on-event placer "resizestop"
 						     (lambda (obj)
 						       (declare (ignore obj))
@@ -524,15 +536,15 @@
 						       (set-geometry placer :units ""
 									    :width (client-width element)
 									    :height (client-height element))
-						       (on-populate-control-properties win)))
+						       (on-populate-control-properties-win win)))
 				 (clog::set-on-event placer "dragstop"
 						     (lambda (obj)
 						       (declare (ignore obj))
 						       (set-geometry element :units ""
 									     :top (top placer)
 									     :left (left placer))
-						       (on-populate-control-properties win)))
-				 (populate-control-list-win)))))))))
+						       (on-populate-control-properties-win win)))
+				 (on-populate-control-list-win content))))))))
 
 (defun on-help-about-builder (obj)
   (let ((about (create-gui-window obj
@@ -568,9 +580,9 @@
 	   (help  (create-gui-menu-drop-down menu :content "Help")))
       (declare (ignore icon))
       (create-gui-menu-item file  :content "New Panel"          :on-click 'on-new-builder-window)
-      (create-gui-menu-item tools :content "Control Pallete"    :on-click 'on-show-control-pallete)
-      (create-gui-menu-item tools :content "Control Properties" :on-click 'on-show-control-properties)
-      (create-gui-menu-item tools :content "Control List"       :on-click 'on-show-control-list)
+      (create-gui-menu-item tools :content "Control Pallete"    :on-click 'on-show-control-pallete-win)
+      (create-gui-menu-item tools :content "Control Properties" :on-click 'on-show-control-properties-win)
+      (create-gui-menu-item tools :content "Control List"       :on-click 'on-show-control-list-win)
       (create-gui-menu-item edit  :content "Undo"               :on-click #'do-ide-edit-undo)
       (create-gui-menu-item edit  :content "Redo"               :on-click #'do-ide-edit-redo)
       (create-gui-menu-item edit  :content "Copy"               :on-click #'do-ide-edit-copy)
@@ -581,9 +593,9 @@
       (create-gui-menu-window-select win)
       (create-gui-menu-item help  :content "About"              :on-click #'on-help-about-builder)
       (create-gui-menu-full-screen menu))
-    (on-show-control-pallete body)
-    (on-show-control-list body)
-    (on-show-control-properties body)
+    (on-show-control-pallete-win body)
+    (on-show-control-list-win body)
+    (on-show-control-properties-win body)
     (on-new-builder-window body)
     (set-on-before-unload (window body) (lambda(obj)
 					  (declare (ignore obj))
