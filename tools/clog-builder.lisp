@@ -47,6 +47,10 @@
     :accessor copy-buf
     :initform ""
     :documentation "Copy buffer")
+   (next-panel-id
+    :accessor next-pannel-id
+    :initform 0
+    :documentation "Next new pannel id")
    (current-placer
     :accessor current-placer
     :initform nil
@@ -368,7 +372,7 @@
 	 (content  (center-panel box))
 	 (next-id  0)
 	 (in-simulation nil)
-	 (panel-name (format nil "panel-~A" (clog-connection:generate-id)))
+	 (panel-name (format nil "panel-~A" (incf (next-pannel-id app))))
 	 (file-name  ".")
 	 control-list
 	 placer-list)
