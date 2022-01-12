@@ -294,7 +294,7 @@
 	(let* ((win (create-gui-window obj :title "Control List"
 					   :top 350
 					   :left 0
-					   :width 200)))
+					   :width 200 :has-pinner t)))
 	  (setf (control-list-win app) win)
 	  (set-on-window-close win (lambda (obj) (setf (control-list-win app) nil)))))))
 
