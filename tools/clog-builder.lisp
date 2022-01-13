@@ -420,10 +420,8 @@
 				       (setf (hiddenp (get-placer control)) nil)))
 				    (t
 				     (setf (text btn-sim) "Develop")
-				     (when (current-control app)
-				       (set-border (get-placer (current-control app)) (unit "px" 0) :none :blue)
-				       (setf (current-control app) nil)
-				       (on-populate-control-properties-win win))
+				     (deselect-current-control app)
+				     (on-populate-control-properties-win win)
 				     (setf in-simulation t)
 				     (dolist (control control-list)
 				       (setf (hiddenp (get-placer control)) t))
@@ -609,5 +607,5 @@
 (defun clog-builder ()
   "Start clog-builder."
   (initialize nil)
-  (set-on-new-window 'on-new-builder :boot-file "/debug.html" :path "/builder")
+  (set-on-new-window 'on-new-builder :path "/builder")
   (open-browser :url "http://127.0.0.1:8080/builder"))
