@@ -39,10 +39,6 @@
 		       (:name "background-color"
 			:prop  clog:background-color)))))
 
-(defun control-info (control-name)
-  "Return control informaton record for CONTROL-NAME"
-  (find-if (lambda (x) (equal (getf x :name) control-name)) supported-controls))
-
 (defclass builder-app-data ()
   ((copy-buf
     :accessor copy-buf
@@ -370,6 +366,27 @@ of controls and double click to select control."
 				 :drag-data (html-id control))))
 	  (setf control (next-sibling control)))))))
 
+(defun control-info (control-name)
+  "Return control informaton record for CONTROL-NAME from the SUPPORTED-CONTROLS list."
+  (find-if (lambda (x) (equal (getf x :name) control-name)) supported-controls))
+
+(defun create-control (parent control-record)
+  "Return a new control based on CONTROL-RECORD as a child of PARENT"
+  (let* ((create-type       (getf control-record :create-type))
+	 (control-type-name (getf control-record :name))
+	 (control           (cond ((eq create-type :label)
+				   (funcall (getf control-record :create) parent
+					    :content (getf control-record :create-content)))
+				  ((eq create-type :form)
+				   (funcall (getf control-record :create) parent
+					    (getf control-record :create-param)
+					    :value (getf control-record :create-value)))
+				  (t nil))))
+    (when control
+      (setf (attribute control "data-clog-type") control-type-name)
+      (create-div parent :html-id (format nil "p-~A" (html-id control))))
+    control))
+
 ;; These templates are here due to compiler or slime bug,
 ;; I don't have time to hunt down at moment.
 (defparameter *builder-template1* "\(in-package :clog-user)~%~
@@ -497,66 +514,62 @@ of controls and double click to select control."
     (set-on-mouse-down content
 		       (lambda (obj data)
 			 (unless in-simulation
-			   (let* ((control-record (selected-tool app))
-				  (create-type    (getf control-record :create-type))
-				  (control        (cond ((eq create-type :label)
-							 (funcall (getf control-record :create) content
-								  :content (getf control-record :create-content)))
-							((eq create-type :form)
-							 (funcall (getf control-record :create) content
-								  (getf control-record :create-param)
-								  :value (getf control-record :create-value)))
-							(t nil)))
-				  (placer         (when control
-						    (create-div obj :html-id (format nil "p-~A" (html-id control))))))
+			   (let* ((control-record    (selected-tool app))
+				  (control-type-name (getf control-record :name))
+				  (control           (create-control content control-record))
+				  (placer            (get-placer control)))
+			     ;; any click on panel directly will focus window
 			     (window-focus win)
-			     (unless control
-			       (deselect-current-control app)
-			       (on-populate-control-list-win content))
-			     (when control
-			       (push control control-list)
-			       (setf (attribute control "data-clog-name")
-				     (format nil "~A-~A" (getf control-record :name) (incf next-id)))
-			       (setf (attribute control "data-clog-type") (getf control-record :name))
-			       (setf (box-sizing control) :content-box)
-			       (setf (box-sizing placer) :content-box)
-			       (set-on-mouse-down placer (lambda (obj data)
-							   (declare (ignore obj) (ignore data))
-							   (select-control control)
-							   (window-focus win))
-						  :cancel-event t)
-			       (setf (selected-tool app) nil)
-			       (setf (positioning control) :absolute)
-			       (set-geometry control
-					     :left (getf data :x)
-					     :top (getf data :y))
-			       (setf (positioning placer) :absolute)
-			       (clog::jquery-execute placer "draggable().resizable()")
-			       (clog::set-on-event placer "resizestop"
-						   (lambda (obj)
-						     (declare (ignore obj))
-						     (set-geometry control :units ""
-									   :width (width placer)
-									   :height (height placer))
-						     (set-geometry placer :units ""
-									  :width (client-width control)
-									  :height (client-height control))
-						     (on-populate-control-properties-win win)))
-			       (clog::set-on-event placer "dragstop"
-						   (lambda (obj)
-						     (declare (ignore obj))
-						     (set-geometry control :units ""
-									   :top (top placer)
-									   :left (left placer))
-						     (on-populate-control-properties-win win)))
-			       (set-geometry placer
-					     :left (getf data :x)
-					     :top (getf data :y))
-			       (set-geometry placer :units ""
-						    :width (client-width control)
-						    :height (client-height control))
-			       (select-control control)
-			       (on-populate-control-list-win content))))))))
+			     (cond (control
+				    ;; panel directly clicked with a control type selected
+				    ;; setup control
+				    (push control control-list)
+				    (setf (attribute control "data-clog-name")
+					  (format nil "~A-~A" control-type-name (incf next-id)))
+				    (setf (box-sizing control) :content-box)
+				    (setf (selected-tool app) nil)
+				    (setf (positioning control) :absolute)
+				    (set-geometry control
+						  :left (getf data :x)
+						  :top (getf data :y))
+				    ;; setup placer
+				    (setf (box-sizing placer) :content-box)
+				    (setf (positioning placer) :absolute)
+				    (clog::jquery-execute placer "draggable().resizable()")
+				    (set-geometry placer
+						  :left (getf data :x)
+						  :top (getf data :y)
+						  :width (client-width control)
+						  :height (client-height control))
+				    (select-control control)
+				    (on-populate-control-list-win content)
+				    ;; setup placer events
+				    (set-on-mouse-down placer (lambda (obj data)
+								(declare (ignore obj) (ignore data))
+								(select-control control)
+								(window-focus win))
+						       :cancel-event t)
+				    (clog::set-on-event placer "resizestop"
+							(lambda (obj)
+							  (declare (ignore obj))
+							  (set-geometry control :units ""
+										:width (width placer)
+										:height (height placer))
+							  (set-geometry placer :units ""
+									       :width (client-width control)
+									       :height (client-height control))
+							  (on-populate-control-properties-win win)))
+				    (clog::set-on-event placer "dragstop"
+							(lambda (obj)
+							  (declare (ignore obj))
+							  (set-geometry control :units ""
+										:top (top placer)
+										:left (left placer))
+							  (on-populate-control-properties-win win))))
+				   (t
+				    ;; panel directly clicked with select tool or no control type to add
+				    (deselect-current-control app)
+				    (on-populate-control-list-win content)))))))))
 
 (defun on-help-about-builder (obj)
   "Open about box"
