@@ -12,7 +12,7 @@
    '(:name           "label"
      :description    "Text Label"
      :create         clog:create-label
-     :create-type    :label
+     :create-type    :element
      :create-content "label"
      :properties     ((:name "text"
 		       :prop clog:text)
@@ -49,7 +49,33 @@
 		       (:name "color"
 			:prop clog:color)
 		       (:name "background-color"
-			:prop clog:background-color)))))
+			:prop clog:background-color)))
+   '(:name           "div"
+     :description    "Div Control"
+     :create         clog:create-div
+     :create-type    :element
+     :create-content "div"
+     :properties     ((:name "text"
+		       :prop clog:text)
+		      (:name "positioning"
+		       :prop clog:positioning)
+		      (:name "color"
+		       :prop clog:color)
+		      (:name "background-color"
+		       :prop clog:background-color)))
+   '(:name           "span"
+     :description    "Span Control"
+     :create         clog:create-span
+     :create-type    :element
+     :create-content "span"
+     :properties     ((:name "text"
+		       :prop clog:text)
+		      (:name "positioning"
+		       :prop clog:positioning)
+		      (:name "color"
+		       :prop clog:color)
+		      (:name "background-color"
+		       :prop clog:background-color)))))
 
 (defclass builder-app-data ()
   ((copy-buf
@@ -399,7 +425,7 @@ of controls and double click to select control."
   "Return a new control based on CONTROL-RECORD as a child of PARENT"
   (let* ((create-type       (getf control-record :create-type))
 	 (control-type-name (getf control-record :name))
-	 (control           (cond ((eq create-type :label)
+	 (control           (cond ((eq create-type :element)
 				   (funcall (getf control-record :create) parent
 					    :content (getf control-record :create-content)))
 				  ((eq create-type :form)
@@ -574,7 +600,7 @@ of controls and double click to select control."
 				    (on-populate-control-list-win content)
 				    ;; setup control events
 				    (set-on-focus control (lambda (obj)
-							    ;; set focus is captured in case
+							    ;; set focus is captured bound in case
 							    ;; control is set to static or reached
 							    ;; using tab selection
 							    (select-control control)))
