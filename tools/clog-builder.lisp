@@ -311,18 +311,19 @@
 	  (set-on-window-close win (lambda (obj) (setf (control-list-win app) nil)))))))
 
 (defun get-placer (control)
-  "Get placer for CONTROL"
+  "Get placer for CONTROL. A placer is a div placed on top of the control and
+access to it and allows manipulation of location, size etc of the control."
   (when control
     (attach-as-child control (format nil "p-~A" (html-id control)))))
 
 (defun deselect-current-control (app)
-  "Remove selection on current control"
+  "Remove selection on current control and remove visual ques on its placer."
   (when (current-control app)
     (set-border (get-placer (current-control app)) (unit "px" 0) :none :blue)
     (setf (current-control app) nil)))
 
 (defun select-control (control)
-  "Select CONTROL as the current control and highlight it"
+  "Select CONTROL as the current control and highlight its placer."
   (let ((app    (connection-data-item control "builder-app-data"))
 	(placer (get-placer control)))
     (deselect-current-control app)
@@ -331,13 +332,15 @@
     (on-populate-control-properties-win control)))
 
 (defun on-populate-control-list-win (content)
-  "Populate the control-list-window"
+  "Populate the control-list-window to allow drag and drop adjust of order
+of controls and double click to select control."
   (let* ((app (connection-data-item content "builder-app-data")))
     (when (control-list-win app)
       (let* ((win     (window-content (control-list-win app)))
 	     (control (first-child content))
 	     dln)
 	(setf (inner-html win) "")
+	;; iterate through controls in content
 	(loop
 	  (when (equal (html-id control) "undefined") (return))
 	  (setf dln (attribute control "data-clog-name"))
@@ -346,10 +349,12 @@
 	      (setf (background-color list-item) :lightgray)
 	      (setf (draggablep list-item) t)
 	      (setf (attribute list-item "data-clog-control") (html-id control))
+	      ;; double click to select item
 	      (set-on-double-click list-item (lambda (obj)
 				       (let* ((id      (attribute obj "data-clog-control"))
 					      (element (attach-as-child obj id)))
 					 (select-control element))))
+	      ;; drag and drop to change
 	      (set-on-drag-over list-item (lambda (obj)(declare (ignore obj))()))
 	      (set-on-drop list-item (lambda (obj data)
 			       (declare (ignore obj))
@@ -392,162 +397,169 @@
 	 (btn-prop (create-button tool-bar :content "Properties"))
 	 (btn-save (create-button tool-bar :content "Save"))
 	 (content  (center-panel box))
-	 (next-id  0)
 	 (in-simulation nil)
-	 (panel-name (format nil "panel-~A" (incf (next-pannel-id app))))
 	 (file-name  ".")
+	 (panel-name (format nil "panel-~A" (incf (next-pannel-id app))))
+	 (next-id  0)
 	 control-list)
-      (setf (background-color tool-bar) :silver)
-      (setf (attribute content "data-clog-name") panel-name)
-      (setf (window-title win) panel-name)
-      (on-populate-control-list-win content)
-      (set-on-window-focus win (lambda (obj) (declare (ignore obj)) (on-populate-control-list-win content)))
-      (set-on-click btn-del (lambda (obj)
-			      (declare (ignore obj))
-			      (when (current-control app)
-				(alexandria:removef control-list (current-control app))
-				(destroy (get-placer (current-control app)))
-				(destroy (current-control app))
-				(setf (current-control app) nil)
-				(on-populate-control-properties-win win)
-				(on-populate-control-list-win content))))
-      (set-on-click btn-sim (lambda (obj)
-			      (declare (ignore obj))
-			      (cond (in-simulation
-				     (setf (text btn-sim) "Simulate")
-				     (setf in-simulation nil)
-				     (dolist (control control-list)
-				       (setf (hiddenp (get-placer control)) nil)))
-				    (t
-				     (setf (text btn-sim) "Develop")
-				     (deselect-current-control app)
-				     (on-populate-control-properties-win win)
-				     (setf in-simulation t)
-				     (dolist (control control-list)
-				       (setf (hiddenp (get-placer control)) t))
-				     (focus (first-child content))))))
-      (set-on-click btn-save (lambda (obj)
-			       (server-file-dialog obj "Save Panel As.." file-name
-						   (lambda (fname)
-						     (window-focus win)
-						     (when fname
-						       (setf file-name fname)
-						       (dolist (control control-list)
-							 (place-inside-bottom-of (bottom-panel box) (get-placer control)))
-						       (write-file (inner-html content) fname))
+    ;; setup panel window
+    (setf (background-color tool-bar) :silver)
+    (setf (attribute content "data-clog-name") panel-name)
+    (setf (window-title win) panel-name)
+    ;; activate associated windows on open
+    (on-populate-control-list-win content)
+    ;; setup window events
+    (set-on-window-focus win (lambda (obj) (declare (ignore obj)) (on-populate-control-list-win content)))
+    (set-on-window-close win
+			 (lambda (obj)
+			   (declare (ignore obj))
+			   ;; clear associated windows on close
+			   (setf (current-control app) nil)
+			   (on-populate-control-properties-win win)
+			   (on-populate-control-list-win content)))
+    ;; setup tool bar events
+    (set-on-click btn-del (lambda (obj)
+			    (declare (ignore obj))
+			    (when (current-control app)
+			      (alexandria:removef control-list (current-control app))
+			      (destroy (get-placer (current-control app)))
+			      (destroy (current-control app))
+			      (setf (current-control app) nil)
+			      (on-populate-control-properties-win win)
+			      (on-populate-control-list-win content))))
+    (set-on-click btn-sim (lambda (obj)
+			    (declare (ignore obj))
+			    (cond (in-simulation
+				   (setf (text btn-sim) "Simulate")
+				   (setf in-simulation nil)
+				   (dolist (control control-list)
+				     (setf (hiddenp (get-placer control)) nil)))
+				  (t
+				   (setf (text btn-sim) "Develop")
+				   (deselect-current-control app)
+				   (on-populate-control-properties-win win)
+				   (setf in-simulation t)
+				   (dolist (control control-list)
+				     (setf (hiddenp (get-placer control)) t))
+				   (focus (first-child content))))))
+    (set-on-click btn-save (lambda (obj)
+			     (server-file-dialog obj "Save Panel As.." file-name
+						 (lambda (fname)
+						   (window-focus win)
+						   (when fname
+						     (setf file-name fname)
 						     (dolist (control control-list)
-							 (place-after control (get-placer control))))
-						   :initial-filename file-name)))
-      (set-on-click btn-rndr (lambda (obj)
-			       (dolist (control control-list)
-				 (place-inside-bottom-of (bottom-panel box) (get-placer control)))
-			       (let* ((cw     (on-show-layout-code obj))
-				      (result (format nil
-						      *builder-template1*
-						      panel-name
-						      (escape-string
-						       (ppcre:regex-replace-all "\\x22"
-										(inner-html content)
-										"\\\\\\\""))
-						      panel-name
-						      (mapcar (lambda (e)
-								(let ((vname (attribute e "data-clog-name")))
-								  (when vname
-								    (format nil *builder-template2*
-									    vname
-									    (html-id e)
-									    (format nil "CLOG:~A" (type-of e))))))
-							      control-list)
-						      (html-id cw)
-						      (html-id cw))))
-				 (js-execute obj (format nil
-							 "editor_~A.setValue('~A');editor_~A.moveCursorTo(0,0);"
-							 (html-id cw)
-							 (escape-string result)
-							 (html-id cw))))
-			       (dolist (control control-list)
-				 (place-after control (get-placer control)))))
-      (set-on-click btn-prop
-		    (lambda (obj)
-		      (input-dialog obj "Panel Name"
-				    (lambda (result)
-				      (when result
-					(setf panel-name result)
-					(setf (attribute content "data-clog-name") panel-name)
-					(setf (window-title win) panel-name)))
-				    :default-value panel-name
-				    :title "Panel Properties")))
-      (set-on-window-close win
-			   (lambda (obj)
-			     (declare (ignore obj))
-			     (setf (current-control app) nil)
-			     (on-populate-control-properties-win win)
-			     (on-populate-control-list-win content)))
-      (set-on-mouse-down content
-			 (lambda (obj data)
-			   (unless in-simulation
-			     (let* ((control     (selected-tool app))
-				    (create-type (getf control :create-type))
-				    (element     (cond ((eq create-type :label)
-							(funcall (getf control :create) content
-								 :content (getf control :create-content)))
-						       ((eq create-type :form)
-							(funcall (getf control :create) content
-								 (getf control :create-param)
-								 :value (getf control :create-value)))
-						       (t nil)))
-				    (placer      (when element
-						   (create-div obj :html-id (format nil "p-~A" (html-id element))))))
-			       (window-focus win)
-			       (unless element
-				 (deselect-current-control app)
-				 (on-populate-control-list-win content))
-			       (when element
-				 (push element control-list)
-				 (setf (attribute element "data-clog-name")
-				       (format nil "~A-~A" (getf control :name) (incf next-id)))
-				 (setf (attribute element "data-clog-type") (getf control :name))
-				 (setf (box-sizing element) :content-box)
-				 (setf (box-sizing placer) :content-box)
-				 (set-on-mouse-down placer (lambda (obj data)
-							     (declare (ignore obj) (ignore data))
-							     (select-control element)
-							     (window-focus win))
-						    :cancel-event t)
-				 (setf (selected-tool app) nil)
-				 (setf (positioning element) :absolute)
-				 (set-geometry element
-					       :left (getf data :x)
-					       :top (getf data :y))
-				 (setf (positioning placer) :absolute)
-				 (clog::jquery-execute placer "draggable().resizable()")
-				 (clog::set-on-event placer "resizestop"
-						     (lambda (obj)
-						       (declare (ignore obj))
-						       (set-geometry element :units ""
-									     :width (width placer)
-									     :height (height placer))
-						       (set-geometry placer :units ""
-									    :width (client-width element)
-									    :height (client-height element))
-						       (on-populate-control-properties-win win)))
-				 (clog::set-on-event placer "dragstop"
-						     (lambda (obj)
-						       (declare (ignore obj))
-						       (set-geometry element :units ""
-									     :top (top placer)
-									     :left (left placer))
-						       (on-populate-control-properties-win win)))
-				 (set-geometry placer
-					       :left (getf data :x)
-					       :top (getf data :y))
-				 (set-geometry placer :units ""
-						      :width (client-width element)
-						      :height (client-height element))
-				 (select-control element)
-				 (on-populate-control-list-win content))))))))
+						       (place-inside-bottom-of (bottom-panel box) (get-placer control)))
+						     (write-file (inner-html content) fname))
+						   (dolist (control control-list)
+						     (place-after control (get-placer control))))
+						 :initial-filename file-name)))
+    (set-on-click btn-rndr (lambda (obj)
+			     (dolist (control control-list)
+			       (place-inside-bottom-of (bottom-panel box) (get-placer control)))
+			     (let* ((cw     (on-show-layout-code obj))
+				    (result (format nil
+						    *builder-template1*
+						    panel-name
+						    (escape-string
+						     (ppcre:regex-replace-all "\\x22"
+									      (inner-html content)
+									      "\\\\\\\""))
+						    panel-name
+						    (mapcar (lambda (e)
+							      (let ((vname (attribute e "data-clog-name")))
+								(when vname
+								  (format nil *builder-template2*
+									  vname
+									  (html-id e)
+									  (format nil "CLOG:~A" (type-of e))))))
+							    control-list)
+						    (html-id cw)
+						    (html-id cw))))
+			       (js-execute obj (format nil
+						       "editor_~A.setValue('~A');editor_~A.moveCursorTo(0,0);"
+						       (html-id cw)
+						       (escape-string result)
+						       (html-id cw))))
+			     (dolist (control control-list)
+			       (place-after control (get-placer control)))))
+    (set-on-click btn-prop
+		  (lambda (obj)
+		    (input-dialog obj "Panel Name"
+				  (lambda (result)
+				    (when result
+				      (setf panel-name result)
+				      (setf (attribute content "data-clog-name") panel-name)
+				      (setf (window-title win) panel-name)))
+				  :default-value panel-name
+				  :title "Panel Properties")))
+    ;; setup adding and manipulating controls
+    (set-on-mouse-down content
+		       (lambda (obj data)
+			 (unless in-simulation
+			   (let* ((control-record (selected-tool app))
+				  (create-type    (getf control-record :create-type))
+				  (control        (cond ((eq create-type :label)
+							 (funcall (getf control-record :create) content
+								  :content (getf control-record :create-content)))
+							((eq create-type :form)
+							 (funcall (getf control-record :create) content
+								  (getf control-record :create-param)
+								  :value (getf control-record :create-value)))
+							(t nil)))
+				  (placer         (when control
+						    (create-div obj :html-id (format nil "p-~A" (html-id control))))))
+			     (window-focus win)
+			     (unless control
+			       (deselect-current-control app)
+			       (on-populate-control-list-win content))
+			     (when control
+			       (push control control-list)
+			       (setf (attribute control "data-clog-name")
+				     (format nil "~A-~A" (getf control-record :name) (incf next-id)))
+			       (setf (attribute control "data-clog-type") (getf control-record :name))
+			       (setf (box-sizing control) :content-box)
+			       (setf (box-sizing placer) :content-box)
+			       (set-on-mouse-down placer (lambda (obj data)
+							   (declare (ignore obj) (ignore data))
+							   (select-control control)
+							   (window-focus win))
+						  :cancel-event t)
+			       (setf (selected-tool app) nil)
+			       (setf (positioning control) :absolute)
+			       (set-geometry control
+					     :left (getf data :x)
+					     :top (getf data :y))
+			       (setf (positioning placer) :absolute)
+			       (clog::jquery-execute placer "draggable().resizable()")
+			       (clog::set-on-event placer "resizestop"
+						   (lambda (obj)
+						     (declare (ignore obj))
+						     (set-geometry control :units ""
+									   :width (width placer)
+									   :height (height placer))
+						     (set-geometry placer :units ""
+									  :width (client-width control)
+									  :height (client-height control))
+						     (on-populate-control-properties-win win)))
+			       (clog::set-on-event placer "dragstop"
+						   (lambda (obj)
+						     (declare (ignore obj))
+						     (set-geometry control :units ""
+									   :top (top placer)
+									   :left (left placer))
+						     (on-populate-control-properties-win win)))
+			       (set-geometry placer
+					     :left (getf data :x)
+					     :top (getf data :y))
+			       (set-geometry placer :units ""
+						    :width (client-width control)
+						    :height (client-height control))
+			       (select-control control)
+			       (on-populate-control-list-win content))))))))
 
 (defun on-help-about-builder (obj)
+  "Open about box"
   (let ((about (create-gui-window obj
 				  :title   "About"
 				  :content "<div class='w3-black'>
@@ -565,6 +577,7 @@
 				    (declare (ignore obj))()))))
 
 (defun on-new-builder (body)
+  "Launch instance of the CLOG Builder"
   (set-html-on-close body "Connection Lost")
   (let ((app (make-instance 'builder-app-data)))
     (setf (connection-data-item body "builder-app-data") app)
