@@ -14,7 +14,9 @@
      :create         clog:create-label
      :create-type    :label
      :create-content "label"
-     :properties     ((:name "color"
+     :properties     ((:name "text"
+		       :prop  clog:text)
+		      (:name "color"
 		       :prop  clog:color)
 		      (:name "background-color"
 		       :prop  clog:background-color)))
@@ -24,7 +26,9 @@
      :create-type     :form
      :create-param    :button
      :create-value    "button"
-     :properties      ((:name "color"
+     :properties      ((:name "value"
+			:prop  clog:value)
+		       (:name "color"
 			 :prop  clog:color)
 			(:name "background-color"
 			 :prop  clog:background-color)))
@@ -34,7 +38,9 @@
      :create-type     :form
      :create-param    :input
      :create-value    ""
-     :properties      ((:name "color"
+     :properties      ((:name "value"
+			:prop  clog:value)
+		       (:name "color"
 			:prop  clog:color)
 		       (:name "background-color"
 			:prop  clog:background-color)))))
@@ -214,8 +220,7 @@
       (setf (inner-html table) ""))
     (when (and win control)
       (let ((info  (control-info (attribute control "data-clog-type")))
-	    (props `(("id"      ,(html-id control) nil)
-		     ("name"    ,(attribute control "data-clog-name") t
+	    (props `(("name"    ,(attribute control "data-clog-name") t
 				,(lambda (obj)
 				   (setf  (attribute control "data-clog-name") (text obj))))
 		     ("top"     ,(top control) t ,(lambda (obj)
@@ -225,12 +230,7 @@
 		     ("width"   ,(width control) t ,(lambda (obj)
 						     (setf (width control) (text obj))))
 		     ("height"  ,(height control) t ,(lambda (obj)
-						       (setf (height control) (text obj))))
-		     ,(if (typep control 'clog:clog-form-element)
-			  `("value"  ,(value control) t ,(lambda (obj)
-							   (setf (value control) (text obj))))
-			  `("text"   ,(text control) t ,(lambda (obj)
-							  (setf (text control) (text obj))))))))
+						       (setf (height control) (text obj)))))))
 	(when info
 	  (let (col)
 	    (dolist (prop (reverse (getf info :properties)))
@@ -388,6 +388,7 @@ of controls and double click to select control."
     control))
 
 ;; These templates are here due to compiler or slime bug,
+;; that confuses the quotes as actual code.
 ;; I don't have time to hunt down at moment.
 (defparameter *builder-template1* "\(in-package :clog-user)~%~
 \(set-on-new-window \(lambda \(body)~%
@@ -426,7 +427,10 @@ of controls and double click to select control."
     ;; activate associated windows on open
     (on-populate-control-list-win content)
     ;; setup window events
-    (set-on-window-focus win (lambda (obj) (declare (ignore obj)) (on-populate-control-list-win content)))
+    (set-on-window-focus win
+			 (lambda (obj)
+			   (declare (ignore obj))
+			   (on-populate-control-list-win content)))
     (set-on-window-close win
 			 (lambda (obj)
 			   (declare (ignore obj))
@@ -569,6 +573,7 @@ of controls and double click to select control."
 				   (t
 				    ;; panel directly clicked with select tool or no control type to add
 				    (deselect-current-control app)
+				    (on-populate-control-properties-win obj)
 				    (on-populate-control-list-win content)))))))))
 
 (defun on-help-about-builder (obj)
