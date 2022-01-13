@@ -15,11 +15,13 @@
      :create-type    :label
      :create-content "label"
      :properties     ((:name "text"
-		       :prop  clog:text)
+		       :prop clog:text)
+		      (:name "positioning"
+		       :prop clog:positioning)
 		      (:name "color"
-		       :prop  clog:color)
+		       :prop clog:color)
 		      (:name "background-color"
-		       :prop  clog:background-color)))
+		       :prop clog:background-color)))
    '(:name            "button"
      :description     "Button"
      :create          clog:create-form-element
@@ -27,11 +29,13 @@
      :create-param    :button
      :create-value    "button"
      :properties      ((:name "value"
-			:prop  clog:value)
+			:prop clog:value)
+		       (:name "positioning"
+			:prop clog:positioning)
 		       (:name "color"
-			 :prop  clog:color)
-			(:name "background-color"
-			 :prop  clog:background-color)))
+			:prop clog:color)
+		       (:name "background-color"
+			:prop clog:background-color)))
    '(:name            "input"
      :description     "Text Input"
      :create          clog:create-form-element
@@ -39,11 +43,13 @@
      :create-param    :input
      :create-value    ""
      :properties      ((:name "value"
-			:prop  clog:value)
+			:prop clog:value)
+		       (:name "positioning"
+			:prop clog:positioning)
 		       (:name "color"
-			:prop  clog:color)
+			:prop clog:color)
 		       (:name "background-color"
-			:prop  clog:background-color)))))
+			:prop clog:background-color)))))
 
 (defclass builder-app-data ()
   ((copy-buf
@@ -223,10 +229,16 @@
 	    (props `(("name"    ,(attribute control "data-clog-name") t
 				,(lambda (obj)
 				   (setf  (attribute control "data-clog-name") (text obj))))
-		     ("top"     ,(top control) t ,(lambda (obj)
-						  (setf (top control) (text obj))))
-		     ("left"    ,(left control) t ,(lambda (obj)
-						   (setf (left control) (text obj))))
+		     ("top"     ,(if (equal (positioning control) "static")
+				     "n/a"
+				     (top control))
+				t ,(lambda (obj)
+				     (setf (top control) (text obj))))
+		     ("left"    ,(if (equal (positioning control) "static")
+				     "n/a"
+				     (left control))
+				t ,(lambda (obj)
+				     (setf (left control) (text obj))))
 		     ("width"   ,(width control) t ,(lambda (obj)
 						     (setf (width control) (text obj))))
 		     ("height"  ,(height control) t ,(lambda (obj)
@@ -250,9 +262,8 @@
 			   (lambda (obj)
 			     (funcall (fourth item) obj)
 			     (when control
-			       (set-geometry placer :units ""
-						    :top (top control)
-						    :left (left control)
+			       (set-geometry placer :top (position-top control)
+						    :left (position-left control)
 						    :width (client-width control)
 						    :height (client-height control))))))))))))
 
@@ -323,6 +334,11 @@ access to it and allows manipulation of location, size etc of the control."
   (let ((app    (connection-data-item control "builder-app-data"))
 	(placer (get-placer control)))
     (deselect-current-control app)
+    ;; insure placer geometry for static positioning
+    (set-geometry placer :top (position-top control)
+			 :left (position-left control)
+			 :width (client-width control)
+			 :height (client-height control))
     (setf (current-control app) control)
     (set-border placer (unit "px" 2) :solid :blue)
     (on-populate-control-properties-win control)))
@@ -347,19 +363,28 @@ of controls and double click to select control."
 	      (setf (attribute list-item "data-clog-control") (html-id control))
 	      ;; double click to select item
 	      (set-on-double-click list-item (lambda (obj)
-				       (let* ((id      (attribute obj "data-clog-control"))
-					      (element (attach-as-child obj id)))
-					 (select-control element))))
+					       (let* ((id      (attribute obj "data-clog-control"))
+						      (element (attach-as-child obj id)))
+						 (select-control element))))
 	      ;; drag and drop to change
 	      (set-on-drag-over list-item (lambda (obj)(declare (ignore obj))()))
 	      (set-on-drop list-item (lambda (obj data)
 			       (declare (ignore obj))
-			       (let* ((id (attribute obj "data-clog-control"))
-				      (c1 (attach-as-child obj id))
-				      (c2 (attach-as-child obj (getf data :drag-data)))
-				      (placer (get-placer c2)))
-				 (place-before c1 c2)
-				 (place-after c2 placer)
+			       (let* ((id       (attribute obj "data-clog-control"))
+				      (control1 (attach-as-child obj id))
+				      (control2 (attach-as-child obj (getf data :drag-data)))
+				      (placer1  (get-placer control1))
+				      (placer2  (get-placer control2)))
+				 (place-before control1 control2)
+				 (place-after control2 placer2)
+				 (set-geometry placer1 :top (position-top control1)
+						       :left (position-left control1)
+						       :width (client-width control1)
+						       :height (client-height control1))
+				 (set-geometry placer2 :top (position-top control2)
+						       :left (position-left control2)
+						       :width (client-width control2)
+						       :height (client-height control2))
 				 (on-populate-control-list-win content))))
 	      (set-on-drag-start list-item (lambda (obj)
 				     (declare (ignore obj))())
@@ -547,6 +572,12 @@ of controls and double click to select control."
 						  :height (client-height control))
 				    (select-control control)
 				    (on-populate-control-list-win content)
+				    ;; setup control events
+				    (set-on-focus control (lambda (obj)
+							    ;; set focus is captured in case
+							    ;; control is set to static or reached
+							    ;; using tab selection
+							    (select-control control)))
 				    ;; setup placer events
 				    (set-on-mouse-down placer (lambda (obj data)
 								(declare (ignore obj) (ignore data))
@@ -569,6 +600,8 @@ of controls and double click to select control."
 							  (set-geometry control :units ""
 										:top (top placer)
 										:left (left placer))
+							  (set-geometry placer :top (position-top control)
+									       :left (position-left control))
 							  (on-populate-control-properties-win win))))
 				   (t
 				    ;; panel directly clicked with select tool or no control type to add
