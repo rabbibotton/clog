@@ -28,8 +28,8 @@
      :create-type     :form
      :create-param    :button
      :create-value    "button"
-     :properties      (;; (:name "value" - to fix
-		       ;; :prop clog:value)
+     :properties      ((:name "value"
+			:prop clog:value)
 		       (:name "positioning"
 			:prop clog:positioning)
 		       (:name "color"
@@ -42,8 +42,8 @@
      :create-type     :form
      :create-param    :input
      :create-value    ""
-     :properties      (;; (:name "value" - to fix
-		       ;; :prop clog:value)
+     :properties      ((:name "value"
+			:prop clog:value)
 		       (:name "positioning"
 			:prop clog:positioning)
 		       (:name "color"
@@ -79,6 +79,10 @@
     :accessor selected-tool
     :initform nil
     :documentation "Currently selected tool")
+   (control-lists
+    :accessor control-lists
+    :initform (make-hash-table :test #'equalp)
+    :documentation "Panel to Control List hash table")
    (properties-list
     :accessor properties-list
     :initform nil
@@ -261,12 +265,7 @@
 		     ("width"   ,(width control) t ,(lambda (obj)
 						     (setf (width control) (text obj))))
 		     ("height"  ,(height control) t ,(lambda (obj)
-						       (setf (height control) (text obj))))
-		     ,(if (typep control 'clog:clog-form-element)
-			  `("value"  ,(value control) t ,(lambda (obj)
-							   (setf (value control) (text obj))))
-			  `("text"   ,(text control) t ,(lambda (obj)
-							  (setf (text control) (text obj))))))))
+						       (setf (height control) (text obj)))))))
 	(when info
 	  (let (col)
 	    (dolist (prop (reverse (getf info :properties)))
@@ -354,7 +353,9 @@ access to it and allows manipulation of location, size etc of the control."
     (setf (current-control app) nil)))
 
 (defun select-control (control)
-  "Select CONTROL as the current control and highlight its placer."
+  "Select CONTROL as the current control and highlight its placer.
+The actual original clog object used for creation must be used and
+not a temporary attached one when using select-control."
   (let ((app    (connection-data-item control "builder-app-data"))
 	(placer (get-placer control)))
     (deselect-current-control app)
@@ -370,7 +371,8 @@ access to it and allows manipulation of location, size etc of the control."
 (defun on-populate-control-list-win (content)
   "Populate the control-list-window to allow drag and drop adjust of order
 of controls and double click to select control."
-  (let ((app (connection-data-item content "builder-app-data")))
+  (let ((app      (connection-data-item content "builder-app-data"))
+	(panel-id (html-id content)))
     (when (control-list-win app)
       (let ((win (window-content (control-list-win app))))
 	(setf (inner-html win) "")
@@ -386,13 +388,16 @@ of controls and double click to select control."
 			   (setf (attribute list-item "data-clog-control") (html-id control))
 			   ;; double click to select item
 			   (set-on-double-click list-item (lambda (obj)
-							    (let* ((id      (attribute obj "data-clog-control"))
-								   (element (attach-as-child obj id)))
-							      (select-control element))))
+							    (let* ((html-id (attribute obj "data-clog-control"))
+								   (control (get-from-control-list app
+												   panel-id
+												   html-id)))
+							      (format t "clicked ~A got ~A on panel ~A~%"
+								      html-id control panel-id)
+							      (select-control control))))
 			   ;; drag and drop to change
 			   (set-on-drag-over list-item (lambda (obj)(declare (ignore obj))()))
 			   (set-on-drop list-item (lambda (obj data)
-						    (declare (ignore obj))
 						    (let* ((id       (attribute obj "data-clog-control"))
 							   (control1 (attach-as-child obj id))
 							   (control2 (attach-as-child obj (getf data :drag-data)))
@@ -451,6 +456,25 @@ of controls and double click to select control."
 (defparameter *builder-template2*
   "~%                            (~A (attach-as-child body \"~A\" :clog-type '~A))")
 
+(defun init-control-list (app panel-id)
+  (setf (gethash panel-id (control-lists app)) (make-hash-table :test #'equalp)))
+
+(defun destroy-control-list (app panel-id)
+  (remhash panel-id (control-lists app)))
+
+(defun get-control-list (app panel-id)
+  (gethash panel-id (control-lists app)))
+
+(defun add-to-control-list (app panel-id control)
+  (let ((html-id (format nil "~A" (html-id control))))
+    (setf (gethash html-id (get-control-list app panel-id)) control)))
+
+(defun get-from-control-list (app panel-id html-id)
+  (gethash html-id (get-control-list app panel-id)))
+
+(defun remove-from-control-list (app panel-id html-id)
+  (remhash html-id (get-control-list app panel-id)))
+
 (defun on-new-builder-window (obj)
   "Open new panel"
   (let* ((app (connection-data-item obj "builder-app-data"))
@@ -469,7 +493,8 @@ of controls and double click to select control."
 	 (file-name  ".")
 	 (panel-name (format nil "panel-~A" (incf (next-pannel-id app))))
 	 (next-id  0)
-	 control-list)
+	 (panel-id (html-id content)))
+    (init-control-list app panel-id)
     ;; setup panel window
     (setf (background-color tool-bar) :silver)
     (setf (attribute content "data-clog-name") panel-name)
@@ -486,13 +511,14 @@ of controls and double click to select control."
 			   (declare (ignore obj))
 			   ;; clear associated windows on close
 			   (setf (current-control app) nil)
+			   (destroy-control-list app panel-id)
 			   (on-populate-control-properties-win win)
 			   (on-populate-control-list-win content)))
     ;; setup tool bar events
     (set-on-click btn-del (lambda (obj)
 			    (declare (ignore obj))
 			    (when (current-control app)
-			      (alexandria:removef control-list (current-control app))
+			      (remove-from-control-list app panel-id (html-id (current-control app)))
 			      (destroy (get-placer (current-control app)))
 			      (destroy (current-control app))
 			      (setf (current-control app) nil)
@@ -503,15 +529,17 @@ of controls and double click to select control."
 			    (cond (in-simulation
 				   (setf (text btn-sim) "Simulate")
 				   (setf in-simulation nil)
-				   (dolist (control control-list)
-				     (setf (hiddenp (get-placer control)) nil)))
+				   (maphash (lambda (html-id control)
+					      (setf (hiddenp (get-placer control)) nil))
+					    (get-control-list app panel-id)))
 				  (t
 				   (setf (text btn-sim) "Develop")
 				   (deselect-current-control app)
 				   (on-populate-control-properties-win win)
 				   (setf in-simulation t)
-				   (dolist (control control-list)
-				     (setf (hiddenp (get-placer control)) t))
+				   (maphash (lambda (html-id control)
+					      (setf (hiddenp (get-placer control)) t))
+					    (get-control-list app panel-id))
 				   (focus (first-child content))))))
     (set-on-click btn-save (lambda (obj)
 			     (server-file-dialog obj "Save Panel As.." file-name
@@ -519,15 +547,21 @@ of controls and double click to select control."
 						   (window-focus win)
 						   (when fname
 						     (setf file-name fname)
-						     (dolist (control control-list)
-						       (place-inside-bottom-of (bottom-panel box) (get-placer control)))
+						     (maphash (lambda (html-id control)
+								(place-inside-bottom-of
+								 (bottom-panel box)
+								 (get-placer control)))
+							      (get-control-list app panel-id))
 						     (write-file (inner-html content) fname))
-						   (dolist (control control-list)
-						     (place-after control (get-placer control))))
+						   (maphash (lambda (html-id control)
+							      (place-after control (get-placer control))
+							      (get-control-list app panel-id))))
 						 :initial-filename file-name)))
     (set-on-click btn-rndr (lambda (obj)
-			     (dolist (control control-list)
-			       (place-inside-bottom-of (bottom-panel box) (get-placer control)))
+			     (maphash (lambda (html-id control)
+					(place-inside-bottom-of (bottom-panel box)
+								(get-placer control)))
+				      (get-control-list app panel-id))
 			     (let* ((cw     (on-show-layout-code obj))
 				    (result (format nil
 						    *builder-template1*
@@ -544,7 +578,7 @@ of controls and double click to select control."
 									  vname
 									  (html-id e)
 									  (format nil "CLOG:~A" (type-of e))))))
-							    control-list)
+							    (get-control-list app panel-id))
 						    (html-id cw)
 						    (html-id cw))))
 			       (js-execute obj (format nil
@@ -552,8 +586,9 @@ of controls and double click to select control."
 						       (html-id cw)
 						       (escape-string result)
 						       (html-id cw))))
-			     (dolist (control control-list)
-			       (place-after control (get-placer control)))))
+			     (maphash (lambda (html-id control)
+					(place-after control (get-placer control))
+					(get-control-list app panel-id)))))
     (set-on-click btn-prop
 		  (lambda (obj)
 		    (input-dialog obj "Panel Name"
@@ -577,7 +612,7 @@ of controls and double click to select control."
 			     (cond (control
 				    ;; panel directly clicked with a control type selected
 				    ;; setup control
-				    (push control control-list)
+				    (add-to-control-list app panel-id control)
 				    (setf (attribute control "data-clog-name")
 					  (format nil "~A-~A" control-type-name (incf next-id)))
 				    (setf (box-sizing control) :content-box)
