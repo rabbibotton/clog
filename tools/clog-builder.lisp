@@ -100,6 +100,35 @@
     :initform nil
     :documentation "Current control pallete window")))
 
+;; Control-List utilities
+
+(defun init-control-list (app panel-id)
+  "Initialize new control list for PANEL-ID on instance of APP."
+  (setf (gethash panel-id (control-lists app)) (make-hash-table :test #'equalp)))
+
+(defun destroy-control-list (app panel-id)
+  "Destroy the control-list on PANEL-ID"
+  (remhash panel-id (control-lists app)))
+
+(defun get-control-list (app panel-id)
+  "Rerieve the control-list hash table on PANEL-ID"
+  (gethash panel-id (control-lists app)))
+
+(defun add-to-control-list (app panel-id control)
+  "Add a CONTROL on to control-list on PANEL-ID"
+  (let ((html-id (format nil "~A" (html-id control))))
+    (setf (gethash html-id (get-control-list app panel-id)) control)))
+
+(defun get-from-control-list (app panel-id html-id)
+  "Get control identified my HTML-ID from control-list on PANEL-ID"
+  (gethash html-id (get-control-list app panel-id)))
+
+(defun remove-from-control-list (app panel-id html-id)
+  "Remove a control identified by HTML-ID from control-list on PANEL-ID"
+  (remhash html-id (get-control-list app panel-id)))
+
+;; Local file utilities
+
 (defun read-file (infile)
   "Read local file"
   (with-open-file (instream infile :direction :input :if-does-not-exist nil)
@@ -125,6 +154,174 @@
 	    (*error-output* stream))
 	(setf eval-result (eval (read-from-string (format nil "(progn ~A)" form))))))
     (format nil "~A~%=>~A~%" result eval-result)))
+
+;; Control utilities
+
+(defun control-info (control-name)
+  "Return control informaton record for CONTROL-NAME from the SUPPORTED-CONTROLS list."
+  (find-if (lambda (x) (equal (getf x :name) control-name)) supported-controls))
+
+(defun create-control (parent control-record)
+  "Return a new control based on CONTROL-RECORD as a child of PARENT"
+  (let* ((create-type       (getf control-record :create-type))
+	 (control-type-name (getf control-record :name))
+	 (control           (cond ((eq create-type :element)
+				   (funcall (getf control-record :create) parent
+					    :content (getf control-record :create-content)))
+				  ((eq create-type :form)
+				   (funcall (getf control-record :create) parent
+					    (getf control-record :create-param)
+					    :value (getf control-record :create-value)))
+				  (t nil))))
+    (when control
+      (setf (attribute control "data-clog-type") control-type-name)
+      (create-div parent :html-id (format nil "p-~A" (html-id control))))
+    control))
+
+;; Control selection utilities
+
+(defun get-placer (control)
+  "Get placer for CONTROL. A placer is a div placed on top of the control and
+access to it and allows manipulation of location, size etc of the control."
+  (when control
+    (attach-as-child control (format nil "p-~A" (html-id control)))))
+
+(defun deselect-current-control (app)
+  "Remove selection on current control and remove visual ques on its placer."
+  (when (current-control app)
+    (set-border (get-placer (current-control app)) (unit "px" 0) :none :blue)
+    (setf (current-control app) nil)))
+
+(defun select-control (control)
+  "Select CONTROL as the current control and highlight its placer.
+The actual original clog object used for creation must be used and
+not a temporary attached one when using select-control."
+  (let ((app    (connection-data-item control "builder-app-data"))
+	(placer (get-placer control)))
+    (deselect-current-control app)
+    ;; insure placer geometry for static positioning
+    (set-geometry placer :top (position-top control)
+			 :left (position-left control)
+			 :width (client-width control)
+			 :height (client-height control))
+    (setf (current-control app) control)
+    (set-border placer (unit "px" 2) :solid :blue)
+    (on-populate-control-properties-win control)))
+
+;; Population of utility windows
+
+(defun on-populate-control-properties-win (obj)
+  "Populate the control properties win for the current control"
+  (let* ((app     (connection-data-item obj "builder-app-data"))
+	 (win     (control-properties-win app))
+	 (control (current-control app))
+	 (placer  (get-placer control))
+	 (table   (properties-list app)))
+    (when win
+      (setf (inner-html table) ""))
+    (when (and win control)
+      (let ((info  (control-info (attribute control "data-clog-type")))
+	    (props `(("name"    ,(attribute control "data-clog-name") t
+				,(lambda (obj)
+				   (setf  (attribute control "data-clog-name") (text obj))))
+		     ("parent"  ,(attribute (parent-element control) "data-clog-name")
+				t ,(lambda (obj)
+				     (place-inside-bottom-of
+				      (attach-as-child obj
+				       (clog::js-query obj (format nil "$(\"[data-clog-name='~A']\").attr('id')"
+								   (text obj))))
+				      control)
+				     (place-after control placer)))
+		     ("top"     ,(if (equal (positioning control) "static")
+				     "n/a"
+				     (top control))
+				t ,(lambda (obj)
+				     (setf (top control) (text obj))))
+		     ("left"    ,(if (equal (positioning control) "static")
+				     "n/a"
+				     (left control))
+				t ,(lambda (obj)
+				     (setf (left control) (text obj))))
+		     ("width"   ,(width control) t ,(lambda (obj)
+						     (setf (width control) (text obj))))
+		     ("height"  ,(height control) t ,(lambda (obj)
+						       (setf (height control) (text obj)))))))
+	(when info
+	  (let (col)
+	    (dolist (prop (reverse (getf info :properties)))
+	      (push `(,(getf prop :name) ,(funcall (getf prop :prop) control) t
+		      ,(lambda (obj)
+			 (funcall (find-symbol (format nil "SET-~A" (getf prop :prop)) :clog) control (text obj))))
+		    col))
+	    (alexandria:appendf props col)))
+	(dolist (item props)
+	  (let* ((tr (create-table-row table))
+		 (td1 (create-table-column tr :content (first item)))
+		 (td2 (create-table-column tr :content (second item))))
+	    (set-border td1 "1px" :dotted :black)
+	    (when (third item)
+	      (setf (editablep td2) t)
+	      (set-on-blur td2
+			   (lambda (obj)
+			     (funcall (fourth item) obj)
+			     (when control
+			       (set-geometry placer :top (position-top control)
+						    :left (position-left control)
+						    :width (client-width control)
+						    :height (client-height control))))))))))))
+
+(defun on-populate-control-list-win (content)
+  "Populate the control-list-window to allow drag and drop adjust of order
+of controls and double click to select control."
+  (let ((app      (connection-data-item content "builder-app-data"))
+	(panel-id (html-id content)))
+    (when (control-list-win app)
+      (let ((win (window-content (control-list-win app))))
+	(setf (inner-html win) "")
+	(labels ((add-siblings (control sim)
+		   (let (dln)
+		     (loop
+		       (when (equal (html-id control) "undefined") (return))
+		       (setf dln (attribute control "data-clog-name"))
+		       (unless (equal dln "undefined")
+			 (let ((list-item (create-div win :content (format nil "&#8597; ~A~A" sim dln))))
+			   (setf (background-color list-item) :lightgray)
+			   (setf (draggablep list-item) t)
+			   (setf (attribute list-item "data-clog-control") (html-id control))
+			   ;; double click to select item
+			   (set-on-double-click list-item (lambda (obj)
+							    (let* ((html-id (attribute obj "data-clog-control"))
+								   (control (get-from-control-list app
+												   panel-id
+												   html-id)))
+							      (select-control control))))
+			   ;; drag and drop to change
+			   (set-on-drag-over list-item (lambda (obj)(declare (ignore obj))()))
+			   (set-on-drop list-item (lambda (obj data)
+						    (let* ((id       (attribute obj "data-clog-control"))
+							   (control1 (attach-as-child obj id))
+							   (control2 (attach-as-child obj (getf data :drag-data)))
+							   (placer1  (get-placer control1))
+							   (placer2  (get-placer control2)))
+						      (place-before control1 control2)
+						      (place-after control2 placer2)
+						      (set-geometry placer1 :top (position-top control1)
+									    :left (position-left control1)
+									    :width (client-width control1)
+									    :height (client-height control1))
+						      (set-geometry placer2 :top (position-top control2)
+									    :left (position-left control2)
+									    :width (client-width control2)
+									    :height (client-height control2))
+						      (on-populate-control-list-win content))))
+			   (set-on-drag-start list-item (lambda (obj)
+							  (declare (ignore obj))())
+					      :drag-data (html-id control))
+			   (add-siblings (first-child control) (format nil "~A->" sim))))
+		       (setf control (next-sibling control))))))
+	  (add-siblings (first-child content) ""))))))
+
+;; Menu handlers
 
 (defun do-ide-edit-copy (obj)
   "Copy to clipboard in to app data and browser's host OS"
@@ -230,66 +427,6 @@
 			(html-id win)))
     win))
 
-(defun on-populate-control-properties-win (obj)
-  "Populate the control properties win for the current control"
-  (let* ((app     (connection-data-item obj "builder-app-data"))
-	 (win     (control-properties-win app))
-	 (control (current-control app))
-	 (placer  (get-placer control))
-	 (table   (properties-list app)))
-    (when win
-      (setf (inner-html table) ""))
-    (when (and win control)
-      (let ((info  (control-info (attribute control "data-clog-type")))
-	    (props `(("name"    ,(attribute control "data-clog-name") t
-				,(lambda (obj)
-				   (setf  (attribute control "data-clog-name") (text obj))))
-		     ("parent"  ,(attribute (parent-element control) "data-clog-name")
-				t ,(lambda (obj)
-				     (place-inside-bottom-of
-				      (attach-as-child obj
-				       (clog::js-query obj (format nil "$(\"[data-clog-name='~A']\").attr('id')"
-								   (text obj))))
-				      control)
-				     (place-after control placer)))
-		     ("top"     ,(if (equal (positioning control) "static")
-				     "n/a"
-				     (top control))
-				t ,(lambda (obj)
-				     (setf (top control) (text obj))))
-		     ("left"    ,(if (equal (positioning control) "static")
-				     "n/a"
-				     (left control))
-				t ,(lambda (obj)
-				     (setf (left control) (text obj))))
-		     ("width"   ,(width control) t ,(lambda (obj)
-						     (setf (width control) (text obj))))
-		     ("height"  ,(height control) t ,(lambda (obj)
-						       (setf (height control) (text obj)))))))
-	(when info
-	  (let (col)
-	    (dolist (prop (reverse (getf info :properties)))
-	      (push `(,(getf prop :name) ,(funcall (getf prop :prop) control) t
-		      ,(lambda (obj)
-			 (funcall (find-symbol (format nil "SET-~A" (getf prop :prop)) :clog) control (text obj))))
-		    col))
-	    (alexandria:appendf props col)))
-	(dolist (item props)
-	  (let* ((tr (create-table-row table))
-		 (td1 (create-table-column tr :content (first item)))
-		 (td2 (create-table-column tr :content (second item))))
-	    (set-border td1 "1px" :dotted :black)
-	    (when (third item)
-	      (setf (editablep td2) t)
-	      (set-on-blur td2
-			   (lambda (obj)
-			     (funcall (fourth item) obj)
-			     (when control
-			       (set-geometry placer :top (position-top control)
-						    :left (position-left control)
-						    :width (client-width control)
-						    :height (client-height control))))))))))))
-
 (defun on-show-control-properties-win (obj)
   (let ((app (connection-data-item obj "builder-app-data")))
     (if (control-properties-win app)
@@ -340,108 +477,6 @@
 	  (setf (control-list-win app) win)
 	  (set-on-window-close win (lambda (obj) (setf (control-list-win app) nil)))))))
 
-(defun get-placer (control)
-  "Get placer for CONTROL. A placer is a div placed on top of the control and
-access to it and allows manipulation of location, size etc of the control."
-  (when control
-    (attach-as-child control (format nil "p-~A" (html-id control)))))
-
-(defun deselect-current-control (app)
-  "Remove selection on current control and remove visual ques on its placer."
-  (when (current-control app)
-    (set-border (get-placer (current-control app)) (unit "px" 0) :none :blue)
-    (setf (current-control app) nil)))
-
-(defun select-control (control)
-  "Select CONTROL as the current control and highlight its placer.
-The actual original clog object used for creation must be used and
-not a temporary attached one when using select-control."
-  (let ((app    (connection-data-item control "builder-app-data"))
-	(placer (get-placer control)))
-    (deselect-current-control app)
-    ;; insure placer geometry for static positioning
-    (set-geometry placer :top (position-top control)
-			 :left (position-left control)
-			 :width (client-width control)
-			 :height (client-height control))
-    (setf (current-control app) control)
-    (set-border placer (unit "px" 2) :solid :blue)
-    (on-populate-control-properties-win control)))
-
-(defun on-populate-control-list-win (content)
-  "Populate the control-list-window to allow drag and drop adjust of order
-of controls and double click to select control."
-  (let ((app      (connection-data-item content "builder-app-data"))
-	(panel-id (html-id content)))
-    (when (control-list-win app)
-      (let ((win (window-content (control-list-win app))))
-	(setf (inner-html win) "")
-	(labels ((add-siblings (control sim)
-		   (let (dln)
-		     (loop
-		       (when (equal (html-id control) "undefined") (return))
-		       (setf dln (attribute control "data-clog-name"))
-		       (unless (equal dln "undefined")
-			 (let ((list-item (create-div win :content (format nil "&#8597; ~A~A" sim dln))))
-			   (setf (background-color list-item) :lightgray)
-			   (setf (draggablep list-item) t)
-			   (setf (attribute list-item "data-clog-control") (html-id control))
-			   ;; double click to select item
-			   (set-on-double-click list-item (lambda (obj)
-							    (let* ((html-id (attribute obj "data-clog-control"))
-								   (control (get-from-control-list app
-												   panel-id
-												   html-id)))
-							      (format t "clicked ~A got ~A on panel ~A~%"
-								      html-id control panel-id)
-							      (select-control control))))
-			   ;; drag and drop to change
-			   (set-on-drag-over list-item (lambda (obj)(declare (ignore obj))()))
-			   (set-on-drop list-item (lambda (obj data)
-						    (let* ((id       (attribute obj "data-clog-control"))
-							   (control1 (attach-as-child obj id))
-							   (control2 (attach-as-child obj (getf data :drag-data)))
-							   (placer1  (get-placer control1))
-							   (placer2  (get-placer control2)))
-						      (place-before control1 control2)
-						      (place-after control2 placer2)
-						      (set-geometry placer1 :top (position-top control1)
-									    :left (position-left control1)
-									    :width (client-width control1)
-									    :height (client-height control1))
-						      (set-geometry placer2 :top (position-top control2)
-									    :left (position-left control2)
-									    :width (client-width control2)
-									    :height (client-height control2))
-						      (on-populate-control-list-win content))))
-			   (set-on-drag-start list-item (lambda (obj)
-							  (declare (ignore obj))())
-					      :drag-data (html-id control))
-			   (add-siblings (first-child control) (format nil "~A->" sim))))
-		       (setf control (next-sibling control))))))
-	  (add-siblings (first-child content) ""))))))
-
-(defun control-info (control-name)
-  "Return control informaton record for CONTROL-NAME from the SUPPORTED-CONTROLS list."
-  (find-if (lambda (x) (equal (getf x :name) control-name)) supported-controls))
-
-(defun create-control (parent control-record)
-  "Return a new control based on CONTROL-RECORD as a child of PARENT"
-  (let* ((create-type       (getf control-record :create-type))
-	 (control-type-name (getf control-record :name))
-	 (control           (cond ((eq create-type :element)
-				   (funcall (getf control-record :create) parent
-					    :content (getf control-record :create-content)))
-				  ((eq create-type :form)
-				   (funcall (getf control-record :create) parent
-					    (getf control-record :create-param)
-					    :value (getf control-record :create-value)))
-				  (t nil))))
-    (when control
-      (setf (attribute control "data-clog-type") control-type-name)
-      (create-div parent :html-id (format nil "p-~A" (html-id control))))
-    control))
-
 ;; These templates are here due to compiler or slime bug,
 ;; that confuses the quotes as actual code.
 ;; I don't have time to hunt down at moment.
@@ -455,25 +490,6 @@ of controls and double click to select control."
 
 (defparameter *builder-template2*
   "~%                            (~A (attach-as-child body \"~A\" :clog-type '~A))")
-
-(defun init-control-list (app panel-id)
-  (setf (gethash panel-id (control-lists app)) (make-hash-table :test #'equalp)))
-
-(defun destroy-control-list (app panel-id)
-  (remhash panel-id (control-lists app)))
-
-(defun get-control-list (app panel-id)
-  (gethash panel-id (control-lists app)))
-
-(defun add-to-control-list (app panel-id control)
-  (let ((html-id (format nil "~A" (html-id control))))
-    (setf (gethash html-id (get-control-list app panel-id)) control)))
-
-(defun get-from-control-list (app panel-id html-id)
-  (gethash html-id (get-control-list app panel-id)))
-
-(defun remove-from-control-list (app panel-id html-id)
-  (remhash html-id (get-control-list app panel-id)))
 
 (defun on-new-builder-window (obj)
   "Open new panel"
