@@ -546,6 +546,7 @@ of controls and double click to select control."
 				   (setf (text btn-sim) "Simulate")
 				   (setf in-simulation nil)
 				   (maphash (lambda (html-id control)
+					      (declare (ignore html-id))
 					      (setf (hiddenp (get-placer control)) nil))
 					    (get-control-list app panel-id)))
 				  (t
@@ -554,6 +555,7 @@ of controls and double click to select control."
 				   (on-populate-control-properties-win win)
 				   (setf in-simulation t)
 				   (maphash (lambda (html-id control)
+					      (declare (ignore html-id))
 					      (setf (hiddenp (get-placer control)) t))
 					    (get-control-list app panel-id))
 				   (focus (first-child content))))))
@@ -563,48 +565,54 @@ of controls and double click to select control."
 						   (window-focus win)
 						   (when fname
 						     (setf file-name fname)
-						     (maphash (lambda (html-id control)
-								(place-inside-bottom-of
-								 (bottom-panel box)
-								 (get-placer control)))
-							      (get-control-list app panel-id))
-						     (write-file (inner-html content) fname))
-						   (maphash (lambda (html-id control)
-							      (place-after control (get-placer control))
-							      (get-control-list app panel-id))))
+						     (maphash
+						      (lambda (html-id control)
+							(declare (ignore html-id))
+							(place-inside-bottom-of (bottom-panel box)
+										(get-placer control)))
+						      (get-control-list app panel-id))
+						     (write-file (inner-html content) fname)
+						     (maphash
+						      (lambda (html-id control)
+							(declare (ignore html-id))
+							(place-after control (get-placer control)))
+						      (get-control-list app panel-id))))
 						 :initial-filename file-name)))
-    (set-on-click btn-rndr (lambda (obj)
-			     (maphash (lambda (html-id control)
-					(place-inside-bottom-of (bottom-panel box)
-								(get-placer control)))
-				      (get-control-list app panel-id))
-			     (let* ((cw     (on-show-layout-code obj))
-				    (result (format nil
-						    *builder-template1*
-						    panel-name
-						    (escape-string
-						     (ppcre:regex-replace-all "\\x22"
-									      (inner-html content)
-									      "\\\\\\\""))
-						    panel-name
-						    (mapcar (lambda (e)
-							      (let ((vname (attribute e "data-clog-name")))
-								(when vname
-								  (format nil *builder-template2*
-									  vname
-									  (html-id e)
-									  (format nil "CLOG:~A" (type-of e))))))
-							    (get-control-list app panel-id))
-						    (html-id cw)
-						    (html-id cw))))
-			       (js-execute obj (format nil
-						       "editor_~A.setValue('~A');editor_~A.moveCursorTo(0,0);"
-						       (html-id cw)
-						       (escape-string result)
-						       (html-id cw))))
-			     (maphash (lambda (html-id control)
-					(place-after control (get-placer control))
-					(get-control-list app panel-id)))))
+    (set-on-click btn-rndr
+		  (lambda (obj)
+		    (let (vars)
+		      (maphash (lambda (html-id control)
+				 ;; hide placer
+				 (place-inside-bottom-of (bottom-panel box)
+							 (get-placer control))
+				 (let ((vname (attribute control "data-clog-name")))
+				   (push (format nil *builder-template2*
+						 vname
+						 html-id
+						 (format nil "CLOG:~A" (type-of control)))
+					 vars)))
+			       (get-control-list app panel-id))
+		      (let* ((cw     (on-show-layout-code obj))
+			     (result (format nil
+					     *builder-template1*
+					     panel-name
+					     (escape-string
+					      (ppcre:regex-replace-all "\\x22"
+								       (inner-html content)
+								       "\\\\\\\""))
+					     panel-name
+					     vars
+					     (html-id cw)
+					     (html-id cw))))
+			(js-execute obj (format nil
+						"editor_~A.setValue('~A');editor_~A.moveCursorTo(0,0);"
+						(html-id cw)
+						(escape-string result)
+						(html-id cw)))))
+		    (maphash (lambda (html-id control)
+			       (declare (ignore html-id))
+			       (place-after control (get-placer control)))
+			     (get-control-list app panel-id))))
     (set-on-click btn-prop
 		  (lambda (obj)
 		    (input-dialog obj "Panel Name"
@@ -650,6 +658,7 @@ of controls and double click to select control."
 				    (on-populate-control-list-win content)
 				    ;; setup control events
 				    (set-on-focus control (lambda (obj)
+							    (declare (ignore obj))
 							    ;; set focus is captured bound in case
 							    ;; control is set to static or reached
 							    ;; using tab selection
