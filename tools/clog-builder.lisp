@@ -327,8 +327,8 @@ not a temporary attached one when using select-control."
 	(panel-id (html-id content)))
     (clrhash (get-control-list app panel-id))
     ;; Assign any elements with no id an id, name and type
-    (clog::js-execute win (format nil "var clog-id=~A; $('*').each(function() {var e = $(this);~
- if(e.attr('id') === undefined) {$(this).attr('id','A' + clog-id++);}~
+    (clog::js-execute win (format nil "var clog_id=~A; $('*').each(function() {var e = $(this);~
+ if(e.attr('id') === undefined) {$(this).attr('id','A' + clog_id++);}~
  if(e.attr('data-clog-name') === undefined) {$(this).attr('data-clog-name', 'none')}~
  if(e.attr('data-clog-type') === undefined) {$(this).attr('data-clog-type', 'div')}})" panel-uid))
     (labels ((add-siblings (control)
