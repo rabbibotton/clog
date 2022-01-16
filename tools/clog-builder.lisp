@@ -165,16 +165,18 @@
   "Return control informaton record for CONTROL-TYPE-NAME from the SUPPORTED-CONTROLS list."
   (find-if (lambda (x) (equal (getf x :name) control-type-name)) supported-controls))
 
-(defun create-control (parent control-record)
+(defun create-control (parent control-record uid)
   "Return a new control based on CONTROL-RECORD as a child of PARENT"
   (let* ((create-type       (getf control-record :create-type))
 	 (control-type-name (getf control-record :name))
 	 (control           (cond ((eq create-type :element)
 				   (funcall (getf control-record :create) parent
+					    :html-id uid
 					    :content (getf control-record :create-content)))
 				  ((eq create-type :form)
 				   (funcall (getf control-record :create) parent
 					    (getf control-record :create-param)
+					    :html-id uid
 					    :value (getf control-record :create-value)))
 				  (t nil))))
     (when control
@@ -575,6 +577,7 @@ of controls and double click to select control."
 	 (file-name  ".")
 	 (panel-name (format nil "panel-~A" (incf (next-pannel-id app))))
 	 (next-id  0)
+	 (panel-uid (get-universal-time)) ;; unique id for panel
 	 (panel-id (html-id content)))
     (init-control-list app panel-id)
     ;; setup panel window
@@ -707,7 +710,10 @@ of controls and double click to select control."
 			   ;; create control
 			   (let* ((control-record    (selected-tool app))
 				  (control-type-name (getf control-record :name))
-				  (control           (create-control content control-record)))
+				  (control           (create-control content control-record
+								     (format nil "B~A~A"
+									     panel-uid
+									     next-id))))
 			     (cond (control
 				    ;; panel directly clicked with a control type selected
 				    ;; setup control
