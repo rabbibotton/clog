@@ -324,12 +324,13 @@ not a temporary attached one when using select-control."
 						    :height (client-height control))))))))))))
 
 (defun on-populate-loaded-window (win content)
+  "Setup html imported in to CONTENT for use with Builder"
   (let ((app      (connection-data-item content "builder-app-data"))
 	(panel-uid (get-universal-time))
 	(panel-id (html-id content)))
     (clrhash (get-control-list app panel-id))
     ;; Assign any elements with no id an id, name and type
-    (clog::js-execute win (format nil
+    (clog::js-execute content (format nil
      "var clog_id=~A; var clog_nid=1;~
       $(~A).find('*').each(function() {var e = $(this);~
         if(e.attr('id') === undefined) {$(this).attr('id','A' + clog_id++);}~
@@ -414,7 +415,7 @@ of controls and double click to select control."
 			   (set-on-drag-start list-item (lambda (obj)
 							  (declare (ignore obj))())
 					      :drag-data (html-id control))
-			   (add-siblings (first-child control) (format nil "~A->" sim))))
+			   (add-siblings (first-child control) (format nil "~A&#8594;" sim))))
 		       (setf control (next-sibling control))))))
 	  (add-siblings (first-child content) ""))))))
 
