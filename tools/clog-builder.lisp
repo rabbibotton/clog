@@ -327,10 +327,15 @@ not a temporary attached one when using select-control."
 	(panel-id (html-id content)))
     (clrhash (get-control-list app panel-id))
     ;; Assign any elements with no id an id, name and type
-    (clog::js-execute win (format nil "var clog_id=~A; $('*').each(function() {var e = $(this);~
- if(e.attr('id') === undefined) {$(this).attr('id','A' + clog_id++);}~
- if(e.attr('data-clog-name') === undefined) {$(this).attr('data-clog-name', 'none')}~
- if(e.attr('data-clog-type') === undefined) {$(this).attr('data-clog-type', 'div')}})" panel-uid))
+    (clog::js-execute win (format nil
+     "var clog_id=~A; var clog_nid=1;~
+      $(~A).find('*').each(function() {var e = $(this);~
+        if(e.attr('id') === undefined) {$(this).attr('id','A' + clog_id++);}~
+        if(e.attr('data-clog-name') === undefined) {$(this).attr('data-clog-name', 'none-' + clog_nid++)}~
+        if(e.attr('data-clog-type') === undefined) {$(this).attr('data-clog-type', 'div')\}~
+      })"
+     panel-uid
+     (clog::jquery content)))
     (labels ((add-siblings (control)
 	       (let (dct)
 		 (loop
@@ -357,17 +362,32 @@ of controls and double click to select control."
 		       (when (equal (html-id control) "undefined") (return))
 		       (setf dln (attribute control "data-clog-name"))
 		       (unless (equal dln "undefined")
-			 (let ((list-item (create-div win :content (format nil "&#8597; ~A~A" sim dln))))
-			   (setf (background-color list-item) :lightgray)
+			 (let ((list-item (create-div win :content (format nil "&#8597; ~A~A" sim dln)))
+			       (status    (hiddenp (get-placer control))))
+			   (if status
+			       (setf (background-color list-item) :gray)
+			       (setf (background-color list-item) :lightgray))
 			   (setf (draggablep list-item) t)
 			   (setf (attribute list-item "data-clog-control") (html-id control))
-			   ;; double click to select item
-			   (set-on-double-click list-item (lambda (obj)
-							    (let* ((html-id (attribute obj "data-clog-control"))
-								   (control (get-from-control-list app
-												   panel-id
-												   html-id)))
-							      (select-control control))))
+			   ;; click to select item
+			   (set-on-click list-item
+					 (lambda (obj)
+					   (let* ((html-id (attribute obj "data-clog-control"))
+						  (control (get-from-control-list app
+										  panel-id
+										  html-id)))
+					     (select-control control))))
+			   (set-on-double-click list-item
+						(lambda (obj)
+						  (let* ((html-id (attribute obj "data-clog-control"))
+							 (control (get-from-control-list app
+											 panel-id
+											 html-id))
+							 (placer  (get-placer control))
+							 (state   (hiddenp placer)))
+						    (setf (hiddenp placer) (not state))
+						    (select-control control)
+						    (on-populate-control-list-win content))))
 			   ;; drag and drop to change
 			   (set-on-drag-over list-item (lambda (obj)(declare (ignore obj))()))
 			   (set-on-drop list-item (lambda (obj data)
@@ -670,7 +690,8 @@ of controls and double click to select control."
 				 (place-inside-bottom-of (bottom-panel box)
 							 (get-placer control))
 				 (let ((vname (attribute control "data-clog-name")))
-				   (unless (equal vname "none")
+				   (unless (and (>= (length vname) 5)
+						(equalp (subseq vname 0 5) "none-"))
 				     (push (format nil *builder-template2*
 						   vname
 						   html-id
