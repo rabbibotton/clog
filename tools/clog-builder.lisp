@@ -11,6 +11,7 @@
      :events         nil)
    '(:name           "label"
      :description    "Text Label"
+     :clog-type      clog:clog-label
      :create         clog:create-label
      :create-type    :element
      :create-content "label"
@@ -24,6 +25,7 @@
 		       :prop clog:background-color)))
    '(:name            "button"
      :description     "Button"
+     :clog-type       clog:clog-form-element
      :create          clog:create-form-element
      :create-type     :form
      :create-param    :button
@@ -38,6 +40,7 @@
 			:prop clog:background-color)))
    '(:name            "input"
      :description     "Text Input"
+     :clog-type       clog:clog-form-element
      :create          clog:create-form-element
      :create-type     :form
      :create-param    :input
@@ -50,17 +53,18 @@
 			:prop clog:color)
 		       (:name "background-color"
 			:prop clog:background-color)))
-   '(:name           "div"
-     :description    "DIV Control"
-     :create         clog:create-div
-     :create-type    :element
-     :create-content ""
-     :properties     ((:name "positioning"
-		       :prop clog:positioning)
-		      (:name "color"
-		       :prop clog:color)
-		      (:name "background-color"
-		       :prop clog:background-color)))))
+   '(:name            "div"
+     :description     "DIV Control"
+     :clog-type       clog:clog-div
+     :create          clog:create-div
+     :create-type     :element
+     :create-content  ""
+     :properties      ((:name "positioning"
+			:prop clog:positioning)
+		       (:name "color"
+			:prop clog:color)
+		       (:name "background-color"
+			:prop clog:background-color)))))
 
 (defclass builder-app-data ()
   ((copy-buf
@@ -157,9 +161,9 @@
 
 ;; Control utilities
 
-(defun control-info (control-name)
-  "Return control informaton record for CONTROL-NAME from the SUPPORTED-CONTROLS list."
-  (find-if (lambda (x) (equal (getf x :name) control-name)) supported-controls))
+(defun control-info (control-type-name)
+  "Return control informaton record for CONTROL-TYPE-NAME from the SUPPORTED-CONTROLS list."
+  (find-if (lambda (x) (equal (getf x :name) control-type-name)) supported-controls))
 
 (defun create-control (parent control-record)
   "Return a new control based on CONTROL-RECORD as a child of PARENT"
@@ -174,9 +178,55 @@
 					    :value (getf control-record :create-value)))
 				  (t nil))))
     (when control
-      (setf (attribute control "data-clog-type") control-type-name)
-      (create-div parent :html-id (format nil "p-~A" (html-id control))))
+      (setf (attribute control "data-clog-type") control-type-name))
     control))
+
+(defun setup-control (win content control)
+  "Setup CONTROL by creating pacer and setting up events for manipulation"
+  (let ((app      (connection-data-item content "builder-app-data"))
+	(panel-id (html-id content))
+	(placer   (create-div control :auto-place nil :html-id (format nil "p-~A" (html-id control)))))
+    (add-to-control-list app panel-id control)
+    ;; setup placer
+    (set-geometry placer :top (position-top control)
+			 :left (position-left control)
+			 :width (client-width control)
+			 :height (client-height control))
+    (place-after control placer)
+    (setf (box-sizing placer) :content-box)
+    (setf (positioning placer) :absolute)
+    (clog::jquery-execute placer "draggable().resizable()")
+    ;; setup control events
+    (set-on-focus control (lambda (obj)
+			    (declare (ignore obj))
+			    ;; set focus is bound in case control
+			    ;; is set to static or reached using
+			    ;; tab selection
+			    (select-control obj)))
+    ;; setup placer events
+    (set-on-mouse-down placer
+		       (lambda (obj data)
+			 (declare (ignore obj) (ignore data))
+			 (select-control control)
+			 (window-focus win))
+		       :cancel-event t)
+    (clog::set-on-event placer "resizestop"
+			(lambda (obj)
+			  (set-geometry control :units ""
+						:width (width placer)
+						:height (height placer))
+			  (set-geometry placer :units ""
+					       :width (client-width control)
+					       :height (client-height control))
+			  (on-populate-control-properties-win obj)))
+    (clog::set-on-event placer "dragstop"
+			(lambda (obj)
+			  (set-geometry control :units ""
+						:top (top placer)
+						:left (left placer))
+			  (set-geometry placer :top (position-top control)
+					       :left (position-left control))
+			  (on-populate-control-properties-win obj)))))
 
 ;; Control selection utilities
 
@@ -199,7 +249,6 @@ not a temporary attached one when using select-control."
   (let ((app    (connection-data-item control "builder-app-data"))
 	(placer (get-placer control)))
     (deselect-current-control app)
-    ;; insure placer geometry for static positioning
     (set-geometry placer :top (position-top control)
 			 :left (position-left control)
 			 :width (client-width control)
@@ -211,7 +260,7 @@ not a temporary attached one when using select-control."
 ;; Population of utility windows
 
 (defun on-populate-control-properties-win (obj)
-  "Populate the control properties win for the current control"
+  "Populate the control properties for the current control"
   (let* ((app     (connection-data-item obj "builder-app-data"))
 	 (win     (control-properties-win app))
 	 (control (current-control app))
@@ -269,6 +318,22 @@ not a temporary attached one when using select-control."
 						    :left (position-left control)
 						    :width (client-width control)
 						    :height (client-height control))))))))))))
+
+(defun on-populate-loaded-window (win content)
+  (let ((app      (connection-data-item content "builder-app-data"))
+	(panel-id (html-id content)))
+    (clrhash (get-control-list app panel-id))
+    (labels ((add-siblings (control)
+	       (let (dct)
+		 (loop
+		   (when (equal (html-id control) "undefined") (return))
+		   (setf dct (attribute control "data-clog-type"))
+		   (unless (equal dct "undefined")
+		     (change-class control (getf (control-info dct) :clog-type))
+		     (setup-control win content control)
+		     (add-siblings (first-child control)))
+		   (setf control (next-sibling control))))))
+      (add-siblings (first-child content)))))
 
 (defun on-populate-control-list-win (content)
   "Populate the control-list-window to allow drag and drop adjust of order
@@ -499,11 +564,12 @@ of controls and double click to select control."
 				       :left-width 0 :right-width 9
 				       :top-height 30 :bottom-height 0))
 	 (tool-bar (top-panel box))
-	 (btn-del  (create-button tool-bar :content "Delete"))
+	 (btn-del  (create-button tool-bar :content "Del"))
 	 (btn-sim  (create-button tool-bar :content "Simulate"))
 	 (btn-rndr (create-button tool-bar :content "Render"))
 	 (btn-prop (create-button tool-bar :content "Properties"))
 	 (btn-save (create-button tool-bar :content "Save"))
+	 (btn-load (create-button tool-bar :content "Load"))
 	 (content  (center-panel box))
 	 (in-simulation nil)
 	 (file-name  ".")
@@ -559,6 +625,15 @@ of controls and double click to select control."
 					      (setf (hiddenp (get-placer control)) t))
 					    (get-control-list app panel-id))
 				   (focus (first-child content))))))
+    (set-on-click btn-load (lambda (obj)
+			     (server-file-dialog obj "Load Panel" file-name
+						 (lambda (fname)
+						   (window-focus win)
+						   (when fname
+						     (setf file-name fname)
+						     (setf (inner-html content)
+							   (escape-string (read-file fname)))
+						     (on-populate-loaded-window win content))))))
     (set-on-click btn-save (lambda (obj)
 			     (server-file-dialog obj "Save Panel As.." file-name
 						 (lambda (fname)
@@ -627,67 +702,26 @@ of controls and double click to select control."
     (set-on-mouse-down content
 		       (lambda (obj data)
 			 (unless in-simulation
+			   ;; any click on panel directly will focus window
+			   (window-focus win)
+			   ;; create control
 			   (let* ((control-record    (selected-tool app))
 				  (control-type-name (getf control-record :name))
-				  (control           (create-control content control-record))
-				  (placer            (get-placer control)))
-			     ;; any click on panel directly will focus window
-			     (window-focus win)
+				  (control           (create-control content control-record)))
 			     (cond (control
 				    ;; panel directly clicked with a control type selected
 				    ;; setup control
-				    (add-to-control-list app panel-id control)
 				    (setf (attribute control "data-clog-name")
 					  (format nil "~A-~A" control-type-name (incf next-id)))
-				    (setf (box-sizing control) :content-box)
 				    (setf (selected-tool app) nil)
+				    (setf (box-sizing control) :content-box)
 				    (setf (positioning control) :absolute)
 				    (set-geometry control
 						  :left (getf data :x)
 						  :top (getf data :y))
-				    ;; setup placer
-				    (setf (box-sizing placer) :content-box)
-				    (setf (positioning placer) :absolute)
-				    (clog::jquery-execute placer "draggable().resizable()")
-				    (set-geometry placer
-						  :left (getf data :x)
-						  :top (getf data :y)
-						  :width (client-width control)
-						  :height (client-height control))
+				    (setup-control win content control)
 				    (select-control control)
-				    (on-populate-control-list-win content)
-				    ;; setup control events
-				    (set-on-focus control (lambda (obj)
-							    (declare (ignore obj))
-							    ;; set focus is captured bound in case
-							    ;; control is set to static or reached
-							    ;; using tab selection
-							    (select-control control)))
-				    ;; setup placer events
-				    (set-on-mouse-down placer (lambda (obj data)
-								(declare (ignore obj) (ignore data))
-								(select-control control)
-								(window-focus win))
-						       :cancel-event t)
-				    (clog::set-on-event placer "resizestop"
-							(lambda (obj)
-							  (declare (ignore obj))
-							  (set-geometry control :units ""
-										:width (width placer)
-										:height (height placer))
-							  (set-geometry placer :units ""
-									       :width (client-width control)
-									       :height (client-height control))
-							  (on-populate-control-properties-win win)))
-				    (clog::set-on-event placer "dragstop"
-							(lambda (obj)
-							  (declare (ignore obj))
-							  (set-geometry control :units ""
-										:top (top placer)
-										:left (left placer))
-							  (set-geometry placer :top (position-top control)
-									       :left (position-left control))
-							  (on-populate-control-properties-win win))))
+				    (on-populate-control-list-win content))
 				   (t
 				    ;; panel directly clicked with select tool or no control type to add
 				    (deselect-current-control app)
