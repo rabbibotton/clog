@@ -323,8 +323,14 @@ not a temporary attached one when using select-control."
 
 (defun on-populate-loaded-window (win content)
   (let ((app      (connection-data-item content "builder-app-data"))
+	(panel-uid (get-universal-time))
 	(panel-id (html-id content)))
     (clrhash (get-control-list app panel-id))
+    ;; Assign any elements with no id an id, name and type
+    (clog::js-execute win (format nil "var clog-id=~A; $('*').each(function() {var e = $(this);~
+ if(e.attr('id') === undefined) {$(this).attr('id','A' + clog-id++);}~
+ if(e.attr('data-clog-name') === undefined) {$(this).attr('data-clog-name', 'none')}~
+ if(e.attr('data-clog-type') === undefined) {$(this).attr('data-clog-type', 'div')}})" panel-uid))
     (labels ((add-siblings (control)
 	       (let (dct)
 		 (loop
@@ -664,11 +670,12 @@ of controls and double click to select control."
 				 (place-inside-bottom-of (bottom-panel box)
 							 (get-placer control))
 				 (let ((vname (attribute control "data-clog-name")))
-				   (push (format nil *builder-template2*
-						 vname
-						 html-id
-						 (format nil "CLOG:~A" (type-of control)))
-					 vars)))
+				   (unless (equal vname "none")
+				     (push (format nil *builder-template2*
+						   vname
+						   html-id
+						   (format nil "CLOG:~A" (type-of control)))
+					   vars))))
 			       (get-control-list app panel-id))
 		      (let* ((cw     (on-show-layout-code obj))
 			     (result (format nil
