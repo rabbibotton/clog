@@ -59,7 +59,9 @@
      :create          clog:create-div
      :create-type     :element
      :create-content  ""
-     :properties      ((:name "positioning"
+     :properties      ((:name "text"
+			:prop clog:text)
+		       (:name "positioning"
 			:prop clog:positioning)
 		       (:name "color"
 			:prop clog:color)
@@ -396,7 +398,9 @@ of controls and double click to select control."
 							   (control2 (attach-as-child obj (getf data :drag-data)))
 							   (placer1  (get-placer control1))
 							   (placer2  (get-placer control2)))
-						      (place-before control1 control2)
+						      (if (getf data :shift-key)
+							  (place-inside-bottom-of control1 control2)
+							  (place-before control1 control2))
 						      (place-after control2 placer2)
 						      (set-geometry placer1 :top (position-top control1)
 									    :left (position-left control1)

@@ -308,6 +308,7 @@ result or if time out DEFAULT-ANSWER (Private)"))
 (defparameter drop-event-script
   "+ (e.clientX - e.currentTarget.getBoundingClientRect().left + e.currentTarget.scrollLeft) + ':' + 
      (e.clientY - e.currentTarget.getBoundingClientRect().top + e.currentTarget.scrollTop) + ':' +
+     e.which + ':' + e.altKey + ':' + e.ctrlKey + ':' + e.shiftKey + ':' + e.metaKey + ':' +
      encodeURIComponent(e.originalEvent.dataTransfer.getData('~A'))"
   "JavaScript to collect drop event data from browser.")
 
@@ -317,7 +318,12 @@ result or if time out DEFAULT-ANSWER (Private)"))
      :event-type   :drop
      :x            (parse-integer (nth 0 f) :junk-allowed t)
      :y            (parse-integer (nth 1 f) :junk-allowed t)
-     :drag-data    (quri:url-decode (or (nth 2 f) "")))))
+     :which-button (parse-integer (nth 2 f) :junk-allowed t)
+     :alt-key      (js-true-p (nth 3 f))
+     :ctrl-key     (js-true-p (nth 4 f))
+     :shift-key    (js-true-p (nth 5 f))
+     :meta-key     (js-true-p (nth 6 f))
+     :drag-data    (quri:url-decode (or (nth 7 f) "")))))
 
 ;;;;;;;;;;;;;;;
 ;; set-event ;;
