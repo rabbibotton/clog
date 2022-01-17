@@ -405,7 +405,7 @@ instead of the compiled version."
   "Execute SCRIPT on CONNECTION-ID, return value. If times out answer
 DEFAULT-ANSWER."
   (let ((uid (generate-id)))
-    (prep-query uid default-answer)
+    (prep-query uid (when default-answer (format nil "~A" default-answer)))
     (execute connection-id
 	     (format nil "ws.send (\"~A:\"+eval(\"~A\"));"
 		     uid
