@@ -1,5 +1,4 @@
 (in-package :clog-tools)
-(export 'clog-builder)
 
 (defparameter supported-controls
   (list
@@ -8,6 +7,7 @@
      :create         nil
      :create-type    nil
      :properties     nil
+     :positioning    nil
      :events         nil)
    '(:name           "label"
      :description    "Text Label"
@@ -15,6 +15,7 @@
      :create         clog:create-label
      :create-type    :element
      :create-content "label"
+     :positioning    :absolute
      :properties     ((:name "text"
 		       :prop clog:text)
 		      (:name "positioning"
@@ -30,6 +31,7 @@
      :create-type     :form
      :create-param    :button
      :create-value    "button"
+     :positioning     :absolute
      :properties      ((:name "value"
 			:prop clog:value)
 		       (:name "positioning"
@@ -45,6 +47,7 @@
      :create-type     :form
      :create-param    :input
      :create-value    ""
+     :positioning     :absolute
      :properties      ((:name "value"
 			:prop clog:value)
 		       (:name "positioning"
@@ -58,7 +61,8 @@
      :clog-type       clog:clog-div
      :create          clog:create-div
      :create-type     :element
-     :create-content  ""
+     :create-content  "DIV"
+     :positioning     :static
      :properties      ((:name "text"
 			:prop clog:text)
 		       (:name "positioning"
@@ -748,7 +752,13 @@ of controls and double click to select control."
 			   ;; create control
 			   (let* ((control-record    (control-info (value (select-tool app))))
 				  (control-type-name (getf control-record :name))
-				  (control           (create-control content control-record
+				  (positioning       (getf control-record :positioning))
+				  (parent            (when (eq positioning :static)
+						       (current-control app)))
+				  (control           (create-control (if parent
+									 parent
+									 content)
+								     control-record
 								     (format nil "B~A~A"
 									     panel-uid
 									     next-id))))
@@ -759,7 +769,7 @@ of controls and double click to select control."
 					  (format nil "~A-~A" control-type-name (incf next-id)))
 				    (setf (value (select-tool app)) 0)
 				    (setf (box-sizing control) :content-box)
-				    (setf (positioning control) :absolute)
+				    (setf (positioning control) positioning)
 				    (set-geometry control
 						  :left (getf data :x)
 						  :top (getf data :y))
@@ -820,6 +830,7 @@ of controls and double click to select control."
 			   (close-window (window body))))
 
     (clog-gui-initialize body)
+    (clog-web-initialize body :w3-css-url nil)
     (init-control-list app panel-id)
     (let* ((pbox     (create-panel-box-layout (window-content win)
 					 :left-width 0 :right-width 0
@@ -947,7 +958,13 @@ of controls and double click to select control."
 			   ;; create control
 			   (let* ((control-record    (control-info (value (select-tool app))))
 				  (control-type-name (getf control-record :name))
-				  (control           (create-control content control-record
+				  (positioning       (getf control-record :positioning))
+				  (parent            (when (eq positioning :static)
+						       (current-control app)))
+				  (control           (create-control (if parent
+									 parent
+									 content)
+								     control-record
 								     (format nil "B~A~A"
 									     panel-uid
 									     next-id))))
@@ -958,7 +975,7 @@ of controls and double click to select control."
 					  (format nil "~A-~A" control-type-name (incf next-id)))
 				    (setf (value (select-tool app)) 0)
 				    (setf (box-sizing control) :content-box)
-				    (setf (positioning control) :absolute)
+				    (setf (positioning control) positioning)
 				    (set-geometry control
 						  :left (getf data :x)
 						  :top (getf data :y))

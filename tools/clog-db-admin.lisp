@@ -1,5 +1,4 @@
 (in-package :clog-tools)
-(export 'clog-db-admin)
 
 (defclass app-data ()
   ((body
