@@ -383,10 +383,19 @@ not a temporary attached one when using select-control."
            {e.attr('id','A'+clog_id++);
             e.attr('data-clog-name','none-'+e.prop('tagName').toLowerCase()+'-'+clog_nid++)}~
         if(e.attr('data-clog-name') === undefined) {e.attr('data-clog-name',e.attr('id'))}~
-        if(e.attr('data-clog-type') === undefined) {e.attr('data-clog-type','div')\}~
+        if(e.attr('data-clog-type') === undefined) {e.attr('data-clog-type','div')}~
       })"
      panel-uid
      (clog::jquery content)))
+    (let* ((data (first-child content))
+	   (name (attribute data "data-clog-title")))
+      (print name)
+      (when name
+	(unless (equalp name "undefined")
+	  (setf (attribute content "data-clog-name") name)
+	  (when win
+	    (setf (window-title win) name))
+	  (destroy data))))
     (labels ((add-siblings (control)
 	       (let (dct)
 		 (loop
@@ -730,7 +739,14 @@ of controls and double click to select control."
 							(place-inside-bottom-of (bottom-panel box)
 										(get-placer control)))
 						      (get-control-list app panel-id))
-						     (write-file (inner-html content) fname)
+						     (let ((data
+							     (create-child content "<data />"
+									   :html-id (format nil "I~A" panel-uid))))
+						       (place-inside-top-of content data)
+						       (setf (attribute data "data-clog-title")
+							     (attribute content "data-clog-name"))
+						       (write-file (inner-html content) fname)
+						       (destroy data))
 						     (maphash
 						      (lambda (html-id control)
 							(declare (ignore html-id))
@@ -906,7 +922,14 @@ of controls and double click to select control."
 							  (place-inside-bottom-of (bottom-panel box)
 										  (get-placer control)))
 							(get-control-list app panel-id))
-						       (write-file (inner-html content) fname)
+						       (let ((data
+							       (create-child content "<data />"
+									     :html-id (format nil "I~A" panel-uid))))
+							 (place-inside-top-of content data)
+							 (setf (attribute data "data-clog-title")
+							       (attribute content "data-clog-name"))
+							 (write-file (inner-html content) fname)
+							 (destroy data))
 						       (maphash
 							(lambda (html-id control)
 							  (declare (ignore html-id))
