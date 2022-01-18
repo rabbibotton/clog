@@ -993,7 +993,7 @@ of controls and double click to select control."
   (let* ((app (connection-data-item obj "builder-app-data"))
 	 (win (create-gui-window obj :top 40 :left 220 :width 400))
 	 (panel-uid  (format nil "~A" (get-universal-time))) ;; unique id for panel
-	 (link       (format nil "http://127.0.0.1:8080/builder/page?bid=~A" panel-uid))
+	 (link       (format nil "http://127.0.0.1:8080/builder-page?bid=~A" panel-uid))
 	 (page-link  (create-a (window-content win)
 			       :target "_blank"
 			       :content "<br><center><button>
@@ -1075,5 +1075,5 @@ of controls and double click to select control."
   "Start clog-builder."
   (initialize nil)
   (set-on-new-window 'on-new-builder :path "/builder")
-  (set-on-new-window 'on-attach-builder-page :path "/builder/page")
+  (set-on-new-window 'on-attach-builder-page :path "/builder-page")
   (open-browser :url "http://127.0.0.1:8080/builder"))
