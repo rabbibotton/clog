@@ -772,30 +772,30 @@ the window will be set to keep-on-top always."))
 				   (when (fire-on-window-can-close win)
 				     (window-close win))))
       (cond (client-movement
-	     (jquery-execute win
+	     (clog::jquery-execute win
 			     (format nil "draggable({handle:'#~A-title-bar'})" html-id))
-	     (jquery-execute win "resizable({handles:'se'})")
+	     (clog::jquery-execute win "resizable({handles:'se'})")
 	     (set-on-pointer-down (win-title win)
 	    			  (lambda (obj data)
 				    (declare (ignore obj) (ignore data))
 	    			    (setf (z-index win) (incf (last-z app)))
 	    			    (fire-on-window-change win app)))
-	     (set-on-event win "dragstart"
-			   (lambda (obj)
-			     (declare (ignore obj))
-			     (fire-on-window-move win)))
-	     (set-on-event win "dragstop"
-			   (lambda (obj)
-			     (declare (ignore obj))
-			     (fire-on-window-move-done win)))
-	     (set-on-event win "resizestart"
-			   (lambda (obj)
-			     (declare (ignore obj))
-			     (fire-on-window-size win)))
-	     (set-on-event win "resizestop"
-			   (lambda (obj)
-			     (declare (ignore obj))
-			     (fire-on-window-size-done win))))
+	     (clog::set-on-event win "dragstart"
+				 (lambda (obj)
+				   (declare (ignore obj))
+				   (fire-on-window-move win)))
+	     (clog::set-on-event win "dragstop"
+				 (lambda (obj)
+				   (declare (ignore obj))
+				   (fire-on-window-move-done win)))
+	     (clog::set-on-event win "resizestart"
+				 (lambda (obj)
+				   (declare (ignore obj))
+				   (fire-on-window-size win)))
+	     (clog::set-on-event win "resizestop"
+				 (lambda (obj)
+				   (declare (ignore obj))
+				   (fire-on-window-size-done win))))
 	    (t
 	     (set-on-pointer-down
 	      (win-title win) 'on-gui-drag-down :capture-pointer t)

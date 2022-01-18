@@ -597,7 +597,7 @@ of controls and double click to select control."
 (defun on-new-builder-panel (obj)
   "Open new panel"
   (let* ((app (connection-data-item obj "builder-app-data"))
-	 (win (create-gui-window obj :top 40 :left 220 :width 400))
+	 (win (create-gui-window obj :top 40 :left 220 :width 400 :client-movement t))
 	 (box (create-panel-box-layout (window-content win)
 				       :left-width 0 :right-width 0
 				       :top-height 30 :bottom-height 0))
