@@ -15,7 +15,6 @@
      :create         clog:create-label
      :create-type    :element
      :create-content "label"
-     :positioning    :absolute
      :properties     ((:name "text"
 		       :prop clog:text)
 		      (:name "positioning"
@@ -31,7 +30,6 @@
      :create-type     :form
      :create-param    :button
      :create-value    "button"
-     :positioning     :absolute
      :properties      ((:name "value"
 			:prop clog:value)
 		       (:name "positioning"
@@ -47,7 +45,6 @@
      :create-type     :form
      :create-param    :input
      :create-value    ""
-     :positioning     :absolute
      :properties      ((:name "value"
 			:prop clog:value)
 		       (:name "positioning"
@@ -61,8 +58,7 @@
      :clog-type       clog:clog-div
      :create          clog:create-div
      :create-type     :element
-     :create-content  "DIV"
-     :positioning     :static
+     :create-content  ""
      :properties      ((:name "text"
 			:prop clog:text)
 		       (:name "positioning"
@@ -752,7 +748,9 @@ of controls and double click to select control."
 			   ;; create control
 			   (let* ((control-record    (control-info (value (select-tool app))))
 				  (control-type-name (getf control-record :name))
-				  (positioning       (getf control-record :positioning))
+				  (positioning       (if (getf data :ctrl-key)
+							 :static
+							 :absolute))
 				  (parent            (when (getf data :shift-key)
 						       (current-control app)))
 				  (control           (create-control (if parent
@@ -958,7 +956,9 @@ of controls and double click to select control."
 			   ;; create control
 			   (let* ((control-record    (control-info (value (select-tool app))))
 				  (control-type-name (getf control-record :name))
-				  (positioning       (getf control-record :positioning))
+				  (positioning       (if (getf data :ctrl-key)
+							 :static
+							 :absolute))
 				  (parent            (when (getf data :shift-key)
 						       (current-control app)))
 				  (control           (create-control (if parent
