@@ -491,7 +491,7 @@ of controls and double click to select control."
 	 (box         (create-panel-box-layout (window-content win)
 					       :left-width 0 :right-width 9
 					       :top-height 30 :bottom-height 0))
-	 (file-name   ".")
+	 (file-name   "")
 	 (center      (center-panel box))
 	 (center-id   (html-id center))
 	 (tool-bar    (top-panel box))
@@ -610,7 +610,7 @@ of controls and double click to select control."
 	 (btn-load (create-button tool-bar :content "Load"))
 	 (content  (center-panel box))
 	 (in-simulation nil)
-	 (file-name  ".")
+	 (file-name  "")
 	 (panel-name (format nil "panel-~A" (incf (next-panel-id app))))
 	 (next-id  0)
 	 (panel-uid (get-universal-time)) ;; unique id for panel
@@ -793,7 +793,7 @@ of controls and double click to select control."
 	 (content       (center-panel box))
 	 (panel-name    (format nil "page-~A" (incf (next-panel-id app))))
 	 (in-simulation nil)
-	 (file-name     ".")
+	 (file-name     "")
 	 (next-id       0)
 	 (panel-id      (html-id content)))
     ;; sync new window with app
