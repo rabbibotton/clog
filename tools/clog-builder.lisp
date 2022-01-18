@@ -232,8 +232,8 @@
 			  (set-geometry control :units ""
 						:top (top placer)
 						:left (left placer))
-			  (set-geometry placer :top (position-top control)
-					       :left (position-left control))
+			  (set-geometry placer :top (top control)
+					       :left (left control))
 			  (on-populate-control-properties-win obj)))))
 
 ;; Control selection utilities
@@ -257,8 +257,8 @@ not a temporary attached one when using select-control."
   (let ((app    (connection-data-item control "builder-app-data"))
 	(placer (get-placer control)))
     (deselect-current-control app)
-    (set-geometry placer :top (position-top control)
-			 :left (position-left control)
+    (set-geometry placer :top (top control)
+			 :left (left control)
 			 :width (client-width control)
 			 :height (client-height control))
     (setf (current-control app) control)
@@ -615,6 +615,7 @@ of controls and double click to select control."
 	 (next-id  0)
 	 (panel-uid (get-universal-time)) ;; unique id for panel
 	 (panel-id (html-id content)))
+    (setf (overflow content) :auto)
     (init-control-list app panel-id)
     ;; setup panel window
     (setf (attribute content "data-clog-name") panel-name)
@@ -806,6 +807,7 @@ of controls and double click to select control."
     (setf (attribute content "data-clog-name") panel-name)
     (setf (title (html-document body)) panel-name)
     (setf (window-title win) panel-name)
+    (setf (overflow content) :auto)
 
     ;; setup close of page
     (set-on-before-unload (window body)
