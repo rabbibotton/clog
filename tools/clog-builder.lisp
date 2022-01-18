@@ -389,12 +389,9 @@ not a temporary attached one when using select-control."
      (clog::jquery content)))
     (let* ((data (first-child content))
 	   (name (attribute data "data-clog-title")))
-      (print name)
       (when name
 	(unless (equalp name "undefined")
 	  (setf (attribute content "data-clog-name") name)
-	  (when win
-	    (setf (window-title win) name))
 	  (destroy data))))
     (labels ((add-siblings (control)
 	       (let (dct)
@@ -726,7 +723,9 @@ of controls and double click to select control."
 						     (setf file-name fname)
 						     (setf (inner-html content)
 							   (escape-string (read-file fname)))
-						     (on-populate-loaded-window content :win win))))))
+						     (on-populate-loaded-window content :win win)
+						     (setf panel-name (attribute content "data-clog-name"))
+						     (setf (window-title win) panel-name))))))
     (set-on-click btn-save (lambda (obj)
 			     (server-file-dialog obj "Save Panel As.." file-name
 						 (lambda (fname)
@@ -909,7 +908,10 @@ of controls and double click to select control."
 						       (setf file-name fname)
 						       (setf (inner-html content)
 							     (escape-string (read-file fname)))
-						       (on-populate-loaded-window content :win win))))))
+						       (on-populate-loaded-window content :win win)
+						       (setf panel-name (attribute content "data-clog-name"))
+						       (setf (title (html-document body)) panel-name)
+						       (setf (window-title win) panel-name))))))
       (set-on-click btn-save (lambda (obj)
 			       (server-file-dialog win "Save Panel As.." file-name
 						   (lambda (fname)
