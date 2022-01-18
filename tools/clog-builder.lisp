@@ -753,7 +753,7 @@ of controls and double click to select control."
 			   (let* ((control-record    (control-info (value (select-tool app))))
 				  (control-type-name (getf control-record :name))
 				  (positioning       (getf control-record :positioning))
-				  (parent            (when (eq positioning :static)
+				  (parent            (when (getf data :shift-key)
 						       (current-control app)))
 				  (control           (create-control (if parent
 									 parent
@@ -959,7 +959,7 @@ of controls and double click to select control."
 			   (let* ((control-record    (control-info (value (select-tool app))))
 				  (control-type-name (getf control-record :name))
 				  (positioning       (getf control-record :positioning))
-				  (parent            (when (eq positioning :static)
+				  (parent            (when (getf data :shift-key)
 						       (current-control app)))
 				  (control           (create-control (if parent
 									 parent
