@@ -379,9 +379,11 @@ not a temporary attached one when using select-control."
     (clog::js-execute content (format nil
      "var clog_id=~A; var clog_nid=1;~
       $(~A).find('*').each(function() {var e = $(this);~
-        if(e.attr('id') === undefined) {$(this).attr('id','A' + clog_id++);}~
-        if(e.attr('data-clog-name') === undefined) {$(this).attr('data-clog-name', 'none-' + clog_nid++)}~
-        if(e.attr('data-clog-type') === undefined) {$(this).attr('data-clog-type', 'div')\}~
+        if((e.attr('id') === undefined) && (e.attr('data-clog-name') === undefined))
+           {e.attr('id','A'+clog_id++);
+            e.attr('data-clog-name','none-'+e.prop('tagName').toLowerCase()+'-'+clog_nid++)}~
+        if(e.attr('data-clog-name') === undefined) {e.attr('data-clog-name',e.attr('id'))}~
+        if(e.attr('data-clog-type') === undefined) {e.attr('data-clog-type','div')\}~
       })"
      panel-uid
      (clog::jquery content)))
