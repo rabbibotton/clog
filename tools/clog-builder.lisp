@@ -188,6 +188,48 @@
       (setf (attribute control "data-clog-type") control-type-name))
     control))
 
+(defun drop-new-control (app content data next-id &key win)
+  "Create new control droppend at event DATA on CONTENT of WIN)"
+  ;; any click on panel directly will focus window
+  (when win
+    (window-focus win))    
+  ;; create control
+  (let* ((control-record    (control-info (value (select-tool app))))
+	 (control-type-name (getf control-record :name))
+	 (positioning       (if (getf data :ctrl-key)
+				:static
+				:absolute))
+	 (parent            (when (getf data :shift-key)
+			      (current-control app)))
+	 (control           (create-control (if parent
+						parent
+						content)
+					    control-record
+					    (format nil "B~A~A"
+						    (get-universal-time)
+						    next-id))))
+    (cond (control
+	   ;; panel directly clicked with a control type selected
+	   ;; setup control
+	   (setf (attribute control "data-clog-name")
+		 (format nil "~A-~A" control-type-name next-id))
+	   (setf (value (select-tool app)) 0)
+	   (setf (box-sizing control) :content-box)
+	   (setf (positioning control) positioning)
+	   (set-geometry control
+			 :left (getf data :x)
+			 :top (getf data :y))
+	   (setup-control content control :win win)
+	   (select-control control)
+	   (on-populate-control-list-win content)
+	   t)
+	  (t
+	   ;; panel directly clicked with select tool or no control type to add
+	   (deselect-current-control app)
+	   (on-populate-control-properties-win content)
+	   (on-populate-control-list-win content)
+	   nil))))
+
 (defun setup-control (content control &key win)
   "Setup CONTROL by creating pacer and setting up events for manipulation"
   (let ((app      (connection-data-item content "builder-app-data"))
@@ -612,9 +654,9 @@ of controls and double click to select control."
 	 (in-simulation nil)
 	 (file-name  "")
 	 (panel-name (format nil "panel-~A" (incf (next-panel-id app))))
-	 (next-id  0)
-	 (panel-uid (get-universal-time)) ;; unique id for panel
-	 (panel-id (html-id content)))
+	 (next-id    1)
+	 (panel-uid  (get-universal-time)) ;; unique id for panel
+	 (panel-id   (html-id content)))
     (setf (overflow content) :auto)
     (init-control-list app panel-id)
     ;; setup panel window
@@ -740,46 +782,12 @@ of controls and double click to select control."
 				      (setf (window-title win) panel-name)))
 				  :default-value panel-name
 				  :title "Panel Properties")))
-    ;; setup adding and manipulating controls
     (set-on-mouse-down content
 		       (lambda (obj data)
+			 (declare (ignore obj))
 			 (unless in-simulation
-			   ;; any click on panel directly will focus window
-			   (window-focus win)
-			   ;; create control
-			   (let* ((control-record    (control-info (value (select-tool app))))
-				  (control-type-name (getf control-record :name))
-				  (positioning       (if (getf data :ctrl-key)
-							 :static
-							 :absolute))
-				  (parent            (when (getf data :shift-key)
-						       (current-control app)))
-				  (control           (create-control (if parent
-									 parent
-									 content)
-								     control-record
-								     (format nil "B~A~A"
-									     panel-uid
-									     next-id))))
-			     (cond (control
-				    ;; panel directly clicked with a control type selected
-				    ;; setup control
-				    (setf (attribute control "data-clog-name")
-					  (format nil "~A-~A" control-type-name (incf next-id)))
-				    (setf (value (select-tool app)) 0)
-				    (setf (box-sizing control) :content-box)
-				    (setf (positioning control) positioning)
-				    (set-geometry control
-						  :left (getf data :x)
-						  :top (getf data :y))
-				    (setup-control content control :win win)
-				    (select-control control)
-				    (on-populate-control-list-win content))
-				   (t
-				    ;; panel directly clicked with select tool or no control type to add
-				    (deselect-current-control app)
-				    (on-populate-control-properties-win obj)
-				    (on-populate-control-list-win content)))))))))
+			   (when (drop-new-control app content data next-id :win win)
+			     (incf next-id)))))))
 
 (defun on-attach-builder-page (body)
   "New builder page has attached"
@@ -951,44 +959,12 @@ of controls and double click to select control."
 					(setf (window-title win) panel-name)))
 				    :default-value panel-name
 				    :title "Panel Properties"))))
-    ;; setup adding and manipulating controls
     (set-on-mouse-down content
 		       (lambda (obj data)
+			 (declare (ignore obj))
 			 (unless in-simulation
-			   ;; create control
-			   (let* ((control-record    (control-info (value (select-tool app))))
-				  (control-type-name (getf control-record :name))
-				  (positioning       (if (getf data :ctrl-key)
-							 :static
-							 :absolute))
-				  (parent            (when (getf data :shift-key)
-						       (current-control app)))
-				  (control           (create-control (if parent
-									 parent
-									 content)
-								     control-record
-								     (format nil "B~A~A"
-									     panel-uid
-									     next-id))))
-			     (cond (control
-				    ;; panel directly clicked with a control type selected
-				    ;; setup control
-				    (setf (attribute control "data-clog-name")
-					  (format nil "~A-~A" control-type-name (incf next-id)))
-				    (setf (value (select-tool app)) 0)
-				    (setf (box-sizing control) :content-box)
-				    (setf (positioning control) positioning)
-				    (set-geometry control
-						  :left (getf data :x)
-						  :top (getf data :y))
-				    (setup-control content control)
-				    (select-control control)
-				    (on-populate-control-list-win content))
-				   (t
-				    ;; panel directly clicked with select tool or no control type to add
-				    (deselect-current-control app)
-				    (on-populate-control-properties-win obj)
-				    (on-populate-control-list-win content)))))))))
+			   (when (drop-new-control app content data next-id :win win)
+			     (incf next-id)))))))
 
 (defun on-new-builder-page (obj)
   "Open new page"
