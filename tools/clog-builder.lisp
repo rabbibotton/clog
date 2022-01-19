@@ -81,7 +81,7 @@
 (defun write-file (string outfile &key (action-if-exists :rename))
   "Write local file"
    (check-type action-if-exists (member nil :error :new-version :rename :rename-and-delete
-                                        :overwrite :append :supersede))
+					    :overwrite :append :supersede))
    (with-open-file (outstream outfile :direction :output :if-exists action-if-exists)
      (write-sequence string outstream)))
 
@@ -99,8 +99,8 @@
 ;; Control utilities
 
 (defun control-info (control-type-name)
-  "Return control informaton record for CONTROL-TYPE-NAME from the SUPPORTED-CONTROLS list."
-  (find-if (lambda (x) (equal (getf x :name) control-type-name)) supported-controls))
+  "Return control informaton record for CONTROL-TYPE-NAME from the *supported-controls* list."
+  (find-if (lambda (x) (equal (getf x :name) control-type-name)) *supported-controls*))
 
 (defun create-control (parent control-record uid)
   "Return a new control based on CONTROL-RECORD as a child of PARENT"
@@ -308,17 +308,23 @@ not a temporary attached one when using select-control."
 	(panel-id (html-id content)))
     (clrhash (get-control-list app panel-id))
     ;; Assign any elements with no id an id, name and type
-    (clog::js-execute content (format nil
-     "var clog_id=~A; var clog_nid=1;~
-      $(~A).find('*').each(function() {var e = $(this);~
-        if((e.attr('id') === undefined) && (e.attr('data-clog-name') === undefined))
-           {e.attr('id','A'+clog_id++);
-            e.attr('data-clog-name','none-'+e.prop('tagName').toLowerCase()+'-'+clog_nid++)}~
-        if(e.attr('data-clog-name') === undefined) {e.attr('data-clog-name',e.attr('id'))}~
-        if(e.attr('data-clog-type') === undefined) {e.attr('data-clog-type','div')}~
-      })"
-     panel-uid
-     (clog::jquery content)))
+    (let ((tmp (format nil
+		       "var clog_id=~A; var clog_nid=1;~
+      $(~A).find('*').each(function() {var e=$(this);~
+        var t=e.prop('tagName').toLowerCase(); var p=e.attr('data-clog-type');~
+        if((e.attr('id') === undefined) && (e.attr('data-clog-name') === undefined))~
+           {e.attr('id','A'+clog_id++);~
+            e.attr('data-clog-name','none-'+t+'-'+clog_nid++)}~
+        if(e.attr('data-clog-name') === undefined){e.attr('data-clog-name',e.attr('id'))}~
+        ~{~A~}~
+        if(e.attr('data-clog-type') === undefined){e.attr('data-clog-type','span')}})"
+		       panel-uid
+		       (clog::jquery content)
+		       (mapcar (lambda (l)
+				 (format nil "if(p === undefined && t=='~A'){e.attr('data-clog-type','~A')}"
+					 (getf l :tag) (getf l :control)))
+			       *import-types*))))
+      (clog::js-execute content tmp))
     (let* ((data (first-child content))
 	   (name (attribute data "data-clog-title")))
       (when name
@@ -548,7 +554,7 @@ of controls and double click to select control."
 	  (setf (size control-list) 2)
 	  (set-geometry control-list :left 0 :top 0 :bottom 0 :width 190)
 	  (setf (select-tool app) control-list)
-	  (dolist (control supported-controls)
+	  (dolist (control *supported-controls*)
 	    (add-select-option control-list (getf control :name) (getf control :description)))))))
 
 (defun on-show-control-list-win (obj)
