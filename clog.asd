@@ -42,4 +42,5 @@
   :depends-on (#:clog)
   :pathname "tools/"
   :components ((:file "clog-db-admin")
+	       (:file "clog-builder-settings")
 	       (:file "clog-builder")))
