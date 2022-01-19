@@ -82,8 +82,8 @@ CL-USER> (ql:quickload :clog)
 CL-USER> (clog:run-tutorial 1)
 ```
 
-Tip for Windows WSL linux user. Create a symbolic link from wslview to xdg-open
-in /usr/local/bin so that run-tutorial uses the windows browser.
+Tip for Windows WSL linux user. Install "sudo apt install xdg-utils" to
+install xdg-open so that run-tutorial uses the windows browser.
 
 To see where the source, tutorial and demo files are:
 
