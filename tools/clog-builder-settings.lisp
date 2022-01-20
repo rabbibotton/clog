@@ -28,10 +28,11 @@
     (:name "positioning"
      :setup ,(lambda (control td1 td2)
 	       (declare (ignore td1))
-	       (let ((dd (create-form-element td2 :text :value (positioning control))))
-		 (make-data-list dd '("absolute"
-				      "static"))
-		 (set-on-blur dd (lambda (obj)
+	       (let ((dd (create-select td2)))
+		 (add-select-options dd '("absolute"
+					  "static"))
+		 (setf (value dd) (positioning control))
+		 (set-on-change dd (lambda (obj)
 				   (declare (ignore obj))
 				   (setf (positioning control) (value dd))
 				   (set-geometry (get-placer control)
@@ -54,10 +55,40 @@
      :setf clog:value)))
 
 (defparameter *props-colors*
-  '((:name "color"
-     :style "color")
-    (:name "background-color"
-     :style "background-color")))
+  `((:name "color"
+     :setup ,(lambda (control td1 td2)
+	       (declare (ignore td1))
+	       (let ((d1 (create-form-element td2 :text  :value (color control)))
+		     (dd (create-form-element td2 :color :value (color control))))
+		 (make-data-list dd '("#ffffff"
+				      "#ff0000"
+				      "#00ff00"
+				      "#0000ff"
+				      "#ff00ff"))
+		 (set-on-change dd (lambda (obj)
+				     (declare (ignore obj))
+				     (setf (value d1) (value dd))
+				     (setf (color control) (value d1))))
+		 (set-on-change d1 (lambda (obj)
+				     (declare (ignore obj))
+				     (setf (color control) (value d1)))))))
+    (:name "background color"
+     :setup ,(lambda (control td1 td2)
+	       (declare (ignore td1))
+	       (let ((d1 (create-form-element td2 :text  :value (background-color control)))
+		     (dd (create-form-element td2 :color :value (background-color control))))
+		 (make-data-list dd '("#ffffff"
+				      "#ff0000"
+				      "#00ff00"
+				      "#0000ff"
+				      "#ff00ff"))
+		 (set-on-change dd (lambda (obj)
+				     (declare (ignore obj))
+				     (setf (value d1) (value dd))
+				     (setf (background-color control) (value d1))))
+		 (set-on-change d1 (lambda (obj)
+				     (declare (ignore obj))
+				     (setf (background-color control) (value d1)))))))))
 
 (defparameter *props-element*
   `(,@*props-location*
