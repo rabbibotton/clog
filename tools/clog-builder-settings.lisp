@@ -24,10 +24,21 @@
 		  "n/a"
 		  (left control)))
      :set  ,(lambda (control obj)
-	      (setf (top control) (text obj))))
+	      (setf (left control) (text obj))))
     (:name "positioning"
-     :style "position")))
-
+     :setup ,(lambda (control td1 td2)
+	       (declare (ignore td1))
+	       (let ((dd (create-form-element td2 :text :value (positioning control))))
+		 (make-data-list dd '("absolute"
+				      "static"))
+		 (set-on-blur dd (lambda (obj)
+				   (declare (ignore obj))
+				   (setf (positioning control) (value dd))
+				   (set-geometry (get-placer control)
+						 :top (position-top control)
+						 :left (position-left control)
+						 :width (client-width control)
+						 :height (client-height control)))))))))
 (defparameter *props-wh*
   '((:name "width"
      :setf clog:width)

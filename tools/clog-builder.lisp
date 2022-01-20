@@ -256,54 +256,66 @@ not a temporary attached one when using select-control."
       (setf (inner-html table) ""))
     (when (and win control)
       (let ((info  (control-info (attribute control "data-clog-type")))
-	    (props `(("name"    ,(attribute control "data-clog-name") t
+	    (props `(("name"    ,(attribute control "data-clog-name")
+				nil
 				,(lambda (obj)
 				   (setf (attribute control "data-clog-name") (text obj))))
 		     ("parent"  ,(attribute (parent-element control) "data-clog-name")
-				t ,(lambda (obj)
-				     (place-inside-bottom-of
-				      (attach-as-child control
-				       (clog::js-query control (format nil "$(\"[data-clog-name='~A']\").attr('id')"
-								   (text obj))))
-				      control)
-				     (place-after control placer))))))
+				nil
+				,(lambda (obj)
+				   (place-inside-bottom-of
+				    (attach-as-child control
+				      (clog::js-query control (format nil "$(\"[data-clog-name='~A']\").attr('id')"
+										     (text obj))))
+				    control)
+				   (place-after control placer))))))
 	(when info
 	  (let (col)
 	    (dolist (prop (reverse (getf info :properties)))
 	      (cond ((eq (third prop) :style)
-		     (push `(,(getf prop :name) ,(style control (getf prop :style)) t
+		     (push `(,(getf prop :name) ,(style control (getf prop :style)) ,(getf prop :setup)
 			     ,(lambda (obj)
 				(setf (style control (getf prop :style)) (text obj))))
 			   col))
-		    ((eq (third prop) :get)
-		     (push `(,(getf prop :name) ,(funcall (getf prop :get) control) t
+		    ((or (eq (third prop) :get)
+			 (eq (third prop) :set)
+			 (eq (third prop) :setup))
+		     (push `(,(getf prop :name) ,(when (getf prop :get)
+						   (funcall (getf prop :get) control))
+			     ,(getf prop :setup)
 			     ,(lambda (obj)
-				(funcall (getf prop :set) control obj)))
+				(when (getf prop :set)
+				  (funcall (getf prop :set) control obj))))
 			   col))
 		    ((eq (third prop) :setf)
-		     (push `(,(getf prop :name) ,(funcall (getf prop :setf) control) t
+		     (push `(,(getf prop :name) ,(funcall (getf prop :setf) control) ,(getf prop :setup)
 			     ,(lambda (obj)
 				(funcall (find-symbol (format nil "SET-~A" (getf prop :setf)) :clog) control (text obj))))
 			   col))
 		    ((eq (third prop) :prop)
-		     (push `(,(getf prop :name) ,(property control (getf prop :prop)) t
+		     (push `(,(getf prop :name) ,(property control (getf prop :prop)) ,(getf prop :setup)
 			     ,(lambda (obj)
 				(setf (property control (getf prop :prop)) (text obj))))
 			   col))
 		    ((eq (third prop) :attr)
-		     (push `(,(getf prop :name) ,(attribute control (getf prop :attr)) t
+		     (push `(,(getf prop :name) ,(attribute control (getf prop :attr)) ,(getf prop :setup)
 			     ,(lambda (obj)
 				(setf (attribute control (getf prop :attr)) (text obj))))
 			   col))
 		    (t (print "Configuration error."))))
 	    (alexandria:appendf props col)))
 	(dolist (item props)
-	  (let* ((tr (create-table-row table))
+	  (let* ((tr  (create-table-row table))
 		 (td1 (create-table-column tr :content (first item)))
-		 (td2 (create-table-column tr :content (second item))))
+		 (td2 (if (second item)
+			  (create-table-column tr :content (second item))
+			  (create-table-column tr))))
 	    (set-border td1 "1px" :dotted :black)
-	    (when (third item)
-	      (setf (editablep td2) t)
+	    (cond ((third item)
+		   (unless (eq (third item) :read-only)
+		     (setf (editablep td2) (funcall (third item) control td1 td2))))
+		  (t
+		    (setf (editablep td2) t)))
 	      (set-on-blur td2
 			   (lambda (obj)
 			     (funcall (fourth item) obj)
@@ -311,7 +323,7 @@ not a temporary attached one when using select-control."
 			       (set-geometry placer :top (position-top control)
 						    :left (position-left control)
 						    :width (client-width control)
-						    :height (client-height control))))))))))))
+						    :height (client-height control)))))))))))
 
 (defun on-populate-loaded-window (content &key win)
   "Setup html imported in to CONTENT for use with Builder"
