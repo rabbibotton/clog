@@ -1,5 +1,7 @@
 (in-package :clog-tools)
 
+;; Per instance app data
+
 (defclass builder-app-data ()
   ((copy-buf
     :accessor copy-buf
@@ -37,6 +39,8 @@
     :accessor control-pallete-win
     :initform nil
     :documentation "Current control pallete window")))
+
+;; Cross page syncing
 
 (defparameter *app-sync-hash* (make-hash-table :test #'equal)
   "Exchange app instance with new external pages")
@@ -280,10 +284,11 @@ not a temporary attached one when using select-control."
 	(when info
 	  (let (col)
 	    (dolist (prop (reverse (getf info :properties)))
-	      (push `(,(getf prop :name) ,(funcall (getf prop :prop) control) t
-		      ,(lambda (obj)
-			 (funcall (find-symbol (format nil "SET-~A" (getf prop :prop)) :clog) control (text obj))))
-		    col))
+	      (cond ((eq (third prop) :prop)
+		     (push `(,(getf prop :name) ,(funcall (getf prop :prop) control) t
+			     ,(lambda (obj)
+				(funcall (find-symbol (format nil "SET-~A" (getf prop :prop)) :clog) control (text obj))))
+			   col))))
 	    (alexandria:appendf props col)))
 	(dolist (item props)
 	  (let* ((tr (create-table-row table))
