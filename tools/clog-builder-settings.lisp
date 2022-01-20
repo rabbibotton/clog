@@ -28,10 +28,11 @@
     (:name "positioning"
      :setup ,(lambda (control td1 td2)
 	       (declare (ignore td1))
-	       (let ((dd (create-select td2)))
-		 (add-select-options dd '("absolute"
+	       (let ((dd (create-select td2))
+		     (v  (positioning control)))
+		 (add-select-options dd `(,v
+					  "absolute"
 					  "static"))
-		 (setf (value dd) (positioning control))
 		 (set-on-change dd (lambda (obj)
 				   (declare (ignore obj))
 				   (setf (positioning control) (value dd))
@@ -51,9 +52,30 @@
      :setf clog:text)))
 
 (defparameter *props-value*
-  '((:name "value"
-     :setf clog:value)))
-
+  `((:name "value"
+     :setf clog:value)
+    (:name "form name"
+     :setf clog:name)
+    (:name "type"
+     :setup ,(lambda (control td1 td2)
+	       (declare (ignore td1))
+	       (let ((dd (create-select td2))
+		     (v  (attribute control "type")))
+		 (add-select-options dd `(,v
+					  "text"
+					  "button"
+					  "checkbox"
+					  "color"
+					  "image"
+					  "time"))
+		 (set-on-change dd (lambda (obj)
+				   (declare (ignore obj))
+				   (setf (attribute control "type") (value dd))
+				   (set-geometry (get-placer control)
+						 :top (position-top control)
+						 :left (position-left control)
+						 :width (client-width control)
+						 :height (client-height control)))))))))
 (defparameter *props-colors*
   `((:name "color"
      :setup ,(lambda (control td1 td2)
@@ -130,7 +152,7 @@
      :clog-type       clog:clog-form-element
      :create          clog:create-form-element
      :create-type     :form
-     :create-param    :input
+     :create-param    :text
      :create-value    ""
      :properties     (,@*props-form-element*))
    `(:name            "span"
