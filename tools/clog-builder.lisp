@@ -258,7 +258,7 @@ not a temporary attached one when using select-control."
       (let ((info  (control-info (attribute control "data-clog-type")))
 	    (props `(("name"    ,(attribute control "data-clog-name") t
 				,(lambda (obj)
-				   (setf  (attribute control "data-clog-name") (text obj))))
+				   (setf (attribute control "data-clog-name") (text obj))))
 		     ("parent"  ,(attribute (parent-element control) "data-clog-name")
 				t ,(lambda (obj)
 				     (place-inside-bottom-of
@@ -266,29 +266,36 @@ not a temporary attached one when using select-control."
 				       (clog::js-query control (format nil "$(\"[data-clog-name='~A']\").attr('id')"
 								   (text obj))))
 				      control)
-				     (place-after control placer)))
-		     ("top"     ,(if (equal (positioning control) "static")
-				     "n/a"
-				     (top control))
-				t ,(lambda (obj)
-				     (setf (top control) (text obj))))
-		     ("left"    ,(if (equal (positioning control) "static")
-				     "n/a"
-				     (left control))
-				t ,(lambda (obj)
-				     (setf (left control) (text obj))))
-		     ("width"   ,(width control) t ,(lambda (obj)
-						     (setf (width control) (text obj))))
-		     ("height"  ,(height control) t ,(lambda (obj)
-						       (setf (height control) (text obj)))))))
+				     (place-after control placer))))))
 	(when info
 	  (let (col)
 	    (dolist (prop (reverse (getf info :properties)))
-	      (cond ((eq (third prop) :prop)
-		     (push `(,(getf prop :name) ,(funcall (getf prop :prop) control) t
+	      (cond ((eq (third prop) :style)
+		     (push `(,(getf prop :name) ,(style control (getf prop :style)) t
 			     ,(lambda (obj)
-				(funcall (find-symbol (format nil "SET-~A" (getf prop :prop)) :clog) control (text obj))))
-			   col))))
+				(setf (style control (getf prop :style)) (text obj))))
+			   col))
+		    ((eq (third prop) :get)
+		     (push `(,(getf prop :name) ,(funcall (getf prop :get) control) t
+			     ,(lambda (obj)
+				(funcall (getf prop :set) control obj)))
+			   col))
+		    ((eq (third prop) :setf)
+		     (push `(,(getf prop :name) ,(funcall (getf prop :setf) control) t
+			     ,(lambda (obj)
+				(funcall (find-symbol (format nil "SET-~A" (getf prop :setf)) :clog) control (text obj))))
+			   col))
+		    ((eq (third prop) :prop)
+		     (push `(,(getf prop :name) ,(property control (getf prop :prop)) t
+			     ,(lambda (obj)
+				(setf (property control (getf prop :prop)) (text obj))))
+			   col))
+		    ((eq (third prop) :attr)
+		     (push `(,(getf prop :name) ,(attribute control (getf prop :attr)) t
+			     ,(lambda (obj)
+				(setf (attribute control (getf prop :attr)) (text obj))))
+			   col))
+		    (t (print "Configuration error."))))
 	    (alexandria:appendf props col)))
 	(dolist (item props)
 	  (let* ((tr (create-table-row table))
