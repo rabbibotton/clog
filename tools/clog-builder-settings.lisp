@@ -7,6 +7,10 @@
 	  :control "input")
 	'(:tag "form"
 	  :control "form")
+	'(:tag "button"
+	  :control "button")
+	'(:tag "a"
+	  :control "link")
 	'(:tag "span"
 	  :control "span")
 	'(:tag "div"
@@ -329,6 +333,31 @@
      :create-type    :element
      :create-content "button"
      :properties     (,@*props-element*))
+   `(:name           "link"
+     :description    "Link"
+     :clog-type      clog:clog-a
+     :create         clog:create-a
+     :create-type    :element
+     :create-content "HTML Link"
+     :properties     ((:name "href link"
+		       :prop "href")
+		      (:name "target"
+		       :prop "target")
+		      ,@*props-element*))
+   `(:name           "image"
+     :description    "Image"
+     :clog-type      clog:clog-img
+     :create         clog:create-img
+     :create-type    :base
+     :setup          ,(lambda (control control-record)
+			(declare (ignore control-record))
+			(setf (url-src control) "/img/clogicon.png")
+			(setf (alt-text control) "Add image url"))
+     :properties     ((:name "image url"
+		       :prop "src")
+		      (:name "alternative text"
+		       :prop "alt")
+		      ,@*props-element*))
    `(:name           "form"
      :description    "Form"
      :clog-type      clog:clog-form

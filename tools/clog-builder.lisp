@@ -124,7 +124,9 @@
 					    :value (getf control-record :create-value)))
 				  (t nil))))
     (when control
-      (setf (attribute control "data-clog-type") control-type-name))
+      (setf (attribute control "data-clog-type") control-type-name)
+      (when (getf control-record :setup)
+	(funcall (getf control-record :setup) control control-record)))
     control))
 
 (defun drop-new-control (app content data next-id &key win)
