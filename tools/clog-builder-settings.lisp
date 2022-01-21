@@ -711,8 +711,7 @@
      :create         clog:create-form-element
      :create-type    :form
      :create-param   :url
-     :create-value   ""
-     :properties     (,@*props-form-element*))
+     :create-value   ""     :properties     (,@*props-form-element*))
    `(:name           "week"
      :description    "Form Week Input"
      :clog-type      clog:clog-form-element
@@ -722,16 +721,62 @@
      :create-value   ""
      :properties     (,@*props-form-element*))
    `(:name           "span"
-     :description    "Span Control"
+     :description    "Span"
      :clog-type      clog:clog-span
      :create         clog:create-span
      :create-type    :element
      :create-content "text here"
      :properties     (,@*props-element*))
    `(:name           "div"
-     :description    "Div Control"
+     :description    "Div"
      :clog-type      clog:clog-div
      :create         clog:create-div
      :create-type    :element
      :create-content ""
+     :properties     (,@*props-element*))
+   `(:name           "audio"
+     :description    "Audio Player"
+     :clog-type      clog:clog-audio
+     :create         clog:create-audio
+     :create-type    :base
+     :properties     ((:name "media url"
+		       :prop "src")
+		      (:name "volume"
+		       :prop "volume")
+		      (:name "controls"
+		       :attr "controls")
+		      (:name "preload"
+		       :attr "preload")
+		      (:name "autoplay"
+		       :attr "autoplay")
+		      (:name "muted"
+		       :prop "muted")
+		      (:name "loop"
+		       :prop "loop")
+		      ,@*props-element*))
+   `(:name           "video"
+     :description    "Video Player"
+     :clog-type      clog:clog-video
+     :create         clog:create-video
+     :create-type    :base
+     :properties     ((:name "media url"
+		       :prop "src")
+		      (:name "volume"
+		       :prop "volume")
+		      (:name "controls"
+		       :attr "controls")
+		      (:name "preload"
+		       :attr "preload")
+		      (:name "autoplay"
+		       :attr "autoplay")
+		      (:name "muted"
+		       :prop "muted")
+		      (:name "loop"
+		       :prop "loop")
+		      ,@*props-element*))
+   `(:name           "canvas"
+     :description    "Canvas"
+     :clog-type      clog:clog-canvas
+     :create         clog:create-canvas
+     :create-type    :base
      :properties     (,@*props-element*))))
