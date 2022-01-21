@@ -424,16 +424,18 @@ spell checking if Editable is also true."))
 ;;;;;;;;;;;;;;;
 
 (defgeneric tab-index (clog-element)
-  (:documentation "Get/Setf tab-index."))
+  (:documentation "Get/Setf tab-index. If -1 not focusable.
+If 0 element in tab index. If >0 sets order in tab index.
+Normally index follows normal sequence of elements."))
 
 (defmethod tab-index ((obj clog-element))
-  (property obj "tabIndex"))
+  (property obj "tabindex"))
 
 (defgeneric set-tab-index (clog-element value)
   (:documentation "Set tab-index VALUE for CLOG-ELEMENT"))
 
 (defmethod set-tab-index ((obj clog-element) value)
-  (setf (property obj "tabIndex") value))
+  (setf (property obj "tabindex") value))
 (defsetf tab-index set-tab-index)
 
 ;;;;;;;;;;

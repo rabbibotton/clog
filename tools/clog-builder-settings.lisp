@@ -34,7 +34,10 @@
 		     (v  (string-downcase (positioning control))))
 		 (add-select-options dd `(,v
 					  "absolute"
-					  "static"))
+					  "static"
+					  "relative"
+					  "sticky"
+					  "fixed"))
 		 (set-on-change dd (lambda (obj)
 				     (declare (ignore obj))
 				     (setf (positioning control) (value dd))
@@ -45,6 +48,7 @@
 						   :height (client-height control))
 				     (on-populate-control-properties-win obj)))
 		 nil)))))
+
 (defparameter *props-with-height*
   '((:name "width"
      :setf clog:width)
@@ -140,6 +144,8 @@
 				     (declare (ignore obj))
 				     (setf (color control) (value d1)))))
 	       nil))
+    (:name "opacity"
+     :style "opacity")
     (:name "background color"
      :setup ,(lambda (control td1 td2)
 	       (declare (ignore td1))
@@ -157,7 +163,43 @@
 		 (set-on-change d1 (lambda (obj)
 				     (declare (ignore obj))
 				     (setf (background-color control) (value d1))))
-		 nil)))))
+		 nil)))
+    (:name "background attachment"
+     :style "background-attachment")
+    (:name "background image"
+     :style "background-image")
+    (:name "background position"
+     :style "background-position")
+    (:name "background origin"
+     :style "background-origin")
+    (:name "background repeat"
+     :style "background-repeat")
+    (:name "background clip"
+     :style "background-clip")
+    (:name "background size"
+     :style "background-size")
+    (:name "border"
+     :style "border")
+    (:name "border radius"
+     :style "border-radius")
+    (:name "box shadow"
+     :style "box-shadow")
+    (:name "text shadow"
+     :style "text-shadow")
+    (:name "outline"
+     :style "outline")
+    (:name "margin"
+     :style "margin")
+    (:name "padding"
+     :style "padding")
+    (:name "cursor"
+     :style "cursor")
+    (:name "font"
+     :style "font")
+    (:name "text alignment"
+     :style "text-align")
+    (:name "vertical align"
+     :style "vertical-align")))
 
 (defparameter *props-text*
   `((:name "contents"
@@ -167,8 +209,8 @@
 		 (set-on-change d1 (lambda (obj)
 				     (declare (ignore obj))
 				     (setf (inner-html control) (value d1)))))
-	       nil))))
-
+	       nil))
+    ))
 
 (defparameter *props-css*
   `((:name "css classes"
@@ -194,7 +236,25 @@
 		 (setf (visiblep control) nil))
 	      (style control "visibility")))
     (:name "editable"
-     :prop "contentEditable")
+     :prop "contenteditable")
+    (:name "spell check"
+     :prop "spellcheck")
+    (:name "text direction"
+     :prop "test-direction")
+    (:name "language code"
+     :prop "lang")
+    (:name "overflow"
+     :style "overflow")
+    (:name "resizable"
+     :style "resize")
+    (:name "minimum width"
+     :style "min-width")
+    (:name "minimum height"
+     :style "min-height")
+    (:name "maximum width"
+     :style "max-width")
+    (:name "maximum height"
+     :style "max-height")
     ))
 
 (defparameter *props-nav*
@@ -202,6 +262,10 @@
      :prop "access key")
     (:name "tool tip"
      :prop "title")
+    (:name "tab index"
+     :prop "tabindex")
+    (:name "z index"
+     :style "z-index")
     ))
 
 (defparameter *props-element*
