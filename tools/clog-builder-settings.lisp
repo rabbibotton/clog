@@ -11,6 +11,40 @@
 	  :control "button")
 	'(:tag "a"
 	  :control "link")
+	'(:tag "img"
+	  :control "image")
+	'(:tag "meter"
+	  :control "meter")
+	'(:tag "progress"
+	  :control "progress")
+	'(:tag "ol"
+	  :control "ol")
+	'(:tag "ul"
+	  :control "ul")
+	'(:tag "li"
+	  :control "li")
+	'(:tag "li"
+	  :control "li")
+	'(:tag "table"
+	  :control "table")
+	'(:tag "tr"
+	  :control "tr")
+	'(:tag "td"
+	  :control "td")
+	'(:tag "th"
+	  :control "th")
+	'(:tag "thead"
+	  :control "thead")
+	'(:tag "tbody"
+	  :control "tbody")
+	'(:tag "tfoot"
+	  :control "tfoot")
+	'(:tag "caption"
+	  :control "tcaption")
+	'(:tag "colgroup"
+	  :control "tcolgroup")
+	'(:tag "col"
+	  :control "tcol")
 	'(:tag "span"
 	  :control "span")
 	'(:tag "div"
@@ -358,6 +392,140 @@
 		      (:name "alternative text"
 		       :prop "alt")
 		      ,@*props-element*))
+   `(:name           "meter"
+     :description    "Meter"
+     :clog-type      clog:clog-meter
+     :create         clog:create-meter
+     :create-type    :base
+     :properties     ((:name "value"
+		       :prop "value")
+		      (:name "high"
+		       :prop "high")
+		      (:name "low"
+		       :prop "low")
+		      (:name "maximum"
+		       :prop "max")
+		      (:name "minimum"
+		       :prop "min")
+		      (:name "optimum"
+		       :prop "optimum")
+		      ,@*props-element*))
+   `(:name           "progress"
+     :description    "Progress Bar"
+     :clog-type      clog:clog-progress-bar
+     :create         clog:create-progress-bar
+     :create-type    :base
+     :properties     ((:name "value"
+		       :prop "value")
+		      (:name "maximum"
+		       :prop "max")
+		      ,@*props-element*))
+   `(:name           "ol"
+     :description    "Ordered List"
+     :clog-type      clog:clog-ordered-list
+     :create         clog:create-ordered-list
+     :create-type    :base
+     :properties     ((:name "list kind"
+		       :prop "list-style-type")
+		      (:name "list location"
+		       :prop "list-style-position")
+		      ,@*props-element*))
+   `(:name           "ul"
+     :description    "Unordered List"
+     :clog-type      clog:clog-unordered-list
+     :create         clog:create-unordered-list
+     :create-type    :base
+     :properties     ((:name "value"
+		       :prop "value")
+		      ,@*props-element*))
+   `(:name           "li"
+     :description    "List Item"
+     :clog-type      clog:clog-list-item
+     :create         clog:create-list-item
+     :create-type    :base
+     :properties     (,@*props-element*))
+   `(:name           "table"
+     :description    "Table"
+     :clog-type      clog:clog-table
+     :create         clog:create-table
+     :create-type    :base
+     :properties     (,@*props-element*))
+   `(:name           "tr"
+     :description    "Table Row"
+     :clog-type      clog:clog-table-row
+     :create         clog:create-table-row
+     :create-type    :base
+     :properties     (,@*props-element*))
+   `(:name           "td"
+     :description    "Table Column"
+     :clog-type      clog:clog-table-column
+     :create         clog:create-table-column
+     :create-type    :element
+     :create-content "Column"
+     :properties     ((:name "column span"
+		       :attr "colspan")
+		      (:name "row span"
+		       :attr "rowspan")
+		      ,@*props-element*))
+   `(:name           "th"
+     :description    "Table Heading"
+     :clog-type      clog:clog-table-heading
+     :create         clog:create-table-heading
+     :create-type    :element
+     :create-content "Heading"
+     :properties     ((:name "column span"
+		       :attr "colspan")
+		      (:name "row span"
+		       :attr "rowspan")
+		      (:name "abbreviated version"
+		       :attr "abbr")
+		      (:name "scope"
+		       :attr "rowspan")
+		      ,@*props-element*))
+   `(:name           "tcolgroup"
+     :description    "Table Column Group"
+     :clog-type      clog:clog-table-column-group
+     :create         clog:create-table-column-group
+     :create-type    :base
+     :properties     ((:name "span"
+		       :attr "span")
+		      ,@*props-element*))
+   `(:name           "tcol"
+     :description    "Table Column Group Item"
+     :clog-type      clog:clog-table-column-group-item
+     :create         clog:create-table-column-group-item
+     :create-type    :base
+     :create-content "Column Group Item"
+     :properties     ((:name "span"
+		       :attr "span")
+		      ,@*props-element*))
+   `(:name           "thead"
+     :description    "Table Head"
+     :clog-type      clog:clog-table-head
+     :create         clog:create-table-head
+     :create-type    :base
+     :properties     (,@*props-element*))
+   `(:name           "tbody"
+     :description    "Table Body"
+     :clog-type      clog:clog-table-body
+     :create         clog:create-table-body
+     :create-type    :base
+     :properties     (,@*props-element*))
+   `(:name           "tfoot"
+     :description    "Table Footer"
+     :clog-type      clog:clog-table-footer
+     :create         clog:create-table-footer
+     :create-type    :base
+     :properties     (,@*props-element*))
+   `(:name           "tcaption"
+     :description    "Table Caption"
+     :clog-type      clog:clog-table-caption
+     :create         clog:create-table-caption
+     :create-type    :element
+     :create-content "Caption"
+     :properties     ((:name "caption side"
+		       :style "caption-side")
+		      ,@*props-element*))
    `(:name           "form"
      :description    "Form"
      :clog-type      clog:clog-form
@@ -367,7 +535,7 @@
 		       :attr "method")
 		      (:name "encoding"
 		       :prop "encoding")
-		      (:name "from element count"
+		      (:name "form element count"
 		       :get ,(lambda (control) (form-element-count control)))))
    `(:name           "input"
      :description    "Form Input"

@@ -15,7 +15,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (mgl-pax:define-package :clog
-  (:documentation "The Common List Omnificent GUI - CLOG")  
+  (:documentation "The Common List Omnificent GUI - CLOG")
   (:use #:cl #:parse-float #:mgl-pax))
 
 (cl:in-package :clog)
@@ -31,7 +31,7 @@ embedded in a native template application.)"
   (@clog-getting-started    section)
   (@clog-programming-basics section)
   (@clog-event-data         section)
-  
+
   (@clog-system          section)
   (@clog-utilities       section)
   (@clog-obj             section)
@@ -67,7 +67,7 @@ embedded in a native template application.)"
   (create-group  function)
   (add           generic-function)
   (obj           generic-function)
-  
+
   "CLOG JS utilities"
   (js-true-p     function)
   (p-true-js     function)
@@ -75,7 +75,7 @@ embedded in a native template application.)"
   (p-on-js       function)
   (escape-string function)
   (lf-to-br      function)
-  
+
   "CLOG Color utilities"
   (rgb           function)
   (rgba          function)
@@ -91,13 +91,13 @@ embedded in a native template application.)"
 
   "CLOG-Obj - General Properties"
   (property  generic-function)
-  
+
   "CLOG-Obj - General Methods"
   (height generic-function)
   (width  generic-function)
   (focus  generic-function)
   (blur   generic-function)
-  
+
   "CLOG-Obj - Low Level"
   (connection-data             generic-function)
   (connection-data-item        generic-function)
@@ -108,7 +108,7 @@ embedded in a native template application.)"
   (html-id    generic-function)
   (js-execute generic-function)
   (js-query   generic-function)
-  
+
   "CLOG-Obj - Event Handling"
   (set-on-resize             generic-function)
   (set-on-focus              generic-function)
@@ -119,7 +119,7 @@ embedded in a native template application.)"
   (set-on-drag-end           generic-function)
   (set-on-drag-enter         generic-function)
   (set-on-drag-leave         generic-function)
-  (set-on-drag-over          generic-function) 
+  (set-on-drag-over          generic-function)
   (set-on-drop               generic-function)
   (set-on-focus-in           generic-function)
   (set-on-focus-out          generic-function)
@@ -138,14 +138,14 @@ embedded in a native template application.)"
   (set-on-mouse-leave        generic-function)
   (set-on-mouse-over         generic-function)
   (set-on-mouse-out          generic-function)
-  (set-on-mouse-down         generic-function) 
+  (set-on-mouse-down         generic-function)
   (set-on-mouse-up           generic-function)
   (set-on-mouse-move         generic-function)
   (set-on-pointer-enter      generic-function)
   (set-on-pointer-leave      generic-function)
   (set-on-pointer-over       generic-function)
   (set-on-pointer-out        generic-function)
-  (set-on-pointer-down       generic-function) 
+  (set-on-pointer-down       generic-function)
   (set-on-pointer-up         generic-function)
   (set-on-pointer-move       generic-function)
   (set-on-touch-start        generic-function)
@@ -357,7 +357,7 @@ embedded in a native template application.)"
   (clog-img   class)
   (create-img generic-function)
   (url-src    generic-function)
-  
+
   "CLOG-Div - Class for CLOG Div Blocks"
   (clog-div   class)
   (create-div generic-function)
@@ -375,7 +375,7 @@ embedded in a native template application.)"
   (minimum      generic-function)
   (maximum      generic-function)
   (optimum      generic-function)
-  
+
   "CLOG-Progress-Bar - Class for CLOG Progress Bars"
   (clog-progress-bar   class)
   (create-progress-bar generic-function)
@@ -394,7 +394,7 @@ embedded in a native template application.)"
   (section-type   type)
   (clog-section   class)
   (create-section generic-function)
-  
+
   "CLOG-Phrase - Class for CLOG Inline Phrases"
   (phrase-type   type)
   (clog-phrase   class)
@@ -407,7 +407,7 @@ embedded in a native template application.)"
   (list-kind           generic-function)
   (list-location-type  type)
   (list-location       generic-function)
-  
+
   "CLOG-Unordered-List - Class for CLOG Unordered-Lists"
   (clog-unordered-list   class)
   (create-unordered-list generic-function)
@@ -416,7 +416,7 @@ embedded in a native template application.)"
   (clog-list-item   class)
   (create-list-item generic-function)
   (item-value       generic-function)
-  
+
   "CLOG-Definition-List - Class for CLOG Definition-Lists"
   (clog-definition-list   class)
   (create-definition-list generic-function)
@@ -424,15 +424,15 @@ embedded in a native template application.)"
   "CLOG-Term - Class for CLOG Terms"
   (clog-term   class)
   (create-term generic-function)
-  
+
   "CLOG-Description - Class for CLOG Descriptions"
   (clog-description   class)
   (create-description generic-function)
-  
+
   "CLOG-Table - Class for CLOG Tables"
   (clog-table   class)
   (create-table generic-function)
-  
+
   "CLOG-Table-Row - Class for CLOG Table-Rows"
   (clog-table-row   class)
   (create-table-row generic-function)
@@ -440,7 +440,7 @@ embedded in a native template application.)"
   "CLOG-Table-Column - Class for CLOG Table-Columns"
   (clog-table-column   class)
   (create-table-column generic-function)
-  
+
   "CLOG-Table-Heading - Class for CLOG Table-Headings"
   (clog-table-heading   class)
   (create-table-heading generic-function)
@@ -460,11 +460,11 @@ embedded in a native template application.)"
   "CLOG-Table-Footer - Class for CLOG Table-Footers"
   (clog-table-footer   class)
   (create-table-footer generic-function)
-  
+
   "CLOG-Table-Column-Group - Class for CLOG Table-Column-Groups"
   (clog-table-column-group   class)
   (create-table-column-group generic-function)
-  
+
   "CLOG-Table-Column-Group-Item - Class for CLOG Table-Column-Group-Items"
   (clog-table-column-group-item   class)
   (create-table-column-group-item generic-function))
@@ -496,11 +496,11 @@ embedded in a native template application.)"
   (form-post-data     generic-function)
   (form-data-item     function)
 
-  "CLOG-Form - Class for organizing Form Elements in to a From"  
+  "CLOG-Form - Class for organizing Form Elements in to a From"
   (form-method-type   type)
   (clog-form          class)
   (create-form        generic-function)
-  
+
   (form-element-count generic-function)
   (submit             generic-function)
   (reset              generic-function)
@@ -548,7 +548,7 @@ embedded in a native template application.)"
   (make-data-list      generic-function)
   (minimum-length      generic-function)
   (maximum-length      generic-function)
-  
+
   "CLOG-Label - Class for CLOG Labels"
   (clog-label   class)
   (create-label generic-function)
@@ -564,7 +564,7 @@ embedded in a native template application.)"
   (selectedp          generic-function)
   (add-select-option  generic-function)
   (add-select-options generic-function)
-		   
+
   "CLOG-Data-List - Class for CLOG Option Data Lists"
   (clog-data-list   class)
   (create-data-list generic-function)
@@ -586,10 +586,10 @@ embedded in a native template application.)"
 
   (clog-context2d   class)
   (create-context2d generic-function)
-  
+
   (clear-rect          generic-function)
   (fill-rect           generic-function)
-  (stroke-rect         generic-function)  
+  (stroke-rect         generic-function)
   (fill-text           generic-function)
   (stroke-text         generic-function)
   (line-width          generic-function)
@@ -680,7 +680,7 @@ embedded in a native template application.)"
   (set-on-time-update      generic-function)
   (set-on-volume-change    generic-function)
   (set-on-waiting          generic-function)
-  
+
   "Clog-Audio - Class for CLOG Audio Control"
   (clog-audio     class)
   (create-audio   generic-function)
@@ -688,7 +688,7 @@ embedded in a native template application.)"
   "Clog-Video - Class for CLOG Video Control"
   (clog-video     class)
   (create-video   generic-function))
-  
+
 (defsection @clog-body (:title "CLOG Body Objects")
   "CLOG-Body - CLOG Body Objects"
   (clog-body class)
@@ -739,7 +739,7 @@ embedded in a native template application.)"
   (storage-key      generic-function)
   (storage-remove   generic-function)
   (storage-element  generic-function)
-  
+
   "CLOG-Window - Events"
   (set-on-abort              generic-function)
   (set-on-error              generic-function)
@@ -772,7 +772,7 @@ embedded in a native template application.)"
   (put-line         generic-function)
   (put-br           generic-function)
   (new-line         generic-function)
-  
+
   "CLOG-Document - Events"
   (set-on-full-screen-change generic-function))
 
@@ -785,7 +785,7 @@ embedded in a native template application.)"
   (language         generic-function)
   (user-agent       generic-function)
   (vendor           generic-function))
-  
+
 (defsection @clog-location (:title "CLOG Location Objects")
   "Clog-Location - CLOG Location Objects"
   (clog-location class)
@@ -800,7 +800,7 @@ embedded in a native template application.)"
   (port        generic-function)
   (protocol    generic-function)
   (url-search  generic-function)
-  
+
   "CLOG-Location - Methods"
   (reload      generic-function)
   (url-replace generic-function)
