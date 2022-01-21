@@ -5,6 +5,8 @@
 	  :control "label")
 	'(:tag "input"
 	  :control "input")
+	'(:tag "form"
+	  :control "form")
 	'(:tag "span"
 	  :control "span")
 	'(:tag "div"
@@ -41,18 +43,15 @@
 						   :left (position-left control)
 						   :width (client-width control)
 						   :height (client-height control))
-				     (on-populate-control-properties-win obj))))))))
-(defparameter *props-wh*
+				     (on-populate-control-properties-win obj)))
+		 nil)))))
+(defparameter *props-with-height*
   '((:name "width"
      :setf clog:width)
     (:name "height"
      :setf clog:height)))
 
-(defparameter *props-text*
-  '((:name "text"
-     :setf clog:text)))
-
-(defparameter *props-value*
+(defparameter *props-form-values*
   `((:name "value"
      :setf clog:value)
     (:name "name on form"
@@ -139,7 +138,8 @@
 				     (setf (color control) (value d1))))
 		 (set-on-change d1 (lambda (obj)
 				     (declare (ignore obj))
-				     (setf (color control) (value d1)))))))
+				     (setf (color control) (value d1)))))
+	       nil))
     (:name "background color"
      :setup ,(lambda (control td1 td2)
 	       (declare (ignore td1))
@@ -156,17 +156,66 @@
 				     (setf (background-color control) (value d1))))
 		 (set-on-change d1 (lambda (obj)
 				     (declare (ignore obj))
-				     (setf (background-color control) (value d1)))))))))
+				     (setf (background-color control) (value d1))))
+		 nil)))))
+
+(defparameter *props-text*
+  `((:name "contents"
+     :setup ,(lambda (control td1 td2)
+	       (declare (ignore td1))
+	       (let ((d1 (create-form-element td2 :text :value (inner-html control))))
+		 (set-on-change d1 (lambda (obj)
+				     (declare (ignore obj))
+				     (setf (inner-html control) (value d1)))))
+	       nil))))
+
+
+(defparameter *props-css*
+  `((:name "css classes"
+     :prop "className")
+    ))
+
+(defparameter *props-base*
+  `((:name "hidden"
+     :get  ,(lambda (control)
+	      (property control "hidden"))
+     :set  ,(lambda (control obj)
+	      (if (equalp (text obj) "true")
+		 (setf (hiddenp control) t)
+		 (setf (hiddenp control) nil))
+	      (property control "hidden")))
+    (:name "visible"
+     :get  ,(lambda (control)
+	      (style control "visibility"))
+     :set  ,(lambda (control obj)
+	      (if (or (equalp (text obj) "true")
+		      (equalp (text obj) "visible"))
+		 (setf (visiblep control) t)
+		 (setf (visiblep control) nil))
+	      (style control "visibility")))
+    (:name "editable"
+     :prop "contentEditable")
+    ))
+
+(defparameter *props-nav*
+  '((:name "access key"
+     :prop "access key")
+    (:name "tool tip"
+     :prop "title")
+    ))
 
 (defparameter *props-element*
   `(,@*props-location*
-    ,@*props-wh*
+    ,@*props-with-height*
     ,@*props-text*
-    ,@*props-colors*))
+    ,@*props-css*
+    ,@*props-colors*
+    ,@*props-base*
+    ,@*props-nav*))
 
 (defparameter *props-form-element*
   `(,@*props-location*
-    ,@*props-wh*
+    ,@*props-with-height*
     (:name "type"
      :setup ,(lambda (control td1 td2)
 	       (declare (ignore td1))
@@ -186,9 +235,13 @@
 						 :top (position-top control)
 						 :left (position-left control)
 						 :width (client-width control)
-						 :height (client-height control)))))))
-    ,@*props-value*
-    ,@*props-colors*))
+						 :height (client-height control))))
+		 nil)))
+    ,@*props-form-values*
+    ,@*props-css*
+    ,@*props-colors*
+    ,@*props-base*
+    ,@*props-nav*))
 
 (defparameter *supported-controls*
   (list
