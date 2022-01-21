@@ -55,28 +55,72 @@
 (defparameter *props-value*
   `((:name "value"
      :setf clog:value)
-    (:name "form name"
+    (:name "name on form"
      :setf clog:name)
-    (:name "type"
-     :setup ,(lambda (control td1 td2)
-	       (declare (ignore td1))
-	       (let ((dd (create-select td2))
-		     (v  (string-downcase (attribute control "type"))))
-		 (add-select-options dd `(,v
-					  "button" "checkbox" "color" "date"
-					  "datetime" "datetime-local" "email"
-					  "image" "file" "hidden" "image"
-					  "month" "number" "password" "radio"
-					  "range" "reset" "search" "submit"
-					  "tel" "text" "time" "url" "week"))
-		 (set-on-change dd (lambda (obj)
-				   (declare (ignore obj))
-				   (setf (attribute control "type") (value dd))
-				   (set-geometry (get-placer control)
-						 :top (position-top control)
-						 :left (position-left control)
-						 :width (client-width control)
-						 :height (client-height control)))))))))
+    (:name "size"
+     :prop "size")
+    (:name "place holder"
+     :prop "placeholder")
+    (:name "default value"
+     :prop "defaultValue")
+    (:name "image url"
+     :prop "src")
+    (:name "image alt"
+     :prop "alt")
+    (:name "checked"
+     :get  ,(lambda (control)
+	      (property control "checked"))
+     :set  ,(lambda (control obj)
+	     (if (equalp (text obj) "true")
+		 (setf (checkedp control) t)
+		 (setf (checkedp control) nil))
+	      (property control "required")))
+    (:name "read only"
+     :get  ,(lambda (control)
+	      (property control "readonly"))
+     :set  ,(lambda (control obj)
+	     (if (equalp (text obj) "true")
+		 (setf (read-only-p control) t)
+		 (setf (read-only-p control) nil))
+	     (property control "readonly")))
+    (:name "disabled"
+     :get  ,(lambda (control)
+	      (property control "disabled"))
+     :set  ,(lambda (control obj)
+	     (if (equalp (text obj) "true")
+		 (setf (disabledp control) t)
+		 (setf (disabledp control) nil))
+	     (property control "disabled")))
+    (:name "required"
+     :get  ,(lambda (control)
+	      (property control "required"))
+     :set  ,(lambda (control obj)
+	     (if (equalp (text obj) "true")
+		 (setf (requiredp control) t)
+		 (setf (requiredp control) nil))
+	      (property control "required")))
+    (:name "pattern"
+     :prop "pattern")
+    (:name "minimum"
+     :prop "min")
+    (:name "maximum"
+     :prop "max")
+    (:name "element step"
+     :prop "step")
+    (:name "minimum length"
+     :prop "minlength")
+    (:name "maximum length"
+     :prop "maxlength")
+    (:name "multiple"
+     :get  ,(lambda (control)
+	      (property control "multiple"))
+     :set  ,(lambda (control obj)
+	      (if (equalp (text obj) "true")
+		 (setf (multiplep control) t)
+		 (setf (multiplep control) nil))
+	      (property control "multiple")))
+    (:name "files accepted"
+     :prop "accept")))
 
 (defparameter *props-colors*
   `((:name "color"
@@ -123,6 +167,26 @@
 (defparameter *props-form-element*
   `(,@*props-location*
     ,@*props-wh*
+    (:name "type"
+     :setup ,(lambda (control td1 td2)
+	       (declare (ignore td1))
+	       (let ((dd (create-select td2))
+		     (v  (string-downcase (attribute control "type"))))
+		 (add-select-options dd `(,v
+					  "button" "checkbox" "color" "date"
+					  "datetime" "datetime-local" "email"
+					  "image" "file" "hidden" "image"
+					  "month" "number" "password" "radio"
+					  "range" "reset" "search" "submit"
+					  "tel" "text" "time" "url" "week"))
+		 (set-on-change dd (lambda (obj)
+				   (declare (ignore obj))
+				   (setf (attribute control "type") (value dd))
+				   (set-geometry (get-placer control)
+						 :top (position-top control)
+						 :left (position-left control)
+						 :width (client-width control)
+						 :height (client-height control)))))))
     ,@*props-value*
     ,@*props-colors*))
 
@@ -155,6 +219,8 @@
      :create-type    :base
      :properties     ((:name "method"
 		       :attr "method")
+		      (:name "encoding"
+		       :prop "encoding")
 		      (:name "from element count"
 		       :get ,(lambda (control) (form-element-count control)))))
    `(:name           "input"

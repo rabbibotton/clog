@@ -117,7 +117,9 @@ action."))
   (:documentation "Set autocompletep for CLOG-FORM"))
 
 (defmethod set-autocompletep ((obj clog-form) autocompletep)
-  (setf (property obj "autocompletep") (p-on-js autocompletep)))
+  (if value
+      (setf (attribute obj "autocomplete") "true")
+      (remove-attribute obj "autocomplete")))
 (defsetf autocompletep set-autocompletep)
 
 ;;;;;;;;;;;;;;
@@ -154,7 +156,9 @@ action."))
   (:documentation "Set VALIDATE-ON-SUBMIT for CLOG-FORM"))
 
 (defmethod set-validate-on-submit ((obj clog-form) value)
-  (setf (property obj "noValidate") (p-true-js (not value))))
+  (if (not value)
+      (setf (attribute obj "noValidate") "true")
+      (remove-attribute obj "noValidate")))
 (defsetf validate-on-submit set-validate-on-submit)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -220,7 +224,9 @@ clog-form in the DOM. The radio ELEMENT-TYPE groups by NAME."))
   (:documentation "Set autocomplete AUTOCOMPLETE for CLOG-FORM-ELEMENT"))
 
 (defmethod set-autocomplete ((obj clog-form-element) value)
-  (setf (property obj "autocomplete") value))
+  (if value
+      (setf (attribute obj "autocomplete") "true")
+      (remove-attribute obj "autocomplete")))
 (defsetf autocomplete set-autocomplete)
 
 ;;;;;;;;;;;;;;;;
@@ -229,7 +235,7 @@ clog-form in the DOM. The radio ELEMENT-TYPE groups by NAME."))
 
 (defgeneric autofocusp (clog-form-element)
   (:documentation "Get/Setf form element autofocusp. Only one element should
-have this set true. Autofocus on element when form loaded. "))
+have this set true ever. Autofocus on element when form loaded."))
 
 (defmethod autofocusp ((obj clog-form-element))
   (js-true-p (attribute obj "autofocus")))
@@ -274,7 +280,9 @@ have this set true. Autofocus on element when form loaded. "))
   (:documentation "Set disabledp DISABLEDP for CLOG-FORM-ELEMENT"))
 
 (defmethod set-disabledp ((obj clog-form-element) value)
-  (setf (property obj "disabled") (p-true-js value)))
+  (if value
+      (setf (attribute obj "disabled") "true")
+      (remove-attribute obj "disabled")))
 (defsetf disabledp set-disabledp)
 
 ;;;;;;;;;;;;;;;;;
@@ -291,7 +299,9 @@ have this set true. Autofocus on element when form loaded. "))
   (:documentation "Set read-only-p READ-ONLY-P for CLOG-FORM-ELEMENT"))
 
 (defmethod set-read-only-p ((obj clog-form-element) value)
-  (setf (property obj "readonly") (p-true-js value)))
+  (if value
+      (setf (attribute obj "readonly") "true")
+      (remove-attribute obj "readonly")))
 (defsetf read-only-p set-read-only-p)
 
 ;;;;;;;;;;;;;;;
@@ -308,8 +318,29 @@ have this set true. Autofocus on element when form loaded. "))
   (:documentation "Set requiredp REQUIREDP for CLOG-FORM-ELEMENT"))
 
 (defmethod set-requiredp ((obj clog-form-element) value)
-  (setf (property obj "required") (p-true-js value)))
+  (if value
+      (setf (attribute obj "required") "true")
+      (remove-attribute obj "required")))
 (defsetf requiredp set-requiredp)
+
+;;;;;;;;;;;;;;;
+;; multiplep ;;
+;;;;;;;;;;;;;;;
+
+(defgeneric multiplep (clog-form-element)
+  (:documentation "Get/Setf form element multiplep."))
+
+(defmethod multiplep ((obj clog-form-element))
+  (js-true-p (property obj "multiple")))
+
+(defgeneric set-multiplep (clog-form-element value)
+  (:documentation "Set multiplep MULTIPLEP for CLOG-FORM-ELEMENT"))
+
+(defmethod set-multiplep ((obj clog-form-element) value)
+  (if value
+      (setf (attribute obj "multiple") "true")
+      (remove-attribute obj "multiple")))
+(defsetf multiplep set-multiplep)
 
 ;;;;;;;;;;
 ;; name ;;
@@ -641,7 +672,9 @@ the File form element type.
   (:documentation "Set VALUE if checkedp for CLOG-FORM-ELEMENT"))
 
 (defmethod set-checkedp ((obj clog-form-element) value)
-  (setf (property obj "checked") (p-true-js value)))
+  (if value
+      (setf (attribute obj "checked") "true")
+      (remove-attribute obj "checked")))
 (defsetf checkedp set-checkedp)
 
 ;;;;;;;;;;;;;;;;

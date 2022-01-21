@@ -524,6 +524,7 @@ embedded in a native template application.)"
   (disabledp           generic-function)
   (read-only-p         generic-function)
   (requiredp           generic-function)
+  (multiplep           generic-function)
   (name                generic-function)
   (default-value       generic-function)
   (value               generic-function)
