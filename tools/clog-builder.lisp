@@ -110,7 +110,10 @@
   "Return a new control based on CONTROL-RECORD as a child of PARENT"
   (let* ((create-type       (getf control-record :create-type))
 	 (control-type-name (getf control-record :name))
-	 (control           (cond ((eq create-type :element)
+	 (control           (cond ((eq create-type :base)
+				   (funcall (getf control-record :create) parent
+					    :html-id uid))
+				  ((eq create-type :element)
 				   (funcall (getf control-record :create) parent
 					    :html-id uid
 					    :content (getf control-record :create-content)))

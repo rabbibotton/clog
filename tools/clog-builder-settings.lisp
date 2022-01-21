@@ -29,18 +29,19 @@
      :setup ,(lambda (control td1 td2)
 	       (declare (ignore td1))
 	       (let ((dd (create-select td2))
-		     (v  (positioning control)))
+		     (v  (string-downcase (positioning control))))
 		 (add-select-options dd `(,v
 					  "absolute"
 					  "static"))
 		 (set-on-change dd (lambda (obj)
-				   (declare (ignore obj))
-				   (setf (positioning control) (value dd))
-				   (set-geometry (get-placer control)
-						 :top (position-top control)
-						 :left (position-left control)
-						 :width (client-width control)
-						 :height (client-height control)))))))))
+				     (declare (ignore obj))
+				     (setf (positioning control) (value dd))
+				     (set-geometry (get-placer control)
+						   :top (position-top control)
+						   :left (position-left control)
+						   :width (client-width control)
+						   :height (client-height control))
+				     (on-populate-control-properties-win obj))))))))
 (defparameter *props-wh*
   '((:name "width"
      :setf clog:width)
@@ -60,14 +61,14 @@
      :setup ,(lambda (control td1 td2)
 	       (declare (ignore td1))
 	       (let ((dd (create-select td2))
-		     (v  (attribute control "type")))
+		     (v  (string-downcase (attribute control "type"))))
 		 (add-select-options dd `(,v
-					  "text"
-					  "button"
-					  "checkbox"
-					  "color"
-					  "image"
-					  "time"))
+					  "button" "checkbox" "color" "date"
+					  "datetime" "datetime-local" "email"
+					  "image" "file" "hidden" "image"
+					  "month" "number" "password" "radio"
+					  "range" "reset" "search" "submit"
+					  "tel" "text" "time" "url" "week"))
 		 (set-on-change dd (lambda (obj)
 				   (declare (ignore obj))
 				   (setf (attribute control "type") (value dd))
@@ -76,6 +77,7 @@
 						 :left (position-left control)
 						 :width (client-width control)
 						 :height (client-height control)))))))))
+
 (defparameter *props-colors*
   `((:name "color"
      :setup ,(lambda (control td1 td2)
@@ -126,8 +128,8 @@
 
 (defparameter *supported-controls*
   (list
-   '(:name          "select"
-     :description   "Selection Tool"
+   '(:name           "select"
+     :description    "Selection Tool"
      :create         nil
      :create-type    nil
      :properties     nil
@@ -139,33 +141,41 @@
      :create-type    :element
      :create-content "label"
      :properties     (,@*props-element*))
-   `(:name            "button"
-     :description     "Button"
-     :clog-type       clog:clog-button
-     :create          clog:create-button
-     :create-type     :element
-     :create-param    :button
-     :create-content  "button"
+   `(:name           "button"
+     :description    "Button"
+     :clog-type      clog:clog-button
+     :create         clog:create-button
+     :create-type    :element
+     :create-content "button"
      :properties     (,@*props-element*))
-   `(:name            "input"
-     :description     "Form Text Input"
-     :clog-type       clog:clog-form-element
-     :create          clog:create-form-element
-     :create-type     :form
-     :create-param    :text
-     :create-value    ""
+   `(:name           "form"
+     :description    "Form"
+     :clog-type      clog:clog-form
+     :create         clog:create-form
+     :create-type    :base
+     :properties     ((:name "method"
+		       :attr "method")
+		      (:name "from element count"
+		       :get ,(lambda (control) (form-element-count control)))))
+   `(:name           "input"
+     :description    "Form Input"
+     :clog-type      clog:clog-form-element
+     :create         clog:create-form-element
+     :create-type    :form
+     :create-param   :text
+     :create-value   ""
      :properties     (,@*props-form-element*))
-   `(:name            "span"
-     :description     "Span Control"
-     :clog-type       clog:clog-span
-     :create          clog:create-span
-     :create-type     :element
-     :create-content  "text here"
+   `(:name           "span"
+     :description    "Span Control"
+     :clog-type      clog:clog-span
+     :create         clog:create-span
+     :create-type    :element
+     :create-content "text here"
      :properties     (,@*props-element*))
-   `(:name            "div"
-     :description     "Div Control"
-     :clog-type       clog:clog-div
-     :create          clog:create-div
-     :create-type     :element
-     :create-content  ""
+   `(:name           "div"
+     :description    "Div Control"
+     :clog-type      clog:clog-div
+     :create         clog:create-div
+     :create-type    :element
+     :create-content ""
      :properties     (,@*props-element*))))
