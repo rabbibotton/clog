@@ -358,14 +358,14 @@
      :clog-type      clog:clog-label
      :create         clog:create-label
      :create-type    :element
-     :create-content "label"
+     :create-content "Label"
      :properties     (,@*props-element*))
    `(:name           "button"
      :description    "Button"
      :clog-type      clog:clog-button
      :create         clog:create-button
      :create-type    :element
-     :create-content "button"
+     :create-content "Button"
      :properties     (,@*props-element*))
    `(:name           "link"
      :description    "Link"
@@ -543,6 +543,182 @@
      :create         clog:create-form-element
      :create-type    :form
      :create-param   :text
+     :create-value   ""
+     :properties     (,@*props-form-element*))
+   `(:name           "fbutton"
+     :description    "Form Button"
+     :clog-type      clog:clog-form-element
+     :create         clog:create-form-element
+     :create-type    :form
+     :create-param   :button
+     :create-value   "Button"
+     :properties     (,@*props-form-element*))
+   `(:name           "reset"
+     :description    "Form Reset"
+     :clog-type      clog:clog-form-element
+     :create         clog:create-form-element
+     :create-type    :form
+     :create-param   :reset
+     :create-value   "Reset"
+     :properties     (,@*props-form-element*))
+   `(:name           "submit"
+     :description    "Form Submit"
+     :clog-type      clog:clog-form-element
+     :create         clog:create-form-element
+     :create-type    :form
+     :create-param   :submit
+     :create-value   "Submit"
+     :properties     (,@*props-form-element*))
+   `(:name           "checkbox"
+     :description    "Form Checkbox"
+     :clog-type      clog:clog-form-element
+     :create         clog:create-form-element
+     :create-type    :form
+     :create-param   :checkbox
+     :create-value   ""
+     :properties     (,@*props-form-element*))
+   `(:name           "radio"
+     :description    "Form Radio Button"
+     :clog-type      clog:clog-form-element
+     :create         clog:create-form-element
+     :create-type    :form
+     :create-param   :radio
+     :create-value   ""
+     :properties     (,@*props-form-element*))
+   `(:name           "color"
+     :description    "Form Color Picker"
+     :clog-type      clog:clog-form-element
+     :create         clog:create-form-element
+     :create-type    :form
+     :create-param   :color
+     :create-value   ""
+     :properties     (,@*props-form-element*))
+   `(:name           "date"
+     :description    "Form Date Picker"
+     :clog-type      clog:clog-form-element
+     :create         clog:create-form-element
+     :create-type    :form
+     :create-param   :date
+     :create-value   ""
+     :properties     (,@*props-form-element*))
+   `(:name           "datetime"
+     :description    "Form Datetime Picker"
+     :clog-type      clog:clog-form-element
+     :create         clog:create-form-element
+     :create-type    :form
+     :create-param   :datetime
+     :create-value   ""
+     :properties     (,@*props-form-element*))
+   `(:name           "datetime-local"
+     :description    "Form Datetime Local Picker"
+     :clog-type      clog:clog-form-element
+     :create         clog:create-form-element
+     :create-type    :form
+     :create-param   :datetime-local
+     :create-value   ""
+     :properties     (,@*props-form-element*))
+   `(:name           "email"
+     :description    "Form Email Input"
+     :clog-type      clog:clog-form-element
+     :create         clog:create-form-element
+     :create-type    :form
+     :create-param   :email
+     :create-value   ""
+     :properties     (,@*props-form-element*))
+   `(:name           "file"
+     :description    "Form File Input"
+     :clog-type      clog:clog-form-element
+     :create         clog:create-form-element
+     :create-type    :form
+     :create-param   :file
+     :create-value   ""
+     :properties     (,@*props-form-element*))
+   `(:name           "hidden"
+     :description    "Form Hidden Value"
+     :clog-type      clog:clog-form-element
+     :create         clog:create-form-element
+     :create-type    :form
+     :create-param   :hidden
+     :create-value   ""
+     :properties     (,@*props-form-element*))
+   `(:name           "fimage"
+     :description    "Form Image Input"
+     :clog-type      clog:clog-form-element
+     :create         clog:create-form-element
+     :create-type    :form
+     :create-param   :image
+     :create-value   ""
+     :properties     (,@*props-form-element*))
+   `(:name           "month"
+     :description    "Form Month and Year Picker"
+     :clog-type      clog:clog-form-element
+     :create         clog:create-form-element
+     :create-type    :form
+     :create-param   :month
+     :create-value   ""
+     :properties     (,@*props-form-element*))
+   `(:name           "number"
+     :description    "Form Number Picker"
+     :clog-type      clog:clog-form-element
+     :create         clog:create-form-element
+     :create-type    :form
+     :create-param   :number
+     :create-value   ""
+     :properties     (,@*props-form-element*))
+   `(:name           "password"
+     :description    "Form Password Input"
+     :clog-type      clog:clog-form-element
+     :create         clog:create-form-element
+     :create-type    :form
+     :create-param   :password
+     :create-value   ""
+     :properties     (,@*props-form-element*))
+   `(:name           "range"
+     :description    "Form Range Picker"
+     :clog-type      clog:clog-form-element
+     :create         clog:create-form-element
+     :create-type    :form
+     :create-param   :range
+     :create-value   ""
+     :properties     (,@*props-form-element*))
+   `(:name           "search"
+     :description    "Form Search Input"
+     :clog-type      clog:clog-form-element
+     :create         clog:create-form-element
+     :create-type    :form
+     :create-param   :search
+     :create-value   ""
+     :properties     (,@*props-form-element*))
+   `(:name           "tel"
+     :description    "Form Tel Input"
+     :clog-type      clog:clog-form-element
+     :create         clog:create-form-element
+     :create-type    :form
+     :create-param   :tel
+     :create-value   ""
+     :properties     (,@*props-form-element*))
+   `(:name           "time"
+     :description    "Form Time Picker"
+     :clog-type      clog:clog-form-element
+     :create         clog:create-form-element
+     :create-type    :form
+     :create-param   :time
+     :create-value   ""
+     :properties     (,@*props-form-element*))
+   `(:name           "url"
+     :description    "Form URL Input"
+     :clog-type      clog:clog-form-element
+     :create         clog:create-form-element
+     :create-type    :form
+     :create-param   :url
+     :create-value   ""
+     :properties     (,@*props-form-element*))
+   `(:name           "week"
+     :description    "Form Week Input"
+     :clog-type      clog:clog-form-element
+     :create         clog:create-form-element
+     :create-type    :form
+     :create-param   :week
      :create-value   ""
      :properties     (,@*props-form-element*))
    `(:name           "span"
