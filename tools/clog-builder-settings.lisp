@@ -65,6 +65,18 @@
 	  :control "optgroup")
 	'(:tag "dialog"
 	  :control "dialog")
+	'(:tag "p"
+	  :control "p")
+	'(:tag "br"
+	  :control "br")
+	'(:tag "hr"
+	  :control "hr")
+	'(:tag "dl"
+	  :control "dl")
+	'(:tag "dt"
+	  :control "dt")
+	'(:tag "dd"
+	  :control "dd")
 	'(:tag "div"
 	  :control "div")))
 
@@ -681,6 +693,26 @@
      :properties     ((:name "caption side"
 		       :style "caption-side")
 		      ,@*props-element*))
+   `(:name           "dl"
+     :description    "Definition List"
+     :clog-type      clog:clog-definition-list
+     :create         clog:create-definition-list
+     :create-type    :base
+     :properties     (,@*props-base*))
+   `(:name           "dt"
+     :description    "Definition Term"
+     :clog-type      clog:clog-term
+     :create         clog:create-term
+     :create-type    :element
+     :create-content "Term"
+     :properties     (,@*props-element*))
+   `(:name           "dd"
+     :description    "Definition Description"
+     :clog-type      clog:clog-description
+     :create         clog:create-description
+     :create-content "Description"
+     :create-type    :element
+     :properties     (,@*props-element*))
    `(:name           "form"
      :description    "Form"
      :clog-type      clog:clog-form
@@ -939,6 +971,25 @@
 		      (:name "return value"
 		       :prop "returnValue")
 		      ,@*props-element*))
+   `(:name           "hr"
+     :description    "Horizontal Rule"
+     :clog-type      clog:clog-hr
+     :create         clog:create-hr
+     :create-type    :base
+     :properties     (,@*props-base*))
+   `(:name           "br"
+     :description    "Line Break"
+     :clog-type      clog:clog-br
+     :create         clog:create-br
+     :create-type    :base
+     :properties     (,@*props-base*))
+   `(:name           "p"
+     :description    "Paragraph"
+     :clog-type      clog:clog-p
+     :create         clog:create-p
+     :create-content "Paragraph"
+     :create-type    :element
+     :properties     (,@*props-element*))
    `(:name           "style-block"
      :description    "Style"
      :clog-type      clog:clog-style-block
