@@ -133,7 +133,7 @@
 	(funcall (getf control-record :setup) control content control-record)))
     control))
 
-(defun drop-new-control (app content data next-id &key win)
+(defun drop-new-control (app content data &key win)
   "Create new control droppend at event DATA on CONTENT of WIN)"
   ;; any click on panel directly will focus window
   (when win
@@ -153,12 +153,12 @@
 					    control-record
 					    (format nil "B~A~A"
 						    (get-universal-time)
-						    next-id))))
+						    (next-id content)))))
     (cond (control
 	   ;; panel directly clicked with a control type selected
 	   ;; setup control
 	   (setf (attribute control "data-clog-name")
-		 (format nil "~A-~A" control-type-name next-id))
+		 (format nil "~A-~A" control-type-name (next-id content)))
 	   (setf (value (select-tool app)) 0)
 	   (setf (box-sizing control) :content-box)
 	   (setf (positioning control) positioning)
@@ -277,7 +277,11 @@ not a temporary attached one when using select-control."
 			       *import-types*))))
       (clog::js-execute parent tmp))
     (let* ((data (first-child parent))
-	   (name (attribute data "data-clog-title")))
+	   (name    (attribute data "data-clog-title"))
+	   (next-id (attribute data "data-clog-next-id")))
+      (when next-id
+	(unless (equalp name "undefined")
+	  (setf-next-id next-id)))
       (when name
 	(unless (equalp name "undefined")
 	  (setf (attribute parent "data-clog-name") name)
@@ -410,7 +414,8 @@ of controls and double click to select control."
 										  html-id)))
 					     (cond ((or (getf data :shift-key)
 						       (getf data :ctrl-key))
-						    (drop-new-control app content data 0))
+						    (when (drop-new-control app content data)
+						      (incf-next-id content)))
 						   (t
 						    (select-control control))))))
 			   (set-on-double-click list-item
@@ -626,6 +631,15 @@ of controls and double click to select control."
 (defparameter *builder-template2*
   "~%                            (~A (attach-as-child body \"~A\" :clog-type '~A))")
 
+(defun next-id (content)
+  (parse-integer (attribute content "data-clog-next-id") :junk-allowed t))
+
+(defun setf-next-id (content id)
+  (setf (attribute content "data-clog-next-id") (format nil "~A" id)))
+
+(defun incf-next-id (content)
+  (setf-next-id content (1+ (next-id content))))
+
 (defun on-new-builder-panel (obj)
   "Open new panel"
   (let* ((app (connection-data-item obj "builder-app-data"))
@@ -644,9 +658,9 @@ of controls and double click to select control."
 	 (in-simulation nil)
 	 (file-name  "")
 	 (panel-name (format nil "panel-~A" (incf (next-panel-id app))))
-	 (next-id    1)
 	 (panel-uid  (get-universal-time)) ;; unique id for panel
 	 (panel-id   (html-id content)))
+    (setf-next-id content 1)
     (setf (overflow content) :auto)
     (init-control-list app panel-id)
     ;; setup panel window
@@ -786,8 +800,8 @@ of controls and double click to select control."
 		       (lambda (obj data)
 			 (declare (ignore obj))
 			 (unless in-simulation
-			   (when (drop-new-control app content data next-id :win win)
-			     (incf next-id)))))))
+			   (when (drop-new-control app content data :win win)
+			     (incf-next-id content)))))))
 
 (defun on-attach-builder-page (body)
   "New builder page has attached"
@@ -802,7 +816,6 @@ of controls and double click to select control."
 	 (panel-name    (format nil "page-~A" (incf (next-panel-id app))))
 	 (in-simulation nil)
 	 (file-name     "")
-	 (next-id       0)
 	 (panel-id      (html-id content)))
     ;; sync new window with app
     (setf (connection-data-item body "builder-app-data") app)
@@ -974,8 +987,8 @@ of controls and double click to select control."
 		       (lambda (obj data)
 			 (declare (ignore obj))
 			 (unless in-simulation
-			   (when (drop-new-control app content data next-id :win win)
-			     (incf next-id)))))))
+			   (when (drop-new-control app content data :win win)
+			     (incf-next-id content)))))))
 
 (defun on-new-builder-page (obj)
   "Open new page"

@@ -454,7 +454,7 @@
 				    (setf (attribute control "multiple") t)
 				    (remove-attribute control "multiple"))
 				(property control "multiple")))
-		      ,@*props-base*))
+		      ,@*props-form-element*))
    `(:name           "listbox"
      :description    "Listbox select"
      :clog-type      clog:clog-select
@@ -471,7 +471,7 @@
 				    (setf (attribute control "multiple") t)
 				    (remove-attribute control "multiple"))
 				(property control "multiple")))
-		      ,@*props-base*))
+		      ,@*props-form-element*))
    `(:name           "option"
      :description    "Option Item"
      :clog-type      clog:clog-option
