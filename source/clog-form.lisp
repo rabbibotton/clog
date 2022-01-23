@@ -766,6 +766,31 @@ virtual keyboards."))
 		:clog-type 'clog-fieldset :html-id html-id :auto-place t))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Implementation - clog-legend
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defclass clog-legend (clog-element)()
+  (:documentation "CLOG Fieldset Legend Object"));
+
+;;;;;;;;;;;;;;;;;;;
+;; create-legend ;;
+;;;;;;;;;;;;;;;;;;;
+
+(defgeneric create-legend (clog-obj &key content class html-id)
+  (:documentation "Create a new clog-legend as child of CLOG-OBJ."))
+
+(defmethod create-legend ((obj clog-obj) &key (content "")
+					     (class nil)
+					     (html-id nil))
+  (create-child obj (format nil "<legend~A>~A</legend>"
+			    (if class
+				(format nil " class='~A'"
+					(escape-string class))
+				"")
+			    content)
+		:clog-type 'clog-legend :html-id html-id :auto-place t))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Implementation - clog-data-list
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 

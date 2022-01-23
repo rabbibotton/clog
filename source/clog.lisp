@@ -517,6 +517,9 @@ embedded in a native template application.)"
   (clog-fieldset   class)
   (create-fieldset generic-function)
 
+  "CLOG-Legend - Class for CLOG Legends"
+  (clog-legend   class)
+  (create-legend generic-function)
 
   "CLOG-Form-Element - Class for form elements"
   (clog-form-element   class)

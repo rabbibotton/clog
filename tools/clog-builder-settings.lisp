@@ -47,6 +47,12 @@
 	  :control "tcol")
 	'(:tag "span"
 	  :control "span")
+	'(:tag "style"
+	  :control "style-block")
+	'(:tag "fieldset"
+	  :control "fieldset")
+	'(:tag "legend"
+	  :control "legend")
 	'(:tag "div"
 	  :control "div")))
 
@@ -385,6 +391,19 @@
      :create         clog:create-div
      :create-type    :element
      :create-content ""
+     :properties     (,@*props-element*))
+   `(:name           "fieldset"
+     :description    "Fieldset"
+     :clog-type      clog:clog-fieldset
+     :create         clog:create-fieldset
+     :create-type    :base
+     :properties     (,@*props-base*))
+   `(:name           "legend"
+     :description    "Fieldset Legend"
+     :clog-type      clog:clog-legend
+     :create         clog:create-legend
+     :create-content "Legend here"
+     :create-type    :element
      :properties     (,@*props-element*))
    `(:name           "span"
      :description    "Span"
@@ -792,4 +811,14 @@
      :clog-type      clog:clog-canvas
      :create         clog:create-canvas
      :create-type    :base
-     :properties     (,@*props-base*))))
+     :properties     (,@*props-base*))
+   `(:name           "style-block"
+     :description    "Style"
+     :clog-type      clog:clog-style-block
+     :create         clog:create-style-block
+     :create-type    :base
+     :properties     ((:name "media"
+		       :attr "media")
+		      (:name "type"
+		       :prop "type")
+		      ,@*props-text*))))
