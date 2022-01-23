@@ -179,7 +179,8 @@ elements."))
     :reset :search :submit :tel :text :time :url :week))
 
 (defgeneric create-form-element (clog-obj element-type
-				 &key name value label class html-id)
+				 &key name value label class
+				   hidden html-id)
   (:documentation "Create a new clog-form-element as child of CLOG-OBJ.
 It is importamt that clog-form-elements are a child or descendant of a
 clog-form in the DOM. The radio ELEMENT-TYPE groups by NAME."))
@@ -189,13 +190,17 @@ clog-form in the DOM. The radio ELEMENT-TYPE groups by NAME."))
 				  (value nil)
 				  (label nil)
 				  (class nil)
+				  (hidden nil)
 				  (html-id nil))
   (let ((element (create-child
-		  obj (format nil "<input type='~A'~A~A~A/>"
+		  obj (format nil "<input type='~A'~A~A~A~A/>"
 			      (escape-string element-type)
 			      (if class
 				  (format nil " class='~A'"
 					  (escape-string class))
+				  "")
+			      (if hidden
+				  " style='visibility:hidden;'"
 				  "")
 			      (if value
 				  (format nil " value='~A'" value)

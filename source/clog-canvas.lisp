@@ -19,15 +19,27 @@
 ;; create-canvas ;;
 ;;;;;;;;;;;;;;;;;;;
 
-(defgeneric create-canvas (clog-obj &key width height auto-place)
+(defgeneric create-canvas (clog-obj &key width height
+				      class hidden html-id auto-place)
   (:documentation "Create a new CLOG-Canvas as child of CLOG-OBJ if
 :AUTO-PLACE (default t) place-inside-bottom-of CLOG-OBJ."))
 
 (defmethod create-canvas ((obj clog-obj)
-			  &key (width 300) (height 150) (auto-place t))
-  (create-child obj (format nil "<canvas width=~A height=~A/>"
+			  &key (width 300) (height 150)
+			    (class nil) (hidden nil)
+			    (html-id nil) (auto-place t))
+  (create-child obj (format nil "<canvas~A~A width=~A height=~A/>"
+			    (if class
+				(format nil " class='~A'"
+					(escape-string class))
+				"")
+			    (if hidden
+				" style='visibility:hidden;'"
+				"")
 			    width height)
-		:clog-type 'clog-canvas :auto-place auto-place))
+		:clog-type  'clog-canvas
+		:html-id    html-id
+		:auto-place auto-place))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Implementation - clog-context2d
@@ -49,7 +61,7 @@
 		(format nil "clog['~A']=clog['~A'].getContext('2d')"
 			web-id
 			(html-id obj)))
-    
+
     (make-instance 'clog-context2d
 		   :connection-id (connection-id obj)
 		   :html-id web-id)))
