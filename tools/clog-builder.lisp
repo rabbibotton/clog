@@ -122,6 +122,10 @@
 					    (getf control-record :create-param)
 					    :html-id uid
 					    :value (getf control-record :create-value)))
+				  ((eq create-type :textarea)
+				   (funcall (getf control-record :create) parent
+					    :html-id uid
+					    :value (getf control-record :create-value)))
 				  (t nil))))
     (when control
       (setf (attribute control "data-clog-type") control-type-name)

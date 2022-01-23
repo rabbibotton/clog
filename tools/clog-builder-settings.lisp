@@ -432,15 +432,15 @@
      :description    "Text Area"
      :clog-type      clog:clog-text-area
      :create         clog:create-text-area
-     :create-type    :element
-     :create-content ""
+     :create-type    :textarea
+     :create-value   ""
      :properties     ((:name "rows"
 		       :prop "rows")
 		      (:name "columns"
 		       :prop "columns")
 		      (:name "word wrap"
 		       :prop "wrap")
-		      ,@*props-element*))
+		      ,@*props-form-element*))
    `(:name           "dropdown"
      :description    "Drop down select"
      :clog-type      clog:clog-select
