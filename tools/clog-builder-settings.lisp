@@ -243,17 +243,15 @@
   `((:name "contents"
      :setup ,(lambda (control td1 td2)
 	       (declare (ignore td1))
-	       (let ((d1 (create-form-element td2 :text :value (inner-html control))))
+	       (let ((d1 (create-text-area td2 :value (inner-html control))))
 		 (set-on-change d1 (lambda (obj)
 				     (declare (ignore obj))
 				     (setf (inner-html control) (value d1)))))
-	       nil))
-    ))
+	       nil))))
 
 (defparameter *props-css*
   `((:name "css classes"
-     :prop "className")
-    ))
+     :prop "className")))
 
 (defparameter *props-base*
   `((:name "hidden"
@@ -292,8 +290,7 @@
     (:name "maximum width"
      :style "max-width")
     (:name "maximum height"
-     :style "max-height")
-    ))
+     :style "max-height")))
 
 (defparameter *props-nav*
   '((:name "access key"
@@ -303,8 +300,15 @@
     (:name "tab index"
      :prop "tabindex")
     (:name "z index"
-     :style "z-index")
-    ))
+     :style "z-index")))
+
+(defparameter *props-base*
+  `(,@*props-location*
+    ,@*props-with-height*
+    ,@*props-css*
+    ,@*props-colors*
+    ,@*props-base*
+    ,@*props-nav*))
 
 (defparameter *props-element*
   `(,@*props-location*
@@ -359,7 +363,15 @@
      :create         clog:create-label
      :create-type    :element
      :create-content "Label"
-     :properties     (,@*props-element*))
+     :properties     ((:name "for"
+		       :get ,(lambda (control)
+			       (clog::js-query control (format nil "$('#~A').attr('data-clog-name')"
+							       (attribute control "for"))))
+		       :set ,(lambda (control obj)
+			       (setf (attribute control "for")
+				     (clog::js-query control (format nil "$(\"[data-clog-name='~A']\").attr('id')"
+										     (text obj))))))
+		      ,@*props-element*))
    `(:name           "button"
      :description    "Button"
      :clog-type      clog:clog-button
@@ -383,15 +395,15 @@
      :clog-type      clog:clog-img
      :create         clog:create-img
      :create-type    :base
-     :setup          ,(lambda (control control-record)
-			(declare (ignore control-record))
+     :setup          ,(lambda (control content control-record)
+			(declare (ignore content) (ignore control-record))
 			(setf (url-src control) "/img/clogicon.png")
 			(setf (alt-text control) "Add image url"))
      :properties     ((:name "image url"
 		       :prop "src")
 		      (:name "alternative text"
 		       :prop "alt")
-		      ,@*props-element*))
+		      ,@*props-base*))
    `(:name           "meter"
      :description    "Meter"
      :clog-type      clog:clog-meter
@@ -409,7 +421,7 @@
 		       :prop "min")
 		      (:name "optimum"
 		       :prop "optimum")
-		      ,@*props-element*))
+		      ,@*props-base*))
    `(:name           "progress"
      :description    "Progress Bar"
      :clog-type      clog:clog-progress-bar
@@ -419,7 +431,7 @@
 		       :prop "value")
 		      (:name "maximum"
 		       :prop "max")
-		      ,@*props-element*))
+		      ,@*props-base*))
    `(:name           "ol"
      :description    "Ordered List"
      :clog-type      clog:clog-ordered-list
@@ -449,13 +461,13 @@
      :clog-type      clog:clog-table
      :create         clog:create-table
      :create-type    :base
-     :properties     (,@*props-element*))
+     :properties     (,@*props-base*))
    `(:name           "tr"
      :description    "Table Row"
      :clog-type      clog:clog-table-row
      :create         clog:create-table-row
      :create-type    :base
-     :properties     (,@*props-element*))
+     :properties     (,@*props-base*))
    `(:name           "td"
      :description    "Table Column"
      :clog-type      clog:clog-table-column
@@ -489,7 +501,7 @@
      :create-type    :base
      :properties     ((:name "span"
 		       :attr "span")
-		      ,@*props-element*))
+		      ,@*props-base*))
    `(:name           "tcol"
      :description    "Table Column Group Item"
      :clog-type      clog:clog-table-column-group-item
@@ -498,25 +510,25 @@
      :create-content "Column Group Item"
      :properties     ((:name "span"
 		       :attr "span")
-		      ,@*props-element*))
+		      ,@*props-base*))
    `(:name           "thead"
      :description    "Table Head"
      :clog-type      clog:clog-table-head
      :create         clog:create-table-head
      :create-type    :base
-     :properties     (,@*props-element*))
+     :properties     (,@*props-base*))
    `(:name           "tbody"
      :description    "Table Body"
      :clog-type      clog:clog-table-body
      :create         clog:create-table-body
      :create-type    :base
-     :properties     (,@*props-element*))
+     :properties     (,@*props-base*))
    `(:name           "tfoot"
      :description    "Table Footer"
      :clog-type      clog:clog-table-footer
      :create         clog:create-table-footer
      :create-type    :base
-     :properties     (,@*props-element*))
+     :properties     (,@*props-base*))
    `(:name           "tcaption"
      :description    "Table Caption"
      :clog-type      clog:clog-table-caption
@@ -711,7 +723,8 @@
      :create         clog:create-form-element
      :create-type    :form
      :create-param   :url
-     :create-value   ""     :properties     (,@*props-form-element*))
+     :create-value   ""
+     :properties     (,@*props-form-element*))
    `(:name           "week"
      :description    "Form Week Input"
      :clog-type      clog:clog-form-element
@@ -753,7 +766,7 @@
 		       :prop "muted")
 		      (:name "loop"
 		       :prop "loop")
-		      ,@*props-element*))
+		      ,@*props-base*))
    `(:name           "video"
      :description    "Video Player"
      :clog-type      clog:clog-video
@@ -773,10 +786,10 @@
 		       :prop "muted")
 		      (:name "loop"
 		       :prop "loop")
-		      ,@*props-element*))
+		      ,@*props-base*))
    `(:name           "canvas"
      :description    "Canvas"
      :clog-type      clog:clog-canvas
      :create         clog:create-canvas
      :create-type    :base
-     :properties     (,@*props-element*))))
+     :properties     (,@*props-base*))))

@@ -62,7 +62,7 @@ nil. Resizable only works if overflow is set to :SCROLL"))
 					  (display nil)
 					  (resizable nil)
 					  (content "")
-					  (style "")			 
+					  (style "")
 					  (hidden nil)
 					  (class nil)
 					  (html-id nil)
@@ -222,7 +222,7 @@ HTML-ID if set is the base and top,left,right,center, bottom are added e.g.
 if :HTML-ID \"myid\" then the HTML-ID for center will be: myid-center"
   (let ((panel-box (make-instance 'clog-panel-box-layout)))
     (unless html-id
-      (setf html-id (clog-connection:generate-id)))    
+      (setf html-id (clog-connection:generate-id)))
     (setf (top-panel panel-box)
 	  (create-panel clog-obj :left 0 :top 0 :right 0 :height top-height
 				 :units units
@@ -253,3 +253,55 @@ if :HTML-ID \"myid\" then the HTML-ID for center will be: myid-center"
 				 :units units
 				 :html-id (format nil "~A-bottom" html-id)))
     panel-box))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Implementation - clog-panel-box
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defclass clog-panel-box (clog-element)
+  ((panel-box
+    :accessor panel-box
+    :documentation "CLOG-PANEL-BOX-LAYOUT access"))
+  (:documentation "CLOG Panel-Box Objects."))
+
+;;;;;;;;;;;;;;;;;;;;;;
+;; create-panel-box ;;
+;;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric create-panel-box (clog-obj &key hidden class html-id auto-place)
+  (:documentation "Create a new CLOG-Panel-Box, a div containg a
+CLOG-PANEL-BOX-LAYOUT as child of CLOG-OBJ with and if :AUTO-PLACE
+(default t) place-inside-bottom-of CLOG-OBJ. If hidden is true visiblep
+is set to nil."))
+
+(defmethod create-panel-box ((obj clog-obj) &key (content "")
+					      (width "100%") (height "100%")
+					      (hidden nil)
+					      (class nil)
+					      (html-id nil)
+					      (auto-place t))
+  (let ((parent (create-child obj (format nil "<div~A~A~A~A/>"
+					  (if class
+					      (format nil " class='~A'" (escape-string class))
+					      "")
+					  (if width
+					      (format nil " width='~A'" width)
+					      "")
+					  (if height
+					      (format nil " height='~A'" height)
+					      "")
+					  (if hidden
+					      " style='visibility:hidden;'"
+					      ""))
+			      :clog-type  'clog-panel-box
+			      :html-id    html-id
+			      :auto-place auto-place)))
+    (setf (panel-box parent) (create-panel-box-layout parent :html-id (html-id parent)))
+    parent))
+
+;;;;;;;;;;;;;;;
+;; panel-box ;;
+;;;;;;;;;;;;;;;
+
+(defgeneric panel-box (clog-panel-box)
+  (:documentation "Returns the CLOG-PANEL-BOX-LAYOUT object contained in the CLOG-PANEL-BOX."))

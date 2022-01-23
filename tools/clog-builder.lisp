@@ -106,7 +106,7 @@
   "Return control informaton record for CONTROL-TYPE-NAME from the *supported-controls* list."
   (find-if (lambda (x) (equal (getf x :name) control-type-name)) *supported-controls*))
 
-(defun create-control (parent control-record uid)
+(defun create-control (parent content control-record uid)
   "Return a new control based on CONTROL-RECORD as a child of PARENT"
   (let* ((create-type       (getf control-record :create-type))
 	 (control-type-name (getf control-record :name))
@@ -126,7 +126,7 @@
     (when control
       (setf (attribute control "data-clog-type") control-type-name)
       (when (getf control-record :setup)
-	(funcall (getf control-record :setup) control control-record)))
+	(funcall (getf control-record :setup) control content control-record)))
     control))
 
 (defun drop-new-control (app content data next-id &key win)
@@ -145,6 +145,7 @@
 	 (control           (create-control (if parent
 						parent
 						content)
+					    content
 					    control-record
 					    (format nil "B~A~A"
 						    (get-universal-time)
@@ -248,6 +249,47 @@ not a temporary attached one when using select-control."
     (set-border placer (unit "px" 2) :solid :blue)
     (on-populate-control-properties-win control)))
 
+(defun add-sub-controls (parent content &key win)
+  "Setup html imported in to CONTENT starting with PARENT for use with Builder"
+  (let ((app       (connection-data-item content "builder-app-data"))
+	(panel-uid (get-universal-time))
+	(panel-id  (html-id content)))
+    ;; Assign any elements with no id, an id, name and type
+    (let ((tmp (format nil
+		       "var clog_id=~A; var clog_nid=1;~
+      $(~A).find('*').each(function() {var e=$(this);~
+        var t=e.prop('tagName').toLowerCase(); var p=e.attr('data-clog-type');~
+        if((e.attr('id') === undefined) && (e.attr('data-clog-name') === undefined))~
+           {e.attr('id','A'+clog_id++);~
+            e.attr('data-clog-name','none-'+t+'-'+clog_nid++)}~
+        if(e.attr('data-clog-name') === undefined){e.attr('data-clog-name',e.attr('id'))}~
+        ~{~A~}~
+        if(e.attr('data-clog-type') === undefined){e.attr('data-clog-type','span')}})"
+		       panel-uid
+		       (clog::jquery parent)
+		       (mapcar (lambda (l)
+				 (format nil "if(p === undefined && t=='~A'){e.attr('data-clog-type','~A')}"
+					 (getf l :tag) (getf l :control)))
+			       *import-types*))))
+      (clog::js-execute parent tmp))
+    (let* ((data (first-child parent))
+	   (name (attribute data "data-clog-title")))
+      (when name
+	(unless (equalp name "undefined")
+	  (setf (attribute parent "data-clog-name") name)
+	  (destroy data))))
+    (labels ((add-siblings (control)
+	       (let (dct)
+		 (loop
+		   (when (equal (html-id control) "undefined") (return))
+		   (setf dct (attribute control "data-clog-type"))
+		   (unless (equal dct "undefined")
+		     (change-class control (getf (control-info dct) :clog-type))
+		     (setup-control content control :win win)
+		     (add-siblings (first-child control)))
+		   (setf control (next-sibling control))))))
+      (add-siblings (first-child parent)))))
+
 ;; Population of utility windows
 
 (defun on-populate-control-properties-win (obj)
@@ -332,45 +374,7 @@ not a temporary attached one when using select-control."
 
 (defun on-populate-loaded-window (content &key win)
   "Setup html imported in to CONTENT for use with Builder"
-  (let ((app      (connection-data-item content "builder-app-data"))
-	(panel-uid (get-universal-time))
-	(panel-id (html-id content)))
-    (clrhash (get-control-list app panel-id))
-    ;; Assign any elements with no id an id, name and type
-    (let ((tmp (format nil
-		       "var clog_id=~A; var clog_nid=1;~
-      $(~A).find('*').each(function() {var e=$(this);~
-        var t=e.prop('tagName').toLowerCase(); var p=e.attr('data-clog-type');~
-        if((e.attr('id') === undefined) && (e.attr('data-clog-name') === undefined))~
-           {e.attr('id','A'+clog_id++);~
-            e.attr('data-clog-name','none-'+t+'-'+clog_nid++)}~
-        if(e.attr('data-clog-name') === undefined){e.attr('data-clog-name',e.attr('id'))}~
-        ~{~A~}~
-        if(e.attr('data-clog-type') === undefined){e.attr('data-clog-type','span')}})"
-		       panel-uid
-		       (clog::jquery content)
-		       (mapcar (lambda (l)
-				 (format nil "if(p === undefined && t=='~A'){e.attr('data-clog-type','~A')}"
-					 (getf l :tag) (getf l :control)))
-			       *import-types*))))
-      (clog::js-execute content tmp))
-    (let* ((data (first-child content))
-	   (name (attribute data "data-clog-title")))
-      (when name
-	(unless (equalp name "undefined")
-	  (setf (attribute content "data-clog-name") name)
-	  (destroy data))))
-    (labels ((add-siblings (control)
-	       (let (dct)
-		 (loop
-		   (when (equal (html-id control) "undefined") (return))
-		   (setf dct (attribute control "data-clog-type"))
-		   (unless (equal dct "undefined")
-		     (change-class control (getf (control-info dct) :clog-type))
-		     (setup-control content control :win win)
-		     (add-siblings (first-child control)))
-		   (setf control (next-sibling control))))))
-      (add-siblings (first-child content)))))
+  (add-sub-controls content content :win win))
 
 (defun on-populate-control-list-win (content)
   "Populate the control-list-window to allow drag and drop adjust of order
@@ -690,6 +694,7 @@ of controls and double click to select control."
 						     (setf file-name fname)
 						     (setf (inner-html content)
 							   (escape-string (read-file fname)))
+						     (clrhash (get-control-list app panel-id))
 						     (on-populate-loaded-window content :win win)
 						     (setf panel-name (attribute content "data-clog-name"))
 						     (setf (window-title win) panel-name))))))
@@ -875,6 +880,7 @@ of controls and double click to select control."
 						       (setf file-name fname)
 						       (setf (inner-html content)
 							     (escape-string (read-file fname)))
+						       (clrhash (get-control-list app panel-id))
 						       (on-populate-loaded-window content :win win)
 						       (setf panel-name (attribute content "data-clog-name"))
 						       (setf (title (html-document body)) panel-name)

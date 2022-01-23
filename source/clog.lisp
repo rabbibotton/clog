@@ -474,6 +474,11 @@ embedded in a native template application.)"
   (clog-panel class)
   (create-panel generic-function)
 
+  "CLOG-Panel-Box - CLOG Panel Box"
+  (clog-panel-box class)
+  (create-panel-box generic-function)
+  (panel-box        generic-function)
+
   "CLOG-Panel-Box-Layout"
   (clog-panel-box-layout   class)
   (center-children         generic-function)
