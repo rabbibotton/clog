@@ -238,7 +238,6 @@ firefox and does not work at all on IE."))
 		:html-id    html-id
 		:auto-place auto-place))
 
-
 ;;;;;;;;;;;;;;;;;;
 ;; return-value ;;
 ;;;;;;;;;;;;;;;;;;
@@ -1368,5 +1367,92 @@ and if :AUTO-PLACE (default t) place-inside-bottom-of CLOG-OBJ"))
 					(escape-string class))
 				""))
 		:clog-type  'clog-table-column-group-item
+		:html-id    html-id
+		:auto-place auto-place))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Implementation - clog-details
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defclass clog-details (clog-element)()
+  (:documentation "CLOG Details Objects."))
+
+;;;;;;;;;;;;;;;;;;;;
+;; create-details ;;
+;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric create-details (clog-obj &key content hidden class html-id auto-place)
+  (:documentation "Create a new CLOG-Details as child of CLOG-OBJ with :CONTENT
+(default \"\") and if :AUTO-PLACE (default t) place-inside-bottom-of
+CLOG-OBJ. If hidden is true visiblep is set to nil."))
+
+(defmethod create-details ((obj clog-obj) &key (content "")
+					(hidden nil)
+					(class nil)
+					(html-id nil)
+					(auto-place t))
+  (create-child obj (format nil "<details~A~A>~A</details>"
+			    (if class
+				(format nil " class='~A'" (escape-string class))
+				"")
+			    (if hidden
+				" style='visibility:hidden;'"
+				"")
+			    (escape-string content))
+		:clog-type  'clog-details
+		:html-id    html-id
+		:auto-place auto-place))
+
+;;;;;;;;;;;;;;;;;;;
+;; details-openp ;;
+;;;;;;;;;;;;;;;;;;;
+
+(defgeneric details-openp (clog-details)
+  (:documentation "Get/Setf details-openp. Will show details "))
+
+(defmethod details-openp ((obj clog-details))
+  (unless (equalp (attribute obj "open") "undefined")
+    t))
+
+(defgeneric set-details-openp (clog-details value)
+  (:documentation "Set details-openp VALUE for CLOG-DETAILS"))
+
+(defmethod set-details-openp ((obj clog-details) value)
+  (if value
+      (setf (attribute obj "open") t)
+      (remove-attribute obj "open")))
+(defsetf details-openp set-details-openp)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Implementation - clog-summary
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defclass clog-summary (clog-element)()
+  (:documentation "CLOG Summary Objects."))
+
+;;;;;;;;;;;;;;;;;;;;
+;; create-summary ;;
+;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric create-summary (clog-obj &key content hidden class html-id auto-place)
+  (:documentation "Create a new CLOG-Summary as child of CLOG-OBJ with :CONTENT
+(default \"\") and if :AUTO-PLACE (default t) place-inside-bottom-of
+CLOG-OBJ. If hidden is true visiblep is set to nil. Use inside a CLOG-DETAILS
+object for drop reveal."))
+
+(defmethod create-summary ((obj clog-obj) &key (content "")
+					(hidden nil)
+					(class nil)
+					(html-id nil)
+					(auto-place t))
+  (create-child obj (format nil "<summary~A~A>~A</summary>"
+			    (if class
+				(format nil " class='~A'" (escape-string class))
+				"")
+			    (if hidden
+				" style='visibility:hidden;'"
+				"")
+			    (escape-string content))
+		:clog-type  'clog-summary
 		:html-id    html-id
 		:auto-place auto-place))

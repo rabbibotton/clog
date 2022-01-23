@@ -370,6 +370,15 @@ embedded in a native template application.)"
   (show-dialog   generic-function)
   (close-dialog  generic-function)
 
+  "CLOG-Details - Class for CLOG Detail Blocks"
+  (clog-details   class)
+  (create-details generic-function)
+  (detail-openp   generic-function)
+
+  "CLOG-Summary - Class for CLOG Summary Blocks"
+  (clog-summary   class)
+  (create-summary generic-function)
+  
   "CLOG-HR - Class for CLOG Hortizontal Rules"
   (clog-HR   class)
   (create-HR generic-function)

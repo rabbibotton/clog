@@ -77,6 +77,10 @@
 	  :control "dt")
 	'(:tag "dd"
 	  :control "dd")
+	'(:tag "details"
+	  :control "details")
+	'(:tag "summary"
+	  :control "summary")
 	'(:tag "div"
 	  :control "div")))
 
@@ -437,25 +441,6 @@
 		      (:name "word wrap"
 		       :prop "wrap")
 		      ,@*props-element*))
-   `(:name           "fieldset"
-     :description    "Fieldset"
-     :clog-type      clog:clog-fieldset
-     :create         clog:create-fieldset
-     :create-type    :base
-     :properties     (,@*props-base*))
-   `(:name           "legend"
-     :description    "Fieldset Legend"
-     :clog-type      clog:clog-legend
-     :create         clog:create-legend
-     :create-content "Legend here"
-     :create-type    :element
-     :properties     (,@*props-element*))
-   `(:name           "datalist"
-     :description    "Data list"
-     :clog-type      clog:clog-data-list
-     :create         clog:create-data-list
-     :create-type    :base
-     :properties     (,@*props-base*))
    `(:name           "dropdown"
      :description    "Drop down select"
      :clog-type      clog:clog-select
@@ -527,24 +512,6 @@
 				    (remove-attribute control "disabled"))
 				(property control "disabled")))
 		      ,@*props-element*))
-   `(:name           "span"
-     :description    "Span"
-     :clog-type      clog:clog-span
-     :create         clog:create-span
-     :create-type    :element
-     :create-content "text here"
-     :properties     (,@*props-element*))
-   `(:name           "link"
-     :description    "Link"
-     :clog-type      clog:clog-a
-     :create         clog:create-a
-     :create-type    :element
-     :create-content "HTML Link"
-     :properties     ((:name "href link"
-		       :prop "href")
-		      (:name "target"
-		       :prop "target")
-		      ,@*props-element*))
    `(:name           "image"
      :description    "Image"
      :clog-type      clog:clog-img
@@ -587,132 +554,6 @@
 		      (:name "maximum"
 		       :prop "max")
 		      ,@*props-base*))
-   `(:name           "ol"
-     :description    "Ordered List"
-     :clog-type      clog:clog-ordered-list
-     :create         clog:create-ordered-list
-     :create-type    :base
-     :properties     ((:name "list kind"
-		       :prop "list-style-type")
-		      (:name "list location"
-		       :prop "list-style-position")
-		      ,@*props-element*))
-   `(:name           "ul"
-     :description    "Unordered List"
-     :clog-type      clog:clog-unordered-list
-     :create         clog:create-unordered-list
-     :create-type    :base
-     :properties     ((:name "value"
-		       :prop "value")
-		      ,@*props-element*))
-   `(:name           "li"
-     :description    "List Item"
-     :clog-type      clog:clog-list-item
-     :create         clog:create-list-item
-     :create-type    :base
-     :properties     (,@*props-element*))
-   `(:name           "table"
-     :description    "Table"
-     :clog-type      clog:clog-table
-     :create         clog:create-table
-     :create-type    :base
-     :properties     (,@*props-base*))
-   `(:name           "tr"
-     :description    "Table Row"
-     :clog-type      clog:clog-table-row
-     :create         clog:create-table-row
-     :create-type    :base
-     :properties     (,@*props-base*))
-   `(:name           "td"
-     :description    "Table Column"
-     :clog-type      clog:clog-table-column
-     :create         clog:create-table-column
-     :create-type    :element
-     :create-content "Column"
-     :properties     ((:name "column span"
-		       :attr "colspan")
-		      (:name "row span"
-		       :attr "rowspan")
-		      ,@*props-element*))
-   `(:name           "th"
-     :description    "Table Heading"
-     :clog-type      clog:clog-table-heading
-     :create         clog:create-table-heading
-     :create-type    :element
-     :create-content "Heading"
-     :properties     ((:name "column span"
-		       :attr "colspan")
-		      (:name "row span"
-		       :attr "rowspan")
-		      (:name "abbreviated version"
-		       :attr "abbr")
-		      (:name "scope"
-		       :attr "rowspan")
-		      ,@*props-element*))
-   `(:name           "tcolgroup"
-     :description    "Table Column Group"
-     :clog-type      clog:clog-table-column-group
-     :create         clog:create-table-column-group
-     :create-type    :base
-     :properties     ((:name "span"
-		       :attr "span")
-		      ,@*props-base*))
-   `(:name           "tcol"
-     :description    "Table Column Group Item"
-     :clog-type      clog:clog-table-column-group-item
-     :create         clog:create-table-column-group-item
-     :create-type    :base
-     :create-content "Column Group Item"
-     :properties     ((:name "span"
-		       :attr "span")
-		      ,@*props-base*))
-   `(:name           "thead"
-     :description    "Table Head"
-     :clog-type      clog:clog-table-head
-     :create         clog:create-table-head
-     :create-type    :base
-     :properties     (,@*props-base*))
-   `(:name           "tbody"
-     :description    "Table Body"
-     :clog-type      clog:clog-table-body
-     :create         clog:create-table-body
-     :create-type    :base
-     :properties     (,@*props-base*))
-   `(:name           "tfoot"
-     :description    "Table Footer"
-     :clog-type      clog:clog-table-footer
-     :create         clog:create-table-footer
-     :create-type    :base
-     :properties     (,@*props-base*))
-   `(:name           "tcaption"
-     :description    "Table Caption"
-     :clog-type      clog:clog-table-caption
-     :create         clog:create-table-caption
-     :create-type    :element
-     :create-content "Caption"
-     :properties     ((:name "caption side"
-		       :style "caption-side")
-		      ,@*props-element*))
-   `(:name           "dl"
-     :description    "Definition List"
-     :clog-type      clog:clog-definition-list
-     :create         clog:create-definition-list
-     :create-type    :base
-     :properties     (,@*props-base*))
-   `(:name           "dt"
-     :description    "Definition Term"
-     :clog-type      clog:clog-term
-     :create         clog:create-term
-     :create-type    :element
-     :create-content "Term"
-     :properties     (,@*props-element*))
-   `(:name           "dd"
-     :description    "Definition Description"
-     :clog-type      clog:clog-description
-     :create         clog:create-description
-     :create-content "Description"
-     :create-type    :element
-     :properties     (,@*props-element*))
    `(:name           "form"
      :description    "Form"
      :clog-type      clog:clog-form
@@ -908,6 +749,173 @@
      :create-param   :week
      :create-value   ""
      :properties     (,@*props-form-element*))
+   `(:name           "fieldset"
+     :description    "Fieldset"
+     :clog-type      clog:clog-fieldset
+     :create         clog:create-fieldset
+     :create-type    :base
+     :properties     (,@*props-base*))
+   `(:name           "legend"
+     :description    "Fieldset Legend"
+     :clog-type      clog:clog-legend
+     :create         clog:create-legend
+     :create-content "Legend here"
+     :create-type    :element
+     :properties     (,@*props-element*))
+   `(:name           "datalist"
+     :description    "Data list"
+     :clog-type      clog:clog-data-list
+     :create         clog:create-data-list
+     :create-type    :base
+     :properties     (,@*props-base*))
+   `(:name           "ol"
+     :description    "Ordered List"
+     :clog-type      clog:clog-ordered-list
+     :create         clog:create-ordered-list
+     :create-type    :base
+     :properties     ((:name "list kind"
+		       :prop "list-style-type")
+		      (:name "list location"
+		       :prop "list-style-position")
+		      ,@*props-element*))
+   `(:name           "ul"
+     :description    "Unordered List"
+     :clog-type      clog:clog-unordered-list
+     :create         clog:create-unordered-list
+     :create-type    :base
+     :properties     ((:name "value"
+		       :prop "value")
+		      ,@*props-element*))
+   `(:name           "li"
+     :description    "List Item"
+     :clog-type      clog:clog-list-item
+     :create         clog:create-list-item
+     :create-type    :base
+     :properties     (,@*props-element*))
+   `(:name           "table"
+     :description    "Table"
+     :clog-type      clog:clog-table
+     :create         clog:create-table
+     :create-type    :base
+     :properties     (,@*props-base*))
+   `(:name           "tr"
+     :description    "Table Row"
+     :clog-type      clog:clog-table-row
+     :create         clog:create-table-row
+     :create-type    :base
+     :properties     (,@*props-base*))
+   `(:name           "td"
+     :description    "Table Column"
+     :clog-type      clog:clog-table-column
+     :create         clog:create-table-column
+     :create-type    :element
+     :create-content "Column"
+     :properties     ((:name "column span"
+		       :attr "colspan")
+		      (:name "row span"
+		       :attr "rowspan")
+		      ,@*props-element*))
+   `(:name           "th"
+     :description    "Table Heading"
+     :clog-type      clog:clog-table-heading
+     :create         clog:create-table-heading
+     :create-type    :element
+     :create-content "Heading"
+     :properties     ((:name "column span"
+		       :attr "colspan")
+		      (:name "row span"
+		       :attr "rowspan")
+		      (:name "abbreviated version"
+		       :attr "abbr")
+		      (:name "scope"
+		       :attr "rowspan")
+		      ,@*props-element*))
+   `(:name           "tcolgroup"
+     :description    "Table Column Group"
+     :clog-type      clog:clog-table-column-group
+     :create         clog:create-table-column-group
+     :create-type    :base
+     :properties     ((:name "span"
+		       :attr "span")
+		      ,@*props-base*))
+   `(:name           "tcol"
+     :description    "Table Column Group Item"
+     :clog-type      clog:clog-table-column-group-item
+     :create         clog:create-table-column-group-item
+     :create-type    :base
+     :create-content "Column Group Item"
+     :properties     ((:name "span"
+		       :attr "span")
+		      ,@*props-base*))
+   `(:name           "thead"
+     :description    "Table Head"
+     :clog-type      clog:clog-table-head
+     :create         clog:create-table-head
+     :create-type    :base
+     :properties     (,@*props-base*))
+   `(:name           "tbody"
+     :description    "Table Body"
+     :clog-type      clog:clog-table-body
+     :create         clog:create-table-body
+     :create-type    :base
+     :properties     (,@*props-base*))
+   `(:name           "tfoot"
+     :description    "Table Footer"
+     :clog-type      clog:clog-table-footer
+     :create         clog:create-table-footer
+     :create-type    :base
+     :properties     (,@*props-base*))
+   `(:name           "tcaption"
+     :description    "Table Caption"
+     :clog-type      clog:clog-table-caption
+     :create         clog:create-table-caption
+     :create-type    :element
+     :create-content "Caption"
+     :properties     ((:name "caption side"
+		       :style "caption-side")
+		      ,@*props-element*))
+   `(:name           "dl"
+     :description    "Definition List"
+     :clog-type      clog:clog-definition-list
+     :create         clog:create-definition-list
+     :create-type    :base
+     :properties     (,@*props-base*))
+   `(:name           "dt"
+     :description    "Definition Term"
+     :clog-type      clog:clog-term
+     :create         clog:create-term
+     :create-type    :element
+     :create-content "Term"
+     :properties     (,@*props-element*))
+   `(:name           "dd"
+     :description    "Definition Description"
+     :clog-type      clog:clog-description
+     :create         clog:create-description
+     :create-content "Description"
+     :create-type    :element
+     :properties     (,@*props-element*))
+   `(:name           "details"
+     :description    "Details Block"
+     :clog-type      clog:clog-details
+     :create         clog:create-details
+     :create-type    :element
+     :create-content "Details"
+     :properties     ((:name "open"
+		       :get  ,(lambda (control)
+				(property control "open"))
+		       :set  ,(lambda (control obj)
+				(if (or (equalp (text obj) "true") (equalp (text obj) "open"))
+				    (setf (attribute control "open") t)
+				    (remove-attribute control "open"))
+				(property control "open")))
+		      ,@*props-element*))
+   `(:name           "summary"
+     :description    "Summary Block"
+     :clog-type      clog:clog-summary
+     :create         clog:create-summary
+     :create-content "Summary"
+     :create-type    :element
+     :properties     (,@*props-element*))
    `(:name           "audio"
      :description    "Audio Player"
      :clog-type      clog:clog-audio
@@ -971,6 +979,24 @@
 		      (:name "return value"
 		       :prop "returnValue")
 		      ,@*props-element*))
+   `(:name           "span"
+     :description    "Span"
+     :clog-type      clog:clog-span
+     :create         clog:create-span
+     :create-type    :element
+     :create-content "text here"
+     :properties     (,@*props-element*))
+   `(:name           "link"
+     :description    "Link"
+     :clog-type      clog:clog-a
+     :create         clog:create-a
+     :create-type    :element
+     :create-content "HTML Link"
+     :properties     ((:name "href link"
+		       :prop "href")
+		      (:name "target"
+		       :prop "target")
+		      ,@*props-element*))
    `(:name           "hr"
      :description    "Horizontal Rule"
      :clog-type      clog:clog-hr
@@ -991,7 +1017,7 @@
      :create-type    :element
      :properties     (,@*props-element*))
    `(:name           "style-block"
-     :description    "Style"
+     :description    "Style Block"
      :clog-type      clog:clog-style-block
      :create         clog:create-style-block
      :create-type    :base
