@@ -362,6 +362,14 @@ embedded in a native template application.)"
   (clog-div   class)
   (create-div generic-function)
 
+  "CLOG-Dialog - Class for CLOG Dialog Blocks"
+  (clog-dialog   class)
+  (create-dialog generic-function)
+  (return-value  generic-function)
+  (dialog-openp  generic-function)
+  (show-dialog   generic-function)
+  (close-dialog  generic-function)
+
   "CLOG-HR - Class for CLOG Hortizontal Rules"
   (clog-HR   class)
   (create-HR generic-function)

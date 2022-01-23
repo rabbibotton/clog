@@ -63,6 +63,8 @@
 	  :control "option")
 	'(:tag "optgroup"
 	  :control "optgroup")
+	'(:tag "dialog"
+	  :control "dialog")
 	'(:tag "div"
 	  :control "div")))
 
@@ -920,6 +922,23 @@
      :create         clog:create-canvas
      :create-type    :base
      :properties     (,@*props-base*))
+   `(:name           "dialog"
+     :description    "Dialog"
+     :clog-type      clog:clog-dialog
+     :create         clog:create-dialog
+     :create-type    :element
+     :create-content ""
+     :properties     ((:name "open"
+		       :get  ,(lambda (control)
+				(property control "open"))
+		       :set  ,(lambda (control obj)
+				(if (or (equalp (text obj) "true") (equalp (text obj) "open"))
+				    (setf (attribute control "open") t)
+				    (remove-attribute control "open"))
+				(property control "open")))
+		      (:name "return value"
+		       :prop "returnValue")
+		      ,@*props-element*))
    `(:name           "style-block"
      :description    "Style"
      :clog-type      clog:clog-style-block
