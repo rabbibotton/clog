@@ -116,12 +116,20 @@
 				  ((eq create-type :element)
 				   (funcall (getf control-record :create) parent
 					    :html-id uid
-					    :content (getf control-record :create-content)))
+					    :content (if (equal (getf control-record :create-content) "")
+							 ""
+							 (format nil "~A-~A"
+								 (getf control-record :create-content)
+								 (next-id content)))))
 				  ((eq create-type :form)
 				   (funcall (getf control-record :create) parent
 					    (getf control-record :create-param)
 					    :html-id uid
-					    :value (getf control-record :create-value)))
+					    :value (if (equal (getf control-record :create-value) "")
+						       ""
+						       (format nil "~A-~A"
+							       (getf control-record :create-value)
+							       (next-id content)))))
 				  ((eq create-type :textarea)
 				   (funcall (getf control-record :create) parent
 					    :html-id uid
@@ -388,7 +396,8 @@ not a temporary attached one when using select-control."
   "Populate the control-list-window to allow drag and drop adjust of order
 of controls and double click to select control."
   (let ((app      (connection-data-item content "builder-app-data"))
-	(panel-id (html-id content)))
+	(panel-id (html-id content))
+	(last-ctl nil))
     (when (control-list-win app)
       (let ((win (window-content (control-list-win app))))
 	(setf (inner-html win) "")
@@ -417,6 +426,10 @@ of controls and double click to select control."
 						    (when (drop-new-control app content data)
 						      (incf-next-id content)))
 						   (t
+						    (when last-ctl
+						      (set-border last-ctl "0px" :dotted :blue))
+						    (set-border list-item "2px" :dotted :blue)
+						    (setf last-ctl list-item)
 						    (select-control control))))))
 			   (set-on-double-click list-item
 						(lambda (obj)
