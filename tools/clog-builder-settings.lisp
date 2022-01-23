@@ -379,6 +379,20 @@
      :create-type    :element
      :create-content "Button"
      :properties     (,@*props-element*))
+   `(:name           "div"
+     :description    "Div"
+     :clog-type      clog:clog-div
+     :create         clog:create-div
+     :create-type    :element
+     :create-content ""
+     :properties     (,@*props-element*))
+   `(:name           "span"
+     :description    "Span"
+     :clog-type      clog:clog-span
+     :create         clog:create-span
+     :create-type    :element
+     :create-content "text here"
+     :properties     (,@*props-element*))
    `(:name           "link"
      :description    "Link"
      :clog-type      clog:clog-a
@@ -733,20 +747,6 @@
      :create-param   :week
      :create-value   ""
      :properties     (,@*props-form-element*))
-   `(:name           "span"
-     :description    "Span"
-     :clog-type      clog:clog-span
-     :create         clog:create-span
-     :create-type    :element
-     :create-content "text here"
-     :properties     (,@*props-element*))
-   `(:name           "div"
-     :description    "Div"
-     :clog-type      clog:clog-div
-     :create         clog:create-div
-     :create-type    :element
-     :create-content ""
-     :properties     (,@*props-element*))
    `(:name           "audio"
      :description    "Audio Player"
      :clog-type      clog:clog-audio
