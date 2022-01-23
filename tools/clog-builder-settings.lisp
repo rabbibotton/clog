@@ -346,7 +346,7 @@
 		 (add-select-options dd `(,v
 					  "button" "checkbox" "color" "date"
 					  "datetime" "datetime-local" "email"
-					  "image" "file" "hidden" "image"
+					  "image" "file" "hidden"
 					  "month" "number" "password" "radio"
 					  "range" "reset" "search" "submit"
 					  "tel" "text" "time" "url" "week"))
@@ -359,6 +359,14 @@
 						 :width (client-width control)
 						 :height (client-height control))))
 		 nil)))
+     (:name "data list"
+		       :get ,(lambda (control)
+			       (clog::js-query control (format nil "$('#~A').attr('data-clog-name')"
+							       (attribute control "list"))))
+		       :set ,(lambda (control obj)
+			       (setf (attribute control "list")
+				     (clog::js-query control (format nil "$(\"[data-clog-name='~A']\").attr('id')"
+								     (text obj))))))
     ,@*props-form-values*
     ,@*props-css*
     ,@*props-colors*
