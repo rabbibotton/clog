@@ -47,12 +47,22 @@
 	  :control "tcol")
 	'(:tag "span"
 	  :control "span")
+	'(:tag "textarea"
+	  :control "textarea")
 	'(:tag "style"
 	  :control "style-block")
 	'(:tag "fieldset"
 	  :control "fieldset")
 	'(:tag "legend"
 	  :control "legend")
+	'(:tag "datalist"
+	  :control "datalist")
+	'(:tag "select"
+	  :control "dropdown")
+	'(:tag "option"
+	  :control "option")
+	'(:tag "optgroup"
+	  :control "optgroup")
 	'(:tag "div"
 	  :control "div")))
 
@@ -392,6 +402,19 @@
      :create-type    :element
      :create-content ""
      :properties     (,@*props-element*))
+   `(:name           "textarea"
+     :description    "Text Area"
+     :clog-type      clog:clog-text-area
+     :create         clog:create-text-area
+     :create-type    :element
+     :create-content ""
+     :properties     ((:name "rows"
+		       :prop "rows")
+		      (:name "columns"
+		       :prop "columns")
+		      (:name "word wrap"
+		       :prop "wrap")
+		      ,@*props-element*))
    `(:name           "fieldset"
      :description    "Fieldset"
      :clog-type      clog:clog-fieldset
@@ -405,6 +428,83 @@
      :create-content "Legend here"
      :create-type    :element
      :properties     (,@*props-element*))
+   `(:name           "datalist"
+     :description    "Data list"
+     :clog-type      clog:clog-data-list
+     :create         clog:create-data-list
+     :create-type    :base
+     :properties     (,@*props-base*))
+   `(:name           "dropdown"
+     :description    "Drop down select"
+     :clog-type      clog:clog-select
+     :create         clog:create-select
+     :create-type    :base
+     :properties     ((:name "multiple select"
+		       :get  ,(lambda (control)
+				(property control "multiple"))
+		       :set  ,(lambda (control obj)
+				(if (or (equalp (text obj) "true") (equalp (text obj) "multiple"))
+				    (setf (attribute control "multiple") t)
+				    (remove-attribute control "multiple"))
+				(property control "multiple")))
+		      ,@*props-base*))
+   `(:name           "listbox"
+     :description    "Listbox select"
+     :clog-type      clog:clog-select
+     :create         clog:create-select
+     :create-type    :base
+     :setup          ,(lambda (control content control-record)
+			(declare (ignore content) (ignore control-record))
+			(setf (size control) "4"))
+     :properties     ((:name "multiple select"
+		       :get  ,(lambda (control)
+				(property control "multiple"))
+		       :set  ,(lambda (control obj)
+				(if (or (equalp (text obj) "true") (equalp (text obj) "multiple"))
+				    (setf (attribute control "multiple") t)
+				    (remove-attribute control "multiple"))
+				(property control "multiple")))
+		      ,@*props-base*))
+   `(:name           "option"
+     :description    "Option Item"
+     :clog-type      clog:clog-option
+     :create         clog:create-option
+     :create-content "option item"
+     :create-type    :element
+     :properties     ((:name "value"
+		       :prop "value")
+		      (:name "selected"
+		       :get  ,(lambda (control)
+				(property control "selected"))
+		       :set  ,(lambda (control obj)
+				(if (or (equalp (text obj) "true") (equalp (text obj) "selected"))
+				    (setf (attribute control "selected") t)
+				    (remove-attribute control "selected"))
+				(property control "selected")))
+		      (:name "disabled"
+		       :get  ,(lambda (control)
+				(property control "disabled"))
+		       :set  ,(lambda (control obj)
+				(if (or (equalp (text obj) "true") (equalp (text obj) "disabled"))
+				    (setf (attribute control "disabled") t)
+				    (remove-attribute control "disabled"))
+				(property control "disabled")))
+		      ,@*props-element*))
+   `(:name           "optgroup"
+     :description    "Option Group"
+     :clog-type      clog:clog-optgroup
+     :create         clog:create-optgroup
+     :create-content "option group"
+     :create-type    :element
+     :properties     ((:name "disabled"
+		       :get  ,(lambda (control)
+				(property control "disabled"))
+		       :set  ,(lambda (control obj)
+				(if (or (equalp (text obj) "true") (equalp (text obj) "disabled"))
+				    (setf (attribute control "disabled") t)
+				    (remove-attribute control "disabled"))
+				(property control "disabled")))
+		      ,@*props-element*))
    `(:name           "span"
      :description    "Span"
      :clog-type      clog:clog-span
