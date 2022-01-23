@@ -402,13 +402,17 @@ of controls and double click to select control."
 			   (setf (draggablep list-item) t)
 			   (setf (attribute list-item "data-clog-control") (html-id control))
 			   ;; click to select item
-			   (set-on-click list-item
-					 (lambda (obj)
+			   (set-on-mouse-down list-item
+					 (lambda (obj data)
 					   (let* ((html-id (attribute obj "data-clog-control"))
 						  (control (get-from-control-list app
 										  panel-id
 										  html-id)))
-					     (select-control control))))
+					     (cond ((or (getf data :shift-key)
+						       (getf data :ctrl-key))
+						    (drop-new-control app content data 0))
+						   (t
+						    (select-control control))))))
 			   (set-on-double-click list-item
 						(lambda (obj)
 						  (let* ((html-id (attribute obj "data-clog-control"))
@@ -590,6 +594,7 @@ of controls and double click to select control."
 	  (setf (positioning control-list) :absolute)
 	  (setf (size control-list) 2)
 	  (set-geometry control-list :left 0 :top 0 :bottom 0 :width 190)
+	  (setf (advisory-title control-list) (format nil "<ctrl> place static~%<shift> child to selected"))
 	  (setf (select-tool app) control-list)
 	  (dolist (control *supported-controls*)
 	    (add-select-option control-list (getf control :name) (getf control :description)))))))
@@ -603,6 +608,8 @@ of controls and double click to select control."
 					   :left 0
 					   :width 200 :has-pinner t)))
 	  (setf (control-list-win app) win)
+	  (setf (advisory-title (window-content win))
+		(format nil "Drag and drop order~%<ctrl> place static~%<shift> child to selected"))
 	  (set-on-window-close win (lambda (obj) (setf (control-list-win app) nil)))))))
 
 ;; These templates are here due to compiler or slime bug,
