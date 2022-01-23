@@ -614,7 +614,8 @@ of controls and double click to select control."
 					   :width 200 :has-pinner t)))
 	  (setf (control-list-win app) win)
 	  (setf (advisory-title (window-content win))
-		(format nil "Drag and drop order~%<ctrl> place static~%<shift> child to selected"))
+		(format nil "Drag and drop order~%Double click non-focusable~%~
+                             <ctrl> place static~%<shift> child to selected"))
 	  (set-on-window-close win (lambda (obj) (setf (control-list-win app) nil)))))))
 
 ;; These templates are here due to compiler or slime bug,
