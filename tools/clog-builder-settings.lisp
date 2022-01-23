@@ -884,8 +884,8 @@
      :description    "Definition Term"
      :clog-type      clog:clog-term
      :create         clog:create-term
-     :create-type    :element
      :create-content "Term"
+     :create-type    :element
      :properties     (,@*props-element*))
    `(:name           "dd"
      :description    "Definition Description"

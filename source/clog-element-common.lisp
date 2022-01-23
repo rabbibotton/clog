@@ -971,13 +971,13 @@ and if :AUTO-PLACE (default t) place-inside-bottom-of CLOG-OBJ"))
 ;; create-term ;;
 ;;;;;;;;;;;;;;;;;
 
-(defgeneric create-term (clog-definition-list
+(defgeneric create-term (clog-obj
 			 &key content
 			   hidden class html-id auto-place)
   (:documentation "Create a new CLOG-Term as child of CLOG-OBJ
 and if :AUTO-PLACE (default t) place-inside-bottom-of CLOG-OBJ"))
 
-(defmethod create-term ((obj clog-definition-list)
+(defmethod create-term ((obj clog-obj)
 			&key (hidden nil)
 			  (content "")
 			  (class nil)
@@ -1006,12 +1006,12 @@ and if :AUTO-PLACE (default t) place-inside-bottom-of CLOG-OBJ"))
 ;; create-description ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defgeneric create-description (clog-definition-list
+(defgeneric create-description (clog-obj
 				&key hidden content class html-id auto-place)
   (:documentation "Create a new CLOG-Description as child of CLOG-OBJ
 and if :AUTO-PLACE (default t) place-inside-bottom-of CLOG-OBJ"))
 
-(defmethod create-description ((obj clog-definition-list)
+(defmethod create-description ((obj clog-obj)
 			       &key (content "")
 				 (hidden nil)
 				 (class nil)

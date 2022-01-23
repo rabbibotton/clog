@@ -284,16 +284,15 @@ not a temporary attached one when using select-control."
 					 (getf l :tag) (getf l :control)))
 			       *import-types*))))
       (clog::js-execute parent tmp))
-    (let* ((data (first-child parent))
+    (let* ((data (first-child content))
 	   (name    (attribute data "data-clog-title"))
 	   (next-id (attribute data "data-clog-next-id")))
-      (when next-id
-	(unless (equalp name "undefined")
-	  (setf-next-id next-id)))
       (when name
+	(unless (equalp next-id "undefined")
+	  (setf-next-id content next-id)))
 	(unless (equalp name "undefined")
-	  (setf (attribute parent "data-clog-name") name)
-	  (destroy data))))
+	  (setf (attribute content "data-clog-name") name)
+	  (destroy data)))
     (labels ((add-siblings (control)
 	       (let (dct)
 		 (loop
@@ -753,6 +752,8 @@ of controls and double click to select control."
 							     (create-child content "<data />"
 									   :html-id (format nil "I~A" panel-uid))))
 						       (place-inside-top-of content data)
+						       (setf (attribute data "data-clog-next-id")
+							     (attribute content "data-clog-next-id"))
 						       (setf (attribute data "data-clog-title")
 							     (attribute content "data-clog-name"))
 						       (write-file (inner-html content) fname)
@@ -839,6 +840,7 @@ of controls and double click to select control."
     (remhash (format nil "~A-win" panel-uid) *app-sync-hash*)
 
     ;; setup window and page
+    (setf-next-id content 1)
     (setf (attribute content "data-clog-name") panel-name)
     (setf (title (html-document body)) panel-name)
     (setf (window-title win) panel-name)
@@ -939,6 +941,8 @@ of controls and double click to select control."
 							       (create-child content "<data />"
 									     :html-id (format nil "I~A" panel-uid))))
 							 (place-inside-top-of content data)
+							 (setf (attribute data "data-clog-next-id")
+							     (attribute content "data-clog-next-id"))
 							 (setf (attribute data "data-clog-title")
 							       (attribute content "data-clog-name"))
 							 (write-file (inner-html content) fname)
