@@ -610,7 +610,7 @@ of controls and double click to select control."
 	  (set-on-window-close win (lambda (obj) (setf (control-pallete-win app) nil)))
 	  (setf (positioning control-list) :absolute)
 	  (setf (size control-list) 2)
-	  (set-geometry control-list :left 0 :top 0 :bottom 0 :width 190)
+	  (set-geometry control-list :units "" :left 0 :top 0 :bottom 0 :width "100%")
 	  (setf (advisory-title control-list) (format nil "<ctrl> place static~%<shift> child to selected"))
 	  (setf (select-tool app) control-list)
 	  (dolist (control *supported-controls*)
