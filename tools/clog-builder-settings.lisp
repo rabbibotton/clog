@@ -273,8 +273,8 @@
     (:name "vertical align"
      :style "vertical-align")))
 
-(defparameter *props-text*
-  `((:name "contents"
+(defparameter *props-contents*
+  `((:name "child contents"
      :setup ,(lambda (control td1 td2)
 	       (declare (ignore td1))
 	       (let ((d1 (create-text-area td2 :value (inner-html control))))
@@ -282,6 +282,14 @@
 				     (declare (ignore obj))
 				     (setf (inner-html control) (value d1)))))
 	       nil))))
+
+(defparameter *props-text*
+  `((:name "text"
+     :get  ,(lambda (control)
+	      (clog::jquery-query control (format nil "contents().not(~A.children()).text()" (clog::jquery control))))
+     :set  ,(lambda (control obj)
+	      (clog::jquery-execute control (format nil "contents().not(~A.children()).get(0).nodeValue='~A'"
+						     (clog::jquery control) (text obj)))))))
 
 (defparameter *props-css*
   `((:name "css classes"
@@ -427,7 +435,7 @@
      :create         clog:create-div
      :create-type    :element
      :create-content ""
-     :properties     (,@*props-element*))
+     :properties     (,@*props-base*))
    `(:name           "textarea"
      :description    "Text Area"
      :clog-type      clog:clog-text-area
@@ -790,7 +798,8 @@
      :description    "List Item"
      :clog-type      clog:clog-list-item
      :create         clog:create-list-item
-     :create-type    :base
+     :create-type    :element
+     :create-content "List Item"
      :properties     (,@*props-element*))
    `(:name           "table"
      :description    "Table"
@@ -984,8 +993,9 @@
      :clog-type      clog:clog-span
      :create         clog:create-span
      :create-type    :element
-     :create-content "text here"
-     :properties     (,@*props-element*))
+     :create-content "span"
+     :properties     (,@*props-contents*
+		      ,@*props-element*))
    `(:name           "link"
      :description    "Link"
      :clog-type      clog:clog-a
@@ -1025,4 +1035,4 @@
 		       :attr "media")
 		      (:name "type"
 		       :prop "type")
-		      ,@*props-text*))))
+		      ,@*props-contents*))))
