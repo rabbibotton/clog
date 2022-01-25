@@ -89,14 +89,15 @@
    (with-open-file (outstream outfile :direction :output :if-exists action-if-exists)
      (write-sequence string outstream)))
 
-(defun capture-eval (form)
+(defun capture-eval (form &key (eval-in-package :clog-user))
   "Capture lisp evaluaton of FORM"
   (let ((result (make-array '(0) :element-type 'base-char
 				 :fill-pointer 0 :adjustable t))
 	(eval-result))
     (with-output-to-string (stream result)
       (let ((*standard-output* stream)
-	    (*error-output* stream))
+	    (*error-output* stream)
+	    (*package* (find-package eval-in-package)))
 	(setf eval-result (eval (read-from-string (format nil "(progn ~A)" form))))))
     (format nil "~A~%=>~A~%" result eval-result)))
 
