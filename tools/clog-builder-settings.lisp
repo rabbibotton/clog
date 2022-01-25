@@ -405,8 +405,7 @@
      :description    "Selection Tool"
      :create         nil
      :create-type    nil
-     :properties     nil
-     :positioning    nil)
+     :properties     nil)
    `(:name           "label"
      :description    "Label"
      :clog-type      clog:clog-label
@@ -415,8 +414,10 @@
      :create-content "Label"
      :properties     ((:name "for"
 		       :get ,(lambda (control)
-			       (clog::js-query control (format nil "$('#~A').attr('data-clog-name')"
-							       (attribute control "for"))))
+			       (let ((f (attribute control "for")))
+				 (unless (equal "" f)
+				   (clog::js-query control (format nil "$('#~A').attr('data-clog-name')"
+								   f)))))
 		       :set ,(lambda (control obj)
 			       (setf (attribute control "for")
 				     (clog::js-query control (format nil "$(\"[data-clog-name='~A']\").attr('id')"
