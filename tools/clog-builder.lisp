@@ -103,15 +103,15 @@
 
 ;; Lisp code evaluation utilities
 
-(defun capture-eval (form &key (eval-in-package :clog-user))
+(defun capture-eval (form &key (eval-in-package "clog-user"))
   "Capture lisp evaluaton of FORM"
   (let ((result (make-array '(0) :element-type 'base-char
 				 :fill-pointer 0 :adjustable t))
 	(eval-result))
     (with-output-to-string (stream result)
-      (let ((*standard-output* stream)
-	    (*error-output* stream)
-	    (*package* (find-package eval-in-package)))
+      (let* ((*standard-output* stream)
+	     (*error-output* stream)
+	     (*package* (find-package (string-upcase eval-in-package))))
 	(setf eval-result (eval (read-from-string (format nil "(progn ~A)" form))))))
     (format nil "~A~%=>~A~%" result eval-result)))
 
@@ -311,13 +311,16 @@ not a temporary attached one when using select-control."
       (clog::js-execute parent tmp))
     (let* ((data (first-child content))
 	   (name    (attribute data "data-clog-title"))
-	   (next-id (attribute data "data-clog-next-id")))
+	   (next-id (attribute data "data-clog-next-id"))
+	   (package (attribute data "data-in-package")))
       (when name
 	(unless (equalp next-id "undefined")
-	  (setf-next-id content next-id)))
+	  (setf-next-id content next-id))
+	(unless (equalp package "undefined")
+	  (setf (attribute content "data-in-package") package))
 	(unless (equalp name "undefined")
 	  (setf (attribute content "data-clog-name") name)
-	  (destroy data)))
+	  (destroy data))))
     (labels ((add-siblings (control)
 	       (let (dct)
 		 (loop
@@ -554,16 +557,21 @@ of controls and double click to select control."
                                      })"
 			      (html-id cw))))))
 
-(defun do-eval (obj)
+(defun do-eval (obj &key cname (package "clog-user"))
   "Do lisp eval of editor contents"
   (let ((cw (current-window obj)))
     (when cw
       (let* ((form-string (js-query obj (format nil "editor_~A.getValue()"
 						(html-id (current-window obj)))))
-	     (result      (capture-eval form-string)))
+	     (result      (capture-eval (if cname
+					    (format nil "~A~% (clog:set-on-new-window~
+                                               (lambda (body) (create-~A body)) :path \"/test\")~
+                                               (clog:open-browser :url \"http://127.0.0.1:8080/test\")"
+						    form-string cname))
+					:eval-in-package package)))
 	(alert-dialog obj result :title "Eval Result")))))
 
-(defun on-show-layout-code (obj)
+(defun on-show-layout-code (obj &key package cname)
   "Show a lisp editor"
   (let* ((win         (create-gui-window obj :title  "Layout Code"
 					     :height 400
@@ -576,10 +584,13 @@ of controls and double click to select control."
 	 (center-id   (html-id center))
 	 (tool-bar    (top-panel box))
 	 (btn-save    (create-button tool-bar :content "Save"))
-	 (btn-eval    (create-button tool-bar :content "Run")))
+	 (btn-eval    (create-button tool-bar :content "Eval"))
+	 (btn-run     (create-button tool-bar :content "Test")))
     (setf (background-color tool-bar) :silver)
     (set-on-click btn-eval (lambda (obj)
-			     (do-eval obj)))
+			     (do-eval obj :package package)))
+    (set-on-click btn-run (lambda (obj)
+			     (do-eval obj :package package :cname cname)))
     (set-on-click btn-save (lambda (obj)
 			     (server-file-dialog obj "Save As.." file-name
 						 (lambda (fname)
@@ -614,6 +625,7 @@ of controls and double click to select control."
     win))
 
 (defun on-show-control-properties-win (obj)
+  "Show control properties window"
   (let ((app (connection-data-item obj "builder-app-data")))
     (if (control-properties-win app)
 	(window-focus (control-properties-win app))
@@ -631,6 +643,7 @@ of controls and double click to select control."
 	  (set-geometry control-list :left 0 :top 0 :bottom 0 :right 0)))))
 
 (defun on-show-control-pallete-win (obj)
+  "Show control pallete"
   (let ((app (connection-data-item obj "builder-app-data")))
     (if (control-pallete-win app)
 	(window-focus (control-pallete-win app))
@@ -651,6 +664,7 @@ of controls and double click to select control."
 	    (add-select-option control-list (getf control :name) (getf control :description)))))))
 
 (defun on-show-control-list-win (obj)
+  "Show control list for selecting and manipulating controls by name"
   (let ((app (connection-data-item obj "builder-app-data")))
     (if (control-list-win app)
 	(window-focus (control-list-win app))
@@ -664,19 +678,88 @@ of controls and double click to select control."
                              <ctrl> place static~%<shift> child to selected"))
 	  (set-on-window-close win (lambda (obj) (setf (control-list-win app) nil)))))))
 
-;; These templates are here due to compiler or slime bug,
-;; that confuses the quotes as actual code.
-;; I don't have time to hunt down at moment.
-(defparameter *builder-template1* "\(in-package ~A)~%~
-\(set-on-new-window \(lambda \(body)~%
-                      \(let* \(\(~A \"~A\")~%
-                            \(panel (create-div body :content ~A))~{~A~})~%
-                       ))~%~
-   :path \"/form_~A\")~%~
-\(open-browser :url \"http://127.0.0.1:8080/form_~A\")~%")
+(defun render-clog-code (content win hide-loc)
+  "Render panel to clog code and add tp CW window"
+  (let* ((app      (connection-data-item content "builder-app-data"))
+	 (panel-id (html-id content))
+	 (package  (attribute content "data-in-package"))
+	 (cname    (attribute content "data-clog-name"))
+	 (cw       (on-show-layout-code win :cname cname :package package))
+	 cmembers vars)
+    (maphash (lambda (html-id control)
+	       (place-inside-bottom-of hide-loc
+				       (get-placer control))
+	       (let ((vname (attribute control "data-clog-name")))
+		 (unless (and (>= (length vname) 5)
+			      (equalp (subseq vname 0 5) "none-"))
+		   (push (format nil
+				 "\(~A :reader ~A\)"
+				 vname
+				 vname)
+			 cmembers)
+		   (push (format nil
+				 "\(setf (slot-value ~A '~A) \(attach-as-child clog-obj \"~A\" :clog-type \'~A\)\)~%"
+				 cname
+				 vname
+				 html-id
+				 (format nil "CLOG:~A" (type-of control)))
+			 vars))))
+	     (get-control-list app panel-id))
+    (let ((result (format nil
+			  "\(in-package \"~A\"\)
+\(defclass ~A \(clog:clog-div\)
+  \(~{~A~}\)\)
+\(defun create-~A \(clog-obj\)
+  \(let \(\(~A \(change-class \(clog:create-div clog-obj :content \"~A\"\) \'~A\)\)\)
+~{~A~}
+    ~A\)\)"
+			  (string-upcase package)
+			  cname     ;;defclass
+			  cmembers
+			  cname     ;;defun
+			  cname     ;;let
+			  (escape-string
+			   (ppcre:regex-replace-all "\\x22"
+						    (inner-html content)
+						    "\\\\\\\""))
+			  cname
+			  vars
+			  cname)))
+      (js-execute cw (format nil
+			     "editor_~A.setValue('~A');editor_~A.moveCursorTo(0,0);"
+			     (html-id cw)
+			     (escape-string result)
+			     (html-id cw))))
+    (maphash (lambda (html-id control)
+	       (declare (ignore html-id))
+	       (place-after control (get-placer control)))
+	     (get-control-list app panel-id))))
 
-(defparameter *builder-template2*
-  "~%                            (~A (attach-as-child body \"~A\" :clog-type '~A))")
+(defun save-panel (fname content panel-id hide-loc)
+  (let ((app (connection-data-item content "builder-app-data")))
+    (maphash
+     (lambda (html-id control)
+       (declare (ignore html-id))
+       (place-inside-bottom-of hide-loc
+			       (get-placer control)))
+     (get-control-list app panel-id))
+    (let ((data
+	    (create-child content "<data />"
+			  :html-id (format nil "I~A" (get-universal-time)))))
+      (place-inside-top-of content data)
+      (setf (attribute data "data-in-package")
+	    (attribute content "data-in-package"))
+      (setf (attribute data "data-clog-next-id")
+	    (attribute content "data-clog-next-id"))
+      (setf (attribute data "data-clog-title")
+	    (attribute content "data-clog-name"))
+      (write-file (inner-html content) fname)
+      (destroy data))
+    (maphash
+     (lambda (html-id control)
+       (declare (ignore html-id))
+       (place-after control (get-placer control)))
+     (get-control-list app panel-id))))
 
 (defun on-new-builder-panel (obj)
   "Open new panel"
@@ -685,17 +768,17 @@ of controls and double click to select control."
 	 (box (create-panel-box-layout (window-content win)
 				       :left-width 0 :right-width 0
 				       :top-height 30 :bottom-height 0))
-	 (tool-bar (top-panel box))
-	 (btn-del  (create-button tool-bar :content "Del"))
-	 (btn-sim  (create-button tool-bar :content "Simulate"))
-	 (btn-rndr (create-button tool-bar :content "Render"))
-	 (btn-save (create-button tool-bar :content "Save"))
-	 (btn-load (create-button tool-bar :content "Load"))
-	 (content  (center-panel box))
+	 (tool-bar  (top-panel box))
+	 (btn-del   (create-button tool-bar :content "Del"))
+	 (btn-sim   (create-button tool-bar :content "Simulate"))
+	 (btn-rndr  (create-button tool-bar :content "Render"))
+	 (btn-save  (create-button tool-bar :content "Save"))
+	 (btn-load  (create-button tool-bar :content "Load"))
+	 (content   (center-panel box))
 	 (in-simulation nil)
-	 (file-name  "")
-	 (panel-uid  (get-universal-time)) ;; unique id for panel
-	 (panel-id   (html-id content)))
+	 (file-name "")
+	 (panel-uid (get-universal-time)) ;; unique id for panel
+	 (panel-id  (html-id content)))
     (setf-next-id content 1)
     (setf (overflow content) :auto)
     (init-control-list app panel-id)
@@ -704,7 +787,7 @@ of controls and double click to select control."
       (setf (window-title win) panel-name)
       (setf (attribute content "data-clog-name") panel-name))
     (setf (attribute content "data-clog-type") "clog-data")
-    (setf (attribute content "data-in-package") ":clog-user")
+    (setf (attribute content "data-in-package") "clog-user")
     (setf (background-color tool-bar) :silver)
     ;; activate associated windows on open
     (on-populate-control-properties-win content :win win)
@@ -766,82 +849,11 @@ of controls and double click to select control."
 						   (window-focus win)
 						   (when fname
 						     (setf file-name fname)
-						     (maphash
-						      (lambda (html-id control)
-							(declare (ignore html-id))
-							(place-inside-bottom-of (bottom-panel box)
-										(get-placer control)))
-						      (get-control-list app panel-id))
-						     (let ((data
-							     (create-child content "<data />"
-									   :html-id (format nil "I~A" panel-uid))))
-						       (place-inside-top-of content data)
-						       (setf (attribute data "data-clog-next-id")
-							     (attribute content "data-clog-next-id"))
-						       (setf (attribute data "data-clog-title")
-							     (attribute content "data-clog-name"))
-						       (write-file (inner-html content) fname)
-						       (destroy data))
-						     (maphash
-						      (lambda (html-id control)
-							(declare (ignore html-id))
-							(place-after control (get-placer control)))
-						      (get-control-list app panel-id))))
-						 :initial-filename file-name)))
+						     (save-panel fname content panel-id (bottom-panel box)))
+						   :initial-filename file-name))))
     (set-on-click btn-rndr
 		  (lambda (obj)
-		    (let ((cname (attribute content "data-clog-name"))
-			  cmembers vars)
-		      (maphash (lambda (html-id control)
-				 ;; hide placer
-				 (place-inside-bottom-of (bottom-panel box)
-							 (get-placer control))
-				 (let ((vname (attribute control "data-clog-name")))
-				   (unless (and (>= (length vname) 5)
-						(equalp (subseq vname 0 5) "none-"))
-				     (push (format nil
-						   "\(~A :reader ~A\)"
-						   vname
-						   vname)
-					   cmembers)
-				     (push (format nil
-						   "\(setf (slot-value ~A '~A) \(attach-as-child clog-obj \"~A\" :clog-type \'~A\)\)~%"
-						   cname
-						   vname
-						   html-id
-						   (format nil "CLOG:~A" (type-of control)))
-					   vars))))
-			       (get-control-list app panel-id))
-		      (let ((cw     (on-show-layout-code obj))
-			    (result (format nil
-					    "\(in-package ~A\)
-\(defclass ~A \(clog:clog-div\)
-  \(~{~A~}\)\)
-\(defun create-~A \(clog-obj\)
-  \(let \(\(~A \(change-class \(clog:create-div clog-obj :content \"~A\"\) \'~A\)\)\)
-~{~A~}
-    ~A\)\)"
-					    (attribute content "data-in-package")
-					    cname     ;;defclass
-					    cmembers
-					    cname     ;;defun
-					    cname     ;;let
-					    (escape-string
-					     (ppcre:regex-replace-all "\\x22"
-								      (inner-html content)
-								      "\\\\\\\""))
-					    cname
-					    vars
-					    cname)))
-			(js-execute obj (format nil
-						"editor_~A.setValue('~A');editor_~A.moveCursorTo(0,0);"
-						(html-id cw)
-						(escape-string result)
-						(html-id cw)))))
-		    (maphash (lambda (html-id control)
-			       (declare (ignore html-id))
-			       (place-after control (get-placer control)))
-			     (get-control-list app panel-id))))
+		      (render-clog-code content win (bottom-panel box))))
     (set-on-mouse-down content
 		       (lambda (obj data)
 			 (declare (ignore obj))
@@ -876,7 +888,7 @@ of controls and double click to select control."
       (setf (window-title win) panel-name)
       (setf (attribute content "data-clog-name") panel-name))
     (setf (attribute content "data-clog-type") "clog-data")
-    (setf (attribute content "data-in-package") ":clog-user")
+    (setf (attribute content "data-in-package") "clog-user")
     (setf (overflow content) :auto)
     (set-on-focus (window body)
 		  (lambda (obj)
@@ -960,71 +972,16 @@ of controls and double click to select control."
 						       (setf (title (html-document body)) (attribute content "data-clog-name"))
 						       (setf (window-title win) (attribute content "data-clog-name")))))))
       (set-on-click btn-save (lambda (obj)
-			       (server-file-dialog win "Save Panel As.." file-name
+			       (server-file-dialog obj "Save Page As.." file-name
 						   (lambda (fname)
 						     (window-focus win)
 						     (when fname
 						       (setf file-name fname)
-						       (maphash
-							(lambda (html-id control)
-							  (declare (ignore html-id))
-							  (place-inside-bottom-of (bottom-panel box)
-										  (get-placer control)))
-							(get-control-list app panel-id))
-						       (let ((data
-							       (create-child content "<data />"
-									     :html-id (format nil "I~A" panel-uid))))
-							 (place-inside-top-of content data)
-							 (setf (attribute data "data-clog-next-id")
-							     (attribute content "data-clog-next-id"))
-							 (setf (attribute data "data-clog-title")
-							       (attribute content "data-clog-name"))
-							 (write-file (inner-html content) fname)
-							 (destroy data))
-						       (maphash
-							(lambda (html-id control)
-							  (declare (ignore html-id))
-							  (place-after control (get-placer control)))
-							(get-control-list app panel-id))))
-						   :initial-filename file-name)))
+						       (save-panel fname content panel-id (bottom-panel box)))
+						     :initial-filename file-name))))
       (set-on-click btn-rndr
 		    (lambda (obj)
-		      (let (vars)
-			(maphash (lambda (html-id control)
-				   ;; hide placer
-				   (place-inside-bottom-of (bottom-panel box)
-							   (get-placer control))
-				   (let ((vname (attribute control "data-clog-name")))
-				     (unless (and (>= (length vname) 5)
-						  (equalp (subseq vname 0 5) "none-"))
-				       (push (format nil *builder-template2*
-						     vname
-						     html-id
-						     (format nil "CLOG:~A" (type-of control)))
-					     vars))))
-				 (get-control-list app panel-id))
-			(let* ((cw     (on-show-layout-code obj))
-			       (result (format nil
-					       *builder-template1*
-					       (attribute content "data-in-package")
-					       (attribute content "data-clog-name")
-					       (escape-string
-						(ppcre:regex-replace-all "\\x22"
-									 (inner-html content)
-									 "\\\\\\\""))
-					       (attribute content "data-clog-name")
-					       vars
-					       (html-id cw)
-					       (html-id cw))))
-			  (js-execute obj (format nil
-						  "editor_~A.setValue('~A');editor_~A.moveCursorTo(0,0);"
-						  (html-id cw)
-						  (escape-string result)
-						  (html-id cw)))))
-		      (maphash (lambda (html-id control)
-				 (declare (ignore html-id))
-				 (place-after control (get-placer control)))
-			       (get-control-list app panel-id)))))
+		      (render-clog-code content win (bottom-panel box)))))
     (set-on-mouse-down content
 		       (lambda (obj data)
 			 (declare (ignore obj))
