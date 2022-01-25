@@ -72,6 +72,18 @@
   "Remove a control identified by HTML-ID from control-list on PANEL-ID"
   (remhash html-id (get-control-list app panel-id)))
 
+;; Handle per content next-id counts
+
+(defun next-id (content)
+  (parse-integer (attribute content "data-clog-next-id") :junk-allowed t))
+
+(defun setf-next-id (content id)
+  (setf (attribute content "data-clog-next-id") (format nil "~A" id)))
+
+(defun incf-next-id (content)
+  (setf-next-id content (1+ (next-id content))))
+
+
 ;; Local file utilities
 
 (defun read-file (infile)
@@ -88,6 +100,8 @@
 					    :overwrite :append :supersede))
    (with-open-file (outstream outfile :direction :output :if-exists action-if-exists)
      (write-sequence string outstream)))
+
+;; Lisp code evaluation utilities
 
 (defun capture-eval (form &key (eval-in-package :clog-user))
   "Capture lisp evaluaton of FORM"
@@ -246,6 +260,12 @@ access to it and allows manipulation of location, size etc of the control."
   (when (current-control app)
     (set-border (get-placer (current-control app)) (unit "px" 0) :none :blue)
     (setf (current-control app) nil)))
+
+(defun delete-current-control (app panel-id html-id)
+  (remove-from-control-list app panel-id html-id)
+  (destroy (get-placer (current-control app)))
+  (destroy (current-control app))
+  (setf (current-control app) nil))
 
 (defun select-control (control)
   "Select CONTROL as the current control and highlight its placer.
@@ -645,15 +665,6 @@ of controls and double click to select control."
 (defparameter *builder-template2*
   "~%                            (~A (attach-as-child body \"~A\" :clog-type '~A))")
 
-(defun next-id (content)
-  (parse-integer (attribute content "data-clog-next-id") :junk-allowed t))
-
-(defun setf-next-id (content id)
-  (setf (attribute content "data-clog-next-id") (format nil "~A" id)))
-
-(defun incf-next-id (content)
-  (setf-next-id content (1+ (next-id content))))
-
 (defun on-new-builder-panel (obj)
   "Open new panel"
   (let* ((app (connection-data-item obj "builder-app-data"))
@@ -700,10 +711,7 @@ of controls and double click to select control."
     (set-on-click btn-del (lambda (obj)
 			    (declare (ignore obj))
 			    (when (current-control app)
-			      (remove-from-control-list app panel-id (html-id (current-control app)))
-			      (destroy (get-placer (current-control app)))
-			      (destroy (current-control app))
-			      (setf (current-control app) nil)
+			      (delete-current-control app panel-id (html-id (current-control app)))
 			      (on-populate-control-properties-win win)
 			      (on-populate-control-list-win content))))
     (set-on-click btn-sim (lambda (obj)
@@ -888,10 +896,7 @@ of controls and double click to select control."
       (set-on-click btn-del (lambda (obj)
 			      (declare (ignore obj))
 			      (when (current-control app)
-				(remove-from-control-list app panel-id (html-id (current-control app)))
-				(destroy (get-placer (current-control app)))
-				(destroy (current-control app))
-				(setf (current-control app) nil)
+				(delete-current-control app panel-id (html-id (current-control app)))
 				(on-populate-control-properties-win content)
 				(on-populate-control-list-win content))))
       (set-on-click btn-sim (lambda (obj)
