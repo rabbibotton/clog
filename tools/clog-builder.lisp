@@ -362,7 +362,8 @@ not a temporary attached one when using select-control."
 	    events)
 	(dolist (event (reverse (getf info :events)))
 	  (let ((attr (format nil "data-~A" (getf event :name))))
-	    (push `(,(getf event :name) ,(attribute control attr) ,(getf event :setup)
+	    (push `(,(getf event :name) ,(attribute control attr) ,(getf event :parameters) 
+		    ,(getf event :setup)
 		    ,(lambda (obj)
 		       (let ((txt (text obj)))
 			 (if (or (equal txt "")
@@ -377,14 +378,14 @@ not a temporary attached one when using select-control."
 			  (create-table-column tr :content (second item))
 			  (create-table-column tr))))
 	    (set-border td1 "1px" :dotted :black)
-	    (cond ((third item)
-		   (unless (eq (third item) :read-only)
-		     (setf (editablep td2) (funcall (third item) control td1 td2))))
+	    (setf (advisory-title td1) (format nil "params: panel ~A" (third item)))
+	    (cond ((fourth item)
+		   (setf (editablep td2) (funcall (fourth item) control td1 td2)))
 		  (t
 		   (setf (editablep td2) t)))
 	    (set-on-blur td2
 			 (lambda (obj)
-			   (funcall (fourth item) obj)))))))))
+			   (funcall (fifth item) obj)))))))))
 
 (defun on-populate-control-properties-win (obj &key win)
   "Populate the control properties for the current control"
