@@ -399,12 +399,19 @@
     ,@*props-base*
     ,@*props-nav*))
 
+(defparameter *events-element*
+  '((:name        "on-click"
+     :parameters  "target")
+    (:name        "on-focus"
+     :parameters  "target")))
+
 (defparameter *supported-controls*
   (list
    '(:name           "select"
      :description    "Selection Tool"
      :create         nil
      :create-type    nil
+     :events         nil
      :properties     nil)
    `(:name           "label"
      :description    "Label"
@@ -412,6 +419,7 @@
      :create         clog:create-label
      :create-type    :element
      :create-content "Label"
+     :events         (,@*events-element*)
      :properties     ((:name "for"
 		       :get ,(lambda (control)
 			       (let ((f (attribute control "for")))
@@ -429,6 +437,7 @@
      :create         clog:create-button
      :create-type    :element
      :create-content "Button"
+     :events         (,@*events-element*)
      :properties     (,@*props-element*))
    `(:name           "div"
      :description    "Div"
@@ -436,6 +445,7 @@
      :create         clog:create-div
      :create-type    :element
      :create-content ""
+     :events         (,@*events-element*)
      :properties     (,@*props-base*))
    `(:name           "textarea"
      :description    "Text Area"
@@ -443,6 +453,7 @@
      :create         clog:create-text-area
      :create-type    :textarea
      :create-value   ""
+     :events         (,@*events-element*)
      :properties     ((:name "rows"
 		       :prop "rows")
 		      (:name "columns"
@@ -455,6 +466,7 @@
      :clog-type      clog:clog-select
      :create         clog:create-select
      :create-type    :base
+     :events         (,@*events-element*)
      :properties     ((:name "multiple select"
 		       :get  ,(lambda (control)
 				(property control "multiple"))
@@ -472,6 +484,7 @@
      :setup          ,(lambda (control content control-record)
 			(declare (ignore content) (ignore control-record))
 			(setf (size control) "4"))
+     :events         (,@*events-element*)
      :properties     ((:name "multiple select"
 		       :get  ,(lambda (control)
 				(property control "multiple"))
@@ -487,6 +500,7 @@
      :create         clog:create-option
      :create-content "option item"
      :create-type    :element
+     :events         (,@*events-element*)
      :properties     ((:name "value"
 		       :prop "value")
 		      (:name "selected"
@@ -512,6 +526,7 @@
      :create         clog:create-optgroup
      :create-content "option group"
      :create-type    :element
+     :events         (,@*events-element*)
      :properties     ((:name "disabled"
 		       :get  ,(lambda (control)
 				(property control "disabled"))
@@ -530,6 +545,7 @@
 			(declare (ignore content) (ignore control-record))
 			(setf (url-src control) "/img/clogicon.png")
 			(setf (alt-text control) "Add image url"))
+     :events         (,@*events-element*)
      :properties     ((:name "image url"
 		       :prop "src")
 		      (:name "alternative text"
@@ -540,6 +556,7 @@
      :clog-type      clog:clog-meter
      :create         clog:create-meter
      :create-type    :base
+     :events         (,@*events-element*)
      :properties     ((:name "value"
 		       :prop "value")
 		      (:name "high"
@@ -558,6 +575,7 @@
      :clog-type      clog:clog-progress-bar
      :create         clog:create-progress-bar
      :create-type    :base
+     :events         (,@*events-element*)
      :properties     ((:name "value"
 		       :prop "value")
 		      (:name "maximum"
@@ -568,6 +586,7 @@
      :clog-type      clog:clog-form
      :create         clog:create-form
      :create-type    :base
+     :events         (,@*events-element*)
      :properties     ((:name "method"
 		       :attr "method")
 		      (:name "encoding"
@@ -581,6 +600,7 @@
      :create-type    :form
      :create-param   :text
      :create-value   ""
+     :events         (,@*events-element*)
      :properties     (,@*props-form-element*))
    `(:name           "fbutton"
      :description    "Form Button"
@@ -589,6 +609,7 @@
      :create-type    :form
      :create-param   :button
      :create-value   "Button"
+     :events         (,@*events-element*)
      :properties     (,@*props-form-element*))
    `(:name           "reset"
      :description    "Form Reset"
@@ -597,6 +618,7 @@
      :create-type    :form
      :create-param   :reset
      :create-value   "Reset"
+     :events         (,@*events-element*)
      :properties     (,@*props-form-element*))
    `(:name           "submit"
      :description    "Form Submit"
@@ -605,6 +627,7 @@
      :create-type    :form
      :create-param   :submit
      :create-value   "Submit"
+     :events         (,@*events-element*)
      :properties     (,@*props-form-element*))
    `(:name           "checkbox"
      :description    "Form Checkbox"
@@ -613,6 +636,7 @@
      :create-type    :form
      :create-param   :checkbox
      :create-value   ""
+     :events         (,@*events-element*)
      :properties     (,@*props-form-element*))
    `(:name           "radio"
      :description    "Form Radio Button"
@@ -621,6 +645,7 @@
      :create-type    :form
      :create-param   :radio
      :create-value   ""
+     :events         (,@*events-element*)
      :properties     (,@*props-form-element*))
    `(:name           "color"
      :description    "Form Color Picker"
@@ -629,6 +654,7 @@
      :create-type    :form
      :create-param   :color
      :create-value   ""
+     :events         (,@*events-element*)
      :properties     (,@*props-form-element*))
    `(:name           "date"
      :description    "Form Date Picker"
@@ -637,6 +663,7 @@
      :create-type    :form
      :create-param   :date
      :create-value   ""
+     :events         (,@*events-element*)
      :properties     (,@*props-form-element*))
    `(:name           "datetime"
      :description    "Form Datetime Picker"
@@ -645,6 +672,7 @@
      :create-type    :form
      :create-param   :datetime
      :create-value   ""
+     :events         (,@*events-element*)
      :properties     (,@*props-form-element*))
    `(:name           "datetime-local"
      :description    "Form Datetime Local Picker"
@@ -653,6 +681,7 @@
      :create-type    :form
      :create-param   :datetime-local
      :create-value   ""
+     :events         (,@*events-element*)
      :properties     (,@*props-form-element*))
    `(:name           "email"
      :description    "Form Email Input"
@@ -661,6 +690,7 @@
      :create-type    :form
      :create-param   :email
      :create-value   ""
+     :events         (,@*events-element*)
      :properties     (,@*props-form-element*))
    `(:name           "file"
      :description    "Form File Input"
@@ -669,6 +699,7 @@
      :create-type    :form
      :create-param   :file
      :create-value   ""
+     :events         (,@*events-element*)
      :properties     (,@*props-form-element*))
    `(:name           "hidden"
      :description    "Form Hidden Value"
@@ -677,6 +708,7 @@
      :create-type    :form
      :create-param   :hidden
      :create-value   ""
+     :events         (,@*events-element*)
      :properties     (,@*props-form-element*))
    `(:name           "fimage"
      :description    "Form Image Input"
@@ -685,6 +717,7 @@
      :create-type    :form
      :create-param   :image
      :create-value   ""
+     :events         (,@*events-element*)
      :properties     (,@*props-form-element*))
    `(:name           "month"
      :description    "Form Month and Year Picker"
@@ -693,6 +726,7 @@
      :create-type    :form
      :create-param   :month
      :create-value   ""
+     :events         (,@*events-element*)
      :properties     (,@*props-form-element*))
    `(:name           "number"
      :description    "Form Number Picker"
@@ -701,6 +735,7 @@
      :create-type    :form
      :create-param   :number
      :create-value   ""
+     :events         (,@*events-element*)
      :properties     (,@*props-form-element*))
    `(:name           "password"
      :description    "Form Password Input"
@@ -709,6 +744,7 @@
      :create-type    :form
      :create-param   :password
      :create-value   ""
+     :events         (,@*events-element*)
      :properties     (,@*props-form-element*))
    `(:name           "range"
      :description    "Form Range Picker"
@@ -717,6 +753,7 @@
      :create-type    :form
      :create-param   :range
      :create-value   ""
+     :events         (,@*events-element*)
      :properties     (,@*props-form-element*))
    `(:name           "search"
      :description    "Form Search Input"
@@ -725,6 +762,7 @@
      :create-type    :form
      :create-param   :search
      :create-value   ""
+     :events         (,@*events-element*)
      :properties     (,@*props-form-element*))
    `(:name           "tel"
      :description    "Form Tel Input"
@@ -733,6 +771,7 @@
      :create-type    :form
      :create-param   :tel
      :create-value   ""
+     :events         (,@*events-element*)
      :properties     (,@*props-form-element*))
    `(:name           "time"
      :description    "Form Time Picker"
@@ -741,6 +780,7 @@
      :create-type    :form
      :create-param   :time
      :create-value   ""
+     :events         (,@*events-element*)
      :properties     (,@*props-form-element*))
    `(:name           "url"
      :description    "Form URL Input"
@@ -749,6 +789,7 @@
      :create-type    :form
      :create-param   :url
      :create-value   ""
+     :events         (,@*events-element*)
      :properties     (,@*props-form-element*))
    `(:name           "week"
      :description    "Form Week Input"
@@ -757,12 +798,14 @@
      :create-type    :form
      :create-param   :week
      :create-value   ""
+     :events         (,@*events-element*)
      :properties     (,@*props-form-element*))
    `(:name           "fieldset"
      :description    "Fieldset"
      :clog-type      clog:clog-fieldset
      :create         clog:create-fieldset
      :create-type    :base
+     :events         (,@*events-element*)
      :properties     (,@*props-base*))
    `(:name           "legend"
      :description    "Fieldset Legend"
@@ -770,18 +813,21 @@
      :create         clog:create-legend
      :create-content "Legend here"
      :create-type    :element
+     :events         (,@*events-element*)
      :properties     (,@*props-element*))
    `(:name           "datalist"
      :description    "Data list"
      :clog-type      clog:clog-data-list
      :create         clog:create-data-list
      :create-type    :base
+     :events         (,@*events-element*)
      :properties     (,@*props-base*))
    `(:name           "ol"
      :description    "Ordered List"
      :clog-type      clog:clog-ordered-list
      :create         clog:create-ordered-list
      :create-type    :base
+     :events         (,@*events-element*)
      :properties     ((:name "list kind"
 		       :prop "list-style-type")
 		      (:name "list location"
@@ -792,6 +838,7 @@
      :clog-type      clog:clog-unordered-list
      :create         clog:create-unordered-list
      :create-type    :base
+     :events         (,@*events-element*)
      :properties     ((:name "value"
 		       :prop "value")
 		      ,@*props-element*))
@@ -801,18 +848,21 @@
      :create         clog:create-list-item
      :create-type    :element
      :create-content "List Item"
+     :events         (,@*events-element*)
      :properties     (,@*props-element*))
    `(:name           "table"
      :description    "Table"
      :clog-type      clog:clog-table
      :create         clog:create-table
      :create-type    :base
+     :events         (,@*events-element*)
      :properties     (,@*props-base*))
    `(:name           "tr"
      :description    "Table Row"
      :clog-type      clog:clog-table-row
      :create         clog:create-table-row
      :create-type    :base
+     :events         (,@*events-element*)
      :properties     (,@*props-base*))
    `(:name           "td"
      :description    "Table Column"
@@ -820,6 +870,7 @@
      :create         clog:create-table-column
      :create-type    :element
      :create-content "Column"
+     :events         (,@*events-element*)
      :properties     ((:name "column span"
 		       :attr "colspan")
 		      (:name "row span"
@@ -831,6 +882,7 @@
      :create         clog:create-table-heading
      :create-type    :element
      :create-content "Heading"
+     :events         (,@*events-element*)
      :properties     ((:name "column span"
 		       :attr "colspan")
 		      (:name "row span"
@@ -845,6 +897,7 @@
      :clog-type      clog:clog-table-column-group
      :create         clog:create-table-column-group
      :create-type    :base
+     :events         (,@*events-element*)
      :properties     ((:name "span"
 		       :attr "span")
 		      ,@*props-base*))
@@ -854,6 +907,7 @@
      :create         clog:create-table-column-group-item
      :create-type    :base
      :create-content "Column Group Item"
+     :events         (,@*events-element*)
      :properties     ((:name "span"
 		       :attr "span")
 		      ,@*props-base*))
@@ -862,18 +916,21 @@
      :clog-type      clog:clog-table-head
      :create         clog:create-table-head
      :create-type    :base
+     :events         (,@*events-element*)
      :properties     (,@*props-base*))
    `(:name           "tbody"
      :description    "Table Body"
      :clog-type      clog:clog-table-body
      :create         clog:create-table-body
      :create-type    :base
+     :events         (,@*events-element*)
      :properties     (,@*props-base*))
    `(:name           "tfoot"
      :description    "Table Footer"
      :clog-type      clog:clog-table-footer
      :create         clog:create-table-footer
      :create-type    :base
+     :events         (,@*events-element*)
      :properties     (,@*props-base*))
    `(:name           "tcaption"
      :description    "Table Caption"
@@ -881,6 +938,7 @@
      :create         clog:create-table-caption
      :create-type    :element
      :create-content "Caption"
+     :events         (,@*events-element*)
      :properties     ((:name "caption side"
 		       :style "caption-side")
 		      ,@*props-element*))
@@ -889,6 +947,7 @@
      :clog-type      clog:clog-definition-list
      :create         clog:create-definition-list
      :create-type    :base
+     :events         (,@*events-element*)
      :properties     (,@*props-base*))
    `(:name           "dt"
      :description    "Definition Term"
@@ -896,6 +955,7 @@
      :create         clog:create-term
      :create-content "Term"
      :create-type    :element
+     :events         (,@*events-element*)
      :properties     (,@*props-element*))
    `(:name           "dd"
      :description    "Definition Description"
@@ -903,6 +963,7 @@
      :create         clog:create-description
      :create-content "Description"
      :create-type    :element
+     :events         (,@*events-element*)
      :properties     (,@*props-element*))
    `(:name           "details"
      :description    "Details Block"
@@ -910,6 +971,7 @@
      :create         clog:create-details
      :create-type    :element
      :create-content "Details"
+     :events         (,@*events-element*)
      :properties     ((:name "open"
 		       :get  ,(lambda (control)
 				(property control "open"))
@@ -925,12 +987,14 @@
      :create         clog:create-summary
      :create-content "Summary"
      :create-type    :element
+     :events         (,@*events-element*)
      :properties     (,@*props-element*))
    `(:name           "audio"
      :description    "Audio Player"
      :clog-type      clog:clog-audio
      :create         clog:create-audio
      :create-type    :base
+     :events         (,@*events-element*)
      :properties     ((:name "media url"
 		       :prop "src")
 		      (:name "volume"
@@ -951,6 +1015,7 @@
      :clog-type      clog:clog-video
      :create         clog:create-video
      :create-type    :base
+     :events         (,@*events-element*)
      :properties     ((:name "media url"
 		       :prop "src")
 		      (:name "volume"
@@ -971,6 +1036,7 @@
      :clog-type      clog:clog-canvas
      :create         clog:create-canvas
      :create-type    :base
+     :events         (,@*events-element*)
      :properties     (,@*props-base*))
    `(:name           "dialog"
      :description    "Dialog"
@@ -978,6 +1044,7 @@
      :create         clog:create-dialog
      :create-type    :element
      :create-content ""
+     :events         (,@*events-element*)
      :properties     ((:name "open"
 		       :get  ,(lambda (control)
 				(property control "open"))
@@ -995,6 +1062,7 @@
      :create         clog:create-span
      :create-type    :element
      :create-content "span"
+     :events         (,@*events-element*)
      :properties     (,@*props-contents*
 		      ,@*props-element*))
    `(:name           "link"
@@ -1003,6 +1071,7 @@
      :create         clog:create-a
      :create-type    :element
      :create-content "HTML Link"
+     :events         (,@*events-element*)
      :properties     ((:name "href link"
 		       :prop "href")
 		      (:name "target"
@@ -1013,12 +1082,14 @@
      :clog-type      clog:clog-hr
      :create         clog:create-hr
      :create-type    :base
+     :events         (,@*events-element*)
      :properties     (,@*props-base*))
    `(:name           "br"
      :description    "Line Break"
      :clog-type      clog:clog-br
      :create         clog:create-br
      :create-type    :base
+     :events         (,@*events-element*)
      :properties     (,@*props-base*))
    `(:name           "p"
      :description    "Paragraph"
@@ -1026,12 +1097,14 @@
      :create         clog:create-p
      :create-content "Paragraph"
      :create-type    :element
+     :events         (,@*events-element*)
      :properties     (,@*props-element*))
    `(:name           "style-block"
      :description    "Style Block"
      :clog-type      clog:clog-style-block
      :create         clog:create-style-block
      :create-type    :base
+     :events         (,@*events-element*)
      :properties     ((:name "media"
 		       :attr "media")
 		      (:name "type"

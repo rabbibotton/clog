@@ -31,6 +31,14 @@
     :accessor control-properties-win
     :initform nil
     :documentation "Current control properties window")
+   (events-list
+    :accessor events-list
+    :initform nil
+    :documentation "Property list in events window")
+   (control-events-win
+    :accessor control-events-win
+    :initform nil
+    :documentation "Current control events window")
    (control-list-win
     :accessor control-list-win
     :initform nil
@@ -122,6 +130,7 @@
   (if (equal control-type-name "clog-data")
        '(:name           "clog-data"
 	 :description    "Panel Properties"
+	 :events         nil
 	 :properties     ((:name "in-package"
 			   :attr "data-in-package")))
       (find-if (lambda (x) (equal (getf x :name) control-type-name)) *supported-controls*)))
@@ -195,6 +204,7 @@
 			 :top (getf data :y))
 	   (setup-control content control :win win)
 	   (select-control control)
+	   (on-populate-control-list-win content)
 	   t)
 	  (t
 	   ;; panel directly clicked with select tool or no control type to add
@@ -335,9 +345,51 @@ not a temporary attached one when using select-control."
 
 ;; Population of utility windows
 
+(defun on-populate-control-events-win (obj &key win)
+  "Populate the control events for the current control"
+  ;; obj if current-control is nil must be content
+  (let* ((app       (connection-data-item obj "builder-app-data"))
+	 (event-win (control-events-win app))
+	 (control   (if (current-control app)
+		        (current-control app)
+		        obj))
+	 (placer    (when control
+		      (get-placer control)))
+	 (table     (events-list app)))
+    (when event-win
+      (setf (inner-html table) "")
+      (let ((info  (control-info (attribute control "data-clog-type")))
+	    events)
+	(dolist (event (reverse (getf info :events)))
+	  (let ((attr (format nil "data-~A" (getf event :name))))
+	    (push `(,(getf event :name) ,(attribute control attr) ,(getf event :setup)
+		    ,(lambda (obj)
+		       (let ((txt (text obj)))
+			 (if (or (equal txt "")
+				 (equalp txt "undefined"))
+			     (remove-attribute control attr)
+			     (setf (attribute control attr) (text obj))))))
+		  events)))
+	(dolist (item events)
+	  (let* ((tr  (create-table-row table))
+		 (td1 (create-table-column tr :content (first item)))
+		 (td2 (if (second item)
+			  (create-table-column tr :content (second item))
+			  (create-table-column tr))))
+	    (set-border td1 "1px" :dotted :black)
+	    (cond ((third item)
+		   (unless (eq (third item) :read-only)
+		     (setf (editablep td2) (funcall (third item) control td1 td2))))
+		  (t
+		   (setf (editablep td2) t)))
+	    (set-on-blur td2
+			 (lambda (obj)
+			   (funcall (fourth item) obj)))))))))
+
 (defun on-populate-control-properties-win (obj &key win)
   "Populate the control properties for the current control"
   ;; obj if current-control is nil must be content
+  (on-populate-control-events-win obj :win win)
   (let* ((app      (connection-data-item obj "builder-app-data"))
 	 (prop-win (control-properties-win app))
 	 (control  (if (current-control app)
@@ -630,15 +682,33 @@ of controls and double click to select control."
     (if (control-properties-win app)
 	(window-focus (control-properties-win app))
 	(let* ((win          (create-gui-window obj :title "Control Properties"
-						    :left 220
-						    :top 250
-						    :height 300 :width 400
+						    :left 630
+						    :top 40
+						    :height 510 :width 400
 						    :has-pinner t))
 	       (content      (window-content win))
 	       (control-list (create-table content)))
 	  (setf (control-properties-win app) win)
 	  (setf (properties-list app) control-list)
 	  (set-on-window-close win (lambda (obj) (setf (control-properties-win app) nil)))
+	  (setf (positioning control-list) :absolute)
+	  (set-geometry control-list :left 0 :top 0 :bottom 0 :right 0)))))
+
+(defun on-show-control-events-win (obj)
+  "Show control events window"
+  (let ((app (connection-data-item obj "builder-app-data")))
+    (if (control-events-win app)
+	(window-focus (control-events-win app))
+	(let* ((win          (create-gui-window obj :title "Control Events"
+						    :left 220
+						    :top 350
+						    :height 200 :width 400
+						    :has-pinner t))
+	       (content      (window-content win))
+	       (control-list (create-table content)))
+	  (setf (control-events-win app) win)
+	  (setf (events-list app) control-list)
+	  (set-on-window-close win (lambda (obj) (setf (control-events-win app) nil)))
 	  (setf (positioning control-list) :absolute)
 	  (set-geometry control-list :left 0 :top 0 :bottom 0 :right 0)))))
 
@@ -685,7 +755,7 @@ of controls and double click to select control."
 	 (package  (attribute content "data-in-package"))
 	 (cname    (attribute content "data-clog-name"))
 	 (cw       (on-show-layout-code win :cname cname :package package))
-	 cmembers vars)
+	 cmembers vars events)
     (maphash (lambda (html-id control)
 	       (place-inside-bottom-of hide-loc
 				       (get-placer control))
@@ -698,33 +768,45 @@ of controls and double click to select control."
 				 vname)
 			 cmembers)
 		   (push (format nil
-				 "\(setf (slot-value ~A '~A) \(attach-as-child clog-obj \"~A\" :clog-type \'~A\)\)~%"
-				 cname
+				 "\(setf (slot-value panel '~A\) \(attach-as-child clog-obj \"~A\" :clog-type \'~A\)\)~%"
 				 vname
 				 html-id
 				 (format nil "CLOG:~A" (type-of control)))
-			 vars))))
+			 vars)
+		   (let ((info  (control-info (attribute control "data-clog-type")))
+			 props)
+		     (dolist (event (getf info :events))
+		       (let ((handler (attribute control (format nil "data-~A" (getf event :name)))))
+			 (unless (or (equalp handler "undefined")
+				     (equal handler ""))
+			   (push (format nil
+					 "\(set-~A \(~A panel\) \(lambda \(~A\) ~A\)\)"
+					 (getf event :name)
+					 vname
+					 (getf event :parameters)
+					 handler)
+				 events))))))))
 	     (get-control-list app panel-id))
     (let ((result (format nil
 			  "\(in-package \"~A\"\)
 \(defclass ~A \(clog:clog-div\)
   \(~{~A~}\)\)
 \(defun create-~A \(clog-obj\)
-  \(let \(\(~A \(change-class \(clog:create-div clog-obj :content \"~A\"\) \'~A\)\)\)
+  \(let \(\(panel \(change-class \(clog:create-div clog-obj :content \"~A\"\) \'~A\)\)\)
 ~{~A~}
-    ~A\)\)"
+~{~A~}
+    panel\)\)"
 			  (string-upcase package)
 			  cname     ;;defclass
 			  cmembers
 			  cname     ;;defun
-			  cname     ;;let
 			  (escape-string
 			   (ppcre:regex-replace-all "\\x22"
 						    (inner-html content)
 						    "\\\\\\\""))
 			  cname
 			  vars
-			  cname)))
+			  events)))
       (js-execute cw (format nil
 			     "editor_~A.setValue('~A');editor_~A.moveCursorTo(0,0);"
 			     (html-id cw)
@@ -764,7 +846,9 @@ of controls and double click to select control."
 (defun on-new-builder-panel (obj)
   "Open new panel"
   (let* ((app (connection-data-item obj "builder-app-data"))
-	 (win (create-gui-window obj :top 40 :left 220 :width 400 :client-movement t))
+	 (win (create-gui-window obj :top 40 :left 220
+				     :width 400 :height 300
+				     :client-movement t))
 	 (box (create-panel-box-layout (window-content win)
 				       :left-width 0 :right-width 0
 				       :top-height 30 :bottom-height 0))
@@ -1051,6 +1135,7 @@ of controls and double click to select control."
       (create-gui-menu-item file  :content "New CLOG WEB Page"  :on-click 'on-new-builder-page)
       (create-gui-menu-item tools :content "Control Pallete"    :on-click 'on-show-control-pallete-win)
       (create-gui-menu-item tools :content "Control Properties" :on-click 'on-show-control-properties-win)
+      (create-gui-menu-item tools :content "Control Events"     :on-click 'on-show-control-events-win)
       (create-gui-menu-item tools :content "Control List"       :on-click 'on-show-control-list-win)
       (create-gui-menu-item edit  :content "Undo"               :on-click #'do-ide-edit-undo)
       (create-gui-menu-item edit  :content "Redo"               :on-click #'do-ide-edit-redo)
@@ -1064,6 +1149,7 @@ of controls and double click to select control."
       (create-gui-menu-full-screen menu))
     (on-show-control-pallete-win body)
     (on-show-control-list-win body)
+    (on-show-control-events-win body)
     (on-show-control-properties-win body)
     (on-new-builder-panel body)
     (set-on-before-unload (window body) (lambda(obj)
