@@ -403,7 +403,99 @@
   '((:name        "on-click"
      :parameters  "target")
     (:name        "on-focus"
-     :parameters  "target")))
+     :parameters  "target")
+    (:name        "on-blur"
+     :parameters  "target")
+    (:name        "on-change"
+     :parameters  "target")
+    (:name        "on-focus-in"
+     :parameters  "target")
+    (:name        "on-focus-out"
+     :parameters  "target")
+    (:name        "on-reset"
+     :parameters  "target")
+    (:name        "on-search"
+     :parameters  "target")
+    (:name        "on-select"
+     :parameters  "target")
+    (:name        "on-submit"
+     :parameters  "target")
+    (:name        "on-context-menu"
+     :parameters  "target")
+    (:name        "on-double-click"
+     :parameters  "target")
+    (:name        "on-mouse-click"
+     :parameters  "target data")
+    (:name        "on-mouse-double-click"
+     :parameters  "target data")
+    (:name        "on-mouse-right-click"
+     :parameters  "target data")
+    (:name        "on-mouse-enter"
+     :parameters  "target")
+    (:name        "on-mouse-leave"
+     :parameters  "target")
+    (:name        "on-mouse-over"
+     :parameters  "target")
+    (:name        "on-mouse-out"
+     :parameters  "target")
+    (:name        "on-mouse-down"
+     :parameters  "target data")
+    (:name        "on-mouse-up"
+     :parameters  "target data")
+    (:name        "on-mouse-move"
+     :parameters  "target data")
+    (:name        "on-pointer-enter"
+     :parameters  "target")
+    (:name        "on-pointer-leave"
+     :parameters  "target")
+    (:name        "on-pointer-over"
+     :parameters  "target")
+    (:name        "on-pointer-out"
+     :parameters  "target")
+    (:name        "on-pointer-down"
+     :parameters  "target data")
+    (:name        "on-pointer-up"
+     :parameters  "target data")
+    (:name        "on-pointer-move"
+     :parameters  "target data")
+    (:name        "on-touch-start"
+     :parameters  "target data")
+    (:name        "on-touch-move"
+     :parameters  "target data")
+    (:name        "on-touch-end"
+     :parameters  "target data")
+    (:name        "on-touch-cancel"
+     :parameters  "target data")
+    (:name        "on-character"
+     :parameters  "target data")
+    (:name        "on-key-down"
+     :parameters  "target data")
+    (:name        "on-key-up"
+     :parameters  "target data")
+    (:name        "on-key-press"
+     :parameters  "target data")
+    (:name        "on-copy"
+     :parameters  "target")
+    (:name        "on-cut"
+     :parameters  "target")
+    (:name        "on-paste"
+     :parameters  "target")
+    (:name        "on-resize"
+     :parameters  "target")
+    (:name        "on-drag-start"
+     :parameters  "target")
+    (:name        "on-drag"
+     :parameters  "target")
+    (:name        "on-drag-end"
+     :parameters  "target")
+    (:name        "on-drag-enter"
+     :parameters  "target")
+    (:name        "on-drag-leave"
+     :parameters  "target")
+    (:name        "on-drag-over"
+     :parameters  "target")
+    (:name        "on-drop"
+     :parameters  "target data")))
 
 (defparameter *supported-controls*
   (list

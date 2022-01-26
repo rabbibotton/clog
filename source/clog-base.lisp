@@ -180,8 +180,8 @@ result or if time out DEFAULT-ANSWER (Private)"))
 ;;;;;;;;;;;;;;;;;;;;;;;
 
 (defparameter mouse-event-script
-  "+ (e.clientX - e.currentTarget.getBoundingClientRect().left + e.currentTarget.scrollLeft) + ':' + 
-     (e.clientY - e.currentTarget.getBoundingClientRect().top + e.currentTarget.scrollTop) + ':' + 
+  "+ (e.clientX - e.currentTarget.getBoundingClientRect().left + e.currentTarget.scrollLeft) + ':' +
+     (e.clientY - e.currentTarget.getBoundingClientRect().top + e.currentTarget.scrollTop) + ':' +
      e.screenX + ':' + e.screenY + ':' + e.which + ':' + e.altKey + ':' +
      e.ctrlKey + ':' + e.shiftKey + ':' + e.metaKey + ':' +
      e.clientX + ':' + e.clientY + ':' + e.pageX + ':' + e.pageY"
@@ -216,10 +216,10 @@ result or if time out DEFAULT-ANSWER (Private)"))
 (defparameter touch-event-script
   "+ (e.touches[0].clientX -
         e.touches[0].currentTarget.getBoundingClientRect().left +
-        e.touches[0].currentTarget.scrollLeft) + ':' + 
+        e.touches[0].currentTarget.scrollLeft) + ':' +
      (e.touches[0].clientY -
         e.touches[0].currentTarget.getBoundingClientRect().top +
-        e.touches[0].currentTarget.scrollTop) + ':' + 
+        e.touches[0].currentTarget.scrollTop) + ':' +
      e.touches[0].screenX + ':' + e.touches[0].screenY + ':' + e.touches.length + ':' +
      e.altKey + ':' +
      e.ctrlKey + ':' +
@@ -252,8 +252,8 @@ result or if time out DEFAULT-ANSWER (Private)"))
 ;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defparameter pointer-event-script
-  "+ (e.clientX - e.currentTarget.getBoundingClientRect().left + e.currentTarget.scrollLeft) + ':' + 
-     (e.clientY - e.currentTarget.getBoundingClientRect().top + e.currentTarget.scrollTop) + ':' + 
+  "+ (e.clientX - e.currentTarget.getBoundingClientRect().left + e.currentTarget.scrollLeft) + ':' +
+     (e.clientY - e.currentTarget.getBoundingClientRect().top + e.currentTarget.scrollTop) + ':' +
      e.screenX + ':' + e.screenY + ':' + e.which + ':' + e.altKey + ':' +
      e.ctrlKey + ':' + e.shiftKey + ':' + e.metaKey + ':' +
      e.clientX + ':' + e.clientY + ':' + e.pageX + ':' + e.pageY"
@@ -306,7 +306,7 @@ result or if time out DEFAULT-ANSWER (Private)"))
 ;;;;;;;;;;;;;;;;;;;;;;
 
 (defparameter drop-event-script
-  "+ (e.clientX - e.currentTarget.getBoundingClientRect().left + e.currentTarget.scrollLeft) + ':' + 
+  "+ (e.clientX - e.currentTarget.getBoundingClientRect().left + e.currentTarget.scrollLeft) + ':' +
      (e.clientY - e.currentTarget.getBoundingClientRect().top + e.currentTarget.scrollTop) + ':' +
      e.which + ':' + e.altKey + ':' + e.ctrlKey + ':' + e.shiftKey + ':' + e.metaKey + ':' +
      encodeURIComponent(e.originalEvent.dataTransfer.getData('~A'))"
@@ -680,7 +680,7 @@ If ON-FOCUS-OUT-HANDLER is nil unbind the event."))
 (defgeneric set-on-reset (clog-obj on-reset-handler)
   (:documentation "Set the ON-RESET-HANDLER for CLOG-OBJ. If ON-RESET-HANDLER
 is nil unbind the event. This event is activated by using reset on a form. If
-this even is bound, you must call the form reset manually."))
+this event is bound, you must call the form reset manually."))
 
 (defmethod set-on-reset ((obj clog-obj) handler)
   (set-event obj "reset"
@@ -1133,7 +1133,7 @@ If ON-KEY-DOWN-HANDLER is nil unbind the event."))
 		 (funcall handler obj (parse-keyboard-event data))))
 	     :one-time one-time
 	     :cancel-event disable-default
-	     :call-back-script keyboard-event-script))   
+	     :call-back-script keyboard-event-script))
 
 ;;;;;;;;;;;;;;;;;;;
 ;; set-on-key-up ;;
@@ -1149,7 +1149,7 @@ ON-KEY-UP-HANDLER is nil unbind the event."))
 	       (lambda (data)
 		 (funcall handler obj (parse-keyboard-event data))))
 	     :one-time one-time
-	     :call-back-script keyboard-event-script))      
+	     :call-back-script keyboard-event-script))
 
 ;;;;;;;;;;;;;;;;;;;;;;
 ;; set-on-key-press ;;

@@ -360,7 +360,7 @@ not a temporary attached one when using select-control."
 	    events)
 	(dolist (event (reverse (getf info :events)))
 	  (let ((attr (format nil "data-~A" (getf event :name))))
-	    (push `(,(getf event :name) ,(attribute control attr) ,(getf event :parameters) 
+	    (push `(,(getf event :name) ,(attribute control attr) ,(getf event :parameters)
 		    ,(getf event :setup)
 		    ,(lambda (obj)
 		       (let ((txt (text obj)))
@@ -776,16 +776,16 @@ of controls and double click to select control."
 				 html-id
 				 (format nil "CLOG:~A" (type-of control)))
 			 vars)
-		   (let ((info  (control-info (attribute control "data-clog-type")))
-			 props)
+		   (let ((info  (control-info (attribute control "data-clog-type"))))
 		     (dolist (event (getf info :events))
 		       (let ((handler (attribute control (format nil "data-~A" (getf event :name)))))
 			 (unless (or (equalp handler "undefined")
 				     (equal handler ""))
 			   (push (format nil
-					 "\(set-~A \(~A panel\) \(lambda \(~A\) ~A\)\)~%"
+					 "\(set-~A \(~A panel\) \(lambda \(~A\) \(declare \(ignorable ~A\)\) ~A\)\)~%"
 					 (getf event :name)
 					 vname
+					 (getf event :parameters)
 					 (getf event :parameters)
 					 handler)
 				 events))))))))
