@@ -410,13 +410,13 @@ its contents"))
 spell checking if Editable is also true."))
 
 (defmethod spellcheckp ((obj clog-element))
-  (js-true-p (property obj "spellcheck")))
+  (js-true-p (attribute obj "spellcheck")))
 
 (defgeneric set-spellcheckp (clog-element value)
   (:documentation "Set spellcheckp VALUE for CLOG-ELEMENT"))
 
 (defmethod set-spellcheckp ((obj clog-element) value)
-  (setf (property obj "spellcheck") (p-true-js value)))
+  (setf (attribute obj "spellcheck") (p-true-js value)))
 (defsetf spellcheckp set-spellcheckp)
 
 ;;;;;;;;;;;;;;;

@@ -345,7 +345,7 @@ not a temporary attached one when using select-control."
 
 ;; Population of utility windows
 
-(defun on-populate-control-events-win (obj &key win)
+(defun on-populate-control-events-win (obj)
   "Populate the control events for the current control"
   ;; obj if current-control is nil must be content
   (let* ((app       (connection-data-item obj "builder-app-data"))
@@ -353,8 +353,6 @@ not a temporary attached one when using select-control."
 	 (control   (if (current-control app)
 		        (current-control app)
 		        obj))
-	 (placer    (when control
-		      (get-placer control)))
 	 (table     (events-list app)))
     (when event-win
       (setf (inner-html table) "")
@@ -378,6 +376,7 @@ not a temporary attached one when using select-control."
 			  (create-table-column tr :content (second item))
 			  (create-table-column tr))))
 	    (set-border td1 "1px" :dotted :black)
+	    (setf (spellcheckp td2) nil)
 	    (setf (advisory-title td1) (format nil "params: panel ~A" (third item)))
 	    (cond ((fourth item)
 		   (setf (editablep td2) (funcall (fourth item) control td1 td2)))
@@ -390,7 +389,7 @@ not a temporary attached one when using select-control."
 (defun on-populate-control-properties-win (obj &key win)
   "Populate the control properties for the current control"
   ;; obj if current-control is nil must be content
-  (on-populate-control-events-win obj :win win)
+  (on-populate-control-events-win obj)
   (let* ((app      (connection-data-item obj "builder-app-data"))
 	 (prop-win (control-properties-win app))
 	 (control  (if (current-control app)
@@ -618,8 +617,11 @@ of controls and double click to select control."
 						(html-id (current-window obj)))))
 	     (result      (capture-eval (if cname
 					    (format nil "~A~% (clog:set-on-new-window~
-                                               (lambda (body) (create-~A body)) :path \"/test\")~
-                                               (clog:open-browser :url \"http://127.0.0.1:8080/test\")"
+                                               (lambda (body)~
+                                                 (clog-gui:clog-gui-initialize body)~
+                                                 (clog-web:clog-web-initialize body :w3-css-url nil)~
+                                                 (create-~A body)) :path \"/test\")~
+                                                 (clog:open-browser :url \"http://127.0.0.1:8080/test\")"
 						    form-string cname))
 					:eval-in-package package)))
 	(alert-dialog obj result :title "Eval Result")))))
@@ -781,7 +783,7 @@ of controls and double click to select control."
 			 (unless (or (equalp handler "undefined")
 				     (equal handler ""))
 			   (push (format nil
-					 "\(set-~A \(~A panel\) \(lambda \(~A\) ~A\)\)"
+					 "\(set-~A \(~A panel\) \(lambda \(~A\) ~A\)\)~%"
 					 (getf event :name)
 					 vname
 					 (getf event :parameters)
