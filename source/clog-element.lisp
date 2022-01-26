@@ -40,7 +40,7 @@ clog[] but is not in the DOM. If HTML-ID is nil one is generated.
 (private)"
   (let ((web-id (if html-id
 		    html-id
-		    (clog-connection:generate-id))))
+		    (format nil "CLOG~A" (clog-connection:generate-id)))))
     (clog-connection:execute
      connection-id
      (format nil
@@ -86,15 +86,24 @@ CLOG-OBJ. If HTML-ID is nil one will be generated."))
 ;; attach-as-child ;;
 ;;;;;;;;;;;;;;;;;;;;;
 
-(defgeneric attach-as-child (clog-obj html-id &key clog-type)
-  (:documentation "Create a new CLOG-Element or sub-type of CLOG-TYPE and
+(defgeneric attach-as-child (clog-obj html-id &key clog-type new-id)
+  (:documentation "Create a new CLOG-ELEMENT or sub-type of CLOG-TYPE and
 attach an existing element with HTML-ID. The HTML-ID must be unique and
-must be in DOM, ie placed or auto-placed."))
+must be in DOM, ie placed or auto-placed. If new-id is true the HTML-ID
+after attachment is changed to one unique to this session."))
 
 (defmethod attach-as-child ((obj clog-obj) html-id
-			    &key (clog-type 'clog-element))
-  (clog-connection:execute (connection-id obj)
-	      (format nil "clog['~A']=$('#~A').get(0)" html-id html-id))
+			    &key (clog-type 'clog-element)
+			      (new-id nil))
+  (if new-id
+      (let ((id (format nil "CLOG~A" (clog-connection:generate-id))))
+	(clog-connection:execute (connection-id obj)
+	 (format nil "$('#~A').attr('id','~A');clog['~A']=$('#~A').get(0)"
+		 html-id id id id))
+	(setf html-id id))
+      (clog-connection:execute (connection-id obj)
+			       (format nil "clog['~A']=$('#~A').get(0)"
+				       html-id html-id)))
   (make-clog-element (connection-id obj) html-id :clog-type clog-type))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

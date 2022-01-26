@@ -778,7 +778,8 @@ of controls and double click to select control."
 				 vname)
 			 cmembers)
 		   (push (format nil
-				 "\(setf (slot-value panel '~A\) \(attach-as-child clog-obj \"~A\" :clog-type \'~A\)\)~%"
+				 "\(setf (slot-value panel '~A\) ~
+                                    \(attach-as-child clog-obj \"~A\" :clog-type \'~A\ :new-id t)\)~%"
 				 vname
 				 html-id
 				 (format nil "CLOG:~A" (type-of control)))
