@@ -316,6 +316,7 @@ not a temporary attached one when using select-control."
         if((e.attr('id') === undefined) && (e.attr('data-clog-name') === undefined))~
            {e.attr('id','A'+clog_id++);~
             e.attr('data-clog-name','none-'+t+'-'+clog_nid++)}~
+        if(e.attr('id') === undefined){e.attr('id','A'+clog_id++)}~
         if(e.attr('data-clog-name') === undefined){e.attr('data-clog-name',e.attr('id'))}~
         ~{~A~}~
         if(e.attr('data-clog-type') === undefined){e.attr('data-clog-type','span')}})"
@@ -858,7 +859,13 @@ z.html()"
 	    (attribute content "data-clog-next-id"))
       (setf (attribute data "data-clog-title")
 	    (attribute content "data-clog-name"))
-      (write-file (inner-html content) fname)
+      (write-file (js-query content
+			    (format nil
+				    "var z=~a.clone();~
+z.find('*').each(function(){$(this).removeAttr('id')});~
+z.html()"
+                                    (clog::jquery content)))
+		  fname)
       (destroy data))
     (maphash
      (lambda (html-id control)
