@@ -281,7 +281,7 @@
      :style "vertical-align")))
 
 (defparameter *props-contents*
-  `((:name "child contents"
+  `((:name "contents"
      :setup ,(lambda (control td1 td2)
 	       (declare (ignore td1))
 	       (let ((d1 (create-text-area td2 :value (inner-html control))))
@@ -543,9 +543,9 @@
      :clog-type      clog:clog-div
      :create         clog:create-div
      :create-type    :element
-     :create-content ""
+     :create-content "div"
      :events         (,@*events-element*)
-     :properties     (,@*props-base*))
+     :properties     (,@*props-element*))
    `(:name           "textarea"
      :description    "Text Area"
      :clog-type      clog:clog-text-area

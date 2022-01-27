@@ -978,7 +978,10 @@ z.html()"
 			   (when (drop-new-control app content data :win win)
 			     (incf-next-id content)))))))
 
-(defun on-attach-builder-page (body)
+(defun on-attach-builder-custom (body)
+  (on-attach-builder-page body :custom t))
+
+(defun on-attach-builder-page (body &key custom)
   "New builder page has attached"
   (let* ((params        (form-get-data body))
 	 (panel-uid     (form-data-item params "bid"))
@@ -1033,9 +1036,14 @@ z.html()"
 			   (setf (current-control app) nil)
 			   (destroy-control-list app panel-id)
 			   (close-window (window body))))
-
-    (clog-gui-initialize body)
-    (clog-web-initialize body :w3-css-url nil)
+    ;; setup jquery and jquery-ui
+    (cond (custom
+	   (load-css (html-document body) "/css/jquery-ui.css")
+	   (load-script (html-document body) "/js/jquery-ui.js"))
+	  (t	  
+	   (clog-gui-initialize body)   
+	   (clog-web-initialize body :w3-css-url nil)))
+    ;; init builder
     (init-control-list app panel-id)
     (let* ((pbox     (create-panel-box-layout (window-content win)
 					 :left-width 0 :right-width 0
@@ -1106,18 +1114,41 @@ z.html()"
 			   (when (drop-new-control app content data :win win)
 			     (incf-next-id content)))))))
 
-(defun on-new-builder-page (obj)
+(defun on-new-builder-launch-page (obj)
+  (on-new-builder-page obj :url-launch t))
+
+(defun on-new-builder-custom (obj)
+  (let ((custom-boot "/boot.html"))
+    (input-dialog obj "Boot File Name:"
+		  (lambda (answer)
+		    (when answer
+		      (setf custom-boot answer))
+		    (set-on-new-window 'on-attach-builder-custom
+				       :boot-file custom-boot :path "/builder-custom"))
+		  :default-value custom-boot :modal t)
+    (on-new-builder-page obj :custom-boot t :url-launch t)))
+
+(defun on-new-builder-page (obj &key custom-boot url-launch)
   "Open new page"
   (let* ((app (connection-data-item obj "builder-app-data"))
 	 (win (create-gui-window obj :top 40 :left 220 :width 400))
 	 (panel-uid  (format nil "~A" (get-universal-time))) ;; unique id for panel
-	 (link       (format nil "http://127.0.0.1:8080/builder-page?bid=~A" panel-uid))
-	 (page-link  (create-a (window-content win)
+	 (boot-loc   (if custom-boot
+			 "builder-custom"
+			 "builder-page"))
+	 (link       (format nil "http://127.0.0.1:8080/~A?bid=~A" boot-loc panel-uid))
+	 (btn-txt    (if url-launch
+			 "Click to launch default browser or copy URL."
+			 "Click if browser does not open new page shortly."))
+	 (txt-area   (create-div (window-content win)))
+	 (page-link  (create-a txt-area
 			       :target "_blank"
-			       :content "<br><center><button>
-                                   Click if browser does not open new page shortly.
-                                   </button></center>"
+			       :content (format nil "<br><center><button>
+                                   ~A
+                                   </button></center>" btn-txt)
 			       :link link))
+	 (txt-link   (create-div txt-area
+				 :content (format nil "<br><center>~A</center>" link)))
 	 content panel-id)
     (setf (gethash panel-uid *app-sync-hash*) app)
     (setf (gethash (format nil "~A-win" panel-uid) *app-sync-hash*) win)
@@ -1125,9 +1156,10 @@ z.html()"
 	  (lambda (obj)
 	    (setf content obj)
 	    (setf panel-id (html-id content))
-	    (destroy page-link)
+	    (destroy txt-area)
 	    (remhash (format nil "~A-link" panel-uid) *app-sync-hash*)))
-    (open-browser :url link)))
+    (unless url-launch
+      (open-browser :url link))))
 
 (defun on-help-about-builder (obj)
   "Open about box"
@@ -1164,8 +1196,10 @@ z.html()"
 	   (win   (create-gui-menu-drop-down menu :content "Window"))
 	   (help  (create-gui-menu-drop-down menu :content "Help")))
       (declare (ignore icon))
-      (create-gui-menu-item file  :content "New CLOG GUI Panel" :on-click 'on-new-builder-panel)
-      (create-gui-menu-item file  :content "New CLOG WEB Page"  :on-click 'on-new-builder-page)
+      (create-gui-menu-item file  :content "New CLOG-GUI Panel"      :on-click 'on-new-builder-panel)
+      (create-gui-menu-item file  :content "New CLOG-WEB Page"       :on-click 'on-new-builder-page)
+      (create-gui-menu-item file  :content "New CLOG-WEB URL Launch" :on-click 'on-new-builder-launch-page)
+      (create-gui-menu-item file  :content "New CLOG Custom Boot"    :on-click 'on-new-builder-custom)
       (create-gui-menu-item tools :content "Control Pallete"    :on-click 'on-show-control-pallete-win)
       (create-gui-menu-item tools :content "Control Properties" :on-click 'on-show-control-properties-win)
       (create-gui-menu-item tools :content "Control Events"     :on-click 'on-show-control-events-win)
