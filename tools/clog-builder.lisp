@@ -195,7 +195,7 @@
 						content)
 					    content
 					    control-record
-					    (format nil "B~A~A"
+					    (format nil "CLOGB~A~A"
 						    (get-universal-time)
 						    (next-id content)))))
     (cond (control
@@ -314,9 +314,9 @@ not a temporary attached one when using select-control."
       $(~A).find('*').each(function() {var e=$(this);~
         var t=e.prop('tagName').toLowerCase(); var p=e.attr('data-clog-type');~
         if((e.attr('id') === undefined) && (e.attr('data-clog-name') === undefined))~
-           {e.attr('id','A'+clog_id++);~
+           {e.attr('id','CLOGB'+clog_id++);~
             e.attr('data-clog-name','none-'+t+'-'+clog_nid++)}~
-        if(e.attr('id') === undefined){e.attr('id','A'+clog_id++)}~
+        if(e.attr('id') === undefined){e.attr('id','CLOGB'+clog_id++)}~
         if(e.attr('data-clog-name') === undefined){e.attr('data-clog-name',e.attr('id'))}~
         ~{~A~}~
         if(e.attr('data-clog-type') === undefined){e.attr('data-clog-type','span')}})"
@@ -862,7 +862,7 @@ z.html()"
       (write-file (js-query content
 			    (format nil
 				    "var z=~a.clone();~
-z.find('*').each(function(){$(this).removeAttr('id')});~
+z.find('*').each(function(){if($(this).attr('id').substring(0,5)=='CLOGB'){$(this).removeAttr('id')}});~
 z.html()"
                                     (clog::jquery content)))
 		  fname)
