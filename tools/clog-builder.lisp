@@ -367,7 +367,12 @@ not a temporary attached one when using select-control."
 	    events)
 	(dolist (event (reverse (getf info :events)))
 	  (let ((attr (format nil "data-~A" (getf event :name))))
-	    (push `(,(getf event :name) ,(attribute control attr) ,(getf event :parameters)
+	    (push `(,(getf event :name)
+		    ,(let ((txt (attribute control attr)))
+		       (if (equalp txt "undefined")
+			   ""
+			   txt))
+		    ,(getf event :parameters)
 		    ,(getf event :setup)
 		    ,(lambda (obj)
 		       (let ((txt (text obj)))
@@ -382,6 +387,8 @@ not a temporary attached one when using select-control."
 		 (td2 (if (second item)
 			  (create-table-column tr :content (second item))
 			  (create-table-column tr))))
+	    (setf (width td1) "20%")
+	    (setf (width td2) "80%")
 	    (set-border td1 "1px" :dotted :black)
 	    (setf (spellcheckp td2) nil)
 	    (setf (advisory-title td1) (format nil "params: panel ~A" (third item)))
@@ -813,7 +820,12 @@ of controls and double click to select control."
 			  cname     ;;defun
 			  (escape-string
 			   (ppcre:regex-replace-all "\\x22"
-						    (inner-html content)
+						    (js-query content
+							      (format nil
+"var z=~a.clone();~
+z.find('*').each(function(){for(n in $(this).get(0).dataset){delete $(this).get(0).dataset[n]}});~
+z.html()"
+								      (clog::jquery content)))
 						    "\\\\\\\""))
 			  cname
 			  vars
