@@ -388,8 +388,8 @@ not a temporary attached one when using select-control."
 		 (td2 (if (second item)
 			  (create-table-column tr :content (second item))
 			  (create-table-column tr))))
-	    (setf (width td1) "20%")
-	    (setf (width td2) "80%")
+	    (setf (width td1) "30%")
+	    (setf (width td2) "70%")
 	    (set-border td1 "1px" :dotted :black)
 	    (setf (spellcheckp td2) nil)
 	    (setf (advisory-title td1) (format nil "params: panel ~A" (third item)))
@@ -713,7 +713,7 @@ of controls and double click to select control."
 	  (setf (properties-list app) control-list)
 	  (set-on-window-close win (lambda (obj) (setf (control-properties-win app) nil)))
 	  (setf (positioning control-list) :absolute)
-	  (set-geometry control-list :left 0 :top 0 :bottom 0 :right 0)))))
+	  (set-geometry control-list :units "" :left 0 :top 0 :bottom 0 :width "100%")))))
 
 (defun on-show-control-events-win (obj)
   "Show control events window"
@@ -731,7 +731,7 @@ of controls and double click to select control."
 	  (setf (events-list app) control-list)
 	  (set-on-window-close win (lambda (obj) (setf (control-events-win app) nil)))
 	  (setf (positioning control-list) :absolute)
-	  (set-geometry control-list :left 0 :top 0 :bottom 0 :right 0)))))
+	  (set-geometry control-list :units "" :left 0 :top 0 :bottom 0 :width "100%")))))
 
 (defun on-show-control-pallete-win (obj)
   "Show control pallete"
