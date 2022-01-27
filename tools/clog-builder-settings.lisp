@@ -816,6 +816,10 @@
      :create-type    :form
      :create-param   :image
      :create-value   ""
+     :setup          ,(lambda (control content control-record)
+			(declare (ignore content) (ignore control-record))
+			(setf (url-src control) "/img/clogicon.png")
+			(setf (alt-text control) "Add image url"))
      :events         (,@*events-element*)
      :properties     (,@*props-form-element*))
    `(:name           "month"
