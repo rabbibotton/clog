@@ -141,8 +141,8 @@ CL-USER> (ql:quickload :clog)
 CL-USER> (clog:run-tutorial 1)
 ```
 
-Tip for Windows WSL linux user. Create a symbolic link from wslview to xdg-open
-in /usr/local/bin so that run-tutorial uses the windows browser.
+Tip for Windows WSL linux user. Install \"sudo apt install xdg-utils\"
+to install xdg-open so that run-tutorial uses the windows browser.
 
 To see where the source, tutorial and demo files are:
 
@@ -202,7 +202,6 @@ needed for mastering CLOG.")
     - You don't need to know HTML but it helps unless someone else is doing the
       design work.
     - You have installed CLOG and (ql:quickload :clog) is working for you.
-
 
 * Simple REPL techniques Tutorial
 

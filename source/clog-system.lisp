@@ -113,7 +113,7 @@ function. If BOOT-FILE is nil path is removed."
 ;;;;;;;;;;;;;;;;;;
 
 (defun open-browser (&key (url "http://127.0.0.1:8080"))
-  "Launch on os a web browser on local machine to URL. See BROWSER-OPEN
+  "Launch on os a web browser on local machine to URL. See OPEN-WINDOW
 for openning windows on remote machines."
   (handler-case
       (trivial-open-browser:open-browser url)

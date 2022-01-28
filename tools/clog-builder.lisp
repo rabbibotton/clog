@@ -1151,6 +1151,9 @@ z.html()"
     (setf (visiblep about) t)
     (set-on-window-can-size about (lambda (obj)
 				    (declare (ignore obj))()))))
+(defun on-help-open-manual (obj)
+  (let* ((body (connection-data-item obj "clog-body")))
+    (open-window (window body) "https://rabbibotton.github.io/clog/clog-manual.html")))
 
 (defun on-new-builder (body)
   "Launch instance of the CLOG Builder"
@@ -1180,6 +1183,7 @@ z.html()"
       (create-gui-menu-item win   :content "Maximize All"       :on-click #'maximize-all-windows)
       (create-gui-menu-item win   :content "Normalize All"      :on-click #'normalize-all-windows)
       (create-gui-menu-window-select win)
+      (create-gui-menu-item help  :content "CLOG Manual"        :on-click #'on-help-open-manual)
       (create-gui-menu-item help  :content "About"              :on-click #'on-help-about-builder)
       (create-gui-menu-full-screen menu))
     (on-show-control-pallete-win body)
