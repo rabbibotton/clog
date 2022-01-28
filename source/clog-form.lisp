@@ -117,7 +117,7 @@ action."))
   (:documentation "Set autocompletep for CLOG-FORM"))
 
 (defmethod set-autocompletep ((obj clog-form) autocompletep)
-  (if value
+  (if autocompletep
       (setf (attribute obj "autocomplete") "true")
       (remove-attribute obj "autocomplete")))
 (defsetf autocompletep set-autocompletep)

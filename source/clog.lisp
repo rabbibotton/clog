@@ -373,7 +373,7 @@ embedded in a native template application.)"
   "CLOG-Details - Class for CLOG Detail Blocks"
   (clog-details   class)
   (create-details generic-function)
-  (detail-openp   generic-function)
+  (details-openp  generic-function)
 
   "CLOG-Summary - Class for CLOG Summary Blocks"
   (clog-summary   class)

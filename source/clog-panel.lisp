@@ -268,14 +268,13 @@ if :HTML-ID \"myid\" then the HTML-ID for center will be: myid-center"
 ;; create-panel-box ;;
 ;;;;;;;;;;;;;;;;;;;;;;
 
-(defgeneric create-panel-box (clog-obj &key hidden class html-id auto-place)
+(defgeneric create-panel-box (clog-obj &key width height hidden class html-id auto-place)
   (:documentation "Create a new CLOG-Panel-Box, a div containg a
 CLOG-PANEL-BOX-LAYOUT as child of CLOG-OBJ with and if :AUTO-PLACE
 (default t) place-inside-bottom-of CLOG-OBJ. If hidden is true visiblep
 is set to nil."))
 
-(defmethod create-panel-box ((obj clog-obj) &key (content "")
-					      (width "100%") (height "100%")
+(defmethod create-panel-box ((obj clog-obj) &key (width "100%") (height "100%")
 					      (hidden nil)
 					      (class nil)
 					      (html-id nil)
