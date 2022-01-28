@@ -149,6 +149,7 @@ the default answer. (Private)"
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defun handle-new-connection (connection id)
+  "Handle new incoming websocket CONNECTIONS with ID from boot page. (Private)"
   (handler-case
       (cond (id
 	   (format t "Reconnection id - ~A to ~A~%" id connection)
@@ -179,6 +180,7 @@ the default answer. (Private)"
 ;;;;;;;;;;;;;;;;;;;;
 
 (defun handle-message (connection message)
+  "Handle incoming websocket MESSAGE on CONNECTION. (Private)"
   (handler-case
       (let ((id (gethash connection *connections*))
 	    (ml (ppcre:split ":" message :limit 2)))
@@ -217,6 +219,7 @@ the default answer. (Private)"
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defun handle-close-connection (connection)
+  "Close websocket CONNECTION. (Private)"
   (handler-case
       (let ((id (gethash connection *connections*)))
 	(when id
@@ -235,6 +238,7 @@ the default answer. (Private)"
 ;;;;;;;;;;;;;;;;;
 
 (defun clog-server (env)
+  "Setup websocket server on ENV. (Private)"
   (handler-case
       (let ((ws (websocket-driver:make-server env)))
 	(websocket-driver:on :open ws
