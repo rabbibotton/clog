@@ -15,4 +15,4 @@ CL-USER> (hello-builder:start-app)
 The hello.clog can be openned in CLOG Builder
 (ql:quickload :clog/tools)(clog-tools:clog-builder)
 
-hello.lisp is a save render of hello.clog
+hello.lisp is a saves render of hello.clog
