@@ -787,6 +787,9 @@ the window will be set to keep-on-top always."))
 	     (clog::set-on-event win "dragstop"
 				 (lambda (obj)
 				   (declare (ignore obj))
+				   (if (< (parse-integer (top win) :junk-allowed t)
+					  (menu-bar-height obj))
+				       (setf (top win) (unit "px" (menu-bar-height obj))))
 				   (fire-on-window-move-done win)))
 	     (clog::set-on-event win "resizestart"
 				 (lambda (obj)
