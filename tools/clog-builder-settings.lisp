@@ -512,6 +512,14 @@
      :create-type    nil
      :events         nil
      :properties     nil)
+   `(:name           "custom"
+     :description    "Custom HTML"
+     :clog-type      clog:clog-element
+     :create         clog:create-child
+     :create-type    :custom-query
+     :create-content "<div><button>test</button></div>"
+     :events         (,@*events-element*)
+     :properties     (,@*props-base*))
    `(:name           "label"
      :description    "Label"
      :clog-type      clog:clog-label

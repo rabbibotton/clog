@@ -142,12 +142,20 @@
 			   :attr "data-in-package")))
       (find-if (lambda (x) (equal (getf x :name) control-type-name)) *supported-controls*)))
 
-(defun create-control (parent content control-record uid)
+(defun create-control (parent content control-record uid &key custom-query)
   "Return a new control based on CONTROL-RECORD as a child of PARENT"
   (let* ((create-type       (getf control-record :create-type))
 	 (control-type-name (getf control-record :name))
 	 (control           (cond ((eq create-type :base)
 				   (funcall (getf control-record :create) parent
+					    :html-id uid))
+				  ((eq create-type :custom)
+				   (funcall (getf control-record :create) parent
+					    (getf control-record :create-content)
+					    :html-id uid))
+				  ((eq create-type :custom-query)
+				   (funcall (getf control-record :create) parent
+					    custom-query
 					    :html-id uid))
 				  ((eq create-type :element)
 				   (funcall (getf control-record :create) parent
@@ -178,10 +186,30 @@
     control))
 
 (defun drop-new-control (app content data &key win)
-  "Create new control droppend at event DATA on CONTENT of WIN)"
+  "Create new control droppend at event DATA on CONTENT of WIN"
   ;; any click on panel directly will focus window
   (when win
     (window-focus win))
+  (let* ((control-record    (control-info (value (select-tool app))))
+	 (control-type-name (getf control-record :create-type)))
+    (if (eq control-type-name :custom-query)
+	(input-dialog win "Enter custom html:"
+		      (lambda (custom-query)
+			(when custom-query
+			  (do-drop-new-control
+			    app content data
+			    :win win
+			    :custom-query custom-query)))
+		      :width 500
+		      :height 300
+		      :rows 5
+		      :size 40
+		      :title "Custom HTML Control"
+		      :default-value (getf control-record :create-content))
+	(do-drop-new-control app content data :win win))))
+
+(defun do-drop-new-control (app content data &key win custom-query)
+  "Create new control droppend at event DATA on CONTENT of WIN)"
   ;; create control
   (let* ((control-record    (control-info (value (select-tool app))))
 	 (control-type-name (getf control-record :name))
@@ -197,7 +225,8 @@
 					    control-record
 					    (format nil "CLOGB~A~A"
 						    (get-universal-time)
-						    (next-id content)))))
+						    (next-id content))
+					    :custom-query custom-query)))
     (cond (control
 	   ;; panel directly clicked with a control type selected
 	   ;; setup control
@@ -211,6 +240,7 @@
 			 :top (getf data :y))
 	   (setup-control content control :win win)
 	   (select-control control)
+	   (add-sub-controls control content :win win)
 	   (on-populate-control-list-win content)
 	   t)
 	  (t
@@ -529,7 +559,7 @@ of controls and double click to select control."
 										  panel-id
 										  html-id)))
 					     (cond ((or (getf data :shift-key)
-						       (getf data :ctrl-key))
+							(getf data :ctrl-key))
 						    (when (drop-new-control app content data)
 						      (incf-next-id content)))
 						   (t
