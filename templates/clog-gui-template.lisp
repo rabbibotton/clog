@@ -50,4 +50,7 @@
 
 (defun start-app ()
   (initialize #'on-new-window)
+  ;; Setup asdf for project and can use
+  ;;	      :static-root (merge-pathnames "./static-files/"
+  ;;			     (asdf:system-source-directory :proj-name)))
   (open-browser))
