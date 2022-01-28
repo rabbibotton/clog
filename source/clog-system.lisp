@@ -23,6 +23,9 @@
 trying to run the tutorials or demos and unable to have your local directory
 the same as the clog directy this overides the relative paths used in them.")
 
+(defvar *static-root* nil
+  "Contains the static-root setting after initialization.")
+
 ;;;;;;;;;;;;;;;;
 ;; initialize ;;
 ;;;;;;;;;;;;;;;;
@@ -65,14 +68,15 @@ compiled version."
     (set-on-new-window on-new-window-handler :path "/" :boot-file boot-file))
   (unless *clog-running*
     (setf *clog-running* t)
+    (setf *static-root* (if *overide-static-root*
+			    *overide-static-root*
+			    static-root))
     (clog-connection:initialize #'on-connect
 				:host           host
 				:port           port
 				:boot-file      boot-file
 				:static-boot-js static-boot-js
-				:static-root    (if *overide-static-root*
-						    *overide-static-root*
-						    static-root))))
+				:static-root    *static-root*)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;
 ;; set-on-new-window ;;

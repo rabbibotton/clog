@@ -1163,6 +1163,9 @@ z.html()"
     (setf (title (html-document body)) "CLOG Builder")
     (clog-gui-initialize body)
     (add-class body "w3-blue-grey")
+    (setf (z-index (create-panel body :positioning :fixed
+				      :bottom 0 :right 0
+				      :content (format nil "static-root: ~A" clog::*static-root*))) -9999)
     (let* ((menu  (create-gui-menu-bar body))
 	   (icon  (create-gui-menu-icon menu :on-click #'on-help-about-builder))
 	   (file  (create-gui-menu-drop-down menu :content "Builder"))
