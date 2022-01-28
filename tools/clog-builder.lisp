@@ -10,11 +10,7 @@
 ;; Per instance app data
 
 (defclass builder-app-data ()
-  ((copy-buf
-    :accessor copy-buf
-    :initform ""
-    :documentation "Copy buffer")
-   (next-panel-id
+  ((next-panel-id
     :accessor next-panel-id
     :initform 0
     :documentation "Next new panel id")
@@ -612,129 +608,24 @@ of controls and double click to select control."
 
 ;; Menu handlers
 
-(defun do-ide-edit-copy (obj)
-  "Copy to clipboard in to app data and browser's host OS"
-  (let ((cw (current-window obj)))
-    (when cw
-      (let ((app (connection-data-item obj "builder-app-data")))
-	(setf (copy-buf app) (js-query obj
-		    (format nil "editor_~A.execCommand('copy');~
-                                 navigator.clipboard.writeText(editor_~A.getCopyText());~
-                                 editor_~A.getCopyText();"
-			    (html-id cw) (html-id cw) (html-id cw))))))))
-
-(defun do-ide-edit-undo (obj)
-  "Undo typing in editor"
-  (let ((cw (current-window obj)))
-    (when cw
-      (do-ide-edit-copy obj)
-      (js-execute obj (format nil "editor_~A.execCommand('undo')"
-			      (html-id cw))))))
-
-(defun do-ide-edit-redo (obj)
-  "Redo typing in editor"
-  (let ((cw (current-window obj)))
-    (when cw
-      (js-execute obj (format nil "editor_~A.execCommand('redo')"
-			      (html-id cw))))))
-
-(defun do-ide-edit-cut (obj)
-  "Cut to clipboard it to app data and browser's host OS"
-  (let ((cw (current-window obj)))
-    (when cw
-      (do-ide-edit-copy obj)
-      (js-execute obj (format nil "editor_~A.execCommand('cut')"
-			      (html-id cw))))))
-
-(defun do-ide-edit-paste (obj)
-  "Paste from browser's host OS clip buffer"
-  (let ((cw (current-window obj)))
-    (when cw
-      ;; Note this methods uses the global clip buffer and not (copy-buf app)
-      ;; on copy and paste we set both the global and local buffer.
-      (js-execute obj (format nil "navigator.clipboard.readText().then(function(text) {~
-                                        editor_~A.execCommand('paste', text)~
-                                     })"
-			      (html-id cw))))))
-
-(defun do-eval (obj &key cname (package "clog-user") custom-boot)
-  "Do lisp eval of editor contents"
-  (let ((cw (current-window obj)))
-    (when cw
-      (let* ((form-string (js-query obj (format nil "editor_~A.getValue()"
-						(html-id (current-window obj)))))
-	     (result      (capture-eval (if cname
-					    (format nil "~A~% (clog:set-on-new-window~
+(defun do-eval (obj form-string cname &key (package "clog-user") custom-boot)
+  "Do lisp test of render"
+  (let* ((result (capture-eval (format nil "~A~% (clog:set-on-new-window~
                                                (lambda (body)~
                                                  ~A
                                                  (create-~A body)) ~A:path \"/test\")~
                                                  (clog:open-browser :url \"http://127.0.0.1:8080/test\")"
-						    form-string
-						    (if custom-boot
-							""
-							"(clog-gui:clog-gui-initialize body)
-                                                         (clog-web:clog-web-initialize body :w3-css-url nil)")
-						    cname
-						    (if custom-boot
-							(format nil ":boot-file \"~A\" " custom-boot)
-							""))
-					    form-string)
-					:eval-in-package package)))
-	(alert-dialog obj result :title "Eval Result")))))
-
-(defun on-show-layout-code (obj &key package cname custom-boot)
-  "Show a lisp editor"
-  (let* ((win         (create-gui-window obj :title  "Layout Code"
-					     :height 400
-					     :width  650
-					     :client-movement t))
-	 (box         (create-panel-box-layout (window-content win)
-					       :left-width 0 :right-width 9
-					       :top-height 30 :bottom-height 0))
-	 (file-name   "")
-	 (center      (center-panel box))
-	 (center-id   (html-id center))
-	 (tool-bar    (top-panel box))
-	 (btn-save    (create-button tool-bar :content "Save"))
-	 (btn-eval    (create-button tool-bar :content "Eval"))
-	 (btn-run     (create-button tool-bar :content "Test")))
-    (setf (background-color tool-bar) :silver)
-    (set-on-click btn-eval (lambda (obj)
-			     (do-eval obj :package package)))
-    (set-on-click btn-run (lambda (obj)
-			     (do-eval obj :package package :cname cname :custom-boot custom-boot)))
-    (set-on-click btn-save (lambda (obj)
-			     (server-file-dialog obj "Save As.." file-name
-						 (lambda (fname)
-						   (window-focus win)
-						   (when fname
-						     (setf (window-title win) fname)
-						     (setf file-name fname)
-						     (write-file (js-query obj (format nil "editor_~A.getValue()"
-										       (html-id win)))
-								 fname)))
-						 :initial-filename file-name)))
-    (set-on-window-size win (lambda (obj)
-			      (js-execute obj
-					  (format nil "editor_~A.resize()" (html-id win)))))
-    (set-on-window-size-done win (lambda (obj)
-				   (js-execute obj
-					       (format nil "editor_~A.resize()" (html-id win)))))
-    (create-child win
-		  (format nil
-			  "<script>
-                            var editor_~A = ace.edit('~A');
-                            editor_~A.setTheme('ace/theme/xcode');
-                            editor_~A.session.setMode('ace/mode/lisp');
-                            editor_~A.session.setTabSize(3);
-                            editor_~A.focus();
-                           </script>"
-			(html-id win) center-id
-			(html-id win)
-			(html-id win)
-			(html-id win)
-			(html-id win)))
-    win))
+				       form-string
+				       (if custom-boot
+					   ""
+					   "(clog-gui:clog-gui-initialize body)
+                                            (clog-web:clog-web-initialize body :w3-css-url nil)")
+				       cname
+				       (if custom-boot
+					   (format nil ":boot-file \"~A\" " custom-boot)
+					   ""))
+			       :eval-in-package package)))
+    (alert-dialog obj result :title "Eval Result")))
 
 (defun on-show-control-properties-win (obj)
   "Show control properties window"
@@ -810,15 +701,12 @@ of controls and double click to select control."
                              <ctrl> place static~%<shift> child to selected"))
 	  (set-on-window-close win (lambda (obj) (setf (control-list-win app) nil)))))))
 
-(defun render-clog-code (content win hide-loc &key custom-boot)
+(defun render-clog-code (content win hide-loc)
   "Render panel to clog code and add tp CW window"
   (let* ((app      (connection-data-item content "builder-app-data"))
 	 (panel-id (html-id content))
 	 (package  (attribute content "data-in-package"))
 	 (cname    (attribute content "data-clog-name"))
-	 (cw       (on-show-layout-code win :cname cname
-					    :package package
-					    :custom-boot custom-boot))
 	 cmembers vars events)
     (maphash (lambda (html-id control)
 	       (place-inside-bottom-of hide-loc
@@ -877,15 +765,11 @@ z.html()"
 			  cname
 			  vars
 			  events)))
-      (js-execute cw (format nil
-			     "editor_~A.setValue('~A');editor_~A.moveCursorTo(0,0);"
-			     (html-id cw)
-			     (escape-string result)
-			     (html-id cw))))
-    (maphash (lambda (html-id control)
-	       (declare (ignore html-id))
-	       (place-after control (get-placer control)))
-	     (get-control-list app panel-id))))
+      (maphash (lambda (html-id control)
+		 (declare (ignore html-id))
+		 (place-after control (get-placer control)))
+	       (get-control-list app panel-id))
+      result)))
 
 (defun save-panel (fname content panel-id hide-loc)
   (let ((app (connection-data-item content "builder-app-data")))
@@ -931,12 +815,14 @@ z.html()"
 	 (tool-bar  (top-panel box))
 	 (btn-del   (create-button tool-bar :content "Del"))
 	 (btn-sim   (create-button tool-bar :content "Simulate"))
+	 (btn-test  (create-button tool-bar :content "Run"))
 	 (btn-rndr  (create-button tool-bar :content "Render"))
 	 (btn-save  (create-button tool-bar :content "Save"))
 	 (btn-load  (create-button tool-bar :content "Load"))
 	 (content   (center-panel box))
 	 (in-simulation nil)
-	 (file-name "")
+	 (file-name        "")
+	 (render-file-name "")
 	 (panel-uid (get-universal-time)) ;; unique id for panel
 	 (panel-id  (html-id content)))
     (setf-next-id content 1)
@@ -1011,9 +897,22 @@ z.html()"
 						     (setf file-name fname)
 						     (save-panel fname content panel-id (bottom-panel box)))
 						   :initial-filename file-name))))
+    (set-on-click btn-test
+		  (lambda (obj)
+		      (do-eval obj (render-clog-code content win (bottom-panel box))
+			(attribute content "data-clog-name")
+			:package (attribute content "data-in-package"))))
     (set-on-click btn-rndr
 		  (lambda (obj)
-		      (render-clog-code content win (bottom-panel box))))
+		    (server-file-dialog obj "Save As.." file-name
+					(lambda (fname)
+					  (window-focus win)
+					  (when fname
+					    (setf (window-title win) fname)
+					    (setf render-file-name fname)
+					    (write-file (render-clog-code content win (bottom-panel box))
+							fname)))
+					:initial-filename render-file-name)))
     (set-on-mouse-down content
 		       (lambda (obj data)
 			 (declare (ignore obj))
@@ -1038,7 +937,8 @@ z.html()"
 						 :top-height 0 :bottom-height 0))
 	 (content       (center-panel box))
 	 (in-simulation nil)
-	 (file-name     "")
+	 (file-name        "")
+	 (render-file-name "")
 	 (panel-id      (html-id content)))
     ;; sync new window with app
     (setf (connection-data-item body "builder-app-data") app)
@@ -1097,6 +997,7 @@ z.html()"
 	   (tool-bar (top-panel pbox))
 	   (btn-del  (create-button tool-bar :content "Del"))
 	   (btn-sim  (create-button tool-bar :content "Simulate"))
+	   (btn-test (create-button tool-bar :content "Run"))
 	   (btn-rndr (create-button tool-bar :content "Render"))
 	   (btn-save (create-button tool-bar :content "Save"))
 	   (btn-load (create-button tool-bar :content "Load"))
@@ -1151,9 +1052,23 @@ z.html()"
 						       (setf file-name fname)
 						       (save-panel fname content panel-id (bottom-panel box)))
 						     :initial-filename file-name))))
+      (set-on-click btn-test
+		    (lambda (obj)
+		      (do-eval obj (render-clog-code content win (bottom-panel box))
+			(attribute content "data-clog-name")
+			:package (attribute content "data-in-package")
+			:custom-boot custom-boot)))
       (set-on-click btn-rndr
 		    (lambda (obj)
-		      (render-clog-code content win (bottom-panel box) :custom-boot custom-boot))))
+		      (server-file-dialog obj "Save As.." file-name
+					  (lambda (fname)
+					    (window-focus win)
+					    (when fname
+					      (setf (window-title win) fname)
+					      (setf render-file-name fname)
+					      (write-file (render-clog-code content win (bottom-panel box))
+							  fname)))
+					  :initial-filename render-file-name))))
     (set-on-mouse-down content
 		       (lambda (obj data)
 			 (declare (ignore obj))
@@ -1244,12 +1159,10 @@ z.html()"
     (setf (connection-data-item body "builder-app-data") app)
     (setf (title (html-document body)) "CLOG Builder")
     (clog-gui-initialize body)
-    (load-script (html-document body) "https://pagecdn.io/lib/ace/1.4.12/ace.js")
     (add-class body "w3-blue-grey")
     (let* ((menu  (create-gui-menu-bar body))
 	   (icon  (create-gui-menu-icon menu :on-click #'on-help-about-builder))
 	   (file  (create-gui-menu-drop-down menu :content "Builder"))
-	   (edit  (create-gui-menu-drop-down menu :content "Edit"))
 	   (tools (create-gui-menu-drop-down menu :content "Tools"))
 	   (win   (create-gui-menu-drop-down menu :content "Window"))
 	   (help  (create-gui-menu-drop-down menu :content "Help")))
@@ -1264,11 +1177,6 @@ z.html()"
       (create-gui-menu-item tools :content "Control Properties" :on-click 'on-show-control-properties-win)
       (create-gui-menu-item tools :content "Control Events"     :on-click 'on-show-control-events-win)
       (create-gui-menu-item tools :content "Control List"       :on-click 'on-show-control-list-win)
-      (create-gui-menu-item edit  :content "Undo"               :on-click #'do-ide-edit-undo)
-      (create-gui-menu-item edit  :content "Redo"               :on-click #'do-ide-edit-redo)
-      (create-gui-menu-item edit  :content "Copy"               :on-click #'do-ide-edit-copy)
-      (create-gui-menu-item edit  :content "Cut"                :on-click #'do-ide-edit-cut)
-      (create-gui-menu-item edit  :content "Paste"              :on-click #'do-ide-edit-paste)
       (create-gui-menu-item win   :content "Maximize All"       :on-click #'maximize-all-windows)
       (create-gui-menu-item win   :content "Normalize All"      :on-click #'normalize-all-windows)
       (create-gui-menu-window-select win)

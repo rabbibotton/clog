@@ -512,14 +512,6 @@
      :create-type    nil
      :events         nil
      :properties     nil)
-   `(:name           "custom"
-     :description    "Custom HTML"
-     :clog-type      clog:clog-element
-     :create         clog:create-child
-     :create-type    :custom-query
-     :create-content "<div></div>"
-     :events         (,@*events-element*)
-     :properties     (,@*props-base*))
    `(:name           "label"
      :description    "Label"
      :clog-type      clog:clog-label
@@ -1220,4 +1212,12 @@
 		       :attr "media")
 		      (:name "type"
 		       :prop "type")
-		      ,@*props-contents*))))
+		      ,@*props-contents*))
+   `(:name           "custom"
+     :description    "Custom HTML"
+     :clog-type      clog:clog-element
+     :create         clog:create-child
+     :create-type    :custom-query
+     :create-content "<div></div>"
+     :events         (,@*events-element*)
+     :properties     (,@*props-base*))))
