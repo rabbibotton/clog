@@ -1,7 +1,3 @@
-Post 1.0
-
-GUI Builder
-
 Post 1.1
 
 Optionaly for local apps allow direct transport of CLOG data to webpage to

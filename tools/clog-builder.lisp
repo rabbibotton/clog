@@ -1255,9 +1255,11 @@ z.html()"
 					  ""))
     (run body)))
 
-(defun clog-builder ()
+(defun clog-builder (&key static-root)
   "Start clog-builder."
-  (initialize nil)
+  (if static-root
+      (initialize nil :static-root static-root)
+      (initialize nil))
   (set-on-new-window 'on-new-builder :path "/builder")
   (set-on-new-window 'on-attach-builder-page :path "/builder-page")
   (open-browser :url "http://127.0.0.1:8080/builder"))

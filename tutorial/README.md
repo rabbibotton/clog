@@ -53,3 +53,4 @@ Tutorial Summary
 - 25-tutorial.lisp - A "local" web app using CLOG WEB
 - 26-tutorial.lisp - A web page and form with CLOG WEB
 - 27-tutorial.lisp - Panel Box Layouts
+- 28-tutorial.lisp - CLOG Builder Hello - A minimalist CLOG Builder project

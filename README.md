@@ -27,7 +27,7 @@ STATUS: CLOG is complete and all work is on higher order additions,
 such as full desktop over the web, database tools,etc. See below for
 some enhacements being worked on. CLOG is actually based on GNOGA, a
 framework I wrote for Ada in 2013 and used in commercial production
-code for the last 8+ years, i.e. the techiniques CLOG uses are solid
+code for the last 9+ years, i.e. the techiniques CLOG uses are solid
 and proven.
 
 CLOG is being actively extended daily. Check the github discussion
@@ -56,8 +56,8 @@ it is tested fairly regulary with SBCL on Linux, Windows and
 Intel MacBook. It should in theory work on any system with
 Quicklisp and CLACK.
 
-CLOG is in Quicklisp (ql:quickload :clog), but you may want to live on the bleeding edge
-and use Ultralisp or clone the github repo into your
+CLOG is in QuickLisp (ql:quickload :clog), but you may want to live on the bleeding edge
+and use UltraLisp or clone the github repo into your
 ~/common-lisp directory (or other quicklisp/asdf findable
 directory):
 
@@ -135,11 +135,11 @@ Work your way through the tutorials. You will see how quick and easy it is
 to be a CLOGer.
 
 
+![Image of clog-builder](https://rabbibotton.github.io/images/clog-builder.png)
 ![Image of demo1](https://rabbibotton.github.io/images/clog-demo1.png)
 ![Image of demo2](https://rabbibotton.github.io/images/clog-demo2.png)
 ![Image of demo3](https://rabbibotton.github.io/images/clog-demo3.png)
 ![Image of clog-db-admin](https://rabbibotton.github.io/images/clog-db-admin.png)
-![Image of clog-builder](https://rabbibotton.github.io/images/clog-builder.png)
 ![Image of clog-web-containers](https://rabbibotton.github.io/images/clog-web-containers.png)
 
 
@@ -195,9 +195,6 @@ Here is a sample CLOG app:
   (open-browser))
 ```
 
-Work in progress:
-(Add an enhancement request if you want to see a specific feature not yet covered.)
-
 Tutorial Summary
 
 - [01-tutorial.lisp](tutorial/01-tutorial.lisp) - Hello World
@@ -227,6 +224,7 @@ Tutorial Summary
 - [25-tutorial.lisp](tutorial/25-tutorial.lisp) - A "local" web app using CLOG WEB
 - [26-tutorial.lisp](tutorial/26-tutorial.lisp) - A web page and form with CLOG WEB
 - [27-tutorial.lisp](tutorial/27-tutorial.lisp) - Panel Box Layouts
+- [28-tutorial/](tutorial/28-tutorial) - CLOG Builder Hello - A minimalist CLOG Builder project
 
 Demo Summary
 
@@ -239,7 +237,7 @@ Demo Summary
 Tool Summary
 
 - clog-db-admin - SQLite3 admin tool
-- clog-builder  - GUI Builder
+- clog-builder  - Rapid visual interactive development for Web and GUIs
 
 Template Summary
 
@@ -265,5 +263,7 @@ High Order Extensions to CLOG
   - Menus
   - Alerts
   - Forms
+
+- clog-panels - Quick application layouts
 
 (See FUTURE.md for future plans)
