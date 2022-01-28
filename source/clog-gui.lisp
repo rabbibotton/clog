@@ -1326,6 +1326,7 @@ is placed in DOM at top of html body instead of bottom of html body."
 (defun input-dialog (obj content on-input &key (modal t)
 					    (title "Input")
 					    (size 20)
+					    (rows 1)
 					    (default-value "")
 					    (left nil) (top nil)
 					    (width 300) (height 200)
@@ -1336,23 +1337,32 @@ Calls on-input with input box contents or nil if canceled."
   (unless html-id
       (setf html-id (clog-connection:generate-id)))
   (let* ((body (connection-data-item obj "clog-body"))
+	 (inp  (if (eql rows 1)
+		   (format nil "<input type='text' id='~A-input' size='~A' value='~A'>"
+			   html-id
+			   size
+			   (escape-string default-value))
+		   (format nil "<textarea id='~A-input' cols='~A' rows='~A'>~A</textarea>"
+			   html-id
+			   size
+			   rows
+			   (escape-string default-value))))
 	 (win  (create-gui-window obj
 				  :title          title
 				  :content        (format nil
 "<div class='w3-panel'>
 <center>~A<br><br>
 <form class='w3-container' onSubmit='return false;'>
-<input type='text' id='~A-input' size='~A' value='~A'><br><br>
+~A<br><br>
 <button class='w3-button w3-black' style='width:7em' id='~A-ok'>OK</button>
 <button class='w3-button w3-black' style='width:7em' id='~A-cancel'>Cancel</button>
 </form>
 </center>
-</div>" content
-        html-id  ; input
-	size
-	(escape-string default-value)
-	html-id  ; ok
-	html-id) ; cancel
+</div>"
+      content
+      inp
+      html-id  ; ok
+      html-id) ; cancel
 				  :top             top
 				  :left            left
 				  :width           width
