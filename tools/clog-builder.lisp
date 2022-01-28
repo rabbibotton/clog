@@ -193,7 +193,7 @@
   (let* ((control-record    (control-info (value (select-tool app))))
 	 (control-type-name (getf control-record :create-type)))
     (if (eq control-type-name :custom-query)
-	(input-dialog win "Enter custom html:"
+	(input-dialog win "Enter html (must have an outer element):"
 		      (lambda (custom-query)
 			(when custom-query
 			  (do-drop-new-control

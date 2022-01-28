@@ -517,7 +517,7 @@
      :clog-type      clog:clog-element
      :create         clog:create-child
      :create-type    :custom-query
-     :create-content "<div><button>test</button></div>"
+     :create-content "<div></div>"
      :events         (,@*events-element*)
      :properties     (,@*props-base*))
    `(:name           "label"
