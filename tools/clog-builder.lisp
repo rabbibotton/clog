@@ -627,7 +627,7 @@ of controls and double click to select control."
                                      })"
 			      (html-id cw))))))
 
-(defun do-eval (obj &key cname (package "clog-user"))
+(defun do-eval (obj &key cname (package "clog-user") custom-boot)
   "Do lisp eval of editor contents"
   (let ((cw (current-window obj)))
     (when cw
@@ -636,19 +636,28 @@ of controls and double click to select control."
 	     (result      (capture-eval (if cname
 					    (format nil "~A~% (clog:set-on-new-window~
                                                (lambda (body)~
-                                                 (clog-gui:clog-gui-initialize body)~
-                                                 (clog-web:clog-web-initialize body :w3-css-url nil)~
-                                                 (create-~A body)) :path \"/test\")~
+                                                 ~A
+                                                 (create-~A body)) ~A:path \"/test\")~
                                                  (clog:open-browser :url \"http://127.0.0.1:8080/test\")"
-						    form-string cname))
+						    form-string
+						    (if custom-boot
+							""
+							"(clog-gui:clog-gui-initialize body)
+                                                         (clog-web:clog-web-initialize body :w3-css-url nil)")
+						    cname
+						    (if custom-boot
+							(format nil ":boot-file \"~A\" " custom-boot)
+							""))
+					    form-string)
 					:eval-in-package package)))
 	(alert-dialog obj result :title "Eval Result")))))
 
-(defun on-show-layout-code (obj &key package cname)
+(defun on-show-layout-code (obj &key package cname custom-boot)
   "Show a lisp editor"
   (let* ((win         (create-gui-window obj :title  "Layout Code"
 					     :height 400
-					     :width  650))
+					     :width  650
+					     :client-movement t))
 	 (box         (create-panel-box-layout (window-content win)
 					       :left-width 0 :right-width 9
 					       :top-height 30 :bottom-height 0))
@@ -663,7 +672,7 @@ of controls and double click to select control."
     (set-on-click btn-eval (lambda (obj)
 			     (do-eval obj :package package)))
     (set-on-click btn-run (lambda (obj)
-			     (do-eval obj :package package :cname cname)))
+			     (do-eval obj :package package :cname cname :custom-boot custom-boot)))
     (set-on-click btn-save (lambda (obj)
 			     (server-file-dialog obj "Save As.." file-name
 						 (lambda (fname)
@@ -706,7 +715,7 @@ of controls and double click to select control."
 						    :left 630
 						    :top 40
 						    :height 510 :width 400
-						    :has-pinner t))
+						    :has-pinner t :client-movement t))
 	       (content      (window-content win))
 	       (control-list (create-table content)))
 	  (setf (control-properties-win app) win)
@@ -724,7 +733,7 @@ of controls and double click to select control."
 						    :left 220
 						    :top 350
 						    :height 200 :width 400
-						    :has-pinner t))
+						    :has-pinner t :client-movement t))
 	       (content      (window-content win))
 	       (control-list (create-table content)))
 	  (setf (control-events-win app) win)
@@ -741,7 +750,8 @@ of controls and double click to select control."
 	(let* ((win          (create-gui-window obj :title "Control Pallete"
 						    :top 40
 						    :left 0
-						    :height 300 :width 200 :has-pinner t))
+						    :height 300 :width 200
+						    :has-pinner t :client-movement t))
 	       (content      (window-content win))
 	       (control-list (create-select content)))
 	  (setf (control-pallete-win app) win)
@@ -762,20 +772,23 @@ of controls and double click to select control."
 	(let* ((win (create-gui-window obj :title "Control List"
 					   :top 350
 					   :left 0
-					   :width 200 :has-pinner t)))
+					   :width 200
+					   :has-pinner t :client-movement t)))
 	  (setf (control-list-win app) win)
 	  (setf (advisory-title (window-content win))
 		(format nil "Drag and drop order~%Double click non-focusable~%~
                              <ctrl> place static~%<shift> child to selected"))
 	  (set-on-window-close win (lambda (obj) (setf (control-list-win app) nil)))))))
 
-(defun render-clog-code (content win hide-loc)
+(defun render-clog-code (content win hide-loc &key custom-boot)
   "Render panel to clog code and add tp CW window"
   (let* ((app      (connection-data-item content "builder-app-data"))
 	 (panel-id (html-id content))
 	 (package  (attribute content "data-in-package"))
 	 (cname    (attribute content "data-clog-name"))
-	 (cw       (on-show-layout-code win :cname cname :package package))
+	 (cw       (on-show-layout-code win :cname cname
+					    :package package
+					    :custom-boot custom-boot))
 	 cmembers vars events)
     (maphash (lambda (html-id control)
 	       (place-inside-bottom-of hide-loc
@@ -979,9 +992,12 @@ z.html()"
 			     (incf-next-id content)))))))
 
 (defun on-attach-builder-custom (body)
-  (on-attach-builder-page body :custom t))
+  "New custom builder page has attached"
+  (let* ((params (form-get-data body))
+	 (curl   (form-data-item params "curl")))
+    (on-attach-builder-page body :custom-boot curl)))
 
-(defun on-attach-builder-page (body &key custom)
+(defun on-attach-builder-page (body &key custom-boot)
   "New builder page has attached"
   (let* ((params        (form-get-data body))
 	 (panel-uid     (form-data-item params "bid"))
@@ -1037,7 +1053,7 @@ z.html()"
 			   (destroy-control-list app panel-id)
 			   (close-window (window body))))
     ;; setup jquery and jquery-ui
-    (cond (custom
+    (cond (custom-boot
 	   (load-css (html-document body) "/css/jquery-ui.css")
 	   (load-script (html-document body) "/js/jquery-ui.js"))
 	  (t	  
@@ -1085,6 +1101,7 @@ z.html()"
 					      (get-control-list app panel-id))
 				     (focus (first-child content))))))
       (set-on-click btn-load (lambda (obj)
+			       (declare (ignore obj))
 			       (server-file-dialog win "Load Panel" file-name
 						   (lambda (fname)
 						     (window-focus win)
@@ -1106,13 +1123,21 @@ z.html()"
 						     :initial-filename file-name))))
       (set-on-click btn-rndr
 		    (lambda (obj)
-		      (render-clog-code content win (bottom-panel box)))))
+		      (render-clog-code content win (bottom-panel box) :custom-boot custom-boot))))
     (set-on-mouse-down content
 		       (lambda (obj data)
 			 (declare (ignore obj))
 			 (unless in-simulation
 			   (when (drop-new-control app content data :win win)
 			     (incf-next-id content)))))))
+
+(defun on-new-builder-basic-page (obj)
+  (set-on-new-window 'on-attach-builder-custom :boot-file "/boot.html" :path "/builder-custom")
+  (on-new-builder-page obj :custom-boot "/boot.html" :url-launch nil))
+
+(defun on-new-builder-bst-page (obj)
+  (set-on-new-window 'on-attach-builder-custom :boot-file "/bootstrap.html" :path "/builder-custom")
+  (on-new-builder-page obj :custom-boot "/bootstrap.html" :url-launch nil))
 
 (defun on-new-builder-launch-page (obj)
   (on-new-builder-page obj :url-launch t))
@@ -1122,21 +1147,24 @@ z.html()"
     (input-dialog obj "Boot File Name:"
 		  (lambda (answer)
 		    (when answer
-		      (setf custom-boot answer))
-		    (set-on-new-window 'on-attach-builder-custom
-				       :boot-file custom-boot :path "/builder-custom"))
-		  :default-value custom-boot :modal t)
-    (on-new-builder-page obj :custom-boot t :url-launch t)))
+		      (setf custom-boot answer)
+		      (set-on-new-window 'on-attach-builder-custom
+					 :boot-file custom-boot :path "/builder-custom")
+		      (on-new-builder-page obj :custom-boot custom-boot :url-launch t)))
+		  :default-value custom-boot :modal t)))
 
 (defun on-new-builder-page (obj &key custom-boot url-launch)
   "Open new page"
   (let* ((app (connection-data-item obj "builder-app-data"))
-	 (win (create-gui-window obj :top 40 :left 220 :width 400))
+	 (win (create-gui-window obj :top 40 :left 220 :width 400 :client-movement t))
 	 (panel-uid  (format nil "~A" (get-universal-time))) ;; unique id for panel
 	 (boot-loc   (if custom-boot
 			 "builder-custom"
 			 "builder-page"))
-	 (link       (format nil "http://127.0.0.1:8080/~A?bid=~A" boot-loc panel-uid))
+	 (curl       (if custom-boot
+			 (format nil "&curl=~A" (quri:url-encode custom-boot))
+			 ""))
+	 (link       (format nil "http://127.0.0.1:8080/~A?bid=~A~A" boot-loc panel-uid curl))
 	 (btn-txt    (if url-launch
 			 "Click to launch default browser or copy URL."
 			 "Click if browser does not open new page shortly."))
@@ -1196,10 +1224,12 @@ z.html()"
 	   (win   (create-gui-menu-drop-down menu :content "Window"))
 	   (help  (create-gui-menu-drop-down menu :content "Help")))
       (declare (ignore icon))
-      (create-gui-menu-item file  :content "New CLOG-GUI Panel"      :on-click 'on-new-builder-panel)
-      (create-gui-menu-item file  :content "New CLOG-WEB Page"       :on-click 'on-new-builder-page)
-      (create-gui-menu-item file  :content "New CLOG-WEB URL Launch" :on-click 'on-new-builder-launch-page)
-      (create-gui-menu-item file  :content "New CLOG Custom Boot"    :on-click 'on-new-builder-custom)
+      (create-gui-menu-item file  :content "New CLOG-GUI Panel"        :on-click 'on-new-builder-panel)
+      (create-gui-menu-item file  :content "New CLOG-WEB Page"         :on-click 'on-new-builder-page)
+      (create-gui-menu-item file  :content "New Basic HTML Page"       :on-click 'on-new-builder-basic-page)
+      (create-gui-menu-item file  :content "New Bootstrap Page"        :on-click 'on-new-builder-bst-page)
+      (create-gui-menu-item file  :content "New CLOG-WEB Delay Launch" :on-click 'on-new-builder-launch-page)
+      (create-gui-menu-item file  :content "New Custom Boot Page"      :on-click 'on-new-builder-custom)
       (create-gui-menu-item tools :content "Control Pallete"    :on-click 'on-show-control-pallete-win)
       (create-gui-menu-item tools :content "Control Properties" :on-click 'on-show-control-properties-win)
       (create-gui-menu-item tools :content "Control Events"     :on-click 'on-show-control-events-win)
