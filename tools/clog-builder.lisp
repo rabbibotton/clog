@@ -26,22 +26,22 @@
     :accessor select-tool
     :initform nil
     :documentation "Select tool")
-   (control-lists
-    :accessor control-lists
-    :initform (make-hash-table :test #'equalp)
-    :documentation "Panel to Control List hash table")
    (properties-list
     :accessor properties-list
     :initform nil
     :documentation "Property list in properties window")
-   (control-properties-win
-    :accessor control-properties-win
-    :initform nil
-    :documentation "Current control properties window")
    (events-list
     :accessor events-list
     :initform nil
     :documentation "Property list in events window")
+   (properties-lock
+    :accessor properties-lock
+    :initform (bordeaux-threads:make-lock)
+    :documentation "Sync properties and event list")
+   (control-properties-win
+    :accessor control-properties-win
+    :initform nil
+    :documentation "Current control properties window")
    (control-events-win
     :accessor control-events-win
     :initform nil
@@ -53,18 +53,29 @@
    (control-pallete-win
     :accessor control-pallete-win
     :initform nil
-    :documentation "Current control pallete window")))
+    :documentation "Current control pallete window")
+   (control-lists
+    :accessor control-lists
+    :initform (make-hash-table :test #'equalp)
+    :documentation "Panel to Control List hash table")
+   (control-lists-lock
+    :accessor control-lists-lock
+    :initform (bordeaux-threads:make-lock)
+    :documentation "Protect the control list")))
 
 ;; Cross page syncing
 
-(defparameter *app-sync-hash* (make-hash-table :test #'equal)
+(defvar *app-sync-hash* (make-hash-table :test #'equal)
   "Exchange app instance with new external pages")
+(defvar *app-sync-lock* (bordeaux-threads:make-lock)
+  "Protect app-sync hash tables")
 
 ;; Control-List utilities
 
 (defun init-control-list (app panel-id)
   "Initialize new control list for PANEL-ID on instance of APP."
-  (setf (gethash panel-id (control-lists app)) (make-hash-table :test #'equalp)))
+  (bordeaux-threads:with-lock-held ((control-lists-lock app))
+    (setf (gethash panel-id (control-lists app)) (make-hash-table :test #'equalp))))
 
 (defun destroy-control-list (app panel-id)
   "Destroy the control-list on PANEL-ID"
@@ -76,8 +87,9 @@
 
 (defun add-to-control-list (app panel-id control)
   "Add a CONTROL on to control-list on PANEL-ID"
-  (let ((html-id (format nil "~A" (html-id control))))
-    (setf (gethash html-id (get-control-list app panel-id)) control)))
+  (bordeaux-threads:with-lock-held ((control-lists-lock app))
+    (let ((html-id (format nil "~A" (html-id control))))
+      (setf (gethash html-id (get-control-list app panel-id)) control))))
 
 (defun get-from-control-list (app panel-id html-id)
   "Get control identified my HTML-ID from control-list on PANEL-ID"
@@ -85,7 +97,8 @@
 
 (defun remove-from-control-list (app panel-id html-id)
   "Remove a control identified by HTML-ID from control-list on PANEL-ID"
-  (remhash html-id (get-control-list app panel-id)))
+  (bordeaux-threads:with-lock-held ((control-lists-lock app))
+    (remhash html-id (get-control-list app panel-id))))
 
 (defun remove-deleted-from-control-list (app panel-id)
   "Remove any deleted control from control-list"
@@ -450,96 +463,97 @@ not a temporary attached one when using select-control."
 (defun on-populate-control-properties-win (obj &key win)
   "Populate the control properties for the current control"
   ;; obj if current-control is nil must be content
-  (on-populate-control-events-win obj)
-  (let* ((app      (connection-data-item obj "builder-app-data"))
-	 (prop-win (control-properties-win app))
-	 (control  (if (current-control app)
-		       (current-control app)
-		       obj))
-	 (placer   (when control
-		     (get-placer control)))
-	 (table    (properties-list app)))
-    (when prop-win
-      (setf (inner-html table) "")
-      (let ((info  (control-info (attribute control "data-clog-type")))
-	    props)
-	(dolist (prop (reverse (getf info :properties)))
-	  (cond ((eq (third prop) :style)
-		 (push `(,(getf prop :name) ,(style control (getf prop :style)) ,(getf prop :setup)
-			 ,(lambda (obj)
-			    (setf (style control (getf prop :style)) (text obj))))
-		       props))
-		((or (eq (third prop) :get)
-		     (eq (third prop) :set)
-		     (eq (third prop) :setup))
-		 (push `(,(getf prop :name) ,(when (getf prop :get)
-					       (funcall (getf prop :get) control))
-			 ,(getf prop :setup)
-			 ,(lambda (obj)
-			    (when (getf prop :set)
-			      (funcall (getf prop :set) control obj))))
-		       props))
-		((eq (third prop) :setf)
-		 (push `(,(getf prop :name) ,(funcall (getf prop :setf) control) ,(getf prop :setup)
-			 ,(lambda (obj)
-			    (funcall (find-symbol (format nil "SET-~A" (getf prop :setf)) :clog) control (text obj))))
-		       props))
-		((eq (third prop) :prop)
-		 (push `(,(getf prop :name) ,(property control (getf prop :prop)) ,(getf prop :setup)
-			 ,(lambda (obj)
-			    (setf (property control (getf prop :prop)) (text obj))))
-		       props))
-		((eq (third prop) :attr)
-		 (push `(,(getf prop :name) ,(attribute control (getf prop :attr)) ,(getf prop :setup)
-			 ,(lambda (obj)
-			    (setf (attribute control (getf prop :attr)) (text obj))))
-		       props))
-		(t (print "Configuration error."))))
-	(when (current-control app)
+  (let ((app      (connection-data-item obj "builder-app-data")))
+    (bordeaux-threads:with-lock-held ((properties-lock app))
+      (on-populate-control-events-win obj)
+      (let* ((prop-win (control-properties-win app))
+	     (control  (if (current-control app)
+			   (current-control app)
+			   obj))
+	     (placer   (when control
+			 (get-placer control)))
+	     (table    (properties-list app)))
+	(when prop-win
+	  (setf (inner-html table) "")
+	  (let ((info  (control-info (attribute control "data-clog-type")))
+		props)
+	    (dolist (prop (reverse (getf info :properties)))
+	      (cond ((eq (third prop) :style)
+		     (push `(,(getf prop :name) ,(style control (getf prop :style)) ,(getf prop :setup)
+			     ,(lambda (obj)
+				(setf (style control (getf prop :style)) (text obj))))
+			   props))
+		    ((or (eq (third prop) :get)
+			 (eq (third prop) :set)
+			 (eq (third prop) :setup))
+		     (push `(,(getf prop :name) ,(when (getf prop :get)
+						   (funcall (getf prop :get) control))
+			     ,(getf prop :setup)
+			     ,(lambda (obj)
+				(when (getf prop :set)
+				  (funcall (getf prop :set) control obj))))
+			   props))
+		    ((eq (third prop) :setf)
+		     (push `(,(getf prop :name) ,(funcall (getf prop :setf) control) ,(getf prop :setup)
+			     ,(lambda (obj)
+				(funcall (find-symbol (format nil "SET-~A" (getf prop :setf)) :clog) control (text obj))))
+			   props))
+		    ((eq (third prop) :prop)
+		     (push `(,(getf prop :name) ,(property control (getf prop :prop)) ,(getf prop :setup)
+			     ,(lambda (obj)
+				(setf (property control (getf prop :prop)) (text obj))))
+			   props))
+		    ((eq (third prop) :attr)
+		     (push `(,(getf prop :name) ,(attribute control (getf prop :attr)) ,(getf prop :setup)
+			     ,(lambda (obj)
+				(setf (attribute control (getf prop :attr)) (text obj))))
+			   props))
+		    (t (print "Configuration error."))))
+	    (when (current-control app)
+	      (push
+	       `("parent"  ,(attribute (parent-element control) "data-clog-name")
+			   nil
+			   ,(lambda (obj)
+			      (place-inside-bottom-of
+			       (attach-as-child control
+						(clog::js-query
+						 control
+						 (format nil "$(\"[data-clog-name='~A']\").attr('id')"
+							 (text obj))))
+			       control)
+			      (place-after control placer)))
+	       props))
 	    (push
-	     `("parent"  ,(attribute (parent-element control) "data-clog-name")
+	     `("name"    ,(attribute control "data-clog-name")
 			 nil
 			 ,(lambda (obj)
-			    (place-inside-bottom-of
-			     (attach-as-child control
-					      (clog::js-query
-					       control
-					       (format nil "$(\"[data-clog-name='~A']\").attr('id')"
-						       (text obj))))
-			     control)
-			    (place-after control placer)))
-	     props))
-	(push
-	 `("name"    ,(attribute control "data-clog-name")
-		      nil
-		      ,(lambda (obj)
-			 (setf (attribute control "data-clog-name") (text obj))
-			 (when (equal (getf info :name) "clog-data")
-			   (setf (window-title win) (text obj)))))
-	 props)
-	(dolist (item props)
-	  (let* ((tr  (create-table-row table))
-		 (td1 (create-table-column tr :content (first item)))
-		 (td2 (if (second item)
-			  (create-table-column tr :content (second item))
-			  (create-table-column tr))))
-	    (setf (width td1) "30%")
-	    (setf (width td2) "70%")
-	    (setf (spellcheckp td2) nil)
-	    (set-border td1 "1px" :dotted :black)
-	    (cond ((third item)
-		   (unless (eq (third item) :read-only)
-		     (setf (editablep td2) (funcall (third item) control td1 td2))))
-		  (t
-		   (setf (editablep td2) t)))
-	    (set-on-blur td2
-			 (lambda (obj)
-			   (funcall (fourth item) obj)
-			   (when placer
-			     (set-geometry placer :top (position-top control)
-						  :left (position-left control)
-						  :width (client-width control)
-						  :height (client-height control)))))))))))
+			    (setf (attribute control "data-clog-name") (text obj))
+			    (when (equal (getf info :name) "clog-data")
+			      (setf (window-title win) (text obj)))))
+	     props)
+	    (dolist (item props)
+	      (let* ((tr  (create-table-row table))
+		     (td1 (create-table-column tr :content (first item)))
+		     (td2 (if (second item)
+			      (create-table-column tr :content (second item))
+			      (create-table-column tr))))
+		(setf (width td1) "30%")
+		(setf (width td2) "70%")
+		(setf (spellcheckp td2) nil)
+		(set-border td1 "1px" :dotted :black)
+		(cond ((third item)
+		       (unless (eq (third item) :read-only)
+			 (setf (editablep td2) (funcall (third item) control td1 td2))))
+		      (t
+		       (setf (editablep td2) t)))
+		(set-on-blur td2
+			     (lambda (obj)
+			       (funcall (fourth item) obj)
+			       (when placer
+				 (set-geometry placer :top (position-top control)
+						      :left (position-left control)
+						      :width (client-width control)
+						      :height (client-height control)))))))))))))
 
 (defun on-populate-loaded-window (content &key win)
   "Setup html imported in to CONTENT for use with Builder"
@@ -988,10 +1002,12 @@ of controls and double click to select control."
 	 (panel-id      (html-id content)))
     ;; sync new window with app
     (setf (connection-data-item body "builder-app-data") app)
-    (remhash panel-uid *app-sync-hash*)
+    (bordeaux-threads:with-lock-held (*app-sync-lock*)
+      (remhash panel-uid *app-sync-hash*))
     (funcall (gethash (format nil "~A-link" panel-uid) *app-sync-hash*) content)
     (setf win (gethash (format nil "~A-win" panel-uid) *app-sync-hash*))
-    (remhash (format nil "~A-win" panel-uid) *app-sync-hash*)
+    (bordeaux-threads:with-lock-held (*app-sync-lock*)
+      (remhash (format nil "~A-win" panel-uid) *app-sync-hash*))
 
     ;; setup window and page
     (setf-next-id content 1)
@@ -1195,14 +1211,18 @@ of controls and double click to select control."
 	 (txt-link   (create-div txt-area
 				 :content (format nil "<br><center>~A</center>" link)))
 	 content panel-id)
-    (setf (gethash panel-uid *app-sync-hash*) app)
-    (setf (gethash (format nil "~A-win" panel-uid) *app-sync-hash*) win)
-    (setf (gethash (format nil "~A-link" panel-uid) *app-sync-hash*)
-	  (lambda (obj)
-	    (setf content obj)
-	    (setf panel-id (html-id content))
-	    (destroy txt-area)
-	    (remhash (format nil "~A-link" panel-uid) *app-sync-hash*)))
+    (bordeaux-threads:with-lock-held (*app-sync-lock*)
+      (setf (gethash panel-uid *app-sync-hash*) app))
+    (bordeaux-threads:with-lock-held (*app-sync-lock*)
+      (setf (gethash (format nil "~A-win" panel-uid) *app-sync-hash*) win))
+    (bordeaux-threads:with-lock-held (*app-sync-lock*)
+      (setf (gethash (format nil "~A-link" panel-uid) *app-sync-hash*)
+	    (lambda (obj)
+	      (setf content obj)
+	      (setf panel-id (html-id content))
+	      (destroy txt-area)
+	      (bordeaux-threads:with-lock-held (*app-sync-lock*)
+		(remhash (format nil "~A-link" panel-uid) *app-sync-hash*)))))
     (unless url-launch
       (open-browser :url link))))
 
