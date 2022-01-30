@@ -83,6 +83,14 @@
   "Remove a control identified by HTML-ID from control-list on PANEL-ID"
   (remhash html-id (get-control-list app panel-id)))
 
+(defun remove-deleted-from-control-list (app panel-id)
+  "Remove any deleted control from control-list"
+  (maphash (lambda (html-id control)
+	     (when (equalp (clog:js-query control (format nil "$.contains(document.documentElement, ~A)"
+							  (clog::script-id control))) "false")
+	       (remove-from-control-list app panel-id html-id)))
+	   (get-control-list app panel-id)))
+
 ;; Handle per content next-id counts
 
 (defun next-id (content)
@@ -312,7 +320,8 @@ access to it and allows manipulation of location, size etc of the control."
   (remove-from-control-list app panel-id html-id)
   (destroy (get-placer (current-control app)))
   (destroy (current-control app))
-  (setf (current-control app) nil))
+  (setf (current-control app) nil)
+  (remove-deleted-from-control-list app panel-id))
 
 (defun select-control (control)
   "Select CONTROL as the current control and highlight its placer.
@@ -717,12 +726,12 @@ of controls and double click to select control."
 		 (unless (and (>= (length vname) 5)
 			      (equalp (subseq vname 0 5) "none-"))
 		   (push (format nil
-				 "\(~A :reader ~A\)"
+				 "    \(~A :reader ~A\)~%"
 				 vname
 				 vname)
 			 cmembers)
 		   (push (format nil
-				 "\(setf (slot-value panel '~A\) ~
+				 "    \(setf (slot-value panel '~A\) ~
                                     \(attach-as-child clog-obj \"~A\" :clog-type \'~A\ :new-id t)\)~%"
 				 vname
 				 html-id
@@ -748,9 +757,7 @@ of controls and double click to select control."
   \(~{~A~}\)\)
 \(defun create-~A \(clog-obj\)
   \(let \(\(panel \(change-class \(clog:create-div clog-obj :content \"~A\"\) \'~A\)\)\)
-~{~A~}
-~{~A~}
-    panel\)\)"
+~{~A~}~{~A~}    panel\)\)"
 			  (string-upcase package)
 			  cname     ;;defclass
 			  cmembers
@@ -910,7 +917,6 @@ z.html()"
 					(lambda (fname)
 					  (window-focus win)
 					  (when fname
-					    (setf (window-title win) fname)
 					    (setf render-file-name fname)
 					    (write-file (render-clog-code content win (bottom-panel box))
 							fname)))
@@ -1066,7 +1072,6 @@ z.html()"
 					  (lambda (fname)
 					    (window-focus win)
 					    (when fname
-					      (setf (window-title win) fname)
 					      (setf render-file-name fname)
 					      (write-file (render-clog-code content win (bottom-panel box))
 							  fname)))
