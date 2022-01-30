@@ -10,7 +10,11 @@
 ;; Per instance app data
 
 (defclass builder-app-data ()
-  ((next-panel-id
+  ((copy-buf
+    :accessor copy-buf
+    :initform ""
+    :documentation "Copy buffer")
+   (next-panel-id
     :accessor next-panel-id
     :initform 0
     :documentation "Next new panel id")
@@ -161,6 +165,13 @@
 				   (funcall (getf control-record :create) parent
 					    custom-query
 					    :html-id uid))
+				  ((eq create-type :paste)
+				   (let ((c (funcall (getf control-record :create) parent
+						     custom-query
+						     :html-id uid)))
+				     (setf control-type-name (attribute c "data-clog-type"))
+				     (change-class c (getf (control-info control-type-name) :clog-type))
+				     c))
 				  ((eq create-type :element)
 				   (funcall (getf control-record :create) parent
 					    :html-id uid
@@ -823,16 +834,17 @@ z.html()"
 				       :top-height 30 :bottom-height 0))
 	 (tool-bar  (top-panel box))
 	 (btn-del   (create-button tool-bar :content "Del"))
-	 (btn-sim   (create-button tool-bar :content "Simulate"))
+	 (btn-copy  (create-button tool-bar :content "Copy"))
+	 (btn-paste (create-button tool-bar :content "Paste"))
+	 (btn-sim   (create-button tool-bar :content "Sim"))
 	 (btn-test  (create-button tool-bar :content "Run"))
-	 (btn-rndr  (create-button tool-bar :content "Render"))
+	 (btn-rndr  (create-button tool-bar :content "Rndr"))
 	 (btn-save  (create-button tool-bar :content "Save"))
 	 (btn-load  (create-button tool-bar :content "Load"))
 	 (content   (center-panel box))
 	 (in-simulation nil)
 	 (file-name        "")
 	 (render-file-name "")
-	 (panel-uid (get-universal-time)) ;; unique id for panel
 	 (panel-id  (html-id content)))
     (setf-next-id content 1)
     (setf (overflow content) :auto)
@@ -862,6 +874,30 @@ z.html()"
 			   (on-populate-control-properties-win content :win win)
 			   (on-populate-control-list-win content)))
     ;; setup tool bar events
+    (set-on-click btn-copy (lambda (obj)
+			     (declare (ignore obj))
+			     (when (current-control app)
+			       (setf (copy-buf app)
+				     (js-query content
+					       (format nil
+						       "var z=~a.clone(); z=$('<div />').append(z);~
+z.find('*').each(function(){if($(this).attr('id').substring(0,5)=='CLOGB'){$(this).removeAttr('id')}});~
+z.html()"
+						       (clog::jquery (current-control app))))))))
+    (set-on-click btn-paste (lambda (obj)
+			      (declare (ignore obj))
+			      (unless (eq (copy-buf app) "")
+				(let ((control (create-control content content
+							       `(:name "custom"
+								 :clog-type      clog:clog-element
+								 :create         clog:create-child
+								 :create-type    :paste)
+							       (format nil "CLOGB~A" (get-universal-time))
+							       :custom-query (copy-buf app))))
+				  (setup-control content control :win win)
+				  (select-control control)
+				  (add-sub-controls control content :win win)
+				  (on-populate-control-list-win content)))))
     (set-on-click btn-del (lambda (obj)
 			    (declare (ignore obj))
 			    (when (current-control app)
@@ -1003,17 +1039,43 @@ z.html()"
 					 :left-width 0 :right-width 0
 					 :top-height 30 :bottom-height 0))
 	   (tool-bar (top-panel pbox))
-	   (btn-del  (create-button tool-bar :content "Del"))
-	   (btn-sim  (create-button tool-bar :content "Simulate"))
-	   (btn-test (create-button tool-bar :content "Run"))
-	   (btn-rndr (create-button tool-bar :content "Render"))
-	   (btn-save (create-button tool-bar :content "Save"))
-	   (btn-load (create-button tool-bar :content "Load"))
+	   (btn-del   (create-button tool-bar :content "Del"))
+	   (btn-copy  (create-button tool-bar :content "Copy"))
+	   (btn-paste (create-button tool-bar :content "Paste"))
+	   (btn-sim   (create-button tool-bar :content "Sim"))
+	   (btn-test  (create-button tool-bar :content "Run"))
+	   (btn-rndr  (create-button tool-bar :content "Rndr"))
+	   (btn-save  (create-button tool-bar :content "Save"))
+	   (btn-load  (create-button tool-bar :content "Load"))
 	   (wcontent  (center-panel pbox)))
       (create-div wcontent :content
 		  "<br><center>Drop and work with controls on it's window.</center>")
       (setf (background-color tool-bar) :silver)
       ;; setup tool bar events
+      (set-on-click btn-copy (lambda (obj)
+			       (declare (ignore obj))
+			       (when (current-control app)
+				 (setf (copy-buf app)
+				       (js-query content
+						 (format nil
+							 "var z=~a.clone(); z=$('<div />').append(z);~
+z.find('*').each(function(){if($(this).attr('id').substring(0,5)=='CLOGB'){$(this).removeAttr('id')}});~
+z.html()"
+							 (clog::jquery (current-control app))))))))
+      (set-on-click btn-paste (lambda (obj)
+				(declare (ignore obj))
+				(unless (eq (copy-buf app) "")
+				  (let ((control (create-control content content
+								 `(:name "custom"
+								   :clog-type      clog:clog-element
+								   :create         clog:create-child
+								   :create-type    :paste)
+								 (format nil "CLOGB~A" (get-universal-time))
+								 :custom-query (copy-buf app))))
+				    (setup-control content control :win win)
+				    (select-control control)
+				    (add-sub-controls control content :win win)
+				    (on-populate-control-list-win content)))))
       (set-on-click btn-del (lambda (obj)
 			      (declare (ignore obj))
 			      (when (current-control app)
