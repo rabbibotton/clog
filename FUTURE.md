@@ -1,6 +1,34 @@
-Post 1.1
+Future additions (if interested in doing any let me know):
 
-Optionaly for local apps allow direct transport of CLOG data to webpage to
+- Multi control select and alignments in Builder
+
+- Right click menus CLOG-GUI
+
+- Handle windows beyond browser edge CLOG-GUI
+
+- Project scaffolding generator
+    1) Basic builder project
+    2) CLOG-GUI builder project
+    3) Builder website
+    4) Database oriented projects
+
+- Improvement to CLOG-GUI menus to enable/disable or switch menus based on current window/panel
+
+- Menu builder for Builder
+
+- Release tool to handle creating platfom executables, templates for Apache and other webservers
+
+- Train and documnetation tool
+
+- Event queuing when desired to avoid event race conditions
+
+- Implement using long polling to optimize CLOG sites for use with
+  search engines. If not long polling at least initial output sent by
+  initial html request until first query.
+
+- Optimize communication with browser
+
+- Optionaly for local apps allow direct transport of CLOG data to webpage to
 remove need for websocket transport.
 
 Some notes
