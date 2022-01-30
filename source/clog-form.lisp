@@ -1018,6 +1018,18 @@ optionally fill in with contents of data-list."))
   (dolist (value content)
     (add-select-option obj value value)))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;
+;; add-select-optgroup ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric add-select-optgroup (clog-select content)
+  (:documentation "Add option VALUE to select."))
+
+(defmethod add-select-optgroup ((obj clog-select) content)
+  (create-child obj (format nil "<optgroup label='~A'/>"
+			    (escape-string content))
+		:clog-type 'clog-element :auto-place t))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Implementation - clog-option
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

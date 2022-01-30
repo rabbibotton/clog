@@ -506,8 +506,39 @@
 
 (defparameter *supported-controls*
   (list
+   '(:name           "group"
+     :description    "tools"
+     :create         nil
+     :create-type    nil
+     :events         nil
+     :properties     nil)
    '(:name           "select"
      :description    "Selection Tool"
+     :create         nil
+     :create-type    nil
+     :events         nil
+     :properties     nil)
+   `(:name           "custom"
+     :description    "Custom HTML"
+     :clog-type      clog:clog-element
+     :create         clog:create-child
+     :create-type    :custom-query
+     :create-content "<div></div>"
+     :events         (,@*events-element*)
+     :properties     (,@*props-base*))
+   `(:name           "style-block"
+     :description    "Style Block"
+     :clog-type      clog:clog-style-block
+     :create         clog:create-style-block
+     :create-type    :base
+     :events         (,@*events-element*)
+     :properties     ((:name "media"
+		       :attr "media")
+		      (:name "type"
+		       :prop "type")
+		      ,@*props-contents*))
+   '(:name           "group"
+     :description    "basic html"
      :create         nil
      :create-type    nil
      :events         nil
@@ -680,6 +711,30 @@
 		      (:name "maximum"
 		       :prop "max")
 		      ,@*props-base*))
+   `(:name           "dialog"
+     :description    "Dialog"
+     :clog-type      clog:clog-dialog
+     :create         clog:create-dialog
+     :create-type    :element
+     :create-content ""
+     :events         (,@*events-element*)
+     :properties     ((:name "open"
+		       :get  ,(lambda (control)
+				(property control "open"))
+		       :set  ,(lambda (control obj)
+				(if (or (equalp (text obj) "true") (equalp (text obj) "open"))
+				    (setf (attribute control "open") t)
+				    (remove-attribute control "open"))
+				(property control "open")))
+		      (:name "return value"
+		       :prop "returnValue")
+		      ,@*props-element*))
+   '(:name           "group"
+     :description    "forms"
+     :create         nil
+     :create-type    nil
+     :events         nil
+     :properties     nil)
    `(:name           "form"
      :description    "Form"
      :clog-type      clog:clog-form
@@ -925,6 +980,55 @@
      :create-type    :base
      :events         (,@*events-element*)
      :properties     (,@*props-base*))
+   '(:name           "group"
+     :description    "text display"
+     :create         nil
+     :create-type    nil
+     :events         nil
+     :properties     nil)
+   `(:name           "span"
+     :description    "Span"
+     :clog-type      clog:clog-span
+     :create         clog:create-span
+     :create-type    :element
+     :create-content "span"
+     :events         (,@*events-element*)
+     :properties     (,@*props-contents*
+		      ,@*props-element*))
+   `(:name           "link"
+     :description    "Link"
+     :clog-type      clog:clog-a
+     :create         clog:create-a
+     :create-type    :element
+     :create-content "HTML Link"
+     :events         (,@*events-element*)
+     :properties     ((:name "href link"
+		       :prop "href")
+		      (:name "target"
+		       :prop "target")
+		      ,@*props-element*))
+   `(:name           "hr"
+     :description    "Horizontal Rule"
+     :clog-type      clog:clog-hr
+     :create         clog:create-hr
+     :create-type    :base
+     :events         (,@*events-element*)
+     :properties     (,@*props-base*))
+   `(:name           "br"
+     :description    "Line Break"
+     :clog-type      clog:clog-br
+     :create         clog:create-br
+     :create-type    :base
+     :events         (,@*events-element*)
+     :properties     (,@*props-base*))
+   `(:name           "p"
+     :description    "Paragraph"
+     :clog-type      clog:clog-p
+     :create         clog:create-p
+     :create-content "Paragraph"
+     :create-type    :element
+     :events         (,@*events-element*)
+     :properties     (,@*props-element*))
    `(:name           "ol"
      :description    "Ordered List"
      :clog-type      clog:clog-ordered-list
@@ -1092,6 +1196,12 @@
      :create-type    :element
      :events         (,@*events-element*)
      :properties     (,@*props-element*))
+   '(:name           "group"
+     :description    "multi-media"
+     :create         nil
+     :create-type    nil
+     :events         nil
+     :properties     nil)
    `(:name           "audio"
      :description    "Audio Player"
      :clog-type      clog:clog-audio
@@ -1134,90 +1244,16 @@
 		      (:name "loop"
 		       :prop "loop")
 		      ,@*props-base*))
+   '(:name           "group"
+     :description    "graphics"
+     :create         nil
+     :create-type    nil
+     :events         nil
+     :properties     nil)
    `(:name           "canvas"
      :description    "Canvas"
      :clog-type      clog:clog-canvas
      :create         clog:create-canvas
      :create-type    :base
-     :events         (,@*events-element*)
-     :properties     (,@*props-base*))
-   `(:name           "dialog"
-     :description    "Dialog"
-     :clog-type      clog:clog-dialog
-     :create         clog:create-dialog
-     :create-type    :element
-     :create-content ""
-     :events         (,@*events-element*)
-     :properties     ((:name "open"
-		       :get  ,(lambda (control)
-				(property control "open"))
-		       :set  ,(lambda (control obj)
-				(if (or (equalp (text obj) "true") (equalp (text obj) "open"))
-				    (setf (attribute control "open") t)
-				    (remove-attribute control "open"))
-				(property control "open")))
-		      (:name "return value"
-		       :prop "returnValue")
-		      ,@*props-element*))
-   `(:name           "span"
-     :description    "Span"
-     :clog-type      clog:clog-span
-     :create         clog:create-span
-     :create-type    :element
-     :create-content "span"
-     :events         (,@*events-element*)
-     :properties     (,@*props-contents*
-		      ,@*props-element*))
-   `(:name           "link"
-     :description    "Link"
-     :clog-type      clog:clog-a
-     :create         clog:create-a
-     :create-type    :element
-     :create-content "HTML Link"
-     :events         (,@*events-element*)
-     :properties     ((:name "href link"
-		       :prop "href")
-		      (:name "target"
-		       :prop "target")
-		      ,@*props-element*))
-   `(:name           "hr"
-     :description    "Horizontal Rule"
-     :clog-type      clog:clog-hr
-     :create         clog:create-hr
-     :create-type    :base
-     :events         (,@*events-element*)
-     :properties     (,@*props-base*))
-   `(:name           "br"
-     :description    "Line Break"
-     :clog-type      clog:clog-br
-     :create         clog:create-br
-     :create-type    :base
-     :events         (,@*events-element*)
-     :properties     (,@*props-base*))
-   `(:name           "p"
-     :description    "Paragraph"
-     :clog-type      clog:clog-p
-     :create         clog:create-p
-     :create-content "Paragraph"
-     :create-type    :element
-     :events         (,@*events-element*)
-     :properties     (,@*props-element*))
-   `(:name           "style-block"
-     :description    "Style Block"
-     :clog-type      clog:clog-style-block
-     :create         clog:create-style-block
-     :create-type    :base
-     :events         (,@*events-element*)
-     :properties     ((:name "media"
-		       :attr "media")
-		      (:name "type"
-		       :prop "type")
-		      ,@*props-contents*))
-   `(:name           "custom"
-     :description    "Custom HTML"
-     :clog-type      clog:clog-element
-     :create         clog:create-child
-     :create-type    :custom-query
-     :create-content "<div></div>"
      :events         (,@*events-element*)
      :properties     (,@*props-base*))))

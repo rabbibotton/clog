@@ -683,7 +683,9 @@ of controls and double click to select control."
 	  (setf (advisory-title control-list) (format nil "<ctrl> place static~%<shift> child to selected"))
 	  (setf (select-tool app) control-list)
 	  (dolist (control *supported-controls*)
-	    (add-select-option control-list (getf control :name) (getf control :description)))))))
+	    (if (equal (getf control :name) "group")
+		(add-select-optgroup control-list (getf control :description))
+		(add-select-option control-list (getf control :name) (getf control :description))))))))
 
 (defun on-show-control-list-win (obj)
   "Show control list for selecting and manipulating controls by name"

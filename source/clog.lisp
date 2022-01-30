@@ -580,15 +580,16 @@ embedded in a native template application.)"
   (label-for    generic-function)
 
   "CLOG-Select - Class for CLOG Selects"
-  (clog-select        class)
-  (create-select      generic-function)
-  (clog-option        class)
-  (create-option      generic-function)
-  (clog-optgroup      class)
-  (create-optgroup    generic-function)
-  (selectedp          generic-function)
-  (add-select-option  generic-function)
-  (add-select-options generic-function)
+  (clog-select         class)
+  (create-select       generic-function)
+  (clog-option         class)
+  (create-option       generic-function)
+  (clog-optgroup       class)
+  (create-optgroup     generic-function)
+  (selectedp           generic-function)
+  (add-select-option   generic-function)
+  (add-select-options  generic-function)
+  (add-select-optgroup generic-function)
 
   "CLOG-Data-List - Class for CLOG Option Data Lists"
   (clog-data-list   class)
