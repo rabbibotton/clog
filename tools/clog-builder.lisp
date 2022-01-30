@@ -12,7 +12,7 @@
 (defclass builder-app-data ()
   ((copy-buf
     :accessor copy-buf
-    :initform ""
+    :initform nil
     :documentation "Copy buffer")
    (next-panel-id
     :accessor next-panel-id
@@ -777,9 +777,9 @@ of controls and double click to select control."
 			   (ppcre:regex-replace-all "\\x22"
 						    (js-query content
 							      (format nil
-"var z=~a.clone();~
-z.find('*').each(function(){for(n in $(this).get(0).dataset){delete $(this).get(0).dataset[n]}});~
-z.html()"
+								      "var z=~a.clone();~
+    z.find('*').each(function(){for(n in $(this).get(0).dataset){delete $(this).get(0).dataset[n]}});~
+    z.html()"
 								      (clog::jquery content)))
 						    "\\\\\\\""))
 			  cname
@@ -812,8 +812,9 @@ z.html()"
       (write-file (js-query content
 			    (format nil
 				    "var z=~a.clone();~
-z.find('*').each(function(){if($(this).attr('id').substring(0,5)=='CLOGB'){$(this).removeAttr('id')}});~
-z.html()"
+                 z.find('*').each(function(){if($(this).attr('id') !== undefined && ~
+                 if($(this).attr('id').substring(0,5)=='CLOGB'){$(this).removeAttr('id')}});~
+                 z.html()"
                                     (clog::jquery content)))
 		  fname)
       (destroy data))
@@ -881,12 +882,13 @@ z.html()"
 				     (js-query content
 					       (format nil
 						       "var z=~a.clone(); z=$('<div />').append(z);~
-z.find('*').each(function(){if($(this).attr('id').substring(0,5)=='CLOGB'){$(this).removeAttr('id')}});~
-z.html()"
+     z.find('*').each(function(){if($(this).attr('id') !== undefined && ~
+     $(this).attr('id').substring(0,5)=='CLOGB'){$(this).removeAttr('id')}});~
+     z.html()"
 						       (clog::jquery (current-control app))))))))
     (set-on-click btn-paste (lambda (obj)
 			      (declare (ignore obj))
-			      (unless (eq (copy-buf app) "")
+			      (when (copy-buf app)
 				(let ((control (create-control content content
 							       `(:name "custom"
 								 :clog-type      clog:clog-element
@@ -1058,13 +1060,14 @@ z.html()"
 				 (setf (copy-buf app)
 				       (js-query content
 						 (format nil
-							 "var z=~a.clone(); z=$('<div />').append(z);~
-z.find('*').each(function(){if($(this).attr('id').substring(0,5)=='CLOGB'){$(this).removeAttr('id')}});~
-z.html()"
+						       "var z=~a.clone(); z=$('<div />').append(z);~
+     z.find('*').each(function(){if($(this).attr('id') !== undefined && ~
+     $(this).attr('id').substring(0,5)=='CLOGB'){$(this).removeAttr('id')}});~
+     z.html()"
 							 (clog::jquery (current-control app))))))))
       (set-on-click btn-paste (lambda (obj)
 				(declare (ignore obj))
-				(unless (eq (copy-buf app) "")
+				(when (copy-buf app)
 				  (let ((control (create-control content content
 								 `(:name "custom"
 								   :clog-type      clog:clog-element
