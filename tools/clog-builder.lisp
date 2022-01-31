@@ -50,6 +50,10 @@
     :accessor control-list-win
     :initform nil
     :documentation "Current control list window")
+   (control-list-win-lock
+    :accessor control-list-win-lock
+    :initform (bordeaux-threads:make-lock)
+    :documentation "Sync control-list-win list")
    (control-pallete-win
     :accessor control-pallete-win
     :initform nil
@@ -390,14 +394,13 @@ not a temporary attached one when using select-control."
 	   (name    (attribute data "data-clog-title"))
 	   (next-id (attribute data "data-clog-next-id"))
 	   (package (attribute data "data-in-package")))
-      (when name
-	(unless (equalp next-id "undefined")
-	  (setf-next-id content next-id))
-	(unless (equalp package "undefined")
-	  (setf (attribute content "data-in-package") package))
-	(unless (equalp name "undefined")
-	  (setf (attribute content "data-clog-name") name)
-	  (destroy data))))
+      (unless (equalp next-id "undefined")
+	(setf-next-id content next-id))
+      (unless (equalp package "undefined")
+	(setf (attribute content "data-in-package") package))
+      (unless (equalp name "undefined")
+	(setf (attribute content "data-clog-name") name)
+	(destroy data)))
     (labels ((add-siblings (control)
 	       (let (dct)
 		 (loop
@@ -562,83 +565,84 @@ not a temporary attached one when using select-control."
 (defun on-populate-control-list-win (content)
   "Populate the control-list-window to allow drag and drop adjust of order
 of controls and double click to select control."
-  (let ((app      (connection-data-item content "builder-app-data"))
-	(panel-id (html-id content))
-	(last-ctl nil))
-    (when (control-list-win app)
-      (let ((win (window-content (control-list-win app))))
-	(setf (inner-html win) "")
-	(labels ((add-siblings (control sim)
-		   (let (dln)
-		     (loop
-		       (when (equal (html-id control) "undefined") (return))
-		       (setf dln (attribute control "data-clog-name"))
-		       (unless (equal dln "undefined")
-			 (let ((list-item (create-div win :content (format nil "&#8597; ~A~A" sim dln)))
-			       (status    (hiddenp (get-placer control))))
-			   (if status
-			       (setf (background-color list-item) :gray)
-			       (setf (background-color list-item) :lightgray))
-			   (setf (draggablep list-item) t)
-			   (setf (attribute list-item "data-clog-control") (html-id control))
-			   ;; click to select item
-			   (set-on-mouse-down list-item
-					 (lambda (obj data)
-					   (let* ((html-id (attribute obj "data-clog-control"))
-						  (control (get-from-control-list app
-										  panel-id
-										  html-id)))
-					     (cond ((or (getf data :shift-key)
-							(getf data :ctrl-key))
-						    (when (drop-new-control app content data)
-						      (incf-next-id content)))
-						   (t
-						    (when last-ctl
-						      (set-border last-ctl "0px" :dotted :blue))
-						    (set-border list-item "2px" :dotted :blue)
-						    (setf last-ctl list-item)
-						    (select-control control))))))
-			   (set-on-double-click list-item
-						(lambda (obj)
-						  (let* ((html-id (attribute obj "data-clog-control"))
-							 (control (get-from-control-list app
-											 panel-id
-											 html-id))
-							 (placer  (get-placer control))
-							 (state   (hiddenp placer)))
-						    (setf (hiddenp placer) (not state))
-						    (select-control control))))
-			   ;; drag and drop to change
-			   (set-on-drag-over list-item (lambda (obj)(declare (ignore obj))()))
-			   (set-on-drop list-item
-					(lambda (obj data)
-					  (let* ((id       (attribute obj "data-clog-control"))
-						 (control1 (get-from-control-list app
-										  panel-id
-										  id))
-						 (control2 (get-from-control-list app
-										  panel-id
-										  (getf data :drag-data)))
-						 (placer1  (get-placer control1))
-						 (placer2  (get-placer control2)))
-						      (if (getf data :shift-key)
-							  (place-inside-bottom-of control1 control2)
-							  (place-before control1 control2))
-						      (place-after control2 placer2)
-						      (set-geometry placer1 :top (position-top control1)
-									    :left (position-left control1)
-									    :width (client-width control1)
-									    :height (client-height control1))
-						      (set-geometry placer2 :top (position-top control2)
-									    :left (position-left control2)
-									    :width (client-width control2)
-									    :height (client-height control2))
-						      (on-populate-control-list-win content))))
-			   (set-on-drag-start list-item (lambda (obj)(declare (ignore obj))())
-					      :drag-data (html-id control))
-			   (add-siblings (first-child control) (format nil "~A&#8594;" sim))))
-		       (setf control (next-sibling control))))))
-	  (add-siblings (first-child content) ""))))))
+  (let ((app      (connection-data-item content "builder-app-data")))
+    (bordeaux-threads:with-lock-held ((control-list-win-lock app))
+      (let ((panel-id (html-id content))
+	    (last-ctl nil))
+	(when (control-list-win app)
+	  (let ((win (window-content (control-list-win app))))
+	    (setf (inner-html win) "")
+	    (labels ((add-siblings (control sim)
+		       (let (dln)
+			 (loop
+			   (when (equal (html-id control) "undefined") (return))
+			   (setf dln (attribute control "data-clog-name"))
+			   (unless (equal dln "undefined")
+			     (let ((list-item (create-div win :content (format nil "&#8597; ~A~A" sim dln)))
+				   (status    (hiddenp (get-placer control))))
+			       (if status
+				   (setf (background-color list-item) :gray)
+				   (setf (background-color list-item) :lightgray))
+			       (setf (draggablep list-item) t)
+			       (setf (attribute list-item "data-clog-control") (html-id control))
+			       ;; click to select item
+			       (set-on-mouse-down list-item
+						  (lambda (obj data)
+						    (let* ((html-id (attribute obj "data-clog-control"))
+							   (control (get-from-control-list app
+											   panel-id
+											   html-id)))
+						      (cond ((or (getf data :shift-key)
+								 (getf data :ctrl-key))
+							     (when (drop-new-control app content data)
+							       (incf-next-id content)))
+							    (t
+							     (when last-ctl
+							       (set-border last-ctl "0px" :dotted :blue))
+							     (set-border list-item "2px" :dotted :blue)
+							     (setf last-ctl list-item)
+							     (select-control control))))))
+			       (set-on-double-click list-item
+						    (lambda (obj)
+						      (let* ((html-id (attribute obj "data-clog-control"))
+							     (control (get-from-control-list app
+											     panel-id
+											     html-id))
+							     (placer  (get-placer control))
+							     (state   (hiddenp placer)))
+							(setf (hiddenp placer) (not state))
+							(select-control control))))
+			       ;; drag and drop to change
+			       (set-on-drag-over list-item (lambda (obj)(declare (ignore obj))()))
+			       (set-on-drop list-item
+					    (lambda (obj data)
+					      (let* ((id       (attribute obj "data-clog-control"))
+						     (control1 (get-from-control-list app
+										      panel-id
+										      id))
+						     (control2 (get-from-control-list app
+										      panel-id
+										      (getf data :drag-data)))
+						     (placer1  (get-placer control1))
+						     (placer2  (get-placer control2)))
+						(if (getf data :shift-key)
+						    (place-inside-bottom-of control1 control2)
+						    (place-before control1 control2))
+						(place-after control2 placer2)
+						(set-geometry placer1 :top (position-top control1)
+								      :left (position-left control1)
+								      :width (client-width control1)
+								      :height (client-height control1))
+						(set-geometry placer2 :top (position-top control2)
+								      :left (position-left control2)
+								      :width (client-width control2)
+								      :height (client-height control2))
+						(on-populate-control-list-win content))))
+			       (set-on-drag-start list-item (lambda (obj)(declare (ignore obj))())
+						  :drag-data (html-id control))
+			       (add-siblings (first-child control) (format nil "~A&#8594;" sim))))
+			   (setf control (next-sibling control))))))
+	      (add-siblings (first-child content) ""))))))))
 
 ;; Menu handlers
 
@@ -827,7 +831,7 @@ of controls and double click to select control."
 			    (format nil
 				    "var z=~a.clone();~
                  z.find('*').each(function(){if($(this).attr('id') !== undefined && ~
-                 if($(this).attr('id').substring(0,5)=='CLOGB'){$(this).removeAttr('id')}});~
+                 $(this).attr('id').substring(0,5)=='CLOGB'){$(this).removeAttr('id')}});~
                  z.html()"
                                     (clog::jquery content)))
 		  fname)
@@ -892,6 +896,12 @@ of controls and double click to select control."
     (set-on-click btn-copy (lambda (obj)
 			     (declare (ignore obj))
 			     (when (current-control app)
+			       (maphash
+				(lambda (html-id control)
+				  (declare (ignore html-id))
+				  (place-inside-bottom-of (bottom-panel box)
+							  (get-placer control)))
+				(get-control-list app panel-id))
 			       (setf (copy-buf app)
 				     (js-query content
 					       (format nil
@@ -899,9 +909,14 @@ of controls and double click to select control."
      z.find('*').each(function(){if($(this).attr('id') !== undefined && ~
      $(this).attr('id').substring(0,5)=='CLOGB'){$(this).removeAttr('id')}});~
      z.html()"
-						       (clog::jquery (current-control app))))))))
-    (set-on-click btn-paste (lambda (obj)
-			      (declare (ignore obj))
+						       (clog::jquery (current-control app)))))
+			       (maphash
+				(lambda (html-id control)
+				  (declare (ignore html-id))
+				  (place-after control (get-placer control)))
+				(get-control-list app panel-id)))))
+  (set-on-click btn-paste (lambda (obj)
+			    (declare (ignore obj))
 			      (when (copy-buf app)
 				(let ((control (create-control content content
 							       `(:name "custom"
@@ -912,8 +927,7 @@ of controls and double click to select control."
 							       :custom-query (copy-buf app))))
 				  (setup-control content control :win win)
 				  (select-control control)
-				  (add-sub-controls control content :win win)
-				  (on-populate-control-list-win content)))))
+				  (add-sub-controls control content :win win)))))
     (set-on-click btn-del (lambda (obj)
 			    (declare (ignore obj))
 			    (when (current-control app)
@@ -1048,8 +1062,8 @@ of controls and double click to select control."
     (cond (custom-boot
 	   (load-css (html-document body) "/css/jquery-ui.css")
 	   (load-script (html-document body) "/js/jquery-ui.js"))
-	  (t	  
-	   (clog-gui-initialize body)   
+	  (t
+	   (clog-gui-initialize body)
 	   (clog-web-initialize body :w3-css-url nil)))
     ;; init builder
     (init-control-list app panel-id)
@@ -1073,14 +1087,25 @@ of controls and double click to select control."
       (set-on-click btn-copy (lambda (obj)
 			       (declare (ignore obj))
 			       (when (current-control app)
+				 (maphash
+				  (lambda (html-id control)
+				    (declare (ignore html-id))
+				    (place-inside-bottom-of (bottom-panel box)
+							    (get-placer control)))
+				  (get-control-list app panel-id))
 				 (setf (copy-buf app)
 				       (js-query content
 						 (format nil
-						       "var z=~a.clone(); z=$('<div />').append(z);~
-     z.find('*').each(function(){if($(this).attr('id') !== undefined && ~
-     $(this).attr('id').substring(0,5)=='CLOGB'){$(this).removeAttr('id')}});~
-     z.html()"
-							 (clog::jquery (current-control app))))))))
+							 "var z=~a.clone(); z=$('<div />').append(z);~
+       z.find('*').each(function(){if($(this).attr('id') !== undefined && ~
+       $(this).attr('id').substring(0,5)=='CLOGB'){$(this).removeAttr('id')}});~
+       z.html()"
+							 (clog::jquery (current-control app)))))
+				 (maphash
+				  (lambda (html-id control)
+				    (declare (ignore html-id))
+				    (place-after control (get-placer control)))
+				  (get-control-list app panel-id)))))
       (set-on-click btn-paste (lambda (obj)
 				(declare (ignore obj))
 				(when (copy-buf app)
@@ -1093,8 +1118,7 @@ of controls and double click to select control."
 								 :custom-query (copy-buf app))))
 				    (setup-control content control :win win)
 				    (select-control control)
-				    (add-sub-controls control content :win win)
-				    (on-populate-control-list-win content)))))
+				    (add-sub-controls control content :win win)))))
       (set-on-click btn-del (lambda (obj)
 			      (declare (ignore obj))
 			      (when (current-control app)
