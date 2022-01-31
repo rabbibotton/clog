@@ -18,9 +18,9 @@ Future additions (if interested in doing any let me know):
 
 - Release tool to handle creating platfom executables, templates for Apache and other webservers
 
-- Train and documnetation tool
+- Training and documentation tool
 
-- Event queuing when desired to avoid event race conditions
+- Event queuing option to avoid event race conditions
 
 - Implement using long polling to optimize CLOG sites for use with
   search engines. If not long polling at least initial output sent by
@@ -28,7 +28,7 @@ Future additions (if interested in doing any let me know):
 
 - Optimize communication with browser
 
-- Optionaly for local apps allow direct transport of CLOG data to webpage to
+- Optionaly, for local apps, allow direct transport of CLOG data to webpage via apis
 remove need for websocket transport.
 
 Some notes

@@ -479,7 +479,7 @@ not a temporary attached one when using select-control."
 (defun on-populate-control-properties-win (obj &key win)
   "Populate the control properties for the current control"
   ;; obj if current-control is nil must be content
-  (let ((app      (connection-data-item obj "builder-app-data")))
+  (let ((app (connection-data-item obj "builder-app-data")))
     (bordeaux-threads:with-lock-held ((properties-lock app))
       (on-populate-control-events-win obj)
       (let* ((prop-win (control-properties-win app))
@@ -578,7 +578,7 @@ not a temporary attached one when using select-control."
 (defun on-populate-control-list-win (content)
   "Populate the control-list-window to allow drag and drop adjust of order
 of controls and double click to select control."
-  (let ((app      (connection-data-item content "builder-app-data")))
+  (let ((app (connection-data-item content "builder-app-data")))
     (bordeaux-threads:with-lock-held ((control-list-win-lock app))
       (let ((panel-id (html-id content))
 	    (last-ctl nil))
@@ -823,6 +823,7 @@ of controls and double click to select control."
       result)))
 
 (defun save-panel (fname content panel-id hide-loc)
+  "Save panel to FNAME"
   (let ((app (connection-data-item content "builder-app-data")))
     (maphash
      (lambda (html-id control)
