@@ -366,7 +366,7 @@ not a temporary attached one when using select-control."
     (set-border placer (unit "px" 2) :solid :blue)
     (on-populate-control-properties-win control)))
 
-(defun add-sub-controls (parent content &key win)
+(defun add-sub-controls (parent content &key win paste)
   "Setup html imported in to CONTENT starting with PARENT for use with Builder"
   (let ((app       (connection-data-item content "builder-app-data"))
 	(panel-uid (get-universal-time))
@@ -381,10 +381,17 @@ not a temporary attached one when using select-control."
             e.attr('data-clog-name','none-'+t+'-'+clog_nid++)}~
         if(e.attr('id') === undefined){e.attr('id','CLOGB'+clog_id++)}~
         if(e.attr('data-clog-name') === undefined){e.attr('data-clog-name',e.attr('id'))}~
+        ~A ~
         ~{~A~}~
         if(e.attr('data-clog-type') === undefined){e.attr('data-clog-type','span')}})"
 		       panel-uid
 		       (clog::jquery parent)
+		       (if paste
+			   (prog1
+			       (format nil "e.attr('data-clog-name', e.attr('data-clog-name')+'-'+~A);"
+				       (next-id content))
+			     (incf-next-id content))
+			   "")
 		       (mapcar (lambda (l)
 				 (format nil "if(p === undefined && t=='~A'){e.attr('data-clog-type','~A')}"
 					 (getf l :tag) (getf l :control)))
@@ -925,9 +932,13 @@ of controls and double click to select control."
 								 :create-type    :paste)
 							       (format nil "CLOGB~A" (get-universal-time))
 							       :custom-query (copy-buf app))))
+				  (setf (attribute control "data-clog-name")
+					(format nil "~A-~A" "copy" (next-id content)))
+				  (incf-next-id content)
 				  (setup-control content control :win win)
 				  (select-control control)
-				  (add-sub-controls control content :win win)))))
+				  (add-sub-controls control content :win win :paste t)
+				  (on-populate-control-list-win content)))))
     (set-on-click btn-del (lambda (obj)
 			    (declare (ignore obj))
 			    (when (current-control app)
@@ -1116,9 +1127,13 @@ of controls and double click to select control."
 								   :create-type    :paste)
 								 (format nil "CLOGB~A" (get-universal-time))
 								 :custom-query (copy-buf app))))
+				    (setf (attribute control "data-clog-name")
+					  (format nil "~A-~A" "copy" (next-id content)))
+				    (incf-next-id content)
 				    (setup-control content control :win win)
 				    (select-control control)
-				    (add-sub-controls control content :win win)))))
+				    (add-sub-controls control content :win win :paste t)
+				    (on-populate-control-list-win content)))))
       (set-on-click btn-del (lambda (obj)
 			      (declare (ignore obj))
 			      (when (current-control app)
