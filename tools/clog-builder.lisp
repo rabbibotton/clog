@@ -58,6 +58,10 @@
     :accessor control-pallete-win
     :initform nil
     :documentation "Current control pallete window")
+   (new-control-lock
+    :accessor new-control-lock
+    :initform (bordeaux-threads:make-lock)
+    :documentation "Sync creating new controls")
    (control-lists
     :accessor control-lists
     :initform (make-hash-table :test #'equalp)
@@ -243,44 +247,45 @@
 (defun do-drop-new-control (app content data &key win custom-query)
   "Create new control droppend at event DATA on CONTENT of WIN)"
   ;; create control
-  (let* ((control-record    (control-info (value (select-tool app))))
-	 (control-type-name (getf control-record :name))
-	 (positioning       (if (getf data :ctrl-key)
-				:static
-				:absolute))
-	 (parent            (when (getf data :shift-key)
-			      (current-control app)))
-	 (control           (create-control (if parent
-						parent
-						content)
-					    content
-					    control-record
-					    (format nil "CLOGB~A~A"
-						    (get-universal-time)
-						    (next-id content))
-					    :custom-query custom-query)))
-    (cond (control
-	   ;; panel directly clicked with a control type selected
-	   ;; setup control
-	   (setf (attribute control "data-clog-name")
-		 (format nil "~A-~A" control-type-name (next-id content)))
-	   (setf (value (select-tool app)) 0)
-	   (setf (box-sizing control) :content-box)
-	   (setf (positioning control) positioning)
-	   (set-geometry control
-			 :left (getf data :x)
-			 :top (getf data :y))
-	   (setup-control content control :win win)
-	   (select-control control)
-	   (add-sub-controls control content :win win)
-	   (on-populate-control-list-win content)
-	   t)
-	  (t
-	   ;; panel directly clicked with select tool or no control type to add
-	   (deselect-current-control app)
-	   (on-populate-control-properties-win content :win win)
-	   (on-populate-control-list-win content)
-	   nil))))
+  (bordeaux-threads:with-lock-held ((new-control-lock app))
+    (let* ((control-record    (control-info (value (select-tool app))))
+	   (control-type-name (getf control-record :name))
+	   (positioning       (if (getf data :ctrl-key)
+				  :static
+				  :absolute))
+	   (parent            (when (getf data :shift-key)
+				(current-control app)))
+	   (control           (create-control (if parent
+						  parent
+						  content)
+					      content
+					      control-record
+					      (format nil "CLOGB~A~A"
+						      (get-universal-time)
+						      (next-id content))
+					      :custom-query custom-query)))
+      (cond (control
+	     ;; panel directly clicked with a control type selected
+	     ;; setup control
+	     (setf (attribute control "data-clog-name")
+		   (format nil "~A-~A" control-type-name (next-id content)))
+	     (setf (value (select-tool app)) 0)
+	     (setf (box-sizing control) :content-box)
+	     (setf (positioning control) positioning)
+	     (set-geometry control
+			   :left (getf data :x)
+			   :top (getf data :y))
+	     (setup-control content control :win win)
+	     (select-control control)
+	     (add-sub-controls control content :win win)
+	     (on-populate-control-list-win content)
+	     t)
+	    (t
+	     ;; panel directly clicked with select tool or no control type to add
+	     (deselect-current-control app)
+	     (on-populate-control-properties-win content :win win)
+	     (on-populate-control-list-win content)
+	     nil)))))
 
 (defun setup-control (content control &key win)
   "Setup CONTROL by creating pacer and setting up events for manipulation"
@@ -345,11 +350,12 @@ access to it and allows manipulation of location, size etc of the control."
     (setf (current-control app) nil)))
 
 (defun delete-current-control (app panel-id html-id)
-  (remove-from-control-list app panel-id html-id)
-  (destroy (get-placer (current-control app)))
-  (destroy (current-control app))
-  (setf (current-control app) nil)
-  (remove-deleted-from-control-list app panel-id))
+  (bordeaux-threads:with-lock-held ((new-control-lock app))
+    (remove-from-control-list app panel-id html-id)
+    (destroy (get-placer (current-control app)))
+    (destroy (current-control app))
+    (setf (current-control app) nil)
+    (remove-deleted-from-control-list app panel-id)))
 
 (defun select-control (control)
   "Select CONTROL as the current control and highlight its placer.
@@ -924,6 +930,7 @@ of controls and double click to select control."
 				(get-control-list app panel-id)))))
   (set-on-click btn-paste (lambda (obj)
 			    (declare (ignore obj))
+			    (bordeaux-threads:with-lock-held ((new-control-lock app))
 			      (when (copy-buf app)
 				(let ((control (create-control content content
 							       `(:name "custom"
@@ -938,7 +945,7 @@ of controls and double click to select control."
 				  (setup-control content control :win win)
 				  (select-control control)
 				  (add-sub-controls control content :win win :paste t)
-				  (on-populate-control-list-win content)))))
+				  (on-populate-control-list-win content))))))
     (set-on-click btn-del (lambda (obj)
 			    (declare (ignore obj))
 			    (when (current-control app)
@@ -1078,10 +1085,10 @@ of controls and double click to select control."
 	   (clog-web-initialize body :w3-css-url nil)))
     ;; init builder
     (init-control-list app panel-id)
-    (let* ((pbox     (create-panel-box-layout (window-content win)
+    (let* ((pbox      (create-panel-box-layout (window-content win)
 					 :left-width 0 :right-width 0
 					 :top-height 30 :bottom-height 0))
-	   (tool-bar (top-panel pbox))
+	   (tool-bar  (top-panel pbox))
 	   (btn-del   (create-button tool-bar :content "Del"))
 	   (btn-copy  (create-button tool-bar :content "Copy"))
 	   (btn-paste (create-button tool-bar :content "Paste"))
@@ -1119,21 +1126,22 @@ of controls and double click to select control."
 				  (get-control-list app panel-id)))))
       (set-on-click btn-paste (lambda (obj)
 				(declare (ignore obj))
-				(when (copy-buf app)
-				  (let ((control (create-control content content
-								 `(:name "custom"
-								   :clog-type      clog:clog-element
-								   :create         clog:create-child
-								   :create-type    :paste)
-								 (format nil "CLOGB~A" (get-universal-time))
-								 :custom-query (copy-buf app))))
-				    (setf (attribute control "data-clog-name")
-					  (format nil "~A-~A" "copy" (next-id content)))
-				    (incf-next-id content)
-				    (setup-control content control :win win)
-				    (select-control control)
-				    (add-sub-controls control content :win win :paste t)
-				    (on-populate-control-list-win content)))))
+				(bordeaux-threads:with-lock-held ((new-control-lock app))
+				  (when (copy-buf app)
+				    (let ((control (create-control content content
+								   `(:name "custom"
+								     :clog-type      clog:clog-element
+								     :create         clog:create-child
+								     :create-type    :paste)
+								   (format nil "CLOGB~A" (get-universal-time))
+								   :custom-query (copy-buf app))))
+				      (setf (attribute control "data-clog-name")
+					    (format nil "~A-~A" "copy" (next-id content)))
+				      (incf-next-id content)
+				      (setup-control content control :win win)
+				      (select-control control)
+				      (add-sub-controls control content :win win :paste t)
+				      (on-populate-control-list-win content))))))
       (set-on-click btn-del (lambda (obj)
 			      (declare (ignore obj))
 			      (when (current-control app)
