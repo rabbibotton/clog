@@ -379,6 +379,7 @@
     ,@*props-text*
     ,@*props-css*
     ,@*props-colors*
+    ,@*props-base*
     ,@*props-nav*
     ,@*props-contents*))
 
