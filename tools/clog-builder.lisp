@@ -624,7 +624,8 @@ of controls and double click to select control."
 							     (placer  (get-placer control))
 							     (state   (hiddenp placer)))
 							(setf (hiddenp placer) (not state))
-							(select-control control))))
+							(select-control control)
+							(on-populate-control-list-win content))))
 			       ;; drag and drop to change
 			       (set-on-drag-over list-item (lambda (obj)(declare (ignore obj))()))
 			       (set-on-drop list-item

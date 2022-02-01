@@ -106,6 +106,20 @@
 		  (left control)))
      :set  ,(lambda (control obj)
 	      (setf (left control) (text obj))))
+    (:name "bottom"
+     :get ,(lambda (control)
+	     (if (equal (positioning control) "static")
+		 "n/a"
+		 (bottom control)))
+     :set ,(lambda (control obj)
+	     (setf (bottom control) (text obj))))
+    (:name "right"
+     :get  ,(lambda (control)
+	      (if (equal (positioning control) "static")
+		  "n/a"
+		  (right control)))
+     :set  ,(lambda (control obj)
+	      (setf (right control) (text obj))))
     (:name "positioning"
      :setup ,(lambda (control td1 td2)
 	       (declare (ignore td1))
@@ -365,8 +379,8 @@
     ,@*props-text*
     ,@*props-css*
     ,@*props-colors*
-    ,@*props-base*
-    ,@*props-nav*))
+    ,@*props-nav*
+    ,@*props-contents*))
 
 (defparameter *props-form-element*
   `(,@*props-location*
