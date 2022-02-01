@@ -1,3 +1,19 @@
+Future tutorials:
+
+for builder:
+
+Navigating CLOG
+Events in CLOG and events in Builder
+Creating a basic website
+Creating a basic CLOG project
+Deploying a CLOG website
+Creating a native application
+Mobile development
+Creating a Bootstrap 5 based app
+Creating a W3CSS based app
+When to use page vs panel
+Running JavaScript
+
 Future additions (if interested in doing any let me know):
 
 - Multi control select and alignments in Builder
