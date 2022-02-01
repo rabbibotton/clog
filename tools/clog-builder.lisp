@@ -164,11 +164,17 @@
 (defun control-info (control-type-name)
   "Return control informaton record for CONTROL-TYPE-NAME from the *supported-controls* list."
   (if (equal control-type-name "clog-data")
-       '(:name           "clog-data"
+       `(:name           "clog-data"
 	 :description    "Panel Properties"
 	 :events         nil
 	 :properties     ((:name "in-package"
-			   :attr "data-in-package")))
+			   :attr "data-in-package")
+			  (:name "width"
+			   :get  ,(lambda (control) (width control))
+			   :setup :read-only)
+			  (:name "height"
+			   :setup :read-only
+			   :get  ,(lambda (control) (height control)))))
       (find-if (lambda (x) (equal (getf x :name) control-type-name)) *supported-controls*)))
 
 (defun create-control (parent content control-record uid &key custom-query)
@@ -907,6 +913,9 @@ of controls and double click to select control."
 			   (destroy-control-list app panel-id)
 			   (on-populate-control-properties-win content :win win)
 			   (on-populate-control-list-win content)))
+    (set-on-window-size-done win
+			     (lambda (obj)
+			       (on-populate-control-properties-win content :win win)))
     ;; setup tool bar events
     (set-on-click btn-copy (lambda (obj)
 			     (declare (ignore obj))

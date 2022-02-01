@@ -13,6 +13,7 @@ Creating a Bootstrap 5 based app
 Creating a W3CSS based app
 When to use page vs panel
 Running JavaScript
+Plug-in panels for use on other sites
 
 Future additions (if interested in doing any let me know):
 

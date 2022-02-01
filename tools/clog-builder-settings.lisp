@@ -316,7 +316,7 @@
   `((:name "css classes"
      :prop "className")))
 
-(defparameter *props-base*
+(defparameter *props-display*
   `((:name "hidden"
      :get  ,(lambda (control)
 	      (property control "hidden"))
@@ -334,6 +334,8 @@
 		 (setf (visiblep control) t)
 		 (setf (visiblep control) nil))
 	      (style control "visibility")))
+    (:name "display"
+     :style "display")
     (:name "editable"
      :prop "contenteditable")
     (:name "spell check"
@@ -370,7 +372,7 @@
     ,@*props-with-height*
     ,@*props-css*
     ,@*props-colors*
-    ,@*props-base*
+    ,@*props-display*
     ,@*props-nav*))
 
 (defparameter *props-element*
@@ -379,7 +381,7 @@
     ,@*props-text*
     ,@*props-css*
     ,@*props-colors*
-    ,@*props-base*
+    ,@*props-display*
     ,@*props-nav*
     ,@*props-contents*))
 
@@ -418,7 +420,7 @@
     ,@*props-form-values*
     ,@*props-css*
     ,@*props-colors*
-    ,@*props-base*
+    ,@*props-display*
     ,@*props-nav*))
 
 (defparameter *events-element*
@@ -540,7 +542,7 @@
      :create-type    :custom-query
      :create-content "<div></div>"
      :events         (,@*events-element*)
-     :properties     (,@*props-base*))
+     :properties     (,@*props-element*))
    `(:name           "style-block"
      :description    "Style Block"
      :clog-type      clog:clog-style-block
