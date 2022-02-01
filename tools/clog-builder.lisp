@@ -1292,10 +1292,6 @@ of controls and double click to select control."
     (setf (visiblep about) t)
     (set-on-window-can-size about (lambda (obj)
 				    (declare (ignore obj))()))))
-(defun on-help-open-manual (obj)
-  (let* ((body (connection-data-item obj "clog-body")))
-    (open-window (window body) "https://rabbibotton.github.io/clog/clog-manual.html")))
-
 (defun on-new-builder (body)
   "Launch instance of the CLOG Builder"
   (set-html-on-close body "Connection Lost")
@@ -1327,7 +1323,15 @@ of controls and double click to select control."
       (create-gui-menu-item win   :content "Maximize All"       :on-click #'maximize-all-windows)
       (create-gui-menu-item win   :content "Normalize All"      :on-click #'normalize-all-windows)
       (create-gui-menu-window-select win)
-      (create-gui-menu-item help  :content "CLOG Manual"        :on-click #'on-help-open-manual)
+      (create-gui-menu-item help  :content "CLOG Manual"          :on-click
+			    (lambda (obj)
+			      (open-window (window body) "https://rabbibotton.github.io/clog/clog-manual.html")))
+      (create-gui-menu-item help  :content "W3.CSS Manual"        :on-click
+			    (lambda (obj)
+			      (open-window (window body) "https://www.w3schools.com/w3css/")))
+      (create-gui-menu-item help  :content "Bootstrap 5.1 Manual" :on-click
+			    (lambda (obj)
+			      (open-window (window body) "https://getbootstrap.com/docs/5.1/getting-started/introduction/")))
       (create-gui-menu-item help  :content "About"              :on-click #'on-help-about-builder)
       (create-gui-menu-full-screen menu))
     (on-show-control-pallete-win body)
