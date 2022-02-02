@@ -146,8 +146,9 @@ nil. Resizable only works if overflow is set to :SCROLL"))
   (:documentation "Align children of CLOG-ELEMENT VERTICAL (default t)
 and/or HORIZONTAL (default t). This will set the DISPLAY property of
 CLOG-ELEMENT to :FLEX. Note: if children of clog-element are using
-absolute positioning they will not flow with flex and will not be
-centered."))
+:absolute positioning they will not flow with flex and will not be
+centered. Using :relative wrapped in div with :static positioning
+will work."))
 
 (defmethod center-children ((obj clog-element) &key (vertical t) (horizontal t))
   (set-styles obj `(("display" "flex")
