@@ -10,8 +10,8 @@
   :serial t
   :pathname "source/"
   :depends-on (#:clack #:websocket-driver #:alexandria #:hunchentoot #:cl-ppcre
-		       #:bordeaux-threads #:trivial-open-browser #:parse-float
-		       #:sqlite #:lack-middleware-static #:mgl-pax #:quri)
+	       #:bordeaux-threads #:trivial-open-browser #:parse-float #:quri
+	       #:sqlite #:lack-middleware-static #:mgl-pax #:cl-template)
   :components ((:file "clog-connection")
 	       (:file "clog")
 	       (:file "clog-utilities")

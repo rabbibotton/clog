@@ -1,11 +1,6 @@
-Future tutorials:
+- Future tutorials for builder:
 
-for builder:
-
-Navigating CLOG
-Events in CLOG and events in Builder
 Creating a basic website
-Creating a basic CLOG project
 Deploying a CLOG website
 Creating a native application
 Mobile development
@@ -15,7 +10,7 @@ When to use page vs panel
 Running JavaScript
 Plug-in panels for use on other sites
 
-Future additions (if interested in doing any let me know):
+- CLOG tools for concurrency - clog-mutex, safe-hash
 
 - Multi control select and alignments in Builder
 
@@ -37,7 +32,7 @@ Future additions (if interested in doing any let me know):
 
 - Training and documentation tool
 
-- Event queuing option to avoid event race conditions
+- Event queuing option to easily avoid event race conditions when desired
 
 - Implement using long polling to optimize CLOG sites for use with
   search engines. If not long polling at least initial output sent by
