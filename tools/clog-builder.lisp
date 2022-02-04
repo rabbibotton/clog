@@ -820,15 +820,14 @@ of controls and double click to select control."
 			  cname     ;;defclass
 			  cmembers
 			  cname     ;;defun
-			  (escape-string
-			   (ppcre:regex-replace-all "\\x22"
+			  (ppcre:regex-replace-all "\""
 						    (js-query content
 							      (format nil
 								      "var z=~a.clone();~
     z.find('*').each(function(){for(n in $(this).get(0).dataset){delete $(this).get(0).dataset[n]}});~
     z.html()"
 								      (clog::jquery content)))
-						    "\\\\\\\""))
+						    "\\\"")
 			  cname
 			  vars
 			  events)))
