@@ -854,7 +854,7 @@ of controls and double click to select control."
       (setf (attribute data "data-in-package")
 	    (attribute content "data-in-package"))
       (setf (attribute data "data-custom-slots")
-	    (attribute content "data-custom-slots"))      
+	    (attribute content "data-custom-slots"))
       (setf (attribute data "data-clog-next-id")
 	    (attribute content "data-clog-next-id"))
       (setf (attribute data "data-clog-title")
@@ -1315,6 +1315,76 @@ of controls and double click to select control."
     (set-on-window-can-size about (lambda (obj)
 				    (declare (ignore obj))()))))
 
+(defun on-new-app-template (obj)
+  (let* ((app (connection-data-item obj "builder-app-data"))
+	 (win (create-gui-window obj :title "New Application Template"))
+	 (ct  (create-clog-templates (window-content win))))
+    (setf (win ct) win)
+    (dolist (tmpl *supported-templates*)
+      (add-select-option (template-box ct) (getf tmpl :code) (getf tmpl :name)))))
+
+(defun walk-files-and-directories (path process)
+    (let* ((flist (uiop:directory-files path))
+	   (dlist (uiop:subdirectories path)))
+      (dolist (f flist)
+	(funcall process path (file-namestring f)))
+      (dolist (d dlist)
+	(walk-files-and-directories d process))))
+
+(defun fill-button-clicked (panel)
+  (let* ((tmpl-rec (find-if (lambda (x)
+			     (equal (getf x :code)
+				    (value (template-box panel))))
+			    *supported-templates*))
+	 (start-dir (format nil "~A~A"
+			    (asdf:system-source-directory :clog)
+			    (getf tmpl-rec :loc))))
+    (setf (hiddenp panel) t)
+    (input-dialog
+     (win panel) "Enter new system name:"
+     (lambda (sys-name)
+       (cond (sys-name
+	      (server-file-dialog
+	       (win panel) "Output Directory" "~/common-lisp/"
+	       (lambda (filename)
+		 (cond
+		   (filename
+		    (walk-files-and-directories
+		     start-dir
+		     (lambda (path file)
+		       (let* ((tmpl-ext "lt")
+			      (src-file (format nil "~A~A"
+						path file))
+			      (out-dir  (format nil "~A/~A/~A"
+						filename
+						sys-name
+						(subseq (format nil "~A" path)
+							(length start-dir))))
+			      (out-file (format nil "~A~A"
+						out-dir
+						file)))
+			 (ensure-directories-exist out-dir)
+			 (cond ((equalp (pathname-type file) tmpl-ext)
+				(let* ((nfile (pathname-name file))
+				       (afile (if (equalp (pathname-name nfile) "tmpl")
+						  (format nil "~A~A.~A" out-dir sys-name (pathname-type nfile))
+						  (format nil "~A~A" out-dir nfile))))
+				  (write-file (funcall (cl-template:compile-template (read-file src-file))
+						       (list :sys-name sys-name))
+					      afile)
+				  (create-div (window-content (win panel))
+					      :content (format nil "<b>~A</b> -> ~A"
+							       src-file afile))))
+			       (t
+				(uiop:copy-file src-file out-file)
+				(create-div (window-content (win panel))
+					    :content (format nil "<b>~A</b> -> ~A"
+							     src-file out-file))))))))
+		   (t
+		    (window-close (win panel)))))))
+	     (t
+	      (window-close (win panel))))))))
+
 (defun on-new-builder (body)
   "Launch instance of the CLOG Builder"
   (set-html-on-close body "Connection Lost")
@@ -1325,7 +1395,8 @@ of controls and double click to select control."
     (add-class body "w3-blue-grey")
     (setf (z-index (create-panel body :positioning :fixed
 				      :bottom 0 :right 0
-				      :content (format nil "static-root: ~A" clog::*static-root*))) -9999)
+				      :content (format nil "static-root: ~A" clog::*static-root*)))
+	  -9999)
     (let* ((menu  (create-gui-menu-bar body))
 	   (icon  (create-gui-menu-icon menu :on-click #'on-help-about-builder))
 	   (file  (create-gui-menu-drop-down menu :content "Builder"))
@@ -1339,6 +1410,7 @@ of controls and double click to select control."
       (create-gui-menu-item file  :content "New Bootstrap Page"        :on-click 'on-new-builder-bst-page)
       (create-gui-menu-item file  :content "New CLOG-WEB Delay Launch" :on-click 'on-new-builder-launch-page)
       (create-gui-menu-item file  :content "New Custom Boot Page"      :on-click 'on-new-builder-custom)
+      (create-gui-menu-item file  :content "New Application Template"  :on-click 'on-new-app-template)
       (create-gui-menu-item tools :content "Control Pallete"    :on-click 'on-show-control-pallete-win)
       (create-gui-menu-item tools :content "Control Properties" :on-click 'on-show-control-properties-win)
       (create-gui-menu-item tools :content "Control Events"     :on-click 'on-show-control-events-win)
@@ -1348,12 +1420,15 @@ of controls and double click to select control."
       (create-gui-menu-window-select win)
       (create-gui-menu-item help  :content "CLOG Manual"          :on-click
 			    (lambda (obj)
+			      (declare (ignore obj))
 			      (open-window (window body) "https://rabbibotton.github.io/clog/clog-manual.html")))
       (create-gui-menu-item help  :content "W3.CSS Manual"        :on-click
 			    (lambda (obj)
+			      (declare (ignore obj))
 			      (open-window (window body) "https://www.w3schools.com/w3css/")))
       (create-gui-menu-item help  :content "Bootstrap 5.1 Manual" :on-click
 			    (lambda (obj)
+			      (declare (ignore obj))
 			      (open-window (window body) "https://getbootstrap.com/docs/5.1/getting-started/introduction/")))
       (create-gui-menu-item help  :content "About"              :on-click #'on-help-about-builder)
       (create-gui-menu-full-screen menu))

@@ -1281,9 +1281,9 @@
      :code    "ncp"
      :type    :system
      :www     t
-     :loc     "./templates/project")
+     :loc     "templates/projects/clog/")
    '(:name    "New CLOG-GUI Project"
      :code    "ncgp"
      :type    :system
      :www     t
-     :loc     "./templates/project")))
+     :loc     "templates/projects/clog-gui/")))

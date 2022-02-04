@@ -1,10 +1,8 @@
-;;; This is a template to help jump start a CLOG-GUI App
-
-(defpackage #:clog-user
+(defpackage #:<%= (@ sys-name) %>
   (:use #:cl #:clog #:clog-gui)
   (:export start-app))
 
-(in-package :clog-user)
+(in-package :<%= (@ sys-name) %>)
 
 (defun on-file-new (obj)
   (let* ((app (connection-data-item obj "app-data"))
@@ -16,10 +14,10 @@
 				   :title   "About"
 				   :content "<div class='w3-black'>
                                          <center><img src='/img/clogwicon.png'></center>
-	                                 <center>CLOG</center>
-	                                 <center>The Common Lisp Omnificent GUI</center></div>
+	                                 <center><%= (@ sys-name) %></center>
+	                                 <center><%= (@ sys-name) %></center></div>
 			                 <div><p><center>A New App</center>
-                                         <center>(c) 2021 - David Botton</center></p></div>"
+                                         <center>(c) 2022 - Some One</center></p></div>"
 				   :hidden  t
 				   :width   200
 				   :height  200)))
@@ -49,8 +47,7 @@
       (run body))))
 
 (defun start-app ()
-  (initialize #'on-new-window)
-  ;; Setup asdf for project and can use
-  ;;	      :static-root (merge-pathnames "./www/"
-  ;;			     (asdf:system-source-directory :proj-name)))
+  (initialize 'on-new-window
+   :static-root (merge-pathnames "./www/"
+		  (asdf:system-source-directory :<%= (@ sys-name) %>)))
   (open-browser))

@@ -1,0 +1,21 @@
+(defpackage #:<%= (@ sys-name) %>
+  (:use #:cl #:clog)
+  (:export start-app))
+
+(in-package :<%= (@ sys-name) %>)
+
+(defun on-new-window (body)
+  ;; Add the clog-web look and feel
+  (clog-web:clog-web-initialize body)
+  ;; Use the panel-box-layout to center horizontally
+  ;; and vertically our div on the screen.
+  (let* ((layout (create-panel-box-layout body)))
+    (center-children (center-panel layout))
+    (create-div (center-panel layout) :content "Hello")
+    (run body)))
+  
+(defun start-app ()
+  (initialize 'on-new-window
+   :static-root (merge-pathnames "./www/"
+		  (asdf:system-source-directory :<%= (@ sys-name) %>)))
+  (open-browser))
