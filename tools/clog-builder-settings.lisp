@@ -1274,3 +1274,16 @@
      :create-type    :base
      :events         (,@*events-element*)
      :properties     (,@*props-base*))))
+
+(defparameter *supported-templates*
+  (list
+   '(:name    "New CLOG Project"
+     :code    "ncp"
+     :type    :system
+     :www     t
+     :loc     "./templates/project")
+   '(:name    "New CLOG-GUI Project"
+     :code    "ncgp"
+     :type    :system
+     :www     t
+     :loc     "./templates/project")))

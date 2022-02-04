@@ -169,6 +169,8 @@
 	 :events         nil
 	 :properties     ((:name "in-package"
 			   :attr "data-in-package")
+			  (:name "custom slots"
+			   :attr "data-custom-slots")
 			  (:name "width"
 			   :get  ,(lambda (control) (width control))
 			   :setup :read-only)
@@ -412,11 +414,14 @@ not a temporary attached one when using select-control."
     (let* ((data (first-child content))
 	   (name    (attribute data "data-clog-title"))
 	   (next-id (attribute data "data-clog-next-id"))
+	   (slots   (attribute data "data-custom-slots"))
 	   (package (attribute data "data-in-package")))
       (unless (equalp next-id "undefined")
 	(setf-next-id content next-id))
       (unless (equalp package "undefined")
 	(setf (attribute content "data-in-package") package))
+      (unless (equalp slots "undefined")
+	(setf (attribute content "data-custom-slots") slots))
       (unless (equalp name "undefined")
 	(setf (attribute content "data-clog-name") name)
 	(destroy data)))
@@ -766,8 +771,12 @@ of controls and double click to select control."
   (let* ((app      (connection-data-item content "builder-app-data"))
 	 (panel-id (html-id content))
 	 (package  (attribute content "data-in-package"))
+	 (slots    (attribute content "data-custom-slots"))
 	 (cname    (attribute content "data-clog-name"))
 	 cmembers vars events)
+    (unless (or (equal slots "")
+		(equal slots "undefined"))
+      (push slots cmembers))
     (maphash (lambda (html-id control)
 	       (place-inside-bottom-of hide-loc
 				       (get-placer control))
@@ -792,7 +801,7 @@ of controls and double click to select control."
 			 (unless (or (equalp handler "undefined")
 				     (equal handler ""))
 			   (push (format nil
-					 "\(set-~A \(~A panel\) \(lambda \(~A\) \(declare \(ignorable ~A\)\) ~A\)\)~%"
+					 "    \(set-~A \(~A panel\) \(lambda \(~A\) \(declare \(ignorable ~A\)\) ~A\)\)~%"
 					 (getf event :name)
 					 vname
 					 (getf event :parameters)
@@ -844,6 +853,8 @@ of controls and double click to select control."
       (place-inside-top-of content data)
       (setf (attribute data "data-in-package")
 	    (attribute content "data-in-package"))
+      (setf (attribute data "data-custom-slots")
+	    (attribute content "data-custom-slots"))      
       (setf (attribute data "data-clog-next-id")
 	    (attribute content "data-clog-next-id"))
       (setf (attribute data "data-clog-title")
@@ -895,6 +906,7 @@ of controls and double click to select control."
       (setf (attribute content "data-clog-name") panel-name))
     (setf (attribute content "data-clog-type") "clog-data")
     (setf (attribute content "data-in-package") "clog-user")
+    (setf (attribute content "data-custom-slots") "")
     (setf (background-color tool-bar) :silver)
     ;; activate associated windows on open
     (on-populate-control-properties-win content :win win)
@@ -1060,6 +1072,7 @@ of controls and double click to select control."
       (setf (attribute content "data-clog-name") panel-name))
     (setf (attribute content "data-clog-type") "clog-data")
     (setf (attribute content "data-in-package") "clog-user")
+    (setf (attribute content "data-custom-slots") "")
     (setf (overflow content) :auto)
     (set-on-focus (window body)
 		  (lambda (obj)
@@ -1293,7 +1306,7 @@ of controls and double click to select control."
 	                                 <center>CLOG</center>
 	                                 <center>The Common Lisp Omnificent GUI</center></div>
 			                 <div><p><center>CLOG Builder</center>
-                                         <center>(c) 2021 - David Botton</center></p></div>"
+                                         <center>(c) 2022 - David Botton</center></p></div>"
 				  :width   200
 				  :height  215
 				  :hidden  t)))
@@ -1301,6 +1314,7 @@ of controls and double click to select control."
     (setf (visiblep about) t)
     (set-on-window-can-size about (lambda (obj)
 				    (declare (ignore obj))()))))
+
 (defun on-new-builder (body)
   "Launch instance of the CLOG Builder"
   (set-html-on-close body "Connection Lost")
