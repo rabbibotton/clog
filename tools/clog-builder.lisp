@@ -1121,11 +1121,28 @@ of controls and double click to select control."
 	   (btn-rndr  (create-button tool-bar :content "Rndr"))
 	   (btn-save  (create-button tool-bar :content "Save"))
 	   (btn-load  (create-button tool-bar :content "Load"))
+	   (btn-exp   (create-button tool-bar :content "Export"))
 	   (wcontent  (center-panel pbox)))
       (create-div wcontent :content
 		  "<br><center>Drop and work with controls on it's window.</center>")
       (setf (background-color tool-bar) :silver)
       ;; setup tool bar events
+      (set-on-click btn-exp (lambda (obj)
+			      (server-file-dialog obj "Export as Boot HTML" "./"
+						  (lambda (filename)
+						    (when filename
+						      (maphash
+						       (lambda (html-id control)
+							 (declare (ignore html-id))
+							 (place-inside-bottom-of (bottom-panel box)
+										 (get-placer control)))
+						       (get-control-list app panel-id))
+						      (save-body-to-file filename :body body :if-exists :rename)
+						      (maphash
+						       (lambda (html-id control)
+							 (declare (ignore html-id))
+							 (place-after control (get-placer control)))
+						       (get-control-list app panel-id)))))))
       (set-on-click btn-copy (lambda (obj)
 			       (declare (ignore obj))
 			       (when (current-control app)
