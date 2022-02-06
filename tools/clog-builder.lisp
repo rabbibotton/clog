@@ -1348,14 +1348,52 @@ of controls and double click to select control."
       (dolist (d dlist)
 	(walk-files-and-directories d process))))
 
+(defun template-copy (sys-name start-dir filename &key panel)
+  (walk-files-and-directories
+   start-dir
+   (lambda (path file)
+     (let* ((tmpl-ext "lt")
+	    (src-file (format nil "~A~A"
+			      path file))
+	    (out-dir  (format nil "~A/~A/~A"
+			      filename
+			      sys-name
+			      (subseq (format nil "~A" path)
+				      (length start-dir))))
+	    (out-file (format nil "~A~A"
+			      out-dir
+			      file)))
+       (ensure-directories-exist out-dir)
+       (cond ((equalp (pathname-type file) tmpl-ext)
+	      (let* ((nfile (pathname-name file))
+		     (afile (if (equalp (pathname-name nfile) "tmpl")
+				(format nil "~A~A.~A" out-dir sys-name (pathname-type nfile))
+				(format nil "~A~A" out-dir nfile))))
+		(write-file (funcall (cl-template:compile-template (read-file src-file))
+				     (list :sys-name sys-name))
+			    afile)
+		(when panel
+		  (create-div (window-content (win panel))
+			      :content (format nil "<b>~A</b> -> ~A"
+					       src-file afile)))))
+	     (t
+	      (uiop:copy-file src-file out-file)
+	      (when panel
+		(create-div (window-content (win panel))
+			    :content (format nil "<b>~A</b> -> ~A"
+					     src-file out-file)))))))))
+  
 (defun fill-button-clicked (panel)
-  (let* ((tmpl-rec (find-if (lambda (x)
-			     (equal (getf x :code)
-				    (value (template-box panel))))
-			    *supported-templates*))
+  (let* ((tmpl-rec  (find-if (lambda (x)
+			       (equal (getf x :code)
+				      (value (template-box panel))))
+			     *supported-templates*))
 	 (start-dir (format nil "~A~A"
 			    (asdf:system-source-directory :clog)
-			    (getf tmpl-rec :loc))))
+			    (getf tmpl-rec :loc)))
+	 (www-dir   (format nil "~A~A"
+			    (asdf:system-source-directory :clog)
+			    (getf tmpl-rec :www))))
     (setf (hiddenp panel) t)
     (input-dialog
      (win panel) "Enter new system name:"
@@ -1364,41 +1402,12 @@ of controls and double click to select control."
 	      (server-file-dialog
 	       (win panel) "Output Directory" "~/common-lisp/"
 	       (lambda (filename)
-		 (cond
-		   (filename
-		    (walk-files-and-directories
-		     start-dir
-		     (lambda (path file)
-		       (let* ((tmpl-ext "lt")
-			      (src-file (format nil "~A~A"
-						path file))
-			      (out-dir  (format nil "~A/~A/~A"
-						filename
-						sys-name
-						(subseq (format nil "~A" path)
-							(length start-dir))))
-			      (out-file (format nil "~A~A"
-						out-dir
-						file)))
-			 (ensure-directories-exist out-dir)
-			 (cond ((equalp (pathname-type file) tmpl-ext)
-				(let* ((nfile (pathname-name file))
-				       (afile (if (equalp (pathname-name nfile) "tmpl")
-						  (format nil "~A~A.~A" out-dir sys-name (pathname-type nfile))
-						  (format nil "~A~A" out-dir nfile))))
-				  (write-file (funcall (cl-template:compile-template (read-file src-file))
-						       (list :sys-name sys-name))
-					      afile)
-				  (create-div (window-content (win panel))
-					      :content (format nil "<b>~A</b> -> ~A"
-							       src-file afile))))
-			       (t
-				(uiop:copy-file src-file out-file)
-				(create-div (window-content (win panel))
-					    :content (format nil "<b>~A</b> -> ~A"
-							     src-file out-file))))))))
-		   (t
-		    (window-close (win panel)))))))
+		 (cond (filename
+			(template-copy sys-name start-dir filename :panel panel)
+			(when (getf tmpl-rec :www)
+			  (template-copy sys-name www-dir filename :panel panel)))
+		       (t
+			(window-close (win panel)))))))
 	     (t
 	      (window-close (win panel))))))))
 

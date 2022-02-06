@@ -1277,13 +1277,19 @@
 
 (defparameter *supported-templates*
   (list
-   '(:name    "New CLOG Project"
+   '(:name    "New CLOG Basic HTML Project"
      :code    "ncp"
      :type    :system
-     :www     t
+     :www     "templates/www/"
      :loc     "templates/projects/clog/")
    '(:name    "New CLOG-GUI Project"
      :code    "ncgp"
      :type    :system
-     :www     t
-     :loc     "templates/projects/clog-gui/")))
+     :www     "templates/www/"
+     :loc     "templates/projects/clog-gui/")
+   '(:name    "New CLOG-WEB Project"
+     :code    "ncwp"
+     :type    :system
+     :www     "templates/www/"
+     :loc     "templates/projects/clog-web/")))
+
