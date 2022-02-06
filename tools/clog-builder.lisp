@@ -1334,13 +1334,15 @@ of controls and double click to select control."
 
 (defun on-new-app-template (obj)
   (let* ((app (connection-data-item obj "builder-app-data"))
-	 (win (create-gui-window obj :title "New Application Template"))
+	 (win (create-gui-window obj :title "New Application Template"
+				     :width 500 :height 400))
 	 (ct  (create-clog-templates (window-content win))))
     (setf (win ct) win)
     (dolist (tmpl *supported-templates*)
       (add-select-option (template-box ct) (getf tmpl :code) (getf tmpl :name)))))
 
 (defun walk-files-and-directories (path process)
+  "Walk PATH and apply PROCESS on each (path and file)"
     (let* ((flist (uiop:directory-files path))
 	   (dlist (uiop:subdirectories path)))
       (dolist (f flist)
@@ -1349,6 +1351,9 @@ of controls and double click to select control."
 	(walk-files-and-directories d process))))
 
 (defun template-copy (sys-name start-dir filename &key panel)
+  "Copy START-DIR to FILENAME processing .lt files as cl-template files,
+if PANEL each copy produces a <b>source</b> to destination added as
+create-div's"
   (walk-files-and-directories
    start-dir
    (lambda (path file)
@@ -1373,13 +1378,13 @@ of controls and double click to select control."
 				     (list :sys-name sys-name))
 			    afile)
 		(when panel
-		  (create-div (window-content (win panel))
+		  (create-div panel
 			      :content (format nil "<b>~A</b> -> ~A"
 					       src-file afile)))))
 	     (t
 	      (uiop:copy-file src-file out-file)
 	      (when panel
-		(create-div (window-content (win panel))
+		(create-div panel
 			    :content (format nil "<b>~A</b> -> ~A"
 					     src-file out-file)))))))))
   
@@ -1403,10 +1408,11 @@ of controls and double click to select control."
 	       (win panel) "Output Directory" "~/common-lisp/"
 	       (lambda (filename)
 		 (cond (filename
-			(template-copy sys-name start-dir filename :panel panel)
+			(template-copy sys-name start-dir filename :panel (window-content (win panel)))
 			(when (getf tmpl-rec :www)
-			  (template-copy sys-name www-dir filename :panel panel))
-			(asdf:clear-source-registry))
+			  (template-copy sys-name www-dir filename :panel (window-content (win panel))))
+			(asdf:clear-source-registry)
+			(create-div (window-content (win panel)) :content "<hr><b>done.</b>"))
 		       (t
 			(window-close (win panel)))))))
 	     (t
