@@ -1338,6 +1338,7 @@ of controls and double click to select control."
 	 (win (create-gui-window obj :title "New Application Template"
 				     :width 500 :height 400))
 	 (ct  (create-clog-templates (window-content win))))
+    (window-center win)
     (setf (win ct) win)
     (dolist (tmpl *supported-templates*)
       (add-select-option (template-box ct) (getf tmpl :code) (getf tmpl :name)))))
