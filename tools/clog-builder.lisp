@@ -816,7 +816,7 @@ of controls and double click to select control."
 \(defun create-~A \(clog-obj &key \(hidden nil\) \(class nil\) \(html-id nil\) \(auto-place t\)\)
   \(let \(\(panel \(change-class \(clog:create-div clog-obj :content \"~A\"
          :hidden hidden :class class :html-id html-id :auto-place auto-place\) \'~A\)\)\)
-~{~A~}~{~A~}    panel\)\)"
+~{~A~}~{~A~}    panel\)\)~%"
 			  (string-upcase package)
 			  cname     ;;defclass
 			  cmembers
@@ -1333,6 +1333,7 @@ of controls and double click to select control."
 				    (declare (ignore obj))()))))
 
 (defun on-new-app-template (obj)
+  "Menu option to create new project from template"
   (let* ((app (connection-data-item obj "builder-app-data"))
 	 (win (create-gui-window obj :title "New Application Template"
 				     :width 500 :height 400))

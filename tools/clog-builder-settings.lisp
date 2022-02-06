@@ -763,7 +763,8 @@
 		      (:name "encoding"
 		       :prop "encoding")
 		      (:name "form element count"
-		       :get ,(lambda (control) (form-element-count control)))))
+		       :get ,(lambda (control) (form-element-count control)))
+		      ,@*props-element*))
    `(:name           "input"
      :description    "Form Input"
      :clog-type      clog:clog-form-element
