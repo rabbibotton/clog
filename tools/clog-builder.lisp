@@ -1405,7 +1405,8 @@ of controls and double click to select control."
 		 (cond (filename
 			(template-copy sys-name start-dir filename :panel panel)
 			(when (getf tmpl-rec :www)
-			  (template-copy sys-name www-dir filename :panel panel)))
+			  (template-copy sys-name www-dir filename :panel panel))
+			(asdf:clear-source-registry))
 		       (t
 			(window-close (win panel)))))))
 	     (t
