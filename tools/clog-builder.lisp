@@ -119,19 +119,22 @@
 ;; Handle per content next-id counts
 
 (defun next-id (content)
+  "Get next id for CONTENT"
   (parse-integer (attribute content "data-clog-next-id") :junk-allowed t))
 
 (defun setf-next-id (content id)
+  "Store ID on CONTENT"
   (setf (attribute content "data-clog-next-id") (format nil "~A" id)))
 
 (defun incf-next-id (content)
+  "Increment next id and store it in CONTENT"
   (setf-next-id content (1+ (next-id content))))
 
 
 ;; Local file utilities
 
 (defun read-file (infile)
-  "Read local file"
+  "Read local file named INFILE"
   (with-open-file (instream infile :direction :input :if-does-not-exist nil)
     (when instream
       (let ((string (make-string (file-length instream))))
@@ -139,7 +142,7 @@
         string))))
 
 (defun write-file (string outfile &key (action-if-exists :rename))
-  "Write local file"
+  "Write local file named OUTFILE"
    (check-type action-if-exists (member nil :error :new-version :rename :rename-and-delete
 					    :overwrite :append :supersede))
    (with-open-file (outstream outfile :direction :output :if-exists action-if-exists)
@@ -230,7 +233,7 @@
     control))
 
 (defun drop-new-control (app content data &key win)
-  "Create new control droppend at event DATA on CONTENT of WIN"
+  "Create new control droppend at event DATA location on CONTENT of WIN"
   ;; any click on panel directly will focus window
   (when win
     (window-focus win))
@@ -347,7 +350,8 @@
 
 (defun get-placer (control)
   "Get placer for CONTROL. A placer is a div placed on top of the control and
-access to it and allows manipulation of location, size etc of the control."
+prevents access to use or activate the control directylu and allows
+manipulation of the control's location and size."
   (when control
     (attach-as-child control (format nil "p-~A" (html-id control)))))
 
@@ -358,6 +362,7 @@ access to it and allows manipulation of location, size etc of the control."
     (setf (current-control app) nil)))
 
 (defun delete-current-control (app panel-id html-id)
+  "Delete the current control"
   (bordeaux-threads:with-lock-held ((new-control-lock app))
     (remove-from-control-list app panel-id html-id)
     (destroy (get-placer (current-control app)))
@@ -672,7 +677,7 @@ of controls and double click to select control."
 ;; Menu handlers
 
 (defun do-eval (obj form-string cname &key (package "clog-user") custom-boot)
-  "Do lisp test of render"
+  "Render, evalute and run code for panel"
   (let* ((result (capture-eval (format nil "~A~% (clog:set-on-new-window~
                                                (lambda (body)~
                                                  ~A
@@ -1253,17 +1258,21 @@ of controls and double click to select control."
 			     (incf-next-id content)))))))
 
 (defun on-new-builder-basic-page (obj)
+  "Menu item to open new basic HTML page"
   (set-on-new-window 'on-attach-builder-custom :boot-file "/boot.html" :path "/builder-custom")
   (on-new-builder-page obj :custom-boot "/boot.html" :url-launch nil))
 
 (defun on-new-builder-bst-page (obj)
+  "Menu item to open new boostrap 5 page"
   (set-on-new-window 'on-attach-builder-custom :boot-file "/bootstrap.html" :path "/builder-custom")
   (on-new-builder-page obj :custom-boot "/bootstrap.html" :url-launch nil))
 
 (defun on-new-builder-launch-page (obj)
+  "Menu item to open new page"
   (on-new-builder-page obj :url-launch t))
 
 (defun on-new-builder-custom (obj)
+  "Open custom boot page"
   (let ((custom-boot "/boot.html"))
     (input-dialog obj "Boot File Name:"
 		  (lambda (answer)
@@ -1334,8 +1343,7 @@ of controls and double click to select control."
 
 (defun on-new-app-template (obj)
   "Menu option to create new project from template"
-  (let* ((app (connection-data-item obj "builder-app-data"))
-	 (win (create-gui-window obj :title "New Application Template"
+  (let* ((win (create-gui-window obj :title "New Application Template"
 				     :width 500 :height 400))
 	 (ct  (create-clog-templates (window-content win))))
     (window-center win)
@@ -1391,6 +1399,7 @@ create-div's"
 					     src-file out-file)))))))))
   
 (defun fill-button-clicked (panel)
+  "Template fill botton clicked"
   (let* ((tmpl-rec  (find-if (lambda (x)
 			       (equal (getf x :code)
 				      (value (template-box panel))))
