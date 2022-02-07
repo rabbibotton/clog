@@ -1331,7 +1331,9 @@ of controls and double click to select control."
                                          <center><img src='/img/clogwicon.png'></center>
 	                                 <center>CLOG</center>
 	                                 <center>The Common Lisp Omnificent GUI</center></div>
-			                 <div><p><center>CLOG Builder</center>
+			                 <div><p><center>
+                                           <a target=_blank href='https://github.com/sponsors/rabbibotton'>CLOG Builder</a>
+                                           </center>
                                          <center>(c) 2022 - David Botton</center></p></div>"
 				  :width   200
 				  :height  215
@@ -1466,6 +1468,18 @@ create-div's"
 			    (lambda (obj)
 			      (declare (ignore obj))
 			      (open-window (window body) "https://rabbibotton.github.io/clog/clog-manual.html")))
+      (create-gui-menu-item help  :content "Lisp in Y Minutes"    :on-click
+			    (lambda (obj)
+			      (declare (ignore obj))
+			      (open-window (window body) "https://learnxinyminutes.com/docs/common-lisp/")))
+      (create-gui-menu-item help  :content "Simplified Reference" :on-click
+			    (lambda (obj)
+			      (declare (ignore obj))
+			      (open-window (window body) "https://jtra.cz/stuff/lisp/sclr/index.html")))
+      (create-gui-menu-item help  :content "Common Lisp Manual"   :on-click
+			    (lambda (obj)
+			      (declare (ignore obj))
+			      (open-window (window body) "http://clhs.lisp.se/")))
       (create-gui-menu-item help  :content "W3.CSS Manual"        :on-click
 			    (lambda (obj)
 			      (declare (ignore obj))
@@ -1474,7 +1488,7 @@ create-div's"
 			    (lambda (obj)
 			      (declare (ignore obj))
 			      (open-window (window body) "https://getbootstrap.com/docs/5.1/getting-started/introduction/")))
-      (create-gui-menu-item help  :content "About"              :on-click #'on-help-about-builder)
+      (create-gui-menu-item help  :content "About CLOG Builder"   :on-click #'on-help-about-builder)
       (create-gui-menu-full-screen menu))
     (on-show-control-pallete-win body)
     (on-show-control-list-win body)
