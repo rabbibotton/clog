@@ -101,6 +101,7 @@ embedded in a native template application.)"
   "CLOG-Obj - Low Level"
   (connection-data             generic-function)
   (connection-data-item        generic-function)
+  (connection-body             generic-function)
   (remove-connection-data-item generic-function)
   (validp                      generic-function)
 

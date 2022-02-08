@@ -459,10 +459,20 @@ clog-obj that will persist regardless of thread. The event hooks
 are stored in this string based hash in the format of:
 \"html-id:event-name\" => #'event-handler. clog-* keys are reserved
 for internal use of clog. The key \"clog-body\" is set to the
-clog-body of this connection."))
+clog-body of this connection and accessible with CONNECTION-BODY."))
 
 (defmethod connection-data ((obj clog-obj))
   (clog-connection:get-connection-data (connection-id obj)))
+
+;;;;;;;;;;;;;;;;;;;;;
+;; connection-body ;;
+;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric connection-body (clog-obj)
+  (:documentation "Get connection's clog-body."))
+
+(defmethod connection-body (clog-obj)
+  (connection-data-item clog-obj "clog-body"))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; connection-data-item ;;
