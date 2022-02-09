@@ -515,9 +515,11 @@ embedded in a native template application.)"
 
 (defsection @clog-form (:title "CLOG Form Objects")
   "CLOG-Form-Data"
-  (form-get-data      generic-function)
-  (form-post-data     generic-function)
-  (form-data-item     function)
+  (form-get-data         generic-function)
+  (form-post-data        generic-function)
+  (form-multipart-data   generic-function)
+  (delete-multipart-data generic-function)
+  (form-data-item        function)
 
   "CLOG-Form - Class for organizing Form Elements in to a From"
   (form-method-type   type)

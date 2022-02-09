@@ -35,11 +35,12 @@ script."
 
   (*verbose-output* variable)
 
-  (initialize          function)
-  (shutdown-clog       function)
-  (set-on-connect      function)
-  (set-clog-path       function)
-  (get-connection-data function)
+  (initialize             function)
+  (shutdown-clog          function)
+  (set-on-connect         function)
+  (set-clog-path          function)
+  (get-connection-data    function)
+  (delete-connection-data function)
 
   "CLOG system utilities"
   
@@ -113,6 +114,15 @@ script."
   "Return the connecton data associated with the CONNECTION-ID a
 hash test: #'equal."
   (gethash connection-id *connection-data*))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; delete-connection-data ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defun delete-connection-data (connection-id)
+  "Delete CONNECTION-ID's data. (private)"
+  (bordeaux-threads:with-lock-held (*connection-lock*)
+    (remhash connection-id *connection-data*)))
 
 ;;;;;;;;;;;;;;;;
 ;; prep-query ;;
@@ -311,7 +321,14 @@ instead of the compiled version."
 			  (let ((page-data (make-string (file-length stream)))
 				(post-data))
 			    (read-sequence page-data stream)
-			    ;; Check if post method response
+			    (when (search "multipart/form-data;"
+					  (getf env :content-type))
+			      (let ((id  (get-universal-time))
+				    (req (lack.request:make-request env)))
+				(bordeaux-threads:with-lock-held (*connection-lock*)
+				  (setf (gethash id *connection-data*)
+					(lack.request:request-body-parameters req)))
+				(setf post-data id)))
 			    (when (equal (getf env :content-type)
 					 "application/x-www-form-urlencoded")
 			      (setf post-data (make-string (getf env :content-length)))

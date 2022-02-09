@@ -15,16 +15,33 @@
 (defgeneric form-get-data (clog-obj)
   (:documentation "Get the form data as an a-list sent by the get method"))
 
-(defmethod form-get-data (clog-obj)
+(defmethod form-get-data ((obj clog-obj))
   (quri:uri-query-params
-   (quri:uri (clog-connection:query (connection-id clog-obj) "location.href"))))
+   (quri:uri (clog-connection:query (connection-id obj) "location.href"))))
 
 (defgeneric form-post-data (clog-obj)
   (:documentation "Get the form data as an a-list sent by post method"))
 
-(defmethod form-post-data (clog-obj)
+(defmethod form-post-data ((obj clog-obj))
   (quri:url-decode-params
-   (clog-connection:query (connection-id clog-obj) "clog['post-data']")))
+   (clog-connection:query (connection-id obj) "clog['post-data']")))
+
+(defgeneric form-multipart-data (clog-obj)
+  (:documentation "Get the form data as an a-list sent with the multipart
+method used in file uploads. DELETE-MULTIPART-DATA must be called or will
+never be GC'd. File upload items will be a four part list
+(name stream file-name content-type)."))
+
+(defmethod form-multipart-data ((obj clog-obj))
+  (clog-connection:get-connection-data
+   (parse-integer (caar (form-post-data obj)) :junk-allowed t)))
+
+(defgeneric delete-multipart-data (clog-obj)
+  (:documentation "Delete the multipart data upload"))
+
+(defmethod delete-multipart-data ((obj clog-obj))
+  (let* ((id  (parse-integer (caar (form-post-data obj))))
+	(clog-connection:delete-connection-data id))))
 
 (defun form-data-item (form-data item)
   "Return value for ITEM from FROM-DATA a-list"
