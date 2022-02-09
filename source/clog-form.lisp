@@ -61,7 +61,8 @@ never be GC'd. File upload items will be a four part list
 (deftype form-method-type () '(members :get :post :none))
 
 (defgeneric create-form (clog-obj
-			 &key action method target class html-id auto-place)
+			 &key action method target encoding
+			   class html-id auto-place)
   (:documentation "Create a new CLOG-Form as child of CLOG-OBJ that organizes
 a collection of form elements in to a single form if :AUTO-PLACE (default t)
 place-inside-bottom-of CLOG-OBJ. In CLOG a form's on-submit handler should be
@@ -69,25 +70,29 @@ set and the form element values handled in that handler as opposed to the
 HTML model of submitting to a new \"page\". If though one wishes to submit to
 another page can use the :ACTION :METHOD and :TARGET keys and either do not
 set an on-submit handler or call (submit CLOG-FORM) to perform the form
-action."))
+action. The default :ENCODING is application/x-www-form-urlencoded if
+doing file upload use multipart/form-data"))
 
 (defmethod create-form ((obj clog-obj)
 			&key (action "#")
 			  (method :none)
 			  (target "_self")
+			  (encoding "application/x-www-form-urlencoded")
 			  (class nil)
 			  (html-id nil)
 			  (auto-place t))
-  (create-child obj (format nil "<form action='~A' ~A target='~A'~A/>"
-			    action
-			    (if (eq method :none)
-				"onSubmit='return false;'"
-				(format nil "method='~A'" method))
-			    target
-			    (if class
-				(format nil " class='~A'"
-					(escape-string class))
-				""))
+  (create-child obj
+		(format nil "<form action='~A' ~A enctype='~A' target='~A'~A/>"
+			action
+			(if (eq method :none)
+			    "onSubmit='return false;'"
+			    (format nil "method='~A'" method))
+			encoding
+			target
+			(if class
+			    (format nil " class='~A'"
+				    (escape-string class))
+			    ""))
 		:clog-type 'clog-form :html-id html-id :auto-place auto-place))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;

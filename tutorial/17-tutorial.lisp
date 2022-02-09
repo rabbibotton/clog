@@ -41,6 +41,18 @@
 	 (fsubmit    (create-form-element form2 :submit))
 	 (tmp        (create-br fcontainer))
 	 (tmp (create-hr data-area))
+	 ;; This is a file upload form that will submit data and files
+	 ;; to a server.
+	 (fcontainer (create-div data-area :class "w3-container"))
+	 (tmp        (create-section fcontainer :h2 :content "File Upload Form"))
+	 (tmp        (create-br fcontainer))
+	 (form4      (create-form fcontainer :method :post
+					     :encoding "multipart/form-data"
+					     :action "/page4"))
+	 (finput     (create-form-element form4 :file :name "filename"))
+	 (fsubmit    (create-form-element form4 :submit))
+	 (tmp        (create-br fcontainer))
+	 (tmp (create-hr data-area))
 	 ;; This is a CLOG style form, instead of submitting data
 	 ;; to another page it is dealt with in place.
 	 (fcontainer (create-div data-area :class "w3-container"))
@@ -81,9 +93,25 @@
 				      (form-data-item params "yourname"))))
   (run body))
 
+(defun on-page4 (body)
+  (let ((params (form-multipart-data body)))
+    (create-div body :content params)
+    (destructuring-bind (stream fname content-type)
+	(form-data-item params "filename")
+      (create-div body :content (format nil "filename = ~A - (contents printed in REPL)" fname))
+      (let ((s (flexi-streams:make-flexi-stream stream :external-format :utf-8))
+	    (b (make-string 1000)))
+	(loop
+	  (let ((c (read-sequence b s)))
+	    (unless (plusp c) (return))
+	    (princ (subseq b 1 c))))))
+    (delete-multipart-data body))
+  (run body))
+
 (defun start-tutorial ()
   "Start tutorial."
   (initialize #'on-index)
   (set-on-new-window #'on-page2 :path "/page2")
   (set-on-new-window #'on-page3 :path "/page3")
+  (set-on-new-window #'on-page4 :path "/page4")
   (open-browser))
