@@ -758,7 +758,11 @@
      :create         clog:create-form
      :create-type    :base
      :events         (,@*events-element*)
-     :properties     ((:name "method"
+     :properties     ((:name "action"
+		       :attr "action")
+		      (:name "target"
+		       :attr "target")
+		      (:name "method"
 		       :attr "method")
 		      (:name "encoding"
 		       :prop "encoding")

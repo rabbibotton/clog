@@ -1,11 +1,9 @@
 - Future tutorials for builder:
 
-Creating a basic website
 Deploying a CLOG website
 Creating a native application
 Mobile development
 Creating a Bootstrap 5 based app
-Creating a W3CSS based app
 When to use page vs panel
 Running JavaScript
 Plug-in panels for use on other sites
@@ -32,7 +30,7 @@ Plug-in panels for use on other sites
 
 - Training and documentation tool
 
-- Event queuing option to easily avoid event race conditions when desired
+- Event queuing option to easily avoid event race conditions when desired in CLOG builder
 
 - Implement using long polling to optimize CLOG sites for use with
   search engines. If not long polling at least initial output sent by
@@ -43,7 +41,7 @@ Plug-in panels for use on other sites
 - Optionaly, for local apps, allow direct transport of CLOG data to webpage via apis
 remove need for websocket transport.
 
-Some notes
+Some notes on this
    1) Sending data to the page - https://wiki.gnome.org/Projects/WebKitGtk/ProgrammingGuide/Cookbook - look there for executing JavaScript (CLOG is JS snipits) or better https://webkitgtk.org/reference/webkitgtk/stable/webkitgtk-webkitwebview.html#webkit-web-view-execute-script  also see https://github.com/webview/webview/issues/8
    
    2) Sending the boot.js file - Certainly a local file load will work file:// but nice if also have direct way to send html/js
