@@ -62,6 +62,9 @@ embedded in a native template application.)"
   (open-browser      function))
 
 (defsection @clog-utilities (:title "CLOG Utilities")
+  "Concurrent Hash Tables"
+  (make-hash-table* function)
+  
   "CLOG-Group - Utility Class for CLOG-Obj storage"
   (clog-group    class)
   (create-group  function)
