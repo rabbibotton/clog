@@ -23,12 +23,11 @@ frameworks and website frameworks. The CLOG package starts up the
 connectivity to the browser or other websocket client (often a browser
 embedded in a native template application.)
 
-STATUS: CLOG is complete and all work is on higher order additions, 
-such as full desktop over the web, database tools,etc. See below for
-some enhacements being worked on. CLOG is actually based on GNOGA, a
-framework I wrote for Ada in 2013 and used in commercial production
-code for the last 9+ years, i.e. the techiniques CLOG uses are solid
-and proven.
+STATUS: CLOG 1.1 and CLOG Builder 1.0 released.
+
+CLOG is actually based on GNOGA, a framework I wrote for Ada in 2013
+and used in commercial production code for the last 9+ years, i.e. the
+techiniques CLOG uses are solid and proven.
 
 CLOG is being actively extended daily. Check the github discussion
 boards for the latest.
@@ -238,10 +237,6 @@ Tool Summary
 
 - clog-db-admin - SQLite3 admin tool
 - clog-builder  - Rapid visual interactive development for Web and GUIs
-
-Template Summary
-
-clog-gui-template.lisp - Basic CLOG-GUI app
 
 High Order Extensions to CLOG
 
