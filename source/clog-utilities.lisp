@@ -8,6 +8,15 @@
 
 (cl:in-package :clog)
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Implementation - make-hash-table*
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defun make-hash-table* (&rest args)
+  "Use native concurrent hash tables"
+  #+(or sbcl ecl mezzano)
+  (apply #'make-hash-table :synchronized t args)
+  #-(or sbcl ecl mezzano) (make-hash-table))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Implementation - clog-group
@@ -16,7 +25,7 @@
 (defclass clog-group ()
   ((controls
    :accessor controls
-   :initform (make-hash-table :test 'equalp))))
+   :initform (make-hash-table* :test 'equalp))))
 
 (defun create-group ()
   "Return a new CLOG-GROUP object for storing CLOG-OBJs. They are indexed by

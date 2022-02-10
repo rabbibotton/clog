@@ -65,6 +65,12 @@ script."
 ;; Implemetation - clog-connection
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(defun make-hash-table* (&rest args)
+  "Use concurrent hash tables"
+  #+(or sbcl ecl mezzano)
+  (apply #'make-hash-table :synchronized t args)
+  #-(or sbcl ecl mezzano) (make-hash-table))
+
 (defvar *verbose-output* nil "Verbose server output (default false)")
 
 (defvar *app*            nil "Clack 'app' middle-ware")
@@ -72,23 +78,20 @@ script."
 
 (defvar *on-connect-handler* nil "New connection event handler.")
 
-(defvar *connections*     (make-hash-table) "Connections to IDs")
-(defvar *connection-ids*  (make-hash-table) "IDs to connections")
-(defvar *connection-data* (make-hash-table) "Connection based data")
-(defvar *connection-lock* (bordeaux-threads:make-lock)
-  "Protect the connection hash tables")
+(defvar *connections*     (make-hash-table*) "Connections to IDs")
+(defvar *connection-ids*  (make-hash-table*) "IDs to connections")
+(defvar *connection-data* (make-hash-table*) "Connection based data")
 
 (defvar *new-id*   0 "Last issued connection or script IDs")
 (defvar *id-lock*  (bordeaux-threads:make-lock)
   "Protect new-id variable.")
 
-(defvar *queries*        (make-hash-table) "Query ID to Answers")
-(defvar *queries-sems*   (make-hash-table) "Query ID to semiphores")
-(defvar *queries-lock*   (bordeaux-threads:make-lock)
-  "Protect query hash tables")
-(defvar *query-time-out* 3 "Number of seconds to timeout waiting for a query")
+(defvar *queries*        (make-hash-table*) "Query ID to Answers")
+(defvar *queries-sems*   (make-hash-table*) "Query ID to semiphores")
+(defvar *query-time-out* 3
+  "Number of seconds to timeout waiting for a query by default")
 
-(defvar *url-to-boot-file* (make-hash-table :test 'equalp) "URL to boot-file")
+(defvar *url-to-boot-file* (make-hash-table* :test 'equalp) "URL to boot-file")
 
 ;;;;;;;;;;;;;;;;;
 ;; generate-id ;;
@@ -121,8 +124,7 @@ hash test: #'equal."
 
 (defun delete-connection-data (connection-id)
   "Delete CONNECTION-ID's data. (private)"
-  (bordeaux-threads:with-lock-held (*connection-lock*)
-    (remhash connection-id *connection-data*)))
+  (remhash connection-id *connection-data*))
 
 ;;;;;;;;;;;;;;;;
 ;; prep-query ;;
@@ -131,9 +133,8 @@ hash test: #'equal."
 (defun prep-query (id default-answer)
   "Setup up a query to be received from a script identified by ID an returning
 with DEFAULT-ANSWER in case of a time out. (Private)"
-  (bordeaux-threads:with-lock-held (*queries-lock*)
-    (setf (gethash id *queries-sems*) (bordeaux-threads:make-semaphore))
-    (setf (gethash id *queries*) default-answer)))
+  (setf (gethash id *queries-sems*) (bordeaux-threads:make-semaphore))
+  (setf (gethash id *queries*) default-answer))
 
 ;;;;;;;;;;;;;;;;;;;;;
 ;; wait-for-answer ;;
@@ -146,9 +147,8 @@ the default answer. (Private)"
       (progn
 	(bordeaux-threads:wait-on-semaphore (gethash id *queries-sems*) :timeout timeout)
 	(let ((answer (gethash id *queries*)))
-	  (bordeaux-threads:with-lock-held (*queries-lock*)
-	    (remhash id *queries*)
-	    (remhash id *queries-sems*))
+	  (remhash id *queries*)
+	  (remhash id *queries-sems*)
 	  answer))
     (t (c)
       (format t "Condition caught in wait-for-answer - ~A.~&" c)
@@ -162,20 +162,18 @@ the default answer. (Private)"
   "Handle new incoming websocket CONNECTIONS with ID from boot page. (Private)"
   (handler-case
       (cond (id
-	   (format t "Reconnection id - ~A to ~A~%" id connection)
-	   (bordeaux-threads:with-lock-held (*connection-lock*)
+	     (format t "Reconnection id - ~A to ~A~%" id connection)
 	     (setf (gethash id *connection-ids*) connection)
-	     (setf (gethash connection *connections*) id)))
+	     (setf (gethash connection *connections*) id))
 	    (t
 	     (setf id (generate-id))
-	     (bordeaux-threads:with-lock-held (*connection-lock*)
-	       (setf (gethash connection *connections*) id)
-	       (setf (gethash id *connection-ids*) connection)
-	       (setf (gethash id *connection-data*) (make-hash-table :test #'equal))
-	       (setf (gethash "connection-id" (get-connection-data id)) id))
+	     (setf (gethash connection *connections*) id)
+	     (setf (gethash id *connection-ids*) connection)
+	     (setf (gethash id *connection-data*) (make-hash-table* :test #'equal))
+	     (setf (gethash "connection-id" (get-connection-data id)) id)
 	     (format t "New connection id - ~A - ~A~%" id connection)
 	     (websocket-driver:send connection
-				  (format nil "clog['connection_id']=~A" id))
+				    (format nil "clog['connection_id']=~A" id))
 	     (bordeaux-threads:make-thread
 	      (lambda ()
 		(funcall *on-connect-handler* id))
@@ -216,8 +214,7 @@ the default answer. (Private)"
 	      (t
 	       (when *verbose-output*
 		 (format t "~A ~A = ~A~%" id (first ml) (second ml)))
-	       (bordeaux-threads:with-lock-held (*queries-lock*)
-		 (setf (gethash (parse-integer (first ml)) *queries*) (second ml)))
+	       (setf (gethash (parse-integer (first ml)) *queries*) (second ml))
 	       (bordeaux-threads:signal-semaphore
 		(gethash (parse-integer (first ml)) *queries-sems*)))))
     (t (c)
@@ -235,10 +232,9 @@ the default answer. (Private)"
 	(when id
 	  (when *verbose-output*
 	    (format t "Connection id ~A has closed. ~A~%" id connection))
-	  (bordeaux-threads:with-lock-held (*connection-lock*)
-	    (remhash id *connection-data*)
-	    (remhash id *connection-ids*)
-	    (remhash connection *connections*))))
+	  (remhash id *connection-data*)
+	  (remhash id *connection-ids*)
+	  (remhash connection *connections*)))
     (t (c)
       (format t "Condition caught in handle-message - ~A.~&" c)
       (values 0 c))))
@@ -325,9 +321,8 @@ instead of the compiled version."
 					  (getf env :content-type))
 			      (let ((id  (get-universal-time))
 				    (req (lack.request:make-request env)))
-				(bordeaux-threads:with-lock-held (*connection-lock*)
-				  (setf (gethash id *connection-data*)
-					(lack.request:request-body-parameters req)))
+				(setf (gethash id *connection-data*)
+				      (lack.request:request-body-parameters req))
 				(setf post-data id)))
 			    (when (equal (getf env :content-type)
 					 "application/x-www-form-urlencoded")
@@ -365,10 +360,9 @@ instead of the compiled version."
 (defun shutdown-clog ()
   "Shutdown CLOG."
   (clack:stop *client-handler*)
-  (bordeaux-threads:with-lock-held (*connection-lock*)
-    (clrhash *connection-data*)
-    (clrhash *connections*)
-    (clrhash *connection-ids*))
+  (clrhash *connection-data*)
+  (clrhash *connections*)
+  (clrhash *connection-ids*)
   (clrhash *url-to-boot-file*)
   (setf *app* nil)
   (setf *client-handler* nil))

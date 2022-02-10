@@ -97,7 +97,7 @@
     :documentation "The current window at front")
    (windows
     :accessor windows
-    :initform (make-hash-table :test 'equalp)
+    :initform (make-hash-table* :test 'equalp)
     :documentation "Window collection indexed by html-id")
    (last-z
     :accessor last-z

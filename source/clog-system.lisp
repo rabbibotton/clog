@@ -13,7 +13,7 @@
 ;; Implementation - CLOG System
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defvar *url-to-on-new-window* (make-hash-table :test 'equalp)
+(defvar *url-to-on-new-window* (make-hash-table* :test 'equalp)
   "URL to on-new-window handlers (private)")
 
 (defvar *clog-running* nil "If clog running.")
