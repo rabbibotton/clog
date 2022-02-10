@@ -37,7 +37,7 @@
    (properties-lock
     :accessor properties-lock
     :initform (bordeaux-threads:make-lock)
-    :documentation "Sync properties and event list")
+    :documentation "Sync refres properties and event window")
    (control-properties-win
     :accessor control-properties-win
     :initform nil
@@ -53,7 +53,7 @@
    (control-list-win-lock
     :accessor control-list-win-lock
     :initform (bordeaux-threads:make-lock)
-    :documentation "Sync control-list-win list")
+    :documentation "Sync refresh control-list-win")
    (control-pallete-win
     :accessor control-pallete-win
     :initform nil
@@ -64,26 +64,19 @@
     :documentation "Sync creating new controls")
    (control-lists
     :accessor control-lists
-    :initform (make-hash-table :test #'equalp)
-    :documentation "Panel to Control List hash table")
-   (control-lists-lock
-    :accessor control-lists-lock
-    :initform (bordeaux-threads:make-lock)
-    :documentation "Protect the control list")))
+    :initform (make-hash-table* :test #'equalp)
+    :documentation "Panel to Control List hash table")))
 
 ;; Cross page syncing
 
-(defvar *app-sync-hash* (make-hash-table :test #'equal)
+(defvar *app-sync-hash* (make-hash-table* :test #'equal)
   "Exchange app instance with new external pages")
-(defvar *app-sync-lock* (bordeaux-threads:make-lock)
-  "Protect app-sync hash tables")
 
 ;; Control-List utilities
 
 (defun init-control-list (app panel-id)
   "Initialize new control list for PANEL-ID on instance of APP."
-  (bordeaux-threads:with-lock-held ((control-lists-lock app))
-    (setf (gethash panel-id (control-lists app)) (make-hash-table :test #'equalp))))
+  (setf (gethash panel-id (control-lists app)) (make-hash-table :test #'equalp)))
 
 (defun destroy-control-list (app panel-id)
   "Destroy the control-list on PANEL-ID"
@@ -95,9 +88,8 @@
 
 (defun add-to-control-list (app panel-id control)
   "Add a CONTROL on to control-list on PANEL-ID"
-  (bordeaux-threads:with-lock-held ((control-lists-lock app))
-    (let ((html-id (format nil "~A" (html-id control))))
-      (setf (gethash html-id (get-control-list app panel-id)) control))))
+  (let ((html-id (format nil "~A" (html-id control))))
+    (setf (gethash html-id (get-control-list app panel-id)) control)))
 
 (defun get-from-control-list (app panel-id html-id)
   "Get control identified my HTML-ID from control-list on PANEL-ID"
@@ -105,8 +97,7 @@
 
 (defun remove-from-control-list (app panel-id html-id)
   "Remove a control identified by HTML-ID from control-list on PANEL-ID"
-  (bordeaux-threads:with-lock-held ((control-lists-lock app))
-    (remhash html-id (get-control-list app panel-id))))
+  (remhash html-id (get-control-list app panel-id)))
 
 (defun remove-deleted-from-control-list (app panel-id)
   "Remove any deleted control from control-list"
@@ -1062,12 +1053,10 @@ of controls and double click to select control."
 	 (panel-id      (html-id content)))
     ;; sync new window with app
     (setf (connection-data-item body "builder-app-data") app)
-    (bordeaux-threads:with-lock-held (*app-sync-lock*)
-      (remhash panel-uid *app-sync-hash*))
+    (remhash panel-uid *app-sync-hash*)
     (funcall (gethash (format nil "~A-link" panel-uid) *app-sync-hash*) content)
     (setf win (gethash (format nil "~A-win" panel-uid) *app-sync-hash*))
-    (bordeaux-threads:with-lock-held (*app-sync-lock*)
-      (remhash (format nil "~A-win" panel-uid) *app-sync-hash*))
+    (remhash (format nil "~A-win" panel-uid) *app-sync-hash*)
 
     ;; setup window and page
     (setf-next-id content 1)
@@ -1308,18 +1297,14 @@ of controls and double click to select control."
 	 (txt-link   (create-div txt-area
 				 :content (format nil "<br><center>~A</center>" link)))
 	 content panel-id)
-    (bordeaux-threads:with-lock-held (*app-sync-lock*)
-      (setf (gethash panel-uid *app-sync-hash*) app))
-    (bordeaux-threads:with-lock-held (*app-sync-lock*)
-      (setf (gethash (format nil "~A-win" panel-uid) *app-sync-hash*) win))
-    (bordeaux-threads:with-lock-held (*app-sync-lock*)
-      (setf (gethash (format nil "~A-link" panel-uid) *app-sync-hash*)
-	    (lambda (obj)
-	      (setf content obj)
-	      (setf panel-id (html-id content))
-	      (destroy txt-area)
-	      (bordeaux-threads:with-lock-held (*app-sync-lock*)
-		(remhash (format nil "~A-link" panel-uid) *app-sync-hash*)))))
+    (setf (gethash panel-uid *app-sync-hash*) app)
+    (setf (gethash (format nil "~A-win" panel-uid) *app-sync-hash*) win)
+    (setf (gethash (format nil "~A-link" panel-uid) *app-sync-hash*)
+	  (lambda (obj)
+	    (setf content obj)
+	    (setf panel-id (html-id content))
+	    (destroy txt-area)
+	    (remhash (format nil "~A-link" panel-uid) *app-sync-hash*)))
     (unless url-launch
       (open-browser :url link))))
 
