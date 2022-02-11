@@ -104,7 +104,7 @@ CL-USER> (ql:quickload :clog/tools)
 CL-USER> (clog-tools:clog-db-admin)
 ```
 
-The clog-builder GUI Builder tool can be run with:
+The CLOG Builder tool can be run with:
 
 ```
 CL-USER> (ql:quickload :clog/tools)
