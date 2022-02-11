@@ -66,10 +66,12 @@ script."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defun make-hash-table* (&rest args)
-  "Use concurrent hash tables"
+  "Use native concurrent hash tables"
+  ;; This covers sbcl ecl mazzano lw and ccl.
+  ;; (lw and ccl default hash is synchronized)
   #+(or sbcl ecl mezzano)
   (apply #'make-hash-table :synchronized t args)
-  #-(or sbcl ecl mezzano) (make-hash-table))
+  #-(or sbcl ecl mezzano) (apply #'make-hash-table args))
 
 (defvar *verbose-output* nil "Verbose server output (default false)")
 

@@ -18,7 +18,7 @@
   ;; (lw and ccl default hash is synchronized)
   #+(or sbcl ecl mezzano)
   (apply #'make-hash-table :synchronized t args)
-  #-(or sbcl ecl mezzano) (make-hash-table))
+  #-(or sbcl ecl mezzano) (apply #'make-hash-table args))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Implementation - clog-group
