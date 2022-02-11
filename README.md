@@ -8,9 +8,9 @@ View the HTML Documentation:
 
 https://rabbibotton.github.io/clog/clog-manual.html
 
-Join the CLOG Maillist for latest updates:
+View a short video on reddit about CLOG Builder
 
-https://mailman.common-lisp.net/listinfo/clog-devel
+https://www.reddit.com/r/lisp/comments/sd9wf1/clog_builder_cl_web_3_awesome_lang_awesome_tool/
 
 ---
 
@@ -135,6 +135,7 @@ to be a CLOGer.
 
 
 ![Image of clog-builder](https://rabbibotton.github.io/images/clog-builder.png)
+![Image of clog-builder-web](https://rabbibotton.github.io/images/cb-web.png)
 ![Image of demo1](https://rabbibotton.github.io/images/clog-demo1.png)
 ![Image of demo2](https://rabbibotton.github.io/images/clog-demo2.png)
 ![Image of demo3](https://rabbibotton.github.io/images/clog-demo3.png)
@@ -194,7 +195,16 @@ Here is a sample CLOG app:
   (open-browser))
 ```
 
-Tutorial Summary
+CLOG Builder Tutorials
+
+1. Chat App
+    https://www.reddit.com/r/lisp/comments/sj1tv5/clog_builder_tutorial_1_a_chat_app_from_start_to/
+2. Building a Web Page
+    https://www.reddit.com/r/lisp/comments/sn8j77/clog_builder_tutorial_2_building_a_web_page/
+3. Importing HTML in to Builder, Adding Pages and Hand Coding
+    https://www.reddit.com/r/lisp/comments/snvv0w/clog_builder_tutorial_3_importing_html_adding/
+
+CLOG Tutorial Summary
 
 - [01-tutorial.lisp](tutorial/01-tutorial.lisp) - Hello World
 - [02-tutorial.lisp](tutorial/02-tutorial.lisp) - Closures in CLOG
