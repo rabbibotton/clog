@@ -105,6 +105,8 @@ embedded in a native template application.)"
   (connection-data             generic-function)
   (connection-data-item        generic-function)
   (connection-body             generic-function)
+  (connection-sync             generic-function)
+  (with-sync-event             macro)
   (remove-connection-data-item generic-function)
   (validp                      generic-function)
 

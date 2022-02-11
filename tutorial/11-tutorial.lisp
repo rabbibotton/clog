@@ -66,11 +66,11 @@
 	     (reset form)))
     ;; We need to override the boostrap default to submit the form html style
     (set-on-submit form (lambda (obj)(declare (ignore obj))()))
-    (set-on-click good-button #'on-click-good)
-    (set-on-click scary-button #'on-click-scary))
+    (set-on-click good-button 'on-click-good)
+    (set-on-click scary-button 'on-click-scary))
     (run body)))
 
 (defun start-tutorial ()
   "Start tutorial."
-  (initialize #'on-new-window)
+  (initialize 'on-new-window)
   (open-browser :url "http://127.0.0.1:8080/tutorial/tut-11.html"))

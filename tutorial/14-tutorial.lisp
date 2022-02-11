@@ -54,5 +54,5 @@ Changes made to a local key will fire an event and print below:<br>"
 
 (defun start-tutorial ()
   "Start turtorial."
-  (initialize #'on-new-window)
+  (initialize 'on-new-window)
   (open-browser))

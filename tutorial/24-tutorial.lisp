@@ -98,11 +98,11 @@
 		     ";; This is a code block<br>
                       (defun start-tutorial ()<br>
                       \"Start turtorial.\"<br>
-                      (initialize #'on-new-window)<br>
+                      (initialize 'on-new-window)<br>
                       (open-browser))")
     (run body)))
 
 (defun start-tutorial ()
   "Start turtorial."
-  (initialize #'on-new-window)
+  (initialize 'on-new-window)
   (open-browser))

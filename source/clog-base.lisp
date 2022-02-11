@@ -474,6 +474,26 @@ clog-body of this connection and accessible with CONNECTION-BODY."))
 (defmethod connection-body (clog-obj)
   (connection-data-item clog-obj "clog-body"))
 
+;;;;;;;;;;;;;;;;;;;;;
+;; connection-sync ;;
+;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric connection-sync (clog-obj)
+  (:documentation "Get connection's clog-sync for optional syncing events."))
+
+(defmethod connection-sync (clog-obj)
+  (connection-data-item clog-obj "clog-sync"))
+
+;;;;;;;;;;;;;;;;;;;;;
+;; with-sync-event ;;
+;;;;;;;;;;;;;;;;;;;;;
+
+(defmacro with-sync-event ((clog-obj) &body body)
+  "Place at start of event to serialize access to the event. All events in
+an application share per connection the same queue of serialized events."
+  `(bordeaux-threads:with-lock-held (,`(connection-sync ,clog-obj))
+     ,@body))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; connection-data-item ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;

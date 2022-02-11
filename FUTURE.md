@@ -8,8 +8,6 @@ When to use page vs panel
 Running JavaScript
 Plug-in panels for use on other sites
 
-- CLOG tools for concurrency - clog-mutex
-
 - Multi control select and alignments in Builder
 
 - Right click menus CLOG-GUI

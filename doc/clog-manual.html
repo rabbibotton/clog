@@ -407,6 +407,16 @@ for openning windows on remote machines.</p></li>
 
 <h2><a href="#x-28CLOG-3A-40CLOG-UTILITIES-20MGL-PAX-3ASECTION-29">5 CLOG Utilities</a></h2>
 
+<p>Concurrent Hash Tables</p>
+
+<p><a id='x-28CLOG-3AMAKE-HASH-TABLE-2A-20FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#x-28CLOG-3AMAKE-HASH-TABLE-2A-20FUNCTION-29" >MAKE-HASH-TABLE*</a></span></span> <span class="locative-args">&amp;REST ARGS</span></span></p>
+
+<p>Use native concurrent hash tables</p></li>
+</ul>
+
 <p>CLOG-Group - Utility Class for CLOG-Obj storage</p>
 
 <p><a id='x-28CLOG-3ACLOG-GROUP-20CLASS-29'></a></p>
@@ -627,6 +637,23 @@ clog-body of this connection and accessible with <a href="#x-28CLOG-3ACONNECTION
 <li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ACONNECTION-BODY-20GENERIC-FUNCTION-29" >CONNECTION-BODY</a></span></span> <span class="locative-args">CLOG-OBJ</span></span></p>
 
 <p>Get connection's clog-body.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3ACONNECTION-SYNC-20GENERIC-FUNCTION-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#x-28CLOG-3ACONNECTION-SYNC-20GENERIC-FUNCTION-29" >CONNECTION-SYNC</a></span></span> <span class="locative-args">CLOG-OBJ</span></span></p>
+
+<p>Get connection's clog-sync for optional syncing events.</p></li>
+</ul>
+
+<p><a id='x-28CLOG-3AWITH-SYNC-EVENT-20MGL-PAX-3AMACRO-29'></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[macro]</span> <span class="reference-object"><a href="#x-28CLOG-3AWITH-SYNC-EVENT-20MGL-PAX-3AMACRO-29" >WITH-SYNC-EVENT</a></span></span> <span class="locative-args">(CLOG-OBJ) &amp;BODY BODY</span></span></p>
+
+<p>Place at start of event to serialize access to the event. All events in
+an application share per connection the same queue of serialized events.</p></li>
 </ul>
 
 <p><a id='x-28CLOG-3AREMOVE-CONNECTION-DATA-ITEM-20GENERIC-FUNCTION-29'></a></p>

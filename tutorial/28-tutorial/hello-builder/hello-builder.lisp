@@ -9,7 +9,7 @@
   (setf (color (hello-span panel)) (rgb (random 255) (random 255) (random 255))))
 
 (defun start-app ()
-  (initialize #'create-hello-page
+  (initialize 'create-hello-page
 	      :static-root (merge-pathnames "./www/"
 			     (asdf:system-source-directory :hello-builder)))
   (open-browser))

@@ -5,11 +5,7 @@
 (in-package :clog-tut-8)
 
 (defclass app-data ()
-  ((drag-mutex
-    :reader drag-mutex
-    :initform (bordeaux-threads:make-lock)
-    :documentation "Serialize access to the on-mouse-down event.")
-   (in-drag
+  ((in-drag
     :accessor in-drag-p
     :initform nil
     :documentation "Ensure only one box is dragged at a time.")
@@ -22,25 +18,25 @@
   (:documentation "App data specific to each instance of our tutorial 8 app"))
 
 (defun on-mouse-down (obj data)
-  (let ((app (connection-data-item obj "app-data")))    ; Access our instance of App-Data
-    (bordeaux-threads:with-lock-held ((drag-mutex app)) ; Ensure the first event received
-      (unless (in-drag-p app)                           ; to drag is the only one, ie only
-	(setf (in-drag-p app) t)                        ; the innermost box is dragged.
-      (let* ((mouse-x  (getf data :screen-x))          ; Use the screen coordinates not
-	     (mouse-y  (getf data :screen-y))          ; the coordinates relative to the obj
-	     (obj-top  (parse-integer (top obj) :junk-allowed t))
-	     (obj-left (parse-integer (left obj) :junk-allowed t)))	
-	(setf (drag-x app) (- mouse-x obj-left))
-	(setf (drag-y app) (- mouse-y obj-top))
-	(if (eq (getf data :event-type) :touch)
-	    (progn
-	      (set-on-touch-move obj 'on-mouse-move)
-	      (set-on-touch-end obj 'stop-obj-grab)
-	      (set-on-touch-cancel obj 'on-mouse-leave))
-	    (progn
-	      (set-on-mouse-move obj 'on-mouse-move)
-	      (set-on-mouse-up obj 'stop-obj-grab)
-	      (set-on-mouse-leave obj 'on-mouse-leave))))))))
+  (with-sync-event (obj)                                 ; Serialize events to on-mouse-down.
+    (let ((app (connection-data-item obj "app-data")))   ; Ensure the first event received
+      (unless (in-drag-p app)                            ; to drag is the only one, ie only
+	(setf (in-drag-p app) t)                         ; the innermost box is dragged.
+	(let* ((mouse-x  (getf data :screen-x))          ; Use the screen coordinates not
+	       (mouse-y  (getf data :screen-y))          ; the coordinates relative to the obj
+	       (obj-top  (parse-integer (top obj) :junk-allowed t))
+	       (obj-left (parse-integer (left obj) :junk-allowed t)))	
+	  (setf (drag-x app) (- mouse-x obj-left))
+	  (setf (drag-y app) (- mouse-y obj-top))
+	  (if (eq (getf data :event-type) :touch)
+	      (progn
+		(set-on-touch-move obj 'on-mouse-move)
+		(set-on-touch-end obj 'stop-obj-grab)
+		(set-on-touch-cancel obj 'on-mouse-leave))
+	      (progn
+		(set-on-mouse-move obj 'on-mouse-move)
+		(set-on-mouse-up obj 'stop-obj-grab)
+		(set-on-mouse-leave obj 'on-mouse-leave))))))))
 
 (defun on-mouse-move (obj data)
   (let* ((app (connection-data-item obj "app-data"))
@@ -102,5 +98,5 @@
 
 (defun start-tutorial ()
   "Start turtorial."
-  (initialize #'on-new-window)
+  (initialize 'on-new-window)
   (open-browser))

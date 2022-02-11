@@ -40,8 +40,13 @@
   (initialize #'on-new-window)
   ;; Set the function on-new-window to execute
   ;; everytime a browser connection to our app.
-  ;; #' tells common lisp to pass the function
-  ;; to intialize and not to execute it.
+  ;; #' tells common lisp to pass the function.
+  ;; If we pass the symbol 'on-new-window it
+  ;; it will look each time for the function
+  ;; represented by our symbol. This is generally
+  ;; prefered in development as then we can
+  ;; recompile our events while running ie. M-C-x
+  ;; in emacs.
 
   ;; Open a browser to http://127.0.0.1:8080 - the default for CLOG apps
   (open-browser))

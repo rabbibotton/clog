@@ -15,12 +15,12 @@
   "On-new-window handler."  
   (setf (title (html-document body)) "Tutorial 5")
   (set-on-click (create-section body :h1 :content "Hello World! (click me!)")
-		#'my-on-click)
+		'my-on-click)
   (setf (connection-data-item body "changer")
 	(create-section body :h1 :content "I change"))
   (run body))
 
 (defun start-tutorial ()
   "Start turtorial."
-  (initialize #'on-new-window)
+  (initialize 'on-new-window)
   (open-browser))
