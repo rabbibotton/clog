@@ -14,6 +14,8 @@
 
 (defun make-hash-table* (&rest args)
   "Use native concurrent hash tables"
+  ;; This covers sbcl ecl mazzano lw and ccl.
+  ;; (lw and ccl default hash is synchronized)
   #+(or sbcl ecl mezzano)
   (apply #'make-hash-table :synchronized t args)
   #-(or sbcl ecl mezzano) (make-hash-table))
