@@ -59,7 +59,7 @@
   
 (defun new-content (app)
   (setf (inner-html (main app)) "")
-  (let ((new-page  (create-form-element (main app) :text))
+  (let ((new-page  (create-form-element (main app) :text :value "New Title"))
 	(tmp       (create-br (main app)))
 	(text-area (create-text-area (main app) :rows 10 :columns 40)))
     (declare (ignore tmp))
