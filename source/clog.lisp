@@ -37,7 +37,8 @@ embedded in a native template application.)"
   (@clog-obj             section)
   (@clog-element         section)
   (@clog-element-common  section)
-  (@clog-panel           section)
+  (@clog-presentations   section)
+  (@clog-panels          section)
   (@clog-style-block     section)
   (@clog-form            section)
   (@clog-canvas          section)
@@ -492,13 +493,20 @@ embedded in a native template application.)"
   (clog-table-column-group-item   class)
   (create-table-column-group-item generic-function))
 
-(defsection @clog-panel (:title "CLOG Panels")
+(defsection @clog-presentations (:title "CLOG Presentations")
+  "CLOG-Presentations - CLOG Presentations"
+  (link-form-element-to-slot macro)
+  (link-element-to-slot      macro)
+  (link-slot-to-form-element macro)
+  (link-slot-to-element      macro))
+
+(defsection @clog-panels (:title "CLOG Panels")
   "CLOG-Panel - CLOG Panels"
-  (clog-panel class)
+  (clog-panel   class)
   (create-panel generic-function)
 
   "CLOG-Panel-Box - CLOG Panel Box"
-  (clog-panel-box class)
+  (clog-panel-box   class)
   (create-panel-box generic-function)
   (panel-box        generic-function)
 
