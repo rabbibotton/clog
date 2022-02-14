@@ -20,6 +20,7 @@
 	 (b2 (create-button body :content "Get (my-slot lisp-obj) Value")))
     (link-form-element-to-slot i1 lisp-obj my-slot)
     (link-slot-to-form-element lisp-obj my-slot i1)
+    (setf (my-slot lisp-obj) "First Value")
     (set-on-click b1
 		  (lambda (obj)
 		    (setf (my-slot lisp-obj) (value i2))))

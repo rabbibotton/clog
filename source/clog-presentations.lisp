@@ -23,18 +23,18 @@
   `(set-on-change ,clog-obj
 		  (lambda (obj)
 		    (declare (ignore obj))
-		    (setf (,slot-name ,object) (value ,clog-obj)))))
+		    (setf (,accessor ,object) (value ,clog-obj)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; link-element-to-slot ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defmacro link-element-to-slot (clog-obj object slot-name)
+(defmacro link-element-to-slot (clog-obj object accessor)
   "Link changes to (text CLOG-OBJ) to (ACESSOR OBJECT)"
   `(set-on-change ,clog-obj
 		  (lambda (obj)
 		    (declare (ignore obj))
-		    (setf (,slot-name ,object) (text ,clog-obj)))))
+		    (setf (,accessor ,object) (text ,clog-obj)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; link-slot-to-form-element ;;
