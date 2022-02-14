@@ -34,21 +34,25 @@
 ;; link-slot-to-form-element ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defmacro link-slot-to-form-element (object accessor clog-obj)
+(defmacro link-slot-to-form-element (object accessor clog-obj &key transform)
   "Link changes to lisp (ACCESSOR OBJECT) to (value CLOG-OBJ). Only one
 element can be bound at a time to a list object."
   `(defmethod (setf ,accessor) :after (new-value (obj (eql ,object)))
-     (setf (value ,clog-obj) new-value)))
+     (setf (value ,clog-obj) (if ,transform
+				 (funcall ,transform new-value)
+				 new-value))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; link-slot-to-element ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defmacro link-slot-to-element (object accessor clog-obj)
+(defmacro link-slot-to-element (object accessor clog-obj &key transform)
   "Link changes to lisp (ACCESSOR OBJECT) to (text CLOG-OBJ). Only one
 element can be bound at a time to a list object."
   `(defmethod (setf ,accessor) :after (new-value (obj (eql ,object)))
-     (setf (text ,clog-obj) new-value)))
+     (setf (text ,clog-obj) (if ,transform
+				(funcall ,transform new-value)
+				new-value))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; link-form-element-to-object ;;
