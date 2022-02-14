@@ -495,10 +495,12 @@ embedded in a native template application.)"
 
 (defsection @clog-presentations (:title "CLOG Presentations")
   "CLOG-Presentations - CLOG Presentations"
-  (link-form-element-to-slot macro)
-  (link-element-to-slot      macro)
-  (link-slot-to-form-element macro)
-  (link-slot-to-element      macro))
+  (link-form-element-to-slot   macro)
+  (link-element-to-slot        macro)
+  (link-slot-to-form-element   macro)
+  (link-slot-to-element        macro)
+  (link-form-element-to-object macro)
+  (link-element-to-object      macro))
 
 (defsection @clog-panels (:title "CLOG Panels")
   "CLOG-Panel - CLOG Panels"
