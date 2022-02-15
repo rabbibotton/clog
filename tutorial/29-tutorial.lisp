@@ -26,7 +26,7 @@
     (declare (ignore tmp))
     ;; We set up direct relationships between lisp objects and clog objects
     ;; any change to i1 will change my-slot and any change to my-slot
-    ;; will change i1.
+    ;; will change i1 and transform it with #'string-upcase
     (link-slot-and-form-element lisp-obj my-slot i1
 				:transform-to-element #'string-upcase)
     ;; any change to my-count will change t1
