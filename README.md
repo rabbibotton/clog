@@ -23,6 +23,8 @@ frameworks and website frameworks. The CLOG package starts up the
 connectivity to the browser or other websocket client (often a browser
 embedded in a native template application.)
 
+[CLOG - Technical Overview and Purpose](CONCEPT.md)
+
 STATUS: CLOG 1.1 and CLOG Builder 1.0 released.
 
 CLOG is actually based on GNOGA, a framework I wrote for Ada in 2013
@@ -50,14 +52,13 @@ an active soft realtime connection. For most CLOG applications all
 programming logic, events and decisions are done on the server
 which can be local, or remote over the web.
 
-CLOG is developed on an M1 MacBook with ECL and SBCL,
-it is tested fairly regulary with SBCL on Linux, Windows and
-Intel MacBook. It should in theory work on any system with
-Quicklisp and CLACK.
+CLOG is developed with ECL and SBCL, it is tested fairly regulary on
+ Linux, Windows, Rasberry Pi (running Ubuntu), M1 and Intel Mac. It
+ should in theory work on any system with Quicklisp and CLACK.
 
-CLOG is in QuickLisp (ql:quickload :clog), but you may want to live on the bleeding edge
-and use UltraLisp or clone the github repo into your
-~/common-lisp directory (or other quicklisp/asdf findable
+CLOG is in QuickLisp (ql:quickload :clog), but you likely want to live
+on the bleeding edge and use UltraLisp or clone the github repo into
+your ~/common-lisp directory (or other quicklisp/asdf findable
 directory):
 
 ```
