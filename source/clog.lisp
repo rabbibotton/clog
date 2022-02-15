@@ -495,6 +495,8 @@ embedded in a native template application.)"
 
 (defsection @clog-presentations (:title "CLOG Presentations")
   "CLOG-Presentations - CLOG Presentations"
+  (link-slot-and-form-element      macro)
+  (link-slot-and-element           macro)
   (link-form-element-to-slot       macro)
   (link-element-to-slot            macro)
   (link-element-to-place           macro)

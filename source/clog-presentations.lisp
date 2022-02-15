@@ -8,11 +8,43 @@
 
 (cl:in-package :clog)
 
-;;; clog-presentations - link Lisp classes to CLOG objects
+;;; clog-presentations - link Lisp objects and CLOG objects
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Implementation - clog-presentations
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; link-slot-and-form-element ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defmacro link-slot-and-form-element (object accessor clog-obj
+				      &key (set-event #'set-on-change)
+					transform-to-lisp
+					transform-to-element)
+  "Biderectional link slot (ACCESSOR OBJECT) <> clog-form-element (CLOG-OBJ)"
+  `(progn
+     (link-form-element-to-slot ,clog-obj ,object ,accessor
+				:set-event ,set-event
+				:transform ,transform-to-lisp)
+     (link-slot-to-form-element ,object ,accessor ,clog-obj
+				:transform ,transform-to-element)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; link-slot-and-element ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defmacro link-slot-and-element (object accessor clog-obj
+				 &key (set-event #'set-on-change)
+				   transform-to-lisp
+				   transform-to-element)
+  "Biderectional link slot (ACCESSOR OBJECT) <> clog-element (CLOG-OBJ)"
+  `(progn
+     (link-element-to-slot ,clog-obj ,object ,accessor
+			   :set-event ,set-event
+			   :transform ,transform-to-lisp)
+     (link-slot-to-element ,object ,accessor ,clog-obj
+			   :transform ,transform-to-element)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; link-form-element-to-slot ;;

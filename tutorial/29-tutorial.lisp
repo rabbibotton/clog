@@ -25,12 +25,10 @@
 				  :label (create-label body :content "Change my-count:"))))
     (declare (ignore tmp))
     ;; We set up direct relationships between lisp objects and clog objects
-    ;; any change to i1 will change my-slot
-    (link-form-element-to-slot i1 lisp-obj my-slot)
-    ;; any change to my-slot will change i1 after transforming
-    ;; my-slot to upercase
-    (link-slot-to-form-element lisp-obj my-slot i1
-			       :transform #'string-upcase)
+    ;; any change to i1 will change my-slot and any change to my-slot
+    ;; will change i1.
+    (link-slot-and-form-element lisp-obj my-slot i1
+				:transform-to-element #'string-upcase)
     ;; any change to my-count will change t1
     (link-slot-to-element lisp-obj my-count t1)
     ;; any change to i3 will change my-count
