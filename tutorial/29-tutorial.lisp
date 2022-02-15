@@ -22,7 +22,9 @@
 	 (tmp (create-br body))
 	 (t1 (create-div body :content "[counter]"))
 	 (i3 (create-form-element body :text
-				  :label (create-label body :content "Change my-count:"))))
+				  :label (create-label body :content "Change my-count:")))
+	 (tmp (create-br body))
+	 (t2 (create-div body :content "'Hello'")))
     (declare (ignore tmp))
     ;; We set up direct relationships between lisp objects and clog objects
     ;; any change to i1 will change my-slot and any change to my-slot
@@ -35,6 +37,8 @@
     ;; and i3's value will be transformed to an integer
     (link-form-element-to-slot i3 lisp-obj my-count
 			       :transform #'parse-integer)
+    ;; Clicking on t2 will set my-slot to its text
+    (link-element-to-slot t2 lisp-obj my-slot :set-event #'set-on-click)
     ;; This change of my-slot will immediately change in the web page
     (setf (my-slot lisp-obj) "First Value")
     (set-on-click b1
