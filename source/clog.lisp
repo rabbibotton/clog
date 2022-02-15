@@ -65,7 +65,7 @@ embedded in a native template application.)"
 (defsection @clog-utilities (:title "CLOG Utilities")
   "Concurrent Hash Tables"
   (make-hash-table* function)
-  
+
   "CLOG-Group - Utility Class for CLOG-Obj storage"
   (clog-group    class)
   (create-group  function)
@@ -385,7 +385,7 @@ embedded in a native template application.)"
   "CLOG-Summary - Class for CLOG Summary Blocks"
   (clog-summary   class)
   (create-summary generic-function)
-  
+
   "CLOG-HR - Class for CLOG Hortizontal Rules"
   (clog-HR   class)
   (create-HR generic-function)
@@ -495,12 +495,12 @@ embedded in a native template application.)"
 
 (defsection @clog-presentations (:title "CLOG Presentations")
   "CLOG-Presentations - CLOG Presentations"
-  (link-form-element-to-slot   macro)
-  (link-element-to-slot        macro)
-  (link-slot-to-form-element   macro)
-  (link-slot-to-element        macro)
-  (link-form-element-to-object macro)
-  (link-element-to-object      macro))
+  (link-form-element-to-slot       macro)
+  (link-element-to-slot            macro)
+  (link-element-to-place           macro)
+  (link-slot-to-form-element       macro)
+  (link-slot-to-element            macro)
+  (link-slot-to-place              macro))
 
 (defsection @clog-panels (:title "CLOG Panels")
   "CLOG-Panel - CLOG Panels"

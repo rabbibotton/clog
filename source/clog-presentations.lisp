@@ -18,17 +18,44 @@
 ;; link-form-element-to-slot ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defmacro link-form-element-to-slot (clog-obj object accessor &key transform)
-  "Link changes to (value CLOG-OBJ) to (ACESSOR OBJECT)"
-  `(link-form-element-to-object ,clog-obj (,accessor ,object) :transform ,transform))
+(defmacro link-form-element-to-slot (clog-obj object accessor
+				     &key (set-event #'set-on-change)
+				       transform)
+  "Link changes to (value CLOG-OBJ) to (ACESSOR OBJECT)
+on SET-EVENT with TRANSFORM"
+  `(link-element-to-place ,clog-obj value (,accessor ,object)
+			  :set-event ,set-event
+			  :transform ,transform))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; link-element-to-slot ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defmacro link-element-to-slot (clog-obj object accessor &key transform)
-  "Link changes to (text CLOG-OBJ) to (ACESSOR OBJECT)"
-  `(link-element-to-object ,clog-obj (,accessor ,object) :transform ,transform))
+(defmacro link-element-to-slot (clog-obj object accessor
+				&key (set-event #'set-on-change)
+				  transform)
+  "Link changes to (text CLOG-OBJ) to (ACESSOR OBJECT)
+on SET-EVENT with TRANSFORM"
+  `(link-element-to-place ,clog-obj text (,accessor ,object)
+				   :set-event ,set-event
+				   :transform ,transform))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; link-element-to-place ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defmacro link-element-to-place (clog-obj property place
+				  &key (set-event #'set-on-change)
+				    transform)
+  "Link changes to (PROPERTY CLOG-OBJ) to any lisp PLACE
+on SET-EVENT with TRANSFORM"
+  `(funcall ,set-event ,clog-obj
+	    (lambda (obj)
+	      (declare (ignore obj))
+	      (let ((v (if ,transform
+			   (funcall ,transform (,property ,clog-obj))
+			   (,property ,clog-obj))))
+		(setf ,place v)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; link-slot-to-form-element ;;
@@ -37,10 +64,7 @@
 (defmacro link-slot-to-form-element (object accessor clog-obj &key transform)
   "Link changes to lisp (ACCESSOR OBJECT) to (value CLOG-OBJ). Only one
 element can be bound at a time to a list object."
-  `(defmethod (setf ,accessor) :after (new-value (obj (eql ,object)))
-     (setf (value ,clog-obj) (if ,transform
-				 (funcall ,transform new-value)
-				 new-value))))
+  `(link-slot-to-place ,object ,accessor (value ,clog-obj) :transform ,transform))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; link-slot-to-element ;;
@@ -49,35 +73,16 @@ element can be bound at a time to a list object."
 (defmacro link-slot-to-element (object accessor clog-obj &key transform)
   "Link changes to lisp (ACCESSOR OBJECT) to (text CLOG-OBJ). Only one
 element can be bound at a time to a list object."
+  `(link-slot-to-place ,object ,accessor (text ,clog-obj) :transform ,transform))
+
+;;;;;;;;;;;;;;;;;;;;;;;;
+;; link-slot-to-place ;;
+;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defmacro link-slot-to-place (object accessor place &key transform)
+  "Link changes to lisp (ACCESSOR OBJECT) to PLACE. Only one
+PLACE can be bound at a time to a list object."
   `(defmethod (setf ,accessor) :after (new-value (obj (eql ,object)))
-     (setf (text ,clog-obj) (if ,transform
-				(funcall ,transform new-value)
-				new-value))))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; link-form-element-to-object ;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(defmacro link-form-element-to-object (clog-obj object &key transform)
-  "Link changes to (value CLOG-OBJ) to any lisp OBJECT"
-  `(set-on-change ,clog-obj
-		  (lambda (obj)
-		    (declare (ignore obj))
-		    (let ((v (if ,transform
-				 (funcall ,transform (value ,clog-obj))
-				 (value ,clog-obj))))
-		      (setf ,object v)))))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; link-element-to-object ;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(defmacro link-element-to-object (clog-obj object &key transform)
-  "Link changes to (text CLOG-OBJ) to any lisp OBJECT"
-  `(set-on-change ,clog-obj
-		  (lambda (obj)
-		    (declare (ignore obj))
-		    (let ((v (if ,transform
-				 (funcall ,transform (text ,clog-obj))
-				 (text ,clog-obj))))
-		      (setf ,object v)))))
+     (setf ,place (if ,transform
+		      (funcall ,transform new-value)
+		      new-value))))
