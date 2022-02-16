@@ -95,7 +95,7 @@ on SET-EVENT with TRANSFORM"
 
 (defmacro link-slot-to-form-element (object accessor clog-obj &key transform)
   "Link changes to lisp (ACCESSOR OBJECT) to (value CLOG-OBJ). Only one
-element can be bound at a time to a list object."
+element can be bound at a time to a lisp object."
   `(link-slot-to-place ,object ,accessor (value ,clog-obj) :transform ,transform))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -104,7 +104,7 @@ element can be bound at a time to a list object."
 
 (defmacro link-slot-to-element (object accessor clog-obj &key transform)
   "Link changes to lisp (ACCESSOR OBJECT) to (text CLOG-OBJ). Only one
-element can be bound at a time to a list object."
+element can be bound at a time to a lisp object."
   `(link-slot-to-place ,object ,accessor (text ,clog-obj) :transform ,transform))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;
@@ -113,7 +113,7 @@ element can be bound at a time to a list object."
 
 (defmacro link-slot-to-place (object accessor place &key transform)
   "Link changes to lisp (ACCESSOR OBJECT) to PLACE. Only one
-PLACE can be bound at a time to a list object."
+PLACE can be bound at a time to a lisp object."
   `(defmethod (setf ,accessor) :after (new-value (obj (eql ,object)))
      (setf ,place (if ,transform
 		      (funcall ,transform new-value)
