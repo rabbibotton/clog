@@ -423,6 +423,54 @@
     ,@*props-display*
     ,@*props-nav*))
 
+(defparameter *events-multimedia*
+  '((:name "on-media-abort"
+     :parameters "target")
+    (:name "on-media-error"
+     :parameters "target")
+    (:name "on-can-play"
+     :parameters "target")
+    (:name "on-can-play-through"
+     :parameters "target")
+    (:name "on-duration-change"
+     :parameters "target")
+    (:name "on-emptied"
+     :parameters "target")
+    (:name "on-ended"
+     :parameters "target")
+    (:name "on-loaded-data"
+     :parameters "target")
+    (:name "on-loaded-meta-data"
+     :parameters "target")
+    (:name "on-load-start"
+     :parameters "target")
+    (:name "on-play"
+     :parameters "target")
+    (:name "on-pause"
+     :parameters "target")
+    (:name "on-playing"
+     :parameters "target")
+    (:name "on-progress"
+     :parameters "target")
+    (:name "on-rate-change"
+     :parameters "target")
+    (:name "on-seek"
+     :parameters "target")
+    (:name "on-seeked"
+     :parameters "target")
+    (:name "on-seeking"
+     :parameters "target")
+    (:name "on-stalled"
+     :parameters "target")
+    (:name "on-suspend"
+     :parameters "target")
+    (:name "on-time-updat"
+     :parameters "target")
+    (:name "on-volume-change"
+     :parameters "target")
+    (:name "on-waiting"
+     :parameters "target")))
+
 (defparameter *events-element*
   '((:name        "on-click"
      :parameters  "target")
@@ -1229,7 +1277,8 @@
      :clog-type      clog:clog-audio
      :create         clog:create-audio
      :create-type    :base
-     :events         (,@*events-element*)
+     :events         (,@*events-multimedia*
+		      ,@*events-element*)
      :properties     ((:name "media url"
 		       :prop "src")
 		      (:name "volume"
@@ -1250,7 +1299,8 @@
      :clog-type      clog:clog-video
      :create         clog:create-video
      :create-type    :base
-     :events         (,@*events-element*)
+     :events         (,@*events-multimedia*
+		      ,@*events-element*)
      :properties     ((:name "media url"
 		       :prop "src")
 		      (:name "volume"
@@ -1297,4 +1347,3 @@
      :type    :system
      :www     "templates/www/"
      :loc     "templates/projects/clog-web/")))
-
