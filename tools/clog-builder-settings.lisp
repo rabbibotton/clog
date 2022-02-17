@@ -472,7 +472,9 @@
      :parameters "target")))
 
 (defparameter *events-element*
-  '((:name        "on-click"
+  '((:name        "on-create"
+     :parameters  "target")
+    (:name        "on-click"
      :parameters  "target")
     (:name        "on-focus"
      :parameters  "target")

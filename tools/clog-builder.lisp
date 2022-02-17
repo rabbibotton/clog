@@ -553,14 +553,23 @@ not a temporary attached one when using select-control."
 		       (let ((handler (attribute control (format nil "data-~A" (getf event :name)))))
 			 (unless (or (equalp handler "undefined")
 				     (equal handler ""))
-			   (push (format nil
-					 "    \(set-~A \(~A panel\) \(lambda \(~A\) \(declare \(ignorable ~A\)\) ~A\)\)~%"
-					 (getf event :name)
-					 vname
-					 (getf event :parameters)
-					 (getf event :parameters)
-					 handler)
-				 events))))))))
+			   (unless (equalp (getf event :name) "on-create")
+			     (push (format nil
+				    "    \(set-~A \(~A panel\) \(lambda \(~A\) \(declare \(ignorable ~A\)\) ~A\)\)~%"
+				    (getf event :name)
+				    vname
+				    (getf event :parameters)
+				    (getf event :parameters)
+				    handler)
+				   events))))))
+		   (let ((handler (attribute control "data-on-create")))
+		     (unless (or (equalp handler "undefined")
+				 (equal handler ""))
+		       (push (format nil
+			      "    \(let \(\(target \(~A panel\)\)\) \(declare \(ignorable target\)\) ~A\)~%"
+			      vname
+			      handler)
+			     events))))))
 	     (get-control-list app panel-id))
     (let ((result (format nil
 			  "\(in-package \"~A\"\)
