@@ -1,4 +1,4 @@
-;; Demonstrate CLOG presentations
+;; Demonstrate CLOG-presentations and CLOG-jQuery
 ;;   links established between CLOG objects and Lisp objects
 
 (defpackage #:clog-tut-29
@@ -49,6 +49,8 @@
 		  (lambda (obj)
 		    (declare (ignore obj))
 		    (setf (value i2) (my-slot lisp-obj))))
+    ;; Use jQuery to set all inputs to have a background color
+    (setf (background-color (create-jquery body "input[type=text]")) :beige)
     ;; This updates an element on the page by just changing the value of the linked
     ;; slot and my-count can be adjusted mid loop from web page
     (loop

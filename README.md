@@ -235,7 +235,7 @@ CLOG Tutorial Summary
 - [26-tutorial.lisp](tutorial/26-tutorial.lisp) - A web page and form with CLOG WEB
 - [27-tutorial.lisp](tutorial/27-tutorial.lisp) - Panel Box Layouts
 - [28-tutorial/](tutorial/28-tutorial) - CLOG Builder Hello - A minimalist CLOG Builder project
-- [29-tutorial.lisp](tutorial/29-tutorial.lisp) - Presentations - linking lisp objects to clog objects
+- [29-tutorial.lisp](tutorial/29-tutorial.lisp) - Presentations (and jQuery) - linking lisp objects to clog objects
 
 Demo Summary
 
