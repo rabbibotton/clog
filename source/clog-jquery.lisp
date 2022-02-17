@@ -28,11 +28,11 @@ can represent one or even my CLOG objects as a single element."))
 (defmethod create-jquery ((obj clog-obj) jquery)
   (let ((html-id (format nil "CLOG~A" (clog-connection:generate-id))))
     (clog-connection:execute
-     connection-id
+     (connection-id obj)
      (format nil
 	     "clog['~A']=$(\"~A\")"
-	     html-id jquery)))
-    (make-clog-element (connection-id obj) html-id :clog-type 'clog-jquery))
+	     html-id jquery))
+    (make-clog-element (connection-id obj) html-id :clog-type 'clog-jquery)))
 
 ;;;;;;;;;;;;
 ;; jquery ;;

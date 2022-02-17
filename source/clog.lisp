@@ -50,7 +50,7 @@ embedded in a native template application.)"
   (@clog-document        section)
   (@clog-location        section)
   (@clog-navigator       section)
-  (@clog-jquery          section)  
+  (@clog-jquery          section)
   (@clog-helpers         section)
   (@clog-internals       section))
 
@@ -89,16 +89,6 @@ embedded in a native template application.)"
 
   "CLOG Unit utilities"
   (unit          function))
-
-(defsection @clog-jquery (:title "CLOG jQuery Objects")
-  "CLOG-jQuery - Base class for CLOG jQuery Objects"
-  (clog-jQuery class)
-  
-  "CLOG-jQuery methods"
-  (jquery         generic-function)
-  (jquery-execute generic-function)
-  (jquery-query   generic-function))
-  
 
 (defsection @clog-obj (:title "CLOG Objects")
   "CLOG-Obj - Base class for CLOG Objects"
@@ -354,6 +344,18 @@ embedded in a native template application.)"
   (first-child      generic-function)
   (previous-sibling generic-function)
   (next-sibling     generic-function))
+
+(defsection @clog-jquery (:title "CLOG jQuery Objects")
+  "CLOG-jQuery - Base class for CLOG jQuery Objects"
+  (clog-jQuery class)
+
+  "CLOG-jQuery creation"
+  (create-jquery generic-function)
+
+  "CLOG-jQuery methods"
+  (jquery         generic-function)
+  (jquery-execute generic-function)
+  (jquery-query   generic-function))
 
 (defsection @clog-element-common (:title "Common CLOG Elements")
   "CLOG-A - Class for CLOG Anchors"
