@@ -23,7 +23,13 @@ can represent one or even my CLOG objects as a single element."))
 ;;;;;;;;;;;;;;;;;;;
 
 (defgeneric create-jquery (clog-obj jquery)
-  (:documentation "Create a new CLOG-JQUERY from JQUERY"))
+  (:documentation "Create a new CLOG-JQUERY from JQUERY.
+Some sample jquery selectors:
+    *
+    .class
+    element_name
+    #id
+    selector1, selectorN, ..."))
 
 (defmethod create-jquery ((obj clog-obj) jquery)
   (let ((html-id (format nil "CLOG~A" (clog-connection:generate-id))))

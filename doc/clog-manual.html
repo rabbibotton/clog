@@ -56,8 +56,9 @@
 <li><a href="#CLOG:@CLOG-DOCUMENT%20MGL-PAX:SECTION" title="CLOG Document Objects">19 CLOG Document Objects</a></li>
 <li><a href="#CLOG:@CLOG-LOCATION%20MGL-PAX:SECTION" title="CLOG Location Objects">20 CLOG Location Objects</a></li>
 <li><a href="#CLOG:@CLOG-NAVIGATOR%20MGL-PAX:SECTION" title="CLOG Navigator Objects">21 CLOG Navigator Objects</a></li>
-<li><a href="#CLOG:@CLOG-HELPERS%20MGL-PAX:SECTION" title="CLOG Helper Functions">22 CLOG Helper Functions</a></li>
-<li><a href="#CLOG:@CLOG-INTERNALS%20MGL-PAX:SECTION" title="CLOG Framework internals and extensions">23 CLOG Framework internals and extensions</a></li>
+<li><a href="#CLOG:@CLOG-JQUERY%20MGL-PAX:SECTION" title="CLOG jQuery Objects">22 CLOG jQuery Objects</a></li>
+<li><a href="#CLOG:@CLOG-HELPERS%20MGL-PAX:SECTION" title="CLOG Helper Functions">23 CLOG Helper Functions</a></li>
+<li><a href="#CLOG:@CLOG-INTERNALS%20MGL-PAX:SECTION" title="CLOG Framework internals and extensions">24 CLOG Framework internals and extensions</a></li>
 </ul>
 
 <h6>[in package CLOG]</h6>
@@ -7451,7 +7452,7 @@ If <code>ON-FULL-SCREEN-CHANGE-HANDLER</code> is nil unbind the event.</p></li>
 <p><a id="x-28CLOG-3A-40CLOG-NAVIGATOR-20MGL-PAX-3ASECTION-29"></a>
 <a id="CLOG:@CLOG-NAVIGATOR%20MGL-PAX:SECTION"></a></p>
 
-<p><span class="outer-navigation"><span class="navigation"> <a href="#CLOG:@CLOG-LOCATION%20MGL-PAX:SECTION" title="CLOG Location Objects">&#8592;</a> <a href="#CLOG:@CLOG-MANUAL%20MGL-PAX:SECTION" title="The CLOG manual">&#8593;</a> <a href="#CLOG:@CLOG-HELPERS%20MGL-PAX:SECTION" title="CLOG Helper Functions">&#8594;</a> <a href="#CLOG:@CLOG-NAVIGATOR%20MGL-PAX:SECTION" title="CLOG Navigator Objects">&#8634;</a></span></span></p>
+<p><span class="outer-navigation"><span class="navigation"> <a href="#CLOG:@CLOG-LOCATION%20MGL-PAX:SECTION" title="CLOG Location Objects">&#8592;</a> <a href="#CLOG:@CLOG-MANUAL%20MGL-PAX:SECTION" title="The CLOG manual">&#8593;</a> <a href="#CLOG:@CLOG-JQUERY%20MGL-PAX:SECTION" title="CLOG jQuery Objects">&#8594;</a> <a href="#CLOG:@CLOG-NAVIGATOR%20MGL-PAX:SECTION" title="CLOG Navigator Objects">&#8634;</a></span></span></p>
 
 <h2><a href="#CLOG:@CLOG-NAVIGATOR%20MGL-PAX:SECTION">21 CLOG Navigator Objects</a></h2>
 
@@ -7504,12 +7505,79 @@ If <code>ON-FULL-SCREEN-CHANGE-HANDLER</code> is nil unbind the event.</p></li>
 <p>Get browser vendor.</p></li>
 </ul>
 
+<p><a id="x-28CLOG-3A-40CLOG-JQUERY-20MGL-PAX-3ASECTION-29"></a>
+<a id="CLOG:@CLOG-JQUERY%20MGL-PAX:SECTION"></a></p>
+
+<p><span class="outer-navigation"><span class="navigation"> <a href="#CLOG:@CLOG-NAVIGATOR%20MGL-PAX:SECTION" title="CLOG Navigator Objects">&#8592;</a> <a href="#CLOG:@CLOG-MANUAL%20MGL-PAX:SECTION" title="The CLOG manual">&#8593;</a> <a href="#CLOG:@CLOG-HELPERS%20MGL-PAX:SECTION" title="CLOG Helper Functions">&#8594;</a> <a href="#CLOG:@CLOG-JQUERY%20MGL-PAX:SECTION" title="CLOG jQuery Objects">&#8634;</a></span></span></p>
+
+<h2><a href="#CLOG:@CLOG-JQUERY%20MGL-PAX:SECTION">22 CLOG jQuery Objects</a></h2>
+
+<p>CLOG-jQuery - Base class for CLOG jQuery Objects</p>
+
+<p><a id="x-28CLOG-3ACLOG-JQUERY-20CLASS-29"></a>
+<a id="CLOG:CLOG-JQUERY%20CLASS"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[class]</span> <span class="reference-object"><a href="#CLOG:CLOG-JQUERY%20CLASS" >CLOG-JQUERY</a></span></span> <span class="locative-args"><a href="#CLOG:CLOG-ELEMENT%20CLASS" title="CLOG:CLOG-ELEMENT CLASS">CLOG-ELEMENT</a></span></span></p>
+
+<p>CLOG jQuery objects. A jQuery representa DOM queries that
+can represent one or even my CLOG objects as a single element.</p></li>
+</ul>
+
+<p>CLOG-jQuery creation</p>
+
+<p><a id="x-28CLOG-3ACREATE-JQUERY-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG:CREATE-JQUERY%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:CREATE-JQUERY%20GENERIC-FUNCTION" >CREATE-JQUERY</a></span></span> <span class="locative-args">CLOG-OBJ JQUERY</span></span></p>
+
+<p>Create a new <a href="#CLOG:CLOG-JQUERY%20CLASS" title="CLOG:CLOG-JQUERY CLASS"><code>CLOG-JQUERY</code></a> from <code>JQUERY</code>.
+Some sample jquery selectors:
+    *
+    .class
+    element_name
+    #id
+    selector1, selectorN, ...</p></li>
+</ul>
+
+<p>CLOG-jQuery methods</p>
+
+<p><a id="x-28CLOG-3AJQUERY-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG:JQUERY%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:JQUERY%20GENERIC-FUNCTION" >JQUERY</a></span></span> <span class="locative-args">CLOG-OBJ</span></span></p>
+
+<p>Return the jQuery accessor for <a href="#CLOG:OBJ%20GENERIC-FUNCTION" title="CLOG:OBJ GENERIC-FUNCTION"><code>OBJ</code></a>.</p></li>
+</ul>
+
+<p><a id="x-28CLOG-3AJQUERY-EXECUTE-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG:JQUERY-EXECUTE%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:JQUERY-EXECUTE%20GENERIC-FUNCTION" >JQUERY-EXECUTE</a></span></span> <span class="locative-args">CLOG-OBJ METHOD</span></span></p>
+
+<p>Execute the jQuery <code>METHOD</code> on <a href="#CLOG:OBJ%20GENERIC-FUNCTION" title="CLOG:OBJ GENERIC-FUNCTION"><code>OBJ</code></a>. Result is
+dicarded, return <code>CLOG-OBJ</code>.</p></li>
+</ul>
+
+<p><a id="x-28CLOG-3AJQUERY-QUERY-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG:JQUERY-QUERY%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:JQUERY-QUERY%20GENERIC-FUNCTION" >JQUERY-QUERY</a></span></span> <span class="locative-args">CLOG-OBJ METHOD &amp;KEY DEFAULT-ANSWER</span></span></p>
+
+<p>Execute the jQuery <code>METHOD</code> on <a href="#CLOG:OBJ%20GENERIC-FUNCTION" title="CLOG:OBJ GENERIC-FUNCTION"><code>OBJ</code></a> and return
+result or <code>DEFAULT-ANSWER</code> on time out.</p></li>
+</ul>
+
 <p><a id="x-28CLOG-3A-40CLOG-HELPERS-20MGL-PAX-3ASECTION-29"></a>
 <a id="CLOG:@CLOG-HELPERS%20MGL-PAX:SECTION"></a></p>
 
-<p><span class="outer-navigation"><span class="navigation"> <a href="#CLOG:@CLOG-NAVIGATOR%20MGL-PAX:SECTION" title="CLOG Navigator Objects">&#8592;</a> <a href="#CLOG:@CLOG-MANUAL%20MGL-PAX:SECTION" title="The CLOG manual">&#8593;</a> <a href="#CLOG:@CLOG-INTERNALS%20MGL-PAX:SECTION" title="CLOG Framework internals and extensions">&#8594;</a> <a href="#CLOG:@CLOG-HELPERS%20MGL-PAX:SECTION" title="CLOG Helper Functions">&#8634;</a></span></span></p>
+<p><span class="outer-navigation"><span class="navigation"> <a href="#CLOG:@CLOG-JQUERY%20MGL-PAX:SECTION" title="CLOG jQuery Objects">&#8592;</a> <a href="#CLOG:@CLOG-MANUAL%20MGL-PAX:SECTION" title="The CLOG manual">&#8593;</a> <a href="#CLOG:@CLOG-INTERNALS%20MGL-PAX:SECTION" title="CLOG Framework internals and extensions">&#8594;</a> <a href="#CLOG:@CLOG-HELPERS%20MGL-PAX:SECTION" title="CLOG Helper Functions">&#8634;</a></span></span></p>
 
-<h2><a href="#CLOG:@CLOG-HELPERS%20MGL-PAX:SECTION">22 CLOG Helper Functions</a></h2>
+<h2><a href="#CLOG:@CLOG-HELPERS%20MGL-PAX:SECTION">23 CLOG Helper Functions</a></h2>
 
 <p>Tutorial and demo helpers</p>
 
@@ -7627,7 +7695,7 @@ clog-user:<em>body</em> to last window openned to /repl.</p></li>
 
 <p><span class="outer-navigation"><span class="navigation"> <a href="#CLOG:@CLOG-HELPERS%20MGL-PAX:SECTION" title="CLOG Helper Functions">&#8592;</a> <a href="#CLOG:@CLOG-MANUAL%20MGL-PAX:SECTION" title="The CLOG manual">&#8593;</a> <a href="#CLOG:@CLOG-INTERNALS%20MGL-PAX:SECTION" title="CLOG Framework internals and extensions">&#8634;</a></span></span></p>
 
-<h2><a href="#CLOG:@CLOG-INTERNALS%20MGL-PAX:SECTION">23 CLOG Framework internals and extensions</a></h2>
+<h2><a href="#CLOG:@CLOG-INTERNALS%20MGL-PAX:SECTION">24 CLOG Framework internals and extensions</a></h2>
 
 <p><em>* Introduction to Internals *</em></p>
 
