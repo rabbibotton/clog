@@ -276,4 +276,6 @@ High Order Extensions to CLOG
 - clog-presentations - bi-directional linking of Lisp Objects and CLOG
                        Objects
 
+- clog-jquery - DOM queries
+
 (See FUTURE.md for future plans)
