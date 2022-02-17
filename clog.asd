@@ -6,7 +6,7 @@
 
   :author "David Botton <david@botton.com>"
   :license  "BSD"
-  :version "1.1.0"
+  :version "1.2.0"
   :serial t
   :pathname "source/"
   :depends-on (#:clack #:websocket-driver #:alexandria #:hunchentoot #:cl-ppcre
@@ -18,6 +18,7 @@
 	       (:file "clog-utilities")
 	       (:file "clog-base")
 	       (:file "clog-element")
+	       (:file "clog-jquery")
 	       (:file "clog-element-common")
 	       (:file "clog-style")
 	       (:file "clog-canvas")

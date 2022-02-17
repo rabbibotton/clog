@@ -97,39 +97,6 @@ dicarded, return CLOG-OBJ. (Internal)"))
 (defmethod js-query ((obj clog-obj) script &key (default-answer nil))
   (clog-connection:query (connection-id obj) script :default-answer default-answer))
 
-;;;;;;;;;;;;
-;; jquery ;;
-;;;;;;;;;;;;
-
-(defgeneric jquery (clog-obj)
-  (:documentation "Return the jquery accessor for OBJ. (Private)"))
-
-(defmethod jquery ((obj clog-obj))
-  (format nil "$(~A)" (script-id obj)))
-
-;;;;;;;;;;;;;;;;;;;;
-;; jquery-execute ;;
-;;;;;;;;;;;;;;;;;;;;
-
-(defgeneric jquery-execute (clog-obj method)
-  (:documentation "Execute the jquery METHOD on OBJ. Result is
-dicarded, return CLOG-OBJ. (Private)"))
-
-(defmethod jquery-execute ((obj clog-obj) method)
-  (js-execute obj (format nil "~A.~A" (jquery obj) method)))
-
-;;;;;;;;;;;;;;;;;;
-;; jquery-query ;;
-;;;;;;;;;;;;;;;;;;
-
-(defgeneric jquery-query (clog-obj method &key default-answer)
-  (:documentation "Execute the jquery METHOD on OBJ and return
-result or DEFAULT-ANSWER on time out. (Private)"))
-
-(defmethod jquery-query ((obj clog-obj) method &key (default-answer nil))
-  (js-query obj (format nil "~A.~A" (jquery obj) method)
-	    :default-answer default-answer))
-
 ;;;;;;;;;;;;;
 ;; execute ;;
 ;;;;;;;;;;;;;
