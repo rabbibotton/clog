@@ -103,7 +103,7 @@ dicarded, return CLOG-OBJ. (Internal)"))
 
 (defgeneric execute (clog-obj method)
   (:documentation "Execute the JavaScript METHOD on OBJ. Result is
-dicarded. (Private)"))
+dicarded. see JQUERY-EXECUTE (Internal)"))
 
 (defmethod execute ((obj clog-obj) method)
   (js-execute obj (format nil "~A.~A" (script-id obj) method)))
@@ -114,7 +114,7 @@ dicarded. (Private)"))
 
 (defgeneric query (clog-obj method &key default-answer)
   (:documentation "Execute the JavaScript query METHOD on OBJ and return
-result or if time out DEFAULT-ANSWER (Private)"))
+result or if time out DEFAULT-ANSWER. see JQUERY-QUERY (Internal)"))
 
 (defmethod query ((obj clog-obj) method &key (default-answer nil))
   (js-query obj (format nil "~A.~A" (script-id obj) method)
@@ -493,7 +493,7 @@ an application share per connection the same queue of serialized events."
 
 (defgeneric set-on-event (clog-obj event-name handler)
   (:documentation "Set a HANDLER for EVENT-NAME on CLOG-OBJ. If handler is
-nil unbind all event handlers. (Private)"))
+nil unbind all event handlers. (Internal)"))
 
 (defmethod set-on-event ((obj clog-obj) event-name handler)
   (set-event obj event-name

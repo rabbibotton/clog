@@ -5,8 +5,8 @@ Creating a native application
 Mobile development
 Creating a Bootstrap 5 based app
 When to use page vs panel
-Running JavaScript
 Plug-in panels for use on other sites
+Demo between different models - stateless, webpage, windows
 
 - Multi control select and alignments in Builder
 
@@ -14,9 +14,9 @@ Plug-in panels for use on other sites
 
 - Handle windows beyond browser edge CLOG-GUI
 
-- Project scaffolding generator
-    1) Basic builder project
-    2) CLOG-GUI builder project
+- Project scaffolding generator - done the template system in Builder
+    1) Basic builder project - done
+    2) CLOG-GUI builder project - done
     3) Builder website
     4) Database oriented projects
 
@@ -27,8 +27,6 @@ Plug-in panels for use on other sites
 - Release tool to handle creating platfom executables, templates for Apache and other webservers
 
 - Training and documentation tool
-
-- Event queuing option to easily avoid event race conditions when desired in CLOG builder
 
 - Implement using long polling to optimize CLOG sites for use with
   search engines. If not long polling at least initial output sent by
@@ -46,7 +44,7 @@ Some notes on this
 
    3) Way to receive data from the page - This is one way but not ideal - https://webkitgtk.org/reference/webkit2gtk/stable/WebKitWebContext.html#webkit-web-context-register-uri-scheme and seems most all here https://blogs.igalia.com/carlosgc/2013/09/10/webkit2gtk-web-process-extensions/
 
-- clog-data
+- clog-data (partial - clog-presentations allows linking list objects and clog objects)
   - binding html controls directly to fields for database use
 
 - clog-auth

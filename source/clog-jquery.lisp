@@ -45,7 +45,7 @@ Some sample jquery selectors:
 ;;;;;;;;;;;;
 
 (defgeneric jquery (clog-obj)
-  (:documentation "Return the jQuery accessor for OBJ."))
+  (:documentation "Return the jQuery accessor for and CLOG-OBJ."))
 
 (defmethod jquery ((obj clog-obj))
   (format nil "$(~A)" (script-id obj)))
@@ -55,7 +55,7 @@ Some sample jquery selectors:
 ;;;;;;;;;;;;;;;;;;;;
 
 (defgeneric jquery-execute (clog-obj method)
-  (:documentation "Execute the jQuery METHOD on OBJ. Result is
+  (:documentation "Execute the jQuery METHOD on and CLOG-OBJ. Result is
 dicarded, return CLOG-OBJ."))
 
 (defmethod jquery-execute ((obj clog-obj) method)
@@ -66,7 +66,7 @@ dicarded, return CLOG-OBJ."))
 ;;;;;;;;;;;;;;;;;;
 
 (defgeneric jquery-query (clog-obj method &key default-answer)
-  (:documentation "Execute the jQuery METHOD on OBJ and return
+  (:documentation "Execute the jQuery METHOD on ANY CLOG-OBJ and return
 result or DEFAULT-ANSWER on time out."))
 
 (defmethod jquery-query ((obj clog-obj) method &key (default-answer nil))
