@@ -9,7 +9,7 @@
 (cl:in-package :clog)
 
 ;;; clog-panels are for doing layouts, base class for pluggins and custom
-;;; widgets.
+;;; widgets and is the base class for CLOG Builder's panels.
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Implementation - clog-panel
@@ -34,10 +34,11 @@
 CLOG-OBJ. Optionally you can set the :X, :Y, :WIDTH and :HEIGHT (in
 :UNITS defulting to :px, if set to nil unit type must be provided for
 x,y,width and height), BORDER-STYLE (see BORDER-STYLE-TYPE),
-BORDER-WIDTH, BORDER-COLOR, :POSITIONING (default is :FIXED) (see
-POSITIONING-TYPE), :OVERFLOW (default is :CLIP) with :CONTENT (default
-\"\") and :RESIZABLE defaults to :NONE. Additional css styles can be
-set in :STYLE (default \"\") if :AUTO-PLACE (default t)
+BORDER-WIDTH, BORDER-COLOR, :POSITIONING (default is :FIXED the
+default builder panels are :STATIC) (see POSITIONING-TYPE),
+:OVERFLOW (default is :CLIP) with :CONTENT (default \"\") and
+:RESIZABLE defaults to :NONE. Additional css styles can be set in
+:STYLE (default \"\") if :AUTO-PLACE (default t)
 place-inside-bottom-of CLOG-OBJ. If hidden is true visiblep is set to
 nil. Resizable only works if overflow is set to :SCROLL"))
 

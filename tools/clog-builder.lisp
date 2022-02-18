@@ -573,7 +573,7 @@ not a temporary attached one when using select-control."
 	     (get-control-list app panel-id))
     (let ((result (format nil
 			  "\(in-package \"~A\"\)
-\(defclass ~A \(clog:clog-div\)
+\(defclass ~A \(clog:clog-panel\)
   \(~{~A~}\)\)
 \(defun create-~A \(clog-obj &key \(hidden nil\) \(class nil\) \(html-id nil\) \(auto-place t\)\)
   \(let \(\(panel \(change-class \(clog:create-div clog-obj :content \"~A\"
