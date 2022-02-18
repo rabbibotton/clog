@@ -455,8 +455,10 @@ Normally index follows normal sequence of elements."))
   (:documentation "Get/Setf text.
 
 <tag>Text Content</tag> - Text content is the content contained by the
-                          tag. This should not be confused with the
-                          'Value' of a Form Tag. (See clog-form.lisp)"))
+                          tag including child tags. This should not be
+                          confused with the 'Value' of a Form Tag.
+                          User TEXT-VALUE for just the text associated
+                          with <tag>. (See clog-form.lisp)"))
 
 (defmethod text ((obj clog-element))
   (jquery-query obj "text()"))
@@ -468,6 +470,26 @@ Normally index follows normal sequence of elements."))
   (jquery-execute obj (format nil "text('~A')" (escape-string value)))
   value)
 (defsetf text set-text)
+
+;;;;;;;;;;;;;;;;
+;; text-value ;;
+;;;;;;;;;;;;;;;;
+
+(defgeneric text-value (clog-element)
+  (:documentation "Get/Setf the first text node of CLOG-ELEMENT.
+Unlike TEXT this is only the text associated with this <tag>."))
+
+(defmethod text-value ((obj clog-element))
+  (jquery-query obj (format nil "contents().not(~A.children()).text()" (jquery obj))))
+
+(defgeneric set-text-value (clog-element value)
+  (:documentation "Set text-value to VALUE for CLOG-ELEMENT"))
+
+(defmethod set-text-value ((obj clog-element) value)
+  (jquery-execute obj (format nil "contents().not(~A.children()).get(0).nodeValue='~A'"
+			      (jquery obj) value)))
+
+(defsetf text-value set-text)
 
 ;;;;;;;;;;;;;;;;;;;;
 ;; text-direction ;;

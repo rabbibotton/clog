@@ -715,7 +715,7 @@ an application share per connection the same queue of serialized events.</p></li
 <p>Returns true if connection is valid on this <code>CLOG-OBJ</code>.</p></li>
 </ul>
 
-<p>CLOG-Obj - Internals for Extension Plugins</p>
+<p>CLOG-Obj - Internals for Extensions and Plugins</p>
 
 <p><a id="x-28CLOG-3AHTML-ID-20GENERIC-FUNCTION-29"></a>
 <a id="CLOG:HTML-ID%20GENERIC-FUNCTION"></a></p>
@@ -724,6 +724,26 @@ an application share per connection the same queue of serialized events.</p></li
 <li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:HTML-ID%20GENERIC-FUNCTION" >HTML-ID</a></span></span> <span class="locative-args">CLOG-OBJ</span></span></p>
 
 <p>Internal html-id of CLOG-Obj. (Internal)</p></li>
+</ul>
+
+<p><a id="x-28CLOG-3AEXECUTE-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG:EXECUTE%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:EXECUTE%20GENERIC-FUNCTION" >EXECUTE</a></span></span> <span class="locative-args">CLOG-OBJ METHOD</span></span></p>
+
+<p>Execute the JavaScript <code>METHOD</code> on <a href="#CLOG:OBJ%20GENERIC-FUNCTION" title="CLOG:OBJ GENERIC-FUNCTION"><code>OBJ</code></a>. Result is
+dicarded. see <a href="#CLOG:JQUERY-EXECUTE%20GENERIC-FUNCTION" title="CLOG:JQUERY-EXECUTE GENERIC-FUNCTION"><code>JQUERY-EXECUTE</code></a> (Internal)</p></li>
+</ul>
+
+<p><a id="x-28CLOG-3AQUERY-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG:QUERY%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:QUERY%20GENERIC-FUNCTION" >QUERY</a></span></span> <span class="locative-args">CLOG-OBJ METHOD &amp;KEY DEFAULT-ANSWER</span></span></p>
+
+<p>Execute the JavaScript query <code>METHOD</code> on <a href="#CLOG:OBJ%20GENERIC-FUNCTION" title="CLOG:OBJ GENERIC-FUNCTION"><code>OBJ</code></a> and return
+result or if time out <code>DEFAULT-ANSWER</code>. see <a href="#CLOG:JQUERY-QUERY%20GENERIC-FUNCTION" title="CLOG:JQUERY-QUERY GENERIC-FUNCTION"><code>JQUERY-QUERY</code></a> (Internal)</p></li>
 </ul>
 
 <p><a id="x-28CLOG-3AJS-EXECUTE-20GENERIC-FUNCTION-29"></a>
@@ -743,6 +763,16 @@ dicarded, return <code>CLOG-OBJ</code>. (Internal)</p></li>
 <li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:JS-QUERY%20GENERIC-FUNCTION" >JS-QUERY</a></span></span> <span class="locative-args">CLOG-OBJ SCRIPT &amp;KEY DEFAULT-ANSWER</span></span></p>
 
 <p>Execure <code>SCRIPT</code> on browser and return result. (Internal)</p></li>
+</ul>
+
+<p><a id="x-28CLOG-3ASET-ON-EVENT-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG:SET-ON-EVENT%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:SET-ON-EVENT%20GENERIC-FUNCTION" >SET-ON-EVENT</a></span></span> <span class="locative-args">CLOG-OBJ EVENT-NAME HANDLER</span></span></p>
+
+<p>Set a <code>HANDLER</code> for <code>EVENT-NAME</code> on <code>CLOG-OBJ</code>. If handler is
+nil unbind all event handlers. (Internal)</p></li>
 </ul>
 
 <p>CLOG-Obj - Event Handling</p>
@@ -1520,8 +1550,20 @@ Normally index follows normal sequence of elements.</p></li>
 <p>Get/Setf text.</p>
 
 <p><tag>Text Content</tag> - Text content is the content contained by the
-                          tag. This should not be confused with the
-                          'Value' of a Form Tag. (See clog-form.lisp)</p></li>
+                          tag including child tags. This should not be
+                          confused with the 'Value' of a Form Tag.
+                          User <a href="#CLOG:TEXT-VALUE%20GENERIC-FUNCTION" title="CLOG:TEXT-VALUE GENERIC-FUNCTION"><code>TEXT-VALUE</code></a> for just the text associated
+                          with <tag>. (See clog-form.lisp)</p></li>
+</ul>
+
+<p><a id="x-28CLOG-3ATEXT-VALUE-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG:TEXT-VALUE%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:TEXT-VALUE%20GENERIC-FUNCTION" >TEXT-VALUE</a></span></span> <span class="locative-args">CLOG-ELEMENT</span></span></p>
+
+<p>Get/Setf the first text node of <code>CLOG-ELEMENT</code>.
+Unlike <a href="#CLOG:TEXT%20GENERIC-FUNCTION" title="CLOG:TEXT GENERIC-FUNCTION"><code>TEXT</code></a> this is only the text associated with this <tag>.</p></li>
 </ul>
 
 <p><a id="x-28CLOG-3ATEXT-DIRECTION-TYPE-20TYPE-29"></a>
@@ -3849,10 +3891,11 @@ element can be bound at a time to a lisp object.</p></li>
 <code>CLOG-OBJ</code>. Optionally you can set the <code>:X</code>, <code>:Y</code>, <code>:WIDTH</code> and <code>:HEIGHT</code> (in
 <code>:UNITS</code> defulting to :px, if set to nil unit type must be provided for
 x,y,width and height), <code>BORDER-STYLE</code> (see <a href="#CLOG:BORDER-STYLE-TYPE%20TYPE" title="CLOG:BORDER-STYLE-TYPE TYPE"><code>BORDER-STYLE-TYPE</code></a>),
-<code>BORDER-WIDTH</code>, <code>BORDER-COLOR</code>, <code>:POSITIONING</code> (default is <code>:FIXED</code>) (see
-<a href="#CLOG:POSITIONING-TYPE%20TYPE" title="CLOG:POSITIONING-TYPE TYPE"><code>POSITIONING-TYPE</code></a>), <code>:OVERFLOW</code> (default is <code>:CLIP</code>) with <code>:CONTENT</code> (default
-&quot;&quot;) and <code>:RESIZABLE</code> defaults to <code>:NONE</code>. Additional css styles can be
-set in <code>:STYLE</code> (default &quot;&quot;) if <code>:AUTO-PLACE</code> (default t)
+<code>BORDER-WIDTH</code>, <code>BORDER-COLOR</code>, <code>:POSITIONING</code> (default is <code>:FIXED</code> the
+default builder panels are <code>:STATIC</code>) (see <a href="#CLOG:POSITIONING-TYPE%20TYPE" title="CLOG:POSITIONING-TYPE TYPE"><code>POSITIONING-TYPE</code></a>),
+<code>:OVERFLOW</code> (default is <code>:CLIP</code>) with <code>:CONTENT</code> (default &quot;&quot;) and
+<code>:RESIZABLE</code> defaults to <code>:NONE</code>. Additional css styles can be set in
+<code>:STYLE</code> (default &quot;&quot;) if <code>:AUTO-PLACE</code> (default t)
 place-inside-bottom-of <code>CLOG-OBJ</code>. If hidden is true visiblep is set to
 nil. Resizable only works if overflow is set to <code>:SCROLL</code></p></li>
 </ul>
@@ -7549,7 +7592,7 @@ Some sample jquery selectors:
 <ul>
 <li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:JQUERY%20GENERIC-FUNCTION" >JQUERY</a></span></span> <span class="locative-args">CLOG-OBJ</span></span></p>
 
-<p>Return the jQuery accessor for <a href="#CLOG:OBJ%20GENERIC-FUNCTION" title="CLOG:OBJ GENERIC-FUNCTION"><code>OBJ</code></a>.</p></li>
+<p>Return the jQuery accessor for and <code>CLOG-OBJ</code>.</p></li>
 </ul>
 
 <p><a id="x-28CLOG-3AJQUERY-EXECUTE-20GENERIC-FUNCTION-29"></a>
@@ -7558,7 +7601,7 @@ Some sample jquery selectors:
 <ul>
 <li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:JQUERY-EXECUTE%20GENERIC-FUNCTION" >JQUERY-EXECUTE</a></span></span> <span class="locative-args">CLOG-OBJ METHOD</span></span></p>
 
-<p>Execute the jQuery <code>METHOD</code> on <a href="#CLOG:OBJ%20GENERIC-FUNCTION" title="CLOG:OBJ GENERIC-FUNCTION"><code>OBJ</code></a>. Result is
+<p>Execute the jQuery <code>METHOD</code> on and <code>CLOG-OBJ</code>. Result is
 dicarded, return <code>CLOG-OBJ</code>.</p></li>
 </ul>
 
@@ -7568,7 +7611,7 @@ dicarded, return <code>CLOG-OBJ</code>.</p></li>
 <ul>
 <li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:JQUERY-QUERY%20GENERIC-FUNCTION" >JQUERY-QUERY</a></span></span> <span class="locative-args">CLOG-OBJ METHOD &amp;KEY DEFAULT-ANSWER</span></span></p>
 
-<p>Execute the jQuery <code>METHOD</code> on <a href="#CLOG:OBJ%20GENERIC-FUNCTION" title="CLOG:OBJ GENERIC-FUNCTION"><code>OBJ</code></a> and return
+<p>Execute the jQuery <code>METHOD</code> on ANY <code>CLOG-OBJ</code> and return
 result or <code>DEFAULT-ANSWER</code> on time out.</p></li>
 </ul>
 

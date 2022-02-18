@@ -204,6 +204,7 @@ embedded in a native template application.)"
   (spellcheckp         generic-function)
   (tab-index           generic-function)
   (text                generic-function)
+  (text-value          generic-function)
   (text-direction-type type)
   (text-direction      generic-function)
   (language-code       generic-function)

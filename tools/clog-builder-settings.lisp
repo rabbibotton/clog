@@ -306,11 +306,7 @@
 
 (defparameter *props-text*
   `((:name "text"
-     :get  ,(lambda (control)
-	      (clog::jquery-query control (format nil "contents().not(~A.children()).text()" (clog::jquery control))))
-     :set  ,(lambda (control obj)
-	      (clog::jquery-execute control (format nil "contents().not(~A.children()).get(0).nodeValue='~A'"
-						     (clog::jquery control) (text obj)))))))
+     :setf clog:text-value)))
 
 (defparameter *props-css*
   `((:name "css classes"
