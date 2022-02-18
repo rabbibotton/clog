@@ -11,7 +11,6 @@
 (defparameter sysop-password "admin")
 
 (defvar *sql-connection*)
-(defvar *site-config*)
 
 (defclass app-data ()
   ((head
@@ -49,7 +48,7 @@
   (create-web-container (main app))) 
 
 (defun insert-content (app new-page text-area)
-  (sqlite:execute-non-query
+  (dbi:do-sql
    *sql-connection*
    (format nil "insert into config (menu, main) values ('~A', '~A')"
 	   (escape-string (value new-page))
@@ -70,7 +69,7 @@
 		    (insert-content app new-page text-area)))))  
 
 (defun update-content (app page text-area)
-  (sqlite:execute-non-query
+  (dbi:do-sql
    *sql-connection*
    (format nil "update config set main='~A' where menu='~A'"
 	   (escape-string (value text-area))
@@ -78,7 +77,7 @@
   (route-content app page))
 
 (defun delete-content (app page)
-  (sqlite:execute-non-query
+  (dbi:do-sql
    *sql-connection*
    (format nil "delete from config where menu='~A'" page))
   (reset-menu app)
@@ -86,12 +85,13 @@
 
 (defun edit-content (app page)
   (setf (inner-html (main app)) "")
-  (let ((contents (sqlite:execute-to-list
-		   *sql-connection*
-		   (format nil "select main from config where menu='~A'" page))))
+  (let ((contents (dbi:fetch-all
+		   (dbi:prepare
+		    *sql-connection*
+		    (format nil "select main from config where menu='~A'" page)))))
     (dolist (content contents)
       (let ((text-area (create-text-area (main app) :rows 10 :columns 40
-						    :value (car content))))
+						    :value (second content))))
 	(create-br (main app))
 	(set-on-click (create-button (main app) :content "Update")
 		      (lambda (obj)
@@ -105,11 +105,12 @@
 
 (defun route-content (app page)
   (setf (inner-html (main app)) "")
-  (let ((contents (sqlite:execute-to-list
-		   *sql-connection*
-		   (format nil "select main from config where menu='~A'" page))))
+  (let ((contents (dbi:fetch-all
+		   (dbi:prepare
+		    *sql-connection*
+		    (format nil "select main from config where menu='~A'" page)))))
     (dolist (content contents)
-      (setf (inner-html (main app)) (car content))
+      (setf (inner-html (main app)) (second content))
       (create-br (main app))
       (create-br (main app))
       (when (sysop app)
@@ -131,14 +132,15 @@
 
 (defun reset-menu (app)
   (setf (inner-html (side app)) "")
-  (let ((menu-items (sqlite:execute-to-list *sql-connection*
-					   "select menu from config")))
+  (let ((menu-items (dbi:fetch-all
+		     (dbi:prepare *sql-connection*
+				  "select menu from config"))))
     (dolist (menu-item menu-items)
       (set-on-click 
-       (create-web-sidebar-item (side app) :content (car menu-item))
+       (create-web-sidebar-item (side app) :content (second menu-item))
        (lambda (obj)
 	 (declare (ignore obj))
-	 (route-content app (car menu-item))))))
+	 (route-content app (second menu-item))))))
   (create-br (side app))
   (if (sysop app)
       (progn
@@ -173,20 +175,19 @@
   "Start dynamic website demo."
   ;; The demo database is created in the clog dir
   (let ((db-dir (merge-pathnames "demo4.db" (clog:clog-install-dir))))
-    (setf *sql-connection* (sqlite:connect db-dir))
+    (setf *sql-connection* (dbi:connect :sqlite3 :database-name db-dir))
     (format t "Database location: ~A~%" db-dir))
   (handler-case
-      (setf *site-config*
-	    (sqlite:execute-to-list *sql-connection* "select * from config"))
+      (dbi:fetch (dbi:prepare *sql-connection* "select * from config"))
     (error ()
       (print "First run creating config.")
-      (sqlite:execute-non-query
+      (dbi:do-sql
        *sql-connection*
        "create table config (menu varchar, main varchar)")
-      (sqlite:execute-non-query
+      (dbi:do-sql
        *sql-connection*
        "insert into config (menu, main) values ('Home', '<b>Hello welcome.</b>')")
-      (sqlite:execute-non-query
+      (dbi:do-sql
        *sql-connection*
        "insert into config (menu, main) values ('Page2', '<i>Customize Me.</i>')")))
   (initialize 'on-new-window)
@@ -194,5 +195,5 @@
 
 (defun stop-demo ()
   "Shutdown demo and close databases."
-  (sqlite:disconnect *sql-connection*)
+  (dbi:disconnect *sql-connection*)
   (shutdown))
