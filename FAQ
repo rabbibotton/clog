@@ -20,3 +20,9 @@ or see CLOG:SAVE-BODY-TO-FILE
 Q) I want to know where the :CLOG tutorials, demos and sources.
 
 Use (clog:clog-install-dir)
+
+Q) Can I offer REST APIs
+
+Yes just use https://github.com/joaotavora/snooze and run on a different
+port than your CLOG app eg.
+    (clack:clackup (snooze:make-clack-app) :port 9003)

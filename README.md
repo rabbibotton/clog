@@ -58,8 +58,8 @@ CLOG is developed with ECL and SBCL, it is tested fairly regulary on
 
 CLOG is in QuickLisp (ql:quickload :clog), but you likely want to live
 on the bleeding edge and use UltraLisp or clone the github repo into
-your ~/common-lisp directory (or other quicklisp/asdf findable
-directory):
+~/common-lisp directory [or other quicklisp/asdf findable directory
+(push "path/to/dir/of/projects" ql:*local-project-directories*) ]:
 
 ```
 cd ~/common-lisp

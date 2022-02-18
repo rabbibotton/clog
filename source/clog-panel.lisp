@@ -148,13 +148,16 @@ nil. Resizable only works if overflow is set to :SCROLL"))
 and/or HORIZONTAL (default t). This will set the DISPLAY property of
 CLOG-ELEMENT to :FLEX. Note: if children of clog-element are using
 :absolute positioning they will not flow with flex and will not be
-centered. Using :relative wrapped in div with :static positioning
-will work."))
+centered. Using :relative wrapped in div with :static positioning will
+work. For example in CLOG Builder the panel is created in a static
+positioning panel, if all the contents are positioning in a div
+aboslute and that div is relative the expected bahvior of a centered
+panel will happen."))
 
 (defmethod center-children ((obj clog-element) &key (vertical t) (horizontal t))
   (set-styles obj `(("display" "flex")
-		   ,(when vertical '("align-items" "center"))
-		   ,(when horizontal '("justify-content" "center")))))
+		    ,(when vertical '("align-items" "center"))
+		    ,(when horizontal '("justify-content" "center")))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Implementation - clog-panel-box-layout

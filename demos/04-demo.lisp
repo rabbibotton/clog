@@ -45,17 +45,16 @@
   ;; Main
   (setf (main app) (create-web-content body))
   (set-margin-side (main app) :left (unit :px (+ side-panel-size 10)))
-  (create-web-container (main app))) 
+  (create-web-container (main app)))
 
 (defun insert-content (app new-page text-area)
   (dbi:do-sql
    *sql-connection*
-   (format nil "insert into config (menu, main) values ('~A', '~A')"
-	   (escape-string (value new-page))
-	   (escape-string (value text-area))))
+   "insert into config (menu, main) values (?, ?)"
+    (list (escape-string (value new-page)) (escape-string (value text-area))))
   (reset-menu app)
   (route-content app (escape-string (value new-page))))
-  
+
 (defun new-content (app)
   (setf (inner-html (main app)) "")
   (let ((new-page  (create-form-element (main app) :text :value "New Title"))
@@ -66,29 +65,30 @@
     (set-on-click (create-button (main app) :content "Insert")
 		  (lambda (obj)
 		    (declare (ignore obj))
-		    (insert-content app new-page text-area)))))  
+		    (insert-content app new-page text-area)))))
 
 (defun update-content (app page text-area)
   (dbi:do-sql
    *sql-connection*
-   (format nil "update config set main='~A' where menu='~A'"
-	   (escape-string (value text-area))
-	   page))
+    "update config set main= ? where menu= ?"
+    (list (escape-string (value text-area)) page))
   (route-content app page))
 
 (defun delete-content (app page)
   (dbi:do-sql
    *sql-connection*
-   (format nil "delete from config where menu='~A'" page))
+    "delete from config where menu= ?" (list page))
   (reset-menu app)
   (route-content app "Home"))
 
 (defun edit-content (app page)
   (setf (inner-html (main app)) "")
   (let ((contents (dbi:fetch-all
-		   (dbi:prepare
-		    *sql-connection*
-		    (format nil "select main from config where menu='~A'" page)))))
+		   (dbi:execute
+		    (dbi:prepare
+		     *sql-connection*
+		     "select main from config where menu= ?")
+		    (list page)))))
     (dolist (content contents)
       (let ((text-area (create-text-area (main app) :rows 10 :columns 40
 						    :value (second content))))
@@ -106,9 +106,11 @@
 (defun route-content (app page)
   (setf (inner-html (main app)) "")
   (let ((contents (dbi:fetch-all
-		   (dbi:prepare
-		    *sql-connection*
-		    (format nil "select main from config where menu='~A'" page)))))
+		   (dbi:execute
+		    (dbi:prepare
+		     *sql-connection*
+		     "select main from config where menu= ?")
+		    (list page)))))
     (dolist (content contents)
       (setf (inner-html (main app)) (second content))
       (create-br (main app))
@@ -128,15 +130,16 @@
 			 (setf (sysop app) t)
 			 (reset-menu app)
 			 (setf (inner-html (main app)) "You are logged in."))
-		       (setf (inner-html (main app)) "Invalid password."))))) 
+		       (setf (inner-html (main app)) "Invalid password.")))))
 
 (defun reset-menu (app)
   (setf (inner-html (side app)) "")
   (let ((menu-items (dbi:fetch-all
-		     (dbi:prepare *sql-connection*
-				  "select menu from config"))))
+		     (dbi:execute
+		      (dbi:prepare *sql-connection*
+				   "select menu from config")))))
     (dolist (menu-item menu-items)
-      (set-on-click 
+      (set-on-click
        (create-web-sidebar-item (side app) :content (second menu-item))
        (lambda (obj)
 	 (declare (ignore obj))
@@ -178,7 +181,7 @@
     (setf *sql-connection* (dbi:connect :sqlite3 :database-name db-dir))
     (format t "Database location: ~A~%" db-dir))
   (handler-case
-      (dbi:fetch (dbi:prepare *sql-connection* "select * from config"))
+      (dbi:fetch (dbi:execute (dbi:prepare *sql-connection* "select * from config")))
     (error ()
       (print "First run creating config.")
       (dbi:do-sql
