@@ -477,7 +477,8 @@ Normally index follows normal sequence of elements."))
 
 (defgeneric text-value (clog-element)
   (:documentation "Get/Setf the first text node of CLOG-ELEMENT.
-Unlike TEXT this is only the text associated with this <tag>."))
+Unlike TEXT this is only the text associated with this <tag>
+Additionally for forms get/setf the value."))
 
 (defmethod text-value ((obj clog-element))
   (jquery-query obj (format nil "contents().not(~A.children()).text()" (jquery obj))))

@@ -453,18 +453,23 @@ place-inside-bottom-of CLOG-OBJ."))
 ;; value ;;
 ;;;;;;;;;;;
 
-(defgeneric value (clog-meter)
-  (:documentation "Get/Setf the value of the meter."))
-
 (defmethod value ((obj clog-meter))
   (property obj "value"))
-
-(defgeneric set-value (clog-meter value)
-  (:documentation "Set value VALUE for CLOG-METER"))
 
 (defmethod set-value ((obj clog-meter) value)
   (setf (property obj "value") value))
 (defsetf value set-value)
+
+;;;;;;;;;;;;;;;;
+;; text-value ;;
+;;;;;;;;;;;;;;;;
+
+(defmethod text-value ((obj clog-meter))
+  (property obj "value"))
+
+(defmethod set-text-value ((obj clog-meter) value)
+  (setf (property obj "value") value))
+(defsetf text-value set-text-value)
 
 ;;;;;;;;;;
 ;; high ;;
@@ -592,18 +597,23 @@ place-inside-bottom-of CLOG-OBJ."))
 ;; value ;;
 ;;;;;;;;;;;
 
-(defgeneric value (clog-progress-bar)
-  (:documentation "Get/Setf the value of the progress-bar."))
-
 (defmethod value ((obj clog-progress-bar))
   (property obj "value"))
-
-(defgeneric set-value (clog-progress-bar value)
-  (:documentation "Set value VALUE for CLOG-PROGRESS-BAR"))
 
 (defmethod set-value ((obj clog-progress-bar) value)
   (setf (property obj "value") value))
 (defsetf value set-value)
+
+;;;;;;;;;;;;;;;;
+;; text-value ;;
+;;;;;;;;;;;;;;;;
+
+(defmethod text-value ((obj clog-progress-bar))
+  (property obj "value"))
+
+(defmethod set-text-value ((obj clog-progress-bar) value)
+  (setf (property obj "value") value))
+(defsetf text-value set-text-value)
 
 ;;;;;;;;;;;;;
 ;; maximum ;;

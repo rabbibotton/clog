@@ -428,6 +428,15 @@ have this set true ever. Autofocus on element when form loaded."))
   (setf (property obj "value") value))
 (defsetf value set-value)
 
+;; overloading of text-value to equal value on forms
+
+(defmethod text-value ((obj clog-form-element))
+  (property obj "value"))
+
+(defmethod set-text-value ((obj clog-form-element) value)
+  (setf (property obj "value") value))
+(defsetf text-value set-text-value)
+
 ;;;;;;;;;;;;;;;;;
 ;; radio-value ;;
 ;;;;;;;;;;;;;;;;;
