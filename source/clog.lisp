@@ -524,7 +524,8 @@ embedded in a native template application.)"
 
 (defsection @clog-data (:title "CLOG Data")
   "CLOG-Data - CLOG Data Binding"
-  (data-load-plist function))
+  (data-load-plist function)
+  (data-write-list function))
 
 (defsection @clog-panels (:title "CLOG Panels")
   "CLOG-Panel - CLOG Panels"
