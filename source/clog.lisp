@@ -524,11 +524,14 @@ embedded in a native template application.)"
 
 (defsection @clog-data (:title "CLOG Data")
   "Load and Write to objects and CLOG-Elements"
-  (data-load-plist function)
-  (data-write-list function)
+  (data-load-plist  function)
+  (data-write-list  function)
+  (data-write-plist function)
 
   "SQL Writing Helpers"
-  (select-fields function))
+  (sql-list        function)
+  (sql-value-list  function)
+  (sql-update-list function))
 
 (defsection @clog-panels (:title "CLOG Panels")
   "CLOG-Panel - CLOG Panels"
