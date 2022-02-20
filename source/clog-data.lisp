@@ -15,11 +15,12 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defun data-load-plist (obj plist &key (upcase-key t))
-  "A plist where key is name of slot and value is data to load on panel.
-The key is coverted to a string and upper cased before attempting to
-match it to a slot if :UPCASE-KEY t. If slot is a clog-element
+  "Load a PLIST in to OBJ where key of plist is the name of slot on
+OBJ and the value is the data to load.  If slot is a clog-element
 TEXT-VALUE is set, if not the slot is set to the value. If key is not
-the name of a slot it is ignored."
+the name of a slot it is ignored.  The key is coverted to a string and
+upper cased before attempting to match it to a slot if :UPCASE-KEY t
+(default)."
   (loop for (key value) on plist by #'cddr while value 
 	do
 	   (let* ((slot-str  (format nil "~A" key))
