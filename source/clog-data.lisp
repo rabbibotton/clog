@@ -11,8 +11,12 @@
 ;;; Various functions for binding data
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Implementation - data binding
+;; Implementation - data load and write from objects
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;;;;;;;;;;;;;;;;;;;;;
+;; data-load-plist ;;
+;;;;;;;;;;;;;;;;;;;;;
 
 (defun data-load-plist (obj plist &key (upcase-key t))
   "Load a PLIST in to OBJ where key of plist is the name of slot on
@@ -34,7 +38,11 @@ upper cased before attempting to match it to a slot if :UPCASE-KEY t
 			    (typep (slot-value obj slot-sym) 'clog:clog-element))
 		       (setf (text-value (slot-value obj slot-sym)) value)
 		       (setf (slot-value obj slot-sym) value))))))))
-  
+
+;;;;;;;;;;;;;;;;;;;;;;
+;;  data-write-list ;;
+;;;;;;;;;;;;;;;;;;;;;;
+
 (defun data-write-list (obj slot-name-list)
   "Returns a list, one member for each slot name in SLOT-NAME-LIST. If
 a slot contains a CLOG-ELEMENT then TEXT-VALUE is used to retrieve the
@@ -49,3 +57,34 @@ looking up symbol). All slot-names must be bound."
 	  (push (text-value (slot-value obj slot)) result)
 	  (push (slot-value obj slot) result)))
     result))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Implementation - simple sql writers
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;;;;;;;;;;;;;;;;;;;
+;; select-fields ;;
+;;;;;;;;;;;;;;;;;;;
+
+(defun select-fields (field-list &key quote-all)
+  "Given list of fields return a string to use in a SQL select. Use a cons to
+rename field if desired. Symbols are stringified first. If :QUOTE-ALL t then
+all fields are in quotes for use on case sensitive SQL dbms.
+ Eg. ((\"a\" \"index\") 'b :|c|) would return -> a as \"index\", B, c"
+  (let ((result))
+    (dolist (field (reverse field-list))
+      (if (consp field)
+	  (setf field (format nil "~A as \"~A\"~A"
+			      (if quote-all
+				  (format nil "\"~A\"" (first field))
+				  (format nil "~A" (first field)))
+			      (second field)
+			      (if result ", " "")))
+	  (setf field (format nil "~A~A"
+			      (if quote-all
+				  (format nil "\"~A\"" field)
+				  (format nil "~A" field))
+			      (if result ", " ""))))
+      (push field result))
+    (format nil "~{~A~}" result)))
+

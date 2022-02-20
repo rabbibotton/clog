@@ -523,9 +523,12 @@ embedded in a native template application.)"
   (link-slot-to-place              macro))
 
 (defsection @clog-data (:title "CLOG Data")
-  "CLOG-Data - CLOG Data Binding"
+  "Load and Write to objects and CLOG-Elements"
   (data-load-plist function)
-  (data-write-list function))
+  (data-write-list function)
+
+  "SQL Writing Helpers"
+  (select-fields function))
 
 (defsection @clog-panels (:title "CLOG Panels")
   "CLOG-Panel - CLOG Panels"
