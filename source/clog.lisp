@@ -38,6 +38,7 @@ embedded in a native template application.)"
   (@clog-element         section)
   (@clog-element-common  section)
   (@clog-presentations   section)
+  (@clog-data            section)
   (@clog-panels          section)
   (@clog-style-block     section)
   (@clog-form            section)
@@ -511,7 +512,7 @@ embedded in a native template application.)"
   (create-table-column-group-item generic-function))
 
 (defsection @clog-presentations (:title "CLOG Presentations")
-  "CLOG-Presentations - CLOG Presentations"
+  "CLOG-Presentations - CLOG bindings to Lisp Objects"
   (link-slot-and-form-element      macro)
   (link-slot-and-element           macro)
   (link-form-element-to-slot       macro)
@@ -520,6 +521,10 @@ embedded in a native template application.)"
   (link-slot-to-form-element       macro)
   (link-slot-to-element            macro)
   (link-slot-to-place              macro))
+
+(defsection @clog-data (:title "CLOG Data")
+  "CLOG-Data - CLOG Data Binding"
+  (data-load-plist function))
 
 (defsection @clog-panels (:title "CLOG Panels")
   "CLOG-Panel - CLOG Panels"
