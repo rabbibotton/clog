@@ -70,19 +70,19 @@ looking up symbol). All slot-names must be bound."
   "Given list of fields return a string to use in a SQL select. Use a cons to
 rename field if desired. Symbols are stringified first. If :QUOTE-ALL t then
 all fields are in quotes for use on case sensitive SQL dbms.
- Eg. ((\"a\" \"index\") 'b :|c|) would return -> a as \"index\", B, c"
+ Eg. ((\"a\" \"index\") 'b :|c|) would return -> a as 'index', B, c"
   (let ((result))
     (dolist (field (reverse field-list))
       (if (consp field)
-	  (setf field (format nil "~A as \"~A\"~A"
+	  (setf field (format nil "~A as '~A'~A"
 			      (if quote-all
-				  (format nil "\"~A\"" (first field))
+				  (format nil "'~A'" (first field))
 				  (format nil "~A" (first field)))
 			      (second field)
 			      (if result ", " "")))
 	  (setf field (format nil "~A~A"
 			      (if quote-all
-				  (format nil "\"~A\"" field)
+				  (format nil "'~A'" field)
 				  (format nil "~A" field))
 			      (if result ", " ""))))
       (push field result))
