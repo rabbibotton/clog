@@ -25,14 +25,14 @@ TEXT-VALUE is set, if not the slot is set to the value. If key is not
 the name of a slot it is ignored.  The key is coverted to a string and
 upper cased before attempting to match it to a slot if :UPCASE-KEY t
 (default)."
-  (loop for (key value) on plist by #'cddr while value 
+  (loop for (key value) on plist by #'cddr while value
 	do
 	   (let* ((slot-str  (format nil "~A" key))
 		  (slot-name (if upcase-key
 				 (string-upcase slot-str)
 				 slot-str)))
 	     (when (find-symbol slot-name)
-	       (let ((slot-sym (intern slot-name)))	     
+	       (let ((slot-sym (intern slot-name)))
 		 (when (slot-exists-p obj slot-sym)
 		   (if (and (slot-boundp obj slot-sym)
 			    (typep (slot-value obj slot-sym) 'clog:clog-element))
@@ -148,7 +148,7 @@ SQL update. If a value is a string it is quoted with single quotes
 (and single quotes qutoed by doubling) unless is the single
 character '?'."
   (let ((result))
-    (loop for (key value) on plist by #'cddr while value 
+    (loop for (key value) on plist by #'cddr while value
 	  do
 	     (push (format nil "~A = ~A~A"
 			   key
@@ -188,6 +188,17 @@ character '?'."
 	  table
 	  (sql-field-list field-list)
 	  (sql-value-list value-list)))
+
+;;;;;;;;;;;;;;;;;
+;; sql-insert* ;;
+;;;;;;;;;;;;;;;;;
+
+(defun sql-insert* (table plist)
+  "Build basic sql insert statement using a plist"
+  (loop for (key value) on plist by #'cddr while value
+	collect key into fields
+	collect value into values
+	finally (return (sql-insert table fields values))))
 
 ;;;;;;;;;;;;;;;;
 ;; sql-update ;;

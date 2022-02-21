@@ -534,6 +534,7 @@ embedded in a native template application.)"
   (sql-update-list function)
   (sql-select      function)
   (sql-insert      function)
+  (sql-insert*     function)
   (sql-update      function))
 
 (defsection @clog-panels (:title "CLOG Panels")
