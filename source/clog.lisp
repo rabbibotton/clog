@@ -529,9 +529,12 @@ embedded in a native template application.)"
   (data-write-plist function)
 
   "SQL Writing Helpers"
-  (sql-list        function)
+  (sql-field-list  function)
   (sql-value-list  function)
-  (sql-update-list function))
+  (sql-update-list function)
+  (sql-select      function)
+  (sql-insert      function)
+  (sql-update      function))
 
 (defsection @clog-panels (:title "CLOG Panels")
   "CLOG-Panel - CLOG Panels"

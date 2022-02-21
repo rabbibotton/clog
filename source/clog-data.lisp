@@ -91,11 +91,11 @@ keyword package."
 ;; Implementation - simple sql writers
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;;;;;;;;;;;;;;
-;; sql-list ;;
-;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;
+;; sql-field-list ;;
+;;;;;;;;;;;;;;;;;;;;
 
-(defun sql-list (field-list &key quote-all)
+(defun sql-field-list (field-list &key quote-all)
   "Given list of fields returns a string for use in a SQL select and
 insert field lists. Use a cons to rename fields for selects if
 desired. Symbols are stringified first. If :QUOTE-ALL t then all
@@ -161,3 +161,41 @@ character '?'."
 		   result))
     (format nil "~{~A~}" result)))
 
+;;;;;;;;;;;;;;;;
+;; sql-select ;;
+;;;;;;;;;;;;;;;;
+
+(defun sql-select (table field-list &key where)
+  "Build basic sql select statement"
+  (format nil "select ~A from ~A~A"
+	  (if (consp field-list)
+	      (sql-field-list field-list)
+	      field-list)
+	  (if (consp table)
+	      (sql-field-list table)
+	      table)
+	  (if where
+	      (format nil " where ~A" where)
+	      "")))
+
+;;;;;;;;;;;;;;;;
+;; sql-insert ;;
+;;;;;;;;;;;;;;;;
+
+(defun sql-insert (table field-list value-list)
+  "Build basic sql insert statement"
+  (format nil "insert into ~A (~A) values (~A)"
+	  table
+	  (sql-field-list field-list)
+	  (sql-value-list value-list)))
+
+;;;;;;;;;;;;;;;;
+;; sql-update ;;
+;;;;;;;;;;;;;;;;
+
+(defun sql-update (table plist where)
+  "Build basic sql update statement"
+  (format nil "update ~A set ~A where ~A"
+	  table
+	  (sql-update-list plist)
+	  where))
