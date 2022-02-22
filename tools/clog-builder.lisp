@@ -548,8 +548,8 @@ not a temporary attached one when using select-control."
 				 html-id
 				 (format nil "CLOG:~A" (type-of control)))
 			 vars)
-		   (let ((info  (control-info (attribute control "data-clog-type"))))
-		     (dolist (event (getf info :events))
+		   (let ((control-record (control-info (attribute control "data-clog-type"))))
+		     (dolist (event (getf control-record :events))
 		       (let ((handler (attribute control (format nil "data-~A" (getf event :name)))))
 			 (unless (or (equalp handler "undefined")
 				     (equal handler ""))
@@ -561,15 +561,23 @@ not a temporary attached one when using select-control."
 				    (getf event :parameters)
 				    (getf event :parameters)
 				    handler)
-				   events))))))
-		   (let ((handler (attribute control "data-on-create")))
-		     (unless (or (equalp handler "undefined")
-				 (equal handler ""))
-		       (push (format nil
-			      "    \(let \(\(target \(~A panel\)\)\) \(declare \(ignorable target\)\) ~A\)~%"
-			      vname
-			      handler)
-			     events))))))
+				   events)))))
+		     (let ((handler (attribute control "data-on-create")))
+		       (when (equalp handler "undefined")
+			 (setf handler ""))
+		       (when (getf control-record :on-setup)
+			 (setf handler (format nil "~A~A"
+					       (funcall (getf control-record :on-setup)
+							control control-record)
+					       handler)))
+		       (unless (equal handler "")
+			 (push (format nil
+				       "    \(let \(\(target \(~A panel\)\)\) ~
+                                             \(declare \(ignorable target\)\) ~
+                                              ~A\)~%"
+				       vname
+				       handler)
+			     events)))))))
 	     (get-control-list app panel-id))
     (let ((result (format nil
 			  "\(in-package \"~A\"\)

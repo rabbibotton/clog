@@ -39,6 +39,7 @@ embedded in a native template application.)"
   (@clog-element-common  section)
   (@clog-presentations   section)
   (@clog-data            section)
+  (@clog-dbi             section)
   (@clog-panels          section)
   (@clog-style-block     section)
   (@clog-form            section)
@@ -536,6 +537,12 @@ embedded in a native template application.)"
   (sql-insert      function)
   (sql-insert*     function)
   (sql-update      function))
+
+(defsection @clog-dbi (:title "CLOG DBI")
+  "CLOG-Database - CLOG Database Connection"
+  (clog-database         class)
+  (database-connection   generic-function)
+  (create-database       generic-function))
 
 (defsection @clog-panels (:title "CLOG Panels")
   "CLOG-Panel - CLOG Panels"

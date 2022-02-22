@@ -34,6 +34,7 @@
 	       (:file "clog-panel")
 	       (:file "clog-presentations")
 	       (:file "clog-data")
+	       (:file "clog-dbi")
 	       (:file "clog-gui")
 	       (:file "clog-web")
 	       (:file "clog-helpers")))
