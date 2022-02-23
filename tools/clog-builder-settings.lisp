@@ -1341,12 +1341,15 @@
      :on-setup       ,(lambda (control control-record)
 			(declare (ignore control-record))
 			(format nil "(setf (database-connection target) ~
-			               (dbi:connect ~A :database-name \"~A\"))"
+			               (dbi:connect ~A ~A :database-name \"~A\"))"
 				(attribute control "data-clog-dbi-dbtype")
+				(attribute control "data-clog-dbi-dbparams")
 				(attribute control "data-clog-dbi-dbname")))
      :events         (,@*events-element*)
      :properties     ((:name "database type"
 		       :attr "data-clog-dbi-dbtype")
+		      (:name "database params"
+		       :attr "data-clog-dbi-dbparams")
 		      (:name "database name"
 		       :attr "data-clog-dbi-dbname")
 		      ,@*props-element*))))
