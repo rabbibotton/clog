@@ -541,8 +541,22 @@ embedded in a native template application.)"
 (defsection @clog-dbi (:title "CLOG DBI")
   "CLOG-Database - CLOG Database Connection"
   (clog-database         class)
+  (create-database       generic-function)
   (database-connection   generic-function)
-  (create-database       generic-function))
+
+  (clog-one-row   class)
+  (create-one-row generic-function)
+  (clog-database  generic-function)
+  (table-name     generic-function)
+  (where-clause   generic-function)
+  (row-id-name    generic-function)
+  (rowid          generic-function)
+  (table-columns  generic-function)
+  (get-row        generic-function)
+  (insert-row     generic-function)
+  (update-row     generic-function)
+  (clear-row      generic-function)
+  (delete-row     generic-function))
 
 (defsection @clog-panels (:title "CLOG Panels")
   "CLOG-Panel - CLOG Panels"

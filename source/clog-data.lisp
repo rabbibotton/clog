@@ -18,28 +18,32 @@
 ;; data-load-plist ;;
 ;;;;;;;;;;;;;;;;;;;;;
 
-(defun data-load-plist (obj plist &key (upcase-key t))
+(defun data-load-plist (obj plist &key (row-id-name nil) (upcase-key t))
   "Load a PLIST in to OBJ where key of plist is the name of slot on
 OBJ and the value is the data to load.  If slot contains a CLOG-ELEMENT
 TEXT-VALUE is set, if not the slot is set to the value. If key is not
 the name of a slot it is ignored.  The key is coverted to a string and
 upper cased before attempting to match it to a slot if :UPCASE-KEY t
-(default)."
-  (loop for (key value) on plist by #'cddr while value
-	do
-	   (let* ((slot-str  (format nil "~A" key))
-		  (slot-name (if upcase-key
-				 (string-upcase slot-str)
-				 slot-str))
-		  (slot-sym  (closer-mop:slot-definition-name
-			      (find slot-name (closer-mop:compute-slots (class-of obj))
-				    :key #'closer-mop:slot-definition-name
-				    :test #'string=))))
-	     (when slot-sym
-	       (if (and (slot-boundp obj slot-sym)
-			(typep (slot-value obj slot-sym) 'clog:clog-element))
-		   (setf (text-value (slot-value obj slot-sym)) value)
-		   (setf (slot-value obj slot-sym) value))))))
+(default). If :ROW-ID-NAME is set returns that fields value."
+  (let ((result))
+    (loop for (key value) on plist by #'cddr while value
+	  do
+	     (let* ((slot-str  (format nil "~A" key))
+		    (slot-name (if upcase-key
+				   (string-upcase slot-str)
+				   slot-str))
+		    (slot-sym  (find slot-name (closer-mop:compute-slots (class-of obj))
+				     :key #'closer-mop:slot-definition-name
+				     :test #'string=)))
+	       (when (equalp row-id-name slot-name)
+		 (setf result value))
+	       (when slot-sym
+		 (setf slot-sym (closer-mop:slot-definition-name slot-sym))
+		 (if (and (slot-boundp obj slot-sym)
+			  (typep (slot-value obj slot-sym) 'clog:clog-element))
+		     (setf (text-value (slot-value obj slot-sym)) value)
+		     (setf (slot-value obj slot-sym) value)))))
+    result))
 
 ;;;;;;;;;;;;;;;;;;;;;;
 ;;  data-write-list ;;
@@ -79,8 +83,9 @@ the key is the slot name. If a slot contains a CLOG-ELEMENT then
 TEXT-VALUE is used to retrieve the value otherwise it is the
 slot-value. Slot names may be symbols, keywords, or text (and will be
 upcased before looking up symbol if :UPCASE-KEY t). All slot-names
-must be bound. If :KEYS-AS-KEYWORDS t (default) then the keys will be
-symbols in the keyword package."
+must be bound. If slot-name does not exist left out of returned
+plist. If :KEYS-AS-KEYWORDS t (default) then the keys will be symbols
+in the keyword package."
   (let ((result))
     (dolist (slot (reverse slot-name-list))
       (when (keywordp slot)
@@ -88,17 +93,18 @@ symbols in the keyword package."
       (unless (symbolp slot)
 	(when upcase-key
 	  (setf slot (string-upcase slot))))
-      (setf slot (closer-mop:slot-definition-name
-		  (find slot (closer-mop:compute-slots (class-of obj))
+      (setf slot (find slot (closer-mop:compute-slots (class-of obj))
 			:key #'closer-mop:slot-definition-name
-			:test #'string=)))
-      (if (and (slot-boundp obj slot)
-	       (typep (slot-value obj slot) 'clog:clog-element))
-	  (push (text-value (slot-value obj slot)) result)
-	  (push (slot-value obj slot) result))
-      (if keys-as-keywords
-	  (push (find-symbol (format nil "~A" slot) 'keyword) result)
-	  (push slot result)))
+			:test #'string=))
+      (when slot
+	(setf slot (closer-mop:slot-definition-name slot))
+	(if (and (slot-boundp obj slot)
+		 (typep (slot-value obj slot) 'clog:clog-element))
+	    (push (text-value (slot-value obj slot)) result)
+	    (push (slot-value obj slot) result))
+	(if keys-as-keywords
+	    (push (intern (format nil "~A" slot) 'keyword) result)
+	    (push slot result))))
     result))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -188,7 +194,7 @@ character '?'."
 	  (if (consp table)
 	      (sql-field-list table)
 	      table)
-	  (if where
+	  (if (and where (not (equal where "")))
 	      (format nil " where ~A" where)
 	      "")))
 
