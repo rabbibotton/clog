@@ -77,6 +77,10 @@ CLOG-Builder. If not using builder use to connect:
     :accessor rowid
     :initform nil
     :documentation "Current rowid")
+   (queryid
+    :accessor queryid
+    :initform nil
+    :documentation "Current query (private)")
    (columns
     :accessor table-columns
     :initform nil
@@ -106,19 +110,26 @@ must be a parent to CLOG-One-Row."))
     new-obj))
 
 (defgeneric get-row (clog-obj panel)
-  (:documentation "Get a row from a database table based on
+  (:documentation "Get first row from a database table based on
 CLOG-OBJECT's table-name using where-clause and table-columns.
-row-id-name is required. All PANEL items or custom rows
-on panel will be set use DATA-LOAD-PLIST."))
+row-id-name is required. All PANEL items or custom rows on panel will
+be set using DATA-LOAD-PLIST."))
 (defmethod get-row ((obj clog-obj) panel)
+  (setf (queryid obj) (dbi:execute
+		       (dbi:prepare
+			(database-connection (clog-database obj))
+			(sql-select (table-name obj)
+				    (table-columns obj)
+				    :where (where-clause obj)))))
+  (next-row obj panel))
+
+(defgeneric next-row (clog-obj panel)
+  (:documentation "Get next row from a database table based on query
+made for get-row. All PANEL items or custom rows on panel will be set
+using DATA-LOAD-PLIST."))
+(defmethod next-row ((obj clog-obj) panel)
   (setf (rowid obj) (data-load-plist panel
-				     (dbi:fetch
-				      (dbi:execute
-				       (dbi:prepare
-					(database-connection (clog-database obj))
-					(sql-select (table-name obj)
-						    (table-columns obj)
-						    :where (where-clause obj)))))
+				     (dbi:fetch (queryid obj))
 				     :row-id-name (row-id-name obj))))
 
 (defgeneric insert-row (clog-obj panel)

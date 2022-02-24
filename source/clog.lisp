@@ -553,6 +553,7 @@ embedded in a native template application.)"
   (rowid          generic-function)
   (table-columns  generic-function)
   (get-row        generic-function)
+  (next-row       generic-function)
   (insert-row     generic-function)
   (update-row     generic-function)
   (clear-row      generic-function)
