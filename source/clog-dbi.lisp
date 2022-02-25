@@ -89,6 +89,10 @@ CLOG-Builder. If not using builder use to connect:
     :accessor queryid
     :initform nil
     :documentation "Current query (private)")
+   (last-fetch
+    :accessor last-fetch
+    :initform nil
+    :documentation "Last fetch plist")
    (columns
     :accessor table-columns
     :initform nil
@@ -149,8 +153,9 @@ be set using DATA-LOAD-PLIST."))
 made for get-row. All PANEL items or custom rows on panel will be set
 using DATA-LOAD-PLIST."))
 (defmethod next-row ((obj clog-obj) panel)
+  (setf (last-fetch obj) (dbi:fetch (queryid obj)))
   (setf (rowid obj) (data-load-plist panel
-				     (dbi:fetch (queryid obj))
+				     (last-fetch obj)
 				     :row-id-name (row-id-name obj))))
 
 (defgeneric insert-row (clog-obj panel)
