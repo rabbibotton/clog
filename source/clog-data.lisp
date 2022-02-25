@@ -28,6 +28,8 @@ upper cased before attempting to match it to a slot if :UPCASE-KEY t
   (let ((result))
     (loop for (key value) on plist by #'cddr while value
 	  do
+	     (when (consp key)
+	       (setf key (second key)))
 	     (let* ((slot-str  (format nil "~A" key))
 		    (slot-name (if upcase-key
 				   (string-upcase slot-str)

@@ -178,15 +178,16 @@ on panel will be retrieved from PANEL using DATA-WRITE-PLIST."))
 		(data-write-plist panel (table-columns obj))
 		(format nil "~A=~A" (row-id-name obj) (rowid obj)))))
 
-(defgeneric delete-row (clog-obj)
+(defgeneric delete-row (clog-obj panel)
   (:documentation "Delete a row from a database table based on
-current rowid"))
-(defmethod delete-row ((obj clog-obj))
+current rowid and then call CLEAR-ROW"))
+(defmethod delete-row ((obj clog-obj) panel)
   (dbi:do-sql (database-connection (clog-database obj))
     (format nil "delete from ~A where ~A=~A"
 	    (table-name obj)
 	    (row-id-name obj)
-	    (rowid obj))))
+	    (rowid obj)))
+  (clear-row obj panel))
 
 (defgeneric clear-row (clog-obj panel)
   (:documentation "Clear current rowid and all fields in PANEL
@@ -197,5 +198,6 @@ using DATA-WRITE-PLIST based on table-columns."))
       (push "" result)
       (push c result))
     (data-load-plist panel result)
+    (setf (last-fetch obj) nil)
     (setf (rowid obj) nil)))
 
