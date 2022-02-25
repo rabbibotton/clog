@@ -69,6 +69,14 @@ CLOG-Builder. If not using builder use to connect:
     :accessor where-clause
     :initform nil
     :documentation "Where clause")
+   (order-by
+    :accessor order-by
+    :initform nil
+    :documentation "Sort by")
+   (limit
+    :accessor limit
+    :initform nil
+    :documentation "Limit number of returned rows")
    (id
     :accessor row-id-name
     :initform nil
@@ -120,7 +128,9 @@ be set using DATA-LOAD-PLIST."))
 			(database-connection (clog-database obj))
 			(sql-select (table-name obj)
 				    (table-columns obj)
-				    :where (where-clause obj)))))
+				    :where (where-clause obj)
+				    :order-by (order-by obj)
+				    :limit (limit obj)))))
   (next-row obj panel))
 
 (defgeneric next-row (clog-obj panel)

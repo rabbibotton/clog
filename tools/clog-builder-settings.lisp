@@ -1367,6 +1367,8 @@
 			(declare (ignore content) (ignore control-record))
 			(setf (attribute control "data-clog-one-row-table") "")
 			(setf (attribute control "data-clog-one-row-where") "")
+			(setf (attribute control "data-clog-one-row-order") "")
+			(setf (attribute control "data-clog-one-row-limit") "")
 			(setf (attribute control "data-clog-one-row-id-name") "rowid")
 			(setf (attribute control "data-clog-one-row-columns") "rowid"))
      :on-setup       ,(lambda (control control-record)
@@ -1374,11 +1376,15 @@
 			(format nil "(setf (clog-database target) (~A panel)) ~
                                      (setf (table-name target) \"~A\") ~
                                      (setf (where-clause target) \"~A\") ~
+                                     (setf (order-by target) \"~A\") ~
+                                     (setf (limit target) \"~A\") ~
                                      (setf (row-id-name target) \"~A\") ~
                                      (setf (table-columns target) '(~A))"
 				(attribute (parent-element control) "data-clog-name")
 				(attribute control "data-clog-one-row-table")
 				(attribute control "data-clog-one-row-where")
+				(attribute control "data-clog-one-row-order")
+				(attribute control "data-clog-one-row-limit")
 				(attribute control "data-clog-one-row-id-name")
 				(attribute control "data-clog-one-row-columns")))
      :events         (,@*events-element*)
@@ -1386,6 +1392,10 @@
 		       :attr "data-clog-one-row-table")
 		      (:name "where clause (optional)"
 		       :attr "data-clog-one-row-where")
+		      (:name "order by (optional)"
+		       :attr "data-clog-one-row-order")
+		      (:name "limit (optional)"
+		       :attr "data-clog-one-row-limit")
 		      (:name "table row id name"
 		       :attr "data-clog-one-row-id-name")
 		      (:name "table columns"

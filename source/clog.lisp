@@ -549,6 +549,8 @@ embedded in a native template application.)"
   (clog-database  generic-function)
   (table-name     generic-function)
   (where-clause   generic-function)
+  (order-by       generic-function)
+  (limit          generic-function)
   (row-id-name    generic-function)
   (rowid          generic-function)
   (table-columns  generic-function)
