@@ -44,9 +44,6 @@ Some notes on this
 
    3) Way to receive data from the page - This is one way but not ideal - https://webkitgtk.org/reference/webkit2gtk/stable/WebKitWebContext.html#webkit-web-context-register-uri-scheme and seems most all here https://blogs.igalia.com/carlosgc/2013/09/10/webkit2gtk-web-process-extensions/
 
-- clog-data (partial - clog-presentations allows linking list objects and clog objects)
-  - binding html controls directly to fields for database use
-
 - clog-auth
   - tiered authorization, user profiles, etc
 

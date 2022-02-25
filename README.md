@@ -278,4 +278,10 @@ High Order Extensions to CLOG
 
 - clog-jquery - DOM queries
 
+- clog-data - Move data between lists and plists and groups of controls
+              SQL writer helpers for basic SQL
+	      CLOG-Database - Database control for CLOG Builder
+	      CLOG-One-Row  - One row at a time table access auto 
+	                      binds to controls in CLOG Builder
+
 (See FUTURE.md for future plans)
