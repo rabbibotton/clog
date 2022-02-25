@@ -49,7 +49,7 @@ CLOG-Builder. If not using builder use to connect:
 ;; database-connection ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defgeneric database-connection (clog-obj)
+(defgeneric database-connection (clog-database)
   (:documentation "Accessor to the database handle"))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -85,10 +85,6 @@ CLOG-Builder. If not using builder use to connect:
     :accessor rowid
     :initform nil
     :documentation "Current rowid")
-   (queryid
-    :accessor queryid
-    :initform nil
-    :documentation "Current query (private)")
    (last-fetch
     :accessor last-fetch
     :initform nil
@@ -96,7 +92,15 @@ CLOG-Builder. If not using builder use to connect:
    (columns
     :accessor table-columns
     :initform nil
-    :documentation "Columns of table to be retrieved"))
+    :documentation "Columns of table to be retrieved")
+   (queryid
+    :accessor queryid
+    :initform nil
+    :documentation "Current query (private)")
+   (on-fetch
+    :accessor on-fetch
+    :initform nil
+    :documentation "on-fetch event, called after fetch complete. (private)"))
   (:documentation "Manipulate one row of a table."))
 
 ;;;;;;;;;;;;;;;;;;;;
@@ -121,23 +125,23 @@ must be a parent to CLOG-One-Row."))
     (setf (clog-database new-obj) clog-database)
     new-obj))
 
-(defgeneric query-row (clog-obj panel sql)
+(defgeneric query-row (clog-one-row panel sql)
   (:documentation "Ignore query related prperties and instead execute
 SQL. row-id-name is required for updates. All PANEL items or custom
 rows on panel will be set using DATA-LOAD-PLIST."))
-(defmethod query-row ((obj clog-obj) panel sql)
+(defmethod query-row ((obj clog-one-row) panel sql)
   (setf (queryid obj) (dbi:execute
 		       (dbi:prepare
 			(database-connection (clog-database obj))
 			sql)))
   (next-row obj panel))
 
-(defgeneric get-row (clog-obj panel)
+(defgeneric get-row (clog-one-row panel)
   (:documentation "Get first row from a database table based on
-CLOG-OBJECT's table-name using where-clause and table-columns.
+CLOG-ONE-ROW's table-name using where-clause and table-columns.
 row-id-name is required. All PANEL items or custom rows on panel will
 be set using DATA-LOAD-PLIST."))
-(defmethod get-row ((obj clog-obj) panel)
+(defmethod get-row ((obj clog-one-row) panel)
   (setf (queryid obj) (dbi:execute
 		       (dbi:prepare
 			(database-connection (clog-database obj))
@@ -148,40 +152,42 @@ be set using DATA-LOAD-PLIST."))
 				    :limit (limit obj)))))
   (next-row obj panel))
 
-(defgeneric next-row (clog-obj panel)
+(defgeneric next-row (clog-one-row panel)
   (:documentation "Get next row from a database table based on query
 made for get-row. All PANEL items or custom rows on panel will be set
 using DATA-LOAD-PLIST."))
-(defmethod next-row ((obj clog-obj) panel)
+(defmethod next-row ((obj clog-one-row) panel)
   (setf (last-fetch obj) (dbi:fetch (queryid obj)))
+  (when (on-fetch obj)
+    (funcall (on-fetch obj) obj))
   (setf (rowid obj) (data-load-plist panel
 				     (last-fetch obj)
 				     :row-id-name (row-id-name obj))))
 
-(defgeneric insert-row (clog-obj panel)
+(defgeneric insert-row (clog-one-row panel)
   (:documentation "Insert new row in to database table based on
-CLOG-OBJECT's table-name and table-columns. DATA-WRITE-PLIST is
+CLOG-ONE-ROW's table-name and table-columns. DATA-WRITE-PLIST is
 used to extract data from PANEL items and custom rows."))
-(defmethod insert-row ((obj clog-obj) panel)
+(defmethod insert-row ((obj clog-one-row) panel)
   (dbi:do-sql (database-connection (clog-database obj))
     (sql-insert* (table-name obj)
 		 (data-write-plist panel (table-columns obj)))))
 
-(defgeneric update-row (clog-obj panel)
+(defgeneric update-row (clog-one-row panel)
   (:documentation "Update row in database table based on
-CLOG-OBJECT's table-name using current rowid and table-columns.
+CLOG-ONE-ROW's table-name using current rowid and table-columns.
 row-id-name is required. All PANEL items or custom rows
 on panel will be retrieved from PANEL using DATA-WRITE-PLIST."))
-(defmethod update-row ((obj clog-obj) panel)
+(defmethod update-row ((obj clog-one-row) panel)
   (dbi:do-sql (database-connection (clog-database obj))
     (sql-update (table-name obj)
 		(data-write-plist panel (table-columns obj))
 		(format nil "~A=~A" (row-id-name obj) (rowid obj)))))
 
-(defgeneric delete-row (clog-obj panel)
+(defgeneric delete-row (clog-one-row panel)
   (:documentation "Delete a row from a database table based on
 current rowid and then call CLEAR-ROW"))
-(defmethod delete-row ((obj clog-obj) panel)
+(defmethod delete-row ((obj clog-one-row) panel)
   (dbi:do-sql (database-connection (clog-database obj))
     (format nil "delete from ~A where ~A=~A"
 	    (table-name obj)
@@ -189,10 +195,10 @@ current rowid and then call CLEAR-ROW"))
 	    (rowid obj)))
   (clear-row obj panel))
 
-(defgeneric clear-row (clog-obj panel)
+(defgeneric clear-row (clog-one-row panel)
   (:documentation "Clear current rowid and all fields in PANEL
 using DATA-WRITE-PLIST based on table-columns."))
-(defmethod clear-row ((obj clog-obj) panel)
+(defmethod clear-row ((obj clog-one-row) panel)
   (let ((result))
     (dolist (c (table-columns obj))
       (push "" result)
@@ -201,3 +207,12 @@ using DATA-WRITE-PLIST based on table-columns."))
     (setf (last-fetch obj) nil)
     (setf (rowid obj) nil)))
 
+(defgeneric set-on-fetch (clog-one-row on-fetch-handler)
+  (:documentation "Set the ON-FETCH-HANDLER for CLOG-ONE-ROW. If ON-FETCH-HANDLER
+is nil unbind the event. The on-fetch event is called after the row was fetched
+and stored in (last-fetch clog-one-row) or nil if no row was returned, and before
+data-load-plist is called that will use the value of (last-fetch clog-one-row).
+Calculated fields, transformations to field values, etc. can be done in on-fetch as
+new-row will block until on-fetch returns."))
+(defmethod set-on-fetch ((obj clog-one-row) on-fetch-handler)
+  (setf (on-fetch obj) on-fetch-handler))

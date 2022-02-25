@@ -1387,7 +1387,9 @@
 				(attribute control "data-clog-one-row-limit")
 				(attribute control "data-clog-one-row-id-name")
 				(attribute control "data-clog-one-row-columns")))
-     :events         (,@*events-element*)
+     :events         ((:name        "on-fetch"
+		       :parameters  "target")
+		       ,@*events-element*)
      :properties     ((:name "table name"
 		       :attr "data-clog-one-row-table")
 		      (:name "where clause (optional)"

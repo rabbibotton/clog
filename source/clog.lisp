@@ -545,6 +545,7 @@ embedded in a native template application.)"
   (database-connection   generic-function)
 
   (clog-one-row   class)
+  (set-on-fetch   generic-function)
   (create-one-row generic-function)
   (clog-database  generic-function)
   (table-name     generic-function)
