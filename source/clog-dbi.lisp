@@ -117,6 +117,17 @@ must be a parent to CLOG-One-Row."))
     (setf (clog-database new-obj) clog-database)
     new-obj))
 
+(defgeneric query-row (clog-obj panel sql)
+  (:documentation "Ignore query related prperties and instead execute
+SQL. row-id-name is required for updates. All PANEL items or custom
+rows on panel will be set using DATA-LOAD-PLIST."))
+(defmethod query-row ((obj clog-obj) panel sql)
+  (setf (queryid obj) (dbi:execute
+		       (dbi:prepare
+			(database-connection (clog-database obj))
+			sql)))
+  (next-row obj panel))
+
 (defgeneric get-row (clog-obj panel)
   (:documentation "Get first row from a database table based on
 CLOG-OBJECT's table-name using where-clause and table-columns.
