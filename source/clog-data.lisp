@@ -57,6 +57,8 @@ upcased before looking up symbol if :UPCASE-KEY t). All slot-names
 must be bound."
   (let ((result))
     (dolist (slot (reverse slot-name-list))
+      (when (consp slot)
+	  (setf slot (second slot)))
       (when (keywordp slot)
 	(setf slot (format nil "~A" slot)))
       (unless (symbolp slot)
@@ -82,16 +84,25 @@ must be bound."
 the key is the slot name. If a slot contains a CLOG-ELEMENT then
 TEXT-VALUE is used to retrieve the value otherwise it is the
 slot-value. Slot names may be symbols, keywords, or text (and will be
-upcased before looking up symbol if :UPCASE-KEY t). All slot-names
-must be bound. If slot-name does not exist left out of returned
-plist. If :KEYS-AS-KEYWORDS t (default) then the keys will be symbols
-in the keyword package."
-  (let ((result))
+upcased before looking up symbol if :UPCASE-KEY t). If a slot-name is
+a cons, the first will be used as the key in the plist and the second
+will be the actual slot-name. All slot-names must be bound. If
+slot-name does not exist it is left out of returned plist. If
+:KEYS-AS-KEYWORDS t (default) then the keys will be symbols in the
+keyword package."
+  (let (result
+	pname)
     (dolist (slot (reverse slot-name-list))
+      (cond ((consp slot)
+	     (setf pname (first slot))
+	     (setf slot (second slot)))
+	    (t
+	     (setf pname slot)))
       (when (keywordp slot)
 	(setf slot (format nil "~A" slot)))
       (unless (symbolp slot)
 	(when upcase-key
+	  (setf pname (string-upcase pname))
 	  (setf slot (string-upcase slot))))
       (setf slot (find slot (closer-mop:compute-slots (class-of obj))
 			:key #'closer-mop:slot-definition-name
@@ -103,8 +114,8 @@ in the keyword package."
 	    (push (text-value (slot-value obj slot)) result)
 	    (push (slot-value obj slot) result))
 	(if keys-as-keywords
-	    (push (intern (format nil "~A" slot) 'keyword) result)
-	    (push slot result))))
+	    (push (intern (format nil "~A" pname) 'keyword) result)
+	    (push pname result))))
     result))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -115,13 +126,16 @@ in the keyword package."
 ;; sql-field-list ;;
 ;;;;;;;;;;;;;;;;;;;;
 
-(defun sql-field-list (field-list &key quote-all)
+(defun sql-field-list (field-list &key quote-all for-insert)
   "Given list of fields returns a string for use in a SQL select and
-insert field lists. Use a cons to rename fields for selects if
-desired. Symbols are stringified first. If :QUOTE-ALL t then all
-fields are in quotes."
+insert field lists. Use a cons (realname asname) to rename fields for
+selects, if :FOR-INSERT t then the realname is used. Symbols are
+stringified first. If :QUOTE-ALL t then all fields are in quotes."
   (let ((result))
     (dolist (field (reverse field-list))
+      (if (and for-insert
+	       (consp field))
+	  (setf field (car field)))
       (if (consp field)
 	  (setf field (format nil "~A as '~A'~A"
 			      (if quote-all
@@ -164,14 +178,16 @@ character '?'."
 
 (defun sql-update-list (plist)
   "Given plist of field names and values returns a string for use in a
-SQL update. If a value is a string it is quoted with single quotes
-(and single quotes qutoed by doubling) unless is the single
-character '?'."
+SQL update. if the 'key' is a cons the first 'key' used. If a value
+is a string it is quoted with single quotes (and single quotes qutoed
+by doubling) unless is the single character '?'."
   (let ((result))
     (loop for (key value) on plist by #'cddr while value
 	  do
 	     (push (format nil "~A = ~A~A"
-			   key
+			   (if (consp key)
+			       (car key)
+			       key)
 			   (if (and (stringp value)
 				    (not (equal value "?")))
 			       (format nil "'~A'"
@@ -185,9 +201,9 @@ character '?'."
 ;; sql-select ;;
 ;;;;;;;;;;;;;;;;
 
-(defun sql-select (table field-list &key where)
+(defun sql-select (table field-list &key where order-by limit)
   "Build basic sql select statement"
-  (format nil "select ~A from ~A~A"
+  (format nil "select ~A from ~A~A~A~A"
 	  (if (consp field-list)
 	      (sql-field-list field-list)
 	      field-list)
@@ -196,6 +212,12 @@ character '?'."
 	      table)
 	  (if (and where (not (equal where "")))
 	      (format nil " where ~A" where)
+	      "")
+	  (if (and order-by (not (equal order-by "")))
+	      (format nil " order by ~A" order-by)
+	      "")
+	  (if (and limit (not (equal limit "")))
+	      (format nil " limit ~A" )
 	      "")))
 
 ;;;;;;;;;;;;;;;;
@@ -206,7 +228,7 @@ character '?'."
   "Build basic sql insert statement"
   (format nil "insert into ~A (~A) values (~A)"
 	  table
-	  (sql-field-list field-list)
+	  (sql-field-list field-list :for-insert t)
 	  (sql-value-list value-list)))
 
 ;;;;;;;;;;;;;;;;;
