@@ -1289,9 +1289,9 @@ and if :AUTO-PLACE (default t) place-inside-bottom-of CLOG-OBJ"))
 (defclass clog-table-footer (clog-table)()
   (:documentation "CLOG Table-Footer Objects."))
 
-;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; create-table-footer ;;
-;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defgeneric create-table-footer (clog-obj &key hidden
 					    class html-id auto-place)

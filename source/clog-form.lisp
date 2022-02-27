@@ -1029,11 +1029,17 @@ optionally fill in with contents of data-list."))
 ;; add-select-option ;;
 ;;;;;;;;;;;;;;;;;;;;;;;
 
-(defgeneric add-select-option (clog-select value content)
+(defgeneric add-select-option (clog-select value content &key selected disabled)
   (:documentation "Add option VALUE to select."))
 
-(defmethod add-select-option ((obj clog-select) value content)
-  (create-child obj (format nil "<option value='~A'>~A</option>"
+(defmethod add-select-option ((obj clog-select) value content &key selected disabled)
+  (create-child obj (format nil "<option~A~A value='~A'>~A</option>"
+			    (if selected
+				" selected"
+				"")
+			    (if disabled
+				" disabled"
+				"")
 			    (escape-string value)
 			    (escape-string content))
 		:clog-type 'clog-element :auto-place t))

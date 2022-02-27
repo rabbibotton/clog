@@ -1416,7 +1416,162 @@
 		       :attr "data-clog-one-row-limit")
 		      (:name "join to slot-name (optional)"
 		       :attr "data-clog-one-row-master")
-		      ,@*props-element*))))
+		      ,@*props-element*))
+   `(:name           "lookup-drop"
+     :description    "Drop down table lookup"
+     :clog-type      clog:clog-lookup
+     :create         clog:create-lookup
+     :create-type    :base
+     :setup          ,(lambda (control content control-record)
+			(declare (ignore content) (ignore control-record))
+			(setf (attribute control "data-clog-one-row-table") "")
+			(setf (attribute control "data-clog-lookup-value") "")
+			(setf (attribute control "data-clog-lookup-option") "")
+			(setf (attribute control "data-clog-one-row-where") "")
+			(setf (attribute control "data-clog-one-row-order") "")
+			(setf (attribute control "data-clog-one-row-limit") "")
+			(setf (attribute control "data-clog-one-row-master") "")
+			(setf (attribute control "data-clog-one-row-id-name") "rowid")
+			(setf (attribute control "data-clog-one-row-columns") "rowid"))
+     :on-setup       ,(lambda (control control-record)
+			(declare (ignore control-record))
+			(let ((parent (attribute (parent-element control) "data-clog-name"))
+			      (master (attribute control "data-clog-one-row-master")))
+			  (when (equal master "")
+			    (setf master nil))
+			  (format nil "(setf (clog-database target) ~A) ~
+                                       ~A ~
+                                       (setf (table-name target) \"~A\") ~
+                                       (setf (value-field target) :|~A|) ~
+                                       (setf (option-field target) :|~A|) ~
+                                       (setf (where-clause target) \"~A\") ~
+                                       (setf (order-by target) \"~A\") ~
+                                       (setf (limit target) \"~A\") ~
+                                       (setf (row-id-name target) \"~A\") ~
+                                       (setf (table-columns target) '(~A))"
+				  (if master
+				      (format nil "(clog-database (~A panel))" parent)
+				      (format nil "(~A panel)" parent))
+				  (if master
+				      (format nil "(set-master-one-row target (~A panel) \"~A\")"
+					      parent master)
+				      "")
+				  (attribute control "data-clog-one-row-table")
+				  (attribute control "data-clog-lookup-value")
+				  (attribute control "data-clog-lookup-option")
+				  (attribute control "data-clog-one-row-where")
+				  (attribute control "data-clog-one-row-order")
+				  (attribute control "data-clog-one-row-limit")
+				  (attribute control "data-clog-one-row-id-name")
+				  (attribute control "data-clog-one-row-columns"))))
+     :events         ((:name        "on-fetch"
+		       :parameters  "target")
+		       ,@*events-element*)
+     :properties     ((:name "multiple select"
+		       :get  ,(lambda (control)
+				(property control "multiple"))
+		       :set  ,(lambda (control obj)
+				(if (or (equalp (text obj) "true") (equalp (text obj) "multiple"))
+				    (setf (attribute control "multiple") t)
+				    (remove-attribute control "multiple"))
+				(property control "multiple")))
+		      (:name "table name"
+		       :attr "data-clog-one-row-table")
+		      (:name "table row id name"
+		       :attr "data-clog-one-row-id-name")
+		      (:name "table columns"
+		       :attr "data-clog-one-row-columns")
+		      (:name "value field"
+		       :attr "data-clog-lookup-value")
+		      (:name "value display field"
+		       :attr "data-clog-lookup-option")
+		      (:name "where clause (optional)"
+		       :attr "data-clog-one-row-where")
+		      (:name "order by (optional)"
+		       :attr "data-clog-one-row-order")
+		      (:name "limit (optional)"
+		       :attr "data-clog-one-row-limit")
+		      (:name "join to slot-name (optional)"
+		       :attr "data-clog-one-row-master")
+		      ,@*props-form-element*))
+   `(:name           "lookup-list"
+     :description    "Listbox table lookup"
+     :clog-type      clog:clog-lookup
+     :create         clog:create-lookup
+     :create-type    :base
+     :setup          ,(lambda (control content control-record)
+			(declare (ignore content) (ignore control-record))
+			(setf (size control) "4")
+			(setf (attribute control "data-clog-one-row-table") "")
+			(setf (attribute control "data-clog-lookup-value") "")
+			(setf (attribute control "data-clog-lookup-option") "")
+			(setf (attribute control "data-clog-one-row-where") "")
+			(setf (attribute control "data-clog-one-row-order") "")
+			(setf (attribute control "data-clog-one-row-limit") "")
+			(setf (attribute control "data-clog-one-row-master") "")
+			(setf (attribute control "data-clog-one-row-id-name") "rowid")
+			(setf (attribute control "data-clog-one-row-columns") "rowid"))
+     :on-setup       ,(lambda (control control-record)
+			(declare (ignore control-record))
+			(let ((parent (attribute (parent-element control) "data-clog-name"))
+			      (master (attribute control "data-clog-one-row-master")))
+			  (when (equal master "")
+			    (setf master nil))
+			  (format nil "(setf (clog-database target) ~A) ~
+                                       ~A ~
+                                       (setf (table-name target) \"~A\") ~
+                                       (setf (value-field target) :|~A|) ~
+                                       (setf (option-field target) :|~A|) ~
+                                       (setf (where-clause target) \"~A\") ~
+                                       (setf (order-by target) \"~A\") ~
+                                       (setf (limit target) \"~A\") ~
+                                       (setf (row-id-name target) \"~A\") ~
+                                       (setf (table-columns target) '(~A))"
+				  (if master
+				      (format nil "(clog-database (~A panel))" parent)
+				      (format nil "(~A panel)" parent))
+				  (if master
+				      (format nil "(set-master-one-row target (~A panel) \"~A\")"
+					      parent master)
+				      "")
+				  (attribute control "data-clog-one-row-table")
+				  (attribute control "data-clog-lookup-value")
+				  (attribute control "data-clog-lookup-option")
+				  (attribute control "data-clog-one-row-where")
+				  (attribute control "data-clog-one-row-order")
+				  (attribute control "data-clog-one-row-limit")
+				  (attribute control "data-clog-one-row-id-name")
+				  (attribute control "data-clog-one-row-columns"))))
+     :events         ((:name        "on-fetch"
+		       :parameters  "target")
+		       ,@*events-element*)
+     :properties     ((:name "multiple select"
+		       :get  ,(lambda (control)
+				(property control "multiple"))
+		       :set  ,(lambda (control obj)
+				(if (or (equalp (text obj) "true") (equalp (text obj) "multiple"))
+				    (setf (attribute control "multiple") t)
+				    (remove-attribute control "multiple"))
+				(property control "multiple")))
+		      (:name "table name"
+		       :attr "data-clog-one-row-table")
+		      (:name "table row id name"
+		       :attr "data-clog-one-row-id-name")
+		      (:name "table columns"
+		       :attr "data-clog-one-row-columns")
+		      (:name "value field"
+		       :attr "data-clog-lookup-value")
+		      (:name "value display field"
+		       :attr "data-clog-lookup-option")
+		      (:name "where clause (optional)"
+		       :attr "data-clog-one-row-where")
+		      (:name "order by (optional)"
+		       :attr "data-clog-one-row-order")
+		      (:name "limit (optional)"
+		       :attr "data-clog-one-row-limit")
+		      (:name "join to slot-name (optional)"
+		       :attr "data-clog-one-row-master")
+		      ,@*props-form-element*))))
 
 (defparameter *supported-templates*
   (list
