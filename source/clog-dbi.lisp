@@ -44,7 +44,7 @@ CLOG-Builder. If not using builder use to connect:
 					       :auto-place auto-place)
 			       'clog-database)))
     new-obj))
-    
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; database-connection ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -97,6 +97,14 @@ CLOG-Builder. If not using builder use to connect:
     :accessor queryid
     :initform nil
     :documentation "Current query (private)")
+   (slave-to-slot
+    :accessor slave-to-slot
+    :initform nil
+    :documentation "Slot to watch on fetch by master row (private)")
+   (slaves
+    :accessor slaves
+    :initform nil
+    :documentation "List of slaves to call get-row")
    (on-fetch
     :accessor on-fetch
     :initform nil
@@ -109,8 +117,9 @@ CLOG-Builder. If not using builder use to connect:
 
 (defgeneric create-one-row (clog-obj &key clog-database
 				       hidden class html-id auto-place)
-  (:documentation "Create a new CLOG-One-Row element. A CLOG Database
-must be a parent to CLOG-One-Row."))
+  (:documentation "Create a new CLOG-One-Row element. If CLOG-OBJ is
+of type-of CLOG-DATABASE it is used as database source unless
+:CLOG-DATABASE is set."))
 
 (defmethod create-one-row ((obj clog-obj) &key (clog-database nil)
 					    (hidden nil)
@@ -122,6 +131,8 @@ must be a parent to CLOG-One-Row."))
 					       :html-id html-id
 					       :auto-place auto-place)
 			       'clog-one-row)))
+    (when (and (typep obj 'clog-database) (not clog-database))
+      (setf clog-database obj))
     (setf (clog-database new-obj) clog-database)
     new-obj))
 
@@ -142,27 +153,47 @@ CLOG-ONE-ROW's table-name using where-clause and table-columns.
 row-id-name is required. All PANEL items or custom rows on panel will
 be set using DATA-LOAD-PLIST."))
 (defmethod get-row ((obj clog-one-row) panel)
-  (setf (queryid obj) (dbi:execute
-		       (dbi:prepare
-			(database-connection (clog-database obj))
-			(sql-select (table-name obj)
-				    (table-columns obj)
-				    :where (where-clause obj)
-				    :order-by (order-by obj)
-				    :limit (limit obj)))))
-  (next-row obj panel))
+  (let ((where (where-clause obj)))
+    (when (slave-to-slot obj)
+      (let ((field (slave-to-slot obj))
+	    (data  (car (data-write-list panel (list (slave-to-slot obj))))))
+	(when (consp (slave-to-slot obj))
+	  (setf flield (car field)))
+	(setf where (format nil "~A='~A'~A"
+				field
+				data
+				(if (equal where "")
+				    ""
+				    (format nil " and ~A" where))))))
+    (setf (queryid obj) (dbi:execute
+			 (dbi:prepare
+			  (database-connection (clog-database obj))
+			  (sql-select (table-name obj)
+				      (table-columns obj)
+				      :where where
+				      :order-by (order-by obj)
+				      :limit (limit obj))))))
+    (next-row obj panel))
 
 (defgeneric next-row (clog-one-row panel)
   (:documentation "Get next row from a database table based on query
 made for get-row. All PANEL items or custom rows on panel will be set
 using DATA-LOAD-PLIST."))
 (defmethod next-row ((obj clog-one-row) panel)
+  (dolist (slave (slaves obj))
+    (clear-row slave panel))
   (setf (last-fetch obj) (dbi:fetch (queryid obj)))
   (when (on-fetch obj)
     (funcall (on-fetch obj) obj))
   (setf (rowid obj) (data-load-plist panel
 				     (last-fetch obj)
-				     :row-id-name (row-id-name obj))))
+				     :row-id-name (row-id-name obj)))
+  (if (rowid obj)
+      (dolist (slave (slaves obj))
+	(get-row slave panel))
+      (unless (slave-to-slot obj)
+	(clear-row obj panel)))
+  (rowid obj))
 
 (defgeneric insert-row (clog-one-row panel)
   (:documentation "Insert new row in to database table based on
@@ -206,6 +237,13 @@ using DATA-WRITE-PLIST based on table-columns."))
     (data-load-plist panel result)
     (setf (last-fetch obj) nil)
     (setf (rowid obj) nil)))
+
+(defgeneric set-master-one-row (clog-one-row master-one-row slot-name)
+  (:documentation "Set CLOG-ONE-ROW to get-row setting a while-clause
+ to follow slot-name of panel when MASTER-ONE-ROW calls next-row."))
+(defmethod set-master-one-row ((obj clog-one-row) master-one-row slot-name)
+  (push obj (slaves master-one-row))
+  (setf (slave-to-slot obj) slot-name))
 
 (defgeneric set-on-fetch (clog-one-row on-fetch-handler)
   (:documentation "Set the ON-FETCH-HANDLER for CLOG-ONE-ROW. If ON-FETCH-HANDLER
