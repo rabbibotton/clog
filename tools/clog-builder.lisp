@@ -519,7 +519,7 @@ not a temporary attached one when using select-control."
 
 ;; Code rendering utlities
 
-(defun render-clog-code (content win hide-loc)
+(defun render-clog-code (content hide-loc)
   "Render panel to clog code and add tp CW window"
   (let* ((app      (connection-data-item content "builder-app-data"))
 	 (panel-id (html-id content))
@@ -531,54 +531,67 @@ not a temporary attached one when using select-control."
 		(equal slots "undefined"))
       (push slots cmembers))
     (maphash (lambda (html-id control)
+	       (declare (ignore html-id))
 	       (place-inside-bottom-of hide-loc
-				       (get-placer control))
-	       (let ((vname (attribute control "data-clog-name")))
-		 (unless (and (>= (length vname) 5)
-			      (equalp (subseq vname 0 5) "none-"))
-		   (push (format nil
-				 "    \(~A :reader ~A\)~%"
-				 vname
-				 vname)
-			 cmembers)
-		   (push (format nil
-				 "    \(setf (slot-value panel '~A\) ~
-                                    \(attach-as-child clog-obj \"~A\" :clog-type \'~A\ :new-id t)\)~%"
-				 vname
-				 html-id
-				 (format nil "CLOG:~A" (type-of control)))
-			 vars)
-		   (let ((control-record (control-info (attribute control "data-clog-type"))))
-		     (dolist (event (getf control-record :events))
-		       (let ((handler (attribute control (format nil "data-~A" (getf event :name)))))
-			 (unless (or (equalp handler "undefined")
-				     (equal handler ""))
-			   (unless (equalp (getf event :name) "on-create")
-			     (push (format nil
-				    "    \(set-~A \(~A panel\) \(lambda \(~A\) \(declare \(ignorable ~A\)\) ~A\)\)~%"
-				    (getf event :name)
-				    vname
-				    (getf event :parameters)
-				    (getf event :parameters)
-				    handler)
-				   events)))))
-		     (let ((handler (attribute control "data-on-create")))
-		       (when (equalp handler "undefined")
-			 (setf handler ""))
-		       (when (getf control-record :on-setup)
-			 (setf handler (format nil "~A~A"
-					       (funcall (getf control-record :on-setup)
-							control control-record)
-					       handler)))
-		       (unless (equal handler "")
+				       (get-placer control)))
+	     (get-control-list app panel-id))
+    ;; crawl tree
+    ;; Insure that on-setup/on-create follow order in tree
+    (labels ((add-siblings (control)
+	       (let (dct)
+		 (loop
+		   (when (equal (html-id control) "undefined") (return))
+		   (setf dct (attribute control "data-clog-name"))
+		   (unless (equal dct "undefined")
+		     (setf control (get-from-control-list app panel-id (html-id control)))
+		     (let ((vname (attribute control "data-clog-name")))
+		       (unless (and (>= (length vname) 5)
+				    (equalp (subseq vname 0 5) "none-"))
 			 (push (format nil
-				       "    \(let \(\(target \(~A panel\)\)\) ~
+				       "    \(~A :reader ~A\)~%"
+				       vname
+				       vname)
+			       cmembers)
+			 (push (format nil
+				       "    \(setf (slot-value panel '~A\) ~
+                                            \(attach-as-child clog-obj \"~A\" :clog-type \'~A\ :new-id t)\)~%"
+				       vname
+				       (html-id control)
+				       (format nil "CLOG:~A" (type-of control)))
+			       vars)
+			 (let ((control-record (control-info (attribute control "data-clog-type"))))
+			   (dolist (event (getf control-record :events))
+			     (let ((handler (attribute control (format nil "data-~A" (getf event :name)))))
+			       (unless (or (equalp handler "undefined")
+					   (equal handler ""))
+				 (unless (equalp (getf event :name) "on-create")
+				   (push (format nil
+				       	 "    \(set-~A \(~A panel\) \(lambda \(~A\) \(declare \(ignorable ~A\)\) ~A\)\)~%"
+					 (getf event :name)
+					 vname
+					 (getf event :parameters)
+					 (getf event :parameters)
+					 handler)
+					 events)))))
+			   (let ((handler (attribute control "data-on-create")))
+			     (when (equalp handler "undefined")
+			       (setf handler ""))
+			     (when (getf control-record :on-setup)
+			       (setf handler (format nil "~A~A"
+						     (funcall (getf control-record :on-setup)
+							      control control-record)
+						     handler)))
+			     (unless (equal handler "")
+			       (push (format nil
+					     "    \(let \(\(target \(~A panel\)\)\) ~
                                              \(declare \(ignorable target\)\) ~
                                               ~A\)~%"
-				       vname
-				       handler)
-			     events)))))))
-	     (get-control-list app panel-id))
+					     vname
+					     handler)
+				     events))))))
+		     (add-siblings (first-child control)))
+		   (setf control (next-sibling control))))))
+      (add-siblings (first-child content)))
     (let ((result (format nil
 			  "\(in-package \"~A\"\)
 \(defclass ~A \(clog:clog-panel\)
@@ -601,7 +614,7 @@ not a temporary attached one when using select-control."
 						    "\\\"")
 			  cname
 			  vars
-			  events)))
+			  (reverse events)))) ; Insure that on-setup/on-create follow order in tree
       (maphash (lambda (html-id control)
 		 (declare (ignore html-id))
 		 (place-after control (get-placer control)))
@@ -1078,7 +1091,7 @@ of controls and double click to select control."
 						   :initial-filename file-name))))
     (set-on-click btn-test
 		  (lambda (obj)
-		      (do-eval obj (render-clog-code content win (bottom-panel box))
+		      (do-eval obj (render-clog-code content (bottom-panel box))
 			(attribute content "data-clog-name")
 			:package (attribute content "data-in-package"))))
     (set-on-click btn-rndr
@@ -1088,7 +1101,7 @@ of controls and double click to select control."
 					  (window-focus win)
 					  (when fname
 					    (setf render-file-name fname)
-					    (write-file (render-clog-code content win (bottom-panel box))
+					    (write-file (render-clog-code content (bottom-panel box))
 							fname)))
 					:initial-filename render-file-name)))
     (set-on-mouse-down content
@@ -1292,7 +1305,7 @@ of controls and double click to select control."
 						     :initial-filename file-name))))
       (set-on-click btn-test
 		    (lambda (obj)
-		      (do-eval obj (render-clog-code content win (bottom-panel box))
+		      (do-eval obj (render-clog-code content (bottom-panel box))
 			(attribute content "data-clog-name")
 			:package (attribute content "data-in-package")
 			:custom-boot custom-boot)))
@@ -1303,7 +1316,7 @@ of controls and double click to select control."
 					    (window-focus win)
 					    (when fname
 					      (setf render-file-name fname)
-					      (write-file (render-clog-code content win (bottom-panel box))
+					      (write-file (render-clog-code content (bottom-panel box))
 							  fname)))
 					  :initial-filename render-file-name))))
     (set-on-mouse-down content
