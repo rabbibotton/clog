@@ -89,6 +89,10 @@ CLOG-Builder. If not using builder use to connect:
     :accessor last-fetch
     :initform nil
     :documentation "Last fetch plist")
+   (last-sql
+    :accessor last-sql
+    :initform nil
+    :documentation "Last sql executed")
    (columns
     :accessor table-columns
     :initform nil
@@ -141,6 +145,7 @@ of type-of CLOG-DATABASE it is used as database source unless
 SQL. row-id-name is required for updates. All PANEL items or custom
 slots on panel will be set using DATA-LOAD-PLIST."))
 (defmethod query-row ((obj clog-one-row) panel sql)
+  (setf (last-sql obj) sql)
   (setf (queryid obj) (dbi:execute
 		       (dbi:prepare
 			(database-connection (clog-database obj))
@@ -165,14 +170,15 @@ be set using DATA-LOAD-PLIST."))
 				(if (equal where "")
 				    ""
 				    (format nil " and ~A" where))))))
-    (setf (queryid obj) (dbi:execute
-			 (dbi:prepare
-			  (database-connection (clog-database obj))
-			  (sql-select (table-name obj)
+    (setf (last-sql obj) (sql-select (table-name obj)
 				      (table-columns obj)
 				      :where where
 				      :order-by (order-by obj)
-				      :limit (limit obj))))))
+				      :limit (limit obj)))
+    (setf (queryid obj) (dbi:execute
+			 (dbi:prepare
+			  (database-connection (clog-database obj))
+			  (last-sql obj)))))
     (next-row obj panel))
 
 (defgeneric next-row (clog-one-row panel)

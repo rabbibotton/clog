@@ -557,6 +557,7 @@ embedded in a native template application.)"
   (rowid              generic-function)
   (table-columns      generic-function)
   (last-fetch         generic-function)
+  (last-sql           generic-function)
   (query-row          generic-function)
   (get-row            generic-function)
   (next-row           generic-function)
