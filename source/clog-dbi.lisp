@@ -45,6 +45,11 @@ CLOG-Builder. If not using builder use to connect:
 			       'clog-database)))
     new-obj))
 
+(defgeneric clog-database (clog-obj)
+  (:documentation "Access to the CLOG-DATABASE"))
+(defmethod clog-database ((obj clog-database))
+  obj)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; database-connection ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -248,7 +253,8 @@ using DATA-WRITE-PLIST based on table-columns."))
   (:documentation "Set CLOG-ONE-ROW to get-row setting a while-clause
  to follow slot-name of panel when MASTER-ONE-ROW calls next-row."))
 (defmethod set-master-one-row ((obj clog-one-row) master-one-row slot-name)
-  (push obj (slaves master-one-row))
+  (when (typep master-one-row 'clog-one-row)
+    (push obj (slaves master-one-row)))
   (setf (slave-to-slot obj) slot-name))
 
 (defgeneric set-on-fetch (clog-one-row on-fetch-handler)
@@ -339,11 +345,8 @@ the displayed option."
 			   (getf row (value-field obj))
 			   (getf row (option-field obj))
 			   :selected selected))))
-  (if (rowid obj)
-      (dolist (slave (slaves obj))
-	(get-row slave panel))
-      (unless (slave-to-slot obj)
-	(clear-row obj panel)))
+  (dolist (slave (slaves obj))
+    (get-row slave panel))
   (rowid obj))
 
 (defmethod clear-row ((obj clog-lookup) panel)
