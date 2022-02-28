@@ -357,7 +357,12 @@ the displayed option."
 ;; Implementation - clog-db-table
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defclass clog-db-table (clog-one-row clog-table)()
+(defclass clog-db-table (clog-one-row clog-table)
+  ((on-header
+    :accessor on-header
+    :initform nil
+    :documentation "on-header event, called after get-row and
+                    before outputing rows. (private)"))
   (:documentation "CLOG Database Table View Object"));
 
 ;;;;;;;;;;;;;;;;;;;;;
@@ -395,6 +400,8 @@ the displayed option."
   ;; loop through fetches
   (setf (rowid obj) nil)
   (setf (inner-html obj) "")
+  (when (on-header obj)
+    (funcall (on-header obj) obj))
   (loop
     (let ((row (dbi:fetch (queryid obj))))
       (unless row
@@ -414,3 +421,10 @@ the displayed option."
 (defmethod clear-row ((obj clog-db-table) panel)
   (setf (inner-html obj) "")
   (call-next-method))
+
+(defgeneric set-on-header (clog-db-table on-header-handler)
+  (:documentation "Set the ON-HEADER-HANDLER for CLOG-DB-TABLE. If ON-HEADER-HANDLER
+is nil unbind the event. The on-header event is called before the first row is output
+after the table is cleared to all adding a header information to the table."))
+(defmethod set-on-header ((obj clog-db-table) on-header-handler)
+  (setf (on-header obj) on-header-handler))

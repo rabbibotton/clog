@@ -1615,6 +1615,8 @@
 				  (attribute control "data-clog-one-row-columns"))))
      :events         ((:name        "on-fetch"
 		       :parameters  "target")
+		      (:name        "on-header"
+		       :parameters  "target")
 		       ,@*events-element*)
      :properties     ((:name "table name"
 		       :attr "data-clog-one-row-table")

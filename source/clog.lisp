@@ -572,7 +572,8 @@ embedded in a native template application.)"
   (option-field       generic-function)
 
   (clog-db-table      class)
-  (create-db-table    generic-function))
+  (create-db-table    generic-function)
+  (set-on-header      generic-function))
 
 (defsection @clog-panels (:title "CLOG Panels")
   "CLOG-Panel - CLOG Panels"
