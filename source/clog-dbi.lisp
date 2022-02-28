@@ -362,8 +362,21 @@ the displayed option."
     :accessor on-header
     :initform nil
     :documentation "on-header event, called after get-row and
-                    before outputing rows. (private)"))
-  (:documentation "CLOG Database Table View Object"));
+                    before outputing rows. (private)")
+   (on-footer
+    :accessor on-footer
+    :initform nil
+    :documentation "on-footer event, called after get-row and
+                    before outputing rows. (private)")
+   (on-row
+    :accessor on-row
+    :initform nil
+    :documentation "on-row event. (private)")
+   (on-column
+    :accessor on-column
+    :initform nil
+    :documentation "on-column. (private)"))
+   (:documentation "CLOG Database Table View Object"))
 
 ;;;;;;;;;;;;;;;;;;;;;
 ;; create-db-table ;;
@@ -408,12 +421,16 @@ the displayed option."
 	(return))
       (when (on-fetch obj)
 	(funcall (on-fetch obj) obj))
-      (create-child obj (format nil "<tr>~{~A~}</tr>"
-				(let ((result))
-				  (loop for (key value) on row by #'cddr while value
-					do
-					   (push (format nil "<td>~A</td>" value) result))
-				  (reverse result))))))
+      (let ((tr (create-table-row obj)))
+	(when (on-row obj)
+	  (funcall (on-row obj) obj tr))
+	(loop for (key value) on row by #'cddr while value
+	      do
+		 (let ((td (create-table-column obj :content value)))
+		   (when (on-column obj)
+		     (funcall (on-column obj) obj key td)))))))
+  (when (on-footer obj)
+    (funcall (on-footer obj) obj))
   (dolist (slave (slaves obj))
     (get-row slave panel))
   (rowid obj))
@@ -428,3 +445,26 @@ is nil unbind the event. The on-header event is called before the first row is o
 after the table is cleared to all adding a header information to the table."))
 (defmethod set-on-header ((obj clog-db-table) on-header-handler)
   (setf (on-header obj) on-header-handler))
+
+(defgeneric set-on-footer (clog-db-table on-footer-handler)
+  (:documentation "Set the ON-FOOTER-HANDLER for CLOG-DB-TABLE. If ON-FOOTER-HANDLER
+is nil unbind the event. The on-footer event is called after all rows are output
+after the table is cleared for adding footer information to the table."))
+(defmethod set-on-footer ((obj clog-db-table) on-footer-handler)
+  (setf (on-footer obj) on-footer-handler))
+
+(defgeneric set-on-row (clog-db-table on-row-handler)
+  (:documentation "Set the ON-ROW-HANDLER for CLOG-DB-TABLE. If ON-ROW-HANDLER
+is nil unbind the event. The on-row event is called for each row. The row handler
+is passed also the clog-table-row object before the columns are added in second parameter to
+handler."))
+(defmethod set-on-row ((obj clog-db-table) on-row-handler)
+  (setf (on-row obj) on-row-handler))
+
+(defgeneric set-on-column (clog-db-table on-column-handler)
+  (:documentation "Set the ON-COLUMN-HANDLER for CLOG-DB-TABLE. If ON-COLUMN-HANDLER
+is nil unbind the event. The on-column event is called for each column as added to
+the current row being processsed. It is passed also the keyworld symbol name of
+the column and the clog-table-column object."))
+(defmethod set-on-column ((obj clog-db-table) on-column-handler)
+  (setf (on-column obj) on-column-handler))
