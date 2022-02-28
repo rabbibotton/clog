@@ -352,3 +352,65 @@ the displayed option."
 (defmethod clear-row ((obj clog-lookup) panel)
   (setf (inner-html obj) "")
   (call-next-method))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Implementation - clog-db-table
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defclass clog-db-table (clog-one-row clog-table)()
+  (:documentation "CLOG Database Table View Object"));
+
+;;;;;;;;;;;;;;;;;;;;;
+;; create-db-table ;;
+;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric create-db-table (clog-obj &key clog-database
+					hidden class html-id auto-place)
+  (:documentation "Create a new clog-db-table as child of CLOG-OBJ."))
+
+(defmethod create-db-table ((obj clog-obj)
+			 &key (clog-database nil)
+			   (hidden nil)
+			   (class nil) (html-id nil) (auto-place t))
+  (let ((element (create-child obj (format nil "<table~A~A/>"
+					   (if hidden
+					       " style='visibility:hidden;'"
+					       "")
+					   (if class
+					       (format nil " class='~A'"
+						       (escape-string class))
+					       ""))
+			       :clog-type  'clog-db-table
+			       :html-id    html-id
+			       :auto-place auto-place)))
+    (if (and (typep obj 'clog-database) (not clog-database))
+	(setf (clog-database element) obj)
+	(setf (clog-database element) clog-database))
+    element))
+
+(defmethod next-row ((obj clog-db-table) panel)
+  "In clog-db-table objects, next-row adds multiple rows to the table."
+  (dolist (slave (slaves obj))
+    (clear-row slave panel))
+  ;; loop through fetches
+  (setf (rowid obj) nil)
+  (setf (inner-html obj) "")
+  (loop
+    (let ((row (dbi:fetch (queryid obj))))
+      (unless row
+	(return))
+      (when (on-fetch obj)
+	(funcall (on-fetch obj) obj))
+      (create-child obj (format nil "<tr>~{~A~}</tr>"
+				(let ((result))
+				  (loop for (key value) on row by #'cddr while value
+					do
+					   (push (format nil "<td>~A</td>" value) result))
+				  (reverse result))))))
+  (dolist (slave (slaves obj))
+    (get-row slave panel))
+  (rowid obj))
+
+(defmethod clear-row ((obj clog-db-table) panel)
+  (setf (inner-html obj) "")
+  (call-next-method))

@@ -569,7 +569,10 @@ embedded in a native template application.)"
   (clog-lookup        class)
   (create-lookup      generic-function)
   (value-field        generic-function)
-  (option-field       generic-function))
+  (option-field       generic-function)
+
+  (clog-db-table      class)
+  (create-db-table    generic-function))
 
 (defsection @clog-panels (:title "CLOG Panels")
   "CLOG-Panel - CLOG Panels"

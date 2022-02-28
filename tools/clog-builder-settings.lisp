@@ -1571,7 +1571,66 @@
 		       :attr "data-clog-one-row-limit")
 		      (:name "join to slot-name (optional)"
 		       :attr "data-clog-one-row-master")
-		      ,@*props-form-element*))))
+		      ,@*props-form-element*))
+   `(:name           "db-table"
+     :description    "Table Many Rows"
+     :clog-type      clog:clog-db-table
+     :create         clog:create-db-table
+     :create-type    :base
+     :setup          ,(lambda (control content control-record)
+			(declare (ignore content) (ignore control-record))
+			(setf (attribute control "data-clog-one-row-table") "")
+			(setf (attribute control "data-clog-one-row-where") "")
+			(setf (attribute control "data-clog-one-row-order") "")
+			(setf (attribute control "data-clog-one-row-limit") "")
+			(setf (attribute control "data-clog-one-row-master") "")
+			(setf (attribute control "data-clog-one-row-id-name") "rowid")
+			(setf (attribute control "data-clog-one-row-columns") "rowid"))
+     :on-setup       ,(lambda (control control-record)
+			(declare (ignore control-record))
+			(let ((parent (attribute (parent-element control) "data-clog-name"))
+			      (master (attribute control "data-clog-one-row-master")))
+			  (when (equal master "")
+			    (setf master nil))
+			  (format nil "(setf (clog-database target) ~A) ~
+                                       ~A ~
+                                       (setf (table-name target) \"~A\") ~
+                                       (setf (where-clause target) \"~A\") ~
+                                       (setf (order-by target) \"~A\") ~
+                                       (setf (limit target) \"~A\") ~
+                                       (setf (row-id-name target) \"~A\") ~
+                                       (setf (table-columns target) '(~A))"
+				  (if master
+				      (format nil "(clog-database (~A panel))" parent)
+				      (format nil "(~A panel)" parent))
+				  (if master
+				      (format nil "(set-master-one-row target (~A panel) \"~A\")"
+					      parent master)
+				      "")
+				  (attribute control "data-clog-one-row-table")
+				  (attribute control "data-clog-one-row-where")
+				  (attribute control "data-clog-one-row-order")
+				  (attribute control "data-clog-one-row-limit")
+				  (attribute control "data-clog-one-row-id-name")
+				  (attribute control "data-clog-one-row-columns"))))
+     :events         ((:name        "on-fetch"
+		       :parameters  "target")
+		       ,@*events-element*)
+     :properties     ((:name "table name"
+		       :attr "data-clog-one-row-table")
+		      (:name "table row id name"
+		       :attr "data-clog-one-row-id-name")
+		      (:name "table columns"
+		       :attr "data-clog-one-row-columns")
+		      (:name "where clause (optional)"
+		       :attr "data-clog-one-row-where")
+		      (:name "order by (optional)"
+		       :attr "data-clog-one-row-order")
+		      (:name "limit (optional)"
+		       :attr "data-clog-one-row-limit")
+		      (:name "join to slot-name (optional)"
+		       :attr "data-clog-one-row-master")
+		      ,@*props-element*))))
 
 (defparameter *supported-templates*
   (list
