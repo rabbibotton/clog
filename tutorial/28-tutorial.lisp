@@ -2,7 +2,7 @@
   (:use #:cl #:clog)
   (:export start-tutorial))
 
-(in-package :clog-tut-13)
+(in-package :clog-tut-28)
 
 (defun start-tutorial ()
   "Start tutorial."
