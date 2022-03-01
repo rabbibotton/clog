@@ -219,7 +219,7 @@ by doubling) unless is the single character '?'."
 	      (format nil " order by ~A" order-by)
 	      "")
 	  (if (and limit (not (equal limit "")))
-	      (format nil " limit ~A" )
+	      (format nil " limit ~A" limit)
 	      "")))
 
 ;;;;;;;;;;;;;;;;
