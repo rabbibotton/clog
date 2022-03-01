@@ -168,7 +168,7 @@ be set using DATA-LOAD-PLIST."))
       (let ((field (slave-to-slot obj))
 	    (data  (car (data-write-list panel (list (slave-to-slot obj))))))
 	(when (consp (slave-to-slot obj))
-	  (setf flield (car field)))
+	  (setf field (car field)))
 	(setf where (format nil "~A='~A'~A"
 				field
 				data

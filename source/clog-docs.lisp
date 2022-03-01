@@ -36,7 +36,11 @@
   (load "source/clog-gui.lisp")
   (load "source/clog-web.lisp")    
   (load "source/clog-docs.lisp")
-  (load "source/clog-helpers.lisp"))
+  (load "source/clog-helpers.lisp")
+  (load "source/clog-panel.lisp")
+  (load "source/clog-presentations.lisp")
+  (load "source/clog-data.lisp")
+  (load "source/clog-dbi.lisp"))
 
 ;;;;;;;;;;;;;;;;;;;;
 ;; make-mark-down ;;

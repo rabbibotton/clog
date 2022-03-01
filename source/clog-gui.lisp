@@ -785,6 +785,7 @@ the window will be set to keep-on-top always."))
 				   (fire-on-window-move win)))
 	     (clog::set-on-event win "dragstop"
 				 (lambda (obj)
+				   (declare (ignore obj))
 				   (fire-on-window-move-done win)))
 	     (clog::set-on-event win "resizestart"
 				 (lambda (obj)
