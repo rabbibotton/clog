@@ -14,8 +14,7 @@
   (set-on-click (create-section body :h1 :content "Hello World! (click me!)")
 		'my-on-click)
   (set-on-click (create-section body :h3 :content "Click me too!")
-		'my-on-click)
-  (run body))
+		'my-on-click))
 
 (defun start-tutorial ()
   "Start turtorial."

@@ -99,8 +99,7 @@
                       (defun start-tutorial ()<br>
                       \"Start turtorial.\"<br>
                       (initialize 'on-new-window)<br>
-                      (open-browser))")
-    (run body)))
+                      (open-browser))")))
 
 (defun start-tutorial ()
   "Start turtorial."

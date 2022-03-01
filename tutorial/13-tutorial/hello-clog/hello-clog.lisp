@@ -5,8 +5,7 @@
 (in-package :hello-clog)
 
 (defun on-new-window (body)
-  (create-div body :content "Hello World!")
-  (run body))
+  (create-div body :content "Hello World!"))
 
 (defun start-app ()
   (initialize 'on-new-window

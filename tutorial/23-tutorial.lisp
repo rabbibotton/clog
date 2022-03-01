@@ -47,8 +47,7 @@
 				      (bordeaux-threads:signal-semaphore hold)))
 		    (bordeaux-threads:wait-on-semaphore hold :timeout 60)
 		    (create-div body :content "Thank you for answering!")))
-		:one-time t)
-  (run body))
+		:one-time t))
 
 (defun start-tutorial ()
   "Start turtorial."

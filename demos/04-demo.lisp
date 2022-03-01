@@ -171,8 +171,7 @@
     (clog-web-initialize body)
     (create-web-frame body app)
     (reset-menu app)
-    (route-content app "Home")
-    (run body)))
+    (route-content app "Home")))
 
 (defun start-demo ()
   "Start dynamic website demo."

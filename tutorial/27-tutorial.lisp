@@ -34,8 +34,7 @@
 			  (setf (url-src viewer) (format nil "/img/~A"
 							 (value lbox)))))
     ;; Setup Bottom
-    (center-children (bottom-panel console) :horizontal nil)
-    (run body)))
+    (center-children (bottom-panel console) :horizontal nil)))
 
 (defun start-tutorial ()
   (initialize 'on-new-window)

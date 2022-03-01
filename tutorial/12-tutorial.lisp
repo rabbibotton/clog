@@ -39,25 +39,21 @@
         <li><a href='/page3'>/page3</a> - tutorial 11 as part of this tutorial
         <li><a href='/tutorial/tut-11.html'>/tutorial/tut-11.html</a> - an html file using boot.js
         <li><a href='/tutorial/regular-file.html'>'/tutorial/regular-file.html</a> - a regular html file
-     </ul>")
-  (run body))
+     </ul>"))
 
 (defun on-page1 (body)
-  (create-div body :content "You are in on-page1")
-  (run body))
+  (create-div body :content "You are in on-page1"))
 
 (defun on-page2 (body)
   (create-div body :content "You are in on-page2")
-  (log-console (window body) "A message in the browser's log")
-  (run body))
+  (log-console (window body) "A message in the browser's log"))
 
 (defun on-default (body)
   (cond ((equalp (path-name (location body))
 		 "/tutorial/tut-11.html")
 	 (on-tutorial11 body))
 	(t
-	 (create-div body :content "No dice!")
-	 (run body))))
+	 (create-div body :content "No dice!"))))
 
 (defun on-tutorial11 (body)
   (let* ((form         (attach-as-child body "form1" :clog-type 'clog-form))
@@ -82,8 +78,7 @@
     ;; We need to override the boostrap default to submit the form html style
     (set-on-submit form (lambda (obj)(declare (ignore obj))()))
     (set-on-click good-button 'on-click-good)
-    (set-on-click scary-button 'on-click-scary))
-    (run body)))
+    (set-on-click scary-button 'on-click-scary))))
 
 (defun start-tutorial ()
   "Start turtorial."

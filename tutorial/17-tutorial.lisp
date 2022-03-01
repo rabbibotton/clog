@@ -76,22 +76,19 @@
 		      (create-div body
 		         :content (format nil "yourname3 = using NAME-VALUE ~A or VALUE ~A"
 					  (name-value form3 "yourname3")
-					  (value finput3)))))))
-  (run body))
+					  (value finput3))))))))
 
 (defun on-page2 (body)
   (let ((params (form-post-data body)))
     (create-div body :content params)
     (create-div body :content (format nil "yourname = ~A"
-				      (form-data-item params "yourname"))))
-  (run body))
+				      (form-data-item params "yourname")))))
 
 (defun on-page3 (body)
   (let ((params (form-get-data body)))
     (create-div body :content params)
     (create-div body :content (format nil "yourname = ~A"
-				      (form-data-item params "yourname"))))
-  (run body))
+				      (form-data-item params "yourname")))))
 
 (defun on-page4 (body)
   (let ((params (form-multipart-data body)))
@@ -105,8 +102,7 @@
 	  (let ((c (read-sequence b s)))
 	    (unless (plusp c) (return))
 	    (princ (subseq b 1 c))))))
-    (delete-multipart-data body))
-  (run body))
+    (delete-multipart-data body)))
 
 (defun start-tutorial ()
   "Start tutorial."

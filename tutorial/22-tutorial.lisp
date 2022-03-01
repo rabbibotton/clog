@@ -153,8 +153,7 @@
   (set-on-before-unload (window body) (lambda(obj)
 					(declare (ignore obj))
 					;; return empty string to prevent nav off page
-					""))
-  (run body))
+					"")))
 
 (defun start-tutorial ()
   "Start turtorial."

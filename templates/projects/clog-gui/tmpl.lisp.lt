@@ -43,8 +43,7 @@
 	   (help-item   (create-gui-menu-drop-down menu-bar :content "Help"))
 	   (help-about  (create-gui-menu-item help-item :content "About" :on-click 'on-help-about))
 	   (full-screen (create-gui-menu-full-screen menu-bar)))
-      (declare (ignore icon-item file-new help-about full-screen))
-      (run body))))
+      (declare (ignore icon-item file-new help-about full-screen)))))
 
 (defun start-app ()
   (initialize 'on-new-window

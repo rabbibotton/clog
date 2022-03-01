@@ -24,8 +24,7 @@
     (set-on-click vst (lambda (obj)(declare (ignore obj))(pause-media vid)))
     (set-on-click ast (lambda (obj)(declare (ignore obj))(pause-media aud)))
     (set-on-time-update vid (lambda (obj)(declare (ignore obj))(setf (value vlc) (media-position vid))))
-    (set-on-time-update aud (lambda (obj)(declare (ignore obj))(setf (value alc) (media-position aud))))
-  (run body)))
+    (set-on-time-update aud (lambda (obj)(declare (ignore obj))(setf (value alc) (media-position aud))))))
 
 (defun start-tutorial ()
   "Start turtorial."

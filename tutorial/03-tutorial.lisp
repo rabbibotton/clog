@@ -19,8 +19,7 @@
 			(dotimes (n y)
 			  (create-p body
 				    :content (format nil "Clicked ~A times." y))
-			  (sleep y)))))) ;)
-    (run body)))
+			  (sleep y)))))))) ;)
 
 ;;; Running this version of the last tutorial and clicking quickly on the (click me!)
 ;;; will demonstrate an important aspect of CLOG, events can happen in _parallel_.

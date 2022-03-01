@@ -51,8 +51,7 @@
 			 (setf (attribute alert "role") "alert")
 			 (setf (attribute btn "data-dismiss") "alert")
 			 (place-after nav alert))))    
-    (set-on-click l3 (lambda (obj)(declare (ignore obj))(setf (color jname) (rgb 128 128 0)))))    
-  (run body))
+    (set-on-click l3 (lambda (obj)(declare (ignore obj))(setf (color jname) (rgb 128 128 0))))))
 
 (defun on-page2 (body)
   ;; Since page2 is a new browser page we need to reload our bootstrap files.
@@ -70,8 +69,7 @@
 	 ;; Jumbotron
 	 (jumbo (create-div body :class "jumbotron text-center"))
 	 (jname (create-section jumbo :h1 :content "You found Page2")))
-    (declare (ignore l1) (ignore l2) (ignore l3) (ignore l4) (ignore jname)))
-  (run body))
+    (declare (ignore l1) (ignore l2) (ignore l3) (ignore l4) (ignore jname))))
 
 (defun start-tutorial ()
   "Start turtorial."

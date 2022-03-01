@@ -93,8 +93,7 @@
     (set-on-mouse-down div2 'on-mouse-down)
     (setf (positioning div3) :absolute)
     (set-on-touch-start div3 'on-mouse-down)
-    (set-on-mouse-down div3 'on-mouse-down)
-    (run body)))
+    (set-on-mouse-down div3 'on-mouse-down)))
 
 (defun start-tutorial ()
   "Start turtorial."

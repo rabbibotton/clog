@@ -171,11 +171,7 @@ Here is a sample CLOG app:
 
     (set-on-click hello-element      ; Now we set a function to handle clicks
           (lambda (obj)              ; In this case we use an anonymous function
-            (setf (color hello-element) "green")))
-
-   (run body))) ; Keep our thread alive until connection closes
-                ; and prevent garbage collection of our CLOG-Objects
-                ; until no longer needed.
+            (setf (color hello-element) "green"))))))
             
 ;; To see all the events one can set and the many properties and styles that
 ;; exist, refer to the CLOG manual or the file clog-element.lisp

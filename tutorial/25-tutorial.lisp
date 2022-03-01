@@ -61,8 +61,7 @@
       (set-height)
       (set-on-resize (window body) (lambda (obj)
 				     (declare (ignore obj))
-				     (set-height)))))
-  (run body))
+				     (set-height))))))
 
 (defun start-tutorial ()
   "Start turtorial."

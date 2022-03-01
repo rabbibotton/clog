@@ -75,8 +75,6 @@
 	    (sleep .02))))
     (error (c)
       (format t "Lost connection.~%~%~A" c))))
-;;; There is no reason to run (run body) here as we check for (validp body)
-;;; and once the connection dies so does the on-new-window thread.
 
 (defun start-tutorial ()
   "Start turtorial."

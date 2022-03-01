@@ -17,8 +17,7 @@
   (set-on-click (create-section body :h1 :content "Hello World! (click me!)")
 		'my-on-click)
   (setf (connection-data-item body "changer")
-	(create-section body :h1 :content "I change"))
-  (run body))
+	(create-section body :h1 :content "I change")))
 
 (defun start-tutorial ()
   "Start turtorial."

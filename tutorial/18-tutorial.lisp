@@ -52,8 +52,7 @@
     (set-on-drop target2 (lambda (obj data)
 			   (declare (ignore obj))
 			   (print (getf data :drag-data))
-			   (place-inside-bottom-of target2 object)))
-  (run body)))
+			   (place-inside-bottom-of target2 object)))))
 
 (defun start-tutorial ()
   "Start tutorial."

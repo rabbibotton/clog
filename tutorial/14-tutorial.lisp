@@ -49,8 +49,7 @@ Changes made to a local key will fire an event and print below:<br>"
        "my-local-key"
        (storage-element (window body) :local "my-local-key")
        "my-session-key"
-       (storage-element (window body) :session "my-session-key")))
-  (run body))
+       (storage-element (window body) :session "my-session-key"))))
 
 (defun start-tutorial ()
   "Start turtorial."

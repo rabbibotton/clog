@@ -4027,7 +4027,7 @@ CLOG-Builder. If not using builder use to connect:
 <a id="CLOG:DATABASE-CONNECTION%20GENERIC-FUNCTION"></a></p>
 
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:DATABASE-CONNECTION%20GENERIC-FUNCTION" >DATABASE-CONNECTION</a></span></span> <span class="locative-args">CLOG-OBJ</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:DATABASE-CONNECTION%20GENERIC-FUNCTION" >DATABASE-CONNECTION</a></span></span> <span class="locative-args">CLOG-DATABASE</span></span></p>
 
 <p>Accessor to the database handle</p></li>
 </ul>
@@ -4038,7 +4038,31 @@ CLOG-Builder. If not using builder use to connect:
 <ul>
 <li><p><span class=reference-bullet><span class=reference><span class="locative-type">[class]</span> <span class="reference-object"><a href="#CLOG:CLOG-ONE-ROW%20CLASS" >CLOG-ONE-ROW</a></span></span> <span class="locative-args"><a href="#CLOG:CLOG-ELEMENT%20CLASS" title="CLOG:CLOG-ELEMENT CLASS">CLOG-ELEMENT</a></span></span></p>
 
-<p>Manipulate one row of a table.</p></li>
+<p>Manipulate one row of a table at a time on panel.</p></li>
+</ul>
+
+<p><a id="x-28CLOG-3ASET-ON-FETCH-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG:SET-ON-FETCH%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:SET-ON-FETCH%20GENERIC-FUNCTION" >SET-ON-FETCH</a></span></span> <span class="locative-args">CLOG-ONE-ROW ON-FETCH-HANDLER</span></span></p>
+
+<p>Set the <code>ON-FETCH-HANDLER</code> for <code>CLOG-ONE-ROW</code>. If <code>ON-FETCH-HANDLER</code>
+is nil unbind the event. The on-fetch event is called after the row was fetched
+and stored in (last-fetch clog-one-row) or nil if no row was returned, and before
+data-load-plist is called that will use the value of (last-fetch clog-one-row).
+Calculated fields, transformations to field values, etc. can be done in on-fetch as
+new-row will block until on-fetch returns.</p></li>
+</ul>
+
+<p><a id="x-28CLOG-3ASET-MASTER-ONE-ROW-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG:SET-MASTER-ONE-ROW%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:SET-MASTER-ONE-ROW%20GENERIC-FUNCTION" >SET-MASTER-ONE-ROW</a></span></span> <span class="locative-args">CLOG-ONE-ROW MASTER-ONE-ROW SLOT-NAME</span></span></p>
+
+<p>Set <code>CLOG-ONE-ROW</code> to get-row setting a while-clause
+to follow slot-name of panel when <code>MASTER-ONE-ROW</code> calls next-row.</p></li>
 </ul>
 
 <p><a id="x-28CLOG-3ACREATE-ONE-ROW-20GENERIC-FUNCTION-29"></a>
@@ -4047,15 +4071,18 @@ CLOG-Builder. If not using builder use to connect:
 <ul>
 <li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:CREATE-ONE-ROW%20GENERIC-FUNCTION" >CREATE-ONE-ROW</a></span></span> <span class="locative-args">CLOG-OBJ &amp;KEY CLOG-DATABASE HIDDEN CLASS HTML-ID AUTO-PLACE</span></span></p>
 
-<p>Create a new CLOG-One-Row element. A CLOG Database
-must be a parent to CLOG-One-Row.</p></li>
+<p>Create a new CLOG-One-Row element. If <code>CLOG-OBJ</code> is
+of type-of <code>CLOG-DATABASE</code> it is used as database source unless
+<code>:CLOG-DATABASE</code> is set.</p></li>
 </ul>
 
 <p><a id="x-28CLOG-3ACLOG-DATABASE-20GENERIC-FUNCTION-29"></a>
 <a id="CLOG:CLOG-DATABASE%20GENERIC-FUNCTION"></a></p>
 
 <ul>
-<li><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:CLOG-DATABASE%20GENERIC-FUNCTION" >CLOG-DATABASE</a></span></span> <span class="locative-args">OBJECT</span></span></li>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:CLOG-DATABASE%20GENERIC-FUNCTION" >CLOG-DATABASE</a></span></span> <span class="locative-args">CLOG-OBJ</span></span></p>
+
+<p>Access to the <code>CLOG-DATABASE</code></p></li>
 </ul>
 
 <p><a id="x-28CLOG-3ATABLE-NAME-20GENERIC-FUNCTION-29"></a>
@@ -4114,26 +4141,33 @@ must be a parent to CLOG-One-Row.</p></li>
 <li><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:LAST-FETCH%20GENERIC-FUNCTION" >LAST-FETCH</a></span></span> <span class="locative-args">OBJECT</span></span></li>
 </ul>
 
+<p><a id="x-28CLOG-3ALAST-SQL-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG:LAST-SQL%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:LAST-SQL%20GENERIC-FUNCTION" >LAST-SQL</a></span></span> <span class="locative-args">OBJECT</span></span></li>
+</ul>
+
 <p><a id="x-28CLOG-3AQUERY-ROW-20GENERIC-FUNCTION-29"></a>
 <a id="CLOG:QUERY-ROW%20GENERIC-FUNCTION"></a></p>
 
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:QUERY-ROW%20GENERIC-FUNCTION" >QUERY-ROW</a></span></span> <span class="locative-args">CLOG-OBJ PANEL SQL</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:QUERY-ROW%20GENERIC-FUNCTION" >QUERY-ROW</a></span></span> <span class="locative-args">CLOG-ONE-ROW PANEL SQL</span></span></p>
 
 <p>Ignore query related prperties and instead execute
 <code>SQL</code>. row-id-name is required for updates. All <code>PANEL</code> items or custom
-rows on panel will be set using <a href="#CLOG:DATA-LOAD-PLIST%20FUNCTION" title="CLOG:DATA-LOAD-PLIST FUNCTION"><code>DATA-LOAD-PLIST</code></a>.</p></li>
+slots on panel will be set using <a href="#CLOG:DATA-LOAD-PLIST%20FUNCTION" title="CLOG:DATA-LOAD-PLIST FUNCTION"><code>DATA-LOAD-PLIST</code></a>.</p></li>
 </ul>
 
 <p><a id="x-28CLOG-3AGET-ROW-20GENERIC-FUNCTION-29"></a>
 <a id="CLOG:GET-ROW%20GENERIC-FUNCTION"></a></p>
 
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:GET-ROW%20GENERIC-FUNCTION" >GET-ROW</a></span></span> <span class="locative-args">CLOG-OBJ PANEL</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:GET-ROW%20GENERIC-FUNCTION" >GET-ROW</a></span></span> <span class="locative-args">CLOG-ONE-ROW PANEL</span></span></p>
 
 <p>Get first row from a database table based on
-CLOG-OBJECT's table-name using where-clause and table-columns.
-row-id-name is required. All <code>PANEL</code> items or custom rows on panel will
+<code>CLOG-ONE-ROW</code>'s table-name using where-clause and table-columns.
+row-id-name is required. All <code>PANEL</code> items or custom slots on panel will
 be set using <a href="#CLOG:DATA-LOAD-PLIST%20FUNCTION" title="CLOG:DATA-LOAD-PLIST FUNCTION"><code>DATA-LOAD-PLIST</code></a>.</p></li>
 </ul>
 
@@ -4141,10 +4175,10 @@ be set using <a href="#CLOG:DATA-LOAD-PLIST%20FUNCTION" title="CLOG:DATA-LOAD-PL
 <a id="CLOG:NEXT-ROW%20GENERIC-FUNCTION"></a></p>
 
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:NEXT-ROW%20GENERIC-FUNCTION" >NEXT-ROW</a></span></span> <span class="locative-args">CLOG-OBJ PANEL</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:NEXT-ROW%20GENERIC-FUNCTION" >NEXT-ROW</a></span></span> <span class="locative-args">CLOG-ONE-ROW PANEL</span></span></p>
 
 <p>Get next row from a database table based on query
-made for get-row. All <code>PANEL</code> items or custom rows on panel will be set
+made for get-row. All <code>PANEL</code> items or custom slots on panel will be set
 using <a href="#CLOG:DATA-LOAD-PLIST%20FUNCTION" title="CLOG:DATA-LOAD-PLIST FUNCTION"><code>DATA-LOAD-PLIST</code></a>.</p></li>
 </ul>
 
@@ -4152,21 +4186,21 @@ using <a href="#CLOG:DATA-LOAD-PLIST%20FUNCTION" title="CLOG:DATA-LOAD-PLIST FUN
 <a id="CLOG:INSERT-ROW%20GENERIC-FUNCTION"></a></p>
 
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:INSERT-ROW%20GENERIC-FUNCTION" >INSERT-ROW</a></span></span> <span class="locative-args">CLOG-OBJ PANEL</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:INSERT-ROW%20GENERIC-FUNCTION" >INSERT-ROW</a></span></span> <span class="locative-args">CLOG-ONE-ROW PANEL</span></span></p>
 
 <p>Insert new row in to database table based on
-CLOG-OBJECT's table-name and table-columns. <a href="#CLOG:DATA-WRITE-PLIST%20FUNCTION" title="CLOG:DATA-WRITE-PLIST FUNCTION"><code>DATA-WRITE-PLIST</code></a> is
-used to extract data from <code>PANEL</code> items and custom rows.</p></li>
+<code>CLOG-ONE-ROW</code>'s table-name and table-columns. <a href="#CLOG:DATA-WRITE-PLIST%20FUNCTION" title="CLOG:DATA-WRITE-PLIST FUNCTION"><code>DATA-WRITE-PLIST</code></a> is
+used to extract data from <code>PANEL</code> items and custom slots.</p></li>
 </ul>
 
 <p><a id="x-28CLOG-3AUPDATE-ROW-20GENERIC-FUNCTION-29"></a>
 <a id="CLOG:UPDATE-ROW%20GENERIC-FUNCTION"></a></p>
 
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:UPDATE-ROW%20GENERIC-FUNCTION" >UPDATE-ROW</a></span></span> <span class="locative-args">CLOG-OBJ PANEL</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:UPDATE-ROW%20GENERIC-FUNCTION" >UPDATE-ROW</a></span></span> <span class="locative-args">CLOG-ONE-ROW PANEL</span></span></p>
 
 <p>Update row in database table based on
-CLOG-OBJECT's table-name using current rowid and table-columns.
+<code>CLOG-ONE-ROW</code>'s table-name using current rowid and table-columns.
 row-id-name is required. All <code>PANEL</code> items or custom rows
 on panel will be retrieved from <code>PANEL</code> using <a href="#CLOG:DATA-WRITE-PLIST%20FUNCTION" title="CLOG:DATA-WRITE-PLIST FUNCTION"><code>DATA-WRITE-PLIST</code></a>.</p></li>
 </ul>
@@ -4175,7 +4209,7 @@ on panel will be retrieved from <code>PANEL</code> using <a href="#CLOG:DATA-WRI
 <a id="CLOG:CLEAR-ROW%20GENERIC-FUNCTION"></a></p>
 
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:CLEAR-ROW%20GENERIC-FUNCTION" >CLEAR-ROW</a></span></span> <span class="locative-args">CLOG-OBJ PANEL</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:CLEAR-ROW%20GENERIC-FUNCTION" >CLEAR-ROW</a></span></span> <span class="locative-args">CLOG-ONE-ROW PANEL</span></span></p>
 
 <p>Clear current rowid and all fields in <code>PANEL</code>
 using <a href="#CLOG:DATA-WRITE-PLIST%20FUNCTION" title="CLOG:DATA-WRITE-PLIST FUNCTION"><code>DATA-WRITE-PLIST</code></a> based on table-columns.</p></li>
@@ -4185,10 +4219,106 @@ using <a href="#CLOG:DATA-WRITE-PLIST%20FUNCTION" title="CLOG:DATA-WRITE-PLIST F
 <a id="CLOG:DELETE-ROW%20GENERIC-FUNCTION"></a></p>
 
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:DELETE-ROW%20GENERIC-FUNCTION" >DELETE-ROW</a></span></span> <span class="locative-args">CLOG-OBJ</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:DELETE-ROW%20GENERIC-FUNCTION" >DELETE-ROW</a></span></span> <span class="locative-args">CLOG-ONE-ROW PANEL</span></span></p>
 
 <p>Delete a row from a database table based on
-current rowid</p></li>
+current rowid and then call <a href="#CLOG:CLEAR-ROW%20GENERIC-FUNCTION" title="CLOG:CLEAR-ROW GENERIC-FUNCTION"><code>CLEAR-ROW</code></a></p></li>
+</ul>
+
+<p><a id="x-28CLOG-3ACLOG-LOOKUP-20CLASS-29"></a>
+<a id="CLOG:CLOG-LOOKUP%20CLASS"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[class]</span> <span class="reference-object"><a href="#CLOG:CLOG-LOOKUP%20CLASS" >CLOG-LOOKUP</a></span></span> <span class="locative-args"><a href="#CLOG:CLOG-ONE-ROW%20CLASS" title="CLOG:CLOG-ONE-ROW CLASS">CLOG-ONE-ROW</a> <a href="#CLOG:CLOG-SELECT%20CLASS" title="CLOG:CLOG-SELECT CLASS">CLOG-SELECT</a></span></span></p>
+
+<p>CLOG Table Lookup Object</p></li>
+</ul>
+
+<p><a id="x-28CLOG-3ACREATE-LOOKUP-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG:CREATE-LOOKUP%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:CREATE-LOOKUP%20GENERIC-FUNCTION" >CREATE-LOOKUP</a></span></span> <span class="locative-args">CLOG-OBJ &amp;KEY NAME MULTIPLE LABEL CLASS HTML-ID CLOG-DATABASE</span></span></p>
+
+<p>Create a new clog-lookup as child of <code>CLOG-OBJ</code>.</p></li>
+</ul>
+
+<p><a id="x-28CLOG-3AVALUE-FIELD-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG:VALUE-FIELD%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:VALUE-FIELD%20GENERIC-FUNCTION" >VALUE-FIELD</a></span></span> <span class="locative-args">OBJECT</span></span></li>
+</ul>
+
+<p><a id="x-28CLOG-3AOPTION-FIELD-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG:OPTION-FIELD%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:OPTION-FIELD%20GENERIC-FUNCTION" >OPTION-FIELD</a></span></span> <span class="locative-args">OBJECT</span></span></li>
+</ul>
+
+<p><a id="x-28CLOG-3ACLOG-DB-TABLE-20CLASS-29"></a>
+<a id="CLOG:CLOG-DB-TABLE%20CLASS"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[class]</span> <span class="reference-object"><a href="#CLOG:CLOG-DB-TABLE%20CLASS" >CLOG-DB-TABLE</a></span></span> <span class="locative-args"><a href="#CLOG:CLOG-ONE-ROW%20CLASS" title="CLOG:CLOG-ONE-ROW CLASS">CLOG-ONE-ROW</a> <a href="#CLOG:CLOG-TABLE%20CLASS" title="CLOG:CLOG-TABLE CLASS">CLOG-TABLE</a></span></span></p>
+
+<p>CLOG Database Table View Object</p></li>
+</ul>
+
+<p><a id="x-28CLOG-3ACREATE-DB-TABLE-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG:CREATE-DB-TABLE%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:CREATE-DB-TABLE%20GENERIC-FUNCTION" >CREATE-DB-TABLE</a></span></span> <span class="locative-args">CLOG-OBJ &amp;KEY CLOG-DATABASE HIDDEN CLASS HTML-ID AUTO-PLACE</span></span></p>
+
+<p>Create a new clog-db-table as child of <code>CLOG-OBJ</code>.</p></li>
+</ul>
+
+<p><a id="x-28CLOG-3ASET-ON-HEADER-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG:SET-ON-HEADER%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:SET-ON-HEADER%20GENERIC-FUNCTION" >SET-ON-HEADER</a></span></span> <span class="locative-args">CLOG-DB-TABLE ON-HEADER-HANDLER</span></span></p>
+
+<p>Set the <code>ON-HEADER-HANDLER</code> for <code>CLOG-DB-TABLE</code>. If <code>ON-HEADER-HANDLER</code>
+is nil unbind the event. The on-header event is called before the first row is output
+after the table is cleared to all adding a header information to the table.</p></li>
+</ul>
+
+<p><a id="x-28CLOG-3ASET-ON-FOOTER-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG:SET-ON-FOOTER%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:SET-ON-FOOTER%20GENERIC-FUNCTION" >SET-ON-FOOTER</a></span></span> <span class="locative-args">CLOG-DB-TABLE ON-FOOTER-HANDLER</span></span></p>
+
+<p>Set the <code>ON-FOOTER-HANDLER</code> for <code>CLOG-DB-TABLE</code>. If <code>ON-FOOTER-HANDLER</code>
+is nil unbind the event. The on-footer event is called after all rows are output
+after the table is cleared for adding footer information to the table.</p></li>
+</ul>
+
+<p><a id="x-28CLOG-3ASET-ON-ROW-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG:SET-ON-ROW%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:SET-ON-ROW%20GENERIC-FUNCTION" >SET-ON-ROW</a></span></span> <span class="locative-args">CLOG-DB-TABLE ON-ROW-HANDLER</span></span></p>
+
+<p>Set the <code>ON-ROW-HANDLER</code> for <code>CLOG-DB-TABLE</code>. If <code>ON-ROW-HANDLER</code>
+is nil unbind the event. The on-row event is called for each row. The row handler
+is passed also the clog-table-row object before the columns are added in second parameter to
+handler.</p></li>
+</ul>
+
+<p><a id="x-28CLOG-3ASET-ON-COLUMN-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG:SET-ON-COLUMN%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:SET-ON-COLUMN%20GENERIC-FUNCTION" >SET-ON-COLUMN</a></span></span> <span class="locative-args">CLOG-DB-TABLE ON-COLUMN-HANDLER</span></span></p>
+
+<p>Set the <code>ON-COLUMN-HANDLER</code> for <code>CLOG-DB-TABLE</code>. If <code>ON-COLUMN-HANDLER</code>
+is nil unbind the event. The on-column event is called for each column as added to
+the current row being processsed. It is passed also the keyworld symbol name of
+the column and the clog-table-column object.</p></li>
 </ul>
 
 <p><a id="x-28CLOG-3A-40CLOG-PANELS-20MGL-PAX-3ASECTION-29"></a>
@@ -4992,7 +5122,7 @@ or CLOG Data-List objects.</p></li>
 <a id="CLOG:ADD-SELECT-OPTION%20GENERIC-FUNCTION"></a></p>
 
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:ADD-SELECT-OPTION%20GENERIC-FUNCTION" >ADD-SELECT-OPTION</a></span></span> <span class="locative-args">CLOG-SELECT VALUE CONTENT</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:ADD-SELECT-OPTION%20GENERIC-FUNCTION" >ADD-SELECT-OPTION</a></span></span> <span class="locative-args">CLOG-SELECT VALUE CONTENT &amp;KEY SELECTED DISABLED</span></span></p>
 
 <p>Add option <code>VALUE</code> to select.</p></li>
 </ul>
@@ -7065,9 +7195,8 @@ if confirmed or nil if canceled. <code>CANCEL-TEXT</code> is only displayed if m
 <ul>
 <li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:RUN%20GENERIC-FUNCTION" >RUN</a></span></span> <span class="locative-args">CLOG-BODY</span></span></p>
 
-<p>Keeps the connection thread alive to prevent garbage
-collection of local objects when not using connection-data objects
-or global objects.</p></li>
+<p>Keeps a connection thread alive to allow post
+user close of connection / browser.</p></li>
 </ul>
 
 <p><a id="x-28CLOG-3ASET-HTML-ON-CLOSE-20GENERIC-FUNCTION-29"></a>

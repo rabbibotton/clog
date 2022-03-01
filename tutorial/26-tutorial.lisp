@@ -93,8 +93,7 @@
 					    :class   "w3-text-white w3-xlarge")))
     (setf (text-shadow txt) "2px 2px black")
     (composite-right txt :padding-class :padding-64)
-    (setf (box-width image) "100%"))
-  (run body))
+    (setf (box-width image) "100%")))
 
 (defun start-tutorial ()
   "Start turtorial."

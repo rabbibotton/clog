@@ -47,15 +47,13 @@
 ;;;;;;;;;
 
 (defgeneric run (clog-body)
-  (:documentation "Keeps the connection thread alive to prevent garbage
-collection of local objects when not using connection-data objects
-or global objects."))
-
+  (:documentation "Keeps a connection thread alive to allow post
+user close of connection / browser."))
 (defmethod run ((obj clog-body))
   (loop
-	(if (validp obj)
-	    (sleep 10)
-	    (return))))
+    (if (validp obj)
+	(sleep 10)
+	(return))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;
 ;; set-html-on-close ;;

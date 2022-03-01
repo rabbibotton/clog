@@ -54,8 +54,7 @@ on the drop-root."))
 	 (item (create-list-item (clog-drop-list:drop-root drop-list) :content "Item 2"))
 	 (item (create-list-item (clog-drop-list:drop-root drop-list) :content "Item 3"))
 	 (item (create-list-item (clog-drop-list:drop-root drop-list) :content "Item 4")))
-    (declare (ignore item)))
-  (run body))
+    (declare (ignore item))))
 
 (defun start-tutorial ()
   "Start tutorial."

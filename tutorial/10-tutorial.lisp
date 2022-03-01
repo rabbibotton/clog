@@ -19,8 +19,7 @@
     (begin-path cx)
     (ellipse cx 200 200 50 7 0.78 0 6.29)
     (path-stroke cx)
-    (path-fill cx)
-    (run body)))
+    (path-fill cx)))
 
 (defun start-tutorial ()
   "Start turtorial."

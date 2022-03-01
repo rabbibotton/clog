@@ -1518,8 +1518,7 @@ of controls and double click to select control."
     (set-on-before-unload (window body) (lambda(obj)
 					  (declare (ignore obj))
 					  ;; return empty string to prevent nav off page
-					  ""))
-    (run body)))
+					  ""))))
 
 (defun clog-builder (&key static-root)
   "Start clog-builder."

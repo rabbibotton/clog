@@ -66,8 +66,7 @@
 	 (item       (create-list-item list-b :content "Item 3"))
 	 (item       (create-list-item list-b :content "Item 4")))
     (declare (ignore item))
-    (clog-toggler:activate toggler))
-  (run body))
+    (clog-toggler:activate toggler)))
 
 (defun start-tutorial ()
   "Start tutorial."

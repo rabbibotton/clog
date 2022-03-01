@@ -9,8 +9,7 @@
   ;; and vertically our div on the screen.
   (let* ((layout (create-panel-box-layout body)))
     (center-children (center-panel layout))
-    (create-div (center-panel layout) :content "Hello")
-    (run body)))
+    (create-div (center-panel layout) :content "Hello")))
   
 (defun start-app ()
   (initialize 'on-new-window
