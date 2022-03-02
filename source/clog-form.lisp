@@ -1067,6 +1067,17 @@ optionally fill in with contents of data-list."))
 			    (escape-string content))
 		:clog-type 'clog-element :auto-place t))
 
+;;;;;;;;;;;;;;;;;
+;; select-text ;;
+;;;;;;;;;;;;;;;;;
+
+(defgeneric select-text (clog-obj)
+  (:documentation "Returns the text of selected item."))
+
+(defmethod select-text ((obj clog-obj))
+  (clog-connection:query (connection-id obj)
+	    (format nil "$('#~A option:selected').text()" (html-id obj))))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Implementation - clog-option
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

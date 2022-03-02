@@ -684,6 +684,7 @@ embedded in a native template application.)"
   (add-select-option   generic-function)
   (add-select-options  generic-function)
   (add-select-optgroup generic-function)
+  (select-text         generic-function)
 
   "CLOG-Data-List - Class for CLOG Option Data Lists"
   (clog-data-list   class)
