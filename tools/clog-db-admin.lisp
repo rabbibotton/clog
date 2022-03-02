@@ -101,7 +101,6 @@
 		   '(("Non-Query" :db-query))
 		   (lambda (results)
 		     (when results
-		       (format t "handle~%")
 		       (handler-case
 			   (progn
 			     (sqlite:execute-non-query (db-connection app)
