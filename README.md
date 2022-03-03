@@ -200,6 +200,8 @@ CLOG Builder Tutorials
     https://www.reddit.com/r/lisp/comments/sn8j77/clog_builder_tutorial_2_building_a_web_page/
 3. Importing HTML in to Builder, Adding Pages and Hand Coding
     https://www.reddit.com/r/lisp/comments/snvv0w/clog_builder_tutorial_3_importing_html_adding/
+4. CLOS-CONTACT - Using database controls demos a contact manager app in clog.
+    https://www.reddit.com/r/lisp/comments/t61sib/clog_builder_tutorial_4_a_complete_database_app/  
 
 CLOG Tutorial Summary
 
