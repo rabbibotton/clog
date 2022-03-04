@@ -25,7 +25,7 @@ embedded in a native template application.)
 
 [CLOG - Technical Overview and Purpose](CONCEPT.md)
 
-STATUS: CLOG 1.1 and CLOG Builder 1.0 released.
+STATUS: CLOG 1.2 and CLOG Builder 1.1 released.
 
 CLOG is actually based on GNOGA, a framework I wrote for Ada in 2013
 and used in commercial production code for the last 9+ years, i.e. the
@@ -203,7 +203,7 @@ CLOG Builder Tutorials
 4. CLOS-CONTACT - Using database controls demos a contact manager app in clog.
     https://www.reddit.com/r/lisp/comments/t61sib/clog_builder_tutorial_4_a_complete_database_app/  
 
-CLOG Tutorial Summary
+CLOG Tutorials
 
 - [01-tutorial.lisp](tutorial/01-tutorial.lisp) - Hello World
 - [02-tutorial.lisp](tutorial/02-tutorial.lisp) - Closures in CLOG
@@ -235,7 +235,7 @@ CLOG Tutorial Summary
 - [28-tutorial/](tutorial/28-tutorial) - CLOG Builder Hello - A minimalist CLOG Builder project
 - [29-tutorial.lisp](tutorial/29-tutorial.lisp) - Presentations (and jQuery) - linking lisp objects to clog objects
 
-Demo Summary
+CLOG Demos
 
 - [01-demo.lisp](demos/01-demo.lisp) - Sparkey the Snake Game
 - [02-demo.lisp](demos/02-demo.lisp) - Chat - Private instant messenger
@@ -281,5 +281,8 @@ High Order Extensions to CLOG
   -  CLOG-Database - Database control for CLOG Builder
   -  CLOG-One-Row  - One row at a time table access auto 
                      binds to controls in CLOG Builder
+  -  CLOG-Lookup   - Version of the select control (dropdown and listbox)
+                     that are database connected
+  -  CLOG-DB-Table - Version of html table that are database connected
 
 (See [FUTURE.md](FUTURE.md) for future plans)
