@@ -4,7 +4,7 @@
 
 (in-package :clog-demo-2)
 
-(defvar *global-list-box-hash* (make-hash-table :test 'equalp)
+(defvar *global-list-box-hash* (make-hash-table* :test 'equalp)
   "Username to update function")
 
 (defun send-message (user msg)
