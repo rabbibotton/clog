@@ -12,6 +12,9 @@ View a short video on reddit about CLOG Builder
 
 https://www.reddit.com/r/lisp/comments/sd9wf1/clog_builder_cl_web_3_awesome_lang_awesome_tool/
 
+
+[LEARN COMMON-LISP AND CLOG - LEARN.md](LEARN.md)
+
 ---
 
 ![Image of CLOG](https://rabbibotton.github.io/images/clog.png)
