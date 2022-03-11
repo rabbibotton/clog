@@ -32,7 +32,7 @@ CLOG Builder Tutorials (Reddit links)
 -  [03 - Importing HTML in to Builder    ](https://www.reddit.com/r/lisp/comments/snvv0w/clog_builder_tutorial_3_importing_html_adding/)
 -  [04 - CLOS-CONTACT - database controls](https://www.reddit.com/r/lisp/comments/t61sib/clog_builder_tutorial_4_a_complete_database_app/)
 
-CLOG Tutorials
+CLOG "The Framework" (Code Tutorials)
 
 - [01-tutorial.lisp](tutorial/01-tutorial.lisp) - Hello World
 - [02-tutorial.lisp](tutorial/02-tutorial.lisp) - Closures in CLOG
@@ -64,7 +64,7 @@ CLOG Tutorials
 - [28-tutorial/](tutorial/28-tutorial) - CLOG Builder Hello - A minimalist CLOG Builder project
 - [29-tutorial.lisp](tutorial/29-tutorial.lisp) - Presentations (and jQuery) - linking lisp objects to clog objects
 
-CLOG Demos
+CLOG Demos - Learn through Projects
 
 - [01-demo.lisp](demos/01-demo.lisp) - Sparkey the Snake Game
 - [02-demo.lisp](demos/02-demo.lisp) - Chat - Private instant messenger
