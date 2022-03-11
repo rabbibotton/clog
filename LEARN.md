@@ -24,7 +24,7 @@ COMMON-LISP "The Tutorial" Series (Google Doc Links)
 -  [04 - Inconceivable         - Functions](https://docs.google.com/document/d/1j5sqsXFUj8pyZhttAywQnAyqz9t1RGGlVGqp9qKJDt0)
 -  [05 - Lisp Loves Donuts     - Control  ](https://docs.google.com/document/d/1rm6-s63PMzgyFX2BYLmX_nNqJ-uFiHxOuFm7ITqQPDI)
 -  [06 - Wax on, Wax Off       - Lists    ](https://docs.google.com/document/d/1PBES_SbntPf5mtdtc2_EZvdJf1SAnJ0JrHYfbL7sbE8)
--  07 Coming soon - Closures and Loops
+-  [07 - Spin Me Right 'Round  - Closures, Loops and Strings](https://docs.google.com/document/d/1qK397lNNmKL5x_1usrwsZEIcZVBdYmAREajSDc7Dpu0)
 
 CLOG Builder Tutorials (Reddit links)
 
