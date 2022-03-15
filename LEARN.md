@@ -18,6 +18,13 @@ LLLL EEEE A   A R  R N    N     CCCC LLLL OOOO GGGG
 
 COMMON-LISP "The Tutorial" Series (Google Doc Links)
 
+The tutorial's goal is to get you writing real Lisp programs, quickly
+(like in a day not weeks or years) and to give you the all important
+high level summary of the entire language that will let you fill in
+the many blanks and shortcuts with the solid books available, but
+already being productive means having a bang up time doin' it all.
+
+
 -  [01 - The Journey                      ](https://docs.google.com/document/d/1Mdp8IY7KzNxcThe9iZHXbyILKSYDWaNJX6k68aYpVR4)
 -  [02 - Not in Kansas Anymore - Symbols  ](https://docs.google.com/document/d/1eiaFmKfTTUxjhphgcOM9-5eioenaFR91rw4ME9jCL30)
 -  [03 - Evolution             - Packages ](https://docs.google.com/document/d/1Yv8PtBJDwg4fqZtIYNmYDw_8N3KwlCzcO_urI9-NwIk)
@@ -26,7 +33,9 @@ COMMON-LISP "The Tutorial" Series (Google Doc Links)
 -  [06 - Wax on, Wax Off       - Lists    ](https://docs.google.com/document/d/1PBES_SbntPf5mtdtc2_EZvdJf1SAnJ0JrHYfbL7sbE8)
 -  [07 - Spin Me Right 'Round  - Closures, Loops and Strings](https://docs.google.com/document/d/1qK397lNNmKL5x_1usrwsZEIcZVBdYmAREajSDc7Dpu0)
 -  [08 - Only A Mom Could Love - Format and Loop](https://docs.google.com/document/d/1L9jdKE-XrCU0VhdsmO5w9-2ozNDrrW1-JOAi3kHrlu4)
--  09 - Hash and Arrays
+-  [09 - I Want a New Drug     - Hash and Arrays](https://docs.google.com/document/d/1H-wx50sr0Oseh3qAGrO8LbEfHS-KnbVSrNBWOAJhStI)
+-  10 - Mapping functions
+-  11 - Structs and CLOS
 
 CLOG Builder Tutorials (Reddit links)
 
