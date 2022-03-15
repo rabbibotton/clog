@@ -34,8 +34,10 @@ already being productive means having a bang up time doin' it all.
 -  [07 - Spin Me Right 'Round  - Closures, Loops and Strings](https://docs.google.com/document/d/1qK397lNNmKL5x_1usrwsZEIcZVBdYmAREajSDc7Dpu0)
 -  [08 - Only A Mom Could Love - Format and Loop](https://docs.google.com/document/d/1L9jdKE-XrCU0VhdsmO5w9-2ozNDrrW1-JOAi3kHrlu4)
 -  [09 - I Want a New Drug     - Hash and Arrays](https://docs.google.com/document/d/1H-wx50sr0Oseh3qAGrO8LbEfHS-KnbVSrNBWOAJhStI)
--  10 - Mapping functions
+-  [10 - Following             - Mapping functions](https://docs.google.com/document/d/1NThII3vh4d6UC_eVvBtMHYvSTKN3ARk_iOxJY4oIRdk)
 -  11 - Structs and CLOS
+-  12 - Macros
+-  13 - Exceptions/Conditions
 
 CLOG Builder Tutorials (Reddit links)
 
