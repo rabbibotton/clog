@@ -38,6 +38,8 @@ already being productive means having a bang up time doin' it all.
 -  11 - Structs and CLOS
 -  12 - Macros
 -  13 - Exceptions/Conditions
+-  14 - Concurrent Programing
+-  15 - Pulling it All Togeher With A Real GUI App
 
 CLOG Builder Tutorials (Reddit links)
 
