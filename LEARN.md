@@ -41,7 +41,7 @@ already being productive means having a bang up time doin' it all.
 -  14 - Concurrent Programing
 -  15 - Pulling it All Togeher With A Real GUI App
 
-![Image of CLOG](https://rabbibotton.github.io/images/clos-contact.png)
+![Image of CLOG](https://rabbibotton.github.io/images/demo-clog-contact.png)
 
 CLOG Builder Tutorials (Reddit links)
 
