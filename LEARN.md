@@ -39,7 +39,10 @@ already being productive means having a bang up time doin' it all.
 -  12 - Macros
 -  13 - Exceptions/Conditions
 -  14 - Concurrent Programing
--  15 - Pulling it All Togeher With A Real GUI App
+-  [15 - Pulling it All Togeher With A Real GUI App - clos-encounters game](https://github.com/rabbibotton/clos-encounters)
+
+Other Resources:
+- [Lisp in Y Minutes](https://learnxinyminutes.com/docs/common-lisp/)
 
 ![Image of CLOG](https://rabbibotton.github.io/images/demo-clog-contact.png)
 
@@ -49,6 +52,7 @@ CLOG Builder Tutorials (Reddit links)
 -  [02 - Building a Web Page             ](https://www.reddit.com/r/lisp/comments/sn8j77/clog_builder_tutorial_2_building_a_web_page/)
 -  [03 - Importing HTML in to Builder    ](https://www.reddit.com/r/lisp/comments/snvv0w/clog_builder_tutorial_3_importing_html_adding/)
 -  [04 - CLOS-CONTACT - database controls, a complete application](https://www.reddit.com/r/lisp/comments/t61sib/clog_builder_tutorial_4_a_complete_database_app/)
+    -  (Completed Tutorial 4 at https://github.com/rabbibotton/clos-contact but you better do the tutorial!)
 
 CLOG "The Framework" (Code Tutorials)
 
