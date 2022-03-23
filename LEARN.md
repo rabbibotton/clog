@@ -12,7 +12,7 @@
 ```
 L    EEEE   A   RRR  NN   N     CCCC L    OOOO GGGG
 L    E     A A  R  R N N  N     C    L    O  O G
-L    EE   A   A RRR  N  N N     C    L    O  O G GG 
+L    EE   A   A RRR  N  N N     C    L    O  O G GG
 L    E    AAAAA R  R N   NN     C    L    O  O G  G
 LLLL EEEE A   A R  R N    N     CCCC LLLL OOOO GGGG
 ```
@@ -42,8 +42,15 @@ already being productive means having a bang up time doin' it all.
 -  14 - Concurrent Programing
 -  [15 - Pulling it All Togeher With A Real GUI App - clos-encounters game](https://github.com/rabbibotton/clos-encounters)
 
-Other Resources:
+Other Quick Resources:
+- [Lisp Cheat Sheet](https://github.com/ashok-khanna/lisp-notes)
 - [Lisp in Y Minutes](https://learnxinyminutes.com/docs/common-lisp/)
+- [Common Lisp Cookbook](https://lispcookbook.github.io/cl-cookbook/)
+
+Full Free Books:
+- Reference - [Common Lisp the Language 2nd ed)[http://www.cs.cmu.edu/Groups/AI/html/cltl/cltl2.html]
+- New to Programming - [Common Lisp: A Gentle Introduction to Symbolic Computing](http://www.cs.cmu.edu/%7Edst/LispBook/)
+- New to Common Lisp - [Practical Common Lisp](http://www.gigamonkeys.com/book/)
 
 ![Image of CLOG](https://rabbibotton.github.io/images/demo-clog-contact.png)
 
