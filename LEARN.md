@@ -101,7 +101,8 @@ CLOG Demos - Learn through Projects
 - [03-demo.lisp](demos/03-demo.lisp) - IDE - A very simple common lisp IDE
   (see source if editor dosen't load)
 - [04-demo.lisp](demos/04-demo.lisp) - CMS Website - A very simple database driven website
-
+- [clos-encounters](https://github.com/rabbibotton/clos-encounters) - Full Project - Game
+- [clos-contact](https://github.com/rabbibotton/clos-contact) - Full Project - Business App 
 
 MANUAL
 
