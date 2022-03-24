@@ -104,6 +104,10 @@ CLOG Demos - Learn through Projects
 - [clos-encounters](https://github.com/rabbibotton/clos-encounters) - Full Project - Game
 - [clos-contact](https://github.com/rabbibotton/clos-contact) - Full Project - Business App 
 
+Misc CLOG Tutorials
+
+- [Wrapping a JS Plugin](https://docs.google.com/document/d/1EDODcnyijP_EjrDQTiA0AB-zbMQzvCo2HltXarw5q5A)
+
 MANUAL
 
 https://rabbibotton.github.io/clog/clog-manual.html
