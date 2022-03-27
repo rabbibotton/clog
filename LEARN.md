@@ -42,6 +42,9 @@ already being productive means having a bang up time doin' it all.
 -  [14 - Kindergarten          - Concurrent and Parallel Programing](https://docs.google.com/document/d/10MGPC7j4lpGrMlQS4xtQTEGrvpBecgDUnqu1OrjSVxk)
 -  [15 - Pulling it All Togeher With A Real GUI App - clos-encounters game](https://github.com/rabbibotton/clos-encounters)
 
+Other Tutorials and General Material:
+- [lisp-lang](https://lisp-lang.org/)
+
 Other Quick Resources:
 - [Lisp Cheat Sheet](https://github.com/ashok-khanna/lisp-notes)
 - [Lisp in Y Minutes](https://learnxinyminutes.com/docs/common-lisp/)
