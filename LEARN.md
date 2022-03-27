@@ -39,7 +39,7 @@ already being productive means having a bang up time doin' it all.
 -  [11 - Build Me Up           - Structs and CLOS](https://docs.google.com/document/d/1CmaDW1h9P5_bjWRqWK-LBf8GSIrCbXUcXIpEKJnF6Wg)
 -  [12 - Expand Your Mind      - Macros   ](https://docs.google.com/document/d/1Hnko12U6LI2o1cH9TgByN6D-lpdOzUmaVUJWxooMFow)
 -  [13 - Y'all come back now   - Exceptions/Conditions](https://docs.google.com/document/d/1bwTipjdEqkNRZVYjwrBGWKqLD1IXeWGofQqgXGdZJ48)
--  14 - Concurrent Programing
+-  [14 - Kindergarten          - Concurrent and Parallel Programing](https://docs.google.com/document/d/10MGPC7j4lpGrMlQS4xtQTEGrvpBecgDUnqu1OrjSVxk)
 -  [15 - Pulling it All Togeher With A Real GUI App - clos-encounters game](https://github.com/rabbibotton/clos-encounters)
 
 Other Quick Resources:
