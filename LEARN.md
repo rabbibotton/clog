@@ -1,20 +1,10 @@
 
-# CLOG - The Common Lisp Omnificent GUI
-
-## David Botton <david@botton.com>
-
-### License BSD 3-Clause License
-
----
-
-![Image of CLOG](https://rabbibotton.github.io/images/clog.png)
-
 ```
-L    EEEE   A   RRR  NN   N     CCCC L    OOOO GGGG
-L    E     A A  R  R N N  N     C    L    O  O G
-L    EE   A   A RRR  N  N N     C    L    O  O G GG
-L    E    AAAAA R  R N   NN     C    L    O  O G  G
-LLLL EEEE A   A R  R N    N     CCCC LLLL OOOO GGGG
+L    EEEE   A   RRR  NN   N     CCCC L    OOOOO GGGGG
+L    E     A A  R  R N N  N     C    L    O   O G
+L    EE   A   A RRR  N  N N     C    L    O   O G  GG
+L    E    AAAAA R  R N   NN     C    L    O   O G   G
+LLLL EEEE A   A R  R N    N     CCCC LLLL OOOOO GGGGG
 ```
 
 COMMON-LISP "The Tutorial" Series (Google Doc Links)
