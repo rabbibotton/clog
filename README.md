@@ -76,6 +76,7 @@ Note: If using portacle for Windows you will need to
 update Quicklisp use (ql:update-dist "quicklisp")
 You will also likely need to copy the sqlite3 dll from
 https://www.sqlite.org/download.html to portacle\win\lib
+Consider a custom [install on windows](WINDOWS.md)
 
 1. Start emacs then M-x slime
 2. In the REPL, run:

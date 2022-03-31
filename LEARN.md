@@ -9,6 +9,9 @@ LLLL EEEE A   A R  R N    N     CCCC LLLL OOOOO GGGGG
 
 COMMON-LISP "The Tutorial" Series (Google Doc Links)
 
+[Install Common-Lisp for Win64](WINDOWS.md)
+[Install Common-Lisp for Linux/Mac](https://lisp-lang.org/learn/getting-started/)
+
 The tutorial's goal is to get you writing real Lisp programs, quickly
 (like in a day not weeks or years) and to give you the all important
 high level summary of the entire language that will let you fill in
