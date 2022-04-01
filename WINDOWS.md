@@ -5,7 +5,7 @@
 
    https://gchristensen.github.io/rho-emacs/
 
-   When installing choose C:\Users\_yourname_ for the "home folder"
+   When installing choose C:\Users\yourname for the "home folder"
 
    I like a plain emacs, others like the various default extensions and themes.
 
