@@ -1,12 +1,10 @@
 
-
 ## Installing Common Lisp on Windows 64bit from Scratch
-
 
 1. Download and install rho-emacs:
 
    https://gchristensen.github.io/rho-emacs/
-   
+
    When installing choose C:\Users\_yourname_ for the "home folder"
 
    I like a plain emacs, others like the various default extensions and themes.
@@ -25,13 +23,13 @@
 4. Get the 64 bit SQLite DLL from:
 
    https://www.sqlite.org/download.html
-     
-Double clip the downloaded dll zip and copy the file to C:\Program Files\Git\mingw64\bin
+
+   Double clip the downloaded dll zip and copy the file to C:\Program Files\Git\mingw64\bin
 
 5. Download QuickLisp:
 
    Download using http://beta.quicklisp.org/quicklisp.lisp
-   
+
    (assuming for the tutorial it is downloaded to your Downloads
    directory)
 
@@ -40,7 +38,7 @@ Double clip the downloaded dll zip and copy the file to C:\Program Files\Git\min
    Open Git Bash and run: sbcl
 
    Use the mouse right click paste or type:
-   
+
    - At the * prompt from sbcl type: (load "~/Downloads/quicklisp.lisp")
    - At the * prompt from sbcl type: (quicklisp-quickstart:install)
    - At the * prompt from sbcl type: (ql:add-to-init-file)
@@ -48,25 +46,30 @@ Double clip the downloaded dll zip and copy the file to C:\Program Files\Git\min
    - At the * prompt from sbcl type: (quit)
 
    Run rho emacs with (I would add to path or make a script):
-   
+
       /c/Program\ Files/rho-emacs/rho
 
    Use C-x-f and create the file ~/.emacs.d/init.el and add the next two lines:
-   
+
 ```
       (load (expand-file-name "C:/Users/david/quicklisp/slime-helper.el"))
       (setq inferior-lisp-program "sbcl")
 ```
 
+7. Restart Emacs
+
    Quit emacs - C-x C-y
+
+   Start again emacs
+
+   /c/Program\ Files/rho-emacs/rho
+
+   Run Slime - M-x slime
 
 7. Install CLOG:
 
-   Start again emacs
-   
-   /c/Program\ Files/rho-emacs/rho
-
-
-   Run Slime - M-x slime
-   
    (ql:quickload :clog)
+   (clog:run-demo 1)
+
+   [Learn about CLOG](README.md)
+   [Learn Common-Lisp](LEARN.md)
