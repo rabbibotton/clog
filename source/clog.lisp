@@ -113,6 +113,8 @@ embedded in a native template application.)"
   (with-sync-event             macro)
   (remove-connection-data-item generic-function)
   (validp                      generic-function)
+  (with-connection-cache       macro)
+  (flush-connection-cache      function)
 
   "CLOG-Obj - Internals for Extensions and Plugins"
   (html-id      generic-function)

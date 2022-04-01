@@ -717,6 +717,25 @@ an application share per connection the same queue of serialized events.</p></li
 <p>Returns true if connection is valid on this <code>CLOG-OBJ</code>.</p></li>
 </ul>
 
+<p><a id="x-28CLOG-3AWITH-CONNECTION-CACHE-20MGL-PAX-3AMACRO-29"></a>
+<a id="CLOG:WITH-CONNECTION-CACHE%20MGL-PAX:MACRO"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[macro]</span> <span class="reference-object"><a href="#CLOG:WITH-CONNECTION-CACHE%20MGL-PAX:MACRO" >WITH-CONNECTION-CACHE</a></span></span> <span class="locative-args">(CLOG-OBJ) &amp;BODY BODY</span></span></p>
+
+<p>Caches writes to the connection-id of <code>CLOG-OBJ</code> until
+flushed with <a href="#CLOG:FLUSH-CONNECTION-CACHE%20FUNCTION" title="CLOG:FLUSH-CONNECTION-CACHE FUNCTION"><code>FLUSH-CONNECTION-CACHE</code></a> or a query is made.</p></li>
+</ul>
+
+<p><a id="x-28CLOG-3AFLUSH-CONNECTION-CACHE-20FUNCTION-29"></a>
+<a id="CLOG:FLUSH-CONNECTION-CACHE%20FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#CLOG:FLUSH-CONNECTION-CACHE%20FUNCTION" >FLUSH-CONNECTION-CACHE</a></span></span> <span class="locative-args">CLOG-OBJ</span></span></p>
+
+<p>Flush connection cache if on.</p></li>
+</ul>
+
 <p>CLOG-Obj - Internals for Extensions and Plugins</p>
 
 <p><a id="x-28CLOG-3AHTML-ID-20GENERIC-FUNCTION-29"></a>
@@ -8151,10 +8170,11 @@ result or <code>DEFAULT-ANSWER</code> on time out.</p></li>
 <a id="CLOG:CLOG-REPL%20FUNCTION"></a></p>
 
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#CLOG:CLOG-REPL%20FUNCTION" >CLOG-REPL</a></span></span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#CLOG:CLOG-REPL%20FUNCTION" >CLOG-REPL</a></span></span> <span class="locative-args">&amp;KEY (CLOG-GUI-INITIALIZE <code>T</code>) (CLOG-WEB-INITIALIZE <code>T</code>)</span></span></p>
 
 <p>Set a path /repl that opens a blank page and sets the global
-clog-user:<em>body</em> to last window openned to /repl.</p></li>
+clog-user:<em>body</em> to last window openned to /repl. Debug mode is
+set (logging to browser console), </p></li>
 </ul>
 
 <p><a id="x-28CLOG-3ASAVE-BODY-TO-FILE-20FUNCTION-29"></a>

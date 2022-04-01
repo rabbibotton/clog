@@ -14,7 +14,16 @@
 ;;; methods to retrieve connection-data (data that is associated with the
 ;;; current page regardless of object or thread of execution is lisp).
 
-(push :clog *features*)
+(pushnew :clog *features*)
+
+(defvar *connection-cache* nil
+  "Dynamic variable containing optional cache. Every thread has its
+own context and therefore its own copy of this variable when
+dynamically bound. As a result no thread protection is needed to
+access. To use dynamically bind the *connection-cache* and set it
+to (list :cache) turn on caching. By default this is off its main use
+is in initial setup complex pages. (private)
+See macro with-connection-cache.")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Implementation - clog-obj
@@ -84,8 +93,33 @@ during attachment. (Private)"))
 dicarded, return CLOG-OBJ. (Internal)"))
 
 (defmethod js-execute ((obj clog-obj) script)
-  (clog-connection:execute (connection-id obj) script)
+  (if *connection-cache*
+      (push script *connection-cache*)
+      (clog-connection:execute (connection-id obj) script))
   obj)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; with-connection-cache ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defmacro with-connection-cache ((clog-obj) &body body)
+  "Caches writes to the connection-id of CLOG-OBJ until
+flushed with FLUSH-CONNECTION-CACHE or a query is made."
+  `(let ((*connection-cache* (list :cache)))
+     ,@body
+     (clog:flush-connection-cache ,clog-obj)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; flush-connection-cache ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defun flush-connection-cache (clog-obj)
+  "Flush connection cache if on."
+  (when *connection-cache*
+    (dolist (script (reverse *connection-cache*))
+      (unless (eq script :cache)
+	(clog-connection:execute (connection-id clog-obj) script)))
+    (setf *connection-cache* (list :cache))))
 
 ;;;;;;;;;;;;;;
 ;; js-query ;;
@@ -95,6 +129,7 @@ dicarded, return CLOG-OBJ. (Internal)"))
   (:documentation "Execure SCRIPT on browser and return result. (Internal)"))
 
 (defmethod js-query ((obj clog-obj) script &key (default-answer nil))
+  (flush-connection-cache obj)
   (clog-connection:query (connection-id obj) script :default-answer default-answer))
 
 ;;;;;;;;;;;;;
