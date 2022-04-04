@@ -57,7 +57,9 @@ which can be local, or remote over the web.
 
 CLOG is developed with ECL and SBCL, it is tested fairly regulary on
  Linux, Windows, Rasberry Pi (running Ubuntu), M1 and Intel Mac. It
- should in theory work on any system with Quicklisp and CLACK.
+ should in theory work out of the box on any system with Quicklisp
+ (although you could hand install) and CLACK (easily switched out
+ and the ecl Android/iPhone branch doesn't use).
 
 CLOG is in QuickLisp (ql:quickload :clog), but you likely want to live
 on the bleeding edge and use UltraLisp or clone the github repo into
