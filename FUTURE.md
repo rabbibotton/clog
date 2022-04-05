@@ -1,9 +1,8 @@
 - Future tutorials for builder:
 
-Deploying a CLOG website
+Deploying a CLOG website - part in WEBSITE.md
 Creating a native application
-Mobile development
-Creating a Bootstrap 5 based app
+Mobile development - u/eql5 has working
 When to use page vs panel
 Plug-in panels for use on other sites
 Demo between different models - stateless, webpage, windows
@@ -11,8 +10,6 @@ Demo between different models - stateless, webpage, windows
 - Multi control select and alignments in Builder
 
 - Right click menus CLOG-GUI
-
-- Handle windows beyond browser edge CLOG-GUI
 
 - Project scaffolding generator - done the template system in Builder
     1) Basic builder project - done
