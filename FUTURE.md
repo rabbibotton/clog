@@ -18,7 +18,6 @@ Demo between different models - stateless, webpage, windows
     1) Basic builder project - done
     2) CLOG-GUI builder project - done
     3) Builder website
-    4) Database oriented projects
 
 - Improvement to CLOG-GUI menus to enable/disable or switch menus based on current window/panel
 
@@ -31,8 +30,6 @@ Demo between different models - stateless, webpage, windows
 - Implement using long polling to optimize CLOG sites for use with
   search engines. If not long polling at least initial output sent by
   initial html request until first query.
-
-- Optimize communication with browser
 
 - Optionaly, for local apps, allow direct transport of CLOG data to webpage via apis
 remove need for websocket transport.

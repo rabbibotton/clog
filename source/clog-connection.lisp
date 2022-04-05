@@ -178,7 +178,11 @@ the default answer. (Private)"
 				    (format nil "clog['connection_id']=~A" id))
 	     (bordeaux-threads:make-thread
 	      (lambda ()
-		(funcall *on-connect-handler* id))
+		(handler-case
+		    (funcall *on-connect-handler* id)
+		  (t (c)
+		    (format t "Condition caught connection ~A - ~A.~&" id c)
+		    (values 0 c))))
               :name (format nil "CLOG connection ~A"
                             id))))
     (t (c)
@@ -206,11 +210,15 @@ the default answer. (Private)"
 			   id event-id data))
 		 (bordeaux-threads:make-thread
 		  (lambda ()
-		    (let* ((event-hash (get-connection-data id))
-			   (event      (when event-hash
-					 (gethash event-id event-hash))))
-		      (when event
-			(funcall event data))))
+		    (handler-case
+			(let* ((event-hash (get-connection-data id))
+			       (event      (when event-hash
+					     (gethash event-id event-hash))))
+			  (when event
+			    (funcall event data)))
+		      (t (c)
+			(format t "Condition caught in handle-message for event - ~A.~&" c)
+			(values 0 c))))
 		  :name (format nil "CLOG event handler ~A"
 				event-id))))
 	      (t
