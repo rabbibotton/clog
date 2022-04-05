@@ -28,12 +28,13 @@
 (in-package :clog-connection)
 
 (defsection @clog-connection (:title "CLOG Connection")
-  "Low level connectivity to the web client and boot file 
+  "Low level connectivity to the web client and boot file
 script."
 
   "CLOG system startup and shutdown"
 
   (*verbose-output* variable)
+  (*break-on-error* variable)
 
   (initialize             function)
   (shutdown-clog          function)
@@ -43,11 +44,11 @@ script."
   (delete-connection-data function)
 
   "CLOG system utilities"
-  
+
   (escape-string function)
-  
+
   "CLOG connections"
-  
+
   (execute           function)
   (query             function)
   (validp            function)
@@ -74,6 +75,7 @@ script."
   #-(or sbcl ecl mezzano) (apply #'make-hash-table args))
 
 (defvar *verbose-output* nil "Verbose server output (default false)")
+(defvar *break-on-error* t "Allow invoking debugger (default true)")
 
 (defvar *app*            nil "Clack 'app' middle-ware")
 (defvar *client-handler* nil "Clack 'handler' for socket traffic")
@@ -94,6 +96,7 @@ script."
   "Number of seconds to timeout waiting for a query by default")
 
 (defvar *url-to-boot-file* (make-hash-table* :test 'equalp) "URL to boot-file")
+
 
 ;;;;;;;;;;;;;;;;;
 ;; generate-id ;;
@@ -154,7 +157,7 @@ the default answer. (Private)"
 	  answer))
     (t (c)
       (format t "Condition caught in wait-for-answer - ~A.~&" c)
-      (values 0 c))))    
+      (values 0 c))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; handle-new-connection ;;
@@ -178,11 +181,13 @@ the default answer. (Private)"
 				    (format nil "clog['connection_id']=~A" id))
 	     (bordeaux-threads:make-thread
 	      (lambda ()
-		(handler-case
+		(if *break-on-error*
 		    (funcall *on-connect-handler* id)
-		  (t (c)
-		    (format t "Condition caught connection ~A - ~A.~&" id c)
-		    (values 0 c))))
+		    (handler-case
+			(funcall *on-connect-handler* id)
+		      (t (c)
+			(format t "Condition caught connection ~A - ~A.~&" id c)
+			(values 0 c)))))
               :name (format nil "CLOG connection ~A"
                             id))))
     (t (c)
@@ -210,15 +215,21 @@ the default answer. (Private)"
 			   id event-id data))
 		 (bordeaux-threads:make-thread
 		  (lambda ()
-		    (handler-case
+		    (if *break-on-error*
 			(let* ((event-hash (get-connection-data id))
 			       (event      (when event-hash
 					     (gethash event-id event-hash))))
 			  (when event
 			    (funcall event data)))
-		      (t (c)
-			(format t "Condition caught in handle-message for event - ~A.~&" c)
-			(values 0 c))))
+			(handler-case
+			    (let* ((event-hash (get-connection-data id))
+				   (event      (when event-hash
+						 (gethash event-id event-hash))))
+			      (when event
+				(funcall event data)))
+			  (t (c)
+			    (format t "Condition caught in handle-message for event - ~A.~&" c)
+			    (values 0 c)))))
 		  :name (format nil "CLOG event handler ~A"
 				event-id))))
 	      (t
@@ -268,10 +279,10 @@ the default answer. (Private)"
 			     (when (typep id 'string)
 			       (setf id (parse-integer id :junk-allowed t)))
 			     (handle-new-connection ws id))))
-	
+
 	(websocket-driver:on :message ws
                              (lambda (msg) (handle-message ws msg)))
-	
+
 	(websocket-driver:on :close ws
                              (lambda (&key code reason)
                                (declare (ignore code reason))
@@ -295,7 +306,7 @@ the default answer. (Private)"
 		     (boot-file        "/boot.html")
 		     (static-boot-js   nil)
 		     (static-root      #P"./static-files/"))
-  "Initialize CLOG on a socket using HOST and PORT to serve BOOT-FILE as 
+  "Initialize CLOG on a socket using HOST and PORT to serve BOOT-FILE as
 the default route for '/' to establish web-socket connections and static files
 located at STATIC-ROOT. If BOOT-FILE is nil no initial clog-path's will be
 setup, use clog-path to add. The on-connect-handler needs to indentify the
@@ -563,7 +574,7 @@ function Setup_ws() {
             console.error (e.message);
         }
     }
-    
+
     ws.onerror = function (event) {
         console.log ('onerror: reconnect');
         ws = null;
@@ -577,7 +588,7 @@ function Setup_ws() {
             Shutdown_ws(event);
         }
     }
-    
+
     ws.onclose = function (event) {
         console.log ('onclose: reconnect');
         ws = null;
@@ -605,16 +616,16 @@ $( document ).ready(function() {
     clog['navigator']=navigator;
     clog['document']=window.document;
     clog['location']=window.location;
-    
+
     if (location.protocol == 'https:') {
         adr = 'wss://' + location.hostname;
     } else {
         adr = 'ws://' + location.hostname;
     }
-    
+
     if (location.port != '') { adr = adr + ':' + location.port; }
     adr = adr + '/clog';
-    
+
     try {
         console.log ('connecting to ' + adr);
         ws = new WebSocket (adr);
@@ -622,7 +633,7 @@ $( document ).ready(function() {
         console.log ('trying again, connecting to ' + adr);
         ws = new WebSocket (adr);
     }
-    
+
     if (ws != null) {
         ws.onopen = function (event) {
             console.log ('connection successful');
