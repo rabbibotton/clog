@@ -48,27 +48,30 @@ the same as the clog directy this overides the relative paths used in them.")
 (defun initialize
     (on-new-window-handler
      &key
-       (host           "0.0.0.0")
-       (port           8080)
-       (boot-file      "/boot.html")
-       (boot-function  nil)
-       (static-boot-js nil)       
-       (static-root    (merge-pathnames "./static-files/"
-			  (asdf:system-source-directory :clog))))
+       (host             "0.0.0.0")
+       (port             8080)
+       (boot-file        "/boot.html")
+       (boot-function    nil)
+       (static-boot-html nil)
+       (static-boot-js   nil)
+       (static-root      (merge-pathnames "./static-files/"
+			    (asdf:system-source-directory :clog))))
   "Inititalize CLOG on a socket using HOST and PORT to serve BOOT-FILE
 as the default route to establish web-socket connections and static
 files located at STATIC-ROOT. If CLOG was already initialized and not
 shut down, this function does the same as set-on-new-window (does not
 change the static-root). If ON-NEW-WINDOW-HANDLER is nil no handler is
-set and none is removed. STATIC-ROOT by default is the \"directory CLOG
-is installed in ./static-files\" If the variable clog:*overide-static-root*
-is set STATIC-ROOT will be ignored. If BOOT-FILE is nil no default
-boot-file will be set for root path, i.e. /. If static-boot-js is t
-then boot.js is served from the file /js/boot.js instead of the
-compiled version. boot-function if set is called with the url and the
-contents of boot-file and its return value replaces the contents sent
-to the brower, this allows adding content for search engine optimization,
-see tutorial 12 for an example."
+set and none is removed. STATIC-ROOT by default is the \"directory
+CLOG is installed in ./static-files\" If the variable
+clog:*overide-static-root* is set STATIC-ROOT will be ignored. If
+BOOT-FILE is nil no default boot-file will be set for root path,
+i.e. /. If static-boot-js is t then boot.js is served from the file
+/js/boot.js instead of the compiled version. Is static-boot-html is t
+if boot.html is not present will use compiled version. boot-function
+if set is called with the url and the contents of boot-file and its
+return value replaces the contents sent to the brower, this allows
+adding content for search engine optimization, see tutorial 12 for an
+example."
   (when on-new-window-handler
     (set-on-new-window on-new-window-handler :path "/" :boot-file boot-file))
   (unless *clog-running*
@@ -77,12 +80,13 @@ see tutorial 12 for an example."
 			    *overide-static-root*
 			    static-root))
     (clog-connection:initialize #'on-connect
-				:host           host
-				:port           port
-				:boot-file      boot-file
-				:boot-function  boot-function
-				:static-boot-js static-boot-js
-				:static-root    *static-root*)))
+				:host             host
+				:port             port
+				:boot-file        boot-file
+				:boot-function    boot-function
+				:static-boot-html static-boot-html
+				:static-boot-js   static-boot-js
+				:static-root      *static-root*)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;
 ;; set-on-new-window ;;
@@ -129,4 +133,3 @@ for openning windows on remote machines."
       (trivial-open-browser:open-browser url)
     (error (c)
       (format t "Unable to open browser.~%~%~A" c))))
-

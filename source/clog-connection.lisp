@@ -45,7 +45,8 @@ script."
 
   "CLOG system utilities"
 
-  (escape-string function)
+  (escape-string      function)
+  (compiled-boot-html function)
 
   "CLOG connections"
 
@@ -305,6 +306,7 @@ the default answer. (Private)"
 		     (port             8080)
 		     (boot-file        "/boot.html")
 		     (boot-function    nil)
+		     (static-boot-html nil)
 		     (static-boot-js   nil)
 		     (static-root      #P"./static-files/"))
   "Initialize CLOG on a socket using HOST and PORT to serve BOOT-FILE
@@ -314,9 +316,10 @@ clog-path's will be setup, use clog-path to add. The
 on-connect-handler needs to indentify the path by querying the
 browser. See PATH-NAME (in CLOG-LOCATION). If static-boot-js is nil
 then boot.js is served from the file /js/boot.js instead of the
-compiled version. boot-function if set is called with the url and the
-contents of boot-file and its return value replaces the contents sent
-to the brower."
+compiled version. Is static-boot-html is t if boot.html is not present
+will use compiled version. boot-function if set is called with the url
+and the contents of boot-file and its return value replaces the
+contents sent to the brower."
   (set-on-connect on-connect-handler)
   (when boot-file
     (set-clog-path "/" boot-file))
@@ -339,9 +342,14 @@ to the brower."
 		      (let ((file (uiop:subpathname static-root clog-path)))
 			(with-open-file (stream file :direction :input
 						     :if-does-not-exist nil)
-			  (let ((page-data (make-string (file-length stream)))
+			  (let ((page-data (if stream
+					       (make-string (file-length stream))
+					       (if static-boot-html
+						   (compiled-boot-html nil nil)
+						   "")))
 				(post-data))
-			    (read-sequence page-data stream)
+			    (when stream
+				(read-sequence page-data stream))
 			    (when boot-function
 			      (setf page-data (funcall boot-function
 						       (getf env :path-info)
@@ -538,6 +546,30 @@ HTML <br />."
 the browser contents in case of connection loss."
   (execute connection-id (format nil "clog['html_on_close']='~A'"
 				 (escape-string html))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;
+;; compiled-boot-html ;;
+;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defun compiled-boot-html (path content)
+  "Returns a compiled version of current version of boot.html"
+"<!doctype HTML>
+<HTML>
+   <HEAD>
+      <meta http-equiv='Cache-Control' content='no-cache, no-store, must-revalidate' />
+      <meta http-equiv='Pragma' content='no-cache' />
+      <meta http-equiv='Expires' content='0' />
+      <meta charset='utf-8'>
+      <meta name='viewport' content='width=device-width, initial-scale=1'>
+      <script src='/js/jquery.min.js' type='text/javascript'></script>
+      <script src='/js/boot.js' type='text/javascript'></script>
+      <noscript><%= (@ meta) %></noscript>
+   </HEAD>
+<BODY>
+  <noscript><%= (@ body) %></noscript>
+</BODY>
+<noscript>Your browser must support JavaScript and be HTML 5 compilant to see this site.</noscript>
+</HTML>")
 
 ;;;;;;;;;;;;;;;;;;;;;;
 ;; compiled-boot-js ;;
