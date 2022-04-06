@@ -75,7 +75,7 @@ script."
   #-(or sbcl ecl mezzano) (apply #'make-hash-table args))
 
 (defvar *verbose-output* nil "Verbose server output (default false)")
-(defvar *break-on-error* t "Allow invoking debugger (default true)")
+(defvar *break-on-error* t   "Allow invoking debugger (default true)")
 
 (defvar *app*            nil "Clack 'app' middle-ware")
 (defvar *client-handler* nil "Clack 'handler' for socket traffic")
@@ -372,7 +372,8 @@ instead of the compiled version."
   (format t "Boot js source       : ~A~%"    (if static-boot-js
 						 "actual file"
 						 "compiled in"))
-  (format t "Boot file for path / : ~A~%"    boot-file))
+  (format t "Boot file for path / : ~A~%"    boot-file)
+  *client-handler*)
 
 ;;;;;;;;;;;;;;;;;;;
 ;; shutdown-clog ;;
