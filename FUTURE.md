@@ -24,10 +24,6 @@ Demo between different models - stateless, webpage, windows
 
 - Training and documentation tool
 
-- Implement using long polling to optimize CLOG sites for use with
-  search engines. If not long polling at least initial output sent by
-  initial html request until first query.
-
 - Optionaly, for local apps, allow direct transport of CLOG data to webpage via apis
 remove need for websocket transport.
 

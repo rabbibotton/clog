@@ -304,15 +304,19 @@ the default answer. (Private)"
 		     (host             "0.0.0.0")
 		     (port             8080)
 		     (boot-file        "/boot.html")
+		     (boot-function    nil)
 		     (static-boot-js   nil)
 		     (static-root      #P"./static-files/"))
-  "Initialize CLOG on a socket using HOST and PORT to serve BOOT-FILE as
-the default route for '/' to establish web-socket connections and static files
-located at STATIC-ROOT. If BOOT-FILE is nil no initial clog-path's will be
-setup, use clog-path to add. The on-connect-handler needs to indentify the
-path by querying the browser. See PATH-NAME (in CLOG-LOCATION). If
-static-boot-js is nil then boot.js is served from the file /js/boot.js
-instead of the compiled version."
+  "Initialize CLOG on a socket using HOST and PORT to serve BOOT-FILE
+as the default route for '/' to establish web-socket connections and
+static files located at STATIC-ROOT. If BOOT-FILE is nil no initial
+clog-path's will be setup, use clog-path to add. The
+on-connect-handler needs to indentify the path by querying the
+browser. See PATH-NAME (in CLOG-LOCATION). If static-boot-js is nil
+then boot.js is served from the file /js/boot.js instead of the
+compiled version. boot-function if set is called with the url and the
+contents of boot-file and its return value replaces the contents sent
+to the brower."
   (set-on-connect on-connect-handler)
   (when boot-file
     (set-clog-path "/" boot-file))
@@ -338,6 +342,10 @@ instead of the compiled version."
 			  (let ((page-data (make-string (file-length stream)))
 				(post-data))
 			    (read-sequence page-data stream)
+			    (when boot-function
+			      (setf page-data (funcall boot-function
+						       (getf env :path-info)
+						       page-data)))
 			    (when (search "multipart/form-data;"
 					  (getf env :content-type))
 			      (let ((id  (get-universal-time))
@@ -402,6 +410,7 @@ instead of the compiled version."
 ;;;;;;;;;;;;;;;;;;;
 
 (defun set-clog-path (path boot-file)
+  "Associate URL path to BOOT-FILE"
   (if boot-file
       (setf (gethash path *url-to-boot-file*)
 	    ;; Make clog-path into a relative path of

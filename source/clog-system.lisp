@@ -51,6 +51,7 @@ the same as the clog directy this overides the relative paths used in them.")
        (host           "0.0.0.0")
        (port           8080)
        (boot-file      "/boot.html")
+       (boot-function  nil)
        (static-boot-js nil)       
        (static-root    (merge-pathnames "./static-files/"
 			  (asdf:system-source-directory :clog))))
@@ -64,7 +65,10 @@ is installed in ./static-files\" If the variable clog:*overide-static-root*
 is set STATIC-ROOT will be ignored. If BOOT-FILE is nil no default
 boot-file will be set for root path, i.e. /. If static-boot-js is t
 then boot.js is served from the file /js/boot.js instead of the
-compiled version."
+compiled version. boot-function if set is called with the url and the
+contents of boot-file and its return value replaces the contents sent
+to the brower, this allows adding content for search engine optimization,
+see tutorial 12 for an example."
   (when on-new-window-handler
     (set-on-new-window on-new-window-handler :path "/" :boot-file boot-file))
   (unless *clog-running*
@@ -76,6 +80,7 @@ compiled version."
 				:host           host
 				:port           port
 				:boot-file      boot-file
+				:boot-function  boot-function
 				:static-boot-js static-boot-js
 				:static-root    *static-root*)))
 

@@ -48,13 +48,6 @@
   (create-div body :content "You are in on-page2")
   (log-console (window body) "A message in the browser's log"))
 
-(defun on-default (body)
-  (cond ((equalp (path-name (location body))
-		 "/tutorial/tut-11.html")
-	 (on-tutorial11 body))
-	(t
-	 (create-div body :content "No dice!"))))
-
 (defun on-tutorial11 (body)
   (let* ((form         (attach-as-child body "form1" :clog-type 'clog-form))
 	 (good-button  (attach-as-child body "button1id"))
@@ -80,9 +73,31 @@
     (set-on-click good-button 'on-click-good)
     (set-on-click scary-button 'on-click-scary))))
 
+(defun on-default (body)
+  (cond ((equalp (path-name (location body))
+		 "/tutorial/tut-11.html")
+	 (on-tutorial11 body))
+	(t
+	 (create-div body :content "No dice!"))))
+
+(defun add-search-optimizations (path content)
+  ;; The default boot.html that comes with CLOG has template
+  ;; markers inside of the meta section and body section
+  ;; that are set to be transparent to the user but show to
+  ;; search engines and text browser. This allows setting
+  ;; custom data for search engine optimizations which are
+  ;; aware of these type of dynamic sites.
+  (declare (ignore path))
+  (funcall (cl-template:compile-template content)
+	   (list :meta "<meta name='description' content='CLOG Tutorial 12'>"
+		 :body "Tutorial 12 for CLOG")))
+
 (defun start-tutorial ()
   "Start turtorial."
-  (initialize 'on-main)
+  ;; Setup the default route / to on-main
+  ;; :boot-function allows us to add or modify our boot-files content
+  ;; for search engine optimization
+  (initialize 'on-main :boot-function 'add-search-optimizations)
   ;; Navigating to http://127.0.0.1:8080/page1 executes on-page1
   (set-on-new-window 'on-page1 :path "/page1")
   ;; Navigating to http://127.0.0.1:8080/page1.html executes on-page1
