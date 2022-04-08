@@ -11,7 +11,7 @@
 ;;; does not require additional components outside of the css file. The goal
 ;;; of clog-web is to help make it easier to create "webpage" style apps
 ;;; (page layout instead of a more direct layout around the browser window
-;;; as in clog-gui the mimics a desktop environment) or actual webpages
+;;; as in clog-gui that mimics a desktop environment) or actual webpages
 ;;; (traditional hyper-linking, submition of forms and minimal need for an
 ;;; active clog connection).
 
