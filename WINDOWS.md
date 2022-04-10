@@ -49,9 +49,12 @@
 
       /c/Program\ Files/rho-emacs/rho
 
-   Use C-x-f and create the file ~/.emacs.d/init.el and add the next two lines:
+   Use C-x-f and create the file ~/.emacs.d/init.el and add the next three lines
+   (The first line is to include custom emacs themese and settings the next two
+    are to install slime for sbcl):
 
 ```
+      (load "~/.emacs.d/.custom")
       (load (expand-file-name "C:/Users/david/quicklisp/slime-helper.el"))
       (setq inferior-lisp-program "sbcl")
 ```
