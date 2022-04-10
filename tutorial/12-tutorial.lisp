@@ -123,5 +123,5 @@
   ;; 11 - "http://127.0.0.1:8080/tutorial/tut-11.html" and if it does
   ;; use on-tutorial11, and if not say "No Dice!" such as when one pics
   ;; some-file.html which also loads boot.js
-  (set-on-new-window 'on-default :path "default")
+  (set-on-new-window 'on-default :path :default)
   (open-browser))
