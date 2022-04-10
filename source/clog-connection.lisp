@@ -316,7 +316,7 @@ clog-path's will be setup, use clog-path to add. The
 on-connect-handler needs to indentify the path by querying the
 browser. See PATH-NAME (in CLOG-LOCATION). If static-boot-js is nil
 then boot.js is served from the file /js/boot.js instead of the
-compiled version. Is static-boot-html is t if boot.html is not present
+compiled version. If static-boot-html is t if boot.html is not present
 will use compiled version. boot-function if set is called with the url
 and the contents of boot-file and its return value replaces the
 contents sent to the brower."
@@ -345,9 +345,9 @@ contents sent to the brower."
 			  (let ((page-data (if stream
 					       (make-string (file-length stream))
 					       (if static-boot-html
-						   (compiled-boot-html nil nil)
-						   "")))
-				(post-data))
+						   ""
+						   (compiled-boot-html nil nil))))
+				(post-data nil))
 			    (when stream
 				(read-sequence page-data stream))
 			    (when boot-function
@@ -385,9 +385,15 @@ contents sent to the brower."
   (setf *client-handler* (clack:clackup *app* :address host :port port))
   (format t "HTTP listening on    : ~A:~A~%" host port)
   (format t "HTML Root            : ~A~%"    static-root)
+  (format t "Boot function added  : ~A~%"    (if boot-function
+						 "yes"
+						 "no"))
+  (format t "Boot html source     : ~A~%"    (if static-boot-html
+						 "actual file always"
+						 "compiled in when no file"))
   (format t "Boot js source       : ~A~%"    (if static-boot-js
-						 "actual file"
-						 "compiled in"))
+						 "actual file always"
+						 "compiled in always"))
   (format t "Boot file for path / : ~A~%"    boot-file)
   *client-handler*)
 
