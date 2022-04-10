@@ -38,6 +38,7 @@
         <li><a href='/page2'>/page2</a> - a CLOG app using an alternative boot file
         <li><a href='/page3'>/page3</a> - tutorial 11 as part of this tutorial
         <li><a href='/tutorial/tut-11.html'>/tutorial/tut-11.html</a> - an html file using boot.js
+        <li><a href='/tutorial/some-file.html'>/tutorial/some-file.html</a> - an html file using boot.js
         <li><a href='/tutorial/regular-file.html'>'/tutorial/regular-file.html</a> - a regular html file
      </ul>"))
 
@@ -78,7 +79,7 @@
 		 "/tutorial/tut-11.html")
 	 (on-tutorial11 body))
 	(t
-	 (create-div body :content "No dice!"))))
+	 (create-div body :content "No dice! What do I do with you?"))))
 
 (defun add-search-optimizations (path content)
   ;; The default boot.html that comes with CLOG has template
@@ -117,9 +118,10 @@
   (set-on-new-window 'on-tutorial11 :path "/page3"
 				     :boot-file "/tutorial/tut-11.html")
   ;; Setting a "default" path says that any use of an included boot.js
-  ;; file will route to this function, in this case #'on-default
+  ;; file by static html file will route to this function, in this case on-default
   ;; which will determine if this is coming from the path used in tutorial
   ;; 11 - "http://127.0.0.1:8080/tutorial/tut-11.html" and if it does
-  ;; use on-tutorial11, and if not say "No Dice!"
+  ;; use on-tutorial11, and if not say "No Dice!" such as when one pics
+  ;; some-file.html which also loads boot.js
   (set-on-new-window 'on-default :path "default")
   (open-browser))

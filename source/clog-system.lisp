@@ -94,11 +94,11 @@ example."
 
 (defun set-on-new-window (on-new-window-handler
 			  &key (path "/") (boot-file "/boot.html"))
-  "Set or change the on-new-window handler or set a new one for PATH
-using BOOT_FILE. Paths should always begin with a '/'. If PATH is set to
-\"default\" will use boot-file when the route can not be determined, ie
-a static html file including boot.js that has not been added with this
-function. If BOOT-FILE is nil path is removed."
+  "Set or change the ON-NEW-WINDOW-HANDLER for PATH using
+BOOT_FILE. Paths should always begin with a forward slash '/'. If PATH
+is set to \"default\" any path without another route and there is no
+static file matching the requested path ON-NEW-WINDOW-HANDLER and
+BOOT-FILE will be used.  If BOOT-FILE is nil path is removed."
   (clog-connection:set-clog-path path boot-file)
   (if boot-file
       (setf (gethash path *url-to-on-new-window*) on-new-window-handler)
