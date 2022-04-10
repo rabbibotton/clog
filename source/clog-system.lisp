@@ -36,7 +36,7 @@ the same as the clog directy this overides the relative paths used in them.")
   (let ((body (make-clog-body connection-id)))
     (let* ((path          (path-name (location body)))
 	   (on-new-window (or (gethash path *url-to-on-new-window*)
-			      (gethash "default" *url-to-on-new-window*)
+			      (gethash :default *url-to-on-new-window*)
 			      (gethash "/" *url-to-on-new-window*))))
       (if on-new-window
 	  (progn
@@ -96,9 +96,9 @@ example."
 			  &key (path "/") (boot-file "/boot.html"))
   "Set or change the ON-NEW-WINDOW-HANDLER for PATH using
 BOOT_FILE. Paths should always begin with a forward slash '/'. If PATH
-is set to \"default\" any path without another route and there is no
+is set to :default any path without another route and there is no
 static file matching the requested path ON-NEW-WINDOW-HANDLER and
-BOOT-FILE will be used.  If BOOT-FILE is nil path is removed."
+BOOT-FILE will be used. If BOOT-FILE is nil path is removed."
   (clog-connection:set-clog-path path boot-file)
   (if boot-file
       (setf (gethash path *url-to-on-new-window*) on-new-window-handler)
