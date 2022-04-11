@@ -43,7 +43,9 @@
      </ul>"))
 
 (defun on-page1 (body)
-  (create-div body :content "You are in on-page1"))
+  (create-div body :content
+	      (format nil "You are in on-page1 and got here using ~A"
+		      (path-name (location body)))))
 
 (defun on-page2 (body)
   (create-div body :content "You are in on-page2")
@@ -71,8 +73,8 @@
 	     (reset form)))
     ;; We need to override the boostrap default to submit the form html style
     (set-on-submit form (lambda (obj)(declare (ignore obj))()))
-    (set-on-click good-button 'on-click-good)
-    (set-on-click scary-button 'on-click-scary))))
+    (set-on-click good-button #'on-click-good)
+    (set-on-click scary-button #'on-click-scary))))
 
 (defun on-default (body)
   (cond ((equalp (path-name (location body))
@@ -98,8 +100,10 @@
   ;; Setup the default route / to on-main
   ;; :boot-function allows us to add or modify our boot-files content
   ;; for search engine optimization
-  (initialize 'on-main :boot-function 'add-search-optimizations)
+  (initialize 'on-main :boot-function 'add-search-optimizations
+		       :extended-routing t)
   ;; Navigating to http://127.0.0.1:8080/page1 executes on-page1
+  ;; Since extended-routing is t /page1/any/thing/else also routes to /page1
   (set-on-new-window 'on-page1 :path "/page1")
   ;; Navigating to http://127.0.0.1:8080/page1.html executes on-page1
   ;; There is no .html file - it is just a route to CLOG handler

@@ -304,6 +304,7 @@ the default answer. (Private)"
 		   &key
 		     (host             "0.0.0.0")
 		     (port             8080)
+		     (extended-routing nil)
 		     (boot-file        "/boot.html")
 		     (boot-function    nil)
 		     (static-boot-html nil)
@@ -314,12 +315,13 @@ as the default route for '/' to establish web-socket connections and
 static files located at STATIC-ROOT. If BOOT-FILE is nil no initial
 clog-path's will be setup, use clog-path to add. The
 on-connect-handler needs to indentify the path by querying the
-browser. See PATH-NAME (in CLOG-LOCATION). If static-boot-js is nil
-then boot.js is served from the file /js/boot.js instead of the
-compiled version. If static-boot-html is t if boot.html is not present
-will use compiled version. boot-function if set is called with the url
-and the contents of boot-file and its return value replaces the
-contents sent to the brower."
+browser. See PATH-NAME (in CLOG-LOCATION). If EXTENDED-ROUTING is t
+routes will match even if extend with additional / and additional
+paths. If static-boot-js is nil then boot.js is served from the file
+/js/boot.js instead of the compiled version. If static-boot-html is t
+if boot.html is not present will use compiled version. boot-function
+if set is called with the url and the contents of boot-file and its
+return value replaces the contents sent to the brower."
   (set-on-connect on-connect-handler)
   (when boot-file
     (set-clog-path "/" boot-file))
@@ -338,6 +340,14 @@ contents sent to the brower."
 	     ;; Special handling of "clog paths"
 	     (let ((clog-path (gethash (getf env :path-info)
 				       *url-to-boot-file*)))
+	       (unless clog-path
+		 (when extended-routing
+		   (maphash (lambda (k v)
+			      (unless (equal k "/")
+				(when (ppcre:scan (format nil "^~A/" k)
+						  (getf env :path-info))
+				  (setf clog-path v))))
+			    *url-to-boot-file*)))
 	       (cond (clog-path
 		      (let ((file (uiop:subpathname static-root clog-path)))
 			(with-open-file (stream file :direction :input

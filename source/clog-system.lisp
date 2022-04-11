@@ -26,6 +26,9 @@ the same as the clog directy this overides the relative paths used in them.")
 (defvar *static-root* nil
   "Contains the static-root setting after initialization.")
 
+(defvar *extended-routing* nil
+  "If true extended routing is done.")
+
 ;;;;;;;;;;;;;;;;
 ;; initialize ;;
 ;;;;;;;;;;;;;;;;
@@ -35,11 +38,20 @@ the same as the clog directy this overides the relative paths used in them.")
     (format t "Start new window handler on connection-id - ~A" connection-id))
   (let ((body (make-clog-body connection-id)))
     (let* ((path          (path-name (location body)))
-	   (on-new-window (or (gethash path *url-to-on-new-window*)
-			      (gethash :default *url-to-on-new-window*)
-			      (gethash "/" *url-to-on-new-window*))))
+	   (on-new-window (gethash path *url-to-on-new-window*)))
+      (unless on-new-window
+	(when *extended-routing*
+	    (maphash (lambda (k v)
+		       (unless (equal k "/")
+			 (when (ppcre:scan (format nil "^~A/" k) path)
+			   (setf on-new-window v))))
+		     *url-to-on-new-window*)))
+      (unless on-new-window
+	  (setf on-new-window (or (gethash :default *url-to-on-new-window*)
+				  (gethash "/" *url-to-on-new-window*))))
       (if on-new-window
 	  (progn
+	    (setf (connection-data-item body "clog-path") path)
 	    (setf (connection-data-item body "clog-body") body)
 	    (setf (connection-data-item body "clog-sync") (bordeaux-threads:make-lock))
 	    (funcall on-new-window body))
@@ -50,6 +62,7 @@ the same as the clog directy this overides the relative paths used in them.")
      &key
        (host             "0.0.0.0")
        (port             8080)
+       (extended-routing nil)
        (boot-file        "/boot.html")
        (boot-function    nil)
        (static-boot-html nil)
@@ -58,20 +71,22 @@ the same as the clog directy this overides the relative paths used in them.")
 			    (asdf:system-source-directory :clog))))
   "Inititalize CLOG on a socket using HOST and PORT to serve BOOT-FILE
 as the default route to establish web-socket connections and static
-files located at STATIC-ROOT. If CLOG was already initialized and not
-shut down, this function does the same as set-on-new-window (does not
-change the static-root). If ON-NEW-WINDOW-HANDLER is nil no handler is
-set and none is removed. STATIC-ROOT by default is the \"directory
-CLOG is installed in ./static-files\" If the variable
-clog:*overide-static-root* is set STATIC-ROOT will be ignored. If
-BOOT-FILE is nil no default boot-file will be set for root path,
-i.e. /. If static-boot-js is t then boot.js is served from the file
-/js/boot.js instead of the compiled version. If static-boot-html is nil
-if boot.html is not present will use compiled version. boot-function
-if set is called with the url and the contents of boot-file and its
-return value replaces the contents sent to the brower, this allows
-adding content for search engine optimization, see tutorial 12 for an
-example."
+files located at STATIC-ROOT. If EXTENDED-ROUTING is t routes will
+match even if extend with additional / and additional paths. If CLOG
+was already initialized and not shut down, this function does the same
+as set-on-new-window (does not change the static-root). If
+ON-NEW-WINDOW-HANDLER is nil no handler is set and none is
+removed. STATIC-ROOT by default is the \"directory CLOG is installed
+in ./static-files\" If the variable clog:*overide-static-root* is set
+STATIC-ROOT will be ignored. If BOOT-FILE is nil no default boot-file
+will be set for root path, i.e. /. If static-boot-js is t then boot.js
+is served from the file /js/boot.js instead of the compiled
+version. If static-boot-html is nil if boot.html is not present will
+use compiled version. boot-function if set is called with the url and
+the contents of boot-file and its return value replaces the contents
+sent to the brower, this allows adding content for search engine
+optimization, see tutorial 12 for an example."
+  (setf *extended-routing* extended-routing)
   (when on-new-window-handler
     (set-on-new-window on-new-window-handler :path "/" :boot-file boot-file))
   (unless *clog-running*
@@ -82,6 +97,7 @@ example."
     (clog-connection:initialize #'on-connect
 				:host             host
 				:port             port
+				:extended-routing extended-routing
 				:boot-file        boot-file
 				:boot-function    boot-function
 				:static-boot-html static-boot-html
