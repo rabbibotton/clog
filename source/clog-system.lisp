@@ -62,6 +62,7 @@ the same as the clog directy this overides the relative paths used in them.")
      &key
        (host             "0.0.0.0")
        (port             8080)
+       (server           :hunchentoot)
        (extended-routing nil)
        (boot-file        "/boot.html")
        (boot-function    nil)
@@ -71,10 +72,11 @@ the same as the clog directy this overides the relative paths used in them.")
 			    (asdf:system-source-directory :clog))))
   "Inititalize CLOG on a socket using HOST and PORT to serve BOOT-FILE
 as the default route to establish web-socket connections and static
-files located at STATIC-ROOT. If EXTENDED-ROUTING is t routes will
-match even if extend with additional / and additional paths. If CLOG
-was already initialized and not shut down, this function does the same
-as set-on-new-window (does not change the static-root). If
+files located at STATIC-ROOT. The webserver used with CLACK can be
+chosed with :SERVER. If EXTENDED-ROUTING is t routes will match even
+if extend with additional / and additional paths. If CLOG was already
+initialized and not shut down, this function does the same as
+set-on-new-window (does not change the static-root). If
 ON-NEW-WINDOW-HANDLER is nil no handler is set and none is
 removed. STATIC-ROOT by default is the \"directory CLOG is installed
 in ./static-files\" If the variable clog:*overide-static-root* is set
@@ -97,6 +99,7 @@ optimization, see tutorial 12 for an example."
     (clog-connection:initialize #'on-connect
 				:host             host
 				:port             port
+				:server           server
 				:extended-routing extended-routing
 				:boot-file        boot-file
 				:boot-function    boot-function

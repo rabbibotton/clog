@@ -295,7 +295,6 @@ the default answer. (Private)"
       (format t "Condition caught in clog-server - ~A.~&" c)
       (values 0 c))))
 
-
 ;;;;;;;;;;;;;;;;
 ;; initialize ;;
 ;;;;;;;;;;;;;;;;
@@ -304,6 +303,7 @@ the default answer. (Private)"
 		   &key
 		     (host             "0.0.0.0")
 		     (port             8080)
+		     (server           :hunchentoot)
 		     (extended-routing nil)
 		     (boot-file        "/boot.html")
 		     (boot-function    nil)
@@ -312,16 +312,17 @@ the default answer. (Private)"
 		     (static-root      #P"./static-files/"))
   "Initialize CLOG on a socket using HOST and PORT to serve BOOT-FILE
 as the default route for '/' to establish web-socket connections and
-static files located at STATIC-ROOT. If BOOT-FILE is nil no initial
-clog-path's will be setup, use clog-path to add. The
-on-connect-handler needs to indentify the path by querying the
-browser. See PATH-NAME (in CLOG-LOCATION). If EXTENDED-ROUTING is t
-routes will match even if extend with additional / and additional
-paths. If static-boot-js is nil then boot.js is served from the file
-/js/boot.js instead of the compiled version. If static-boot-html is t
-if boot.html is not present will use compiled version. boot-function
-if set is called with the url and the contents of boot-file and its
-return value replaces the contents sent to the brower."
+static files located at STATIC-ROOT. The webserver used with CLACK can
+be chosed with :SERVER. If BOOT-FILE is nil no initial clog-path's
+will be setup, use clog-path to add. The on-connect-handler needs to
+indentify the path by querying the browser. See PATH-NAME (in
+CLOG-LOCATION). If EXTENDED-ROUTING is t routes will match even if
+extend with additional / and additional paths. If static-boot-js is
+nil then boot.js is served from the file /js/boot.js instead of the
+compiled version. If static-boot-html is t if boot.html is not present
+will use compiled version. boot-function if set is called with the url
+and the contents of boot-file and its return value replaces the
+contents sent to the brower."
   (set-on-connect on-connect-handler)
   (when boot-file
     (set-clog-path "/" boot-file))
@@ -392,7 +393,7 @@ return value replaces the contents sent to the brower."
 	 ;; Handle Websocket connection
 	 (lambda (env)
 	   (clog-server env))))
-  (setf *client-handler* (clack:clackup *app* :address host :port port))
+  (setf *client-handler* (clack:clackup *app* :server server :address host :port port))
   (format t "HTTP listening on    : ~A:~A~%" host port)
   (format t "HTML Root            : ~A~%"    static-root)
   (format t "Boot function added  : ~A~%"    (if boot-function
