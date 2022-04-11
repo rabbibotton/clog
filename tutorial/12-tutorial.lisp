@@ -90,10 +90,11 @@
   ;; search engines and text browser. This allows setting
   ;; custom data for search engine optimizations which are
   ;; aware of these type of dynamic sites.
-  (declare (ignore path))
-  (funcall (cl-template:compile-template content)
-	   (list :meta "<meta name='description' content='CLOG Tutorial 12'>"
-		 :body "Tutorial 12 for CLOG")))
+  (if (equal path "/")
+    (funcall (cl-template:compile-template content)
+	     (list :meta "<meta name='description' content='CLOG Tutorial 12'>"
+		   :body "Tutorial 12 for CLOG"))
+    content))
 
 (defun start-tutorial ()
   "Start turtorial."
