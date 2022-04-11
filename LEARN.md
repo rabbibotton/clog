@@ -37,6 +37,7 @@ already being productive means having a bang up time doin' it all.
 
 Other Tutorials and General Material:
 - [lisp-lang](https://lisp-lang.org/)
+- [Awesome-CL libraries](https://github.com/CodyReichert/awesome-cl)
 
 Other Quick Resources:
 - [Lisp Cheat Sheet](https://github.com/ashok-khanna/lisp-notes)
