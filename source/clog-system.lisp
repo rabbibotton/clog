@@ -106,6 +106,7 @@ optimization, see tutorial 12 for an example."
 				:host             host
 				:port             port
 				:server           server
+				:long-poll-first  long-poll-first
 				:extended-routing extended-routing
 				:boot-file        boot-file
 				:boot-function    boot-function

@@ -359,19 +359,29 @@ properties (to use for :property) are based on the event type.</p>
 <a id="CLOG:INITIALIZE%20FUNCTION"></a></p>
 
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#CLOG:INITIALIZE%20FUNCTION" >INITIALIZE</a></span></span> <span class="locative-args">ON-NEW-WINDOW-HANDLER &amp;KEY (HOST &quot;0.0.0.0&quot;) (PORT 8080) (BOOT-FILE &quot;/boot.html&quot;) (STATIC-BOOT-JS <code>NIL</code>) (STATIC-ROOT (<a href="http://www.lispworks.com/documentation/HyperSpec/Body/f_merge_.htm" title="MERGE-PATHNAMES FUNCTION"><code>MERGE-PATHNAMES</code></a> &quot;./static-files/&quot; (<code>ASDF/SYSTEM:SYSTEM-SOURCE-DIRECTORY</code> <code>:CLOG</code>)))</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#CLOG:INITIALIZE%20FUNCTION" >INITIALIZE</a></span></span> <span class="locative-args">ON-NEW-WINDOW-HANDLER &amp;KEY (HOST &quot;0.0.0.0&quot;) (PORT 8080) (SERVER <code>:HUNCHENTOOT</code>) (EXTENDED-ROUTING <code>NIL</code>) (LONG-POLL-FIRST <code>NIL</code>) (BOOT-FILE &quot;/boot.html&quot;) (BOOT-FUNCTION <code>NIL</code>) (STATIC-BOOT-HTML <code>NIL</code>) (STATIC-BOOT-JS <code>NIL</code>) (STATIC-ROOT (<a href="http://www.lispworks.com/documentation/HyperSpec/Body/f_merge_.htm" title="MERGE-PATHNAMES FUNCTION"><code>MERGE-PATHNAMES</code></a> &quot;./static-files/&quot; (<code>ASDF/SYSTEM:SYSTEM-SOURCE-DIRECTORY</code> <code>:CLOG</code>)))</span></span></p>
 
 <p>Inititalize CLOG on a socket using <code>HOST</code> and <code>PORT</code> to serve <code>BOOT-FILE</code>
 as the default route to establish web-socket connections and static
-files located at <code>STATIC-ROOT</code>. If CLOG was already initialized and not
-shut down, this function does the same as set-on-new-window (does not
-change the static-root). If <code>ON-NEW-WINDOW-HANDLER</code> is nil no handler is
-set and none is removed. <code>STATIC-ROOT</code> by default is the &quot;directory CLOG
-is installed in ./static-files&quot; If the variable clog:<em>overide-static-root</em>
-is set <code>STATIC-ROOT</code> will be ignored. If <code>BOOT-FILE</code> is nil no default
-boot-file will be set for root path, i.e. /. If static-boot-js is t
-then boot.js is served from the file /js/boot.js instead of the
-compiled version.</p></li>
+files located at <code>STATIC-ROOT</code>. The webserver used with CLACK can be
+chosed with <code>:SERVER</code>. If <code>EXTENDED-ROUTING</code> is t routes will match even
+if extend with additional / and additional paths. If
+LONG-POLLING-FIRST is t, the output is sent as <code>HTML</code> instead of
+websocket commands until on-new-window-handler ends, this should be
+used in webserver applications to enable crawling of your website. If
+CLOG was already initialized and not shut down, this function does the
+same as set-on-new-window (does not change the static-root). If
+<code>ON-NEW-WINDOW-HANDLER</code> is nil no handler is set and none is
+removed. <code>STATIC-ROOT</code> by default is the &quot;directory CLOG is installed
+in ./static-files&quot; If the variable clog:<em>overide-static-root</em> is set
+<code>STATIC-ROOT</code> will be ignored. If <code>BOOT-FILE</code> is nil no default boot-file
+will be set for root path, i.e. /. If static-boot-js is t then boot.js
+is served from the file /js/boot.js instead of the compiled
+version. If static-boot-html is nil if boot.html is not present will
+use compiled version. boot-function if set is called with the url and
+the contents of boot-file and its return value replaces the contents
+sent to the brower, this allows adding content for search engine
+optimization, see tutorial 12 for an example.</p></li>
 </ul>
 
 <p><a id="x-28CLOG-3ASET-ON-NEW-WINDOW-20FUNCTION-29"></a>
@@ -380,11 +390,11 @@ compiled version.</p></li>
 <ul>
 <li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#CLOG:SET-ON-NEW-WINDOW%20FUNCTION" >SET-ON-NEW-WINDOW</a></span></span> <span class="locative-args">ON-NEW-WINDOW-HANDLER &amp;KEY (PATH &quot;/&quot;) (BOOT-FILE &quot;/boot.html&quot;)</span></span></p>
 
-<p>Set or change the on-new-window handler or set a new one for <code>PATH</code>
-using BOOT_FILE. Paths should always begin with a '/'. If <code>PATH</code> is set to
-&quot;default&quot; will use boot-file when the route can not be determined, ie
-a static html file including boot.js that has not been added with this
-function. If <code>BOOT-FILE</code> is nil path is removed.</p></li>
+<p>Set or change the <code>ON-NEW-WINDOW-HANDLER</code> for <code>PATH</code> using
+BOOT_FILE. Paths should always begin with a forward slash '/'. If <code>PATH</code>
+is set to :default any path without another route and there is no
+static file matching the requested path <code>ON-NEW-WINDOW-HANDLER</code> and
+<code>BOOT-FILE</code> will be used. If <code>BOOT-FILE</code> is nil path is removed.</p></li>
 </ul>
 
 <p><a id="x-28CLOG-3ASHUTDOWN-20FUNCTION-29"></a>
