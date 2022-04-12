@@ -1,8 +1,19 @@
 /*static version*/
-var ws;
+var ws=null;
 var adr;
 var clog={};
 var pingerid;
+var s = document.location.search;
+var tokens;
+var r = /[?&]?([^=]+)=([^&]*)/g;
+
+clog['body']=document.body;
+clog['head']=document.head;
+clog['documentElement']=document.documentElement;
+clog['window']=window;
+clog['navigator']=navigator;
+clog['document']=window.document;
+clog['location']=window.location;
 
 if (typeof clog_debug == 'undefined') {
     clog_debug = false;
@@ -38,7 +49,7 @@ function Setup_ws() {
             console.error (e.message);
         }
     }
-    
+
     ws.onerror = function (event) {
         console.log ('onerror: reconnect');
         ws = null;
@@ -52,11 +63,11 @@ function Setup_ws() {
             Shutdown_ws(event);
         }
     }
-    
+
     ws.onclose = function (event) {
         console.log ('onclose: reconnect');
         ws = null;
-        ws = new WebSocket (adr  + '?r=' + clog['connection_id']);
+        ws = new WebSocket (adr + '?r=' + clog['connection_id']);
         ws.onopen = function (event) {
             console.log ('onclose: reconnect successful');
             Setup_ws();
@@ -68,43 +79,37 @@ function Setup_ws() {
     }
 }
 
-$( document ).ready(function() {
-    var s = document.location.search;
-    var tokens;
-    var r = /[?&]?([^=]+)=([^&]*)/g;
-
-    clog['body']=document.body;
-    clog['head']=document.head;
-    clog['documentElement']=document.documentElement;
-    clog['window']=window;
-    clog['navigator']=navigator;
-    clog['document']=window.document;
-    clog['location']=window.location;
-    
+function Open_ws() {
     if (location.protocol == 'https:') {
-        adr = 'wss://' + location.hostname;
+	adr = 'wss://' + location.hostname;
     } else {
-        adr = 'ws://' + location.hostname;
+	adr = 'ws://' + location.hostname;
     }
-    
+
     if (location.port != '') { adr = adr + ':' + location.port; }
     adr = adr + '/clog';
-    
+
+    if (clog['connection_id']) { adr = adr  + '?r=' + clog['connection_id'] }
+
     try {
-        console.log ('connecting to ' + adr);
-        ws = new WebSocket (adr);
+	console.log ('connecting to ' + adr);
+	ws = new WebSocket (adr);
     } catch (e) {
-        console.log ('trying again, connecting to ' + adr);
-        ws = new WebSocket (adr);
+	console.log ('trying again, connecting to ' + adr);
+	ws = new WebSocket (adr);
     }
-    
+
     if (ws != null) {
-        ws.onopen = function (event) {
+	ws.onopen = function (event) {
             console.log ('connection successful');
             Setup_ws();
-        }
-        pingerid = setInterval (function () {Ping_ws ();}, 10000);
+	}
+	pingerid = setInterval (function () {Ping_ws ();}, 10000);
     } else {
-        document.writeln ('If you are seeing this your browser or your connection to the internet is blocking websockets.');
+	document.writeln ('If you are seeing this your browser or your connection to the internet is blocking websockets.');
     }
+}
+
+$( document ).ready(function() {
+    if (ws == null) { Open_ws(); }
 });

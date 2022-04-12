@@ -34,12 +34,12 @@
       <ul>
         <li><a href='/page1'>/page1</a> - a CLOG app
         <li><a href='/page1.html'>/page1.html</a> - a CLOG app mascarading as a .html
-        <li><a href='/somepath/hi/'>/somepath/hi/</a> - a CLOG app mascarading as a .html
+        <li><a href='/somepath/hi/'>/somepath/hi/</a> - deeper paths
         <li><a href='/page2'>/page2</a> - a CLOG app using an alternative boot file
         <li><a href='/page3'>/page3</a> - tutorial 11 as part of this tutorial
         <li><a href='/tutorial/tut-11.html'>/tutorial/tut-11.html</a> - an html file using boot.js
         <li><a href='/tutorial/some-file.html'>/tutorial/some-file.html</a> - an html file using boot.js
-        <li><a href='/tutorial/regular-file.html'>'/tutorial/regular-file.html</a> - a regular html file
+        <li><a href='/tutorial/regular-file.html'>/tutorial/regular-file.html</a> - a regular html file
      </ul>"))
 
 (defun on-page1 (body)
@@ -100,9 +100,12 @@
   "Start turtorial."
   ;; Setup the default route / to on-main
   ;; :boot-function allows us to add or modify our boot-files content
-  ;; for search engine optimization
-  (initialize 'on-main :boot-function 'add-search-optimizations
-		       :extended-routing t)
+  ;; for search engine optimization. We choose long-polling-first so
+  ;; our website can be crawled for content by google
+  (initialize 'on-main
+	      :long-poll-first t
+	      :boot-function 'add-search-optimizations
+	      :extended-routing t)
   ;; Navigating to http://127.0.0.1:8080/page1 executes on-page1
   ;; Since extended-routing is t /page1/any/thing/else also routes to /page1
   (set-on-new-window 'on-page1 :path "/page1")

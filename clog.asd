@@ -11,8 +11,8 @@
   :pathname "source/"
   :depends-on (#:clack #:websocket-driver #:alexandria #:hunchentoot #:cl-ppcre
 	       #:bordeaux-threads #:trivial-open-browser #:parse-float #:quri
-	       #:lack-middleware-static #:lack-request #:mgl-pax #:cl-template
-	       #:closer-mop
+	       #:lack-middleware-static #:lack-request #:lack-util-writer-stream
+	       #:closer-mop #:mgl-pax #:cl-template
 	       #:sqlite #:cl-dbi)
   :components ((:file "clog-connection")
 	       (:file "clog")

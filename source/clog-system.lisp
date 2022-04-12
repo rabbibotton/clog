@@ -37,7 +37,9 @@ the same as the clog directy this overides the relative paths used in them.")
   (when clog-connection:*verbose-output*
     (format t "Start new window handler on connection-id - ~A" connection-id))
   (let ((body (make-clog-body connection-id)))
-    (let* ((path          (path-name (location body)))
+    (let* ((path          (if clog-connection::*long-poll-url*
+			      clog-connection::*long-poll-url*
+			      (path-name (location body))))
 	   (on-new-window (gethash path *url-to-on-new-window*)))
       (unless on-new-window
 	(when *extended-routing*
@@ -64,6 +66,7 @@ the same as the clog directy this overides the relative paths used in them.")
        (port             8080)
        (server           :hunchentoot)
        (extended-routing nil)
+       (long-poll-first  nil)
        (boot-file        "/boot.html")
        (boot-function    nil)
        (static-boot-html nil)
@@ -74,9 +77,12 @@ the same as the clog directy this overides the relative paths used in them.")
 as the default route to establish web-socket connections and static
 files located at STATIC-ROOT. The webserver used with CLACK can be
 chosed with :SERVER. If EXTENDED-ROUTING is t routes will match even
-if extend with additional / and additional paths. If CLOG was already
-initialized and not shut down, this function does the same as
-set-on-new-window (does not change the static-root). If
+if extend with additional / and additional paths. If
+LONG-POLLING-FIRST is t, the output is sent as HTML instead of
+websocket commands until on-new-window-handler ends, this should be
+used in webserver applications to enable crawling of your website. If
+CLOG was already initialized and not shut down, this function does the
+same as set-on-new-window (does not change the static-root). If
 ON-NEW-WINDOW-HANDLER is nil no handler is set and none is
 removed. STATIC-ROOT by default is the \"directory CLOG is installed
 in ./static-files\" If the variable clog:*overide-static-root* is set

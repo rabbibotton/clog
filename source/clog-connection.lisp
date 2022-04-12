@@ -98,6 +98,11 @@ script."
 
 (defvar *url-to-boot-file* (make-hash-table* :test 'equalp) "URL to boot-file")
 
+(defvar *long-poll-first* nil
+  "Dynamic variable indicating to use html output instead of
+   websocket for output")
+(defvar *long-poll-url* nil
+  "Dynamic variable indicating the url path used.")
 
 ;;;;;;;;;;;;;;;;;
 ;; generate-id ;;
@@ -305,6 +310,7 @@ the default answer. (Private)"
 		     (port             8080)
 		     (server           :hunchentoot)
 		     (extended-routing nil)
+		     (long-poll-first  nil)
 		     (boot-file        "/boot.html")
 		     (boot-function    nil)
 		     (static-boot-html nil)
@@ -313,16 +319,19 @@ the default answer. (Private)"
   "Initialize CLOG on a socket using HOST and PORT to serve BOOT-FILE
 as the default route for '/' to establish web-socket connections and
 static files located at STATIC-ROOT. The webserver used with CLACK can
-be chosed with :SERVER. If BOOT-FILE is nil no initial clog-path's
-will be setup, use clog-path to add. The on-connect-handler needs to
-indentify the path by querying the browser. See PATH-NAME (in
-CLOG-LOCATION). If EXTENDED-ROUTING is t routes will match even if
-extend with additional / and additional paths. If static-boot-js is
-nil then boot.js is served from the file /js/boot.js instead of the
-compiled version. If static-boot-html is t if boot.html is not present
-will use compiled version. boot-function if set is called with the url
-and the contents of boot-file and its return value replaces the
-contents sent to the brower."
+be chosed with :SERVER. If LONG-POLLING-FIRST is t, the output is sent
+as HTML instead of websocket commands until on-new-window-handler
+ends, this should be used in webserver applications to enable crawling
+of your website. If BOOT-FILE is nil no initial clog-path's will be
+setup, use clog-path to add. The on-connect-handler needs to indentify
+the path by querying the browser. See PATH-NAME (in CLOG-LOCATION). If
+EXTENDED-ROUTING is t routes will match even if extend with additional
+/ and additional paths. If static-boot-js is nil then boot.js is
+served from the file /js/boot.js instead of the compiled version. If
+static-boot-html is t if boot.html is not present will use compiled
+version. boot-function if set is called with the url and the contents
+of boot-file and its return value replaces the contents sent to the
+brower."
   (set-on-connect on-connect-handler)
   (when boot-file
     (set-clog-path "/" boot-file))
@@ -334,19 +343,19 @@ contents sent to the brower."
 	     (if (and (eq static-boot-js nil)
 		      (equalp (getf env :path-info) "/js/boot.js"))
 		 `(200 (:content-type "text/javascript")
-		   (,(compiled-boot-js)))
+		       (,(compiled-boot-js)))
 		 (funcall app env))))
 	 (lambda (app)
 	   (lambda (env)
 	     ;; Special handling of "clog paths"
-	     (let ((clog-path (gethash (getf env :path-info)
-				       *url-to-boot-file*)))
+	     (let* ((url-path  (getf env :path-info))
+		    (clog-path (gethash url-path *url-to-boot-file*)))
 	       (unless clog-path
 		 (when extended-routing
 		   (maphash (lambda (k v)
 			      (unless (equal k "/")
 				(when (ppcre:scan (format nil "^~A/" k)
-						  (getf env :path-info))
+						  url-path)
 				  (setf clog-path v))))
 			    *url-to-boot-file*)))
 	       (cond (clog-path
@@ -360,10 +369,10 @@ contents sent to the brower."
 						   (compiled-boot-html nil nil))))
 				(post-data nil))
 			    (when stream
-				(read-sequence page-data stream))
+			      (read-sequence page-data stream))
 			    (when boot-function
 			      (setf page-data (funcall boot-function
-						       (getf env :path-info)
+						       url-path
 						       page-data)))
 			    (when (search "multipart/form-data;"
 					  (getf env :content-type))
@@ -376,12 +385,46 @@ contents sent to the brower."
 					 "application/x-www-form-urlencoded")
 			      (setf post-data (make-string (getf env :content-length)))
 			      (read-sequence post-data (getf env :raw-body)))
-      			    `(200 (:content-type "text/html")
-				  (,(if post-data
-				      (concatenate 'string page-data
-				        (format nil "<script>clog['post-data']='~A'</script>"
-						post-data))
-				      page-data)))))))
+			    (cond (long-poll-first
+				   (let ((id (generate-id)))
+				     (setf (gethash id *connection-data*) (make-hash-table* :test #'equal))
+				     (setf (gethash "connection-id" (get-connection-data id)) id)
+				     (format t "New html connection id - ~A~%" id)
+				     (lambda (responder)
+				       (let* ((writer (funcall responder '(200 (:content-type "text/html"))))
+					      (stream (lack.util.writer-stream:make-writer-stream writer))
+					      (*long-poll-url* url-path)
+					      (*long-poll-first* stream))
+					 (write-sequence page-data stream)
+					 (write-sequence
+					  (format nil "<script>clog['connection_id']=~A;Open_ws();</script>" id)
+					  stream)
+					 (when post-data
+					   (write-sequence
+					    (format nil "<script>clog['post-data']='~A'</script>"
+						    post-data)
+					    stream))
+					 (if *break-on-error*
+					     (funcall *on-connect-handler* id)
+					     (handler-case
+						 (funcall *on-connect-handler* id)
+					       (t (c)
+						 (format t "Condition caught connection ~A - ~A.~&" id c)
+						 (values 0 c))))
+					 (when *long-poll-first*
+					   (finish-output stream))
+					 (format t "HTML connection closed - ~A~%" id)))))
+				  (t
+				   (lambda (responder)
+				     (let* ((writer (funcall responder '(200 (:content-type "text/html"))))
+					    (stream (lack.util.writer-stream:make-writer-stream writer)))
+				       (write-sequence page-data stream)
+				       (when post-data
+					 (write-sequence
+					  (format nil "<script>clog['post-data']='~A'</script>"
+						  post-data)
+					  stream))
+				       (finish-output stream)))))))))
 		     ;; Pass the handling on to next rule
 		     (t (funcall app env))))))
 	 (:static :path (lambda (path)
@@ -395,7 +438,10 @@ contents sent to the brower."
 	   (clog-server env))))
   (setf *client-handler* (clack:clackup *app* :server server :address host :port port))
   (format t "HTTP listening on    : ~A:~A~%" host port)
-  (format t "HTML Root            : ~A~%"    static-root)
+  (format t "HTML root            : ~A~%"    static-root)
+  (format t "Long poll first      : ~A~%"    (if long-poll-first
+						 "yes"
+						 "no"))
   (format t "Boot function added  : ~A~%"    (if boot-function
 						 "yes"
 						 "no"))
@@ -464,9 +510,12 @@ contents sent to the brower."
 
 (defun execute (connection-id message)
   "Execute SCRIPT on CONNECTION-ID, disregard return value."
-  (let ((con (get-connection connection-id)))
-    (when con
-      (websocket-driver:send con message))))
+  (if *long-poll-first*
+      (write-sequence (format nil "<script>~A</script>" message)
+		      *long-poll-first*)
+      (let ((con (get-connection connection-id)))
+	(when con
+	  (websocket-driver:send con message)))))
 
 ;;;;;;;;;;;
 ;; query ;;
@@ -475,6 +524,16 @@ contents sent to the brower."
 (defun query (connection-id script &key (default-answer nil))
   "Execute SCRIPT on CONNECTION-ID, return value. If times out answer
 DEFAULT-ANSWER."
+  ;; Provide delay if needed to establish websocket connection for
+  ;; response.
+  (when *long-poll-first*
+    (finish-output *long-poll-first*)
+    (loop
+      for n from 1 to 10 do
+	(let ((con (get-connection connection-id)))
+	  (when con
+	    (return))
+	  (sleep .1))))
   (let ((uid (generate-id)))
     (prep-query uid (when default-answer (format nil "~A" default-answer)))
     (execute connection-id
@@ -594,10 +653,23 @@ the browser contents in case of connection loss."
 
 (defun compiled-boot-js ()
   "Returns a compiled version of current version of boot.js (private)"
-"var ws;
+"
+/*compiled version*/
+var ws=null;
 var adr;
 var clog={};
 var pingerid;
+var s = document.location.search;
+var tokens;
+var r = /[?&]?([^=]+)=([^&]*)/g;
+
+clog['body']=document.body;
+clog['head']=document.head;
+clog['documentElement']=document.documentElement;
+clog['window']=window;
+clog['navigator']=navigator;
+clog['document']=window.document;
+clog['location']=window.location;
 
 if (typeof clog_debug == 'undefined') {
     clog_debug = false;
@@ -651,7 +723,7 @@ function Setup_ws() {
     ws.onclose = function (event) {
         console.log ('onclose: reconnect');
         ws = null;
-        ws = new WebSocket (adr  + '?r=' + clog['connection_id']);
+        ws = new WebSocket (adr + '?r=' + clog['connection_id']);
         ws.onopen = function (event) {
             console.log ('onclose: reconnect successful');
             Setup_ws();
@@ -663,43 +735,39 @@ function Setup_ws() {
     }
 }
 
-$( document ).ready(function() {
-    var s = document.location.search;
-    var tokens;
-    var r = /[?&]?([^=]+)=([^&]*)/g;
-
-    clog['body']=document.body;
-    clog['head']=document.head;
-    clog['documentElement']=document.documentElement;
-    clog['window']=window;
-    clog['navigator']=navigator;
-    clog['document']=window.document;
-    clog['location']=window.location;
-
+function Open_ws() {
     if (location.protocol == 'https:') {
-        adr = 'wss://' + location.hostname;
+	adr = 'wss://' + location.hostname;
     } else {
-        adr = 'ws://' + location.hostname;
+	adr = 'ws://' + location.hostname;
     }
 
     if (location.port != '') { adr = adr + ':' + location.port; }
     adr = adr + '/clog';
 
+    if (clog['connection_id']) { adr = adr  + '?r=' + clog['connection_id'] }
+
     try {
-        console.log ('connecting to ' + adr);
-        ws = new WebSocket (adr);
+	console.log ('connecting to ' + adr);
+	ws = new WebSocket (adr);
     } catch (e) {
-        console.log ('trying again, connecting to ' + adr);
-        ws = new WebSocket (adr);
+	console.log ('trying again, connecting to ' + adr);
+	ws = new WebSocket (adr);
     }
 
     if (ws != null) {
-        ws.onopen = function (event) {
+	ws.onopen = function (event) {
             console.log ('connection successful');
             Setup_ws();
-        }
-        pingerid = setInterval (function () {Ping_ws ();}, 10000);
+	}
+	pingerid = setInterval (function () {Ping_ws ();}, 10000);
     } else {
-        document.writeln ('If you are seeing this your browser or your connection to the internet is blocking websockets.');
+	document.writeln ('If you are seeing this your browser or your connection to the internet is blocking websockets.');
     }
-});")
+}
+
+$( document ).ready(function() {
+    if (ws == null) { Open_ws(); }
+});
+
+")
