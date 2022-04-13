@@ -41,9 +41,7 @@
 	      :long-poll-first t
 	      ;; Supply so meta info
 	      :boot-function (clog-web-meta
-			      "clogpower.com - CLOG - the common lisp omnificent gui")
-	      :static-root (merge-pathnames "./www/"
-					    (asdf:system-source-directory :cweb)))
+			      "clogpower.com - CLOG - the common lisp omnificent gui"))
   ;; Add /about
   (set-on-new-window 'on-about :path "/about")
   (open-browser))
