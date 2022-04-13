@@ -64,7 +64,7 @@
   (initialize 'on-main
 	      ;; Use long polling technique so pages are crawled by google
 	      :long-poll-first t
-	      ;; Supply so meta info
+	      ;; Supply some meta info
 	      :boot-function (clog-web-meta
 			      "clogpower.com - CLOG - the common lisp omnificent gui"))
   ;; clog web helper to set up routes in menu
