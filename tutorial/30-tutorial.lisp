@@ -13,6 +13,7 @@
 (defun init-site (body)
   (clog-web-initialize body)
   (create-web-site body
+		   :theme 'clog-web:default-theme
 		   :settings '(:menu-class "w3-black")
 		   :title "CLOG - The Common Lisp Omnificent GUI"
 		   :footer "(c) 2022 David Botton"
