@@ -240,6 +240,7 @@ CLOG Tutorials
 - [27-tutorial.lisp](tutorial/27-tutorial.lisp) - Panel Box Layouts
 - [28-tutorial/](tutorial/28-tutorial) - CLOG Builder Hello - A minimalist CLOG Builder project
 - [29-tutorial.lisp](tutorial/29-tutorial.lisp) - Presentations (and jQuery) - linking lisp objects to clog objects
+- [30-tutorial.lisp](tutorial/30-tutorial.lisp) - Instant websites - clog-web-site
 
 CLOG Demos
 
@@ -274,6 +275,7 @@ High Order Extensions to CLOG
   - Menus
   - Alerts
   - Forms
+  - Instant Web Sites - clog-web-site
 
 - clog-panels - Quick application layouts
 

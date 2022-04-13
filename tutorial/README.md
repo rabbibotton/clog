@@ -55,3 +55,4 @@ Tutorial Summary
 - 27-tutorial.lisp - Panel Box Layouts
 - 28-tutorial.lisp - CLOG Builder Hello - A minimalist CLOG Builder project
 - 29-tutorial.lisp - Presentations (and jQuery) - linking lisp objects to clog objects
+- 30-tutorial.lisp - Instant websites - clog-web-site

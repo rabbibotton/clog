@@ -445,12 +445,12 @@ brower."
   (format t "Boot function added  : ~A~%"    (if boot-function
 						 "yes"
 						 "no"))
-  (format t "Boot html source     : ~A~%"    (if static-boot-html
-						 "actual file always"
-						 "compiled in when no file"))
-  (format t "Boot js source       : ~A~%"    (if static-boot-js
-						 "actual file always"
-						 "compiled in always"))
+  (format t "Boot html source use : ~A~%"    (if static-boot-html
+						 "static file"
+						 "compiled version, when no file"))
+  (format t "Boot js source use   : ~A~%"    (if static-boot-js
+						 "static file"
+						 "compiled version"))
   (format t "Boot file for path / : ~A~%"    boot-file)
   *client-handler*)
 
@@ -511,7 +511,7 @@ brower."
 (defun execute (connection-id message)
   "Execute SCRIPT on CONNECTION-ID, disregard return value."
   (if *long-poll-first*
-      (write-sequence (format nil "<script>~A</script>" message)
+      (write-sequence (format nil "<script>~A</script>~%" message)
 		      *long-poll-first*)
       (let ((con (get-connection connection-id)))
 	(when con

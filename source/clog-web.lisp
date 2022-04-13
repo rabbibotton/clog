@@ -55,13 +55,13 @@
   (composite-middle        generic-function)
   (composite-left          generic-function)
   (composite-right         generic-function)
-  
+
   "CLOG-WEB - Auto Layout System"
   (clog-web-auto-row      class)
   (create-web-auto-row    generic-function)
   (clog-web-auto-column   class)
   (create-web-auto-column generic-function)
-			
+
   "CLOG-WEB - 12 Column Grid Layout System"
   (clog-web-row         class)
   (create-web-row       generic-function)
@@ -71,7 +71,7 @@
   "CLOG-WEB - Look and Feel"
   (add-card-look       generic-function)
   (add-hard-card-look  generic-function)
-  
+
   "CLOG-WEB - Mobile"
   (full-row-on-mobile     generic-function)
   (hide-on-small-screens  generic-function)
@@ -82,7 +82,7 @@
   (clog-web-menu-bar             class)
   (create-web-menu-bar           generic-function)
   (web-menu-bar                  generic-function)
-  (web-menu-bar-height           generic-function)  
+  (web-menu-bar-height           generic-function)
   (clog-web-menu-drop-down       class)
   (create-web-menu-drop-down     generic-function)
   (clog-web-menu-item            class)
@@ -92,7 +92,20 @@
 
   "CLOG-WEB - Interactions"
   (clog-web-alert         function)
-  (clog-web-form          function))
+  (clog-web-form          function)
+
+  "CLOG-WEB - Websites"
+  (clog-web-site   class)
+  (clog-web-meta   function)
+  (default-theme   function)
+  (theme           generic-function)
+  (settings        generic-function)
+  (url             generic-function)
+  (title           generic-function)
+  (footer          generic-function)
+  (logo            generic-function)
+  (create-web-site generic-function)
+  (create-web-page generic-function))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Implementation - clog-web - CLOG Web page abstraction
@@ -102,6 +115,10 @@
   ((body
     :accessor body
     :documentation "Top level access to browser window")
+   (web-site
+    :accessor web-site
+    :initform nil
+    :documentation "The clog-web-site if installed")
    (web-menu
     :accessor web-menu
     :initform nil
@@ -131,6 +148,18 @@ If W3-CSS-URL has not been loaded before is installed unless is nil."
     (when w3-css-url
       (setf (connection-data-item clog-body "w3-css") t)
       (load-css (html-document clog-body) w3-css-url))))
+
+;;;;;;;;;;;;;;;;;;;
+;; clog-web-meta ;;
+;;;;;;;;;;;;;;;;;;;
+
+(defun clog-web-meta (description)
+  "Returns a boot-function for use with CLOG:INITIALIZE to add meta and body
+information for search engines with DESCRIPTION."
+  (lambda (path content)
+    (funcall (cl-template:compile-template content)
+	   (list :meta (format nil "<meta name='description' content='~A'>" description)
+		 :body description))))
 
 ;;;;;;;;;;;;;;;;;;
 ;; web-menu-bar ;;
@@ -173,14 +202,17 @@ create-web-menu-bar."))
   (:documentation "Menu bar"))
 
 (defgeneric create-web-menu-bar (clog-obj &key class html-id)
-  (:documentation "Attached a menu bar to a CLOG-OBJ in general a
+  (:documentation "Attach a menu bar to a CLOG-OBJ generally a
 clog-body."))
 
 (defmethod create-web-menu-bar ((obj clog-obj)
-				&key (class "w3-bar w3-white")
+				&key (class nil)
 				  (html-id nil))
-  (let ((div (create-div obj :class class :html-id html-id))
-	(app (connection-data-item obj "clog-web")))
+  (let* ((div (create-div obj :class class :html-id html-id))
+	 (tmp (create-span div)) ; corrects css issue with w3.css
+	 (app (connection-data-item obj "clog-web")))
+    (declare (ignore tmp))
+    (add-class div "w3-bar")
     (change-class div 'clog-web-menu-bar)
     (setf (web-menu app) div)
     div))
@@ -198,12 +230,14 @@ clog-body."))
 
 (defmethod create-web-menu-drop-down ((obj clog-web-menu-bar)
 	          &key (content "")
-		    (class "w3-dropdown-content w3-bar-block")
+		    (class nil)
 		    (html-id nil))
   (let* ((hover  (create-div obj :class "w3-dropdown-hover"))
 	 (button (create-button hover :class "w3-button" :content content))
 	 (div    (create-div hover :class class :html-id html-id)))
     (declare (ignore button))
+    (add-class div "w3-dropdown-content")
+    (add-class div "w3-bar-block")
     (change-class div 'clog-web-menu-drop-down)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -215,42 +249,26 @@ clog-body."))
 
 (defgeneric create-web-menu-item (clog-web-menu-drop-down
 				  &key content
+				    link
 				    on-click
 				    class
 				    html-id)
-  (:documentation "Attached a menu item to a CLOG-WEB-MENU-DROP-DOWN"))
+  (:documentation "Attached a menu item to a CLOG-WEB-MENU-DROP-DOWN.
+Use to set a link or on-click to set an on-click handler"))
 
 (defmethod create-web-menu-item ((obj clog-obj)
 				 &key (content "")
+				   (link nil)
 				   (on-click nil)
-				   (class "w3-bar-item w3-button")
+				   (class nil)
 				   (html-id nil))
   (let ((span
-	  (create-span obj :content content :class class :html-id html-id)))
-    (set-on-click span on-click)
-    (change-class span 'clog-web-menu-item)))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; create-web-menu-item ;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(defclass clog-web-menu-item (clog-span)()
-  (:documentation "Menu item"))
-
-(defgeneric create-web-menu-item (clog-web-menu-drop-down
-				  &key content
-				    on-click
-				    class
-				    html-id)
-  (:documentation "Attached a menu item to a CLOG-WEB-MENU-DROP-DOWN"))
-
-(defmethod create-web-menu-item ((obj clog-obj)
-				 &key (content "")
-				   (on-click nil)
-				   (class "w3-bar-item w3-button")
-				   (html-id nil))
-  (let ((span
-	  (create-span obj :content content :class class :html-id html-id)))
+	  (create-span (if link
+			   (create-a obj :link link)
+			   obj)
+		       :content content :class class :html-id html-id)))
+    (add-class span "w3-bar-item")
+    (add-class span "w3-button")
     (set-on-click span on-click)
     (change-class span 'clog-web-menu-item)))
 
@@ -425,7 +443,7 @@ to nil on creation."))
   (let ((div (create-div obj :content content
 			     :hidden t :class class :html-id html-id)))
     (add-class div "w3-content")
-    (when maximum-width      
+    (when maximum-width
       (setf (maximum-width div) (unit "px" maximum-width)))
     (unless hidden
       (setf (visiblep div) t))
@@ -992,3 +1010,117 @@ if confirmed or nil if canceled. CANCEL-TEXT is only displayed if modal is t"
 				      fields)))
 			 (funcall on-input result)))
 		  :one-time nil)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Implementation - clog-web Websites
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;;;;;;;;;;;;;;;;;;;;;
+;; create-web-site ;;
+;;;;;;;;;;;;;;;;;;;;;
+
+(defclass clog-web-site ()
+  ((theme     :initarg :theme
+	      :accessor theme)
+   (settings  :initarg :settings
+              :reader  settings)
+   (url       :initarg :url
+              :reader  url)
+   (title     :initarg :title
+	      :reader title)
+   (footer    :initarg :footer
+	      :reader footer)
+   (logo      :initarg :logo
+	      :reader logo))
+  (:documentation "Website information"))
+
+;;;;;;;;;;;;;;;;;;;
+;; default-theme ;;
+;;;;;;;;;;;;;;;;;;;
+
+(defun default-theme (body website page properties)
+  "The default theme for clog-web-site.
+Settings available:
+  :menu-class - w3 color class for menu bar
+Page properties:
+  :menu - ((\"Menu Name\" ((\"Menu Item\" \"link\"))))
+  :content"
+  (declare (ignore page))
+  (let ((sb (create-style-block body)))
+    (add-style sb :element "a" '(("text-decoration" :none))))
+  (let* ((row   (create-web-auto-row body))
+	 (left  (create-web-auto-column row))
+	 (right (create-web-auto-column row :vertical-align :middle)))
+    (when (logo website)
+      (set-geometry (create-img (create-a left
+					  :link (url website))
+				:url-src (logo website))
+		    :height 75))
+    (create-span (create-a right
+			   :link (url website))
+		 :content (title website)
+		 :class "w3-xlarge w3-sans-serif"))
+  (let ((menu  (create-web-menu-bar body :class "w3-card-4")))
+    (when (getf (settings website) :menu-class)
+      (add-class menu (getf (settings website) :menu-class)))
+    (dolist (drop-down (getf properties :menu))
+      (let ((drop (create-web-menu-drop-down menu
+					     :content (first drop-down)
+					     :class "w3-border")))
+	(dolist (item (second drop-down))
+	  (create-web-menu-item drop
+				:content (first item)
+				:link (second item))))))
+  (create-br body)
+  (let ((c (getf properties :content)))
+    (when c
+      (typecase c
+	(string
+	 (create-div body :content c))
+	(function
+	 (funcall c body))
+	(t
+	 (create-div body :content (format nil "~A" c))))))
+  (create-br body)
+  (create-br body)
+  (create-div body :content (format nil "~A" (footer website))))
+
+(defgeneric create-web-site (clog-obj &key theme
+					settings
+					url
+					title
+					footer
+					logo)
+  (:documentation "Attach a clog-web-site to a CLOG-OBJ generally a
+clog-body."))
+
+(defmethod create-web-site ((obj clog-obj) &key
+					     settings
+					     (theme 'default-theme)
+					     (url "/")
+					     (title "")
+					     (footer "")
+					     (logo ""))
+  (let ((website (make-instance 'clog-web-site
+				:theme theme
+				:settings settings
+				:url url
+				:title title
+				:footer footer
+				:logo logo))
+	(app (connection-data-item obj "clog-web")))
+    (setf (web-site app) website)
+    website))
+
+;;;;;;;;;;;;;;;;;;;;;
+;; create-web-page ;;
+;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric create-web-page (clog-obj page properties)
+  (:documentation "Use the clog-web-site THEME to create PAGE with
+CLOG-OBJ as parent"))
+
+(defmethod create-web-page ((obj clog-obj) page properties)
+  (let* ((app     (connection-data-item obj "clog-web"))
+	 (website (web-site app)))
+    (funcall (theme website) obj website page properties)))
