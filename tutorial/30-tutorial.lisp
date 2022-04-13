@@ -6,13 +6,10 @@
 
 (in-package :clog-tut-30)
 
-;; This is the menu structure for the default theme
 
-(defparameter *menu* `(("Stuff" (("Link 1" "/link1")
-				 ("Link 2" "/link2")))
-		       ("Help"  (("About" "/about")))))
+;; Site setup
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;l;;
 
-;; Init the site on every new page request
 (defun init-site (body)
   (clog-web-initialize body)
   (create-web-site body
@@ -21,12 +18,36 @@
 		   :footer "(c) 2022 David Botton"
 		   :logo "/img/clog-liz.png"))
 
-;; /
+;; This is the menu structure
+(defparameter *menu* `(("Content" (("Home"                "/")
+				   ("Content from Lambda" "/lambda")
+				   ("Content from File"   "/readme")))
+		       ("Help"    (("About" "/about")))))
+
+;; Page handlers
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; / -  a simple content string
 (defun on-main (body)
+  ;; We call init-site on every page to load our theme and settings
   (init-site body)
   (create-web-page body :main `(:menu    ,*menu*
-				:content ,(lambda (body)
-					    (create-span body :content "Main")))))
+				:content "<b>Welcome to tutorial 30</b><p>Any HTML works!")))
+
+;; /readme - get content from a text file
+(defun on-readme (body)
+  (init-site body)
+  (let ((readme (alexandria:read-file-into-string
+		 (format nil "~A~A" (asdf:system-source-directory :clog) "README.md"))))
+    (create-web-page body :main `(:menu    ,*menu*
+				  :content ,(format nil "<pre>~A</pre>" readme)))))
+
+;; /lambda - use a function to output to the page content
+(defun on-lambda (body)
+  (init-site body)
+  (create-web-page body :main `(:menu    ,*menu*
+				:content ,(lambda (obj)
+					    (create-div obj :content "I am in the content area")))))
 
 ;; /about
 (defun on-about (body)
@@ -34,6 +55,7 @@
   (create-web-page body :main `(:menu    ,*menu*
 				:content "About Me")))
 
+;; Start the webserver
 (defun start-tutorial ()
   ;; Initialize CLOG and the / url path
   (initialize 'on-main
@@ -42,6 +64,8 @@
 	      ;; Supply so meta info
 	      :boot-function (clog-web-meta
 			      "clogpower.com - CLOG - the common lisp omnificent gui"))
-  ;; Add /about
+  ;; Setup additional paths
   (set-on-new-window 'on-about :path "/about")
+  (set-on-new-window 'on-lambda :path "/lambda")
+  (set-on-new-window 'on-readme :path "/readme")
   (open-browser))
