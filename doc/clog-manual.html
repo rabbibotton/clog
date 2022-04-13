@@ -7087,7 +7087,7 @@ screen size smaller then 601 pixels DP</p></li>
 <ul>
 <li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-WEB:CREATE-WEB-MENU-BAR%20GENERIC-FUNCTION" >CREATE-WEB-MENU-BAR</a></span></span> <span class="locative-args">CLOG-OBJ &amp;KEY CLASS HTML-ID</span></span></p>
 
-<p>Attached a menu bar to a <code>CLOG-OBJ</code> in general a
+<p>Attach a menu bar to a <code>CLOG-OBJ</code> generally a
 clog-body.</p></li>
 </ul>
 
@@ -7141,9 +7141,10 @@ create-web-menu-bar.</p></li>
 <a id="CLOG-WEB:CREATE-WEB-MENU-ITEM%20GENERIC-FUNCTION"></a></p>
 
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-WEB:CREATE-WEB-MENU-ITEM%20GENERIC-FUNCTION" >CREATE-WEB-MENU-ITEM</a></span></span> <span class="locative-args">CLOG-WEB-MENU-DROP-DOWN &amp;KEY CONTENT ON-CLICK CLASS HTML-ID</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-WEB:CREATE-WEB-MENU-ITEM%20GENERIC-FUNCTION" >CREATE-WEB-MENU-ITEM</a></span></span> <span class="locative-args">CLOG-WEB-MENU-DROP-DOWN &amp;KEY CONTENT LINK ON-CLICK CLASS HTML-ID</span></span></p>
 
-<p>Attached a menu item to a <code>CLOG-WEB-MENU-DROP-DOWN</code></p></li>
+<p>Attached a menu item to a <code>CLOG-WEB-MENU-DROP-DOWN</code>.
+Use to set a link or on-click to set an on-click handler</p></li>
 </ul>
 
 <p><a id="x-28CLOG-WEB-3ACREATE-WEB-MENU-FULL-SCREEN-20GENERIC-FUNCTION-29"></a>
@@ -7205,6 +7206,107 @@ is placed in DOM at top of <code>OBJ</code> instead of bottom of <code>OBJ</code
 
 <p>Calls on-input after OK or Cancel with an a-list of field name to value
 if confirmed or nil if canceled. <code>CANCEL-TEXT</code> is only displayed if modal is t</p></li>
+</ul>
+
+<p><code>CLOG-WEB</code> - Websites</p>
+
+<p><a id="x-28CLOG-WEB-3ACLOG-WEB-SITE-20CLASS-29"></a>
+<a id="CLOG-WEB:CLOG-WEB-SITE%20CLASS"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[class]</span> <span class="reference-object"><a href="#CLOG-WEB:CLOG-WEB-SITE%20CLASS" >CLOG-WEB-SITE</a></span></span></span></p>
+
+<p>Website information</p></li>
+</ul>
+
+<p><a id="x-28CLOG-WEB-3ACLOG-WEB-META-20FUNCTION-29"></a>
+<a id="CLOG-WEB:CLOG-WEB-META%20FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#CLOG-WEB:CLOG-WEB-META%20FUNCTION" >CLOG-WEB-META</a></span></span> <span class="locative-args">DESCRIPTION</span></span></p>
+
+<p>Returns a boot-function for use with <a href="#CLOG:INITIALIZE%20FUNCTION" title="CLOG:INITIALIZE FUNCTION"><code>CLOG:INITIALIZE</code></a> to add meta and body
+information for search engines with <code>DESCRIPTION</code>.</p></li>
+</ul>
+
+<p><a id="x-28CLOG-WEB-3ADEFAULT-THEME-20FUNCTION-29"></a>
+<a id="CLOG-WEB:DEFAULT-THEME%20FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#CLOG-WEB:DEFAULT-THEME%20FUNCTION" >DEFAULT-THEME</a></span></span> <span class="locative-args">BODY WEBSITE PAGE PROPERTIES</span></span></p>
+
+<p>The default theme for clog-web-site.
+Settings available:
+  :menu-class - w3 color class for menu bar
+Page properties:
+  :menu - ((&quot;Menu Name&quot; ((&quot;Menu Item&quot; &quot;link&quot;))))
+  :content</p></li>
+</ul>
+
+<p><a id="x-28CLOG-WEB-3ATHEME-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG-WEB:THEME%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-WEB:THEME%20GENERIC-FUNCTION" >THEME</a></span></span> <span class="locative-args">OBJECT</span></span></li>
+</ul>
+
+<p><a id="x-28CLOG-WEB-3ASETTINGS-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG-WEB:SETTINGS%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-WEB:SETTINGS%20GENERIC-FUNCTION" >SETTINGS</a></span></span> <span class="locative-args">OBJECT</span></span></li>
+</ul>
+
+<p><a id="x-28CLOG-3AURL-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG:URL%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:URL%20GENERIC-FUNCTION" >URL</a></span></span> <span class="locative-args">CLOG-LOCATION</span></span></p>
+
+<p>Get/Setf full url. Setting the <code>URL</code> causes navgation to <code>URL</code>.</p></li>
+</ul>
+
+<p><a id="x-28CLOG-3ATITLE-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG:TITLE%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:TITLE%20GENERIC-FUNCTION" >TITLE</a></span></span> <span class="locative-args">CLOG-DOCUMENT</span></span></p>
+
+<p>Get/setf title.</p></li>
+</ul>
+
+<p><a id="x-28CLOG-WEB-3AFOOTER-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG-WEB:FOOTER%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-WEB:FOOTER%20GENERIC-FUNCTION" >FOOTER</a></span></span> <span class="locative-args">OBJECT</span></span></li>
+</ul>
+
+<p><a id="x-28CLOG-WEB-3ALOGO-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG-WEB:LOGO%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-WEB:LOGO%20GENERIC-FUNCTION" >LOGO</a></span></span> <span class="locative-args">OBJECT</span></span></li>
+</ul>
+
+<p><a id="x-28CLOG-WEB-3ACREATE-WEB-SITE-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG-WEB:CREATE-WEB-SITE%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-WEB:CREATE-WEB-SITE%20GENERIC-FUNCTION" >CREATE-WEB-SITE</a></span></span> <span class="locative-args">CLOG-OBJ &amp;KEY THEME SETTINGS URL TITLE FOOTER LOGO</span></span></p>
+
+<p>Attach a clog-web-site to a <code>CLOG-OBJ</code> generally a
+clog-body.</p></li>
+</ul>
+
+<p><a id="x-28CLOG-WEB-3ACREATE-WEB-PAGE-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG-WEB:CREATE-WEB-PAGE%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-WEB:CREATE-WEB-PAGE%20GENERIC-FUNCTION" >CREATE-WEB-PAGE</a></span></span> <span class="locative-args">CLOG-OBJ PAGE PROPERTIES</span></span></p>
+
+<p>Use the clog-web-site <a href="#CLOG-WEB:THEME%20GENERIC-FUNCTION" title="CLOG-WEB:THEME GENERIC-FUNCTION"><code>THEME</code></a> to create <code>PAGE</code> with
+<code>CLOG-OBJ</code> as parent</p></li>
 </ul>
 
 <p><a id="x-28CLOG-3A-40CLOG-BODY-20MGL-PAX-3ASECTION-29"></a>
