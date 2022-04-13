@@ -13,17 +13,19 @@
 (defun init-site (body)
   (clog-web-initialize body)
   (create-web-site body
+		   ;; use the default theme
 		   :theme 'clog-web:default-theme
+		   ;; theme settings - in this case w3.css color of menu bar
 		   :settings '(:menu-class "w3-black")
 		   :title "CLOG - The Common Lisp Omnificent GUI"
 		   :footer "(c) 2022 David Botton"
 		   :logo "/img/clog-liz.png"))
 
 ;; This is the menu structure
-(defparameter *menu* `(("Content" (("Home"                "/")
-				   ("Content from Lambda" "/lambda")
-				   ("Content from File"   "/readme")))
-		       ("Help"    (("About" "/about")))))
+(defparameter *menu* `(("Content" (("Home"                "/"       on-main)
+				   ("Content from Lambda" "/lambda" on-lambda)
+				   ("Content from File"   "/readme" on-readme)))
+		       ("Help"    (("About"               "/about"  on-about)))))
 
 ;; Page handlers
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -58,15 +60,13 @@
 
 ;; Start the webserver
 (defun start-tutorial ()
-  ;; Initialize CLOG and the / url path
+  ;; Initialize CLOG and the / url path (since / in our menu could just be nil)
   (initialize 'on-main
 	      ;; Use long polling technique so pages are crawled by google
 	      :long-poll-first t
 	      ;; Supply so meta info
 	      :boot-function (clog-web-meta
 			      "clogpower.com - CLOG - the common lisp omnificent gui"))
-  ;; Setup additional paths
-  (set-on-new-window 'on-about :path "/about")
-  (set-on-new-window 'on-lambda :path "/lambda")
-  (set-on-new-window 'on-readme :path "/readme")
+  ;; clog web helper to set up routes in menu
+  (clog-web-routes-from-menu *menu*)
   (open-browser))

@@ -95,17 +95,18 @@
   (clog-web-form          function)
 
   "CLOG-WEB - Websites"
-  (clog-web-site   class)
-  (clog-web-meta   function)
-  (default-theme   function)
-  (theme           generic-function)
-  (settings        generic-function)
-  (url             generic-function)
-  (title           generic-function)
-  (footer          generic-function)
-  (logo            generic-function)
-  (create-web-site generic-function)
-  (create-web-page generic-function))
+  (clog-web-site             class)
+  (clog-web-routes-from-menu function)
+  (clog-web-meta             function)
+  (default-theme             function)
+  (theme                     generic-function)
+  (settings                  generic-function)
+  (url                       generic-function)
+  (title                     generic-function)
+  (footer                    generic-function)
+  (logo                      generic-function)
+  (create-web-site           generic-function)
+  (create-web-page           generic-function))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Implementation - clog-web - CLOG Web page abstraction
@@ -1085,6 +1086,14 @@ Page properties:
   (create-br body)
   (create-div body :content (format nil "~A" (footer website))))
 
+(defun clog-web-routes-from-menu (menu)
+  "Use a menu to setup a route for each menu item that has a third
+element."
+  (dolist (drop-down menu)
+    (dolist (item (second drop-down))
+      (when (third item)
+	(set-on-new-window (third item) :path (second item))))))
+  
 (defgeneric create-web-site (clog-obj &key theme
 					settings
 					url
