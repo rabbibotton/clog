@@ -7219,6 +7219,16 @@ if confirmed or nil if canceled. <code>CANCEL-TEXT</code> is only displayed if m
 <p>Website information</p></li>
 </ul>
 
+<p><a id="x-28CLOG-WEB-3ACLOG-WEB-ROUTES-FROM-MENU-20FUNCTION-29"></a>
+<a id="CLOG-WEB:CLOG-WEB-ROUTES-FROM-MENU%20FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#CLOG-WEB:CLOG-WEB-ROUTES-FROM-MENU%20FUNCTION" >CLOG-WEB-ROUTES-FROM-MENU</a></span></span> <span class="locative-args">MENU</span></span></p>
+
+<p>Use a menu to setup a route for each menu item that has a third
+element.</p></li>
+</ul>
+
 <p><a id="x-28CLOG-WEB-3ACLOG-WEB-META-20FUNCTION-29"></a>
 <a id="CLOG-WEB:CLOG-WEB-META%20FUNCTION"></a></p>
 
@@ -7307,6 +7317,35 @@ clog-body.</p></li>
 
 <p>Use the clog-web-site <a href="#CLOG-WEB:THEME%20GENERIC-FUNCTION" title="CLOG-WEB:THEME GENERIC-FUNCTION"><code>THEME</code></a> to create <code>PAGE</code> with
 <code>CLOG-OBJ</code> as parent</p></li>
+</ul>
+
+<p><code>CLOG-WEB</code> - Utilities</p>
+
+<p><a id="x-28CLOG-WEB-3ABASE-URL-P-20FUNCTION-29"></a>
+<a id="CLOG-WEB:BASE-URL-P%20FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#CLOG-WEB:BASE-URL-P%20FUNCTION" >BASE-URL-P</a></span></span> <span class="locative-args">BASE-URL URL-PATH</span></span></p>
+
+<p>True if url-path is based on base-url</p></li>
+</ul>
+
+<p><a id="x-28CLOG-WEB-3AADJUST-FOR-BASE-URL-20FUNCTION-29"></a>
+<a id="CLOG-WEB:ADJUST-FOR-BASE-URL%20FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#CLOG-WEB:ADJUST-FOR-BASE-URL%20FUNCTION" >ADJUST-FOR-BASE-URL</a></span></span> <span class="locative-args">BASE-URL URL-PATH</span></span></p>
+
+<p>If url-path is not on base-url return base-url otherwise url-path</p></li>
+</ul>
+
+<p><a id="x-28CLOG-WEB-3ABASE-URL-SPLIT-20FUNCTION-29"></a>
+<a id="CLOG-WEB:BASE-URL-SPLIT%20FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#CLOG-WEB:BASE-URL-SPLIT%20FUNCTION" >BASE-URL-SPLIT</a></span></span> <span class="locative-args">BASE-URL URL-PATH</span></span></p>
+
+<p>Split path by / adjusting for base-url</p></li>
 </ul>
 
 <p><a id="x-28CLOG-3A-40CLOG-BODY-20MGL-PAX-3ASECTION-29"></a>
@@ -8080,7 +8119,8 @@ If <code>ON-FULL-SCREEN-CHANGE-HANDLER</code> is nil unbind the event.</p></li>
 <ul>
 <li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:URL-REPLACE%20GENERIC-FUNCTION" >URL-REPLACE</a></span></span> <span class="locative-args">CLOG-WINDOW REPLACE-URL</span></span></p>
 
-<p>Replace browser url.</p></li>
+<p>Replace browser url, ie a redirection and current <a href="#CLOG:URL%20GENERIC-FUNCTION" title="CLOG:URL GENERIC-FUNCTION"><code>URL</code></a> not
+saved in session history and back button will not return to it.</p></li>
 </ul>
 
 <p><a id="x-28CLOG-3AURL-ASSIGN-20GENERIC-FUNCTION-29"></a>

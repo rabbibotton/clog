@@ -106,7 +106,12 @@
   (footer                    generic-function)
   (logo                      generic-function)
   (create-web-site           generic-function)
-  (create-web-page           generic-function))
+  (create-web-page           generic-function)
+
+  "CLOG-WEB - Utilities"
+  (base-url-p          function)
+  (adjust-for-base-url function)
+  (base-url-split      function))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Implementation - clog-web - CLOG Web page abstraction
@@ -149,18 +154,6 @@ If W3-CSS-URL has not been loaded before is installed unless is nil."
     (when w3-css-url
       (setf (connection-data-item clog-body "w3-css") t)
       (load-css (html-document clog-body) w3-css-url))))
-
-;;;;;;;;;;;;;;;;;;;
-;; clog-web-meta ;;
-;;;;;;;;;;;;;;;;;;;
-
-(defun clog-web-meta (description)
-  "Returns a boot-function for use with CLOG:INITIALIZE to add meta and body
-information for search engines with DESCRIPTION."
-  (lambda (path content)
-    (funcall (cl-template:compile-template content)
-	   (list :meta (format nil "<meta name='description' content='~A'>" description)
-		 :body description))))
 
 ;;;;;;;;;;;;;;;;;;
 ;; web-menu-bar ;;
@@ -1086,6 +1079,23 @@ Page properties:
   (create-br body)
   (create-div body :content (format nil "~A" (footer website))))
 
+;;;;;;;;;;;;;;;;;;;
+;; clog-web-meta ;;
+;;;;;;;;;;;;;;;;;;;
+
+(defun clog-web-meta (description)
+  "Returns a boot-function for use with CLOG:INITIALIZE to add meta and body
+information for search engines with DESCRIPTION."
+  (lambda (path content)
+    (declare (ignore path))
+    (funcall (cl-template:compile-template content)
+	   (list :meta (format nil "<meta name='description' content='~A'>" description)
+		 :body description))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; clog-web-routes-from-menu ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 (defun clog-web-routes-from-menu (menu)
   "Use a menu to setup a route for each menu item that has a third
 element."
@@ -1094,6 +1104,10 @@ element."
       (when (third item)
 	(set-on-new-window (third item) :path (second item))))))
   
+;;;;;;;;;;;;;;;;;;;;;
+;; create-web-site ;;
+;;;;;;;;;;;;;;;;;;;;;
+
 (defgeneric create-web-site (clog-obj &key theme
 					settings
 					url
@@ -1133,3 +1147,21 @@ CLOG-OBJ as parent"))
   (let* ((app     (connection-data-item obj "clog-web"))
 	 (website (web-site app)))
     (funcall (theme website) obj website page properties)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Utilities
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defun base-url-p (base-url url-path)
+  "True if url-path is based on base-url"
+  (ppcre:scan (format nil "^~A/" base-url) (format nil "~A/" url-path)))
+
+(defun adjust-for-base-url (base-url url-path)
+  "If url-path is not on base-url return base-url otherwise url-path"
+  (if (base-url-p base-url url-path)
+      url-path
+      base-url))
+
+(defun base-url-split (base-url url-path)
+  "Split path by / adjusting for base-url"
+  (ppcre:split "/" (adjust-for-base-url base-url url-path)))
