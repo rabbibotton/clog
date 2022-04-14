@@ -34,7 +34,7 @@
 The value of local storage persists in the browser cache even after the browser 
 is closed. If you reset this page the session storage key will remain the same,
 but opening this page in another window or tab will be a new session. If the
-new window came from a click from this window, the  session keys (on some
+new window came from a click from this window, the session keys (on some
 browsers are copied first to the new window, if you wish to persist data accross
 windows use local storage instead.</p>
 <br>

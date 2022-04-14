@@ -531,7 +531,7 @@ STORAGE-TYPE. (local = persistant or session)"))
 STORAGE-TYPE. (local = persistant or session)"))
 
 (defmethod storage-remove ((obj clog-window) storage-type key-name)
-  (execute obj (format nil "~(~a~)Storage.removeItem(~A)" storage-type key-name)))
+  (execute obj (format nil "~(~a~)Storage.removeItem('~A')" storage-type key-name)))
 
 ;;;;;;;;;;;;;;;;;;;;;
 ;; storage-element ;;

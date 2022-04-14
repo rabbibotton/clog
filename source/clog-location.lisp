@@ -185,7 +185,8 @@
 ;;;;;;;;;;;;;;;;;
 
 (defgeneric url-replace (clog-window replace-url)
-  (:documentation "Replace browser url."))
+  (:documentation "Replace browser url, ie a redirection and current URL not
+saved in session history and back button will not return to it."))
 
 (defmethod url-replace ((obj clog-window) replace-url)
   (execute obj (format nil "replace('~A')" replace-url)))
