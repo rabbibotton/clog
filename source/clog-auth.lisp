@@ -34,7 +34,6 @@
 (defun get-authentication-token (body &key auth-path)
   "Retrieve the stored authorization token"
   (let ((token (storage-element (window body) :local *clog-auth-key*)))
-    (print token)
     (when (equalp token "null")
       (setf token nil))
     (unless token

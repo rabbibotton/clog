@@ -34,9 +34,6 @@ Some notes on this
 
    3) Way to receive data from the page - This is one way but not ideal - https://webkitgtk.org/reference/webkit2gtk/stable/WebKitWebContext.html#webkit-web-context-register-uri-scheme and seems most all here https://blogs.igalia.com/carlosgc/2013/09/10/webkit2gtk-web-process-extensions/
 
-- clog-auth
-  - tiered authorization, user profiles, etc
-
 - clog-monitor
   - logging, usage, etc.
 

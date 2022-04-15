@@ -293,4 +293,6 @@ High Order Extensions to CLOG
                      that are database connected
   -  CLOG-DB-Table - Version of html table that are database connected
 
+- clog-auth - Authentication and authorization framework (in progress)
+
 (See [FUTURE.md](FUTURE.md) for future plans)

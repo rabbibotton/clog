@@ -31,7 +31,8 @@
 			     &key hidden class html-id auto-place)
   (:documentation "Create a new CLOG-Database element, for use in
 CLOG-Builder. If not using builder use to connect:
-    (dbi:connect (database-connection clog-obj) ...)"))
+    (dbi:connect (database-connection clog-obj) ...) or if a
+connection exists assign it to the database-connecton."))
 
 (defmethod create-database ((obj clog-obj)
 			    &key (hidden nil)
