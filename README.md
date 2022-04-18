@@ -200,7 +200,7 @@ Here is a sample CLOG app:
 
 Other samples of CLOG on the web:
 
-[CLOG + cl-collider]https://www.reddit.com/r/lisp/comments/u689dp/clog_clcollider_experience/)
+[CLOG + cl-collider](https://www.reddit.com/r/lisp/comments/u689dp/clog_clcollider_experience/)
 
 
 CLOG Builder Tutorials
