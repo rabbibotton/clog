@@ -16,9 +16,10 @@
 
 (defsection @clog-auth (:title "CLOG Auth Objects")
   "CLOG-AUTH - authorization abstraction for CLOG"
-  (get-authentication-token    function)
-  (store-authentication-token  function)
-  (remove-authentication-token function))
+  (get-authentication-token            function)
+  (store-authentication-token          function)
+  (remove-authentication-token         function)
+  (reset-page-on-authentication-change function))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Implementation - clog-auth
@@ -32,7 +33,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defun get-authentication-token (body &key auth-path)
-  "Retrieve the stored authorization token"
+  "Retrieve the stored authentication token"
   (let ((token (storage-element (window body) :local *clog-auth-key*)))
     (when (equalp token "null")
       (setf token nil))
@@ -55,5 +56,15 @@
 (defun remove-authentication-token (body)
   (storage-remove (window body) :local *clog-auth-key*))  
 
-  
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; reset-page-on-authentication-change ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defun reset-page-on-authentication-change (obj)
+  (let ((body (connection-body obj)))
+    (set-on-storage (window body) (lambda (obj data)
+				    (set-on-storage (window body) nil)
+				    (when (equalp (getf data :key)
+						  "clog-auth-token")
+				      (reload (location body)))))))
 

@@ -184,19 +184,19 @@
 ;; url-replace ;;
 ;;;;;;;;;;;;;;;;;
 
-(defgeneric url-replace (clog-window replace-url)
+(defgeneric url-replace (clog-location replace-url)
   (:documentation "Replace browser url, ie a redirection and current URL not
 saved in session history and back button will not return to it."))
 
-(defmethod url-replace ((obj clog-window) replace-url)
+(defmethod url-replace ((obj clog-location) replace-url)
   (execute obj (format nil "replace('~A')" replace-url)))
 
 ;;;;;;;;;;;;;;;;
 ;; url-assign ;;
 ;;;;;;;;;;;;;;;;
 
-(defgeneric url-assign (clog-window assign-url)
+(defgeneric url-assign (clog-location assign-url)
   (:documentation "Assign browser url."))
 
-(defmethod url-assign ((obj clog-window) assign-url)
+(defmethod url-assign ((obj clog-location) assign-url)
   (execute obj (format nil "assign('~A')" assign-url)))
