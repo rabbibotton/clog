@@ -38,6 +38,7 @@
 	       (:file "clog-auth")
 	       (:file "clog-gui")
 	       (:file "clog-web")
+	       (:file "clog-web-themes")
 	       (:file "clog-helpers")))
 
 (asdf:defsystem #:clog/docs

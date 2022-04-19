@@ -98,7 +98,6 @@
   (clog-web-site             class)
   (clog-web-routes-from-menu function)
   (clog-web-meta             function)
-  (default-theme             function)
   (theme                     generic-function)
   (settings                  generic-function)
   (url                       generic-function)
@@ -1027,57 +1026,6 @@ if confirmed or nil if canceled. CANCEL-TEXT is only displayed if modal is t"
    (logo      :initarg :logo
 	      :reader logo))
   (:documentation "Website information"))
-
-;;;;;;;;;;;;;;;;;;;
-;; default-theme ;;
-;;;;;;;;;;;;;;;;;;;
-
-(defun default-theme (body website page properties)
-  "The default theme for clog-web-site.
-Settings available:
-  :menu-class - w3 color class for menu bar
-Page properties:
-  :menu - ((\"Menu Name\" ((\"Menu Item\" \"link\"))))
-  :content"
-  (declare (ignore page))
-  (let ((sb (create-style-block body)))
-    (add-style sb :element "a" '(("text-decoration" :none))))
-  (let* ((row   (create-web-auto-row body))
-	 (left  (create-web-auto-column row))
-	 (right (create-web-auto-column row :vertical-align :middle)))
-    (when (logo website)
-      (set-geometry (create-img (create-a left
-					  :link (url website))
-				:url-src (logo website))
-		    :height 75))
-    (create-span (create-a right
-			   :link (url website))
-		 :content (title website)
-		 :class "w3-xlarge w3-sans-serif"))
-  (let ((menu  (create-web-menu-bar body :class "w3-card-4")))
-    (when (getf (settings website) :menu-class)
-      (add-class menu (getf (settings website) :menu-class)))
-    (dolist (drop-down (getf properties :menu))
-      (let ((drop (create-web-menu-drop-down menu
-					     :content (first drop-down)
-					     :class "w3-border")))
-	(dolist (item (second drop-down))
-	  (create-web-menu-item drop
-				:content (first item)
-				:link (second item))))))
-  (create-br body)
-  (let ((c (getf properties :content)))
-    (when c
-      (typecase c
-	(string
-	 (create-div body :content c))
-	(function
-	 (funcall c body))
-	(t
-	 (create-div body :content (format nil "~A" c))))))
-  (create-br body)
-  (create-br body)
-  (create-div body :content (format nil "~A" (footer website))))
 
 ;;;;;;;;;;;;;;;;;;;
 ;; clog-web-meta ;;
