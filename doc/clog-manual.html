@@ -51,16 +51,19 @@
 <li><a href="#CLOG:@CLOG-FORM%20MGL-PAX:SECTION" title="CLOG Form Objects">14 CLOG Form Objects</a></li>
 <li><a href="#CLOG:@CLOG-CANVAS%20MGL-PAX:SECTION" title="CLOG Canvas Objects">15 CLOG Canvas Objects</a></li>
 <li><a href="#CLOG:@CLOG-MULTIMEDIA%20MGL-PAX:SECTION" title="CLOG Multimedia Objects">16 CLOG Multimedia Objects</a></li>
-<li><a href="#CLOG:@CLOG-GUI%20MGL-PAX:SECTION" title="CLOG GUI Objects">17 CLOG GUI Objects</a></li>
-<li><a href="#CLOG:@CLOG-WEB%20MGL-PAX:SECTION" title="CLOG Web Objects">18 CLOG Web Objects</a></li>
-<li><a href="#CLOG:@CLOG-BODY%20MGL-PAX:SECTION" title="CLOG Body Objects">19 CLOG Body Objects</a></li>
-<li><a href="#CLOG:@CLOG-WINDOW%20MGL-PAX:SECTION" title="CLOG Window Objects">20 CLOG Window Objects</a></li>
-<li><a href="#CLOG:@CLOG-DOCUMENT%20MGL-PAX:SECTION" title="CLOG Document Objects">21 CLOG Document Objects</a></li>
-<li><a href="#CLOG:@CLOG-LOCATION%20MGL-PAX:SECTION" title="CLOG Location Objects">22 CLOG Location Objects</a></li>
-<li><a href="#CLOG:@CLOG-NAVIGATOR%20MGL-PAX:SECTION" title="CLOG Navigator Objects">23 CLOG Navigator Objects</a></li>
-<li><a href="#CLOG:@CLOG-JQUERY%20MGL-PAX:SECTION" title="CLOG jQuery Objects">24 CLOG jQuery Objects</a></li>
-<li><a href="#CLOG:@CLOG-HELPERS%20MGL-PAX:SECTION" title="CLOG Helper Functions">25 CLOG Helper Functions</a></li>
-<li><a href="#CLOG:@CLOG-INTERNALS%20MGL-PAX:SECTION" title="CLOG Framework internals and extensions">26 CLOG Framework internals and extensions</a></li>
+<li><a href="#CLOG:@CLOG-AUTH%20MGL-PAX:SECTION" title="CLOG Auth Objects">17 CLOG Auth Objects</a></li>
+<li><a href="#CLOG:@CLOG-GUI%20MGL-PAX:SECTION" title="CLOG GUI Objects">18 CLOG GUI Objects</a></li>
+<li><a href="#CLOG:@CLOG-WEB%20MGL-PAX:SECTION" title="CLOG Web Objects">19 CLOG Web Objects</a></li>
+<li><a href="#CLOG:@CLOG-WEB-DBI%20MGL-PAX:SECTION" title="CLOG Web DBI - dbi based website">20 CLOG Web DBI - dbi based website</a></li>
+<li><a href="#CLOG:@CLOG-WEB-THEMES%20MGL-PAX:SECTION" title="CLOG Web Site Themes">21 CLOG Web Site Themes</a></li>
+<li><a href="#CLOG:@CLOG-BODY%20MGL-PAX:SECTION" title="CLOG Body Objects">22 CLOG Body Objects</a></li>
+<li><a href="#CLOG:@CLOG-WINDOW%20MGL-PAX:SECTION" title="CLOG Window Objects">23 CLOG Window Objects</a></li>
+<li><a href="#CLOG:@CLOG-DOCUMENT%20MGL-PAX:SECTION" title="CLOG Document Objects">24 CLOG Document Objects</a></li>
+<li><a href="#CLOG:@CLOG-LOCATION%20MGL-PAX:SECTION" title="CLOG Location Objects">25 CLOG Location Objects</a></li>
+<li><a href="#CLOG:@CLOG-NAVIGATOR%20MGL-PAX:SECTION" title="CLOG Navigator Objects">26 CLOG Navigator Objects</a></li>
+<li><a href="#CLOG:@CLOG-JQUERY%20MGL-PAX:SECTION" title="CLOG jQuery Objects">27 CLOG jQuery Objects</a></li>
+<li><a href="#CLOG:@CLOG-HELPERS%20MGL-PAX:SECTION" title="CLOG Helper Functions">28 CLOG Helper Functions</a></li>
+<li><a href="#CLOG:@CLOG-INTERNALS%20MGL-PAX:SECTION" title="CLOG Framework internals and extensions">29 CLOG Framework internals and extensions</a></li>
 </ul>
 
 <h6>[in package CLOG]</h6>
@@ -4049,7 +4052,8 @@ by doubling) unless is the single character '?'.</p></li>
 
 <p>Create a new CLOG-Database element, for use in
 CLOG-Builder. If not using builder use to connect:
-    (dbi:connect (database-connection clog-obj) ...)</p></li>
+    (dbi:connect (database-connection clog-obj) ...) or if a
+connection exists assign it to the database-connecton.</p></li>
 </ul>
 
 <p><a id="x-28CLOG-3ADATABASE-CONNECTION-20GENERIC-FUNCTION-29"></a>
@@ -5673,7 +5677,7 @@ https://developer.mozilla.org/en-US/docs/Web/CSS/font</p></li>
 <p><a id="x-28CLOG-3A-40CLOG-MULTIMEDIA-20MGL-PAX-3ASECTION-29"></a>
 <a id="CLOG:@CLOG-MULTIMEDIA%20MGL-PAX:SECTION"></a></p>
 
-<p><span class="outer-navigation"><span class="navigation"> <a href="#CLOG:@CLOG-CANVAS%20MGL-PAX:SECTION" title="CLOG Canvas Objects">&#8592;</a> <a href="#CLOG:@CLOG-MANUAL%20MGL-PAX:SECTION" title="The CLOG manual">&#8593;</a> <a href="#CLOG:@CLOG-GUI%20MGL-PAX:SECTION" title="CLOG GUI Objects">&#8594;</a> <a href="#CLOG:@CLOG-MULTIMEDIA%20MGL-PAX:SECTION" title="CLOG Multimedia Objects">&#8634;</a></span></span></p>
+<p><span class="outer-navigation"><span class="navigation"> <a href="#CLOG:@CLOG-CANVAS%20MGL-PAX:SECTION" title="CLOG Canvas Objects">&#8592;</a> <a href="#CLOG:@CLOG-MANUAL%20MGL-PAX:SECTION" title="The CLOG manual">&#8593;</a> <a href="#CLOG:@CLOG-AUTH%20MGL-PAX:SECTION" title="CLOG Auth Objects">&#8594;</a> <a href="#CLOG:@CLOG-MULTIMEDIA%20MGL-PAX:SECTION" title="CLOG Multimedia Objects">&#8634;</a></span></span></p>
 
 <h2><a href="#CLOG:@CLOG-MULTIMEDIA%20MGL-PAX:SECTION">16 CLOG Multimedia Objects</a></h2>
 
@@ -6116,12 +6120,53 @@ is nil unbind the event.</p></li>
 <p>Create a CLOG video control</p></li>
 </ul>
 
+<p><a id="x-28CLOG-3A-40CLOG-AUTH-20MGL-PAX-3ASECTION-29"></a>
+<a id="CLOG:@CLOG-AUTH%20MGL-PAX:SECTION"></a></p>
+
+<p><span class="outer-navigation"><span class="navigation"> <a href="#CLOG:@CLOG-MULTIMEDIA%20MGL-PAX:SECTION" title="CLOG Multimedia Objects">&#8592;</a> <a href="#CLOG:@CLOG-MANUAL%20MGL-PAX:SECTION" title="The CLOG manual">&#8593;</a> <a href="#CLOG:@CLOG-GUI%20MGL-PAX:SECTION" title="CLOG GUI Objects">&#8594;</a> <a href="#CLOG:@CLOG-AUTH%20MGL-PAX:SECTION" title="CLOG Auth Objects">&#8634;</a></span></span></p>
+
+<h2><a href="#CLOG:@CLOG-AUTH%20MGL-PAX:SECTION">17 CLOG Auth Objects</a></h2>
+
+<h6>[in package CLOG-AUTH]</h6>
+
+<p>CLOG-AUTH - authorization abstraction for CLOG</p>
+
+<p><a id="x-28CLOG-AUTH-3AGET-AUTHENTICATION-TOKEN-20FUNCTION-29"></a>
+<a id="CLOG-AUTH:GET-AUTHENTICATION-TOKEN%20FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#CLOG-AUTH:GET-AUTHENTICATION-TOKEN%20FUNCTION" >GET-AUTHENTICATION-TOKEN</a></span></span> <span class="locative-args">BODY &amp;KEY AUTH-PATH</span></span></p>
+
+<p>Retrieve the stored authentication token</p></li>
+</ul>
+
+<p><a id="x-28CLOG-AUTH-3ASTORE-AUTHENTICATION-TOKEN-20FUNCTION-29"></a>
+<a id="CLOG-AUTH:STORE-AUTHENTICATION-TOKEN%20FUNCTION"></a></p>
+
+<ul>
+<li><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#CLOG-AUTH:STORE-AUTHENTICATION-TOKEN%20FUNCTION" >STORE-AUTHENTICATION-TOKEN</a></span></span> <span class="locative-args">BODY TOKEN</span></span></li>
+</ul>
+
+<p><a id="x-28CLOG-AUTH-3AREMOVE-AUTHENTICATION-TOKEN-20FUNCTION-29"></a>
+<a id="CLOG-AUTH:REMOVE-AUTHENTICATION-TOKEN%20FUNCTION"></a></p>
+
+<ul>
+<li><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#CLOG-AUTH:REMOVE-AUTHENTICATION-TOKEN%20FUNCTION" >REMOVE-AUTHENTICATION-TOKEN</a></span></span> <span class="locative-args">BODY</span></span></li>
+</ul>
+
+<p><a id="x-28CLOG-AUTH-3ASET-ON-AUTHENTICATION-CHANGE-20FUNCTION-29"></a>
+<a id="CLOG-AUTH:SET-ON-AUTHENTICATION-CHANGE%20FUNCTION"></a></p>
+
+<ul>
+<li><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#CLOG-AUTH:SET-ON-AUTHENTICATION-CHANGE%20FUNCTION" >SET-ON-AUTHENTICATION-CHANGE</a></span></span> <span class="locative-args">OBJ HANDLER</span></span></li>
+</ul>
+
 <p><a id="x-28CLOG-3A-40CLOG-GUI-20MGL-PAX-3ASECTION-29"></a>
 <a id="CLOG:@CLOG-GUI%20MGL-PAX:SECTION"></a></p>
 
-<p><span class="outer-navigation"><span class="navigation"> <a href="#CLOG:@CLOG-MULTIMEDIA%20MGL-PAX:SECTION" title="CLOG Multimedia Objects">&#8592;</a> <a href="#CLOG:@CLOG-MANUAL%20MGL-PAX:SECTION" title="The CLOG manual">&#8593;</a> <a href="#CLOG:@CLOG-WEB%20MGL-PAX:SECTION" title="CLOG Web Objects">&#8594;</a> <a href="#CLOG:@CLOG-GUI%20MGL-PAX:SECTION" title="CLOG GUI Objects">&#8634;</a></span></span></p>
+<p><span class="outer-navigation"><span class="navigation"> <a href="#CLOG:@CLOG-AUTH%20MGL-PAX:SECTION" title="CLOG Auth Objects">&#8592;</a> <a href="#CLOG:@CLOG-MANUAL%20MGL-PAX:SECTION" title="The CLOG manual">&#8593;</a> <a href="#CLOG:@CLOG-WEB%20MGL-PAX:SECTION" title="CLOG Web Objects">&#8594;</a> <a href="#CLOG:@CLOG-GUI%20MGL-PAX:SECTION" title="CLOG GUI Objects">&#8634;</a></span></span></p>
 
-<h2><a href="#CLOG:@CLOG-GUI%20MGL-PAX:SECTION">17 CLOG GUI Objects</a></h2>
+<h2><a href="#CLOG:@CLOG-GUI%20MGL-PAX:SECTION">18 CLOG GUI Objects</a></h2>
 
 <h6>[in package CLOG-GUI]</h6>
 
@@ -6622,9 +6667,9 @@ machine, upon close <code>ON-FILE-NAME</code> called with filename or nil if fai
 <p><a id="x-28CLOG-3A-40CLOG-WEB-20MGL-PAX-3ASECTION-29"></a>
 <a id="CLOG:@CLOG-WEB%20MGL-PAX:SECTION"></a></p>
 
-<p><span class="outer-navigation"><span class="navigation"> <a href="#CLOG:@CLOG-GUI%20MGL-PAX:SECTION" title="CLOG GUI Objects">&#8592;</a> <a href="#CLOG:@CLOG-MANUAL%20MGL-PAX:SECTION" title="The CLOG manual">&#8593;</a> <a href="#CLOG:@CLOG-BODY%20MGL-PAX:SECTION" title="CLOG Body Objects">&#8594;</a> <a href="#CLOG:@CLOG-WEB%20MGL-PAX:SECTION" title="CLOG Web Objects">&#8634;</a></span></span></p>
+<p><span class="outer-navigation"><span class="navigation"> <a href="#CLOG:@CLOG-GUI%20MGL-PAX:SECTION" title="CLOG GUI Objects">&#8592;</a> <a href="#CLOG:@CLOG-MANUAL%20MGL-PAX:SECTION" title="The CLOG manual">&#8593;</a> <a href="#CLOG:@CLOG-WEB-DBI%20MGL-PAX:SECTION" title="CLOG Web DBI - dbi based website">&#8594;</a> <a href="#CLOG:@CLOG-WEB%20MGL-PAX:SECTION" title="CLOG Web Objects">&#8634;</a></span></span></p>
 
-<h2><a href="#CLOG:@CLOG-WEB%20MGL-PAX:SECTION">18 CLOG Web Objects</a></h2>
+<h2><a href="#CLOG:@CLOG-WEB%20MGL-PAX:SECTION">19 CLOG Web Objects</a></h2>
 
 <h6>[in package CLOG-WEB]</h6>
 
@@ -7182,7 +7227,7 @@ is placed in DOM at top of <code>OBJ</code> instead of bottom of <code>OBJ</code
 <a id="CLOG-WEB:CLOG-WEB-FORM%20FUNCTION"></a></p>
 
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#CLOG-WEB:CLOG-WEB-FORM%20FUNCTION" >CLOG-WEB-FORM</a></span></span> <span class="locative-args">OBJ CONTENT FIELDS ON-INPUT &amp;KEY (MODAL <code>NIL</code>) (OK-TEXT &quot;OK&quot;) (CANCEL-TEXT &quot;Cancel&quot;) (HTML-ID <code>NIL</code>)</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#CLOG-WEB:CLOG-WEB-FORM%20FUNCTION" >CLOG-WEB-FORM</a></span></span> <span class="locative-args">OBJ CONTENT FIELDS ON-INPUT &amp;KEY (MODAL <code>NIL</code>) (OK-TEXT &quot;OK&quot;) (CANCEL-TEXT &quot;Cancel&quot;) (CLASS <code>NIL</code>) (HTML-ID <code>NIL</code>)</span></span></p>
 
 <p>Create a form with <code>CONTENT</code> followed by <code>FIELDS</code>.
 <code>FIELDS</code> is a list of lists each list has:</p>
@@ -7206,6 +7251,15 @@ is placed in DOM at top of <code>OBJ</code> instead of bottom of <code>OBJ</code
 
 <p>Calls on-input after OK or Cancel with an a-list of field name to value
 if confirmed or nil if canceled. <code>CANCEL-TEXT</code> is only displayed if modal is t</p></li>
+</ul>
+
+<p><a id="x-28CLOG-WEB-3AFORM-RESULT-20FUNCTION-29"></a>
+<a id="CLOG-WEB:FORM-RESULT%20FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#CLOG-WEB:FORM-RESULT%20FUNCTION" >FORM-RESULT</a></span></span> <span class="locative-args">RESULT KEY</span></span></p>
+
+<p>Return the value for <code>KEY</code> from <code>RESULT</code></p></li>
 </ul>
 
 <p><code>CLOG-WEB</code> - Websites</p>
@@ -7235,23 +7289,31 @@ element.</p></li>
 <ul>
 <li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#CLOG-WEB:CLOG-WEB-META%20FUNCTION" >CLOG-WEB-META</a></span></span> <span class="locative-args">DESCRIPTION</span></span></p>
 
-<p>Returns a boot-function for use with <a href="#CLOG:INITIALIZE%20FUNCTION" title="CLOG:INITIALIZE FUNCTION"><code>CLOG:INITIALIZE</code></a> to add meta and body
-information for search engines with <code>DESCRIPTION</code>.</p></li>
+<p>Returns a boot-function for use with <a href="#CLOG:INITIALIZE%20FUNCTION" title="CLOG:INITIALIZE FUNCTION"><code>CLOG:INITIALIZE</code></a> to add meta
+and no-script body information for search engines with <code>DESCRIPTION</code>.</p></li>
 </ul>
 
-<p><a id="x-28CLOG-WEB-3ADEFAULT-THEME-20FUNCTION-29"></a>
-<a id="CLOG-WEB:DEFAULT-THEME%20FUNCTION"></a></p>
+<p><a id="x-28CLOG-WEB-3ACREATE-WEB-SITE-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG-WEB:CREATE-WEB-SITE%20GENERIC-FUNCTION"></a></p>
 
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#CLOG-WEB:DEFAULT-THEME%20FUNCTION" >DEFAULT-THEME</a></span></span> <span class="locative-args">BODY WEBSITE PAGE PROPERTIES</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-WEB:CREATE-WEB-SITE%20GENERIC-FUNCTION" >CREATE-WEB-SITE</a></span></span> <span class="locative-args">CLOG-OBJ &amp;KEY THEME SETTINGS URL TITLE FOOTER LOGO PROFILE</span></span></p>
 
-<p>The default theme for clog-web-site.
-Settings available:
-  :menu-class - w3 color class for menu bar
-Page properties:
-  :menu - ((&quot;Menu Name&quot; ((&quot;Menu Item&quot; &quot;link&quot;))))
-  :content</p></li>
+<p>Attach a clog-web-site to a <code>CLOG-OBJ</code> generally a
+clog-body.</p></li>
 </ul>
+
+<p><a id="x-28CLOG-WEB-3ACREATE-WEB-PAGE-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG-WEB:CREATE-WEB-PAGE%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-WEB:CREATE-WEB-PAGE%20GENERIC-FUNCTION" >CREATE-WEB-PAGE</a></span></span> <span class="locative-args">CLOG-OBJ PAGE PROPERTIES</span></span></p>
+
+<p>Use the clog-web-site <a href="#CLOG-WEB:THEME%20GENERIC-FUNCTION" title="CLOG-WEB:THEME GENERIC-FUNCTION"><code>THEME</code></a> to create <code>PAGE</code> with
+<code>CLOG-OBJ</code> as parent</p></li>
+</ul>
+
+<p><a href="#CLOG-WEB:CLOG-WEB-SITE%20CLASS" title="CLOG-WEB:CLOG-WEB-SITE CLASS"><code>CLOG-WEB-SITE</code></a> - Accessors</p>
 
 <p><a id="x-28CLOG-WEB-3ATHEME-20GENERIC-FUNCTION-29"></a>
 <a id="CLOG-WEB:THEME%20GENERIC-FUNCTION"></a></p>
@@ -7265,6 +7327,13 @@ Page properties:
 
 <ul>
 <li><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-WEB:SETTINGS%20GENERIC-FUNCTION" >SETTINGS</a></span></span> <span class="locative-args">OBJECT</span></span></li>
+</ul>
+
+<p><a id="x-28CLOG-WEB-3APROFILE-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG-WEB:PROFILE%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-WEB:PROFILE%20GENERIC-FUNCTION" >PROFILE</a></span></span> <span class="locative-args">OBJECT</span></span></li>
 </ul>
 
 <p><a id="x-28CLOG-3AURL-20GENERIC-FUNCTION-29"></a>
@@ -7299,26 +7368,6 @@ Page properties:
 <li><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-WEB:LOGO%20GENERIC-FUNCTION" >LOGO</a></span></span> <span class="locative-args">OBJECT</span></span></li>
 </ul>
 
-<p><a id="x-28CLOG-WEB-3ACREATE-WEB-SITE-20GENERIC-FUNCTION-29"></a>
-<a id="CLOG-WEB:CREATE-WEB-SITE%20GENERIC-FUNCTION"></a></p>
-
-<ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-WEB:CREATE-WEB-SITE%20GENERIC-FUNCTION" >CREATE-WEB-SITE</a></span></span> <span class="locative-args">CLOG-OBJ &amp;KEY THEME SETTINGS URL TITLE FOOTER LOGO</span></span></p>
-
-<p>Attach a clog-web-site to a <code>CLOG-OBJ</code> generally a
-clog-body.</p></li>
-</ul>
-
-<p><a id="x-28CLOG-WEB-3ACREATE-WEB-PAGE-20GENERIC-FUNCTION-29"></a>
-<a id="CLOG-WEB:CREATE-WEB-PAGE%20GENERIC-FUNCTION"></a></p>
-
-<ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-WEB:CREATE-WEB-PAGE%20GENERIC-FUNCTION" >CREATE-WEB-PAGE</a></span></span> <span class="locative-args">CLOG-OBJ PAGE PROPERTIES</span></span></p>
-
-<p>Use the clog-web-site <a href="#CLOG-WEB:THEME%20GENERIC-FUNCTION" title="CLOG-WEB:THEME GENERIC-FUNCTION"><code>THEME</code></a> to create <code>PAGE</code> with
-<code>CLOG-OBJ</code> as parent</p></li>
-</ul>
-
 <p><code>CLOG-WEB</code> - Utilities</p>
 
 <p><a id="x-28CLOG-WEB-3ABASE-URL-P-20FUNCTION-29"></a>
@@ -7348,12 +7397,98 @@ clog-body.</p></li>
 <p>Split path by / adjusting for base-url</p></li>
 </ul>
 
+<p><a id="x-28CLOG-3A-40CLOG-WEB-DBI-20MGL-PAX-3ASECTION-29"></a>
+<a id="CLOG:@CLOG-WEB-DBI%20MGL-PAX:SECTION"></a></p>
+
+<p><span class="outer-navigation"><span class="navigation"> <a href="#CLOG:@CLOG-WEB%20MGL-PAX:SECTION" title="CLOG Web Objects">&#8592;</a> <a href="#CLOG:@CLOG-MANUAL%20MGL-PAX:SECTION" title="The CLOG manual">&#8593;</a> <a href="#CLOG:@CLOG-WEB-THEMES%20MGL-PAX:SECTION" title="CLOG Web Site Themes">&#8594;</a> <a href="#CLOG:@CLOG-WEB-DBI%20MGL-PAX:SECTION" title="CLOG Web DBI - dbi based website">&#8634;</a></span></span></p>
+
+<h2><a href="#CLOG:@CLOG-WEB-DBI%20MGL-PAX:SECTION">20 CLOG Web DBI - dbi based website</a></h2>
+
+<h6>[in package CLOG-WEB-DBI]</h6>
+
+<p>Authentication</p>
+
+<p><a id="x-28CLOG-WEB-DBI-3ALOGIN-20FUNCTION-29"></a>
+<a id="CLOG-WEB-DBI:LOGIN%20FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#CLOG-WEB-DBI:LOGIN%20FUNCTION" >LOGIN</a></span></span> <span class="locative-args">OBJ SQL-CONNECTION USERNAME PASSWORD</span></span></p>
+
+<p>Login and set current authentication token, it does not remove token
+if one is present and login fails.</p></li>
+</ul>
+
+<p><a id="x-28CLOG-WEB-DBI-3ALOGOUT-20FUNCTION-29"></a>
+<a id="CLOG-WEB-DBI:LOGOUT%20FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#CLOG-WEB-DBI:LOGOUT%20FUNCTION" >LOGOUT</a></span></span> <span class="locative-args">OBJ</span></span></p>
+
+<p>Logout and remove current authenitcation token</p></li>
+</ul>
+
+<p><a id="x-28CLOG-WEB-DBI-3AGET-PROFILE-20FUNCTION-29"></a>
+<a id="CLOG-WEB-DBI:GET-PROFILE%20FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#CLOG-WEB-DBI:GET-PROFILE%20FUNCTION" >GET-PROFILE</a></span></span> <span class="locative-args">OBJ SQL-CONNECTION</span></span></p>
+
+<p>Retrieve profile based on current authentication token. If there is
+no token or fails to match as user returns nil</p></li>
+</ul>
+
+<p><a id="x-28CLOG-WEB-DBI-3ASIGN-UP-20FUNCTION-29"></a>
+<a id="CLOG-WEB-DBI:SIGN-UP%20FUNCTION"></a></p>
+
+<ul>
+<li><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#CLOG-WEB-DBI:SIGN-UP%20FUNCTION" >SIGN-UP</a></span></span> <span class="locative-args">OBJ SQL-CONNECTION &amp;KEY (TITLE &quot;Sign Up&quot;) (NEXT-STEP &quot;/login&quot;)</span></span></li>
+</ul>
+
+<p><a id="x-28CLOG-WEB-DBI-3AMAKE-TOKEN-20FUNCTION-29"></a>
+<a id="CLOG-WEB-DBI:MAKE-TOKEN%20FUNCTION"></a></p>
+
+<ul>
+<li><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#CLOG-WEB-DBI:MAKE-TOKEN%20FUNCTION" >MAKE-TOKEN</a></span></span></span></li>
+</ul>
+
+<p><a id="x-28CLOG-WEB-DBI-3ACREATE-BASE-TABLES-20FUNCTION-29"></a>
+<a id="CLOG-WEB-DBI:CREATE-BASE-TABLES%20FUNCTION"></a></p>
+
+<ul>
+<li><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#CLOG-WEB-DBI:CREATE-BASE-TABLES%20FUNCTION" >CREATE-BASE-TABLES</a></span></span> <span class="locative-args">SQL-CONNECTION</span></span></li>
+</ul>
+
+<p><a id="x-28CLOG-3A-40CLOG-WEB-THEMES-20MGL-PAX-3ASECTION-29"></a>
+<a id="CLOG:@CLOG-WEB-THEMES%20MGL-PAX:SECTION"></a></p>
+
+<p><span class="outer-navigation"><span class="navigation"> <a href="#CLOG:@CLOG-WEB-DBI%20MGL-PAX:SECTION" title="CLOG Web DBI - dbi based website">&#8592;</a> <a href="#CLOG:@CLOG-MANUAL%20MGL-PAX:SECTION" title="The CLOG manual">&#8593;</a> <a href="#CLOG:@CLOG-BODY%20MGL-PAX:SECTION" title="CLOG Body Objects">&#8594;</a> <a href="#CLOG:@CLOG-WEB-THEMES%20MGL-PAX:SECTION" title="CLOG Web Site Themes">&#8634;</a></span></span></p>
+
+<h2><a href="#CLOG:@CLOG-WEB-THEMES%20MGL-PAX:SECTION">21 CLOG Web Site Themes</a></h2>
+
+<h6>[in package CLOG-WEB]</h6>
+
+<p>Built in themes</p>
+
+<p><a id="x-28CLOG-WEB-3ADEFAULT-THEME-20FUNCTION-29"></a>
+<a id="CLOG-WEB:DEFAULT-THEME%20FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#CLOG-WEB:DEFAULT-THEME%20FUNCTION" >DEFAULT-THEME</a></span></span> <span class="locative-args">BODY WEBSITE PAGE PROPERTIES</span></span></p>
+
+<p>The default theme for clog-web-site.
+Settings available:
+  :menu-class - w3 color class for menu bar
+Page properties:
+  :menu - ((&quot;Menu Name&quot; ((&quot;Menu Item&quot; &quot;link&quot;))))
+  :content</p></li>
+</ul>
+
 <p><a id="x-28CLOG-3A-40CLOG-BODY-20MGL-PAX-3ASECTION-29"></a>
 <a id="CLOG:@CLOG-BODY%20MGL-PAX:SECTION"></a></p>
 
-<p><span class="outer-navigation"><span class="navigation"> <a href="#CLOG:@CLOG-WEB%20MGL-PAX:SECTION" title="CLOG Web Objects">&#8592;</a> <a href="#CLOG:@CLOG-MANUAL%20MGL-PAX:SECTION" title="The CLOG manual">&#8593;</a> <a href="#CLOG:@CLOG-WINDOW%20MGL-PAX:SECTION" title="CLOG Window Objects">&#8594;</a> <a href="#CLOG:@CLOG-BODY%20MGL-PAX:SECTION" title="CLOG Body Objects">&#8634;</a></span></span></p>
+<p><span class="outer-navigation"><span class="navigation"> <a href="#CLOG:@CLOG-WEB-THEMES%20MGL-PAX:SECTION" title="CLOG Web Site Themes">&#8592;</a> <a href="#CLOG:@CLOG-MANUAL%20MGL-PAX:SECTION" title="The CLOG manual">&#8593;</a> <a href="#CLOG:@CLOG-WINDOW%20MGL-PAX:SECTION" title="CLOG Window Objects">&#8594;</a> <a href="#CLOG:@CLOG-BODY%20MGL-PAX:SECTION" title="CLOG Body Objects">&#8634;</a></span></span></p>
 
-<h2><a href="#CLOG:@CLOG-BODY%20MGL-PAX:SECTION">19 CLOG Body Objects</a></h2>
+<h2><a href="#CLOG:@CLOG-BODY%20MGL-PAX:SECTION">22 CLOG Body Objects</a></h2>
 
 <p>CLOG-Body - CLOG Body Objects</p>
 
@@ -7429,7 +7564,7 @@ with <code>HTML</code>.</p></li>
 
 <p><span class="outer-navigation"><span class="navigation"> <a href="#CLOG:@CLOG-BODY%20MGL-PAX:SECTION" title="CLOG Body Objects">&#8592;</a> <a href="#CLOG:@CLOG-MANUAL%20MGL-PAX:SECTION" title="The CLOG manual">&#8593;</a> <a href="#CLOG:@CLOG-DOCUMENT%20MGL-PAX:SECTION" title="CLOG Document Objects">&#8594;</a> <a href="#CLOG:@CLOG-WINDOW%20MGL-PAX:SECTION" title="CLOG Window Objects">&#8634;</a></span></span></p>
 
-<h2><a href="#CLOG:@CLOG-WINDOW%20MGL-PAX:SECTION">20 CLOG Window Objects</a></h2>
+<h2><a href="#CLOG:@CLOG-WINDOW%20MGL-PAX:SECTION">23 CLOG Window Objects</a></h2>
 
 <p>CLOG-Window - CLOG Window Objects</p>
 
@@ -7834,7 +7969,7 @@ on-storage event is fired for changes to :local storage keys.</p></li>
 
 <p><span class="outer-navigation"><span class="navigation"> <a href="#CLOG:@CLOG-WINDOW%20MGL-PAX:SECTION" title="CLOG Window Objects">&#8592;</a> <a href="#CLOG:@CLOG-MANUAL%20MGL-PAX:SECTION" title="The CLOG manual">&#8593;</a> <a href="#CLOG:@CLOG-LOCATION%20MGL-PAX:SECTION" title="CLOG Location Objects">&#8594;</a> <a href="#CLOG:@CLOG-DOCUMENT%20MGL-PAX:SECTION" title="CLOG Document Objects">&#8634;</a></span></span></p>
 
-<h2><a href="#CLOG:@CLOG-DOCUMENT%20MGL-PAX:SECTION">21 CLOG Document Objects</a></h2>
+<h2><a href="#CLOG:@CLOG-DOCUMENT%20MGL-PAX:SECTION">24 CLOG Document Objects</a></h2>
 
 <p>CLOG-Document - CLOG Document Objects</p>
 
@@ -8006,7 +8141,7 @@ If <code>ON-FULL-SCREEN-CHANGE-HANDLER</code> is nil unbind the event.</p></li>
 
 <p><span class="outer-navigation"><span class="navigation"> <a href="#CLOG:@CLOG-DOCUMENT%20MGL-PAX:SECTION" title="CLOG Document Objects">&#8592;</a> <a href="#CLOG:@CLOG-MANUAL%20MGL-PAX:SECTION" title="The CLOG manual">&#8593;</a> <a href="#CLOG:@CLOG-NAVIGATOR%20MGL-PAX:SECTION" title="CLOG Navigator Objects">&#8594;</a> <a href="#CLOG:@CLOG-LOCATION%20MGL-PAX:SECTION" title="CLOG Location Objects">&#8634;</a></span></span></p>
 
-<h2><a href="#CLOG:@CLOG-LOCATION%20MGL-PAX:SECTION">22 CLOG Location Objects</a></h2>
+<h2><a href="#CLOG:@CLOG-LOCATION%20MGL-PAX:SECTION">25 CLOG Location Objects</a></h2>
 
 <p>Clog-Location - CLOG Location Objects</p>
 
@@ -8117,7 +8252,7 @@ If <code>ON-FULL-SCREEN-CHANGE-HANDLER</code> is nil unbind the event.</p></li>
 <a id="CLOG:URL-REPLACE%20GENERIC-FUNCTION"></a></p>
 
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:URL-REPLACE%20GENERIC-FUNCTION" >URL-REPLACE</a></span></span> <span class="locative-args">CLOG-WINDOW REPLACE-URL</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:URL-REPLACE%20GENERIC-FUNCTION" >URL-REPLACE</a></span></span> <span class="locative-args">CLOG-LOCATION REPLACE-URL</span></span></p>
 
 <p>Replace browser url, ie a redirection and current <a href="#CLOG:URL%20GENERIC-FUNCTION" title="CLOG:URL GENERIC-FUNCTION"><code>URL</code></a> not
 saved in session history and back button will not return to it.</p></li>
@@ -8127,7 +8262,7 @@ saved in session history and back button will not return to it.</p></li>
 <a id="CLOG:URL-ASSIGN%20GENERIC-FUNCTION"></a></p>
 
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:URL-ASSIGN%20GENERIC-FUNCTION" >URL-ASSIGN</a></span></span> <span class="locative-args">CLOG-WINDOW ASSIGN-URL</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:URL-ASSIGN%20GENERIC-FUNCTION" >URL-ASSIGN</a></span></span> <span class="locative-args">CLOG-LOCATION ASSIGN-URL</span></span></p>
 
 <p>Assign browser url.</p></li>
 </ul>
@@ -8137,7 +8272,7 @@ saved in session history and back button will not return to it.</p></li>
 
 <p><span class="outer-navigation"><span class="navigation"> <a href="#CLOG:@CLOG-LOCATION%20MGL-PAX:SECTION" title="CLOG Location Objects">&#8592;</a> <a href="#CLOG:@CLOG-MANUAL%20MGL-PAX:SECTION" title="The CLOG manual">&#8593;</a> <a href="#CLOG:@CLOG-JQUERY%20MGL-PAX:SECTION" title="CLOG jQuery Objects">&#8594;</a> <a href="#CLOG:@CLOG-NAVIGATOR%20MGL-PAX:SECTION" title="CLOG Navigator Objects">&#8634;</a></span></span></p>
 
-<h2><a href="#CLOG:@CLOG-NAVIGATOR%20MGL-PAX:SECTION">23 CLOG Navigator Objects</a></h2>
+<h2><a href="#CLOG:@CLOG-NAVIGATOR%20MGL-PAX:SECTION">26 CLOG Navigator Objects</a></h2>
 
 <p>CLOG-Navigator - CLOG Navigator Objects</p>
 
@@ -8193,7 +8328,7 @@ saved in session history and back button will not return to it.</p></li>
 
 <p><span class="outer-navigation"><span class="navigation"> <a href="#CLOG:@CLOG-NAVIGATOR%20MGL-PAX:SECTION" title="CLOG Navigator Objects">&#8592;</a> <a href="#CLOG:@CLOG-MANUAL%20MGL-PAX:SECTION" title="The CLOG manual">&#8593;</a> <a href="#CLOG:@CLOG-HELPERS%20MGL-PAX:SECTION" title="CLOG Helper Functions">&#8594;</a> <a href="#CLOG:@CLOG-JQUERY%20MGL-PAX:SECTION" title="CLOG jQuery Objects">&#8634;</a></span></span></p>
 
-<h2><a href="#CLOG:@CLOG-JQUERY%20MGL-PAX:SECTION">24 CLOG jQuery Objects</a></h2>
+<h2><a href="#CLOG:@CLOG-JQUERY%20MGL-PAX:SECTION">27 CLOG jQuery Objects</a></h2>
 
 <p>CLOG-jQuery - Base class for CLOG jQuery Objects</p>
 
@@ -8260,7 +8395,7 @@ result or <code>DEFAULT-ANSWER</code> on time out.</p></li>
 
 <p><span class="outer-navigation"><span class="navigation"> <a href="#CLOG:@CLOG-JQUERY%20MGL-PAX:SECTION" title="CLOG jQuery Objects">&#8592;</a> <a href="#CLOG:@CLOG-MANUAL%20MGL-PAX:SECTION" title="The CLOG manual">&#8593;</a> <a href="#CLOG:@CLOG-INTERNALS%20MGL-PAX:SECTION" title="CLOG Framework internals and extensions">&#8594;</a> <a href="#CLOG:@CLOG-HELPERS%20MGL-PAX:SECTION" title="CLOG Helper Functions">&#8634;</a></span></span></p>
 
-<h2><a href="#CLOG:@CLOG-HELPERS%20MGL-PAX:SECTION">25 CLOG Helper Functions</a></h2>
+<h2><a href="#CLOG:@CLOG-HELPERS%20MGL-PAX:SECTION">28 CLOG Helper Functions</a></h2>
 
 <p>Tutorial and demo helpers</p>
 
@@ -8379,7 +8514,7 @@ set (logging to browser console), </p></li>
 
 <p><span class="outer-navigation"><span class="navigation"> <a href="#CLOG:@CLOG-HELPERS%20MGL-PAX:SECTION" title="CLOG Helper Functions">&#8592;</a> <a href="#CLOG:@CLOG-MANUAL%20MGL-PAX:SECTION" title="The CLOG manual">&#8593;</a> <a href="#CLOG:@CLOG-INTERNALS%20MGL-PAX:SECTION" title="CLOG Framework internals and extensions">&#8634;</a></span></span></p>
 
-<h2><a href="#CLOG:@CLOG-INTERNALS%20MGL-PAX:SECTION">26 CLOG Framework internals and extensions</a></h2>
+<h2><a href="#CLOG:@CLOG-INTERNALS%20MGL-PAX:SECTION">29 CLOG Framework internals and extensions</a></h2>
 
 <p><em>* Introduction to Internals *</em></p>
 

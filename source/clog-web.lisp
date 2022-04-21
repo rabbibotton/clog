@@ -93,19 +93,23 @@
   "CLOG-WEB - Interactions"
   (clog-web-alert         function)
   (clog-web-form          function)
+  (form-result            function)
 
   "CLOG-WEB - Websites"
   (clog-web-site             class)
   (clog-web-routes-from-menu function)
   (clog-web-meta             function)
+  (create-web-site           generic-function)
+  (create-web-page           generic-function)
+
+  "CLOG-WEB-SITE - Accessors"
   (theme                     generic-function)
   (settings                  generic-function)
+  (profile                   generic-function)
   (url                       generic-function)
   (title                     generic-function)
   (footer                    generic-function)
   (logo                      generic-function)
-  (create-web-site           generic-function)
-  (create-web-page           generic-function)
 
   "CLOG-WEB - Utilities"
   (base-url-p          function)
@@ -862,9 +866,14 @@ is placed in DOM at top of OBJ instead of bottom of OBJ."
       (sleep time-out)
       (destroy panel))))
 
+(defun form-result (result key)
+  "Return the value for KEY from RESULT"
+  (second (assoc key result :test #'equal)))
+
 (defun clog-web-form (obj content fields on-input &key (modal nil)
 						    (ok-text "OK")
 						    (cancel-text "Cancel")
+						    (class nil)
 						    (html-id nil))
   "Create a form with CONTENT followed by FIELDS.
 FIELDS is a list of lists each list has:
@@ -1015,6 +1024,8 @@ if confirmed or nil if canceled. CANCEL-TEXT is only displayed if modal is t"
 (defclass clog-web-site ()
   ((theme     :initarg :theme
 	      :accessor theme)
+   (profile   :initarg :profile
+	      :accessor profile)
    (settings  :initarg :settings
               :reader  settings)
    (url       :initarg :url
@@ -1032,13 +1043,14 @@ if confirmed or nil if canceled. CANCEL-TEXT is only displayed if modal is t"
 ;;;;;;;;;;;;;;;;;;;
 
 (defun clog-web-meta (description)
-  "Returns a boot-function for use with CLOG:INITIALIZE to add meta and body
-information for search engines with DESCRIPTION."
+  "Returns a boot-function for use with CLOG:INITIALIZE to add meta
+and no-script body information for search engines with DESCRIPTION."
   (lambda (path content)
     (declare (ignore path))
     (funcall (cl-template:compile-template content)
-	   (list :meta (format nil "<meta name='description' content='~A'>" description)
-		 :body description))))
+	     (list :meta (format nil "<meta name='description' content='~A'>"
+				 description)
+		   :body description))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; clog-web-routes-from-menu ;;
@@ -1067,18 +1079,20 @@ clog-body."))
 
 (defmethod create-web-site ((obj clog-obj) &key
 					     settings
+					     (profile nil)
 					     (theme 'default-theme)
 					     (url "/")
 					     (title "")
 					     (footer "")
 					     (logo ""))
   (let ((website (make-instance 'clog-web-site
-				:theme theme
 				:settings settings
-				:url url
-				:title title
-				:footer footer
-				:logo logo))
+				:profile  profile
+				:theme    theme
+				:url      url
+				:title    title
+				:footer   footer
+				:logo     logo))
 	(app (connection-data-item obj "clog-web")))
     (setf (web-site app) website)
     website))

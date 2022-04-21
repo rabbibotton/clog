@@ -279,8 +279,12 @@ High Order Extensions to CLOG
   - Compositor containers
   - Menus
   - Alerts
-  - Forms
-  - Instant Web Sites - clog-web-site
+  - Forms - clog-web-forms
+  - Web Sites - clog-web-site
+
+- clog-web-themes - basic themes for clog based websites
+
+- clog-web-dbi - components for database driven websites
 
 - clog-panels - Quick application layouts
 

@@ -7,6 +7,8 @@ When to use page vs panel
 Plug-in panels for use on other sites
 Demo between different models - stateless, webpage, windows
 
+- Expand clog-db-admin to use other available dbi database types
+
 - Multi control select and alignments in Builder
 
 - Right click menus CLOG-GUI

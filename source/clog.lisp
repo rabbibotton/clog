@@ -48,6 +48,7 @@ embedded in a native template application.)"
   (@clog-auth            section)
   (@clog-gui             section)
   (@clog-web             section)
+  (@clog-web-dbi         section)
   (@clog-web-themes      section)
   (@clog-body            section)
   (@clog-window          section)

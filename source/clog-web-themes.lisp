@@ -70,7 +70,8 @@ Page properties:
 	   (l2        (create-label p2 :content "Password"))
 	   (pass      (create-form-element p2 :password :name "password" :class "w3-input"))
 	   (p3        (create-p form)))
-      (declare (ignore l1 l2))
+
+      (declare (ignore l1 l2 p3))
       (setf (maximum-width outter) (unit :px 500))
       (setf (requiredp user) t)
       (setf (requiredp pass) t)
@@ -78,7 +79,9 @@ Page properties:
 					:class (format nil "~A ~A" "w3-button"
 						       (getf (settings website)
 							     :menu-class)))
-      (set-on-submit form (getf properties :on-submit))))
+      (set-on-submit form (getf properties :on-submit))
+      (when (getf properties :sign-up)
+	(create-a form :class "w3-right" :content "sign up" :link (getf properties :sign-up)))))
   (create-br body)
   (create-br body)
   (create-div body :content (format nil "~A" (footer website))))
