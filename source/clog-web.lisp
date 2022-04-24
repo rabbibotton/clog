@@ -97,9 +97,8 @@
 
   "CLOG-WEB - Websites"
   (clog-web-site             class)
-  (clog-web-routes-from-menu function)
-  (clog-web-meta             function)
   (create-web-site           generic-function)
+  (get-web-site              generic-function)
   (create-web-page           generic-function)
 
   "CLOG-WEB-SITE - Accessors"
@@ -112,9 +111,11 @@
   (logo                      generic-function)
 
   "CLOG-WEB - Utilities"
-  (base-url-p          function)
-  (adjust-for-base-url function)
-  (base-url-split      function))
+  (clog-web-routes-from-menu function)
+  (clog-web-meta             function)
+  (base-url-p                function)
+  (adjust-for-base-url       function)
+  (base-url-split            function))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Implementation - clog-web - CLOG Web page abstraction
@@ -917,8 +918,8 @@ the value if set in the theme settings."
 				(cond
 				  ((eq (third l) :select)
 				   (format nil
-					   "<div><label class='~A'>~A</label>~
-			       <select class='w3-select ~A' name='~A-~A'>~A</select></div>"
+					   "<p><label class='~A'>~A</label>~
+			       <select class='w3-select ~A' name='~A-~A'>~A</select></p>"
 					   text-class (first l)
 					   border-class html-id (second l)
 					   (format nil "~{~A~}"
@@ -933,14 +934,14 @@ the value if set in the theme settings."
 							   (fourth l)))))
 				  ((eq (third l) :radio)
 				   (format nil
-					   "<div><label class='~A'>~A</label>~A</div>"
+					   "<p><label class='~A'>~A</label>~A</p>"
 					   text-class (first l)
 					   (format nil "~{~A~}"
 						   (mapcar (lambda (s)
 							     (format nil
-			       "<div><input type=radio class='w3-radio' name='~A-~A'~
+			       "<p><input type=radio class='w3-radio' name='~A-~A'~
                                       id='~A-~A-~A' value='~A' ~A> ~
-                                     <label for='~A-~A-~A'>~A</label></div>"
+                                     <label for='~A-~A-~A'>~A</label></p>"
 			                                      html-id (second l)
 							      html-id (second l) (second s)
 							      (second s)
@@ -952,11 +953,11 @@ the value if set in the theme settings."
 							   (fourth l)))))
 				  ((eq (third l) :checkbox)
 				   (format nil
-					   "<div><input class='w3-check' type='checkbox' ~
+					   "<p><input class='w3-check' type='checkbox' ~
                                                   name='~A-~A' id='~A-~A' ~A> ~
                                                   <label class='~A' for='~A-~A'>~
                                                   ~A</label>~
-                                            </div>"
+                                            </p>"
 					   html-id (second l) html-id (second l)
 					   (if (fourth l)
 					       "checked"
@@ -965,9 +966,9 @@ the value if set in the theme settings."
 					   (first l)))
 				  ((third l)
 				   (format nil
-					   "<div><label class='~A'>~A</label>~
+					   "<p><label class='~A'>~A</label>~
                                                  <input class='w3-input ~A' type='~A'~
-                                                  name='~A-~A' id='~A-~A' value='~A'></div>"
+                                                  name='~A-~A' id='~A-~A' value='~A'></p>"
 					   text-class (first l)
 					   border-class (third l)
 					   html-id (second l) html-id (second l)
@@ -976,8 +977,8 @@ the value if set in the theme settings."
 					       "")))
 				  (t
 				   (format nil
-					    "<div><label class='~A'>~A</label>~
-                               <input class='w3-input ~A' type='text' name='~A-~A' id='~A-~A'></div>"
+					    "<p><label class='~A'>~A</label>~
+                               <input class='w3-input ~A' type='text' name='~A-~A' id='~A-~A'></p>"
                                             text-class (first l)
 					    border-class html-id (second l) html-id (second l)))))
 			      fields)))
@@ -1055,32 +1056,6 @@ the value if set in the theme settings."
 	      :reader logo))
   (:documentation "Website information"))
 
-;;;;;;;;;;;;;;;;;;;
-;; clog-web-meta ;;
-;;;;;;;;;;;;;;;;;;;
-
-(defun clog-web-meta (description)
-  "Returns a boot-function for use with CLOG:INITIALIZE to add meta
-and no-script body information for search engines with DESCRIPTION."
-  (lambda (path content)
-    (declare (ignore path))
-    (funcall (cl-template:compile-template content)
-	     (list :meta (format nil "<meta name='description' content='~A'>"
-				 description)
-		   :body description))))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; clog-web-routes-from-menu ;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(defun clog-web-routes-from-menu (menu)
-  "Use a menu to setup a route for each menu item that has a third
-element."
-  (dolist (drop-down menu)
-    (dolist (item (second drop-down))
-      (when (third item)
-	(set-on-new-window (third item) :path (second item))))))
-  
 ;;;;;;;;;;;;;;;;;;;;;
 ;; create-web-site ;;
 ;;;;;;;;;;;;;;;;;;;;;
@@ -1114,6 +1089,15 @@ clog-body."))
     (setf (web-site app) website)
     website))
 
+(defgeneric get-web-site (clog-obj)
+  (:documentation "Retrieve the clog-web-site object created on CLOG-OBJ's
+connection"))
+
+(defmethod get-web-site ((obj clog-obj))
+  (let* ((app     (connection-data-item obj "clog-web"))
+	 (website (web-site app)))
+    website))
+
 ;;;;;;;;;;;;;;;;;;;;;
 ;; create-web-page ;;
 ;;;;;;;;;;;;;;;;;;;;;
@@ -1123,23 +1107,59 @@ clog-body."))
 CLOG-OBJ as parent"))
 
 (defmethod create-web-page ((obj clog-obj) page properties)
-  (let* ((app     (connection-data-item obj "clog-web"))
-	 (website (web-site app)))
-    (funcall (theme website) obj website page properties)))
+  (funcall (theme (get-web-site obj))
+	   obj (get-web-site obj) page properties))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Utilities
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+;;;;;;;;;;;;;;;;;;;
+;; clog-web-meta ;;
+;;;;;;;;;;;;;;;;;;;
+
+(defun clog-web-meta (description)
+  "Returns a boot-function for use with CLOG:INITIALIZE to add meta
+and no-script body information for search engines with DESCRIPTION."
+  (lambda (path content)
+    (declare (ignore path))
+    (funcall (cl-template:compile-template content)
+	     (list :meta (format nil "<meta name='description' content='~A'>"
+				 description)
+		   :body description))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; clog-web-routes-from-menu ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defun clog-web-routes-from-menu (menu)
+  "Use a menu to setup a route for each menu item that has a third
+element."
+  (dolist (drop-down menu)
+    (dolist (item (second drop-down))
+      (when (third item)
+	(set-on-new-window (third item) :path (second item))))))
+;;;;;;;;;;;;;;;;
+;; base-url-p ;;
+;;;;;;;;;;;;;;;;
+
 (defun base-url-p (base-url url-path)
   "True if url-path is based on base-url"
   (ppcre:scan (format nil "^~A/" base-url) (format nil "~A/" url-path)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;
+;; adjust-for-base-url ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defun adjust-for-base-url (base-url url-path)
   "If url-path is not on base-url return base-url otherwise url-path"
   (if (base-url-p base-url url-path)
       url-path
       base-url))
+
+;;;;;;;;;;;;;;;;;;;;
+;; base-url-split ;;
+;;;;;;;;;;;;;;;;;;;;
 
 (defun base-url-split (base-url url-path)
   "Split path by / adjusting for base-url"
