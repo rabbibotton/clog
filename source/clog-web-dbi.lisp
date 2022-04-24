@@ -139,4 +139,3 @@ if one is present and login fails."
     (sql-insert* "users" `(:username "admin"
 			   :password "admin"
 			   :token    ,(make-token)))))
-

@@ -9,24 +9,32 @@
 ;; CLOG-Auth an authorization abstraction for CLOG
 
 (mgl-pax:define-package :clog-auth
-  (:documentation "CLOG-AUTH an authorization abstraction for CLOG")
+  (:documentation "CLOG-AUTH an authenticationa and authorization abstraction
+for CLOG")
   (:use #:cl #:clog #:mgl-pax))
 
 (cl:in-package :clog-auth)
 
 (defsection @clog-auth (:title "CLOG Auth Objects")
-  "CLOG-AUTH - authorization abstraction for CLOG"
+  "CLOG-AUTH - Authentication"
   (get-authentication-token     function)
   (store-authentication-token   function)
   (remove-authentication-token  function)
-  (set-on-authentication-change function))
+  (set-on-authentication-change function)
+
+  "CLOG-AUTH - Authorization"
+  (add-authorization function)
+  (is-authorized-p   function))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Implementation - clog-auth
+;; Implementation - clog-auth - Authenitcation
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defparameter *clog-auth-key* "clog-auth-token"
   "Key used for local storage of authentication token")
+
+(defparameter *authorization-hash* (make-hash-table* :test #'equalp)
+  "Hash table of roles to actions")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; get-authentication-token ;;
@@ -38,7 +46,7 @@
     (when (equalp token "null")
       (setf token nil))
     (unless token
-      (when auth-path	
+      (when auth-path
 	(url-assign (window body) auth-path)))
     token))
 
@@ -54,7 +62,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defun remove-authentication-token (body)
-  (storage-remove (window body) :local *clog-auth-key*))  
+  (storage-remove (window body) :local *clog-auth-key*))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; set-on-authentication-change ;;
@@ -68,3 +76,30 @@
 						  "clog-auth-token")
 				      (funcall handler body))))))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Implementation - clog-auth - Authorization
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defparameter *authorization-hash* (make-hash-table* :test #'equalp)
+  "Hash table of role to action")
+
+;;;;;;;;;;;;;;;;;;;;;;;
+;; add-authorization ;;
+;;;;;;;;;;;;;;;;;;;;;;;
+
+(defun add-authorization (role-list action-list)
+  "Add to each role in ROLE-LIST every action in ACTION-LIST"
+  (dolist (role role-list)
+    (dolist (action action-list)
+      (setf (gethash role *authorization-hash*)
+       (adjoin action (gethash role *authorization-hash*))))))
+
+;;;;;;;;;;;;;;;;;;;;;
+;; is-authorized-p ;;
+;;;;;;;;;;;;;;;;;;;;;
+
+(defun is-authorized-p (role-list action)
+  "Given ROLE-LIST is action authorized"
+  (dolist (role role-list nil)
+    (when (member action (gethash role *authorization-hash*))
+      (return t))))

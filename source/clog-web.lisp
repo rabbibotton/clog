@@ -105,6 +105,7 @@
   (theme                     generic-function)
   (settings                  generic-function)
   (profile                   generic-function)
+  (roles                     generic-function)
   (url                       generic-function)
   (title                     generic-function)
   (footer                    generic-function)
@@ -1044,6 +1045,8 @@ the value if set in the theme settings."
 	      :accessor theme)
    (profile   :initarg :profile
 	      :accessor profile)
+   (roles     :initarg :roles
+	      :accessor roles)
    (settings  :initarg :settings
               :reader  settings)
    (url       :initarg :url
@@ -1060,8 +1063,11 @@ the value if set in the theme settings."
 ;; create-web-site ;;
 ;;;;;;;;;;;;;;;;;;;;;
 
-(defgeneric create-web-site (clog-obj &key theme
+(defgeneric create-web-site (clog-obj &key
 					settings
+					profile
+					roles
+					theme
 					url
 					title
 					footer
@@ -1072,6 +1078,7 @@ clog-body."))
 (defmethod create-web-site ((obj clog-obj) &key
 					     settings
 					     (profile nil)
+					     (roles nil)
 					     (theme 'default-theme)
 					     (url "/")
 					     (title "")
@@ -1080,6 +1087,7 @@ clog-body."))
   (let ((website (make-instance 'clog-web-site
 				:settings settings
 				:profile  profile
+				:roles    roles
 				:theme    theme
 				:url      url
 				:title    title

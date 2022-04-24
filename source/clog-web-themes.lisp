@@ -26,7 +26,7 @@ Settings available:
   :text-class   - w3 text color class
 Page properties:
   :menu - ((\"Menu Name\" ((\"Menu Item\" \"link\"))))
-  :content"    
+  :content"
   (let ((sb (create-style-block body)))
     (add-style sb :element "a" '(("text-decoration" :none))))
   (let* ((row   (create-web-auto-row body))
@@ -49,9 +49,13 @@ Page properties:
 					     :content (first drop-down)
 					     :class "w3-border")))
 	(dolist (item (second drop-down))
-	  (create-web-menu-item drop
-				:content (first item)
-				:link (second item))))))
+	  (when (or (and (fourth item)
+			 (clog-auth:is-authorized-p (roles website)
+						    (fourth item)))
+		    (eq (fourth item) nil))
+	    (create-web-menu-item drop
+				  :content (first item)
+				  :link (second item)))))))
   (create-br body)
   (let ((c (getf properties :content)))
     (when c

@@ -166,19 +166,19 @@ Here is a sample CLOG app:
 
   (let ((hello-element                ; hello-element is a local variable that
                                       ; will be bound to our new CLOG-Element
-      
+
       ;; This application simply creates a CLOG-Element as a child to the
       ;; CLOG-body object in the browser window.
 
       ;; A CLOG-Element represents a block of HTML (we will later see ways to
-      ;; directly create buttons and all sorts of HTML elements in more 
-      ;; lisp-like ways with no knowledge of HTML or JavaScript. 
+      ;; directly create buttons and all sorts of HTML elements in more
+      ;; lisp-like ways with no knowledge of HTML or JavaScript.
       (create-child body "<h1>Hello World! (click me!)</h1>")))
 
     (set-on-click hello-element      ; Now we set a function to handle clicks
           (lambda (obj)              ; In this case we use an anonymous function
             (setf (color hello-element) "green"))))))
-            
+
 ;; To see all the events one can set and the many properties and styles that
 ;; exist, refer to the CLOG manual or the file clog-element.lisp
 
@@ -212,7 +212,7 @@ CLOG Builder Tutorials
 3. Importing HTML in to Builder, Adding Pages and Hand Coding
     https://www.reddit.com/r/lisp/comments/snvv0w/clog_builder_tutorial_3_importing_html_adding/
 4. CLOS-CONTACT - Using database controls demos a contact manager app in clog.
-    https://www.reddit.com/r/lisp/comments/t61sib/clog_builder_tutorial_4_a_complete_database_app/  
+    https://www.reddit.com/r/lisp/comments/t61sib/clog_builder_tutorial_4_a_complete_database_app/
 
 CLOG Tutorials
 
@@ -269,7 +269,7 @@ High Order Extensions to CLOG
   - File Load / Save dialogs
   - Alert, Input and Confirmation dialogs
   - Form dialogs
-  
+
 - clog-web - Webpage creation
   - Auto column layouts
   - 12 Point Grid System layouts
@@ -279,12 +279,15 @@ High Order Extensions to CLOG
   - Compositor containers
   - Menus
   - Alerts
-  - Forms - clog-web-forms
-  - Web Sites - clog-web-site
 
-- clog-web-themes - basic themes for clog based websites
-
-- clog-web-dbi - components for database driven websites
+- clog-web-site - Instant themed websites with plugins:
+  - clog-web-page    - create a theme based page
+  - clog-web-dbi     - database driven websites (uses clog-auth)
+  - clog-web-forms   - Instant web forms
+  - clog-web-themes  - basic themes for clog based websites
+  - clog-web-content - database driven content,tags, comments (in progress)
+  - clog-web-blog    - instant blogs (in progress)
+  - clog-web-cart    - instant shopping carts (future)
 
 - clog-panels - Quick application layouts
 
@@ -296,12 +299,12 @@ High Order Extensions to CLOG
 - clog-data - Move data to and from groups of controls
   -  SQL writer helpers for basic SQL
   -  CLOG-Database - Database control for CLOG Builder
-  -  CLOG-One-Row  - One row at a time table access auto 
+  -  CLOG-One-Row  - One row at a time table access auto
                      binds to controls in CLOG Builder
   -  CLOG-Lookup   - Version of the select control (dropdown and listbox)
                      that are database connected
   -  CLOG-DB-Table - Version of html table that are database connected
 
-- clog-auth - Authentication and authorization framework (in progress)
+- clog-auth - Authentication and authorization framework
 
 (See [FUTURE.md](FUTURE.md) for future plans)
