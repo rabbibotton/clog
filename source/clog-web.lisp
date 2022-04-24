@@ -873,7 +873,9 @@ is placed in DOM at top of OBJ instead of bottom of OBJ."
 (defun clog-web-form (obj content fields on-input &key (modal nil)
 						    (ok-text "OK")
 						    (cancel-text "Cancel")
-						    (class nil)
+						    (border-class "w3-border")
+						    (text-class "w3-text-black")
+						    (color-class "w3-black")
 						    (html-id nil))
   "Create a form with CONTENT followed by FIELDS.
 FIELDS is a list of lists each list has:
@@ -895,7 +897,19 @@ Special field types
       see FORM-ELEMENT-TYPE)
 
 Calls on-input after OK or Cancel with an a-list of field name to value
-if confirmed or nil if canceled. CANCEL-TEXT is only displayed if modal is t"
+if confirmed or nil if canceled. CANCEL-TEXT is only displayed if modal is t
+
+If clog-web-site is being used the class class setting will be replaced with
+the value if set in the theme settings."
+  (let* ((app     (connection-data-item obj "clog-web"))
+	 (website (web-site app)))
+    (when website
+      (when (getf (settings website) :text-class)
+	(setf text-class (getf (settings website) :text-class)))
+      (when (getf (settings website) :border-class)
+	(setf border-class (getf (settings website) :border-class)))
+      (when (getf (settings website) :color-class)
+	(setf color-class (getf (settings website) :color-class)))))
   (unless html-id
     (setf html-id (clog-connection:generate-id)))
   (let* ((fls (format nil "~{~A~}"
@@ -903,9 +917,10 @@ if confirmed or nil if canceled. CANCEL-TEXT is only displayed if modal is t"
 				(cond
 				  ((eq (third l) :select)
 				   (format nil
-					   "<div><label class='w3-text-black'><b>~A</b></label>~
-			       <select class='w3-select w3-border' name='~A-~A'>~A</select></div>"
-					   (first l) html-id (second l)
+					   "<div><label class='~A'>~A</label>~
+			       <select class='w3-select ~A' name='~A-~A'>~A</select></div>"
+					   text-class (first l)
+					   border-class html-id (second l)
 					   (format nil "~{~A~}"
 						   (mapcar (lambda (s)
 							     (format nil
@@ -918,8 +933,8 @@ if confirmed or nil if canceled. CANCEL-TEXT is only displayed if modal is t"
 							   (fourth l)))))
 				  ((eq (third l) :radio)
 				   (format nil
-					   "<div><label class='w3-text-black'><b>~A</b></label>~A</div>"
-					   (first l)
+					   "<div><label class='~A'>~A</label>~A</div>"
+					   text-class (first l)
 					   (format nil "~{~A~}"
 						   (mapcar (lambda (s)
 							     (format nil
@@ -939,30 +954,32 @@ if confirmed or nil if canceled. CANCEL-TEXT is only displayed if modal is t"
 				   (format nil
 					   "<div><input class='w3-check' type='checkbox' ~
                                                   name='~A-~A' id='~A-~A' ~A> ~
-                                                  <label class='w3-text-black' for='~A-~A'>~
-                                                  <b>~A</b></label>~
+                                                  <label class='~A' for='~A-~A'>~
+                                                  ~A</label>~
                                             </div>"
 					   html-id (second l) html-id (second l)
 					   (if (fourth l)
 					       "checked"
 					       "")
-					   html-id (second l)
+					   text-class html-id (second l)
 					   (first l)))
 				  ((third l)
 				   (format nil
-					   "<div><label class='w3-text-black'><b>~A</b></label>~
-                                                 <input class='w3-input w3-border' type='~A'~
+					   "<div><label class='~A'>~A</label>~
+                                                 <input class='w3-input ~A' type='~A'~
                                                   name='~A-~A' id='~A-~A' value='~A'></div>"
-                                   (first l) (third l)
-				   html-id (second l) html-id (second l)
-				   (if (fourth l)
-				       (fourth l)
-				       "")))
+					   text-class (first l)
+					   border-class (third l)
+					   html-id (second l) html-id (second l)
+					   (if (fourth l)
+					       (fourth l)
+					       "")))
 				  (t
 				   (format nil
-					    "<div><label class='w3-text-black'><b>~A</b></label>~
-                               <input class='w3-input w3-border' type='text' name='~A-~A' id='~A-~A'></div>"
-                                            (first l) html-id (second l) html-id (second l)))))
+					    "<div><label class='~A'>~A</label>~
+                               <input class='w3-input ~A' type='text' name='~A-~A' id='~A-~A'></div>"
+                                            text-class (first l)
+					    border-class html-id (second l) html-id (second l)))))
 			      fields)))
 	 (win  (create-web-content obj
 				  :content        (format nil
@@ -971,17 +988,17 @@ if confirmed or nil if canceled. CANCEL-TEXT is only displayed if modal is t"
 <form class='w3-container' onSubmit='return false;'>
 ~A
 <br><center>
-<button class='w3-button w3-black' style='width:7em' id='~A-ok'>~A</button>~A
+<button class='w3-button ~A' style='width:7em' id='~A-ok'>~A</button>~A
 </center>
 </form>
 </div>" (if content
 	    (format nil "<center>~A</center><br>" content)
 	    "")
         fls
-	html-id ok-text ; ok
+	color-class html-id ok-text ; ok
 	(if modal
-	    (format nil "&nbsp;<button class='w3-button w3-black' style='width:7em' id='~A-cancel'>~A</button>"
-		    html-id cancel-text)
+	    (format nil "&nbsp;<button class='w3-button ~A' style='width:7em' id='~A-cancel'>~A</button>"
+		    color-class html-id cancel-text)
 	    ""))
 				  :hidden          t
 				  :html-id         html-id))

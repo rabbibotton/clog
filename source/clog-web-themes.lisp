@@ -21,7 +21,9 @@
 (defun default-theme (body website page properties)
   "The default theme for clog-web-site.
 Settings available:
-  :menu-class - w3 color class for menu bar
+  :color-class  - w3 color class for menu bars and buttons
+  :border-class - w3 border
+  :text-class   - w3 text color class
 Page properties:
   :menu - ((\"Menu Name\" ((\"Menu Item\" \"link\"))))
   :content"    
@@ -40,8 +42,8 @@ Page properties:
 		 :content (title website)
 		 :class "w3-xlarge w3-sans-serif"))
   (let ((menu  (create-web-menu-bar body :class "w3-card-4")))
-    (when (getf (settings website) :menu-class)
-      (add-class menu (getf (settings website) :menu-class)))
+    (when (getf (settings website) :color-class)
+      (add-class menu (getf (settings website) :color-class)))
     (dolist (drop-down (getf properties :menu))
       (let ((drop (create-web-menu-drop-down menu
 					     :content (first drop-down)
@@ -63,12 +65,24 @@ Page properties:
   (when (eq page :login)
     (let* ((outter    (create-web-container body))
 	   (form      (create-form outter))
+	   (t-class   (if (getf (settings website) :text-class)
+			  (getf (settings website) :text-class)
+			  ""))
+	   (b-class   (if (getf (settings website) :border-class)
+			  (getf (settings website) :border-class)
+			  ""))
 	   (p1        (create-p form))
-	   (l1        (create-label p1 :content "User Name"))
-	   (user      (create-form-element p1 :text :name "username" :class "w3-input"))
+	   (l1        (create-label p1 :content "User Name"
+				       :class t-class))
+	   (user      (create-form-element p1 :text
+					   :name "username"
+					   :class (format nil "w3-input ~A" b-class)))
 	   (p2        (create-p form))
-	   (l2        (create-label p2 :content "Password"))
-	   (pass      (create-form-element p2 :password :name "password" :class "w3-input"))
+	   (l2        (create-label p2 :content "Password"
+				       :class t-class))
+	   (pass      (create-form-element p2 :password
+					   :name "password"
+					   :class (format nil "w3-input ~A" b-class)))
 	   (p3        (create-p form)))
 
       (declare (ignore l1 l2 p3))
@@ -78,7 +92,7 @@ Page properties:
       (create-form-element form :submit :value "Submit"
 					:class (format nil "~A ~A" "w3-button"
 						       (getf (settings website)
-							     :menu-class)))
+							     :color-class)))
       (set-on-submit form (getf properties :on-submit))
       (when (getf properties :sign-up)
 	(create-a form :class "w3-right" :content "sign up" :link (getf properties :sign-up)))))
