@@ -1,4 +1,4 @@
-;; Demonstrates clog-web-site from clog-web instant websites
+;; Demonstrates clog-web-site to create instant websites
 
 (defpackage #:clog-tut-30
   (:use #:cl #:clog #:clog-web)

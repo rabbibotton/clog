@@ -56,3 +56,4 @@ Tutorial Summary
 - 28-tutorial.lisp - CLOG Builder Hello - A minimalist CLOG Builder project
 - 29-tutorial.lisp - Presentations (and jQuery) - linking lisp objects to clog objects
 - 30-tutorial.lisp - Instant websites - clog-web-site
+- 31-tutorial.lisp - Database and Authority based websites - clog-web-dbi and clog-auth
