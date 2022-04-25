@@ -14,7 +14,7 @@
 
 (cl:in-package :clog-web-dbi)
 
-(defsection @clog-web-dbi (:title "CLOG Web DBI - dbi based website")
+(defsection @clog-web-dbi (:title "CLOG Web DBI")
   "Authentication"
   (login              function)
   (logout             function)
