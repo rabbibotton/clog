@@ -6129,7 +6129,7 @@ is nil unbind the event.</p></li>
 
 <h6>[in package CLOG-AUTH]</h6>
 
-<p>CLOG-AUTH - authorization abstraction for CLOG</p>
+<p>CLOG-AUTH - Authentication</p>
 
 <p><a id="x-28CLOG-AUTH-3AGET-AUTHENTICATION-TOKEN-20FUNCTION-29"></a>
 <a id="CLOG-AUTH:GET-AUTHENTICATION-TOKEN%20FUNCTION"></a></p>
@@ -6159,6 +6159,26 @@ is nil unbind the event.</p></li>
 
 <ul>
 <li><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#CLOG-AUTH:SET-ON-AUTHENTICATION-CHANGE%20FUNCTION" >SET-ON-AUTHENTICATION-CHANGE</a></span></span> <span class="locative-args">OBJ HANDLER</span></span></li>
+</ul>
+
+<p>CLOG-AUTH - Authorization</p>
+
+<p><a id="x-28CLOG-AUTH-3AADD-AUTHORIZATION-20FUNCTION-29"></a>
+<a id="CLOG-AUTH:ADD-AUTHORIZATION%20FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#CLOG-AUTH:ADD-AUTHORIZATION%20FUNCTION" >ADD-AUTHORIZATION</a></span></span> <span class="locative-args">ROLE-LIST ACTION-LIST</span></span></p>
+
+<p>Add to each role in <code>ROLE-LIST</code> every action in <code>ACTION-LIST</code></p></li>
+</ul>
+
+<p><a id="x-28CLOG-AUTH-3AIS-AUTHORIZED-P-20FUNCTION-29"></a>
+<a id="CLOG-AUTH:IS-AUTHORIZED-P%20FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#CLOG-AUTH:IS-AUTHORIZED-P%20FUNCTION" >IS-AUTHORIZED-P</a></span></span> <span class="locative-args">ROLE-LIST ACTION</span></span></p>
+
+<p>Given <code>ROLE-LIST</code> is action authorized</p></li>
 </ul>
 
 <p><a id="x-28CLOG-3A-40CLOG-GUI-20MGL-PAX-3ASECTION-29"></a>
@@ -7227,7 +7247,7 @@ is placed in DOM at top of <code>OBJ</code> instead of bottom of <code>OBJ</code
 <a id="CLOG-WEB:CLOG-WEB-FORM%20FUNCTION"></a></p>
 
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#CLOG-WEB:CLOG-WEB-FORM%20FUNCTION" >CLOG-WEB-FORM</a></span></span> <span class="locative-args">OBJ CONTENT FIELDS ON-INPUT &amp;KEY (MODAL <code>NIL</code>) (OK-TEXT &quot;OK&quot;) (CANCEL-TEXT &quot;Cancel&quot;) (CLASS <code>NIL</code>) (HTML-ID <code>NIL</code>)</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#CLOG-WEB:CLOG-WEB-FORM%20FUNCTION" >CLOG-WEB-FORM</a></span></span> <span class="locative-args">OBJ CONTENT FIELDS ON-INPUT &amp;KEY (MODAL <code>NIL</code>) (OK-TEXT &quot;OK&quot;) (CANCEL-TEXT &quot;Cancel&quot;) (BORDER-CLASS &quot;w3-border&quot;) (TEXT-CLASS &quot;w3-text-black&quot;) (COLOR-CLASS &quot;w3-black&quot;) (HTML-ID <code>NIL</code>)</span></span></p>
 
 <p>Create a form with <code>CONTENT</code> followed by <code>FIELDS</code>.
 <code>FIELDS</code> is a list of lists each list has:</p>
@@ -7250,7 +7270,10 @@ is placed in DOM at top of <code>OBJ</code> instead of bottom of <code>OBJ</code
       see <a href="#CLOG:FORM-ELEMENT-TYPE%20TYPE" title="CLOG:FORM-ELEMENT-TYPE TYPE"><code>FORM-ELEMENT-TYPE</code></a>)</p>
 
 <p>Calls on-input after OK or Cancel with an a-list of field name to value
-if confirmed or nil if canceled. <code>CANCEL-TEXT</code> is only displayed if modal is t</p></li>
+if confirmed or nil if canceled. <code>CANCEL-TEXT</code> is only displayed if modal is t</p>
+
+<p>If clog-web-site is being used the class class setting will be replaced with
+the value if set in the theme settings.</p></li>
 </ul>
 
 <p><a id="x-28CLOG-WEB-3AFORM-RESULT-20FUNCTION-29"></a>
@@ -7273,44 +7296,38 @@ if confirmed or nil if canceled. <code>CANCEL-TEXT</code> is only displayed if m
 <p>Website information</p></li>
 </ul>
 
-<p><a id="x-28CLOG-WEB-3ACLOG-WEB-ROUTES-FROM-MENU-20FUNCTION-29"></a>
-<a id="CLOG-WEB:CLOG-WEB-ROUTES-FROM-MENU%20FUNCTION"></a></p>
-
-<ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#CLOG-WEB:CLOG-WEB-ROUTES-FROM-MENU%20FUNCTION" >CLOG-WEB-ROUTES-FROM-MENU</a></span></span> <span class="locative-args">MENU</span></span></p>
-
-<p>Use a menu to setup a route for each menu item that has a third
-element.</p></li>
-</ul>
-
-<p><a id="x-28CLOG-WEB-3ACLOG-WEB-META-20FUNCTION-29"></a>
-<a id="CLOG-WEB:CLOG-WEB-META%20FUNCTION"></a></p>
-
-<ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#CLOG-WEB:CLOG-WEB-META%20FUNCTION" >CLOG-WEB-META</a></span></span> <span class="locative-args">DESCRIPTION</span></span></p>
-
-<p>Returns a boot-function for use with <a href="#CLOG:INITIALIZE%20FUNCTION" title="CLOG:INITIALIZE FUNCTION"><code>CLOG:INITIALIZE</code></a> to add meta
-and no-script body information for search engines with <code>DESCRIPTION</code>.</p></li>
-</ul>
-
 <p><a id="x-28CLOG-WEB-3ACREATE-WEB-SITE-20GENERIC-FUNCTION-29"></a>
 <a id="CLOG-WEB:CREATE-WEB-SITE%20GENERIC-FUNCTION"></a></p>
 
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-WEB:CREATE-WEB-SITE%20GENERIC-FUNCTION" >CREATE-WEB-SITE</a></span></span> <span class="locative-args">CLOG-OBJ &amp;KEY THEME SETTINGS URL TITLE FOOTER LOGO PROFILE</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-WEB:CREATE-WEB-SITE%20GENERIC-FUNCTION" >CREATE-WEB-SITE</a></span></span> <span class="locative-args">CLOG-OBJ &amp;KEY SETTINGS PROFILE ROLES THEME URL TITLE FOOTER LOGO</span></span></p>
 
 <p>Attach a clog-web-site to a <code>CLOG-OBJ</code> generally a
 clog-body.</p></li>
+</ul>
+
+<p><a id="x-28CLOG-WEB-3AGET-WEB-SITE-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG-WEB:GET-WEB-SITE%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-WEB:GET-WEB-SITE%20GENERIC-FUNCTION" >GET-WEB-SITE</a></span></span> <span class="locative-args">CLOG-OBJ</span></span></p>
+
+<p>Retrieve the clog-web-site object created on <code>CLOG-OBJ</code>'s
+connection</p></li>
 </ul>
 
 <p><a id="x-28CLOG-WEB-3ACREATE-WEB-PAGE-20GENERIC-FUNCTION-29"></a>
 <a id="CLOG-WEB:CREATE-WEB-PAGE%20GENERIC-FUNCTION"></a></p>
 
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-WEB:CREATE-WEB-PAGE%20GENERIC-FUNCTION" >CREATE-WEB-PAGE</a></span></span> <span class="locative-args">CLOG-OBJ PAGE PROPERTIES</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-WEB:CREATE-WEB-PAGE%20GENERIC-FUNCTION" >CREATE-WEB-PAGE</a></span></span> <span class="locative-args">CLOG-OBJ PAGE PROPERTIES &amp;KEY AUTHORIZE</span></span></p>
 
 <p>Use the clog-web-site <a href="#CLOG-WEB:THEME%20GENERIC-FUNCTION" title="CLOG-WEB:THEME GENERIC-FUNCTION"><code>THEME</code></a> to create <code>PAGE</code> with
-<code>CLOG-OBJ</code> as parent</p></li>
+<code>CLOG-OBJ</code> as parent. <code>PAGE</code> is a symbol to identify the pages purpose to
+the website theme. Themes are required to provide certain default
+pages see clog-web-themes file. If <code>AUTHORIZE</code> then <code>PAGE</code> is used also as
+a CLOG-Auth action to be checked if the current users roles have
+permission to <code>PAGE</code></p></li>
 </ul>
 
 <p><a href="#CLOG-WEB:CLOG-WEB-SITE%20CLASS" title="CLOG-WEB:CLOG-WEB-SITE CLASS"><code>CLOG-WEB-SITE</code></a> - Accessors</p>
@@ -7334,6 +7351,13 @@ clog-body.</p></li>
 
 <ul>
 <li><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-WEB:PROFILE%20GENERIC-FUNCTION" >PROFILE</a></span></span> <span class="locative-args">OBJECT</span></span></li>
+</ul>
+
+<p><a id="x-28CLOG-WEB-3AROLES-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG-WEB:ROLES%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-WEB:ROLES%20GENERIC-FUNCTION" >ROLES</a></span></span> <span class="locative-args">OBJECT</span></span></li>
 </ul>
 
 <p><a id="x-28CLOG-3AURL-20GENERIC-FUNCTION-29"></a>
@@ -7369,6 +7393,26 @@ clog-body.</p></li>
 </ul>
 
 <p><code>CLOG-WEB</code> - Utilities</p>
+
+<p><a id="x-28CLOG-WEB-3ACLOG-WEB-ROUTES-FROM-MENU-20FUNCTION-29"></a>
+<a id="CLOG-WEB:CLOG-WEB-ROUTES-FROM-MENU%20FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#CLOG-WEB:CLOG-WEB-ROUTES-FROM-MENU%20FUNCTION" >CLOG-WEB-ROUTES-FROM-MENU</a></span></span> <span class="locative-args">MENU</span></span></p>
+
+<p>Use a menu to setup a route for each menu item that has a third
+element.</p></li>
+</ul>
+
+<p><a id="x-28CLOG-WEB-3ACLOG-WEB-META-20FUNCTION-29"></a>
+<a id="CLOG-WEB:CLOG-WEB-META%20FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#CLOG-WEB:CLOG-WEB-META%20FUNCTION" >CLOG-WEB-META</a></span></span> <span class="locative-args">DESCRIPTION</span></span></p>
+
+<p>Returns a boot-function for use with <a href="#CLOG:INITIALIZE%20FUNCTION" title="CLOG:INITIALIZE FUNCTION"><code>CLOG:INITIALIZE</code></a> to add meta
+and no-script body information for search engines with <code>DESCRIPTION</code>.</p></li>
+</ul>
 
 <p><a id="x-28CLOG-WEB-3ABASE-URL-P-20FUNCTION-29"></a>
 <a id="CLOG-WEB:BASE-URL-P%20FUNCTION"></a></p>
@@ -7477,7 +7521,9 @@ no token or fails to match as user returns nil</p></li>
 
 <p>The default theme for clog-web-site.
 Settings available:
-  :menu-class - w3 color class for menu bar
+  :color-class  - w3 color class for menu bars and buttons
+  :border-class - w3 border
+  :text-class   - w3 text color class
 Page properties:
   :menu - ((&quot;Menu Name&quot; ((&quot;Menu Item&quot; &quot;link&quot;))))
   :content</p></li>
