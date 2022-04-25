@@ -45,17 +45,21 @@ Page properties:
     (when (getf (settings website) :color-class)
       (add-class menu (getf (settings website) :color-class)))
     (dolist (drop-down (getf properties :menu))
-      (let ((drop (create-web-menu-drop-down menu
-					     :content (first drop-down)
-					     :class "w3-border")))
+      (let ((drop  (create-web-menu-drop-down menu
+					      :content (first drop-down)
+					      :class "w3-border"))
+	    (count 0))
 	(dolist (item (second drop-down))
 	  (when (or (and (fourth item)
 			 (clog-auth:is-authorized-p (roles website)
 						    (fourth item)))
 		    (eq (fourth item) nil))
+	    (incf count)
 	    (create-web-menu-item drop
 				  :content (first item)
-				  :link (second item)))))))
+				  :link (second item))))
+	(when (eql count 0)
+	  (destroy (parent-element drop))))))
   (create-br body)
   (let ((c (getf properties :content)))
     (when c

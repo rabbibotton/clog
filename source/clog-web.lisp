@@ -1110,13 +1110,21 @@ connection"))
 ;; create-web-page ;;
 ;;;;;;;;;;;;;;;;;;;;;
 
-(defgeneric create-web-page (clog-obj page properties)
+(defgeneric create-web-page (clog-obj page properties &key authorize)
   (:documentation "Use the clog-web-site THEME to create PAGE with
-CLOG-OBJ as parent"))
+CLOG-OBJ as parent. PAGE is a symbol to identify the pages purpose to
+the website theme. Themes are required to provide certain default
+pages see clog-web-themes file. If AUTHORIZE then PAGE is used also as
+a CLOG-Auth action to be checked if the current users roles have
+permission to PAGE"))
 
-(defmethod create-web-page ((obj clog-obj) page properties)
-  (funcall (theme (get-web-site obj))
-	   obj (get-web-site obj) page properties))
+(defmethod create-web-page ((obj clog-obj) page properties &key authorize)
+  (if (or (and authorize
+		 (clog-auth:is-authorized-p (roles (get-web-site obj)) page))
+	    (not authorize))
+    (funcall (theme (get-web-site obj))
+	     obj (get-web-site obj) page properties)
+    (create-div obj :content "Authorization failure")))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Utilities
