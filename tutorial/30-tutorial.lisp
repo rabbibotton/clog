@@ -16,7 +16,7 @@
 		   ;; use the default theme
 		   :theme 'clog-web:default-theme
 		   ;; theme settings - in this case w3.css color of menu bar
-		   :settings '(:menu-class "w3-black")
+		   :settings '(:color-class "w3-black")
 		   :title "CLOG - The Common Lisp Omnificent GUI"
 		   :footer "(c) 2022 David Botton"
 		   :logo "/img/clog-liz.png"))
