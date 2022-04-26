@@ -1155,6 +1155,7 @@ element."
     (dolist (item (second drop-down))
       (when (third item)
 	(set-on-new-window (third item) :path (second item))))))
+
 ;;;;;;;;;;;;;;;;
 ;; base-url-p ;;
 ;;;;;;;;;;;;;;;;

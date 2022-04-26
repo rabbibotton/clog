@@ -42,6 +42,7 @@ for CLOG")
 
 (defun get-authentication-token (body &key auth-path)
   "Retrieve the stored authentication token"
+  (check-type body clog-body)
   (let ((token (storage-element (window body) :local *clog-auth-key*)))
     (when (equalp token "null")
       (setf token nil))
@@ -55,6 +56,7 @@ for CLOG")
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defun store-authentication-token (body token)
+  (check-type body clog-body)
   (setf (storage-element (window body) :local *clog-auth-key*) token))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -62,19 +64,20 @@ for CLOG")
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defun remove-authentication-token (body)
+  (check-type body clog-body)
   (storage-remove (window body) :local *clog-auth-key*))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; set-on-authentication-change ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defun set-on-authentication-change (obj handler)
-  (let ((body (connection-body obj)))
-    (set-on-storage (window body) (lambda (obj data)
-				    (set-on-storage (window body) nil)
-				    (when (equalp (getf data :key)
-						  "clog-auth-token")
-				      (funcall handler body))))))
+(defun set-on-authentication-change (body handler)
+  (check-type body clog-body)
+  (set-on-storage (window body) (lambda (obj data)
+				  (set-on-storage (window body) nil)
+				  (when (equalp (getf data :key)
+						"clog-auth-token")
+				    (funcall handler body)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Implementation - clog-auth - Authorization

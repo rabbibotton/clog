@@ -30,7 +30,8 @@
 (defun get-profile (obj sql-connection)
   "Retrieve profile based on current authentication token. If there is
 no token or fails to match as user returns nil"
-  (let ((token (clog-auth:get-authentication-token obj)))
+  (let* ((body  (connection-body obj))
+	 (token (clog-auth:get-authentication-token body)))
     (when token
       (let ((contents (dbi:fetch-all
 		       (dbi:execute
@@ -45,9 +46,10 @@ no token or fails to match as user returns nil"
 ;; login ;;
 ;;;;;;;;;;;
 
-(defun login (obj sql-connection username password)
+(defun login (body sql-connection username password)
   "Login and set current authentication token, it does not remove token
 if one is present and login fails."
+  (check-type body clog-body)
   (let ((contents (dbi:fetch-all
 		   (dbi:execute
 		    (dbi:prepare
@@ -55,24 +57,26 @@ if one is present and login fails."
 		     "select token from users where username=? and password=?")
 		    (list username password)))))
     (when contents
-      (store-authentication-token obj (getf (car contents) :|token|)))))
+      (store-authentication-token body (getf (car contents) :|token|)))))
 
 ;;;;;;;;;;;;
 ;; logout ;;
 ;;;;;;;;;;;;
 
-(defun logout (obj)
+(defun logout (body)
   "Logout and remove current authenitcation token"
-  (remove-authentication-token obj))
+  (check-type body clog-body)
+  (remove-authentication-token body))
 
 ;;;;;;;;;;;;;
 ;; sign-up ;;
 ;;;;;;;;;;;;;
 
-(defun sign-up (obj sql-connection &key (title "Sign Up")
-				     (next-step "/login"))
+(defun sign-up (body sql-connection &key (title "Sign Up")
+				      (next-step "/login"))
+  (check-type body clog-body)
   (clog-web-form
-   obj title
+   body title
    `(("Username" "username")
      ("Password" "password" :password)
      ("Retype Password" "repass" :password))
@@ -80,17 +84,17 @@ if one is present and login fails."
      (cond ((not
 	     (equal (form-result result "password")
 		    (form-result result "repass")))
-	    (clog-web-alert obj "Mismatch"
+	    (clog-web-alert body "Mismatch"
 			    "The passwords do match."
 			    :time-out 3
 			    :place-top t))
 	   ((< (length (form-result result "password")) 4)
-	    (clog-web-alert obj "Missize"
+	    (clog-web-alert body "Missize"
 			    "The passwords must at least 4 characters."
 			    :time-out 3
 			    :place-top t))
 	   ((< (length (form-result result "username")) 4)
-	    (clog-web-alert obj "Missize"
+	    (clog-web-alert body "Missize"
 			    "The username must be at least 4 characters."
 			    :time-out 3
 			    :place-top t))
@@ -102,7 +106,7 @@ if one is present and login fails."
 			       "select username from users where username=?")
 			      (list (form-result result "username"))))))
 	      (cond (contents
-		     (clog-web-alert obj "Exists"
+		     (clog-web-alert body "Exists"
 				     "The username is not available."
 				     :time-out 3
 				     :place-top t))
@@ -114,7 +118,7 @@ if one is present and login fails."
 			`(:username ,(form-result result "username")
 			  :password ,(form-result result "password")
 			  :token    ,(make-token))))
-		     (url-replace (location obj) next-step)))))))))
+		     (url-replace (location body) next-step)))))))))
 
 ;;;;;;;;;;;;;;;;
 ;; make-token ;;
