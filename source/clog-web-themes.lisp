@@ -21,9 +21,10 @@
 (defun default-theme (body website page properties)
   "The default theme for clog-web-site.
 Settings available:
-  :color-class  - w3 color class for menu bars and buttons
-  :border-class - w3 border
-  :text-class   - w3 text color class
+  :color-class   - w3 color class for menu bars and buttons
+  :border-class  - w3 border
+  :text-class    - w3 text color class
+  :username-link - link when clicking on username (default /logout)
 Page properties:
   :menu - ((\"Menu Name\" ((\"Menu Item\" \"link\"))))
   :content"
@@ -59,7 +60,13 @@ Page properties:
 				  :content (first item)
 				  :link (second item))))
 	(when (eql count 0)
-	  (destroy (parent-element drop))))))
+	  (destroy (parent-element drop)))))
+    (when (getf (profile website) :|username|)
+      (create-web-menu-item menu :class "w3-right"
+				 :content (getf (profile website) :|username|)
+				 :link (if (getf (settings website) :username-link)
+					   (getf (settings website) :username-link)
+					   "/logout"))))
   (create-br body)
   (let ((c (getf properties :content)))
     (when c
