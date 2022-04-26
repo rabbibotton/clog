@@ -21,6 +21,7 @@
   (get-profile        function)
   (sign-up            function)
   (make-token         function)
+  (load-content       function)
   (create-base-tables function))
 
 ;;;;;;;;;;;;;;;;;
@@ -137,9 +138,35 @@ if one is present and login fails."
     "create table config (key varchar, value varchar)")
   (dbi:do-sql
     sql-connection
+    (format nil "create table content (key varchar, value varchar, parent varchar, title varchar, username varchar, createdate date)"))
+  (dbi:do-sql
+    sql-connection
+    "create table tags (key varchar, value varchar, category varchar)")
+  (dbi:do-sql
+    sql-connection
     "create table users (username varchar, password varchar, token varchar)")
+  (dbi:do-sql
+    sql-connection
+    (sql-insert* "content" '(:key        "main"
+			     :value      "<h3>Welcome to CLOG</h3>"
+			     :createdate ("date()"))))
   (dbi:do-sql
     sql-connection
     (sql-insert* "users" `(:username "admin"
 			   :password "admin"
 			   :token    ,(make-token)))))
+
+;;;;;;;;;;;;;;;;;;
+;; load-content ;;
+;;;;;;;;;;;;;;;;;;
+
+(defun load-content (sql-connection table key-value &key (key-col "key"))
+  "Returns list of records found in TABLE where KEY-COL = KEY-VALUE"
+  (let ((contents (dbi:fetch-all
+		   (dbi:execute
+		    (dbi:prepare
+		     sql-connection
+		     (format nil "select * from ~A where ~A=?"
+			     table key-col))
+		    (list key-value)))))
+    contents))

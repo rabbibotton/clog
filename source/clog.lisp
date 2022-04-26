@@ -535,6 +535,7 @@ embedded in a native template application.)"
   (data-write-plist function)
 
   "SQL Writing Helpers"
+  (sql-quote       function)
   (sql-field-list  function)
   (sql-value-list  function)
   (sql-update-list function)
