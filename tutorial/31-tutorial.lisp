@@ -71,7 +71,9 @@
   (let ((profile (get-profile body *sql-connection*)))
     (create-web-site body
 		     :settings '(:color-class  "w3-blue-gray"
-				 :border-class "")
+				 :border-class ""
+				 :signup-link  "/signup"
+				 :login-link   "/login")
 		     :profile profile
 		     :roles (if profile
 				(if (equalp "admin"
@@ -93,7 +95,6 @@
   (create-web-page
    body
    :login `(:menu      ,*menu*
-	    :sign-up   "/signup"
 	    :on-submit ,(lambda (obj)
 			  (if (login body *sql-connection*
 				     (name-value obj "username")

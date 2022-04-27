@@ -1097,6 +1097,10 @@ clog-body."))
     (setf (web-site app) website)
     website))
 
+;;;;;;;;;;;;;;;;;;
+;; get-web-site ;;
+;;;;;;;;;;;;;;;;;;
+
 (defgeneric get-web-site (clog-obj)
   (:documentation "Retrieve the clog-web-site object created on CLOG-OBJ's
 connection"))
@@ -1123,7 +1127,7 @@ permission to PAGE"))
 		 (clog-auth:is-authorized-p (roles (get-web-site obj)) page))
 	    (not authorize))
     (funcall (theme (get-web-site obj))
-	     obj (get-web-site obj) page properties)
+	     obj page properties)
     (create-div obj :content "Authorization failure")))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
