@@ -160,13 +160,68 @@ if one is present and login fails."
 ;; load-content ;;
 ;;;;;;;;;;;;;;;;;;
 
-(defun load-content (sql-connection table key-value &key (key-col "key"))
-  "Returns list of records found in TABLE where KEY-COL = KEY-VALUE"
+(defun load-content (sql-connection table key-value &key
+						      (key-col "key")
+						      where
+						      order-by)
+  "Returns list of records found in TABLE where KEY-COL = KEY-VALUE and
+optional WHERE and ORDER-BY sql."
   (let ((contents (dbi:fetch-all
 		   (dbi:execute
 		    (dbi:prepare
 		     sql-connection
-		     (format nil "select * from ~A where ~A=?"
-			     table key-col))
+		     (format nil "select * from ~A where ~A=? ~A ~A"
+			     table key-col
+			     (if where
+				 (format nil "and ~A" where)
+				 "")
+			     (if order-by
+				 (format nil "order by ~A" order-by)
+				 "")))
 		    (list key-value)))))
     contents))
+
+;;;;;;;;;;;;;;;;;;;;;;
+;; clog-web-content ;;
+;;;;;;;;;;;;;;;;;;;;;;
+
+(defun clog-web-content (sql-connection
+			 &key
+			   (page              "main")
+			   (table             "content")
+			   (base-url          "/content")
+			   (follow-url-page   t)
+			   comment-table
+			   on-new
+			   on-edit
+			   on-delete
+			   (can-comment       :content-comment)
+			   (can-show-comments :content-show-comments)
+			   (can-edit          :content-edit))
+  "Create content for CLOG-WEB:CREATE-WEB-PAGE based on dbi TABLE
+value where key=PAGE or if FOLLOW-URL-PAGE is true PAGE is default
+page if no second on path otherwise page is the second on path (first
+must be base-url). If comment-table is nil no comments are shown. User
+must authorize on CAN-COMMENT, CAN-SHOW-COMMENTS and if CAN-EDIT."
+  (lambda (obj)
+    (let* ((body    (connection-body obj))
+	   (prof    (profile (get-web-site body)))
+	   (roles   (roles (get-web-site body)))
+	   (url     (base-url-split base-url (path-name (location body)))))
+      (when follow-url-page
+	(when (second url)
+	  (setf page (second url))))
+      (let ((content (getf (car (load-content
+				 sql-connection table page))
+			   :|value|)))
+	(when content
+	  (create-div body :content content)))
+      (when (and (clog-auth:is-authorized-p roles can-show-comments)
+		 comment-table)
+	(let ((comments (load-content sql-connection comment-table page
+				      :key-col  "parent"
+				      :order-by "createdate desc")))
+	  (dolist (comment comments)
+	    (create-div obj :content (getf comment :|value|)))))
+      (create-div body :content (format nil "<br>prof = ~A<br>url = '~A'<br>roles = ~A"
+					prof (second url) roles)))))

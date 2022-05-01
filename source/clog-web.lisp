@@ -1184,4 +1184,7 @@ element."
 
 (defun base-url-split (base-url url-path)
   "Split path by / adjusting for base-url"
-  (ppcre:split "/" (adjust-for-base-url base-url url-path)))
+  (let ((s (ppcre:split "/" (adjust-for-base-url base-url url-path))))
+    (if (equal (car s) "")
+	(cdr s)
+	s)))
