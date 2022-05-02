@@ -41,7 +41,7 @@ Some potential applications for CLOG:
 
 * Cross-platform GUIs and Reports
 * Secure websites and complex interactive web applications
-* Mobile software
+* Mobile software (CLOG Runs native on Android and iOS)
 * Massive multiplayer online games
 * Monitoring software for embedded systems
 * A fun way to teach programming and advanced multi-tasking
@@ -201,7 +201,7 @@ Here is a sample CLOG app:
 Other samples of CLOG on the web:
 
 [CLOG + cl-collider](https://github.com/byulparan/clog-collider-experience)
-
+[CLOG on iOS and Android](https://www.reddit.com/r/lisp/comments/tl46of/would_it_be_cool_to_run_a_clog_app_on_mobile_you/)
 
 CLOG Builder Tutorials
 
