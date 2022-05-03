@@ -102,7 +102,9 @@ for CLOG")
 ;;;;;;;;;;;;;;;;;;;;;
 
 (defun is-authorized-p (role-list action)
-  "Given ROLE-LIST is action authorized"
-  (dolist (role role-list nil)
-    (when (member action (gethash role *authorization-hash*))
-      (return t))))
+  "Given ROLE-LIST is action authorized. If action is nil returns t."
+  (if action
+      (dolist (role role-list nil)
+	(when (member action (gethash role *authorization-hash*))
+	  (return t)))
+      t))

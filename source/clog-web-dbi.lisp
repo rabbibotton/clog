@@ -202,7 +202,8 @@ optional WHERE and ORDER-BY sql."
 value where key=PAGE or if FOLLOW-URL-PAGE is true PAGE is default
 page if no second on path otherwise page is the second on path (first
 must be base-url). If comment-table is nil no comments are shown. User
-must authorize on CAN-COMMENT, CAN-SHOW-COMMENTS and if CAN-EDIT."
+must authorize on action set by CAN-COMMENT, CAN-SHOW-COMMENTS and if
+CAN-EDIT unless they are set to nil."
   (lambda (obj)
     (let* ((body    (connection-body obj))
 	   (prof    (profile (get-web-site body)))
