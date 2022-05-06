@@ -148,7 +148,8 @@ if one is present and login fails."
   (dbi:do-sql
     sql-connection
     (sql-insert* "content" '(:key        "main"
-			     :value      "<h3>Welcome to CLOG</h3>"
+			     :title      "Welcome to CLOG"
+			     :value      "Sample data"
 			     :createdate ("date()"))))
   (dbi:do-sql
     sql-connection
@@ -192,6 +193,8 @@ optional WHERE and ORDER-BY sql."
 			   (base-url          "/content")
 			   (follow-url-page   t)
 			   comment-table
+			   on-content
+			   on-comment
 			   on-new
 			   on-edit
 			   on-delete
@@ -201,28 +204,86 @@ optional WHERE and ORDER-BY sql."
   "Create content for CLOG-WEB:CREATE-WEB-PAGE based on dbi TABLE
 value where key=PAGE or if FOLLOW-URL-PAGE is true PAGE is default
 page if no second on path otherwise page is the second on path (first
-must be base-url). If comment-table is nil no comments are shown. User
-must authorize on action set by CAN-COMMENT, CAN-SHOW-COMMENTS and if
-CAN-EDIT unless they are set to nil."
+must be base-url). ON-CONTENT, ON-COMMENT are called with (obj value)
+before display of value the return value is used. ON-NEW, ON-EDIT are
+called with (obj value) to allow filter of value before storage, if
+nil is return aborted. ON-DELETE called with (obj page comment-id) if
+returns nil aborted. If comment-table is nil no comments are
+shown. User must authorize on action set by CAN-COMMENT,
+CAN-SHOW-COMMENTS and if CAN-EDIT unless they are set to nil. The URL
+scheme as as follows:
+
+to add content    - baseurl/add
+or add content    - baseurl/page/add
+to edit content   - baseurl/page/edit
+to delete content - baseurl/page/delete
+to add comment    - baseurl/page/comment/add
+or add comment    - baseurl/page/comment/comment-id/add
+to delete comment - baseurl/page/comment/comment-id/delete
+to edit comment   - baseurl/page/comment/comment-id/edit
+"
   (lambda (obj)
     (let* ((body    (connection-body obj))
+	   (theme   (theme (get-web-site body)))
 	   (prof    (profile (get-web-site body)))
 	   (roles   (roles (get-web-site body)))
 	   (url     (base-url-split base-url (path-name (location body)))))
+      ;; Set page to show content
       (when follow-url-page
 	(when (second url)
 	  (setf page (second url))))
-      (let ((content (getf (car (load-content
-				 sql-connection table page))
-			   :|value|)))
+      ;; Perform commands on content and comments
+      (cond ((equalp (third url) ;; delete content
+		     "delete")
+	     (when (clog-auth:is-authorized-p roles can-edit)
+	       (if on-delete
+		   (setf on-delete (setf on-delete (funcall on-delete obj page nil)))
+		   (setf on-delete t))
+	       (when on-delete
+		 (dbi:do-sql
+		   sql-connection
+		   (format nil "delete from ~A where key=?" table)
+		   (list page)))))
+	    ((and (and (third url) ;; delete comment
+		       "comment")
+		  (equalp (fifth url)
+			  "delete"))
+	     (when (clog-auth:is-authorized-p roles can-edit)
+	       (if on-delete
+		   (setf on-delete (funcall on-delete obj page (fourth url)))
+		   (setf on-delete t))
+	       (when on-delete
+		 (dbi:do-sql
+		   sql-connection
+		   (format nil "delete from ~A where key=?" comment-table)
+		   (list (fourth url)))))))
+      (let ((content (car (load-content
+			   sql-connection table page))))
 	(when content
-	  (create-div body :content content)))
+	  (when on-content
+	    (setf content (funcall on-content obj content)))
+	  (funcall theme obj :content-body
+		   (list :content content
+			 :base-url (format nil "~A/~A" base-url page)
+			 :can-edit (clog-auth:is-authorized-p roles can-edit)
+			 :can-comment (clog-auth:is-authorized-p
+				       roles can-comment)))))
       (when (and (clog-auth:is-authorized-p roles can-show-comments)
 		 comment-table)
 	(let ((comments (load-content sql-connection comment-table page
 				      :key-col  "parent"
 				      :order-by "createdate desc")))
 	  (dolist (comment comments)
-	    (create-div obj :content (getf comment :|value|)))))
-      (create-div body :content (format nil "<br>prof = ~A<br>url = '~A'<br>roles = ~A"
-					prof (second url) roles)))))
+	    (when on-comment
+	      (setf comment (funcall on-comment obj comment)))	    
+	    (funcall theme obj :content-comment
+		     (list :content comment
+			   :base-url (format nil "~A/~A/comment/~A"
+					     base-url
+					     page
+					     (getf comment :|key|))
+			   :can-edit (and (getf prof :|username|)
+					  (equalp (getf comment :|username|)
+						  (getf prof    :|username|)))
+			   :can-comment (clog-auth:is-authorized-p
+					 roles can-comment)))))))))
