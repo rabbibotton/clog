@@ -138,7 +138,9 @@ if one is present and login fails."
     "create table config (key varchar, value varchar)")
   (dbi:do-sql
     sql-connection
-    (format nil "create table content (key varchar, value varchar, parent varchar, title varchar, username varchar, createdate date)"))
+    (format nil "create table content (key varchar, value varchar,~
+                                       parent varchar, title varchar,~
+                                       username varchar, createdate date)"))
   (dbi:do-sql
     sql-connection
     "create table tags (key varchar, value varchar, category varchar)")
