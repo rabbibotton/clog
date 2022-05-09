@@ -78,6 +78,7 @@ Page properties:
 				 (ipanel (create-span opanel :content
 						      (format nil "~A: " (getf (profile website) :|username|))))
 				 (npanel (create-span opanel :content "")))
+			    (declare (ignore ipanel))
 			    (set-border opanel :medium :dotted :red)
 			    (place-after panel opanel)
 			    (setf (editablep npanel) t)
@@ -97,7 +98,8 @@ Page properties:
 					      (funcall save (list :|value| tcomment))
 					      (set-border opanel :thin :dotted :black)
 					      (setf (text obj) "comment")
-					      (set-on-click obj #'start-add)))))))
+					      (set-on-click obj #'start-add)
+					      (reload (location (connection-body obj)))))))))
 		 (set-on-click (create-a panel :class button-class
 					       :content "comment")
 			       #'start-add)))
@@ -143,6 +145,7 @@ Page properties:
 	   (let* ((opanel (create-div body))
 		  (ipanel (create-span opanel :content (format nil "~A: " (getf content :|username|))))
 		  (comment (create-span opanel :content (getf content :|value|))))
+	     (declare (ignore ipanel))
 	     (set-border opanel :thin :dotted :black)
 	     (let ((panel (create-span opanel :content "&nbsp;&nbsp;")))
 	       (when (get-property properties :can-edit nil)
