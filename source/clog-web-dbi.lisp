@@ -217,12 +217,8 @@ scheme as as follows:
 
 to add content    - baseurl/add
 or add content    - baseurl/page/add
-to edit content   - baseurl/page/edit
 to delete content - baseurl/page/delete
-to add comment    - baseurl/page/comment/add
-or add comment    - baseurl/page/comment/comment-id/add
 to delete comment - baseurl/page/comment/comment-id/delete
-to edit comment   - baseurl/page/comment/comment-id/edit
 "
   (lambda (obj)
     (let* ((body    (connection-body obj))
@@ -267,7 +263,30 @@ to edit comment   - baseurl/page/comment/comment-id/edit
 	  (funcall theme obj :content-body
 		   (list :content content
 			 :base-url (format nil "~A/~A" base-url page)
+			 :save-edit (lambda (content)
+				      (when on-edit
+					(setf content (funcall on-edit content)))
+				      (dbi:do-sql
+					sql-connection
+					(sql-update table
+						    content
+						    "key=?")
+					(list page)))
 			 :can-edit (clog-auth:is-authorized-p roles can-edit)
+			 :new-comment (lambda (content)
+					(push `("unixepoch()") content)
+					(push :createdate content)
+					(push `("unixepoch()") content)
+					(push :key content)
+					(push page content)
+					(push :parent content)
+					(push (getf prof :|username|) content)
+					(push :username content)
+					(when on-new
+					  (setf content (funcall on-new content)))
+					(dbi:do-sql
+					  sql-connection
+					  (sql-insert* comment-table content)))
 			 :can-comment (clog-auth:is-authorized-p
 				       roles can-comment)))))
       (when (and (clog-auth:is-authorized-p roles can-show-comments)
@@ -277,13 +296,22 @@ to edit comment   - baseurl/page/comment/comment-id/edit
 				      :order-by "createdate desc")))
 	  (dolist (comment comments)
 	    (when on-comment
-	      (setf comment (funcall on-comment obj comment)))	    
+	      (setf comment (funcall on-comment obj comment)))
 	    (funcall theme obj :content-comment
 		     (list :content comment
 			   :base-url (format nil "~A/~A/comment/~A"
 					     base-url
 					     page
 					     (getf comment :|key|))
+			   :save-edit (lambda (content)
+					(when on-edit
+					  (setf content (funcall on-edit content)))
+					(dbi:do-sql
+					  sql-connection
+					  (sql-update comment-table
+						      content
+						      "key=?")
+					  (list (getf comment :|key|))))
 			   :can-edit (and (getf prof :|username|)
 					  (equalp (getf comment :|username|)
 						  (getf prof    :|username|)))

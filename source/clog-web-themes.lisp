@@ -68,17 +68,69 @@ Page properties:
 	 (content        (get-property properties :content "")))
     (cond ((or (eq page :content-body) ; data based content layout
 	       (eq page :blog-body))   ; blog based content layout
-	   (create-section body :h3 :content (getf content :|title|))
-	   (create-div body :content (getf content :|value|))
-	   (let ((panel (create-div body)))
+	   (let ((etitle (create-section body :h3 :content (getf content :|title|)))
+		 (ebody  (create-div body :content (getf content :|value|)))
+		 (panel  (create-div body)))
 	     (when (get-property properties :can-comment nil)
-	       (create-a panel :class button-class
-			       :content "comment"
-			       :link (format nil "~A/add" base-url)))
+	       (labels ((start-add (obj)
+			  (let ((npanel (create-div panel :auto-place nil
+							  :content "")))
+			    (set-border npanel :medium :dotted :red)
+			    (place-after panel npanel)
+			    (setf (editablep npanel) t)
+			    (focus npanel)
+			    (set-on-click obj nil)
+			    (setf (text obj) "save")
+			    (set-on-click obj
+					  (lambda (obj)
+					    (let ((tcomment (text npanel))
+						  (save     (get-property
+							     properties
+							     :new-comment
+							     nil)))
+					      (set-on-click obj nil)
+					      (setf (editablep npanel) nil)
+					      (setf (inner-html npanel) tcomment)
+					      (funcall save (list :|value| tcomment))
+					      (set-border npanel :thin :dotted :black)
+					      (setf (text obj) "comment")
+					      (set-on-click obj #'start-add)))))))
+		 (set-on-click (create-a panel :class button-class
+					       :content "comment")
+			       #'start-add)))
 	     (when (get-property properties :can-edit nil)
-	       (create-a panel :class button-class
-			       :content "edit"
-			       :link (format nil "~A/edit" base-url))
+	       (labels ((start-edit (obj)
+			  (setf (editablep etitle) t)
+			  (setf (text etitle) (inner-html etitle))
+			  (setf (editablep ebody) t)
+			  (setf (text ebody) (inner-html ebody))
+			  (focus etitle)
+			  (setf (text obj) "save")
+			  (set-border etitle :medium :solid :red)
+			  (set-border ebody :medium :solid :red)
+			  (set-on-click obj nil)
+			  (set-on-click obj
+					(lambda (obj)
+					  (let ((ttitle (text etitle))
+						(tbody  (text ebody))
+						(save   (get-property
+							 properties
+							 :save-edit nil)))
+					    (set-on-click obj nil)
+					    (setf (editablep etitle) nil)
+					    (setf (inner-html etitle) ttitle)
+					    (setf (editablep ebody) nil)
+					    (setf (inner-html ebody) tbody)
+					    (funcall save
+						     (list :|title| ttitle
+							   :|value| tbody))
+					    (set-border etitle :none "" "")
+					    (set-border ebody :none "" "")
+					    (setf (text obj) "edit")
+					    (set-on-click obj #'start-edit))))))
+		 (set-on-click (create-a panel :class button-class
+					       :content "edit")
+			       #'start-edit))
 	       (create-a panel :class button-class
 			       :content "delete"
 			       :link (format nil "~A/delete" base-url))))
@@ -88,14 +140,30 @@ Page properties:
 	   (let ((comment (create-div body :content (getf content :|value|))))
 	     (set-border comment :thin :dotted :black)
 	     (let ((panel (create-div body)))
-	       (when (get-property properties :can-comment nil)
-		 (create-a panel :class button-class
-				 :content "comment"
-				 :link (format nil "~A/add" base-url)))
 	       (when (get-property properties :can-edit nil)
-		 (create-a panel :class button-class
-				 :content "edit"
-				 :link (format nil "~A/edit" base-url))
+		 (labels ((start-edit (obj)
+			    (setf (editablep comment) t)
+			    (setf (text comment) (inner-html comment))
+			    (focus comment)
+			    (setf (text obj) "save")
+			    (set-border comment :medium :solid :red)
+			    (set-on-click obj nil)
+			    (set-on-click obj
+					  (lambda (obj)
+					    (let ((tcomment (text comment))
+						  (save   (get-property
+							   properties
+							   :save-edit nil)))
+					      (set-on-click obj nil)
+					      (setf (editablep comment) nil)
+					      (setf (inner-html comment) tcomment)
+					      (funcall save (list :|value| tcomment))
+					      (set-border comment :thin :dotted :black)
+					      (setf (text obj) "edit")
+					      (set-on-click obj #'start-edit))))))
+		   (set-on-click (create-a panel :class button-class
+						 :content "edit")
+				 #'start-edit))
 		 (create-a panel :class button-class
 				 :content "delete"
 				 :link (format nil "~A/delete" base-url))))))
