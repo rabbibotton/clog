@@ -73,10 +73,13 @@ Page properties:
 		 (panel  (create-div body)))
 	     (when (get-property properties :can-comment nil)
 	       (labels ((start-add (obj)
-			  (let ((npanel (create-div panel :auto-place nil
-							  :content "")))
-			    (set-border npanel :medium :dotted :red)
-			    (place-after panel npanel)
+			  (create-br obj)
+			  (let* ((opanel (create-div panel :auto-place nil))
+				 (ipanel (create-span opanel :content
+						      (format nil "~A: " (getf (profile website) :|username|))))
+				 (npanel (create-span opanel :content "")))
+			    (set-border opanel :medium :dotted :red)
+			    (place-after panel opanel)
 			    (setf (editablep npanel) t)
 			    (focus npanel)
 			    (set-on-click obj nil)
@@ -92,7 +95,7 @@ Page properties:
 					      (setf (editablep npanel) nil)
 					      (setf (inner-html npanel) tcomment)
 					      (funcall save (list :|value| tcomment))
-					      (set-border npanel :thin :dotted :black)
+					      (set-border opanel :thin :dotted :black)
 					      (setf (text obj) "comment")
 					      (set-on-click obj #'start-add)))))))
 		 (set-on-click (create-a panel :class button-class
@@ -137,16 +140,18 @@ Page properties:
 	   (create-br body))
 	  ((or (eq page :content-comment) ; data comment layout
 	       (eq page :blog-comment))   ; blog comment layout
-	   (let ((comment (create-div body :content (getf content :|value|))))
-	     (set-border comment :thin :dotted :black)
-	     (let ((panel (create-div body)))
+	   (let* ((opanel (create-div body))
+		  (ipanel (create-span opanel :content (format nil "~A: " (getf content :|username|))))
+		  (comment (create-span opanel :content (getf content :|value|))))
+	     (set-border opanel :thin :dotted :black)
+	     (let ((panel (create-span opanel :content "&nbsp;&nbsp;")))
 	       (when (get-property properties :can-edit nil)
 		 (labels ((start-edit (obj)
 			    (setf (editablep comment) t)
 			    (setf (text comment) (inner-html comment))
 			    (focus comment)
 			    (setf (text obj) "save")
-			    (set-border comment :medium :solid :red)
+			    (set-border opanel :medium :solid :red)
 			    (set-on-click obj nil)
 			    (set-on-click obj
 					  (lambda (obj)
@@ -158,7 +163,7 @@ Page properties:
 					      (setf (editablep comment) nil)
 					      (setf (inner-html comment) tcomment)
 					      (funcall save (list :|value| tcomment))
-					      (set-border comment :thin :dotted :black)
+					      (set-border opanel :thin :dotted :black)
 					      (setf (text obj) "edit")
 					      (set-on-click obj #'start-edit))))))
 		   (set-on-click (create-a panel :class button-class

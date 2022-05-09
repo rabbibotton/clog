@@ -200,6 +200,7 @@ optional WHERE and ORDER-BY sql."
 			   on-new
 			   on-edit
 			   on-delete
+			   (can-admin         :content-admin)
 			   (can-comment       :content-comment)
 			   (can-show-comments :content-show-comments)
 			   (can-edit          :content-edit))
@@ -246,15 +247,19 @@ to delete comment - baseurl/page/comment/comment-id/delete
 		       "comment")
 		  (equalp (fifth url)
 			  "delete"))
-	     (when (clog-auth:is-authorized-p roles can-edit)
-	       (if on-delete
-		   (setf on-delete (funcall on-delete obj page (fourth url)))
-		   (setf on-delete t))
-	       (when on-delete
-		 (dbi:do-sql
-		   sql-connection
-		   (format nil "delete from ~A where key=?" comment-table)
-		   (list (fourth url)))))))
+	     (if on-delete
+		 (setf on-delete (funcall on-delete obj page (fourth url)))
+		 (setf on-delete t))
+	     (when on-delete
+	       (if (clog-auth:is-authorized-p roles can-admin)
+		   (dbi:do-sql
+		     sql-connection
+		     (format nil "delete from ~A where key=?" comment-table)
+		     (list (fourth url)))
+		   (dbi:do-sql
+		     sql-connection
+		     (format nil "delete from ~A where key=? and username=?" comment-table)
+		     (list (fourth url) (getf prof :|username|)))))))
       (let ((content (car (load-content
 			   sql-connection table page))))
 	(when content
@@ -312,8 +317,10 @@ to delete comment - baseurl/page/comment/comment-id/delete
 						      content
 						      "key=?")
 					  (list (getf comment :|key|))))
-			   :can-edit (and (getf prof :|username|)
-					  (equalp (getf comment :|username|)
-						  (getf prof    :|username|)))
+			   :can-edit (or (clog-auth:is-authorized-p
+					  roles can-admin)
+					 (and (getf prof :|username|)
+					      (equalp (getf comment :|username|)
+						      (getf prof    :|username|))))
 			   :can-comment (clog-auth:is-authorized-p
 					 roles can-comment)))))))))
