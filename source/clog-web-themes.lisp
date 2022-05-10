@@ -64,7 +64,6 @@ Page properties:
 	 (signup-link    (get-setting website :signup-link "/signup"))
 	 (username-link  (get-setting website :username-link "/logout"))
 	 (menu-property  (get-property properties :menu "w3-black"))
-	 (base-url       (get-property properties :base-url "/"))
 	 (content        (get-property properties :content "")))
     (cond ((or (eq page :content-body) ; data based content layout
 	       (eq page :blog-body))   ; blog based content layout

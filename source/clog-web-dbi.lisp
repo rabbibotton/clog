@@ -224,52 +224,53 @@ CAN-SHOW-COMMENTS and if CAN-EDIT unless they are set to nil."
       (when follow-url-page
 	(when (second url)
 	  (setf page (second url))))
-      (let ((content (car (load-content
-			   sql-connection table page))))
-	(when content
-	  (when on-content
-	    (setf content (funcall on-content obj content)))
-	  (funcall theme obj :content-body
-		   (list :content content
-			 :base-url (format nil "~A/~A" base-url page)
-			 :save-edit (when (clog-auth:is-authorized-p roles can-edit)
-				      (lambda (content)
-					(when on-edit
-					  (setf content (funcall on-edit content)))
-					(when content
-					  (dbi:do-sql
-					    sql-connection
-					    (sql-update table
-							content
-							"key=?")
-					    (list page)))))
-			 :do-delete (when (clog-auth:is-authorized-p roles can-edit)
-				      (lambda ()
-					(if on-delete
-					    (setf on-delete (setf on-delete (funcall on-delete obj page nil)))
-					    (setf on-delete t))
-					(when on-delete
-					  (dbi:do-sql
-					    sql-connection
-					    (format nil "delete from ~A where key=?" table)
-					    (list page)))))
-			 :new-comment (when (clog-auth:is-authorized-p
-					     roles can-comment)
+      ;; Page Content Display
+      (let ((pages (load-content sql-connection table page)))
+	(dolist (content pages)
+	  (when content
+	    (when on-content
+	      (setf content (funcall on-content obj content)))
+	    (funcall theme obj :content-body
+		     (list :content content
+			   :save-edit (when (clog-auth:is-authorized-p roles can-edit)
 					(lambda (content)
-					  (push `("unixepoch()") content)
-					  (push :createdate content)
-					  (push `("unixepoch()") content)
-					  (push :key content)
-					  (push page content)
-					  (push :parent content)
-					  (push (getf prof :|username|) content)
-					  (push :username content)
-					  (when on-new
-					    (setf content (funcall on-new content)))
+					  (when on-edit
+					    (setf content (funcall on-edit content)))
 					  (when content
 					    (dbi:do-sql
 					      sql-connection
-					      (sql-insert* comment-table content)))))))))
+					      (sql-update table
+							  content
+							  "key=?")
+					      (list page)))))
+			   :do-delete (when (clog-auth:is-authorized-p roles can-edit)
+					(lambda ()
+					  (if on-delete
+					      (setf on-delete (setf on-delete (funcall on-delete obj page nil)))
+					      (setf on-delete t))
+					  (when on-delete
+					    (dbi:do-sql
+					      sql-connection
+					      (format nil "delete from ~A where key=?" table)
+					      (list page)))))
+			   :new-comment (when (clog-auth:is-authorized-p
+					       roles can-comment)
+					  (lambda (content)
+					    (push `("unixepoch()") content)
+					    (push :createdate content)
+					    (push `("unixepoch()") content)
+					    (push :key content)
+					    (push page content)
+					    (push :parent content)
+					    (push (getf prof :|username|) content)
+					    (push :username content)
+					    (when on-new
+					      (setf content (funcall on-new content)))
+					    (when content
+					      (dbi:do-sql
+						sql-connection
+						(sql-insert* comment-table content))))))))))
+      ;; Comments Display
       (when (and (clog-auth:is-authorized-p roles can-show-comments)
 		 comment-table)
 	(let ((comments (load-content sql-connection comment-table page
@@ -280,10 +281,6 @@ CAN-SHOW-COMMENTS and if CAN-EDIT unless they are set to nil."
 	      (setf comment (funcall on-comment obj comment)))
 	    (funcall theme obj :content-comment
 		     (list :content comment
-			   :base-url (format nil "~A/~A/comment/~A"
-					     base-url
-					     page
-					     (getf comment :|key|))
 			   :do-delete (when (or (clog-auth:is-authorized-p roles can-admin)
 						(and (getf prof :|username|)
 						     (equalp (getf comment :|username|)
