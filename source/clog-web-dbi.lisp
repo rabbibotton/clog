@@ -213,14 +213,7 @@ called with (obj value) to allow filter of value before storage, if
 nil is return aborted. ON-DELETE called with (obj page comment-id) if
 returns nil aborted. If comment-table is nil no comments are
 shown. User must authorize on action set by CAN-COMMENT,
-CAN-SHOW-COMMENTS and if CAN-EDIT unless they are set to nil. The URL
-scheme as as follows:
-
-to add content    - baseurl/add
-or add content    - baseurl/page/add
-to delete content - baseurl/page/delete
-to delete comment - baseurl/page/comment/comment-id/delete
-"
+CAN-SHOW-COMMENTS and if CAN-EDIT unless they are set to nil."
   (lambda (obj)
     (let* ((body    (connection-body obj))
 	   (theme   (theme (get-web-site body)))
@@ -231,35 +224,6 @@ to delete comment - baseurl/page/comment/comment-id/delete
       (when follow-url-page
 	(when (second url)
 	  (setf page (second url))))
-      ;; Perform commands on content and comments
-      (cond ((equalp (third url) ;; delete content
-		     "delete")
-	     (when (clog-auth:is-authorized-p roles can-edit)
-	       (if on-delete
-		   (setf on-delete (setf on-delete (funcall on-delete obj page nil)))
-		   (setf on-delete t))
-	       (when on-delete
-		 (dbi:do-sql
-		   sql-connection
-		   (format nil "delete from ~A where key=?" table)
-		   (list page)))))
-	    ((and (and (third url) ;; delete comment
-		       "comment")
-		  (equalp (fifth url)
-			  "delete"))
-	     (if on-delete
-		 (setf on-delete (funcall on-delete obj page (fourth url)))
-		 (setf on-delete t))
-	     (when on-delete
-	       (if (clog-auth:is-authorized-p roles can-admin)
-		   (dbi:do-sql
-		     sql-connection
-		     (format nil "delete from ~A where key=?" comment-table)
-		     (list (fourth url)))
-		   (dbi:do-sql
-		     sql-connection
-		     (format nil "delete from ~A where key=? and username=?" comment-table)
-		     (list (fourth url) (getf prof :|username|)))))))
       (let ((content (car (load-content
 			   sql-connection table page))))
 	(when content
@@ -268,32 +232,44 @@ to delete comment - baseurl/page/comment/comment-id/delete
 	  (funcall theme obj :content-body
 		   (list :content content
 			 :base-url (format nil "~A/~A" base-url page)
-			 :save-edit (lambda (content)
-				      (when on-edit
-					(setf content (funcall on-edit content)))
-				      (dbi:do-sql
-					sql-connection
-					(sql-update table
-						    content
-						    "key=?")
-					(list page)))
-			 :can-edit (clog-auth:is-authorized-p roles can-edit)
-			 :new-comment (lambda (content)
-					(push `("unixepoch()") content)
-					(push :createdate content)
-					(push `("unixepoch()") content)
-					(push :key content)
-					(push page content)
-					(push :parent content)
-					(push (getf prof :|username|) content)
-					(push :username content)
-					(when on-new
-					  (setf content (funcall on-new content)))
-					(dbi:do-sql
-					  sql-connection
-					  (sql-insert* comment-table content)))
-			 :can-comment (clog-auth:is-authorized-p
-				       roles can-comment)))))
+			 :save-edit (when (clog-auth:is-authorized-p roles can-edit)
+				      (lambda (content)
+					(when on-edit
+					  (setf content (funcall on-edit content)))
+					(when content
+					  (dbi:do-sql
+					    sql-connection
+					    (sql-update table
+							content
+							"key=?")
+					    (list page)))))
+			 :do-delete (when (clog-auth:is-authorized-p roles can-edit)
+				      (lambda ()
+					(if on-delete
+					    (setf on-delete (setf on-delete (funcall on-delete obj page nil)))
+					    (setf on-delete t))
+					(when on-delete
+					  (dbi:do-sql
+					    sql-connection
+					    (format nil "delete from ~A where key=?" table)
+					    (list page)))))
+			 :new-comment (when (clog-auth:is-authorized-p
+					     roles can-comment)
+					(lambda (content)
+					  (push `("unixepoch()") content)
+					  (push :createdate content)
+					  (push `("unixepoch()") content)
+					  (push :key content)
+					  (push page content)
+					  (push :parent content)
+					  (push (getf prof :|username|) content)
+					  (push :username content)
+					  (when on-new
+					    (setf content (funcall on-new content)))
+					  (when content
+					    (dbi:do-sql
+					      sql-connection
+					      (sql-insert* comment-table content)))))))))
       (when (and (clog-auth:is-authorized-p roles can-show-comments)
 		 comment-table)
 	(let ((comments (load-content sql-connection comment-table page
@@ -308,19 +284,35 @@ to delete comment - baseurl/page/comment/comment-id/delete
 					     base-url
 					     page
 					     (getf comment :|key|))
-			   :save-edit (lambda (content)
-					(when on-edit
-					  (setf content (funcall on-edit content)))
-					(dbi:do-sql
-					  sql-connection
-					  (sql-update comment-table
-						      content
-						      "key=?")
-					  (list (getf comment :|key|))))
-			   :can-edit (or (clog-auth:is-authorized-p
-					  roles can-admin)
-					 (and (getf prof :|username|)
-					      (equalp (getf comment :|username|)
-						      (getf prof    :|username|))))
-			   :can-comment (clog-auth:is-authorized-p
-					 roles can-comment)))))))))
+			   :do-delete (when (or (clog-auth:is-authorized-p roles can-admin)
+						(and (getf prof :|username|)
+						     (equalp (getf comment :|username|)
+							     (getf prof    :|username|))))
+					(lambda ()
+					  (if on-delete
+					      (setf on-delete (funcall on-delete obj page (getf comment :|key|)))
+					      (setf on-delete t))
+					  (when on-delete
+					    (if (clog-auth:is-authorized-p roles can-admin)
+						(dbi:do-sql
+						  sql-connection
+						  (format nil "delete from ~A where key=?" comment-table)
+						  (list (getf comment :|key|)))
+						(dbi:do-sql
+						  sql-connection
+						  (format nil "delete from ~A where key=? and username=?" comment-table)
+						  (list (getf comment :|key|) (getf prof :|username|)))))))
+			   :save-edit (when (or (clog-auth:is-authorized-p roles can-admin)
+						(and (getf prof :|username|)
+						     (equalp (getf comment :|username|)
+							     (getf prof    :|username|))))
+					(lambda (content)
+					  (when on-edit
+					    (setf content (funcall on-edit content)))
+					  (when content
+					    (dbi:do-sql
+					      sql-connection
+					      (sql-update comment-table
+							  content
+							  "key=?")
+					      (list (getf comment :|key|))))))))))))))
