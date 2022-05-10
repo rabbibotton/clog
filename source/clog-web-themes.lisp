@@ -65,9 +65,49 @@ Page properties:
 	 (username-link  (get-setting website :username-link "/logout"))
 	 (menu-property  (get-property properties :menu "w3-black"))
 	 (content        (get-property properties :content "")))
-    (cond ((or (eq page :content-body) ; data based content layout
+
+    (cond ;; Sub-section: Table of Contents
+          ((or (eq page :content-contents) ; data based contents layout
+	       (eq page :blog-contents))   ; blog based contents layout
+	   (let ((contents (get-property properties :content nil))
+		 (do-add   (get-property properties :do-add nil)))
+	     (when do-add
+	       (set-on-click (create-a body :class button-class
+					    :content "add contents")
+			     (lambda (obj)
+			       (set-on-click obj nil)
+			       (let* ((opanel (create-div obj :auto-place nil))
+				      (etitle (create-section opanel :h3 :content "New Title"))
+				      (ebody  (create-div opanel :content "New Body")))
+				 (place-after obj opanel)
+				 (setf (editablep etitle) t)
+				 (setf (editablep ebody) t)
+				 (set-border opanel :medium :dotted :red)
+				 (setf (text obj) "Save")
+				 (set-on-click obj
+					       (lambda (obj)
+						 (funcall do-add (list
+								  :|title| (text etitle)
+								  :|value| (text ebody)))
+						 (reload (location (connection-body obj))))))))
+	       (create-br body))
+	     (when contents
+	       (let ((ul (create-ordered-list body :auto-place nil))
+		     (count 0))
+		 (dolist (content contents)
+		   (incf count)
+		   (create-list-item (create-a ul :link (format nil "#~A" (getf content :|createdate|)))
+				     :content (getf content :|title|)))
+		 (when (> count 1)
+		   (place-inside-bottom-of body ul))))))
+	  ;; Sub-Section: Content
+	  ((or (eq page :content-body) ; data based content layout
 	       (eq page :blog-body))   ; blog based content layout
-	   (let ((etitle      (create-section body :h3 :content (getf content :|title|)))
+	   (let ((anchor      (create-child body
+					    (format nil "<a id=~A></a>"
+						    (getf content :|createdate|))))
+		 (etitle      (create-section body :h3
+					      :content	(getf content :|title|)))
 		 (ebody       (create-div body :content (getf content :|value|)))
 		 (panel       (create-div body))
 		 (new-comment (get-property properties :new-comment nil))
@@ -138,6 +178,7 @@ Page properties:
 			       (funcall do-delete)
 			       (reload (location (connection-body obj)))))))
 	   (create-br body))
+	  ;; Sub-Section: Comments
 	  ((or (eq page :content-comment) ; data comment layout
 	       (eq page :blog-comment))   ; blog comment layout
 	   (let* ((opanel (create-div body))

@@ -212,7 +212,7 @@ before display of value the return value is used. ON-NEW, ON-EDIT are
 called with (obj value) to allow filter of value before storage, if
 nil is return aborted. ON-DELETE called with (obj page comment-id) if
 returns nil aborted. If comment-table is nil no comments are
-shown. User must authorize on action set by CAN-COMMENT,
+shown. User must authorize on action set by CAN-COMMENT, CAN-ADMIN,
 CAN-SHOW-COMMENTS and if CAN-EDIT unless they are set to nil."
   (lambda (obj)
     (let* ((body    (connection-body obj))
@@ -220,12 +220,31 @@ CAN-SHOW-COMMENTS and if CAN-EDIT unless they are set to nil."
 	   (prof    (profile (get-web-site body)))
 	   (roles   (roles (get-web-site body)))
 	   (url     (base-url-split base-url (path-name (location body)))))
-      ;; Set page to show content
+      ;; set page to show content
       (when follow-url-page
 	(when (second url)
 	  (setf page (second url))))
-      ;; Page Content Display
-      (let ((pages (load-content sql-connection table page)))
+      ;; page content display
+      (let ((pages (load-content sql-connection table page
+				 :order-by "createdate desc")))
+	;; ask theme for table of contents or to allow add
+	(funcall theme obj :content-contents
+		 (list :content pages
+		       :do-add (when (clog-auth:is-authorized-p roles can-edit)
+				 (lambda (content)
+				     (push '("unixepoch()") content)
+				     (push :createdate content)
+				     (push page content)
+				     (push :key content)
+				     (push page content)
+				     (push :username content)
+				     (when on-new
+				       (setf content (funcall on-new content)))
+				     (print content)
+				     (when content
+				       (dbi:do-sql
+					 sql-connection
+					 (sql-insert* table content)))))))
 	(dolist (content pages)
 	  (when content
 	    (when on-content
@@ -241,8 +260,8 @@ CAN-SHOW-COMMENTS and if CAN-EDIT unless they are set to nil."
 					      sql-connection
 					      (sql-update table
 							  content
-							  "key=?")
-					      (list page)))))
+							  "key=? and createdate=?")
+					      (list page (getf content :|createdate|))))))
 			   :do-delete (when (clog-auth:is-authorized-p roles can-edit)
 					(lambda ()
 					  (if on-delete
@@ -251,26 +270,26 @@ CAN-SHOW-COMMENTS and if CAN-EDIT unless they are set to nil."
 					  (when on-delete
 					    (dbi:do-sql
 					      sql-connection
-					      (format nil "delete from ~A where key=?" table)
-					      (list page)))))
+					      (format nil "delete from ~A where key=? and createdate=?" table)
+					      (list page (getf content :|createdate|))))))
 			   :new-comment (when (clog-auth:is-authorized-p
 					       roles can-comment)
 					  (lambda (content)
-					    (push `("unixepoch()") content)
-					    (push :createdate content)
-					    (push `("unixepoch()") content)
-					    (push :key content)
+					    (push '("unixepoch()") content)
+					    (push :|createdate| content)
+					    (push '("unixepoch()") content)
+					    (push :|key| content)
 					    (push page content)
-					    (push :parent content)
+					    (push :|parent| content)
 					    (push (getf prof :|username|) content)
-					    (push :username content)
+					    (push :|username| content)
 					    (when on-new
 					      (setf content (funcall on-new content)))
 					    (when content
 					      (dbi:do-sql
 						sql-connection
 						(sql-insert* comment-table content))))))))))
-      ;; Comments Display
+      ;; comments display
       (when (and (clog-auth:is-authorized-p roles can-show-comments)
 		 comment-table)
 	(let ((comments (load-content sql-connection comment-table page
@@ -293,12 +312,14 @@ CAN-SHOW-COMMENTS and if CAN-EDIT unless they are set to nil."
 					    (if (clog-auth:is-authorized-p roles can-admin)
 						(dbi:do-sql
 						  sql-connection
-						  (format nil "delete from ~A where key=?" comment-table)
-						  (list (getf comment :|key|)))
+						  (format nil "delete from ~A where key=? and parent=?"
+							  comment-table)
+						  (list (getf comment :|key|) page))
 						(dbi:do-sql
 						  sql-connection
-						  (format nil "delete from ~A where key=? and username=?" comment-table)
-						  (list (getf comment :|key|) (getf prof :|username|)))))))
+						  (format nil "delete from ~A where key=? and username=? and parent=?"
+							  comment-table)
+						  (list (getf comment :|key|) (getf prof :|username|) page))))))
 			   :save-edit (when (or (clog-auth:is-authorized-p roles can-admin)
 						(and (getf prof :|username|)
 						     (equalp (getf comment :|username|)
