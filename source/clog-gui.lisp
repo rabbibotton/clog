@@ -675,6 +675,10 @@ title bar to allow pinning the window in place, if keep-on-top t then when
 pinned also will keep-on-top. If had-pinned is nil and keep-on-top t then
 the window will be set to keep-on-top always."))
 
+(defvar *client-movement* nil
+  "Default value for client movement in gui.
+If client-movement is t then jquery-ui is used to move/resize and will not work on mobile. When client-movementis t only on-window-move is fired once at start of drag and on-window-move-done at end of drag and on-window-resize at start of resize and on-window-resize-done at end of resize.")
+
 (defmethod create-gui-window ((obj clog-obj) &key (title "New Window")
 					       (content "")
 					       (left nil)
@@ -685,7 +689,7 @@ the window will be set to keep-on-top always."))
 			                       (has-pinner nil)
 					       (keep-on-top nil)
 					       (hidden nil)
-					       (client-movement nil)
+					       (client-movement *client-movement*)
 					       (html-id nil))
   (let ((app (connection-data-item obj "clog-gui")))
     (unless html-id
@@ -1281,7 +1285,7 @@ is placed in DOM at top of html body instead of bottom of html body."
 				   (title "About")
 				   (left nil) (top nil)
 				   (width 300) (height 200)
-				   (client-movement nil)
+				   (client-movement *client-movement*)
 				   (html-id nil))
   "Create an alert dialog box with CONTENT centered."
   (unless html-id
@@ -1333,7 +1337,7 @@ is placed in DOM at top of html body instead of bottom of html body."
 					    (default-value "")
 					    (left nil) (top nil)
 					    (width 300) (height 200)
-					    (client-movement nil)
+					    (client-movement *client-movement*)
 					    (html-id nil))
   "Create an input dialog box with CONTENT centered and an input box.
 Calls on-input with input box contents or nil if canceled."
@@ -1415,7 +1419,7 @@ Calls on-input with input box contents or nil if canceled."
 					      (cancel-text "Cancel")
 					      (left nil) (top nil)
 					      (width 300) (height 200)
-					      (client-movement nil)
+					      (client-movement *client-movement*)
 					      (html-id nil))
   "Create a confirmation dialog box with CONTENT centered.
 Calls on-input with t if confirmed or nil if canceled."
@@ -1482,7 +1486,7 @@ Calls on-input with t if confirmed or nil if canceled."
 						  (cancel-text "Cancel")
 						  (left nil) (top nil)
 						  (width 400) (height 500)
-						  (client-movement nil)
+						  (client-movement *client-movement*)
 						  (html-id nil))
   "Create a form dialog box with CONTENT followed by FIELDS.
 FIELDS is a list of lists each list has:
@@ -1666,7 +1670,7 @@ if confirmed or nil if canceled."
 			     (left nil) (top nil) (width 390) (height 425)
 			     (maximize nil)
 			     (initial-filename nil)
-			     (client-movement nil)
+			     (client-movement *client-movement*)
 			     (html-id nil))
   "Create a local file dialog box called TITLE using INITIAL-DIR on server
 machine, upon close ON-FILE-NAME called with filename or nil if failure."
