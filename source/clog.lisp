@@ -534,6 +534,11 @@ embedded in a native template application.)"
   (data-write-list  function)
   (data-write-plist function)
 
+  "SQL Timestamp by Engine"
+  (*mysql-timestamp* constant)
+  (*sqlite-timestamp* constant)
+  (*postgresql-timestamp* constant)
+
   "SQL Writing Helpers"
   (sql-quote       function)
   (sql-field-list  function)

@@ -132,7 +132,7 @@ if one is present and login fails."
 ;; create-base-table ;;
 ;;;;;;;;;;;;;;;;;;;;;;;
 
-(defun create-base-tables (sql-connection)
+(defun create-base-tables (sql-connection &key (sql-timestamp-func *sqlite-timestamp*))
   (dbi:do-sql
     sql-connection
     "create table config (key varchar, value varchar)")
@@ -149,10 +149,10 @@ if one is present and login fails."
     "create table users (username varchar, password varchar, token varchar)")
   (dbi:do-sql
     sql-connection
-    (sql-insert* "content" '(:key        "main"
+    (sql-insert* "content" `(:key        "main"
 			     :title      "Welcome to CLOG"
 			     :value      "Sample data"
-			     :createdate ("date()"))))
+			     :createdate (,sql-timestamp-func))))
   (dbi:do-sql
     sql-connection
     (sql-insert* "users" `(:username "admin"
@@ -203,7 +203,8 @@ optional WHERE and ORDER-BY sql."
 			   (can-admin         :content-admin)
 			   (can-comment       :content-comment)
 			   (can-show-comments :content-show-comments)
-			   (can-edit          :content-edit))
+			   (can-edit          :content-edit)
+			   (sql-timestamp-func *sqlite-timestamp*))
   "Create content for CLOG-WEB:CREATE-WEB-PAGE based on dbi TABLE
 value where key=PAGE or if FOLLOW-URL-PAGE is true PAGE is default
 page if no second on path otherwise page is the second on path (first
@@ -232,7 +233,7 @@ CAN-SHOW-COMMENTS and if CAN-EDIT unless they are set to nil."
 		 (list :content pages
 		       :do-add (when (clog-auth:is-authorized-p roles can-edit)
 				 (lambda (content)
-				     (push '("unixepoch()") content)
+				     (push (list sql-timestamp-func) content)
 				     (push :createdate content)
 				     (push page content)
 				     (push :key content)
@@ -275,9 +276,9 @@ CAN-SHOW-COMMENTS and if CAN-EDIT unless they are set to nil."
 			   :new-comment (when (clog-auth:is-authorized-p
 					       roles can-comment)
 					  (lambda (content)
-					    (push '("unixepoch()") content)
+					    (push (list sql-timestamp-func) content)
 					    (push :|createdate| content)
-					    (push '("unixepoch()") content)
+					    (push (list sql-timestamp-func) content)
 					    (push :|key| content)
 					    (push page content)
 					    (push :|parent| content)

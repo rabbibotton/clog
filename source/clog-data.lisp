@@ -124,6 +124,10 @@ keyword package."
 ;; Implementation - simple sql writers
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(defparameter *mysql-timestamp* "unix_timestamp()")
+(defparameter *sqlite-timestamp* "strftime('%s')")
+(defparameter *postgresql-timestamp* "extract(epoch from now())")
+
 ;;;;;;;;;;;;;;;;;;;;
 ;; sql-field-list ;;
 ;;;;;;;;;;;;;;;;;;;;
