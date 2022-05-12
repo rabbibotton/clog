@@ -1,12 +1,15 @@
-;; Demonstrates clog-web-site using a database oriented setup
-;; using clog-web-dbi for users and clog-auth for authentication
-;; and authorization
+;; In this tutorial we expand on the last using clog-web-content
+;; to instantly create a site with user, authentication, and
+;; content management including comments. We also use the option
+;; :extended-routing to allow handlers to handle routes on the
+;; same path.
 
-(defpackage #:clog-tut-31
+
+(defpackage #:clog-tut-32
   (:use #:cl #:clog #:clog-web #:clog-auth #:clog-web-dbi)
   (:export start-tutorial))
 
-(in-package #:clog-tut-31)
+(in-package #:clog-tut-32)
 
 ;;
 ;; Setup website structure, database and CLOG
@@ -17,30 +20,39 @@
 
 ;; Default user/pass is username: admin and password: admin
 
-;; We use authorizations to control what menus appear if logged in or not.
-;; We use the :authorize key on create-web-page to limit access as well
-;; directly to a page when not using menus.
-;; We use our menu with the convenient clog-web-routes-from-menu to
-;; setup the routes from URLs to handlers:
+;; /content is our root content URL, if you are authorized as an
+;; editor or admin you are able to add additional pages by going to
+;; the url /content/whatever and then click to add page. If you want
+;; it in the menu you would just need to add the url to the
+;; menu. There is no need to add handlers for pages under /content as
+;; when we initalized CLOG we used the option :extended-routing so
+;; that a URL start with /content/ will be sent to the same handler as
+;; /content in this case on-main. So our about page has no handler set
+;; but functions as we added to out database.
 
-                      ; Menu         Menu Item   URL       Handler   Actions Auth
-(defparameter *menu* `(("Features" (("Login"     "/login"  on-login  :login)
-				    ("Signup"    "/signup" on-signup :signup)
-				    ("Main"      "/main"   on-main   :main)
-				    ("Logout"    "/logout" on-logout :logout)))
-		       ("Admin"    (("User List" "/users"  on-users  :users)))
-		       ("Help"     (("About"     "/about"  on-about))))
+                      ; Menu         Menu Item   URL        Handler   Actions Auth
+(defparameter *menu* `(("Features" (("Home"     "/")
+				    ("Login"     "/login"   on-login  :login)
+				    ("Signup"    "/signup"  on-signup :signup)
+				    ("Content"   "/content" on-main   :content)
+				    ("Logout"    "/logout"  on-logout :logout)))
+		       ("Admin"    (("User List" "/users"   on-users  :users)))
+		       ("Help"     (("About"     "/content/about"))))
   "Setup website menu")
 
 (defun start-tutorial ()
-  ;; Setup authorizations between roles and actions
-  (add-authorization '(:guest) '(:login :signup :main))
-  (add-authorization '(:member) '(:logout :main))
-  (add-authorization '(:admin) '(:users))
+  ;; Here we add authorizations for content and editting content, not just
+  ;; access to pages.
+  (add-authorization '(:guest :member) '(:content-show-comments))
+  (add-authorization '(:guest)         '(:login :signup))
+  (add-authorization '(:member)        '(:logout
+				         :content-comment))
+  (add-authorization '(:editor)        '(:content-edit))
+  (add-authorization '(:admin)         '(:users :content-admin))
   ;; Setup database connection
   (when *sql-connection*
     (dbi:disconnect *sql-connection*))
-  (let ((db-dir (format nil "~A~A" (asdf:system-source-directory :clog) "tut-31.db")))
+  (let ((db-dir (format nil "~A~A" (asdf:system-source-directory :clog) "tut-32.db")))
     (setf *sql-connection* (dbi:connect :sqlite3 :database-name db-dir))
     (format t "Database location: ~A~%" db-dir))
   ;; Check if need to setup sample data
@@ -48,10 +60,18 @@
       (dbi:fetch (dbi:execute (dbi:prepare *sql-connection* "select * from config")))
     (error ()
       (print "Create database and tables.")
-      (create-base-tables *sql-connection*)))
-  ;; Setup clog, using long polling for web crawlers and some meta info
+      (create-base-tables *sql-connection*)
+      ;; A main page was added, but let's also add an about page:
+      (dbi:do-sql
+	*sql-connection*
+	(sql-insert* "content" `(:key        "about"
+				 :title      "About Tutorial 32"
+				 :value      "All about me."
+				 :createdate (,*sqlite-timestamp*))))))
+  ;; Setup clog
   (initialize 'on-main
 	      :long-poll-first t
+	      :extended-routing t
 	      :boot-function (clog-web-meta
 			      "clogpower.com - CLOG - the common lisp omnificent gui"))
   (clog-web-routes-from-menu *menu*)
@@ -77,10 +97,13 @@
 				 :signup-link  "/signup"
 				 :login-link   "/login")
 		     :profile profile
+		     ;; We define the roles simply if logged out a :guest
+		     ;; if logged in a :member and if username is admin
+		     ;; a :member, :editor and :admin.
 		     :roles (if profile
 				(if (equalp "admin"
 					    (getf profile :|username|))
-				    '(:member :admin)
+				    '(:member :editor :admin)			    
 				    '(:member))
 				'(:guest))
 		     :title "CLOG - The Common Lisp Omnificent GUI"
@@ -101,12 +124,10 @@
 			  (if (login body *sql-connection*
 				     (name-value obj "username")
 				     (name-value obj "password"))
-			      ;; url-replace removes login from history stack
-			      (url-replace (location body) "/main")
+			      (url-replace (location body) "/")
 			      (clog-web-alert obj "Invalid" "The username and password are invalid."
 					      :time-out 3
 					      :place-top t))))
-   ;; don't authorize use of page if logged in
    :authorize t))
 
 (defun on-logout (body)
@@ -119,18 +140,13 @@
 		   :signup `(:menu    ,*menu*
 			     :content ,(lambda (body)
 					 (sign-up body *sql-connection*)))
-		   ;; don't authorize use of page if logged in
 		   :authorize t))
 
 (defun on-main (body)
   (init-site body)
-  (create-web-page body :main `(:menu    ,*menu*
-				:content "I am the main page")))
-
-(defun on-about (body)
-  (init-site body)
-  (create-web-page body :about `(:menu    ,*menu*
-				 :content "About Me")))
+  (create-web-page body :index `(:menu    ,*menu*
+				 :content ,(clog-web-content *sql-connection*
+							     :comment-table "content"))))
 
 (defun on-users (body)
   (init-site body)
@@ -144,5 +160,4 @@
 						 "select * from users")))))
 				   (dolist (user users)
 				     (create-div body :content (getf user :|username|))))))
-		   ;; don't authorize use of page unless you are the admin
 			:authorize t))

@@ -204,17 +204,33 @@ optional WHERE and ORDER-BY sql."
 			   (can-comment        :content-comment)
 			   (can-show-comments  :content-show-comments)
 			   (can-edit           :content-edit)
+			   (content-order-by   "createdate")
+			   (comment-order-by   "createdate desc")
 			   (sql-timestamp-func *sqlite-timestamp*))
-  "Create content for CLOG-WEB:CREATE-WEB-PAGE based on dbi TABLE
-value where key=PAGE or if FOLLOW-URL-PAGE is true PAGE is default
-page if no second on path otherwise page is the second on path (first
-must be base-url). ON-CONTENT, ON-COMMENT are called with (obj value)
-before display of value the return value is used. ON-NEW, ON-EDIT are
-called with (obj value) to allow filter of value before storage, if
-nil is return aborted. ON-DELETE called with (obj page comment-id) if
-returns nil aborted. If comment-table is nil no comments are
-shown. User must authorize on action set by CAN-COMMENT, CAN-ADMIN,
-CAN-SHOW-COMMENTS and if CAN-EDIT unless they are set to nil."
+  "This is used to create PAGE based content. If more than one entry in
+TABLE is keyed for same PAGE, if theme is configured for it, displays
+a table of contents, followed by each content record, followed by
+comments for the whole page.
+
+Creates content for CLOG-WEB:CREATE-WEB-PAGE based on TABLE where
+key=PAGE (or if FOLLOW-URL-PAGE is true PAGE is default page and if no
+second on path otherwise page is the second on path, first must be
+base-url). e.g.
+
+(defun on-main (body)
+  (init-site body)
+  (create-web-page body
+    :index `(:menu    ,*menu*
+             :content ,(clog-web-content *sql-connection*
+             :comment-table \"content\"))))
+
+ON-CONTENT, ON-COMMENT are called with (obj value) before
+display of value the return value is used. ON-NEW, ON-EDIT are called
+with (obj value) to allow filter of value before storage, if nil is
+return aborted. ON-DELETE called with (obj page comment-id) if returns
+nil aborted. If comment-table is nil no comments are shown. User must
+authorize on action set by CAN-COMMENT, CAN-ADMIN, CAN-SHOW-COMMENTS
+and if CAN-EDIT unless they are set to nil."
   (lambda (obj)
     (let* ((body    (connection-body obj))
 	   (theme   (theme (get-web-site body)))
@@ -227,7 +243,7 @@ CAN-SHOW-COMMENTS and if CAN-EDIT unless they are set to nil."
 	  (setf page (second url))))
       ;; page content display
       (let ((pages (load-content sql-connection table page
-				 :order-by "createdate desc")))
+				 :order-by content-order-by)))
 	;; ask theme for table of contents or to allow add
 	(funcall theme obj :content-contents
 		 (list :content pages
@@ -241,7 +257,6 @@ CAN-SHOW-COMMENTS and if CAN-EDIT unless they are set to nil."
 				     (push :username content)
 				     (when on-new
 				       (setf content (funcall on-new content)))
-				     (print content)
 				     (when content
 				       (dbi:do-sql
 					 sql-connection
@@ -295,7 +310,7 @@ CAN-SHOW-COMMENTS and if CAN-EDIT unless they are set to nil."
 		 comment-table)
 	(let ((comments (load-content sql-connection comment-table page
 				      :key-col  "parent"
-				      :order-by "createdate desc")))
+				      :order-by comment-order-by)))
 	  (dolist (comment comments)
 	    (when on-comment
 	      (setf comment (funcall on-comment obj comment)))
