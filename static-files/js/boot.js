@@ -1,6 +1,6 @@
 /*static version*/
 var ws=null;
-var adr;
+var adr; var adrc;
 var clog={};
 var pingerid;
 var s = document.location.search;
@@ -89,14 +89,16 @@ function Open_ws() {
     if (location.port != '') { adr = adr + ':' + location.port; }
     adr = adr + '/clog';
 
-    if (clog['connection_id']) { adr = adr  + '?r=' + clog['connection_id'] }
+    if (clog['connection_id']) {
+      adrc = adr  + '?r=' + clog['connection_id'];
+    } else { adrc = adr }
 
     try {
-	console.log ('connecting to ' + adr);
-	ws = new WebSocket (adr);
+	console.log ('connecting to ' + adrc);
+	ws = new WebSocket (adrc);
     } catch (e) {
-	console.log ('trying again, connecting to ' + adr);
-	ws = new WebSocket (adr);
+	console.log ('trying again, connecting to ' + adrc);
+	ws = new WebSocket (adrc);
     }
 
     if (ws != null) {

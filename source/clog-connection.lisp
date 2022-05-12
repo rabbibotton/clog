@@ -276,28 +276,40 @@ the default answer. (Private)"
       (let ((ws (websocket-driver:make-server env)))
 	(websocket-driver:on :open ws
                              (lambda ()
-			   (let* ((query (getf env :query-string))
-				  (items (when query
-					   (quri:url-decode-params query)))
-				  (id    (when items
-					   (cdr (assoc "r" items
-						       :test #'equalp)))))
-			     (when (typep id 'string)
-			       (setf id (parse-integer id :junk-allowed t)))
-			     (handle-new-connection ws id))))
-
+			       (handler-case
+				   (let* ((query (getf env :query-string))
+					  (items (when query
+						   (quri:url-decode-params query)))
+					  (id    (when items
+						   (cdr (assoc "r" items
+							       :test #'equalp)))))
+				     (when (typep id 'string)
+				       (setf id (parse-integer id :junk-allowed t)))
+				     (handle-new-connection ws id))
+				 (t (c)
+				   (print env)
+				   (format t "Condition caught in clog-server :open - ~A.~&" c)
+				   (values 0 c)))))
 	(websocket-driver:on :message ws
-                             (lambda (msg) (handle-message ws msg)))
-
+                             (lambda (msg)
+			       (handler-case
+				   (handle-message ws msg)
+				 (t (c)
+				   (format t "Condition caught in clog-server :message - ~A.~&" c)
+				   (values 0 c)))))
 	(websocket-driver:on :close ws
                              (lambda (&key code reason)
                                (declare (ignore code reason))
-                               (handle-close-connection ws)))
+			       (handler-case
+				   (handle-close-connection ws)
+				 (t (c)
+				   (format t "Condition caught in clog-server :message - ~A.~&" c)
+				   (values 0 c)))))
 	(lambda (responder)
 	  (declare (ignore responder))
 	  (websocket-driver:start-connection ws)))
     (t (c)
-      (format t "Condition caught in clog-server - ~A.~&" c)
+      (format t "Condition caught in clog-server start-up - ~A.~&" c)
       (values 0 c))))
 
 ;;;;;;;;;;;;;;;;
@@ -656,7 +668,7 @@ the browser contents in case of connection loss."
 "
 /*compiled version*/
 var ws=null;
-var adr;
+var adr; var adrc;
 var clog={};
 var pingerid;
 var s = document.location.search;
@@ -745,14 +757,16 @@ function Open_ws() {
     if (location.port != '') { adr = adr + ':' + location.port; }
     adr = adr + '/clog';
 
-    if (clog['connection_id']) { adr = adr  + '?r=' + clog['connection_id'] }
+    if (clog['connection_id']) {
+      adrc = adr  + '?r=' + clog['connection_id'];
+    } else { adrc = adr }
 
     try {
-	console.log ('connecting to ' + adr);
-	ws = new WebSocket (adr);
+	console.log ('connecting to ' + adrc);
+	ws = new WebSocket (adrc);
     } catch (e) {
-	console.log ('trying again, connecting to ' + adr);
-	ws = new WebSocket (adr);
+	console.log ('trying again, connecting to ' + adrc);
+	ws = new WebSocket (adrc);
     }
 
     if (ws != null) {
