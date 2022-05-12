@@ -57,4 +57,4 @@ Tutorial Summary
 - 29-tutorial.lisp - Presentations (and jQuery) - linking lisp objects to clog objects
 - 30-tutorial.lisp - Instant websites - clog-web-site
 - 31-tutorial.lisp - Database and Authority based websites - clog-web-dbi and clog-auth
-- 32-tutorial.lisp - Database Managed Content webste - clog-web-content
+- 32-tutorial.lisp - Database Managed Content websites - clog-web-content
