@@ -124,9 +124,12 @@ keyword package."
 ;; Implementation - simple sql writers
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defparameter *mysql-timestamp* "unix_timestamp()")
-(defparameter *sqlite-timestamp* "strftime('%s')")
-(defparameter *postgresql-timestamp* "extract(epoch from now())")
+(defparameter *mysql-timestamp* "unix_timestamp()"
+  "Function used by mysql to retrieve the time from the epoch")
+(defparameter *sqlite-timestamp* "strftime('%s')"
+  "Function used by sqlite to retrieve the time from the epoch")
+(defparameter *postgresql-timestamp* "extract(epoch from now())"
+  "Function used by postgresql to retrieve the time from the epoch")
 
 ;;;;;;;;;;;;;;;;;;;;
 ;; sql-field-list ;;

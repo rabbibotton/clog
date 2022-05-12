@@ -535,9 +535,9 @@ embedded in a native template application.)"
   (data-write-plist function)
 
   "SQL Timestamp by Engine"
-  (*mysql-timestamp* constant)
-  (*sqlite-timestamp* constant)
-  (*postgresql-timestamp* constant)
+  (*mysql-timestamp* variable)
+  (*sqlite-timestamp* variable)
+  (*postgresql-timestamp* variable)
 
   "SQL Writing Helpers"
   (sql-quote       function)

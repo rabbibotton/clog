@@ -54,7 +54,7 @@
 <li><a href="#CLOG:@CLOG-AUTH%20MGL-PAX:SECTION" title="CLOG Auth Objects">17 CLOG Auth Objects</a></li>
 <li><a href="#CLOG:@CLOG-GUI%20MGL-PAX:SECTION" title="CLOG GUI Objects">18 CLOG GUI Objects</a></li>
 <li><a href="#CLOG:@CLOG-WEB%20MGL-PAX:SECTION" title="CLOG Web Objects">19 CLOG Web Objects</a></li>
-<li><a href="#CLOG:@CLOG-WEB-DBI%20MGL-PAX:SECTION" title="CLOG Web DBI - dbi based website">20 CLOG Web DBI - dbi based website</a></li>
+<li><a href="#CLOG:@CLOG-WEB-DBI%20MGL-PAX:SECTION" title="CLOG Web DBI">20 CLOG Web DBI</a></li>
 <li><a href="#CLOG:@CLOG-WEB-THEMES%20MGL-PAX:SECTION" title="CLOG Web Site Themes">21 CLOG Web Site Themes</a></li>
 <li><a href="#CLOG:@CLOG-BODY%20MGL-PAX:SECTION" title="CLOG Body Objects">22 CLOG Body Objects</a></li>
 <li><a href="#CLOG:@CLOG-WINDOW%20MGL-PAX:SECTION" title="CLOG Window Objects">23 CLOG Window Objects</a></li>
@@ -3952,7 +3952,47 @@ slot-name does not exist it is left out of returned plist. If
 keyword package.</p></li>
 </ul>
 
+<p><code>SQL</code> Timestamp by Engine</p>
+
+<p><a id="x-28CLOG-3A-2AMYSQL-TIMESTAMP-2A-20VARIABLE-29"></a>
+<a id="CLOG:*MYSQL-TIMESTAMP*%20VARIABLE"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[variable]</span> <span class="reference-object"><a href="#CLOG:*MYSQL-TIMESTAMP*%20VARIABLE" >*MYSQL-TIMESTAMP*</a></span></span> <span class="locative-args">&quot;unix_timestamp()&quot;</span></span></p>
+
+<p>Function used by mysql to retrieve the time from the epoch</p></li>
+</ul>
+
+<p><a id="x-28CLOG-3A-2ASQLITE-TIMESTAMP-2A-20VARIABLE-29"></a>
+<a id="CLOG:*SQLITE-TIMESTAMP*%20VARIABLE"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[variable]</span> <span class="reference-object"><a href="#CLOG:*SQLITE-TIMESTAMP*%20VARIABLE" >*SQLITE-TIMESTAMP*</a></span></span> <span class="locative-args">&quot;strftime('%s')&quot;</span></span></p>
+
+<p>Function used by sqlite to retrieve the time from the epoch</p></li>
+</ul>
+
+<p><a id="x-28CLOG-3A-2APOSTGRESQL-TIMESTAMP-2A-20VARIABLE-29"></a>
+<a id="CLOG:*POSTGRESQL-TIMESTAMP*%20VARIABLE"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[variable]</span> <span class="reference-object"><a href="#CLOG:*POSTGRESQL-TIMESTAMP*%20VARIABLE" >*POSTGRESQL-TIMESTAMP*</a></span></span> <span class="locative-args">&quot;extract(epoch from now())&quot;</span></span></p>
+
+<p>Function used by postgresql to retrieve the time from the epoch</p></li>
+</ul>
+
 <p><code>SQL</code> Writing Helpers</p>
+
+<p><a id="x-28CLOG-3ASQL-QUOTE-20FUNCTION-29"></a>
+<a id="CLOG:SQL-QUOTE%20FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#CLOG:SQL-QUOTE%20FUNCTION" >SQL-QUOTE</a></span></span> <span class="locative-args">VALUE</span></span></p>
+
+<p>Returns value single quoted if string (single quote quoted by doubling)
+unless is the single character '?'. If value is a list the car is returned
+unquoted</p></li>
+</ul>
 
 <p><a id="x-28CLOG-3ASQL-FIELD-LIST-20FUNCTION-29"></a>
 <a id="CLOG:SQL-FIELD-LIST%20FUNCTION"></a></p>
@@ -3972,10 +4012,8 @@ stringified first. If <code>:QUOTE-ALL</code> t then all fields are in quotes.</
 <ul>
 <li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#CLOG:SQL-VALUE-LIST%20FUNCTION" >SQL-VALUE-LIST</a></span></span> <span class="locative-args">VALUE-LIST</span></span></p>
 
-<p>Given list of values returns a string for use in a <code>SQL</code> insert value
-list. If a value is a string it is quoted with single quotes
-(and single quotes qutoed by doubling) unless is the single
-character '?'.</p></li>
+<p>Given list of values each passed to <a href="#CLOG:SQL-QUOTE%20FUNCTION" title="CLOG:SQL-QUOTE FUNCTION"><code>SQL-QUOTE</code></a> returns a string for
+use in a <code>SQL</code> insert value list.</p></li>
 </ul>
 
 <p><a id="x-28CLOG-3ASQL-UPDATE-LIST-20FUNCTION-29"></a>
@@ -3984,10 +4022,9 @@ character '?'.</p></li>
 <ul>
 <li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#CLOG:SQL-UPDATE-LIST%20FUNCTION" >SQL-UPDATE-LIST</a></span></span> <span class="locative-args">PLIST</span></span></p>
 
-<p>Given plist of field names and values returns a string for use in a
-<code>SQL</code> update. if the 'key' is a cons the first 'key' used. If a value
-is a string it is quoted with single quotes (and single quotes qutoed
-by doubling) unless is the single character '?'.</p></li>
+<p>Given plist of field names and values each passed to <a href="#CLOG:SQL-QUOTE%20FUNCTION" title="CLOG:SQL-QUOTE FUNCTION"><code>SQL-QUOTE</code></a> and
+returns a string for use in a <code>SQL</code> update. if the 'key' is a cons the
+first 'key' used.</p></li>
 </ul>
 
 <p><a id="x-28CLOG-3ASQL-SELECT-20FUNCTION-29"></a>
@@ -6158,7 +6195,7 @@ is nil unbind the event.</p></li>
 <a id="CLOG-AUTH:SET-ON-AUTHENTICATION-CHANGE%20FUNCTION"></a></p>
 
 <ul>
-<li><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#CLOG-AUTH:SET-ON-AUTHENTICATION-CHANGE%20FUNCTION" >SET-ON-AUTHENTICATION-CHANGE</a></span></span> <span class="locative-args">OBJ HANDLER</span></span></li>
+<li><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#CLOG-AUTH:SET-ON-AUTHENTICATION-CHANGE%20FUNCTION" >SET-ON-AUTHENTICATION-CHANGE</a></span></span> <span class="locative-args">BODY HANDLER</span></span></li>
 </ul>
 
 <p>CLOG-AUTH - Authorization</p>
@@ -6178,7 +6215,7 @@ is nil unbind the event.</p></li>
 <ul>
 <li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#CLOG-AUTH:IS-AUTHORIZED-P%20FUNCTION" >IS-AUTHORIZED-P</a></span></span> <span class="locative-args">ROLE-LIST ACTION</span></span></p>
 
-<p>Given <code>ROLE-LIST</code> is action authorized</p></li>
+<p>Given <code>ROLE-LIST</code> is action authorized. If action is nil returns t.</p></li>
 </ul>
 
 <p><a id="x-28CLOG-3A-40CLOG-GUI-20MGL-PAX-3ASECTION-29"></a>
@@ -6687,7 +6724,7 @@ machine, upon close <code>ON-FILE-NAME</code> called with filename or nil if fai
 <p><a id="x-28CLOG-3A-40CLOG-WEB-20MGL-PAX-3ASECTION-29"></a>
 <a id="CLOG:@CLOG-WEB%20MGL-PAX:SECTION"></a></p>
 
-<p><span class="outer-navigation"><span class="navigation"> <a href="#CLOG:@CLOG-GUI%20MGL-PAX:SECTION" title="CLOG GUI Objects">&#8592;</a> <a href="#CLOG:@CLOG-MANUAL%20MGL-PAX:SECTION" title="The CLOG manual">&#8593;</a> <a href="#CLOG:@CLOG-WEB-DBI%20MGL-PAX:SECTION" title="CLOG Web DBI - dbi based website">&#8594;</a> <a href="#CLOG:@CLOG-WEB%20MGL-PAX:SECTION" title="CLOG Web Objects">&#8634;</a></span></span></p>
+<p><span class="outer-navigation"><span class="navigation"> <a href="#CLOG:@CLOG-GUI%20MGL-PAX:SECTION" title="CLOG GUI Objects">&#8592;</a> <a href="#CLOG:@CLOG-MANUAL%20MGL-PAX:SECTION" title="The CLOG manual">&#8593;</a> <a href="#CLOG:@CLOG-WEB-DBI%20MGL-PAX:SECTION" title="CLOG Web DBI">&#8594;</a> <a href="#CLOG:@CLOG-WEB%20MGL-PAX:SECTION" title="CLOG Web Objects">&#8634;</a></span></span></p>
 
 <h2><a href="#CLOG:@CLOG-WEB%20MGL-PAX:SECTION">19 CLOG Web Objects</a></h2>
 
@@ -7444,9 +7481,9 @@ and no-script body information for search engines with <code>DESCRIPTION</code>.
 <p><a id="x-28CLOG-3A-40CLOG-WEB-DBI-20MGL-PAX-3ASECTION-29"></a>
 <a id="CLOG:@CLOG-WEB-DBI%20MGL-PAX:SECTION"></a></p>
 
-<p><span class="outer-navigation"><span class="navigation"> <a href="#CLOG:@CLOG-WEB%20MGL-PAX:SECTION" title="CLOG Web Objects">&#8592;</a> <a href="#CLOG:@CLOG-MANUAL%20MGL-PAX:SECTION" title="The CLOG manual">&#8593;</a> <a href="#CLOG:@CLOG-WEB-THEMES%20MGL-PAX:SECTION" title="CLOG Web Site Themes">&#8594;</a> <a href="#CLOG:@CLOG-WEB-DBI%20MGL-PAX:SECTION" title="CLOG Web DBI - dbi based website">&#8634;</a></span></span></p>
+<p><span class="outer-navigation"><span class="navigation"> <a href="#CLOG:@CLOG-WEB%20MGL-PAX:SECTION" title="CLOG Web Objects">&#8592;</a> <a href="#CLOG:@CLOG-MANUAL%20MGL-PAX:SECTION" title="The CLOG manual">&#8593;</a> <a href="#CLOG:@CLOG-WEB-THEMES%20MGL-PAX:SECTION" title="CLOG Web Site Themes">&#8594;</a> <a href="#CLOG:@CLOG-WEB-DBI%20MGL-PAX:SECTION" title="CLOG Web DBI">&#8634;</a></span></span></p>
 
-<h2><a href="#CLOG:@CLOG-WEB-DBI%20MGL-PAX:SECTION">20 CLOG Web DBI - dbi based website</a></h2>
+<h2><a href="#CLOG:@CLOG-WEB-DBI%20MGL-PAX:SECTION">20 CLOG Web DBI</a></h2>
 
 <h6>[in package CLOG-WEB-DBI]</h6>
 
@@ -7456,7 +7493,7 @@ and no-script body information for search engines with <code>DESCRIPTION</code>.
 <a id="CLOG-WEB-DBI:LOGIN%20FUNCTION"></a></p>
 
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#CLOG-WEB-DBI:LOGIN%20FUNCTION" >LOGIN</a></span></span> <span class="locative-args">OBJ SQL-CONNECTION USERNAME PASSWORD</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#CLOG-WEB-DBI:LOGIN%20FUNCTION" >LOGIN</a></span></span> <span class="locative-args">BODY SQL-CONNECTION USERNAME PASSWORD</span></span></p>
 
 <p>Login and set current authentication token, it does not remove token
 if one is present and login fails.</p></li>
@@ -7466,7 +7503,7 @@ if one is present and login fails.</p></li>
 <a id="CLOG-WEB-DBI:LOGOUT%20FUNCTION"></a></p>
 
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#CLOG-WEB-DBI:LOGOUT%20FUNCTION" >LOGOUT</a></span></span> <span class="locative-args">OBJ</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#CLOG-WEB-DBI:LOGOUT%20FUNCTION" >LOGOUT</a></span></span> <span class="locative-args">BODY</span></span></p>
 
 <p>Logout and remove current authenitcation token</p></li>
 </ul>
@@ -7485,7 +7522,7 @@ no token or fails to match as user returns nil</p></li>
 <a id="CLOG-WEB-DBI:SIGN-UP%20FUNCTION"></a></p>
 
 <ul>
-<li><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#CLOG-WEB-DBI:SIGN-UP%20FUNCTION" >SIGN-UP</a></span></span> <span class="locative-args">OBJ SQL-CONNECTION &amp;KEY (TITLE &quot;Sign Up&quot;) (NEXT-STEP &quot;/login&quot;)</span></span></li>
+<li><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#CLOG-WEB-DBI:SIGN-UP%20FUNCTION" >SIGN-UP</a></span></span> <span class="locative-args">BODY SQL-CONNECTION &amp;KEY (TITLE &quot;Sign Up&quot;) (NEXT-STEP &quot;/login&quot;)</span></span></li>
 </ul>
 
 <p><a id="x-28CLOG-WEB-DBI-3AMAKE-TOKEN-20FUNCTION-29"></a>
@@ -7495,21 +7532,51 @@ no token or fails to match as user returns nil</p></li>
 <li><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#CLOG-WEB-DBI:MAKE-TOKEN%20FUNCTION" >MAKE-TOKEN</a></span></span></span></li>
 </ul>
 
+<p><a id="x-28CLOG-WEB-DBI-3ALOAD-CONTENT-20FUNCTION-29"></a>
+<a id="CLOG-WEB-DBI:LOAD-CONTENT%20FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#CLOG-WEB-DBI:LOAD-CONTENT%20FUNCTION" >LOAD-CONTENT</a></span></span> <span class="locative-args">SQL-CONNECTION TABLE KEY-VALUE &amp;KEY (KEY-COL &quot;key&quot;) WHERE ORDER-BY</span></span></p>
+
+<p>Returns list of records found in <code>TABLE</code> where <code>KEY-COL</code> = <code>KEY-VALUE</code> and
+optional <code>WHERE</code> and <code>ORDER-BY</code> sql.</p></li>
+</ul>
+
 <p><a id="x-28CLOG-WEB-DBI-3ACREATE-BASE-TABLES-20FUNCTION-29"></a>
 <a id="CLOG-WEB-DBI:CREATE-BASE-TABLES%20FUNCTION"></a></p>
 
 <ul>
-<li><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#CLOG-WEB-DBI:CREATE-BASE-TABLES%20FUNCTION" >CREATE-BASE-TABLES</a></span></span> <span class="locative-args">SQL-CONNECTION</span></span></li>
+<li><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#CLOG-WEB-DBI:CREATE-BASE-TABLES%20FUNCTION" >CREATE-BASE-TABLES</a></span></span> <span class="locative-args">SQL-CONNECTION &amp;KEY (SQL-TIMESTAMP-FUNC <a href="#CLOG:*SQLITE-TIMESTAMP*%20VARIABLE" title="CLOG:*SQLITE-TIMESTAMP* VARIABLE"><code>*SQLITE-TIMESTAMP*</code></a>)</span></span></li>
 </ul>
 
 <p><a id="x-28CLOG-3A-40CLOG-WEB-THEMES-20MGL-PAX-3ASECTION-29"></a>
 <a id="CLOG:@CLOG-WEB-THEMES%20MGL-PAX:SECTION"></a></p>
 
-<p><span class="outer-navigation"><span class="navigation"> <a href="#CLOG:@CLOG-WEB-DBI%20MGL-PAX:SECTION" title="CLOG Web DBI - dbi based website">&#8592;</a> <a href="#CLOG:@CLOG-MANUAL%20MGL-PAX:SECTION" title="The CLOG manual">&#8593;</a> <a href="#CLOG:@CLOG-BODY%20MGL-PAX:SECTION" title="CLOG Body Objects">&#8594;</a> <a href="#CLOG:@CLOG-WEB-THEMES%20MGL-PAX:SECTION" title="CLOG Web Site Themes">&#8634;</a></span></span></p>
+<p><span class="outer-navigation"><span class="navigation"> <a href="#CLOG:@CLOG-WEB-DBI%20MGL-PAX:SECTION" title="CLOG Web DBI">&#8592;</a> <a href="#CLOG:@CLOG-MANUAL%20MGL-PAX:SECTION" title="The CLOG manual">&#8593;</a> <a href="#CLOG:@CLOG-BODY%20MGL-PAX:SECTION" title="CLOG Body Objects">&#8594;</a> <a href="#CLOG:@CLOG-WEB-THEMES%20MGL-PAX:SECTION" title="CLOG Web Site Themes">&#8634;</a></span></span></p>
 
 <h2><a href="#CLOG:@CLOG-WEB-THEMES%20MGL-PAX:SECTION">21 CLOG Web Site Themes</a></h2>
 
 <h6>[in package CLOG-WEB]</h6>
+
+<p>Theme helpers</p>
+
+<p><a id="x-28CLOG-WEB-3AGET-SETTING-20FUNCTION-29"></a>
+<a id="CLOG-WEB:GET-SETTING%20FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#CLOG-WEB:GET-SETTING%20FUNCTION" >GET-SETTING</a></span></span> <span class="locative-args">WEBSITE KEY DEFAULT</span></span></p>
+
+<p>Return the setting for <code>KEY</code> or <code>DEFAULT</code> from website settings</p></li>
+</ul>
+
+<p><a id="x-28CLOG-WEB-3AGET-PROPERTY-20FUNCTION-29"></a>
+<a id="CLOG-WEB:GET-PROPERTY%20FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#CLOG-WEB:GET-PROPERTY%20FUNCTION" >GET-PROPERTY</a></span></span> <span class="locative-args">PROPERTIES KEY DEFAULT</span></span></p>
+
+<p>Return the property for <code>KEY</code> from the p-list <code>PROPERTIES</code> or <code>DEFAULT</code></p></li>
+</ul>
 
 <p>Built in themes</p>
 
@@ -7517,16 +7584,19 @@ no token or fails to match as user returns nil</p></li>
 <a id="CLOG-WEB:DEFAULT-THEME%20FUNCTION"></a></p>
 
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#CLOG-WEB:DEFAULT-THEME%20FUNCTION" >DEFAULT-THEME</a></span></span> <span class="locative-args">BODY WEBSITE PAGE PROPERTIES</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#CLOG-WEB:DEFAULT-THEME%20FUNCTION" >DEFAULT-THEME</a></span></span> <span class="locative-args">BODY PAGE PROPERTIES</span></span></p>
 
 <p>The default theme for clog-web-site.
 Settings available:
-  :color-class  - w3 color class for menu bars and buttons
-  :border-class - w3 border
-  :text-class   - w3 text color class
+  :color-class   - w3 color class for menu bars and buttons (def: w3-black)
+  :border-class  - w3 border (def: &quot;&quot;)
+  :text-class    - w3 text color class (def: &quot;&quot;)
+  :signup-link   - link to signup (def: /signup)
+  :login-link    - link to login (def: /login)
+  :username-link - link when clicking on username (def: /logout)
 Page properties:
-  :menu - ((&quot;Menu Name&quot; ((&quot;Menu Item&quot; &quot;link&quot;))))
-  :content</p></li>
+  :menu - ((&quot;Menu Name&quot; ((&quot;Menu Item&quot; &quot;link&quot;)))) (def: nil)
+  :content - (def: &quot;&quot;)</p></li>
 </ul>
 
 <p><a id="x-28CLOG-3A-40CLOG-BODY-20MGL-PAX-3ASECTION-29"></a>

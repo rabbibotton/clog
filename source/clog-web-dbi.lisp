@@ -190,20 +190,20 @@ optional WHERE and ORDER-BY sql."
 
 (defun clog-web-content (sql-connection
 			 &key
-			   (page              "main")
-			   (table             "content")
-			   (base-url          "/content")
-			   (follow-url-page   t)
+			   (page               "main")
+			   (table              "content")
+			   (base-url           "/content")
+			   (follow-url-page    t)
 			   comment-table
 			   on-content
 			   on-comment
 			   on-new
 			   on-edit
 			   on-delete
-			   (can-admin         :content-admin)
-			   (can-comment       :content-comment)
-			   (can-show-comments :content-show-comments)
-			   (can-edit          :content-edit)
+			   (can-admin          :content-admin)
+			   (can-comment        :content-comment)
+			   (can-show-comments  :content-show-comments)
+			   (can-edit           :content-edit)
 			   (sql-timestamp-func *sqlite-timestamp*))
   "Create content for CLOG-WEB:CREATE-WEB-PAGE based on dbi TABLE
 value where key=PAGE or if FOLLOW-URL-PAGE is true PAGE is default
