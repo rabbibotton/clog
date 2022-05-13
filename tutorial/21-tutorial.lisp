@@ -34,12 +34,13 @@ on the drop-root."))
 	 (header  (create-list-item new-obj :content content)))    
     (change-class new-obj 'clog-drop-list)
     (setf (drop-root new-obj) (create-unordered-list header))
-    (set-on-click header
-		  (lambda (obj)
-		    (declare (ignore obj))
-		    (if (hiddenp (drop-root new-obj))
-			(setf (hiddenp (drop-root new-obj)) nil)
-			(setf (hiddenp (drop-root new-obj)) t))))
+    (set-on-mouse-down header
+		       (lambda (obj data)
+			 (declare (ignore obj data))
+			 (if (hiddenp (drop-root new-obj))
+			     (setf (hiddenp (drop-root new-obj)) nil)
+			     (setf (hiddenp (drop-root new-obj)) t)))
+		       :cancel-event t) ; prevent event bubble up tree
     new-obj))
 
 (defpackage #:clog-tut-21
@@ -53,7 +54,11 @@ on the drop-root."))
 	 (item (create-list-item (clog-drop-list:drop-root drop-list) :content "Item 1"))
 	 (item (create-list-item (clog-drop-list:drop-root drop-list) :content "Item 2"))
 	 (item (create-list-item (clog-drop-list:drop-root drop-list) :content "Item 3"))
-	 (item (create-list-item (clog-drop-list:drop-root drop-list) :content "Item 4")))
+	 (item (create-list-item (clog-drop-list:drop-root drop-list) :content "Item 4"))
+	 (drop-list2 (clog-drop-list:create-drop-list item :content "Another Drop"))
+	 (item (create-list-item (clog-drop-list:drop-root drop-list2) :content "Item 1"))
+	 (item (create-list-item (clog-drop-list:drop-root drop-list2) :content "Item 2")))
+	 
     (declare (ignore item))))
 
 (defun start-tutorial ()
