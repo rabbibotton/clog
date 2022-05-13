@@ -57,9 +57,15 @@ on the drop-root."))
 	 (item (create-list-item (clog-drop-list:drop-root drop-list) :content "Item 4"))
 	 (drop-list2 (clog-drop-list:create-drop-list item :content "Another Drop"))
 	 (item (create-list-item (clog-drop-list:drop-root drop-list2) :content "Item 1"))
-	 (item (create-list-item (clog-drop-list:drop-root drop-list2) :content "Item 2")))
-	 
-    (declare (ignore item))))
+	 (item (create-list-item (clog-drop-list:drop-root drop-list2) :content "Item 2"))
+	 (drop-list3 (clog-drop-list:create-drop-list item :content "Hidden Drop"))
+	 (item (create-list-item (clog-drop-list:drop-root drop-list3) :content "Item 1"))
+	 (item (create-list-item (clog-drop-list:drop-root drop-list3) :content "Item 2"))
+	 (drop-list4 (clog-drop-list:create-drop-list drop-list :content "One more Drop"))
+	 (item (create-list-item (clog-drop-list:drop-root drop-list4) :content "Item 1"))
+	 (item (create-list-item (clog-drop-list:drop-root drop-list4) :content "Item 2")))
+    (declare (ignore item))
+    (setf (hiddenp (clog-drop-list:drop-root drop-list3)) t)))
 
 (defun start-tutorial ()
   "Start tutorial."
