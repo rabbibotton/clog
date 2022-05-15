@@ -185,7 +185,7 @@ CLOG-USER> (setf (background-color *body*) \"beige\")
 CLOG-USER> (create-div *body* :content \"Hello World!\")
 ```
 
-The clog-repl URL is http://127.0.0.1/repl *body* will always refer to the
+The clog-repl URL is http://127.0.0.1:8080/repl *body* will always refer to the
 last access of that URL.
 
 To open a browser with the CLOG manual:
