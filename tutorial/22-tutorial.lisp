@@ -21,7 +21,7 @@
   (let* ((win (create-gui-window obj :title "Drawing"))
 	 (canvas (create-canvas (window-content win) :width 600 :height 400))
 	 (cx     (create-context2d canvas)))
-    (set-border canvas :thin :solid :black)    
+    (set-border canvas :thin :solid :black)
     (fill-style cx :green)
     (fill-rect cx 10 10 150 100)
     (fill-style cx :blue)
@@ -53,7 +53,7 @@
   (alert-dialog obj "This is a modal alert box"))
 
 (defun on-dlg-confirm (obj)
-  (confirm-dialog obj "Shall we play a game?"		  
+  (confirm-dialog obj "Shall we play a game?"
 		(lambda (input)
 		  (if input
 		      (alert-dialog obj "How about Global Thermonuclear War.")
@@ -119,11 +119,11 @@
 				    (declare (ignore obj))()))))
 
 (defun on-new-window (body)
-  (setf (title (html-document body)) "Tutorial 22")  
+  (setf (title (html-document body)) "Tutorial 22")
   ;; For web oriented apps consider using the :client-movement option.
   ;; See clog-gui-initialize documentation.
   (clog-gui-initialize body)
-  (add-class body "w3-cyan")  
+  (add-class body "w3-cyan")
   (let* ((menu  (create-gui-menu-bar body))
 	 (tmp   (create-gui-menu-icon menu :on-click 'on-help-about))
 	 (file  (create-gui-menu-drop-down menu :content "File"))
@@ -137,7 +137,7 @@
 	 (tmp   (create-gui-menu-item win :content "Normalize All" :on-click 'normalize-all-windows))
 	 (tmp   (create-gui-menu-window-select win))
 	 (dlg   (create-gui-menu-drop-down menu :content "Dialogs"))
-	 (tmp   (create-gui-menu-item dlg :content "Alert Dialog Box" :on-click 'on-dlg-alert))	 
+	 (tmp   (create-gui-menu-item dlg :content "Alert Dialog Box" :on-click 'on-dlg-alert))
 	 (tmp   (create-gui-menu-item dlg :content "Input Dialog Box" :on-click 'on-dlg-input))
 	 (tmp   (create-gui-menu-item dlg :content "Confirm Dialog Box" :on-click 'on-dlg-confirm))
 	 (tmp   (create-gui-menu-item dlg :content "Form Dialog Box" :on-click 'on-dlg-form))
@@ -150,6 +150,34 @@
 	 (tmp   (create-gui-menu-item help :content "About" :on-click 'on-help-about))
 	 (tmp   (create-gui-menu-full-screen menu)))
     (declare (ignore tmp)))
+  ;; Alternatively with-clog-create can be used to declartively create the menu
+  ;; see tutorial 33
+  ;; (with-clog-create body
+  ;;   (gui-menu-bar ()
+  ;; 		  (gui-menu-icon (:on-click 'on-help-about))
+  ;; 		  (gui-menu-drop-down (:content "File")
+  ;; 				      (gui-menu-item (:content "Count" :on-click 'on-file-count))
+  ;; 				      (gui-menu-item (:content "Browse" :on-click 'on-file-browse))
+  ;; 				      (gui-menu-item (:content "Drawing" :on-click 'on-file-drawing))
+  ;; 				      (gui-menu-item (:content "Movie" :on-click 'on-file-movies))
+  ;; 				      (gui-menu-item (:content "Pinned" :on-click 'on-file-pinned)))
+  ;; 		  (gui-menu-drop-down (:content "Window")
+  ;; 				      (gui-menu-item (:content "Maximize All" :on-click 'maximize-all-windows))
+  ;; 				      (gui-menu-item (:content "Normalize All" :on-click 'normalize-all-windows))
+  ;; 				      (gui-menu-window-select ()))
+  ;; 		  (gui-menu-drop-down (:content "Dialogs")
+  ;; 				      (gui-menu-item (:content "Alert Dialog Box" :on-click 'on-dlg-alert))
+  ;; 				      (gui-menu-item (:content "Input Dialog Box" :on-click 'on-dlg-input))
+  ;; 				      (gui-menu-item (:content "Confirm Dialog Box" :on-click 'on-dlg-confirm))
+  ;; 				      (gui-menu-item (:content "Form Dialog Box" :on-click 'on-dlg-form))
+  ;; 				      (gui-menu-item (:content "Server File Dialog Box" :on-click 'on-dlg-file)))
+  ;; 		  (gui-menu-drop-down (:content "Toasts")
+  ;; 				      (gui-menu-item (:content "Alert Toast" :on-click 'on-toast-alert))
+  ;; 				      (gui-menu-item (:content "Warning Toast" :on-click 'on-toast-warn))
+  ;; 				      (gui-menu-item (:content "Success Toast" :on-click 'on-toast-success)))
+  ;; 		  (gui-menu-drop-down (:content "Help")
+  ;; 				      (gui-menu-item (:content "About" :on-click 'on-help-about)))
+  ;; 		  (gui-menu-full-screen ())))
   (set-on-before-unload (window body) (lambda(obj)
 					(declare (ignore obj))
 					;; return empty string to prevent nav off page

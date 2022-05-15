@@ -249,6 +249,7 @@ CLOG Tutorials
 - [30-tutorial.lisp](tutorial/30-tutorial.lisp) - Instant websites - clog-web-site
 - [31-tutorial.lisp](tutorial/31-tutorial.lisp) - Database and Authority based websites - clog-web-dbi and clog-auth
 - [32-tutorial.lisp](tutorial/32-tutorial.lisp) - Database Managed Content websites - clog-web-content
+- [33-tutorial.lisp](tutorial/33-tutorial.lisp) - with-clog-create - Using a declartive syntax for GUIs
 
 CLOG Demos
 

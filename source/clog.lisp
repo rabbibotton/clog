@@ -72,6 +72,9 @@ embedded in a native template application.)"
   "Concurrent Hash Tables"
   (make-hash-table* function)
 
+  "Declerative Syntax Support"
+  (with-clog-create macro)
+
   "CLOG-Group - Utility Class for CLOG-Obj storage"
   (clog-group    class)
   (create-group  function)

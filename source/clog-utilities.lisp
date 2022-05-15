@@ -20,6 +20,50 @@
   (apply #'make-hash-table :synchronized t args)
   #-(or sbcl ecl mezzano) (apply #'make-hash-table args))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Implementation - with-clog-create ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defmacro with-clog-create (obj spec &body body)
+"To use the macro you remove the create- from the create
+functions. The clog-obj passed as the first parameter of the macro is
+passed as the parent obj to the declared object, after that nested
+levels of decleraton are used as the parent clog-obj. To bind a
+variable to any created clog object using :bind var. See tutorial 33
+and 22 for examples."
+  (flet ((extract-bind (args)
+	   (when args
+	     (let ((fargs ())
+		    bind)
+	       (do* ((i 0)
+		      (x (nth i args) (nth i args)))
+		 ((>= i (length args)))
+		 (if (eql x :bind)
+		   (progn
+		     (setf bind (nth (1+ i) args))
+		     (incf i 2))
+		   (progn
+		     (push x fargs)
+		     (incf i))))
+	       (values (reverse fargs) bind)))))
+    (let ((let-bindings ())
+	   (used-bindings ()))
+      (labels ((create-from-spec (spec parent-binding)
+		 (destructuring-bind (gui-func-name args &body children)
+		   spec
+		   (multiple-value-bind (gui-func-args bind) (extract-bind args)
+		     (let* ((binding (or bind (gensym)))
+			     (create-func-name (intern (concatenate 'string "CREATE-" (symbol-name gui-func-name)))))
+		       (push `(,binding (,create-func-name ,parent-binding ,@gui-func-args)) let-bindings)
+		       (when (or bind children)
+			 (push binding used-bindings))
+		       (dolist (child-spec children)
+			 (create-from-spec child-spec binding)))))))
+	(create-from-spec spec obj)
+	`(let* ,(reverse let-bindings)
+	   (declare (ignore ,@(set-difference (mapcar #'first let-bindings) used-bindings)))
+	   ,@body)))))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Implementation - clog-group
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

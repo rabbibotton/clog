@@ -7,15 +7,18 @@
 (defun on-new-window (body)
   (setf (title (html-document body)) "Tutorial 9")
   ;; When doing extensive setup of a page using connection cache
-  ;; reduces rountrip traffic and speeds setup considerably.
+  ;; reduces rountrip traffic and speeds setup.
   (with-connection-cache (body)
     (let* (last-tab
 	   ;; Note: Since the there is no need to use the tmp objects
 	   ;;       we reuse the same symbol name (tmp) even though the
 	   ;;       compiler can mark those for garbage collection early
 	   ;;       this not an issue as the element is created already
-	   ;;       in the browser window. This is probably not the best
-	   ;;       option for a production app though regardless.
+	   ;;       in the browser window.
+	   ;;
+	   ;;       See tutorial 33 for a far more elegant approach
+	   ;;       that uses with-clog-create for this type of code
+	   ;;       based layout.
 	   ;;
 	   ;; Create tabs and panels
 	   (t1  (create-button body :content "Tab1"))
@@ -65,7 +68,7 @@
 	   (tmp (create-form-element f2 :reset :value "Start Again")))
       (declare (ignore tmp))
     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-      ;; Panel 1 contents
+    ;; Panel 1 contents
     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
       (setf (place-holder fe1) "type here..")
       (setf (requiredp fe1) t)
@@ -96,7 +99,7 @@
       (set-border p2 :thin :solid :black)
       (set-border p3 :thin :solid :black)
     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-      ;; Panel 2 contents
+    ;; Panel 2 contents
     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
       (setf (vertical-align ta1) :top)
       (disable-resize ta1)
@@ -130,11 +133,11 @@
 					    (value sl2)
 					    (selectedp o2)))))
     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-      ;; Panel 3 contents
+    ;; Panel 3 contents
     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
       (setf (editablep p3) t)
     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-      ;; Tab functionality
+    ;; Tab functionality
     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
       (flet ((select-tab (obj)
 	       (setf (hiddenp p1) t)
