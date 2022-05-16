@@ -184,7 +184,7 @@ CLOG-USER&gt; <span class="paren1">(<span class="code">clog-repl</span>)</span>
 CLOG-USER&gt; <span class="paren1">(<span class="code">setf <span class="paren2">(<span class="code">background-color <span class="special">*body*</span></span>)</span> <span class="string">"beige"</span></span>)</span>
 CLOG-USER&gt; <span class="paren1">(<span class="code">create-div <span class="special">*body*</span> <span class="keyword">:content</span> <span class="string">"Hello World!"</span></span>)</span></span></code></pre>
 
-<p>The clog-repl <a href="#CLOG:URL%20GENERIC-FUNCTION" title="CLOG:URL GENERIC-FUNCTION"><code>URL</code></a> is http://127.0.0.1/repl <em>body</em> will always refer to the
+<p>The clog-repl <a href="#CLOG:URL%20GENERIC-FUNCTION" title="CLOG:URL GENERIC-FUNCTION"><code>URL</code></a> is http://127.0.0.1:8080/repl <em>body</em> will always refer to the
 last access of that <code>URL</code>.</p>
 
 <p>To open a browser with the CLOG manual:</p>
@@ -444,6 +444,22 @@ for openning windows on remote machines.</p></li>
 <li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#CLOG:MAKE-HASH-TABLE*%20FUNCTION" >MAKE-HASH-TABLE*</a></span></span> <span class="locative-args">&amp;REST ARGS</span></span></p>
 
 <p>Use native concurrent hash tables</p></li>
+</ul>
+
+<p>Declerative Syntax Support</p>
+
+<p><a id="x-28CLOG-3AWITH-CLOG-CREATE-20MGL-PAX-3AMACRO-29"></a>
+<a id="CLOG:WITH-CLOG-CREATE%20MGL-PAX:MACRO"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[macro]</span> <span class="reference-object"><a href="#CLOG:WITH-CLOG-CREATE%20MGL-PAX:MACRO" >WITH-CLOG-CREATE</a></span></span> <span class="locative-args">OBJ SPEC &amp;BODY BODY</span></span></p>
+
+<p>To use the macro you remove the create- from the create
+functions. The clog-obj passed as the first parameter of the macro is
+passed as the parent obj to the declared object, after that nested
+levels of decleraton are used as the parent clog-obj. To bind a
+variable to any created clog object using :bind var. See tutorial 33
+and 22 for examples.</p></li>
 </ul>
 
 <p>CLOG-Group - Utility Class for CLOG-Obj storage</p>
