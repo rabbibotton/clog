@@ -338,16 +338,17 @@ and if CAN-EDIT unless they are set to nil."
 	    (funcall theme obj :content-body
 		     (list :content content
 			   :save-edit (when (clog-auth:is-authorized-p roles can-edit)
-					(lambda (content)
+					(lambda (new-content)
 					  (when on-edit
-					    (setf content (funcall on-edit content)))
-					  (when content
+					    (setf new-content (funcall on-edit new-content)))
+					  (when new-content
 					    (dbi:do-sql
 					      sql-connection
 					      (sql-update table
-							  content
+							  new-content
 							  "key=? and createdate=?")
-					      (list page (getf content :|createdate|))))))
+					      (list page (getf content :|createdate|)))
+					    (print (getf content :|createdate|)))))
 			   :do-delete (when (clog-auth:is-authorized-p roles can-edit)
 					(lambda ()
 					  (if on-delete
