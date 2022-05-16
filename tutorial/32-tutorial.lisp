@@ -30,14 +30,15 @@
 ;; /content in this case on-main. So our about page has no handler set
 ;; but functions as we added to out database.
 
-                      ; Menu         Menu Item   URL        Handler   Actions Auth
-(defparameter *menu* `(("Features" (("Home"     "/")
-				    ("Login"     "/login"   on-login  :login)
-				    ("Signup"    "/signup"  on-signup :signup)
-				    ("Content"   "/content" on-main   :content)
-				    ("Logout"    "/logout"  on-logout :logout)))
-		       ("Admin"    (("User List" "/users"   on-users  :users)))
-		       ("Help"     (("About"     "/content/about"))))
+                      ; Menu         Menu Item         URL        Handler     Actions Auth
+(defparameter *menu* `(("Features" (("Home"            "/")
+				    ("Login"           "/login"   on-login    :login)
+				    ("Signup"          "/signup"  on-signup   :signup)
+				    ("Change Password" "/pass"    on-new-pass :change-password)
+				    ("Content"         "/content" on-main     :content)
+				    ("Logout"          "/logout"  on-logout   :logout)))
+		       ("Admin"    (("User List"       "/users"   on-users    :users)))
+		       ("Help"     (("About"           "/content/about"))))
   "Setup website menu")
 
 (defun start-tutorial ()
@@ -46,6 +47,7 @@
   (add-authorization '(:guest :member) '(:content-show-comments))
   (add-authorization '(:guest)         '(:login :signup))
   (add-authorization '(:member)        '(:logout
+					 :change-password
 				         :content-comment))
   (add-authorization '(:editor)        '(:content-edit))
   (add-authorization '(:admin)         '(:users :content-admin))
@@ -161,3 +163,11 @@
 				   (dolist (user users)
 				     (create-div body :content (getf user :|username|))))))
 			:authorize t))
+
+(defun on-new-pass (body)
+  (init-site body)
+  (create-web-page body
+		   :change-password `(:menu    ,*menu*
+				      :content ,(lambda (body)
+						  (change-password body *sql-connection*)))
+		   :authorize t))

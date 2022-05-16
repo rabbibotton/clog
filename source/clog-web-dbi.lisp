@@ -20,6 +20,7 @@
   (logout             function)
   (get-profile        function)
   (sign-up            function)
+  (change-password    function)
   (make-token         function)
   (load-content       function)
   (create-base-tables function))
@@ -120,6 +121,54 @@ if one is present and login fails."
 			  :password ,(form-result result "password")
 			  :token    ,(make-token))))
 		     (url-replace (location body) next-step)))))))))
+
+;;;;;;;;;;;;;;;;;;;;;
+;; change-password ;;
+;;;;;;;;;;;;;;;;;;;;;
+
+(defun change-password (body sql-connection &key (title "Change Password")
+					      (next-step "/"))
+  (check-type body clog-body)
+  (clog-web-form
+   body title
+   `(("Old Password" "oldpass" :password)
+     ("New Password" "password" :password)
+     ("Retype Password" "repass" :password))
+   (lambda (result)
+     (cond ((not
+	     (equal (form-result result "password")
+		    (form-result result "repass")))
+	    (clog-web-alert body "Password Mismatch"
+			    "The new passwords do match."
+			    :time-out 3
+			    :place-top t))
+	   ((< (length (form-result result "password")) 4)
+	    (clog-web-alert body "Password Missize"
+			    "The new passwords must at least 4 characters."
+			    :time-out 3
+			    :place-top t))
+	   (t
+	    (let ((contents (dbi:fetch-all
+			     (dbi:execute
+			      (dbi:prepare
+			       sql-connection
+			       "select username from users where username=? and password=?")
+			      (list (getf (profile (get-web-site body)) :|username|)
+				    (form-result result "oldpass"))))))
+	      (cond (contents
+		     (dbi:do-sql
+		       sql-connection
+		       (sql-update
+			"users"
+			`(:password ,(form-result result "password"))
+			"username=?")
+		       (list (getf (profile (get-web-site body)) :|username|)))
+		     (url-replace (location body) next-step))
+		    (t
+		     (clog-web-alert body "Old Password"
+				     "Old password is incorrect."
+				     :time-out 3
+				     :place-top t)))))))))
 
 ;;;;;;;;;;;;;;;;
 ;; make-token ;;
