@@ -17,7 +17,7 @@ https://www.reddit.com/r/lisp/comments/sd9wf1/clog_builder_cl_web_3_awesome_lang
 
 ---
 
-![Image of CLOG](https://rabbibotton.github.io/images/clog-logo.png)
+![Image of CLOG](https://rabbibotton.github.io/images/clog.png)
 
 The Common Lisp Omnificent GUI, CLOG for short, uses web technology to
 produce graphical user interfaces for applications locally or remotely.
