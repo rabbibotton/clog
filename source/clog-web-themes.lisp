@@ -238,7 +238,7 @@ Page properties:
 			  :content (title website)
 			  :class "w3-xlarge w3-sans-serif"))
 	   ;; SECTION: Menu bar
-	   (let ((menu  (create-web-menu-bar body :class "w3-card-4")))
+	   (let ((menu  (create-web-menu-bar body :class "w3-card-4 w3-margin-top")))
 	     (add-class menu color-class)
 	     (dolist (drop-down menu-property)
 	       (let ((drop  (create-web-menu-drop-down menu
