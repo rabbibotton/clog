@@ -161,7 +161,17 @@
 						 *sql-connection*
 						 "select * from users")))))
 				   (dolist (user users)
-				     (create-div body :content (getf user :|username|))))))
+				     (let* ((box   (create-div body))
+					    (suser (create-span box :content (getf user :|username|)))
+					    (rbut  (create-button box :content "Reset Password"
+								      :class "w3-margin-left")))
+				       (declare (ignore suser))
+				       (set-on-click rbut (lambda (obj)
+							    (declare (ignore obj))
+							    (reset-password *sql-connection*
+									    (getf user :|username|))
+							    (setf (disabledp rbut) t)
+							    (setf (text rbut) "Done"))))))))
 			:authorize t))
 
 (defun on-new-pass (body)

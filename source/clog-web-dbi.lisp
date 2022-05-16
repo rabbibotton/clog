@@ -21,6 +21,7 @@
   (get-profile        function)
   (sign-up            function)
   (change-password    function)
+  (reset-password     function)
   (make-token         function)
   (load-content       function)
   (create-base-tables function))
@@ -76,6 +77,7 @@ if one is present and login fails."
 
 (defun sign-up (body sql-connection &key (title "Sign Up")
 				      (next-step "/login"))
+  "Setup a sign-up form and process a new sign-up"
   (check-type body clog-body)
   (clog-web-form
    body title
@@ -128,6 +130,7 @@ if one is present and login fails."
 
 (defun change-password (body sql-connection &key (title "Change Password")
 					      (next-step "/"))
+  "Setup a change password form and handle change of password"
   (check-type body clog-body)
   (clog-web-form
    body title
@@ -170,11 +173,28 @@ if one is present and login fails."
 				     :time-out 3
 				     :place-top t)))))))))
 
+;;;;;;;;;;;;;;;;;;;;
+;; reset-password ;;
+;;;;;;;;;;;;;;;;;;;;
+
+(defun reset-password (sql-connection username &key (new-password "password"))
+  "Reset USERNAME's password to :NEW-PASSWORD"
+  (print username)
+
+  (dbi:do-sql
+    sql-connection
+    (sql-update
+     "users"
+     `(:password ,new-password)
+     "username=?")
+    (list username)))
+
 ;;;;;;;;;;;;;;;;
 ;; make-token ;;
 ;;;;;;;;;;;;;;;;
 
 (defun make-token ()
+  "Create a unique token used to associate a browser with a user"
   (get-universal-time))
 
 ;;;;;;;;;;;;;;;;;;;;;;;
@@ -182,6 +202,7 @@ if one is present and login fails."
 ;;;;;;;;;;;;;;;;;;;;;;;
 
 (defun create-base-tables (sql-connection &key (sql-timestamp-func *sqlite-timestamp*))
+  "Create default tables"
   (dbi:do-sql
     sql-connection
     "create table config (key varchar, value varchar)")
