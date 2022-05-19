@@ -133,7 +133,7 @@
 							 data)))
 			      (cadar data))
                       (mapcar #'second data))))
-		 (results-window app "select changes()" :title table)))))
+		 (results-window app "select changes()" :title table))))
 
 (defun on-query-tables (obj)
   (let ((app (connection-data-item obj "app-data")))
