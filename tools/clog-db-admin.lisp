@@ -117,7 +117,8 @@
 		 (when data
 		   (flet ((trim-last (s)
 			    (subseq s 0 (- (length s) 1))))
-		     (sqlite:execute-non-query
+                     (apply
+                      #'sqlite:execute-non-query
 		      (db-connection app)
 		      (format nil
 			      "update ~A set ~A where rowid=~A"
@@ -127,12 +128,12 @@
 							   (if (equalp "rowid"
 								       (first l))
 							       ""
-							       (format nil "~A='~A',"
-								       (first l)
-								       (second l))))
+							       (format nil "~A=?,"
+								       (first l))))
 							 data)))
-			      (cadar data))))
-		   (results-window app "select changes()" :title table)))))
+			      (cadar data))
+                      (mapcar #'second data))))
+		 (results-window app "select changes()" :title table))))
 
 (defun on-query-tables (obj)
   (let ((app (connection-data-item obj "app-data")))
