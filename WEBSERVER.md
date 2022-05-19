@@ -18,6 +18,7 @@ how I configure my CLOG based servers:
     SSLCertificateChainFile /etc/ssl/ca_bundle.crt
 
     ProxyPass / http://127.0.0.1:8081/
+    ProxyPassReverse / http://127.0.0.1:8081/
     RewriteEngine on
     RewriteCond %{HTTP:Upgrade} websocket [NC]
     RewriteCond %{HTTP:Connection} upgrade [NC]
