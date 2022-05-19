@@ -6,6 +6,7 @@ but interanlly as localhost on port 8081 (or other port) and is typically
 how I configure my CLOG based servers:
 (Note use of *.443 also and use of SSLEngine, if not using SSL remove both)
 
+```
 <VirtualHost *:80 *:443>
     ServerName clogpower.com
     ServerAlias www.clogpower.com
@@ -25,6 +26,7 @@ how I configure my CLOG based servers:
     ErrorLog ${APACHE_LOG_DIR}/clog.err.log
     CustomLog ${APACHE_LOG_DIR}/clog.log common
 </VirtualHost>
+```
 
 I make sure that my start funtion ends with a busy wait like - (loop (sleep 360))
 or the process will return and the service end.
@@ -33,6 +35,7 @@ Then I setup sbcl with my app to run as a service:
 
 I then create the file /etc/systemd/system/clogpower.service (using sudo):
 
+```
 [Unit]
 Description=clogpower site
 
@@ -46,7 +49,7 @@ Restart=on-failure
 
 [Install]
 WantedBy=network.target
-
+```
 
 Then I install the service so it comes up after boot:
 
