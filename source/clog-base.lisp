@@ -511,7 +511,8 @@ an application share per connection the same queue of serialized events."
 
 (defmethod set-connection-data-item ((obj clog-obj) item-name value)
   (bordeaux-threads:with-lock-held ((connection-data-mutex obj))
-    (setf (gethash item-name (connection-data obj)) value))
+    (ignore-errors
+     (setf (gethash item-name (connection-data obj)) value)))
   value)
 (defsetf connection-data-item set-connection-data-item)
 
