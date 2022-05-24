@@ -263,9 +263,11 @@ Use to set a link or on-click to set an on-click handler"))
 				   (html-id nil))
   (let ((span
 	  (create-span (if link
-			   (create-a obj :link link)
+			   (create-a obj :class class :link link)
 			   obj)
-		       :content content :class class :html-id html-id)))
+		       :content content
+		       :class (unless link class)
+		       :html-id html-id)))
     (add-class span "w3-bar-item")
     (add-class span "w3-button")
     (set-on-click span on-click)

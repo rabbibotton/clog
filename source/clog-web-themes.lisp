@@ -220,7 +220,7 @@ Page properties:
 	  (t
 	   ;; Setup CSS style changes
 	   (let ((sb (create-style-block body)))
-	     (add-style sb :element "a" '(("text-decoration" :none))))
+	     (add-style sb :element "a.clog-theme" '(("text-decoration" "none"))))
 	   ;;
 	   ;; Page layout
 	   ;;
@@ -234,6 +234,7 @@ Page properties:
 					 :url-src (logo website))
 			     :height 75))
 	     (create-span (create-a right
+				    :class "clog-theme"
 				    :link (url website))
 			  :content (title website)
 			  :class "w3-xlarge w3-sans-serif"))
@@ -252,6 +253,7 @@ Page properties:
 			     (eq (fourth item) nil))
 		     (incf count)
 		     (create-web-menu-item drop
+					   :class "clog-theme"
 					   :content (first item)
 					   :link (second item))))
 		 (when (eql count 0)
