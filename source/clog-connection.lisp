@@ -424,11 +424,12 @@ brower."
 						 (format t "Condition caught connection ~A - ~A.~&" id c)
 						 (values 0 c))))
 					 (when *long-poll-first*
-					     (handler-case
-						 (finish-output stream)
-					       (t (c)
-						 (format t "Condition caught finish-output ~A - ~A.~&" id c)
-						 (values 0 c))))
+					   (setf *long-poll-first* nil)
+					   (handler-case
+					       (finish-output stream)
+					     (t (c)
+					       (format t "Condition caught finish-output ~A - ~A.~&" id c)
+					       (values 0 c))))
 					 (format t "HTML connection closed - ~A~%" id)))))
 				  (t
 				   (lambda (responder)
