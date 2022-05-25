@@ -1676,4 +1676,9 @@
      :code    "ncwp"
      :type    :system
      :www     "templates/www/"
-     :loc     "templates/projects/clog-web/")))
+     :loc     "templates/projects/clog-web/")
+   '(:name    "New CLOG-WEB-SITE Project"
+     :code    "ncws"
+     :type    :system
+     :www     "templates/www/"
+     :loc     "templates/projects/clog-web-site/")))
