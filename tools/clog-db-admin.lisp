@@ -167,7 +167,7 @@
     (set-on-window-can-size about (lambda (obj)
 				    (declare (ignore obj))()))))
 
-(defun on-new-window (body)
+(defun on-new-db-admin (body)
   (let ((app (make-instance 'app-data)))
     (setf (connection-data-item body "app-data") app)
     (setf (body app) body)
@@ -195,7 +195,10 @@
     (when (db-connection app)
       (sqlite:disconnect (db-connection app)))))
 
-(defun clog-db-admin ()
+(defun clog-db-admin (&key (port 8080) static-root)
   "Start clog-db-admin."
-  (initialize #'on-new-window)
-  (open-browser))
+  (if static-root
+      (initialize nil :port port :static-root static-root)
+      (initialize nil :port port))
+  (set-on-new-window 'on-new-db-admin :path "/dbadmin")
+  (open-browser :url (format nil "http://127.0.0.1:~A/dbadmin" port)))

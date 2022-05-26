@@ -1520,11 +1520,11 @@ of controls and double click to select control."
 					  ;; return empty string to prevent nav off page
 					  ""))))
 
-(defun clog-builder (&key static-root)
+(defun clog-builder (&key (port 8080) static-root)
   "Start clog-builder."
   (if static-root
-      (initialize nil :static-root static-root)
-      (initialize nil))
+      (initialize nil :port port :static-root static-root)
+      (initialize nil :port port))
   (set-on-new-window 'on-new-builder :path "/builder")
   (set-on-new-window 'on-attach-builder-page :path "/builder-page")
-  (open-browser :url "http://127.0.0.1:8080/builder"))
+  (open-browser :url (format nil "http://127.0.0.1:~A/builder" port)))
