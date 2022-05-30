@@ -6,9 +6,21 @@
 
 ## 1 Open app using chrome in app mode
 
-To open a chrome window in app mode use -app="URL" for example on a Mac:
+To open a chrome window in app mode use -app="URL" for example
+to start the builder as an app:
+
+On Mac:
 
 /Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome -app="http://127.0.0.1:8080/builder"
+
+On Linux:
+
+google-chrome-stable --new-window --app="http://127.0.0.1:8080/builder"
+
+On WindowsL
+
+chrome --new-window --app="http://127.0.0.1:8080/builder"
+
 
 ## 2 Using Ceramic Mac/Windows/Linux
 
