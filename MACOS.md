@@ -41,3 +41,11 @@ sbcl --eval '(ql:quickload :quicklisp-slime-helper)' --quit
 
 8. You can now start emacs graphically or if did option 2 from terminal
 and then use M-x slime
+
+9. Install CLOG:
+
+   (ql:quickload :clog)
+   (clog:run-demo 1)
+
+   [Learn about CLOG](README.md)
+   [Learn Common-Lisp](LEARN.md)
