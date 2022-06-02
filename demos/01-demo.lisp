@@ -177,5 +177,5 @@
 
 (defun start-demo ()
   "Start demo."
-  (initialize #'on-new-window)
+  (initialize 'on-new-window)
   (open-browser))

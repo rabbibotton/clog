@@ -40,7 +40,10 @@ sbcl --eval '(ql:quickload :quicklisp-slime-helper)' --quit
 ```
 
 8. You can now start emacs graphically or if did option 2 from terminal
-and then use M-x slime
+using emacs (and if desire terminal version use emacs -nw) and then use M-x slime
+
+Tip: If using the -nw version in terminal preferances under profiles and under
+the default profile choose use option as Meta.
 
 9. Install using slime CLOG:
 ```
