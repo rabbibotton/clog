@@ -1,4 +1,3 @@
-
 ## Installing Common Lisp + Emacs + Slime on MacOS (all platforms)
 
 1. Install Emacs for Msc OS from - https://emacsformacosx.com/
@@ -42,14 +41,24 @@ sbcl --eval '(ql:quickload :quicklisp-slime-helper)' --quit
 8. You can now start emacs graphically or if did option 2 from terminal
 using emacs (and if desire terminal version use emacs -nw) and then use M-x slime
 
-Tip: If using the -nw version in terminal preferances under profiles and under
-the default profile choose use option as Meta.
-
 9. Install using slime CLOG:
 ```
    (ql:quickload :clog)
    (clog:run-demo 1)
 ```
+
+
+Tips: If using the -nw version in terminal preferances under profiles and under
+the default profile choose "Use Option as Meta". I also add the following:
+
+```
+;; Selecting with mouse is an emacs selection
+(xterm-mouse-mode t)
+;; Fix mouse wheel under xterm-mouse-mode
+(global-set-key (kbd "<mouse-4>") (kbd "C-p"))
+(global-set-key (kbd "<mouse-5>") (kbd "C-n"))
+```
+
 
 -  [Learn about CLOG](README.md)
 -  [Learn Common-Lisp](LEARN.md)
