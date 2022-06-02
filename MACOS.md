@@ -50,7 +50,7 @@ using emacs (and if desire terminal version use emacs -nw) and then use M-x slim
 
 Tips: If using emacs in the terminal (ie emacs -nw) in terminal
 preferances under profiles and under the default profile choose "Use
-Option as Meta". I also add the following:
+Option as Meta". I also add the following to my ~/.emacs.d/init.el:
 
 ```
 ;; Selecting with mouse is an emacs selection
