@@ -1,6 +1,6 @@
 ## Installing Common Lisp + Emacs + Slime on MacOS (all platforms)
 
-1. Install Emacs for Msc OS from - https://emacsformacosx.com/
+1. Install Emacs for Mac OS from - https://emacsformacosx.com/
 
 2. [optional] Add Emacs to your system's path by creating a
 file /etc/paths.d/emacs with:
