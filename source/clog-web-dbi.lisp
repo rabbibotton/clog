@@ -57,7 +57,7 @@ if one is present and login fails."
 		   (dbi:execute
 		    (dbi:prepare
 		     sql-connection
-		     "select token from users where username=?")
+		     "select * from users where username=?")
 		    (list username)))))
     (when (and contents
                (cl-pass:check-password password (getf (car contents) :|password|)))
@@ -156,7 +156,7 @@ if one is present and login fails."
 			     (dbi:execute
 			      (dbi:prepare
 			       sql-connection
-			       "select username from users where username=?")
+			       "select username, password from users where username=?")
 			      (list (getf (profile (get-web-site body)) :|username|))))))
 	      (cond (and contents
                          (cl-pass:check-password (form-result result "oldpass")
