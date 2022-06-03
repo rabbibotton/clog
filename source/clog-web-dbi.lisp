@@ -228,7 +228,7 @@ if one is present and login fails."
   (dbi:do-sql
     sql-connection
     (sql-insert* "users" `(:username "admin"
-			   :password (cl-pass:hash "admin")
+			   :password ,(cl-pass:hash "admin")
 			   :token    ,(make-token)))))
 
 ;;;;;;;;;;;;;;;;;;
