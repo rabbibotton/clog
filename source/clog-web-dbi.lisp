@@ -321,18 +321,18 @@ and if CAN-EDIT unless they are set to nil."
 		 (list :content pages
 		       :do-add (when (clog-auth:is-authorized-p roles can-edit)
 				 (lambda (content)
-				     (push (list sql-timestamp-func) content)
-				     (push :createdate content)
-				     (push page content)
-				     (push :key content)
-				     (push page content)
-				     (push :username content)
-				     (when on-new
-				       (setf content (funcall on-new content)))
-				     (when content
-				       (dbi:do-sql
-					 sql-connection
-					 (sql-insert* table content)))))))
+				   (push (list sql-timestamp-func) content)
+				   (push :createdate content)
+				   (push page content)
+				   (push :key content)
+				   (push page content)
+				   (push :username content)
+				   (when on-new
+				     (setf content (funcall on-new content)))
+				   (when content
+				     (dbi:do-sql
+				       sql-connection
+				       (sql-insert* table content)))))))
 	(dolist (content pages)
 	  (when content
 	    (when on-content
