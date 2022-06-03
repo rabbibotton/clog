@@ -57,9 +57,10 @@ if one is present and login fails."
 		   (dbi:execute
 		    (dbi:prepare
 		     sql-connection
-		     "select token from users where username=? and password=?")
-		    (list username password)))))
-    (when contents
+		     "select * from users where username=?")
+		    (list username)))))
+    (when (and contents
+               (cl-pass:check-password password (getf (car contents) :|password|)))
       (store-authentication-token body (getf (car contents) :|token|)))))
 
 ;;;;;;;;;;;;
@@ -120,7 +121,7 @@ if one is present and login fails."
 		       (sql-insert*
 			"users"
 			`(:username ,(form-result result "username")
-			  :password ,(form-result result "password")
+			  :password ,(cl-pass:hash (form-result result "password"))
 			  :token    ,(make-token))))
 		     (url-replace (location body) next-step)))))))))
 
@@ -155,15 +156,16 @@ if one is present and login fails."
 			     (dbi:execute
 			      (dbi:prepare
 			       sql-connection
-			       "select username from users where username=? and password=?")
-			      (list (getf (profile (get-web-site body)) :|username|)
-				    (form-result result "oldpass"))))))
-	      (cond (contents
+			       "select username, password from users where username=?")
+			      (list (getf (profile (get-web-site body)) :|username|))))))
+	      (cond ((and contents
+                          (cl-pass:check-password (form-result result "oldpass")
+                                                  (getf (car contents) :|password|)))
 		     (dbi:do-sql
 		       sql-connection
 		       (sql-update
 			"users"
-			`(:password ,(form-result result "password"))
+			`(:password ,(cl-pass:hash (form-result result "password")))
 			"username=?")
 		       (list (getf (profile (get-web-site body)) :|username|)))
 		     (url-replace (location body) next-step))
@@ -185,7 +187,7 @@ if one is present and login fails."
     sql-connection
     (sql-update
      "users"
-     `(:password ,new-password)
+     `(:password ,(cl-pass:hash new-password))
      "username=?")
     (list username)))
 
@@ -226,7 +228,7 @@ if one is present and login fails."
   (dbi:do-sql
     sql-connection
     (sql-insert* "users" `(:username "admin"
-			   :password "admin"
+			   :password ,(cl-pass:hash "admin")
 			   :token    ,(make-token)))))
 
 ;;;;;;;;;;;;;;;;;;
@@ -319,18 +321,18 @@ and if CAN-EDIT unless they are set to nil."
 		 (list :content pages
 		       :do-add (when (clog-auth:is-authorized-p roles can-edit)
 				 (lambda (content)
-				     (push (list sql-timestamp-func) content)
-				     (push :createdate content)
-				     (push page content)
-				     (push :key content)
-				     (push page content)
-				     (push :username content)
-				     (when on-new
-				       (setf content (funcall on-new content)))
-				     (when content
-				       (dbi:do-sql
-					 sql-connection
-					 (sql-insert* table content)))))))
+				   (push (list sql-timestamp-func) content)
+				   (push :createdate content)
+				   (push page content)
+				   (push :key content)
+				   (push page content)
+				   (push :username content)
+				   (when on-new
+				     (setf content (funcall on-new content)))
+				   (when content
+				     (dbi:do-sql
+				       sql-connection
+				       (sql-insert* table content)))))))
 	(dolist (content pages)
 	  (when content
 	    (when on-content
