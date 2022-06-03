@@ -158,9 +158,9 @@ if one is present and login fails."
 			       sql-connection
 			       "select username, password from users where username=?")
 			      (list (getf (profile (get-web-site body)) :|username|))))))
-	      (cond (and contents
-                         (cl-pass:check-password (form-result result "oldpass")
-                                                 (getf (car contents) :|password|)))
+	      (cond ((and contents
+                          (cl-pass:check-password (form-result result "oldpass")
+                                                  (getf (car contents) :|password|)))
 		     (dbi:do-sql
 		       sql-connection
 		       (sql-update
