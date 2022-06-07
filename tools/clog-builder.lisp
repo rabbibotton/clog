@@ -1477,6 +1477,10 @@ of controls and double click to select control."
       (create-gui-menu-item file  :content "New CLOG-WEB Delay Launch" :on-click 'on-new-builder-launch-page)
       (create-gui-menu-item file  :content "New Custom Boot Page"      :on-click 'on-new-builder-custom)
       (create-gui-menu-item file  :content "New Application Template"  :on-click 'on-new-app-template)
+      (create-gui-menu-item file  :content "Launch DB Admin"           :on-click
+			    (lambda (obj)
+			      (declare (ignore obj))
+			      (open-window (window body) "/dbadmin")))
       (create-gui-menu-item tools :content "Control Pallete"    :on-click 'on-show-control-pallete-win)
       (create-gui-menu-item tools :content "Control Properties" :on-click 'on-show-control-properties-win)
       (create-gui-menu-item tools :content "Control Events"     :on-click 'on-show-control-events-win)
@@ -1526,5 +1530,6 @@ of controls and double click to select control."
       (initialize nil :port port :static-root static-root)
       (initialize nil :port port))
   (set-on-new-window 'on-new-builder :path "/builder")
+  (set-on-new-window 'on-new-db-admin :path "/dbadmin")
   (set-on-new-window 'on-attach-builder-page :path "/builder-page")
   (open-browser :url (format nil "http://127.0.0.1:~A/builder" port)))
