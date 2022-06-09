@@ -27,24 +27,24 @@ upper cased before attempting to match it to a slot if :UPCASE-KEY t
 (default). If :ROW-ID-NAME is set returns that fields value."
   (let ((result))
     (loop for (key value) on plist by #'cddr while value
-	  do
-	     (when (consp key)
-	       (setf key (second key)))
-	     (let* ((slot-str  (format nil "~A" key))
-		    (slot-name (if upcase-key
-				   (string-upcase slot-str)
-				   slot-str))
-		    (slot-sym  (find slot-name (closer-mop:compute-slots (class-of obj))
-				     :key #'closer-mop:slot-definition-name
-				     :test #'string=)))
-	       (when (equalp row-id-name slot-name)
-		 (setf result value))
-	       (when slot-sym
-		 (setf slot-sym (closer-mop:slot-definition-name slot-sym))
-		 (if (and (slot-boundp obj slot-sym)
-			  (typep (slot-value obj slot-sym) 'clog:clog-element))
-		     (setf (text-value (slot-value obj slot-sym)) value)
-		     (setf (slot-value obj slot-sym) value)))))
+          do
+             (when (consp key)
+               (setf key (second key)))
+             (let* ((slot-str  (format nil "~A" key))
+                    (slot-name (if upcase-key
+                                   (string-upcase slot-str)
+                                   slot-str))
+                    (slot-sym  (find slot-name (closer-mop:compute-slots (class-of obj))
+                                     :key #'closer-mop:slot-definition-name
+                                     :test #'string=)))
+               (when (equalp row-id-name slot-name)
+                 (setf result value))
+               (when slot-sym
+                 (setf slot-sym (closer-mop:slot-definition-name slot-sym))
+                 (if (and (slot-boundp obj slot-sym)
+                          (typep (slot-value obj slot-sym) 'clog:clog-element))
+                     (setf (text-value (slot-value obj slot-sym)) value)
+                     (setf (slot-value obj slot-sym) value)))))
     result))
 
 ;;;;;;;;;;;;;;;;;;;;;;
@@ -60,20 +60,20 @@ must be bound."
   (let ((result))
     (dolist (slot (reverse slot-name-list))
       (when (consp slot)
-	  (setf slot (second slot)))
+          (setf slot (second slot)))
       (when (keywordp slot)
-	(setf slot (format nil "~A" slot)))
+        (setf slot (format nil "~A" slot)))
       (unless (symbolp slot)
-	(when upcase-key
-	  (setf slot (string-upcase slot))))
+        (when upcase-key
+          (setf slot (string-upcase slot))))
       (setf slot (closer-mop:slot-definition-name
-		  (find slot (closer-mop:compute-slots (class-of obj))
-			:key #'closer-mop:slot-definition-name
-			:test #'string=)))
+                  (find slot (closer-mop:compute-slots (class-of obj))
+                        :key #'closer-mop:slot-definition-name
+                        :test #'string=)))
       (if (and (slot-boundp obj slot)
-	       (typep (slot-value obj slot) 'clog:clog-element))
-	  (push (text-value (slot-value obj slot)) result)
-	  (push (slot-value obj slot) result)))
+               (typep (slot-value obj slot) 'clog:clog-element))
+          (push (text-value (slot-value obj slot)) result)
+          (push (slot-value obj slot) result)))
     result))
 
 ;;;;;;;;;;;;;;;;;;;;;;;
@@ -81,7 +81,7 @@ must be bound."
 ;;;;;;;;;;;;;;;;;;;;;;;
 
 (defun data-write-plist (obj slot-name-list &key (upcase-key t)
-					      (keys-as-keywords t))
+                                              (keys-as-keywords t))
   "Returns a plist, one member for each slot name in SLOT-NAME-LIST,
 the key is the slot name. If a slot contains a CLOG-ELEMENT then
 TEXT-VALUE is used to retrieve the value otherwise it is the
@@ -93,31 +93,31 @@ slot-name does not exist it is left out of returned plist. If
 :KEYS-AS-KEYWORDS t (default) then the keys will be symbols in the
 keyword package."
   (let (result
-	pname)
+        pname)
     (dolist (slot (reverse slot-name-list))
       (cond ((consp slot)
-	     (setf pname (first slot))
-	     (setf slot (second slot)))
-	    (t
-	     (setf pname slot)))
+             (setf pname (first slot))
+             (setf slot (second slot)))
+            (t
+             (setf pname slot)))
       (when (keywordp slot)
-	(setf slot (format nil "~A" slot)))
+        (setf slot (format nil "~A" slot)))
       (unless (symbolp slot)
-	(when upcase-key
-	  (setf pname (string-upcase pname))
-	  (setf slot (string-upcase slot))))
+        (when upcase-key
+          (setf pname (string-upcase pname))
+          (setf slot (string-upcase slot))))
       (setf slot (find slot (closer-mop:compute-slots (class-of obj))
-			:key #'closer-mop:slot-definition-name
-			:test #'string=))
+                        :key #'closer-mop:slot-definition-name
+                        :test #'string=))
       (when slot
-	(setf slot (closer-mop:slot-definition-name slot))
-	(if (and (slot-boundp obj slot)
-		 (typep (slot-value obj slot) 'clog:clog-element))
-	    (push (text-value (slot-value obj slot)) result)
-	    (push (slot-value obj slot) result))
-	(if keys-as-keywords
-	    (push (intern (format nil "~A" pname) 'keyword) result)
-	    (push pname result))))
+        (setf slot (closer-mop:slot-definition-name slot))
+        (if (and (slot-boundp obj slot)
+                 (typep (slot-value obj slot) 'clog:clog-element))
+            (push (text-value (slot-value obj slot)) result)
+            (push (slot-value obj slot) result))
+        (if keys-as-keywords
+            (push (intern (format nil "~A" pname) 'keyword) result)
+            (push pname result))))
     result))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -143,20 +143,20 @@ stringified first. If :QUOTE-ALL t then all fields are in quotes."
   (let ((result))
     (dolist (field (reverse field-list))
       (if (and for-insert
-	       (consp field))
-	  (setf field (car field)))
+               (consp field))
+          (setf field (car field)))
       (if (consp field)
-	  (setf field (format nil "~A as '~A'~A"
-			      (if quote-all
-				  (format nil "'~A'" (first field))
-				  (format nil "~A" (first field)))
-			      (second field)
-			      (if result ", " "")))
-	  (setf field (format nil "~A~A"
-			      (if quote-all
-				  (format nil "'~A'" field)
-				  (format nil "~A" field))
-			      (if result ", " ""))))
+          (setf field (format nil "~A as '~A'~A"
+                              (if quote-all
+                                  (format nil "'~A'" (first field))
+                                  (format nil "~A" (first field)))
+                              (second field)
+                              (if result ", " "")))
+          (setf field (format nil "~A~A"
+                              (if quote-all
+                                  (format nil "'~A'" field)
+                                  (format nil "~A" field))
+                              (if result ", " ""))))
       (push field result))
     (format nil "~{~A~}" result)))
 
@@ -169,13 +169,13 @@ stringified first. If :QUOTE-ALL t then all fields are in quotes."
 unless is the single character '?'. If value is a list the car is returned
 unquoted"
   (cond ((and (stringp value)
-	      (not (equal value "?")))
-	 (format nil "'~A'"
-		 (ppcre:regex-replace-all "'" value "''")))
-	((consp value)
-	 (car value))
-	(t
-	 value)))
+              (not (equal value "?")))
+         (format nil "'~A'"
+                 (ppcre:regex-replace-all "'" value "''")))
+        ((consp value)
+         (car value))
+        (t
+         value)))
 
 ;;;;;;;;;;;;;;;;;;;;
 ;; sql-value-list ;;
@@ -187,8 +187,8 @@ use in a SQL insert value list."
   (let ((result))
     (dolist (value (reverse value-list))
       (setf value (format nil "~A~A"
-			  (sql-quote value)
-			  (if result ", " "")))
+                          (sql-quote value)
+                          (if result ", " "")))
     (push value result))
   (format nil "~{~A~}" result)))
 
@@ -202,14 +202,14 @@ returns a string for use in a SQL update. if the 'key' is a cons the
 first 'key' used."
   (let ((result))
     (loop for (key value) on plist by #'cddr while value
-	  do
-	     (push (format nil "~A = ~A~A"
-			   (if (consp key)
-			       (car key)
-			       key)
-			   (sql-quote value)
-			   (if result ", " ""))
-		   result))
+          do
+             (push (format nil "~A = ~A~A"
+                           (if (consp key)
+                               (car key)
+                               key)
+                           (sql-quote value)
+                           (if result ", " ""))
+                   result))
     (format nil "~{~A~}" result)))
 
 ;;;;;;;;;;;;;;;;
@@ -219,21 +219,21 @@ first 'key' used."
 (defun sql-select (table field-list &key where order-by limit)
   "Build basic sql select statement"
   (format nil "select ~A from ~A~A~A~A"
-	  (if (consp field-list)
-	      (sql-field-list field-list)
-	      field-list)
-	  (if (consp table)
-	      (sql-field-list table)
-	      table)
-	  (if (and where (not (equal where "")))
-	      (format nil " where ~A" where)
-	      "")
-	  (if (and order-by (not (equal order-by "")))
-	      (format nil " order by ~A" order-by)
-	      "")
-	  (if (and limit (not (equal limit "")))
-	      (format nil " limit ~A" limit)
-	      "")))
+          (if (consp field-list)
+              (sql-field-list field-list)
+              field-list)
+          (if (consp table)
+              (sql-field-list table)
+              table)
+          (if (and where (not (equal where "")))
+              (format nil " where ~A" where)
+              "")
+          (if (and order-by (not (equal order-by "")))
+              (format nil " order by ~A" order-by)
+              "")
+          (if (and limit (not (equal limit "")))
+              (format nil " limit ~A" limit)
+              "")))
 
 ;;;;;;;;;;;;;;;;
 ;; sql-insert ;;
@@ -242,9 +242,9 @@ first 'key' used."
 (defun sql-insert (table field-list value-list)
   "Build basic sql insert statement"
   (format nil "insert into ~A (~A) values (~A)"
-	  table
-	  (sql-field-list field-list :for-insert t)
-	  (sql-value-list value-list)))
+          table
+          (sql-field-list field-list :for-insert t)
+          (sql-value-list value-list)))
 
 ;;;;;;;;;;;;;;;;;
 ;; sql-insert* ;;
@@ -253,9 +253,9 @@ first 'key' used."
 (defun sql-insert* (table plist)
   "Build basic sql insert statement using a plist"
   (loop for (key value) on plist by #'cddr while value
-	collect key into fields
-	collect value into values
-	finally (return (sql-insert table fields values))))
+        collect key into fields
+        collect value into values
+        finally (return (sql-insert table fields values))))
 
 ;;;;;;;;;;;;;;;;
 ;; sql-update ;;
@@ -264,6 +264,6 @@ first 'key' used."
 (defun sql-update (table plist where)
   "Build basic sql update statement"
   (format nil "update ~A set ~A where ~A"
-	  table
-	  (sql-update-list plist)
-	  where))
+          table
+          (sql-update-list plist)
+          where))

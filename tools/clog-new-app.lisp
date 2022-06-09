@@ -16,15 +16,15 @@
     (clog-gui-initialize body)
     (add-class body "w3-blue-grey")
     (let* ((menu  (create-gui-menu-bar body))
-	   (icon  (create-gui-menu-icon menu :on-click #'on-help-about-builder))
-	   (file  (create-gui-menu-drop-down menu :content "New App")))
+           (icon  (create-gui-menu-icon menu :on-click #'on-help-about-builder))
+           (file  (create-gui-menu-drop-down menu :content "New App")))
       (declare (ignore icon))
       (create-gui-menu-item file  :content "New Application Template"  :on-click 'on-new-app-template)
       (create-gui-menu-full-screen menu))
     (set-on-before-unload (window body) (lambda(obj)
-					  (declare (ignore obj))
-					  ;; return empty string to prevent nav off page
-					  ""))))
+                                          (declare (ignore obj))
+                                          ;; return empty string to prevent nav off page
+                                          ""))))
     
 (defun clog-new-app (&key (port 8080) static-root)
   "Start clog-new-app."

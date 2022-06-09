@@ -163,23 +163,23 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defun clog-gui-initialize (clog-body &key (w3-css-url "/css/w3.css")
-					(jquery-ui-css "/css/jquery-ui.css")
-					(jquery-ui "/js/jquery-ui.js"))
+                                        (jquery-ui-css "/css/jquery-ui.css")
+                                        (jquery-ui "/js/jquery-ui.js"))
   "Initializes clog-gui and installs a clog-gui object on connection.
 If W3-CSS-URL has not been loaded before is installed unless is nil."
   (create-clog-gui clog-body)
   (set-on-full-screen-change (html-document clog-body)
-			     (lambda (obj)
-			       (when (current-window obj)
-				 (when (window-maximized-p (current-window obj))
-				   (window-normalize (current-window obj))
-				   (window-maximize (current-window obj))))))
+                             (lambda (obj)
+                               (when (current-window obj)
+                                 (when (window-maximized-p (current-window obj))
+                                   (window-normalize (current-window obj))
+                                   (window-maximize (current-window obj))))))
   (set-on-orientation-change (window clog-body)
-			     (lambda (obj)
-			       (when (current-window obj)
-				 (when (window-maximized-p (current-window obj))
-				   (window-normalize (current-window obj))
-				   (window-maximize (current-window obj))))))
+                             (lambda (obj)
+                               (when (current-window obj)
+                                 (when (window-maximized-p (current-window obj))
+                                   (window-normalize (current-window obj))
+                                   (window-maximize (current-window obj))))))
   (unless (connection-data-item clog-body "w3-css")
     (when w3-css-url
       (setf (connection-data-item clog-body "w3-css") t)
@@ -223,8 +223,8 @@ create-gui-menu-bar."))
 (defmethod menu-bar-height ((obj clog-obj))
   (let ((app (connection-data-item obj "clog-gui")))
     (if (menu app)
-	(height (menu app))
-	0)))
+        (height (menu app))
+        0)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;
 ;; window-collection ;;
@@ -247,9 +247,9 @@ create-gui-menu-bar."))
 (defmethod maximize-all-windows ((obj clog-obj))
   (let ((app (connection-data-item obj "clog-gui")))
     (maphash (lambda (key value)
-	       (declare (ignore key))
-	       (window-maximize value))
-	     (windows app))))
+               (declare (ignore key))
+               (window-maximize value))
+             (windows app))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; normalize-all-windows ;;
@@ -261,9 +261,9 @@ create-gui-menu-bar."))
 (defmethod normalize-all-windows ((obj clog-obj))
   (let ((app (connection-data-item obj "clog-gui")))
     (maphash (lambda (key value)
-	       (declare (ignore key))
-	       (window-normalize value))
-	     (windows app))))
+               (declare (ignore key))
+               (window-normalize value))
+             (windows app))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; create-gui-menu-bar ;;
@@ -277,10 +277,10 @@ create-gui-menu-bar."))
 clog-body."))
 
 (defmethod create-gui-menu-bar ((obj clog-obj)
-				&key (class "w3-bar w3-black w3-card-4")
-				  (html-id nil))
+                                &key (class "w3-bar w3-black w3-card-4")
+                                  (html-id nil))
   (let ((div (create-div obj :class class :html-id html-id))
-	(app (connection-data-item obj "clog-gui")))
+        (app (connection-data-item obj "clog-gui")))
     (change-class div 'clog-gui-menu-bar)
     (setf (menu app) div)
     div))
@@ -293,16 +293,16 @@ clog-body."))
   (:documentation "Drop down menu"))
 
 (defgeneric create-gui-menu-drop-down (clog-gui-menu-bar
-				       &key content class html-id)
+                                       &key content class html-id)
   (:documentation "Attached a menu bar drop-down to a CLOG-GUI-MENU-BAR"))
 
 (defmethod create-gui-menu-drop-down ((obj clog-gui-menu-bar)
-	          &key (content "")
-		    (class "w3-dropdown-content w3-bar-block w3-card-4")
-		    (html-id nil))
+                  &key (content "")
+                    (class "w3-dropdown-content w3-bar-block w3-card-4")
+                    (html-id nil))
   (let* ((hover  (create-div obj :class "w3-dropdown-hover"))
-	 (button (create-button hover :class "w3-button" :content content))
-	 (div    (create-div hover :class class :html-id html-id)))
+         (button (create-button hover :class "w3-button" :content content))
+         (div    (create-div hover :class class :html-id html-id)))
     (declare (ignore button))
     (change-class div 'clog-gui-menu-drop-down)))
 
@@ -314,19 +314,19 @@ clog-body."))
   (:documentation "Menu item"))
 
 (defgeneric create-gui-menu-item (clog-gui-menu-drop-down
-				  &key content
-				    on-click
-				    class
-				    html-id)
+                                  &key content
+                                    on-click
+                                    class
+                                    html-id)
   (:documentation "Attached a menu item to a CLOG-GUI-MENU-DROP-DOWN"))
 
 (defmethod create-gui-menu-item ((obj clog-obj)
-				 &key (content "")
-				   (on-click nil)
-				   (class "w3-bar-item w3-button")
-				   (html-id nil))
+                                 &key (content "")
+                                   (on-click nil)
+                                   (class "w3-bar-item w3-button")
+                                   (html-id nil))
   (let ((span
-	  (create-span obj :content content :class class :html-id html-id)))
+          (create-span obj :content content :class class :html-id html-id)))
     (set-on-click span on-click)
     (change-class span 'clog-gui-menu-item)))
 
@@ -338,19 +338,19 @@ clog-body."))
   (:documentation "Menu item"))
 
 (defgeneric create-gui-menu-item (clog-gui-menu-drop-down
-				  &key content
-				    on-click
-				    class
-				    html-id)
+                                  &key content
+                                    on-click
+                                    class
+                                    html-id)
   (:documentation "Attached a menu item to a CLOG-GUI-MENU-DROP-DOWN"))
 
 (defmethod create-gui-menu-item ((obj clog-obj)
-				 &key (content "")
-				   (on-click nil)
-				   (class "w3-bar-item w3-button")
-				   (html-id nil))
+                                 &key (content "")
+                                   (on-click nil)
+                                   (class "w3-bar-item w3-button")
+                                   (html-id nil))
   (let ((span
-	  (create-span obj :content content :class class :html-id html-id)))
+          (create-span obj :content content :class class :html-id html-id)))
     (set-on-click span on-click)
     (change-class span 'clog-gui-menu-item)))
 
@@ -363,8 +363,8 @@ clog-body."))
 will maximize it on top."))
 
 (defgeneric create-gui-menu-window-select (clog-obj
-					   &key class
-					     html-id)
+                                           &key class
+                                             html-id)
   (:documentation "Attached a clog-select as a menu item that auto updates
 with open windows and maximizes them unless is a keep-on-top window or
 on-window-can-maximize returns nil. Only one instance allowed."))
@@ -374,14 +374,14 @@ on-window-can-maximize returns nil. Only one instance allowed."))
      &key (class "w3-select")
        (html-id nil))
   (let ((window-select (create-select obj :class class :html-id html-id))
-	(app           (connection-data-item obj "clog-gui")))
+        (app           (connection-data-item obj "clog-gui")))
     (change-class window-select 'clog-gui-menu-window-select)
     (setf (window-select app) window-select)
     (set-on-change window-select (lambda (obj)
-				   (let ((win (gethash (value obj) (windows app))))
-				     (when win
-				       (unless (keep-on-top win)
-					 (window-maximize win))))))
+                                   (let ((win (gethash (value obj) (windows app))))
+                                     (when win
+                                       (unless (keep-on-top win)
+                                         (window-maximize win))))))
     (create-option window-select :content "Select Window")
     window-select))
 
@@ -394,38 +394,38 @@ on-window-can-maximize returns nil. Only one instance allowed."))
 icon ⤢ and full screen mode."))
 
 (defmethod create-gui-menu-full-screen ((obj clog-gui-menu-bar)
-					&key (html-id nil))
+                                        &key (html-id nil))
   (create-child obj
-    	  " <span class='w3-bar-item w3-right' style='user-select:none;'
-	     onClick='if (document.fullscreenElement==null) {
+          " <span class='w3-bar-item w3-right' style='user-select:none;'
+             onClick='if (document.fullscreenElement==null) {
                          documentElement.requestFullscreen()
                       } else {document.exitFullscreen();}'>⤢</span>"
-	  :html-id html-id
-	  :clog-type 'clog-gui-menu-item))
+          :html-id html-id
+          :clog-type 'clog-gui-menu-item))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; create-gui-menu-icon ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defgeneric create-gui-menu-icon (clog-gui-menu-bar &key image-url
-						      on-click
-						      class
-						      html-id)
+                                                      on-click
+                                                      class
+                                                      html-id)
   (:documentation "Add icon as menu bar item."))
 
 (defmethod create-gui-menu-icon ((obj clog-gui-menu-bar)
-				 &key (image-url "/img/clogwicon.png")
-				   (on-click nil)
-				   (class "w3-button w3-bar-item")
-				   (html-id nil))
+                                 &key (image-url "/img/clogwicon.png")
+                                   (on-click nil)
+                                   (class "w3-button w3-bar-item")
+                                   (html-id nil))
   (set-on-click
    (create-child obj
-		 (format nil "<button class='~A'>~
+                 (format nil "<button class='~A'>~
                                 <img height=22 src='~A'></button>"
-			 class
-			 image-url)
-		 :html-id html-id
-		 :clog-type 'clog-gui-menu-item)
+                         class
+                         image-url)
+                 :html-id html-id
+                 :clog-type 'clog-gui-menu-item)
    on-click))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -461,14 +461,14 @@ The on-window-change clog-obj received is the new window"))
     (fire-on-window-blur (current-win app)))
   (unless obj
     (let (new-order
-	  (order -9999))
+          (order -9999))
       (maphash (lambda (key value)
-		 (declare (ignore key))
-		 (setf new-order (z-index value))
-		 (when (>= new-order order)
-		   (setf order new-order)
-		   (setf obj value)))
-	       (windows app))))
+                 (declare (ignore key))
+                 (setf new-order (z-index value))
+                 (when (>= new-order order)
+                   (setf order new-order)
+                   (setf obj value)))
+               (windows app))))
   (setf (current-win app) obj)
   (when (on-window-change app)
     (funcall (on-window-change app) obj))
@@ -586,35 +586,35 @@ The on-window-change clog-obj received is the new window"))
     (unless (in-drag app)
       (setf (in-drag app) (attribute obj "data-drag-type"))
       (let* ((target (gethash (attribute obj "data-drag-obj") (windows app)))
-	     (pointer-x (getf data ':screen-x))
-	     (pointer-y (getf data ':screen-y))
-	     (obj-top)
-	     (obj-left)
-	     (perform-drag nil))
-	(when target
-	  (setf (drag-obj app) target)
-	  (cond ((equalp (in-drag app) "m")
-		 (setf obj-top
-		       (parse-integer (top (drag-obj app)) :junk-allowed t))
-		 (setf obj-left
-		       (parse-integer (left (drag-obj app)) :junk-allowed t))
-		 (setf perform-drag (fire-on-window-can-move (drag-obj app))))
-		((equalp (in-drag app) "s")
-		 (setf obj-top  (height (drag-obj app)))
-		 (setf obj-left (width (drag-obj app)))
-		 (setf perform-drag (fire-on-window-can-size (drag-obj app))))
-		(t
-		 (format t "Warning - invalid data-drag-type attribute")))
-	  (unless (keep-on-top (drag-obj app))
-	    (setf (z-index (drag-obj app)) (incf (last-z app))))
-	  (fire-on-window-change (drag-obj app) app)
-	  (setf (drag-y app) (- pointer-y obj-top))
-	  (setf (drag-x app) (- pointer-x obj-left)))
-	(cond (perform-drag
-	       (set-on-pointer-move obj 'on-gui-drag-move)
-	       (set-on-pointer-up obj 'on-gui-drag-stop))
-	      (t
-	       (setf (in-drag app) nil)))))))
+             (pointer-x (getf data ':screen-x))
+             (pointer-y (getf data ':screen-y))
+             (obj-top)
+             (obj-left)
+             (perform-drag nil))
+        (when target
+          (setf (drag-obj app) target)
+          (cond ((equalp (in-drag app) "m")
+                 (setf obj-top
+                       (parse-integer (top (drag-obj app)) :junk-allowed t))
+                 (setf obj-left
+                       (parse-integer (left (drag-obj app)) :junk-allowed t))
+                 (setf perform-drag (fire-on-window-can-move (drag-obj app))))
+                ((equalp (in-drag app) "s")
+                 (setf obj-top  (height (drag-obj app)))
+                 (setf obj-left (width (drag-obj app)))
+                 (setf perform-drag (fire-on-window-can-size (drag-obj app))))
+                (t
+                 (format t "Warning - invalid data-drag-type attribute")))
+          (unless (keep-on-top (drag-obj app))
+            (setf (z-index (drag-obj app)) (incf (last-z app))))
+          (fire-on-window-change (drag-obj app) app)
+          (setf (drag-y app) (- pointer-y obj-top))
+          (setf (drag-x app) (- pointer-x obj-left)))
+        (cond (perform-drag
+               (set-on-pointer-move obj 'on-gui-drag-move)
+               (set-on-pointer-up obj 'on-gui-drag-stop))
+              (t
+               (setf (in-drag app) nil)))))))
 
 ;;;;;;;;;;;;;;;;;;;;;;
 ;; on-gui-drag-move ;;
@@ -623,18 +623,18 @@ The on-window-change clog-obj received is the new window"))
 (defun on-gui-drag-move (obj data)
   "Handle mouse tracking on drag object"
   (let* ((app (connection-data-item obj "clog-gui"))
-	 (x        (getf data ':screen-x))
-	 (y        (getf data ':screen-y))
-	 (adj-y    (- y (drag-y app)))
-	 (adj-x    (- x (drag-x app))))
+         (x        (getf data ':screen-x))
+         (y        (getf data ':screen-y))
+         (adj-y    (- y (drag-y app)))
+         (adj-x    (- x (drag-x app))))
     (cond ((equalp (in-drag app) "m")
-	   (fire-on-window-move (drag-obj app))
-	   (setf (top (drag-obj app)) (unit :px adj-y))
-	   (setf (left (drag-obj app)) (unit :px adj-x)))
-	  ((equalp (in-drag app) "s")
-	   (fire-on-window-size (drag-obj app))
-	   (setf (height (drag-obj app)) (unit :px adj-y))
-	   (setf (width (drag-obj app)) (unit :px adj-x))))))
+           (fire-on-window-move (drag-obj app))
+           (setf (top (drag-obj app)) (unit :px adj-y))
+           (setf (left (drag-obj app)) (unit :px adj-x)))
+          ((equalp (in-drag app) "s")
+           (fire-on-window-size (drag-obj app))
+           (setf (height (drag-obj app)) (unit :px adj-y))
+           (setf (width (drag-obj app)) (unit :px adj-x))))))
 
 ;;;;;;;;;;;;;;;;;;;;;;
 ;; on-gui-drag-stop ;;
@@ -647,9 +647,9 @@ The on-window-change clog-obj received is the new window"))
     (set-on-pointer-move obj nil)
     (set-on-pointer-up obj nil)
     (cond ((equalp (in-drag app) "m")
-	   (fire-on-window-move-done (drag-obj app)))
-	  ((equalp (in-drag app) "s")
-	   (fire-on-window-size-done (drag-obj app))))
+           (fire-on-window-move-done (drag-obj app)))
+          ((equalp (in-drag app) "s")
+           (fire-on-window-size-done (drag-obj app))))
     (setf (in-drag app) nil)
     (setf (drag-obj app) nil)))
 
@@ -658,35 +658,35 @@ The on-window-change clog-obj received is the new window"))
 ;;;;;;;;;;;;;;;;;;;;;;;
 
 (defgeneric create-gui-window (clog-obj &key title
-					  content
-					  left top width height
-					  maximize
-					  has-pinner
-					  keep-on-top
-					  hidden
-					  client-movement
-					  html-id)
+                                          content
+                                          left top width height
+                                          maximize
+                                          has-pinner
+                                          keep-on-top
+                                          hidden
+                                          client-movement
+                                          html-id)
   (:documentation "Create a clog-gui-window. If client-movement is t then
 use jquery-ui to move/resize and will not work on mobile. When client-movement
 is t only on-window-move is fired once at start of drag and on-window-move-done
 at end of drag and on-window-resize at start of resize and
-on-window-resize-done at end of resize. If has-pinner a toggle wil appear on 
+on-window-resize-done at end of resize. If has-pinner a toggle wil appear on
 title bar to allow pinning the window in place, if keep-on-top t then when
 pinned also will keep-on-top. If had-pinned is nil and keep-on-top t then
 the window will be set to keep-on-top always."))
 
 (defmethod create-gui-window ((obj clog-obj) &key (title "New Window")
-					       (content "")
-					       (left nil)
-					       (top nil)
-					       (width 300)
-					       (height 200)
-					       (maximize nil)
-			                       (has-pinner nil)
-					       (keep-on-top nil)
-					       (hidden nil)
-					       (client-movement nil)
-					       (html-id nil))
+                                               (content "")
+                                               (left nil)
+                                               (top nil)
+                                               (width 300)
+                                               (height 200)
+                                               (maximize nil)
+                                               (has-pinner nil)
+                                               (keep-on-top nil)
+                                               (hidden nil)
+                                               (client-movement nil)
+                                               (html-id nil))
   (let ((app (connection-data-item obj "clog-gui")))
     (unless html-id
       (setf html-id (clog-connection:generate-id)))
@@ -701,14 +701,14 @@ the window will be set to keep-on-top always."))
     (unless top
       ;; Generate sensible initial y location
       (when (eql (last-y app) 0)
-	(setf (last-y app) (menu-bar-height obj)))
+        (setf (last-y app) (menu-bar-height obj)))
       (setf top (last-y app))
       (incf (last-y app) top-bar-height)
       (when (> top (- (inner-height (window (body app))) (last-y app)))
-	(setf (last-y app) (menu-bar-height obj))))
+        (setf (last-y app) (menu-bar-height obj))))
     (let ((win (create-child (body app)
-			    (format nil
-	    "<div style='position:fixed;top:~Apx;left:~Apx;width:~Apx;height:~Apx;
+                            (format nil
+            "<div style='position:fixed;top:~Apx;left:~Apx;width:~Apx;height:~Apx;
                   z-index:~A;visibility:hidden'
                   class='w3-card-4 w3-white w3-border'>
                   <div id='~A-title-bar' class='w3-container w3-black'
@@ -724,82 +724,82 @@ the window will be set to keep-on-top always."))
                        cursor:se-resize;opacity:0'
                        class='w3-right' data-drag-obj='~A' data-drag-type='s'>+</div>
              </div>"
-	    top left width height (incf (last-z app))   ; outer div
-	    html-id html-id html-id                     ; title bar
-	    title                                       ; title
-	    (if has-pinner                              ; pinner
-	      (format nil "<span id='~A-pinner'
+            top left width height (incf (last-z app))   ; outer div
+            html-id html-id html-id                     ; title bar
+            title                                       ; title
+            (if has-pinner                              ; pinner
+              (format nil "<span id='~A-pinner'
                  style='position:absolute;top:0;right:20px;
                         cursor:pointer;user-select:none;'>
                  ☐</span><span>&nbsp;&nbsp;&nbsp;</span>" html-id)
-	      "")
-	    html-id                                     ; closer
-	    html-id content                             ; body
-	    html-id html-id)                            ; size
-			    :clog-type 'clog-gui-window
-			    :html-id html-id)))
+              "")
+            html-id                                     ; closer
+            html-id content                             ; body
+            html-id html-id)                            ; size
+                            :clog-type 'clog-gui-window
+                            :html-id html-id)))
       (setf (win-title win)
-	    (attach-as-child win (format nil "~A-title" html-id)))
+            (attach-as-child win (format nil "~A-title" html-id)))
       (setf (title-bar win)
-	    (attach-as-child win (format nil "~A-title-bar" html-id)))
+            (attach-as-child win (format nil "~A-title-bar" html-id)))
       (when has-pinner
-	(setf (pinner win) (attach-as-child win (format nil "~A-pinner" html-id))))
+        (setf (pinner win) (attach-as-child win (format nil "~A-pinner" html-id))))
       (setf (closer win) (attach-as-child win (format nil "~A-closer" html-id)))
       (setf (sizer win) (attach-as-child win (format nil "~A-sizer" html-id)))
       (setf (content win) (attach-as-child win (format nil "~A-body"  html-id)))
       (setf (gethash (format nil "~A" html-id) (windows app)) win)
       (if maximize
-	  (window-maximize win)
-	  (fire-on-window-change win app))
+          (window-maximize win)
+          (fire-on-window-change win app))
       (unless hidden
-	(setf (visiblep win) t))
+        (setf (visiblep win) t))
       (when (window-select app)
-	(setf (window-select-item win) (create-option (window-select app)
-						      :content title
-						      :value html-id)))
+        (setf (window-select-item win) (create-option (window-select app)
+                                                      :content title
+                                                      :value html-id)))
       (set-on-double-click (win-title win) (lambda (obj)
-					     (declare (ignore obj))
-					     (window-toggle-maximize win)))
+                                             (declare (ignore obj))
+                                             (window-toggle-maximize win)))
       (if has-pinner
-	  (set-on-click (pinner win) (lambda (obj)
-       				       (declare (ignore obj))
-       				       (window-toggle-pin win keep-on-top)))
-	  (when keep-on-top
-	    (window-keep-on-top win)))      
+          (set-on-click (pinner win) (lambda (obj)
+                                       (declare (ignore obj))
+                                       (window-toggle-pin win keep-on-top)))
+          (when keep-on-top
+            (window-keep-on-top win)))
       (set-on-click (closer win) (lambda (obj)
-				   (declare (ignore obj))
-				   (when (fire-on-window-can-close win)
-				     (window-close win))))
+                                   (declare (ignore obj))
+                                   (when (fire-on-window-can-close win)
+                                     (window-close win))))
       (cond (client-movement
-	     (clog::jquery-execute win
-			     (format nil "draggable({handle:'#~A-title-bar'})" html-id))
-	     (clog::jquery-execute win "resizable({handles:'se'})")
-	     (set-on-pointer-down (win-title win)
-	    			  (lambda (obj data)
-				    (declare (ignore obj) (ignore data))
-	    			    (setf (z-index win) (incf (last-z app)))
-	    			    (fire-on-window-change win app)))
-	     (clog::set-on-event win "dragstart"
-				 (lambda (obj)
-				   (declare (ignore obj))
-				   (fire-on-window-move win)))
-	     (clog::set-on-event win "dragstop"
-				 (lambda (obj)
-				   (declare (ignore obj))
-				   (fire-on-window-move-done win)))
-	     (clog::set-on-event win "resizestart"
-				 (lambda (obj)
-				   (declare (ignore obj))
-				   (fire-on-window-size win)))
-	     (clog::set-on-event win "resizestop"
-				 (lambda (obj)
-				   (declare (ignore obj))
-				   (fire-on-window-size-done win))))
-	    (t
-	     (set-on-pointer-down
-	      (win-title win) 'on-gui-drag-down :capture-pointer t)
-	     (set-on-pointer-down
-	      (sizer win) 'on-gui-drag-down :capture-pointer t)))
+             (clog::jquery-execute win
+                             (format nil "draggable({handle:'#~A-title-bar'})" html-id))
+             (clog::jquery-execute win "resizable({handles:'se'})")
+             (set-on-pointer-down (win-title win)
+                                  (lambda (obj data)
+                                    (declare (ignore obj) (ignore data))
+                                    (setf (z-index win) (incf (last-z app)))
+                                    (fire-on-window-change win app)))
+             (clog::set-on-event win "dragstart"
+                                 (lambda (obj)
+                                   (declare (ignore obj))
+                                   (fire-on-window-move win)))
+             (clog::set-on-event win "dragstop"
+                                 (lambda (obj)
+                                   (declare (ignore obj))
+                                   (fire-on-window-move-done win)))
+             (clog::set-on-event win "resizestart"
+                                 (lambda (obj)
+                                   (declare (ignore obj))
+                                   (fire-on-window-size win)))
+             (clog::set-on-event win "resizestop"
+                                 (lambda (obj)
+                                   (declare (ignore obj))
+                                   (fire-on-window-size-done win))))
+            (t
+             (set-on-pointer-down
+              (win-title win) 'on-gui-drag-down :capture-pointer t)
+             (set-on-pointer-down
+              (sizer win) 'on-gui-drag-down :capture-pointer t)))
       win)))
 
 ;;;;;;;;;;;;;;;;;;
@@ -886,15 +886,15 @@ the browser."))
       (window-focus obj))
     (when (fire-on-window-can-maximize obj)
       (unless (window-maximized-p obj)
-	(setf (last-x obj) (left obj))
-	(setf (last-y obj) (top obj))
-	(setf (last-height obj) (height obj))
-	(setf (last-width obj) (width obj)))
+        (setf (last-x obj) (left obj))
+        (setf (last-y obj) (top obj))
+        (setf (last-height obj) (height obj))
+        (setf (last-width obj) (width obj)))
       (setf (top obj) (unit :px (menu-bar-height obj)))
       (setf (left obj) (unit :px 0))
       (setf (width obj) (unit :vw 100))
       (setf (height obj)
-	    (- (inner-height (window (body app))) (menu-bar-height obj)))
+            (- (inner-height (window (body app))) (menu-bar-height obj)))
       (fire-on-window-size-done obj))))
 
 ;;;;;;;;;;;;;;;;;;;;;;
@@ -940,29 +940,29 @@ keep-on-top t when pinned is always on top. A new window is always unpinned."))
 (defmethod window-toggle-pin ((win clog-gui-window) keep-on-top)
   (if (pinnedp win)
       (progn
-	(when (pinner win)
-	  (setf (inner-html (pinner win)) "☐"))
-	(when keep-on-top
-	  (setf (keep-on-top win) nil)
-	  (window-focus win))
-	(setf (pinnedp win) nil)
-	(set-on-window-can-close win nil)
-	(set-on-window-can-size win nil)
-	(set-on-window-can-move win nil)
-	(set-on-window-can-maximize win nil)
-	(set-on-window-can-normalize win nil))
+        (when (pinner win)
+          (setf (inner-html (pinner win)) "☐"))
+        (when keep-on-top
+          (setf (keep-on-top win) nil)
+          (window-focus win))
+        (setf (pinnedp win) nil)
+        (set-on-window-can-close win nil)
+        (set-on-window-can-size win nil)
+        (set-on-window-can-move win nil)
+        (set-on-window-can-maximize win nil)
+        (set-on-window-can-normalize win nil))
       (flet ((no-op (obj) (declare (ignore obj))))
-	(when (pinner win)
-	  (setf (inner-html (pinner win)) "☑"))
-	(when keep-on-top
-	  (setf (keep-on-top win) t)
-	  (setf (z-index win) 1))
-	(setf (pinnedp win) t)
-	(set-on-window-can-close win #'no-op)
-	(set-on-window-can-size win #'no-op)
-	(set-on-window-can-move win #'no-op)
-	(set-on-window-can-maximize win #'no-op)
-	(set-on-window-can-normalize win #'no-op))))
+        (when (pinner win)
+          (setf (inner-html (pinner win)) "☑"))
+        (when keep-on-top
+          (setf (keep-on-top win) t)
+          (setf (z-index win) 1))
+        (setf (pinnedp win) t)
+        (set-on-window-can-close win #'no-op)
+        (set-on-window-can-size win #'no-op)
+        (set-on-window-can-move win #'no-op)
+        (set-on-window-can-maximize win #'no-op)
+        (set-on-window-can-normalize win #'no-op))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;
 ;; window-keep-on-top ;;
@@ -1016,9 +1016,9 @@ interactions. Use window-end-modal to undo."))
 (defmethod window-center ((obj clog-gui-window))
   (let ((body (connection-data-item obj "clog-body")))
     (setf (top obj) (unit :px (- (/ (inner-height (window body)) 2.0)
-				 (/ (height obj) 2.0))))
+                                 (/ (height obj) 2.0))))
     (setf (left obj) (unit :px (- (/ (inner-width (window body)) 2.0)
-				  (/ (width obj) 2.0))))))
+                                  (/ (width obj) 2.0))))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; set-on-window-focus ;;
@@ -1222,11 +1222,11 @@ interactions. Use window-end-modal to undo."))
 (defmethod fire-on-window-move-done ((obj clog-gui-window))
   (let ((top-loc (parse-integer (top obj) :junk-allowed t)))
     (if (< top-loc (menu-bar-height obj))
-	(setf (top obj) (unit :px (menu-bar-height obj)))
-	(let* ((body        (connection-data-item obj "clog-body"))
-	       (body-height (height (html-document body))))
-	  (if (>= top-loc body-height)
-	      (setf (top obj) (unit :px (- body-height 15)))))))
+        (setf (top obj) (unit :px (menu-bar-height obj)))
+        (let* ((body        (connection-data-item obj "clog-body"))
+               (body-height (height (html-document body))))
+          (if (>= top-loc body-height)
+              (setf (top obj) (unit :px (- body-height 15)))))))
   (when (on-window-move-done obj)
     (funcall (on-window-move-done obj) obj)))
 
@@ -1239,31 +1239,31 @@ interactions. Use window-end-modal to undo."))
 ;;;;;;;;;;;;;;;;;
 
 (defun alert-toast (obj title content &key
-					(color-class "w3-red")
-					(time-out nil)
-					(place-top nil)
-					(html-id nil))
+                                        (color-class "w3-red")
+                                        (time-out nil)
+                                        (place-top nil)
+                                        (html-id nil))
   "Create an alert toast with option :TIME-OUT. If place-top is t then alert
 is placed in DOM at top of html body instead of bottom of html body."
   (unless html-id
       (setf html-id (clog-connection:generate-id)))
   (let* ((body   (connection-data-item obj "clog-body"))
-	 (win    (create-child body
-			     (format nil
+         (win    (create-child body
+                             (format nil
 "  <div class='w3-panel ~A w3-animate-right w3-display-container'>~
    <span id=~A-close class='w3-button w3-large w3-display-topright'>&times;</span>~
    <h3>~A</h3>~
    <p>~A</p>~
 </div>"
                               color-class
-			      html-id
-			      title
-			      content)
-			     :html-id html-id
-			     :auto-place nil)))
+                              html-id
+                              title
+                              content)
+                             :html-id html-id
+                             :auto-place nil)))
     (if place-top
-	(place-inside-top-of body win)
-	(place-inside-bottom-of body win))
+        (place-inside-top-of body win)
+        (place-inside-bottom-of body win))
     (set-on-click
      (attach-as-child obj (format nil "~A-close" html-id))
      (lambda (obj)
@@ -1278,81 +1278,81 @@ is placed in DOM at top of html body instead of bottom of html body."
 ;;;;;;;;;;;;;;;;;;
 
 (defun alert-dialog (obj content &key (modal t)
-				   (title "About")
-				   (left nil) (top nil)
-				   (width 300) (height 200)
-				   (client-movement nil)
-				   (html-id nil))
+                                   (title "About")
+                                   (left nil) (top nil)
+                                   (width 300) (height 200)
+                                   (client-movement nil)
+                                   (html-id nil))
   "Create an alert dialog box with CONTENT centered."
   (unless html-id
       (setf html-id (clog-connection:generate-id)))
   (let* ((body (connection-data-item obj "clog-body"))
-	 (win  (create-gui-window obj
-				  :title    title
-				  :content  (format nil
+         (win  (create-gui-window obj
+                                  :title    title
+                                  :content  (format nil
 "<div class='w3-panel'>
 <center>~A<br><br>
 <button class='w3-button w3-black' id='~A-btn'>OK</button>
 </center>
 </div>" content html-id)
-				  :top             top
-				  :left            left
-				  :width           width
-				  :height          height
-				  :hidden          t
-				  :client-movement client-movement
-				  :html-id         html-id))
-	 (btn  (attach-as-child win (format nil "~A-btn" html-id))))
+                                  :top             top
+                                  :left            left
+                                  :width           width
+                                  :height          height
+                                  :hidden          t
+                                  :client-movement client-movement
+                                  :html-id         html-id))
+         (btn  (attach-as-child win (format nil "~A-btn" html-id))))
     (unless top
       (setf (top win) (unit :px (- (/ (inner-height (window body)) 2.0)
-				   (/ (height win) 2.0)))))
+                                   (/ (height win) 2.0)))))
     (unless left
       (setf (left win) (unit :px (- (/ (inner-width (window body)) 2.0)
-				    (/ (width win) 2.0)))))
+                                    (/ (width win) 2.0)))))
     (setf (visiblep win) t)
     (when modal
       (window-make-modal win))
     (focus btn)
     (set-on-click btn (lambda (obj)
-			(declare (ignore obj))
-			(window-end-modal win)
-			(window-close win)))
+                        (declare (ignore obj))
+                        (window-end-modal win)
+                        (window-close win)))
     (set-on-window-close win (lambda (obj)
-			       (declare (ignore obj))
-			       (when modal
-				 (window-end-modal win))))))
+                               (declare (ignore obj))
+                               (when modal
+                                 (window-end-modal win))))))
 
 ;;;;;;;;;;;;;;;;;;
 ;; input-dialog ;;
 ;;;;;;;;;;;;;;;;;;
 
 (defun input-dialog (obj content on-input &key (modal t)
-					    (title "Input")
-					    (size 20)
-					    (rows 1)
-					    (default-value "")
-					    (left nil) (top nil)
-					    (width 300) (height 200)
-					    (client-movement nil)
-					    (html-id nil))
+                                            (title "Input")
+                                            (size 20)
+                                            (rows 1)
+                                            (default-value "")
+                                            (left nil) (top nil)
+                                            (width 300) (height 200)
+                                            (client-movement nil)
+                                            (html-id nil))
   "Create an input dialog box with CONTENT centered and an input box.
 Calls on-input with input box contents or nil if canceled."
   (unless html-id
       (setf html-id (clog-connection:generate-id)))
   (let* ((body (connection-data-item obj "clog-body"))
-	 (inp  (if (eql rows 1)
-		   (format nil "<input type='text' id='~A-input' size='~A' value='~A'>"
-			   html-id
-			   size
-			   (escape-string default-value))
-		   (format nil "<textarea id='~A-input' cols='~A' rows='~A'>~A</textarea>"
-			   html-id
-			   size
-			   rows
-			   (escape-string default-value))))
-	 (win  (create-gui-window obj
-				  :title          title
-				  :content        (format nil
+         (inp  (if (eql rows 1)
+                   (format nil "<input type='text' id='~A-input' size='~A' value='~A'>"
+                           html-id
+                           size
+                           (escape-string default-value))
+                   (format nil "<textarea id='~A-input' cols='~A' rows='~A'>~A</textarea>"
+                           html-id
+                           size
+                           rows
+                           (escape-string default-value))))
+         (win  (create-gui-window obj
+                                  :title          title
+                                  :content        (format nil
 "<div class='w3-panel'>
 <center>~A<br><br>
 <form class='w3-container' onSubmit='return false;'>
@@ -1366,65 +1366,65 @@ Calls on-input with input box contents or nil if canceled."
       inp
       html-id  ; ok
       html-id) ; cancel
-				  :top             top
-				  :left            left
-				  :width           width
-				  :height          height
-				  :hidden          t
-				  :client-movement client-movement
-				  :html-id         html-id))
-	 (input  (attach-as-child win (format nil "~A-input" html-id)
-				  :clog-type 'clog:clog-form-element))
-	 (ok     (attach-as-child win (format nil "~A-ok" html-id)))
-	 (cancel (attach-as-child win (format nil "~A-cancel" html-id))))
+                                  :top             top
+                                  :left            left
+                                  :width           width
+                                  :height          height
+                                  :hidden          t
+                                  :client-movement client-movement
+                                  :html-id         html-id))
+         (input  (attach-as-child win (format nil "~A-input" html-id)
+                                  :clog-type 'clog:clog-form-element))
+         (ok     (attach-as-child win (format nil "~A-ok" html-id)))
+         (cancel (attach-as-child win (format nil "~A-cancel" html-id))))
     (unless top
       (setf (top win) (unit :px (- (/ (inner-height (window body)) 2.0)
-				   (/ (height win) 2.0)))))
+                                   (/ (height win) 2.0)))))
     (unless left
       (setf (left win) (unit :px (- (/ (inner-width (window body)) 2.0)
-				    (/ (width win) 2.0)))))
+                                    (/ (width win) 2.0)))))
     (setf (visiblep win) t)
     (when modal
       (window-make-modal win))
     (focus input)
     (set-on-click cancel (lambda (obj)
-			   (declare (ignore obj))
-			   (window-close win))
-		  :one-time t)
+                           (declare (ignore obj))
+                           (window-close win))
+                  :one-time t)
     (set-on-click ok (lambda (obj)
-		       (declare (ignore obj))
-		       (set-on-window-close win nil)
-		       (when modal
-			 (window-end-modal win))
-		       (window-close win)
-		       (funcall on-input (value input)))
-		  :one-time t)
+                       (declare (ignore obj))
+                       (set-on-window-close win nil)
+                       (when modal
+                         (window-end-modal win))
+                       (window-close win)
+                       (funcall on-input (value input)))
+                  :one-time t)
     (set-on-window-close win (lambda (obj)
-			       (declare (ignore obj))
-			       (when modal
-				 (window-end-modal win))
-			       (funcall on-input nil)))))
+                               (declare (ignore obj))
+                               (when modal
+                                 (window-end-modal win))
+                               (funcall on-input nil)))))
 
 ;;;;;;;;;;;;;;;;;;;;
 ;; confirm-dialog ;;
 ;;;;;;;;;;;;;;;;;;;;
 
 (defun confirm-dialog (obj content on-input &key (modal t)
-					      (title "Confirm")
-					      (ok-text "OK")
-					      (cancel-text "Cancel")
-					      (left nil) (top nil)
-					      (width 300) (height 200)
-					      (client-movement nil)
-					      (html-id nil))
+                                              (title "Confirm")
+                                              (ok-text "OK")
+                                              (cancel-text "Cancel")
+                                              (left nil) (top nil)
+                                              (width 300) (height 200)
+                                              (client-movement nil)
+                                              (html-id nil))
   "Create a confirmation dialog box with CONTENT centered.
 Calls on-input with t if confirmed or nil if canceled."
   (unless html-id
       (setf html-id (clog-connection:generate-id)))
   (let* ((body (connection-data-item obj "clog-body"))
-	 (win  (create-gui-window obj
-				  :title          title
-				  :content        (format nil
+         (win  (create-gui-window obj
+                                  :title          title
+                                  :content        (format nil
 "<div class='w3-panel'>
 <center>~A<br><br>
 <form class='w3-container' onSubmit='return false;'>
@@ -1433,57 +1433,57 @@ Calls on-input with t if confirmed or nil if canceled."
 </form>
 </center>
 </div>" content
-	html-id ok-text      ; ok
-	html-id cancel-text) ; cancel
-				  :top             top
-				  :left            left
-				  :width           width
-				  :height          height
-				  :hidden          t
-				  :client-movement client-movement
-				  :html-id         html-id))
-	 (ok     (attach-as-child win (format nil "~A-ok" html-id)))
-	 (cancel (attach-as-child win (format nil "~A-cancel" html-id))))
+        html-id ok-text      ; ok
+        html-id cancel-text) ; cancel
+                                  :top             top
+                                  :left            left
+                                  :width           width
+                                  :height          height
+                                  :hidden          t
+                                  :client-movement client-movement
+                                  :html-id         html-id))
+         (ok     (attach-as-child win (format nil "~A-ok" html-id)))
+         (cancel (attach-as-child win (format nil "~A-cancel" html-id))))
     (unless top
       (setf (top win) (unit :px (- (/ (inner-height (window body)) 2.0)
-				   (/ (height win) 2.0)))))
+                                   (/ (height win) 2.0)))))
     (unless left
       (setf (left win) (unit :px (- (/ (inner-width (window body)) 2.0)
-				    (/ (width win) 2.0)))))
+                                    (/ (width win) 2.0)))))
     (setf (visiblep win) t)
     (when modal
       (window-make-modal win))
     (focus ok)
     (set-on-click cancel (lambda (obj)
-			   (declare (ignore obj))
-			   (window-close win))
-		  :one-time t)
+                           (declare (ignore obj))
+                           (window-close win))
+                  :one-time t)
     (set-on-click ok (lambda (obj)
-		       (declare (ignore obj))
-		       (set-on-window-close win nil)
-		       (when modal
-			 (window-end-modal win))
-		       (window-close win)
-		       (funcall on-input t))
-		  :one-time t)
+                       (declare (ignore obj))
+                       (set-on-window-close win nil)
+                       (when modal
+                         (window-end-modal win))
+                       (window-close win)
+                       (funcall on-input t))
+                  :one-time t)
     (set-on-window-close win (lambda (obj)
-			       (declare (ignore obj))
-			       (when modal
-				 (window-end-modal win))
-			       (funcall on-input nil)))))
+                               (declare (ignore obj))
+                               (when modal
+                                 (window-end-modal win))
+                               (funcall on-input nil)))))
 
 ;;;;;;;;;;;;;;;;;
 ;; form-dialog ;;
 ;;;;;;;;;;;;;;;;;
 
 (defun form-dialog (obj content fields on-input &key (modal t)
-						  (title "Form")
-						  (ok-text "OK")
-						  (cancel-text "Cancel")
-						  (left nil) (top nil)
-						  (width 400) (height 500)
-						  (client-movement nil)
-						  (html-id nil))
+                                                  (title "Form")
+                                                  (ok-text "OK")
+                                                  (cancel-text "Cancel")
+                                                  (left nil) (top nil)
+                                                  (width 400) (height 500)
+                                                  (client-movement nil)
+                                                  (html-id nil))
   "Create a form dialog box with CONTENT followed by FIELDS.
 FIELDS is a list of lists each list has:
 
@@ -1509,75 +1509,75 @@ if confirmed or nil if canceled."
   (unless html-id
     (setf html-id (clog-connection:generate-id)))
   (let* ((body (connection-data-item obj "clog-body"))
-	 (fls (format nil "~{~A~}"
-		      (mapcar (lambda (l)
-				(cond
-				  ((eq (third l) :select)
-				   (format nil
-					   "<div><label class='w3-text-black'><b>~A</b></label>~
-			       <select class='w3-select w3-border' name='~A-~A'>~A</select></div>"
-					   (first l) html-id (second l)
-					   (format nil "~{~A~}"
-						   (mapcar (lambda (s)
-							     (format nil
-								     "<option value='~A' ~A>~A</option>"
-								     (second s)
-								     (if (third s)
-									 (third s)
-									 "")
-								     (first s)))
-							   (fourth l)))))
-				  ((eq (third l) :radio)
-				   (format nil
-					   "<div><label class='w3-text-black'><b>~A</b></label>~A</div>"
-					   (first l)
-					   (format nil "~{~A~}"
-						   (mapcar (lambda (s)
-							     (format nil
-			       "<div><input type=radio class='w3-radio' name='~A-~A'~
+         (fls (format nil "~{~A~}"
+                      (mapcar (lambda (l)
+                                (cond
+                                  ((eq (third l) :select)
+                                   (format nil
+                                           "<div><label class='w3-text-black'><b>~A</b></label>~
+                               <select class='w3-select w3-border' name='~A-~A'>~A</select></div>"
+                                           (first l) html-id (second l)
+                                           (format nil "~{~A~}"
+                                                   (mapcar (lambda (s)
+                                                             (format nil
+                                                                     "<option value='~A' ~A>~A</option>"
+                                                                     (second s)
+                                                                     (if (third s)
+                                                                         (third s)
+                                                                         "")
+                                                                     (first s)))
+                                                           (fourth l)))))
+                                  ((eq (third l) :radio)
+                                   (format nil
+                                           "<div><label class='w3-text-black'><b>~A</b></label>~A</div>"
+                                           (first l)
+                                           (format nil "~{~A~}"
+                                                   (mapcar (lambda (s)
+                                                             (format nil
+                               "<div><input type=radio class='w3-radio' name='~A-~A'~
                                       id='~A-~A-~A' value='~A' ~A> ~
                                      <label for='~A-~A-~A'>~A</label></div>"
-			                                      html-id (second l)
-							      html-id (second l) (second s)
-							      (second s)
-							      (if (third s)
-								  (third s)
-								  "")
-							      html-id (second l) (second s)
-							      (first s)))
-							   (fourth l)))))
-				  ((eq (third l) :checkbox)
-				   (format nil
-					   "<div><input class='w3-check' type='checkbox' ~
+                                                              html-id (second l)
+                                                              html-id (second l) (second s)
+                                                              (second s)
+                                                              (if (third s)
+                                                                  (third s)
+                                                                  "")
+                                                              html-id (second l) (second s)
+                                                              (first s)))
+                                                           (fourth l)))))
+                                  ((eq (third l) :checkbox)
+                                   (format nil
+                                           "<div><input class='w3-check' type='checkbox' ~
                                                   name='~A-~A' id='~A-~A' ~A> ~
                                                   <label class='w3-text-black' for='~A-~A'>~
                                                   <b>~A</b></label>~
                                             </div>"
-					   html-id (second l) html-id (second l)
-					   (if (fourth l)
-					       "checked"
-					       "")
-					   html-id (second l)
-					   (first l)))
-				  ((third l)
-				   (format nil
-					   "<div><label class='w3-text-black'><b>~A</b></label>~
+                                           html-id (second l) html-id (second l)
+                                           (if (fourth l)
+                                               "checked"
+                                               "")
+                                           html-id (second l)
+                                           (first l)))
+                                  ((third l)
+                                   (format nil
+                                           "<div><label class='w3-text-black'><b>~A</b></label>~
                                                  <input class='w3-input w3-border' type='~A'~
                                                   name='~A-~A' id='~A-~A' value='~A'></div>"
                                    (first l) (third l)
-				   html-id (second l) html-id (second l)
-				   (if (fourth l)
-				       (fourth l)
-				       "")))
-				  (t
-				   (format nil
-					    "<div><label class='w3-text-black'><b>~A</b></label>~
+                                   html-id (second l) html-id (second l)
+                                   (if (fourth l)
+                                       (fourth l)
+                                       "")))
+                                  (t
+                                   (format nil
+                                            "<div><label class='w3-text-black'><b>~A</b></label>~
                                <input class='w3-input w3-border' type='text' name='~A-~A' id='~A-~A'></div>"
                                             (first l) html-id (second l) html-id (second l)))))
-			      fields)))
-	 (win  (create-gui-window obj
-				  :title          title
-				  :content        (format nil
+                              fields)))
+         (win  (create-gui-window obj
+                                  :title          title
+                                  :content        (format nil
 "<div class='w3-panel'>
 ~A
 <form class='w3-container' onSubmit='return false;'>
@@ -1588,115 +1588,115 @@ if confirmed or nil if canceled."
 </center>
 </form>
 </div>" (if content
-	    (format nil "<center>~A</center><br>" content)
-	    "")
+            (format nil "<center>~A</center><br>" content)
+            "")
         fls
-	html-id ok-text      ; ok
-	html-id cancel-text) ; cancel
-				  :top             top
-				  :left            left
-				  :width           width
-				  :height          height
-				  :hidden          t
-				  :client-movement client-movement
-				  :html-id         html-id))
-	 (ok     (attach-as-child win (format nil "~A-ok" html-id)))
-	 (cancel (attach-as-child win (format nil "~A-cancel" html-id))))
+        html-id ok-text      ; ok
+        html-id cancel-text) ; cancel
+                                  :top             top
+                                  :left            left
+                                  :width           width
+                                  :height          height
+                                  :hidden          t
+                                  :client-movement client-movement
+                                  :html-id         html-id))
+         (ok     (attach-as-child win (format nil "~A-ok" html-id)))
+         (cancel (attach-as-child win (format nil "~A-cancel" html-id))))
     (unless top
       (setf (top win) (unit :px (- (/ (inner-height (window body)) 2.0)
-				   (/ (height win) 2.0)))))
+                                   (/ (height win) 2.0)))))
     (unless left
       (setf (left win) (unit :px (- (/ (inner-width (window body)) 2.0)
-				    (/ (width win) 2.0)))))
+                                    (/ (width win) 2.0)))))
     (setf (visiblep win) t)
     (when modal
       (window-make-modal win))
     (mapcar (lambda (l)
-	      (when (eq (third l) :filename)
-		(let ((fld (attach-as-child body (format nil "~A-~A"
-							    html-id
-							    (second l))
-					    :clog-type 'clog:clog-form-element)))
-		  (set-on-click fld (lambda (obj)
-				      (declare (ignore obj))
-				      (server-file-dialog body (first l) (fourth l)
-							  (lambda (fname)
-							    (setf (value fld) fname))))))))
-	    fields)
+              (when (eq (third l) :filename)
+                (let ((fld (attach-as-child body (format nil "~A-~A"
+                                                            html-id
+                                                            (second l))
+                                            :clog-type 'clog:clog-form-element)))
+                  (set-on-click fld (lambda (obj)
+                                      (declare (ignore obj))
+                                      (server-file-dialog body (first l) (fourth l)
+                                                          (lambda (fname)
+                                                            (setf (value fld) fname))))))))
+            fields)
     (js-execute obj (format nil "$('[name=~A-~A]').focus()"
-			    html-id
-			    (cadar fields)))
+                            html-id
+                            (cadar fields)))
     (set-on-click cancel (lambda (obj)
-			   (declare (ignore obj))
-			   (window-close win))
-		  :one-time t)
+                           (declare (ignore obj))
+                           (window-close win))
+                  :one-time t)
     (set-on-click ok (lambda (obj)
-		       (declare (ignore obj))
-		       (set-on-window-close win nil)
-		       (when modal
-			 (window-end-modal win))
-		       (let ((result (mapcar
-				      (lambda (l)
-					`(,(second l)
-					  ,(let ((name (format nil "~A-~A" html-id (second l))))
-					     (cond ((eq (third l) :select)
-						    (select-value win name))
-						   ((eq (third l) :radio)
-						    (radio-value win name))
-						   ((eq (third l) :checkbox)
-						    (checkbox-value win name))
-						   (t
-						    (name-value win name))))))
-				      fields)))
-			 (window-close win)
-			 (funcall on-input result)))
-		  :one-time t)
+                       (declare (ignore obj))
+                       (set-on-window-close win nil)
+                       (when modal
+                         (window-end-modal win))
+                       (let ((result (mapcar
+                                      (lambda (l)
+                                        `(,(second l)
+                                          ,(let ((name (format nil "~A-~A" html-id (second l))))
+                                             (cond ((eq (third l) :select)
+                                                    (select-value win name))
+                                                   ((eq (third l) :radio)
+                                                    (radio-value win name))
+                                                   ((eq (third l) :checkbox)
+                                                    (checkbox-value win name))
+                                                   (t
+                                                    (name-value win name))))))
+                                      fields)))
+                         (window-close win)
+                         (funcall on-input result)))
+                  :one-time t)
     (set-on-window-close win (lambda (obj)
-			       (declare (ignore obj))
-			       (when modal
-				 (window-end-modal win))
-			       (funcall on-input nil)))))
+                               (declare (ignore obj))
+                               (when modal
+                                 (window-end-modal win))
+                               (funcall on-input nil)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;
 ;; server-file-dialog ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defun server-file-dialog (obj title initial-dir on-file-name
-			   &key (modal t)
-			     (left nil) (top nil) (width 390) (height 425)
-			     (maximize nil)
-			     (initial-filename nil)
-			     (client-movement nil)
-			     (html-id nil))
+                           &key (modal t)
+                             (left nil) (top nil) (width 390) (height 425)
+                             (maximize nil)
+                             (initial-filename nil)
+                             (client-movement nil)
+                             (html-id nil))
   "Create a local file dialog box called TITLE using INITIAL-DIR on server
 machine, upon close ON-FILE-NAME called with filename or nil if failure."
   (let* ((body (connection-data-item obj "clog-body"))
-	 (win  (create-gui-window obj
-				  :title           title
-				  :maximize        maximize
-				  :top             top
-				  :left            left
-				  :width           width
-				  :height          height
-				  :hidden          t
-				  :client-movement client-movement
-				  :html-id         html-id))
-	 (box    (create-div (window-content win) :class "w3-panel"))
-	 (form   (create-form box))
-	 (dirs   (create-select form))
-	 (files  (create-select form))
-	 (input  (create-form-element form :input :label
-				     (create-label form :content "File Name:")))
-	 (ok     (create-button form :content "OK"
-				     :class "w3-button w3-black w3-margin"))
-	 (cancel (create-button form :content "Cancel"
-				     :class "w3-button w3-black w3-margin")))
+         (win  (create-gui-window obj
+                                  :title           title
+                                  :maximize        maximize
+                                  :top             top
+                                  :left            left
+                                  :width           width
+                                  :height          height
+                                  :hidden          t
+                                  :client-movement client-movement
+                                  :html-id         html-id))
+         (box    (create-div (window-content win) :class "w3-panel"))
+         (form   (create-form box))
+         (dirs   (create-select form))
+         (files  (create-select form))
+         (input  (create-form-element form :input :label
+                                     (create-label form :content "File Name:")))
+         (ok     (create-button form :content "OK"
+                                     :class "w3-button w3-black w3-margin"))
+         (cancel (create-button form :content "Cancel"
+                                     :class "w3-button w3-black w3-margin")))
     (unless top
       (setf (top win) (unit :px (- (/ (inner-height (window body)) 2.0)
-				   (/ (height win) 2.0)))))
+                                   (/ (height win) 2.0)))))
     (unless left
       (setf (left win) (unit :px (- (/ (inner-width (window body)) 2.0)
-				    (/ (width win) 2.0)))))
+                                    (/ (width win) 2.0)))))
     (setf (size dirs) 4)
     (setf (box-width dirs) "100%")
     (setf (size files) 8)
@@ -1708,58 +1708,58 @@ machine, upon close ON-FILE-NAME called with filename or nil if failure."
     (when modal
       (window-make-modal win))
     (flet ((populate-dirs (dir)
-	     (setf (inner-html dirs) "")
-	     (add-select-option dirs (format nil "~A" dir) ".")
-	     (setf (value input) (truename dir))
-	     (unless (or (equalp dir "/") (equalp dir #P"/"))
-	       (add-select-option dirs (format nil "~A../" dir) ".."))
-	     (dolist (item (uiop:subdirectories dir))
-	       (add-select-option dirs item item)))
-	   (populate-files (dir)
-	     (setf (inner-html files) "")
-	     (dolist (item (uiop:directory-files dir))
-	       (add-select-option files item (file-namestring item))))
-	   (caret-at-end ()
-	     (focus input)
-	     (js-execute win (format nil "~A.setSelectionRange(~A.value.length,~A.value.length)"
-				     (clog::script-id input)
-				     (clog::script-id input)
-				     (clog::script-id input)))))
+             (setf (inner-html dirs) "")
+             (add-select-option dirs (format nil "~A" dir) ".")
+             (setf (value input) (truename dir))
+             (unless (or (equalp dir "/") (equalp dir #P"/"))
+               (add-select-option dirs (format nil "~A../" dir) ".."))
+             (dolist (item (uiop:subdirectories dir))
+               (add-select-option dirs item item)))
+           (populate-files (dir)
+             (setf (inner-html files) "")
+             (dolist (item (uiop:directory-files dir))
+               (add-select-option files item (file-namestring item))))
+           (caret-at-end ()
+             (focus input)
+             (js-execute win (format nil "~A.setSelectionRange(~A.value.length,~A.value.length)"
+                                     (clog::script-id input)
+                                     (clog::script-id input)
+                                     (clog::script-id input)))))
       (populate-dirs initial-dir)
       (populate-files initial-dir)
       (when initial-filename
-	(setf (value input) (truename initial-filename))
-	(caret-at-end))
+        (setf (value input) (truename initial-filename))
+        (caret-at-end))
       (set-on-change files (lambda (obj)
-			     (declare (ignore obj))
-			     (setf (value input) (truename (value files)))
-			     (caret-at-end)))
+                             (declare (ignore obj))
+                             (setf (value input) (truename (value files)))
+                             (caret-at-end)))
       (set-on-change dirs (lambda (obj)
-			    (declare (ignore obj))
-			    (setf (value input) (value dirs))
-			    (caret-at-end)
-			    (populate-files (value dirs))))
+                            (declare (ignore obj))
+                            (setf (value input) (value dirs))
+                            (caret-at-end)
+                            (populate-files (value dirs))))
       (set-on-double-click dirs
-			   (lambda (obj)
-			     (declare (ignore obj))
-			     (populate-dirs (truename (value dirs)))))
+                           (lambda (obj)
+                             (declare (ignore obj))
+                             (populate-dirs (truename (value dirs)))))
       (set-on-double-click files (lambda (obj)
-				   (declare (ignore obj))
-				   (click ok))))
+                                   (declare (ignore obj))
+                                   (click ok))))
     (set-on-window-close win (lambda (obj)
-			       (declare (ignore obj))
-			       (when modal
-				 (window-end-modal win))
-			       (funcall on-file-name nil)))
+                               (declare (ignore obj))
+                               (when modal
+                                 (window-end-modal win))
+                               (funcall on-file-name nil)))
     (set-on-click cancel (lambda (obj)
-			   (declare (ignore obj))
-			   (window-close win))
-		  :one-time t)
+                           (declare (ignore obj))
+                           (window-close win))
+                  :one-time t)
     (set-on-click ok (lambda (obj)
-		       (declare (ignore obj))
-		       (set-on-window-close win nil)
-		       (when modal
-			 (window-end-modal win))
-		       (window-close win)
-		       (funcall on-file-name (value input)))
-		  :one-time t)))
+                       (declare (ignore obj))
+                       (set-on-window-close win nil)
+                       (when modal
+                         (window-end-modal win))
+                       (window-close win)
+                       (funcall on-file-name (value input)))
+                  :one-time t)))

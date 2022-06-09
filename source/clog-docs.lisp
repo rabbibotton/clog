@@ -25,7 +25,7 @@
   (load "source/clog-style.lisp")
   (load "source/clog-canvas.lisp")
   (load "source/clog-form.lisp")
-  (load "source/clog-multimedia.lisp")  
+  (load "source/clog-multimedia.lisp")
   (load "source/clog-window.lisp")
   (load "source/clog-document.lisp")
   (load "source/clog-location.lisp")
@@ -34,7 +34,7 @@
   (load "source/clog-system.lisp")
   (load "source/clog-panel.lisp")
   (load "source/clog-gui.lisp")
-  (load "source/clog-web.lisp")    
+  (load "source/clog-web.lisp")
   (load "source/clog-docs.lisp")
   (load "source/clog-helpers.lisp")
   (load "source/clog-panel.lisp")
@@ -86,7 +86,7 @@ frameworks and website frameworks. The CLOG package starts up the
 connectivity to the browser or other websocket client (often a browser
 embedded in a native template application.)
 
-STATUS: CLOG is complete and all work is on higher order additions, 
+STATUS: CLOG is complete and all work is on higher order additions,
 such as full desktop over the web, database tools,etc. See below for
 some enhacements being worked on. CLOG is actually based on GNOGA, a
 framework I wrote for Ada in 2013 and used in commercial production
@@ -295,7 +295,7 @@ change the even hander, set-on-* function will need to be called.")
 (defsection @clog-event-data (:title "CLOG Event Data")
 "
 Some events in CLOG return in addition to the target event, event data.
-The data is passed in the second argument to the event handler as a 
+The data is passed in the second argument to the event handler as a
 property list. To retrieve the data use (getf data :property) the available
 properties (to use for :property) are based on the event type.
 
@@ -410,7 +410,7 @@ keyboard-event-script:
 	     (when handler
 	       (lambda (data)
 		 (funcall handler obj (parse-keyboard-event data))))
-	     :call-back-script keyboard-event-script))   
+	     :call-back-script keyboard-event-script))
 ```
 
 * The script

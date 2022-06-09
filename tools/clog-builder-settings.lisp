@@ -9,138 +9,138 @@
 
 (defparameter *import-types*
   (list '(:tag "label"
-	  :control "label")
-	'(:tag "input"
-	  :control "input")
-	'(:tag "form"
-	  :control "form")
-	'(:tag "button"
-	  :control "button")
-	'(:tag "a"
-	  :control "link")
-	'(:tag "img"
-	  :control "image")
-	'(:tag "meter"
-	  :control "meter")
-	'(:tag "progress"
-	  :control "progress")
-	'(:tag "ol"
-	  :control "ol")
-	'(:tag "ul"
-	  :control "ul")
-	'(:tag "li"
-	  :control "li")
-	'(:tag "li"
-	  :control "li")
-	'(:tag "table"
-	  :control "table")
-	'(:tag "tr"
-	  :control "tr")
-	'(:tag "td"
-	  :control "td")
-	'(:tag "th"
-	  :control "th")
-	'(:tag "thead"
-	  :control "thead")
-	'(:tag "tbody"
-	  :control "tbody")
-	'(:tag "tfoot"
-	  :control "tfoot")
-	'(:tag "caption"
-	  :control "tcaption")
-	'(:tag "colgroup"
-	  :control "tcolgroup")
-	'(:tag "col"
-	  :control "tcol")
-	'(:tag "span"
-	  :control "span")
-	'(:tag "textarea"
-	  :control "textarea")
-	'(:tag "style"
-	  :control "style-block")
-	'(:tag "fieldset"
-	  :control "fieldset")
-	'(:tag "legend"
-	  :control "legend")
-	'(:tag "datalist"
-	  :control "datalist")
-	'(:tag "select"
-	  :control "dropdown")
-	'(:tag "option"
-	  :control "option")
-	'(:tag "optgroup"
-	  :control "optgroup")
-	'(:tag "dialog"
-	  :control "dialog")
-	'(:tag "p"
-	  :control "p")
-	'(:tag "br"
-	  :control "br")
-	'(:tag "hr"
-	  :control "hr")
-	'(:tag "dl"
-	  :control "dl")
-	'(:tag "dt"
-	  :control "dt")
-	'(:tag "dd"
-	  :control "dd")
-	'(:tag "details"
-	  :control "details")
-	'(:tag "summary"
-	  :control "summary")
-	'(:tag "div"
-	  :control "div")))
+          :control "label")
+        '(:tag "input"
+          :control "input")
+        '(:tag "form"
+          :control "form")
+        '(:tag "button"
+          :control "button")
+        '(:tag "a"
+          :control "link")
+        '(:tag "img"
+          :control "image")
+        '(:tag "meter"
+          :control "meter")
+        '(:tag "progress"
+          :control "progress")
+        '(:tag "ol"
+          :control "ol")
+        '(:tag "ul"
+          :control "ul")
+        '(:tag "li"
+          :control "li")
+        '(:tag "li"
+          :control "li")
+        '(:tag "table"
+          :control "table")
+        '(:tag "tr"
+          :control "tr")
+        '(:tag "td"
+          :control "td")
+        '(:tag "th"
+          :control "th")
+        '(:tag "thead"
+          :control "thead")
+        '(:tag "tbody"
+          :control "tbody")
+        '(:tag "tfoot"
+          :control "tfoot")
+        '(:tag "caption"
+          :control "tcaption")
+        '(:tag "colgroup"
+          :control "tcolgroup")
+        '(:tag "col"
+          :control "tcol")
+        '(:tag "span"
+          :control "span")
+        '(:tag "textarea"
+          :control "textarea")
+        '(:tag "style"
+          :control "style-block")
+        '(:tag "fieldset"
+          :control "fieldset")
+        '(:tag "legend"
+          :control "legend")
+        '(:tag "datalist"
+          :control "datalist")
+        '(:tag "select"
+          :control "dropdown")
+        '(:tag "option"
+          :control "option")
+        '(:tag "optgroup"
+          :control "optgroup")
+        '(:tag "dialog"
+          :control "dialog")
+        '(:tag "p"
+          :control "p")
+        '(:tag "br"
+          :control "br")
+        '(:tag "hr"
+          :control "hr")
+        '(:tag "dl"
+          :control "dl")
+        '(:tag "dt"
+          :control "dt")
+        '(:tag "dd"
+          :control "dd")
+        '(:tag "details"
+          :control "details")
+        '(:tag "summary"
+          :control "summary")
+        '(:tag "div"
+          :control "div")))
 
 (defparameter *props-location*
   `((:name "top"
      :get ,(lambda (control)
-	     (if (equal (positioning control) "static")
-		 "n/a"
-		 (top control)))
+             (if (equal (positioning control) "static")
+                 "n/a"
+                 (top control)))
      :set ,(lambda (control obj)
-	     (setf (top control) (text obj))))
+             (setf (top control) (text obj))))
     (:name "left"
      :get  ,(lambda (control)
-	      (if (equal (positioning control) "static")
-		  "n/a"
-		  (left control)))
+              (if (equal (positioning control) "static")
+                  "n/a"
+                  (left control)))
      :set  ,(lambda (control obj)
-	      (setf (left control) (text obj))))
+              (setf (left control) (text obj))))
     (:name "bottom"
      :get ,(lambda (control)
-	     (if (equal (positioning control) "static")
-		 "n/a"
-		 (bottom control)))
+             (if (equal (positioning control) "static")
+                 "n/a"
+                 (bottom control)))
      :set ,(lambda (control obj)
-	     (setf (bottom control) (text obj))))
+             (setf (bottom control) (text obj))))
     (:name "right"
      :get  ,(lambda (control)
-	      (if (equal (positioning control) "static")
-		  "n/a"
-		  (right control)))
+              (if (equal (positioning control) "static")
+                  "n/a"
+                  (right control)))
      :set  ,(lambda (control obj)
-	      (setf (right control) (text obj))))
+              (setf (right control) (text obj))))
     (:name "positioning"
      :setup ,(lambda (control td1 td2)
-	       (declare (ignore td1))
-	       (let ((dd (create-select td2))
-		     (v  (string-downcase (positioning control))))
-		 (add-select-options dd `(,v
-					  "absolute"
-					  "static"
-					  "relative"
-					  "sticky"
-					  "fixed"))
-		 (set-on-change dd (lambda (obj)
-				     (declare (ignore obj))
-				     (setf (positioning control) (value dd))
-				     (set-geometry (get-placer control)
-						   :top (position-top control)
-						   :left (position-left control)
-						   :width (client-width control)
-						   :height (client-height control))
-				     (on-populate-control-properties-win obj)))
-		 nil)))))
+               (declare (ignore td1))
+               (let ((dd (create-select td2))
+                     (v  (string-downcase (positioning control))))
+                 (add-select-options dd `(,v
+                                          "absolute"
+                                          "static"
+                                          "relative"
+                                          "sticky"
+                                          "fixed"))
+                 (set-on-change dd (lambda (obj)
+                                     (declare (ignore obj))
+                                     (setf (positioning control) (value dd))
+                                     (set-geometry (get-placer control)
+                                                   :top (position-top control)
+                                                   :left (position-left control)
+                                                   :width (client-width control)
+                                                   :height (client-height control))
+                                     (on-populate-control-properties-win obj)))
+                 nil)))))
 
 (defparameter *props-with-height*
   '((:name "width"
@@ -165,36 +165,36 @@
      :prop "alt")
     (:name "checked"
      :get  ,(lambda (control)
-	      (property control "checked"))
+              (property control "checked"))
      :set  ,(lambda (control obj)
-	     (if (equalp (text obj) "true")
-		 (setf (checkedp control) t)
-		 (setf (checkedp control) nil))
-	      (property control "required")))
+             (if (equalp (text obj) "true")
+                 (setf (checkedp control) t)
+                 (setf (checkedp control) nil))
+              (property control "required")))
     (:name "read only"
      :get  ,(lambda (control)
-	      (property control "readonly"))
+              (property control "readonly"))
      :set  ,(lambda (control obj)
-	     (if (equalp (text obj) "true")
-		 (setf (read-only-p control) t)
-		 (setf (read-only-p control) nil))
-	     (property control "readonly")))
+             (if (equalp (text obj) "true")
+                 (setf (read-only-p control) t)
+                 (setf (read-only-p control) nil))
+             (property control "readonly")))
     (:name "disabled"
      :get  ,(lambda (control)
-	      (property control "disabled"))
+              (property control "disabled"))
      :set  ,(lambda (control obj)
-	     (if (equalp (text obj) "true")
-		 (setf (disabledp control) t)
-		 (setf (disabledp control) nil))
-	     (property control "disabled")))
+             (if (equalp (text obj) "true")
+                 (setf (disabledp control) t)
+                 (setf (disabledp control) nil))
+             (property control "disabled")))
     (:name "required"
      :get  ,(lambda (control)
-	      (property control "required"))
+              (property control "required"))
      :set  ,(lambda (control obj)
-	     (if (equalp (text obj) "true")
-		 (setf (requiredp control) t)
-		 (setf (requiredp control) nil))
-	      (property control "required")))
+             (if (equalp (text obj) "true")
+                 (setf (requiredp control) t)
+                 (setf (requiredp control) nil))
+              (property control "required")))
     (:name "pattern"
      :prop "pattern")
     (:name "minimum"
@@ -209,54 +209,54 @@
      :prop "maxlength")
     (:name "multiple"
      :get  ,(lambda (control)
-	      (property control "multiple"))
+              (property control "multiple"))
      :set  ,(lambda (control obj)
-	      (if (equalp (text obj) "true")
-		 (setf (multiplep control) t)
-		 (setf (multiplep control) nil))
-	      (property control "multiple")))
+              (if (equalp (text obj) "true")
+                 (setf (multiplep control) t)
+                 (setf (multiplep control) nil))
+              (property control "multiple")))
     (:name "files accepted"
      :prop "accept")))
 
 (defparameter *props-colors*
   `((:name "color"
      :setup ,(lambda (control td1 td2)
-	       (declare (ignore td1))
-	       (let ((d1 (create-form-element td2 :text  :value (color control)))
-		     (dd (create-form-element td2 :color :value (color control))))
-		 (make-data-list dd '("#ffffff"
-				      "#ff0000"
-				      "#00ff00"
-				      "#0000ff"
-				      "#ff00ff"))
-		 (set-on-change dd (lambda (obj)
-				     (declare (ignore obj))
-				     (setf (value d1) (value dd))
-				     (setf (color control) (value d1))))
-		 (set-on-change d1 (lambda (obj)
-				     (declare (ignore obj))
-				     (setf (color control) (value d1)))))
-	       nil))
+               (declare (ignore td1))
+               (let ((d1 (create-form-element td2 :text  :value (color control)))
+                     (dd (create-form-element td2 :color :value (color control))))
+                 (make-data-list dd '("#ffffff"
+                                      "#ff0000"
+                                      "#00ff00"
+                                      "#0000ff"
+                                      "#ff00ff"))
+                 (set-on-change dd (lambda (obj)
+                                     (declare (ignore obj))
+                                     (setf (value d1) (value dd))
+                                     (setf (color control) (value d1))))
+                 (set-on-change d1 (lambda (obj)
+                                     (declare (ignore obj))
+                                     (setf (color control) (value d1)))))
+               nil))
     (:name "opacity"
      :style "opacity")
     (:name "background color"
      :setup ,(lambda (control td1 td2)
-	       (declare (ignore td1))
-	       (let ((d1 (create-form-element td2 :text  :value (background-color control)))
-		     (dd (create-form-element td2 :color :value (background-color control))))
-		 (make-data-list dd '("#ffffff"
-				      "#ff0000"
-				      "#00ff00"
-				      "#0000ff"
-				      "#ff00ff"))
-		 (set-on-change dd (lambda (obj)
-				     (declare (ignore obj))
-				     (setf (value d1) (value dd))
-				     (setf (background-color control) (value d1))))
-		 (set-on-change d1 (lambda (obj)
-				     (declare (ignore obj))
-				     (setf (background-color control) (value d1))))
-		 nil)))
+               (declare (ignore td1))
+               (let ((d1 (create-form-element td2 :text  :value (background-color control)))
+                     (dd (create-form-element td2 :color :value (background-color control))))
+                 (make-data-list dd '("#ffffff"
+                                      "#ff0000"
+                                      "#00ff00"
+                                      "#0000ff"
+                                      "#ff00ff"))
+                 (set-on-change dd (lambda (obj)
+                                     (declare (ignore obj))
+                                     (setf (value d1) (value dd))
+                                     (setf (background-color control) (value d1))))
+                 (set-on-change d1 (lambda (obj)
+                                     (declare (ignore obj))
+                                     (setf (background-color control) (value d1))))
+                 nil)))
     (:name "background attachment"
      :style "background-attachment")
     (:name "background image"
@@ -297,12 +297,12 @@
 (defparameter *props-contents*
   `((:name "contents"
      :setup ,(lambda (control td1 td2)
-	       (declare (ignore td1))
-	       (let ((d1 (create-text-area td2 :value (inner-html control))))
-		 (set-on-change d1 (lambda (obj)
-				     (declare (ignore obj))
-				     (setf (inner-html control) (value d1)))))
-	       nil))))
+               (declare (ignore td1))
+               (let ((d1 (create-text-area td2 :value (inner-html control))))
+                 (set-on-change d1 (lambda (obj)
+                                     (declare (ignore obj))
+                                     (setf (inner-html control) (value d1)))))
+               nil))))
 
 (defparameter *props-text*
   `((:name "text"
@@ -315,21 +315,21 @@
 (defparameter *props-display*
   `((:name "hidden"
      :get  ,(lambda (control)
-	      (property control "hidden"))
+              (property control "hidden"))
      :set  ,(lambda (control obj)
-	      (if (equalp (text obj) "true")
-		 (setf (hiddenp control) t)
-		 (setf (hiddenp control) nil))
-	      (property control "hidden")))
+              (if (equalp (text obj) "true")
+                 (setf (hiddenp control) t)
+                 (setf (hiddenp control) nil))
+              (property control "hidden")))
     (:name "visible"
      :get  ,(lambda (control)
-	      (style control "visibility"))
+              (style control "visibility"))
      :set  ,(lambda (control obj)
-	      (if (or (equalp (text obj) "true")
-		      (equalp (text obj) "visible"))
-		 (setf (visiblep control) t)
-		 (setf (visiblep control) nil))
-	      (style control "visibility")))
+              (if (or (equalp (text obj) "true")
+                      (equalp (text obj) "visible"))
+                 (setf (visiblep control) t)
+                 (setf (visiblep control) nil))
+              (style control "visibility")))
     (:name "display"
      :style "display")
     (:name "editable"
@@ -386,33 +386,33 @@
     ,@*props-with-height*
     (:name "type"
      :setup ,(lambda (control td1 td2)
-	       (declare (ignore td1))
-	       (let ((dd (create-select td2))
-		     (v  (string-downcase (attribute control "type"))))
-		 (add-select-options dd `(,v
-					  "button" "checkbox" "color" "date"
-					  "datetime" "datetime-local" "email"
-					  "image" "file" "hidden"
-					  "month" "number" "password" "radio"
-					  "range" "reset" "search" "submit"
-					  "tel" "text" "time" "url" "week"))
-		 (set-on-change dd (lambda (obj)
-				   (declare (ignore obj))
-				   (setf (attribute control "type") (value dd))
-				   (set-geometry (get-placer control)
-						 :top (position-top control)
-						 :left (position-left control)
-						 :width (client-width control)
-						 :height (client-height control))))
-		 nil)))
+               (declare (ignore td1))
+               (let ((dd (create-select td2))
+                     (v  (string-downcase (attribute control "type"))))
+                 (add-select-options dd `(,v
+                                          "button" "checkbox" "color" "date"
+                                          "datetime" "datetime-local" "email"
+                                          "image" "file" "hidden"
+                                          "month" "number" "password" "radio"
+                                          "range" "reset" "search" "submit"
+                                          "tel" "text" "time" "url" "week"))
+                 (set-on-change dd (lambda (obj)
+                                   (declare (ignore obj))
+                                   (setf (attribute control "type") (value dd))
+                                   (set-geometry (get-placer control)
+                                                 :top (position-top control)
+                                                 :left (position-left control)
+                                                 :width (client-width control)
+                                                 :height (client-height control))))
+                 nil)))
      (:name "data list"
-		       :get ,(lambda (control)
-			       (clog::js-query control (format nil "$('#~A').attr('data-clog-name')"
-							       (attribute control "list"))))
-		       :set ,(lambda (control obj)
-			       (setf (attribute control "list")
-				     (clog::js-query control (format nil "$(\"[data-clog-name='~A']\").attr('id')"
-								     (text obj))))))
+                       :get ,(lambda (control)
+                               (clog::js-query control (format nil "$('#~A').attr('data-clog-name')"
+                                                               (attribute control "list"))))
+                       :set ,(lambda (control obj)
+                               (setf (attribute control "list")
+                                     (clog::js-query control (format nil "$(\"[data-clog-name='~A']\").attr('id')"
+                                                                     (text obj))))))
     ,@*props-form-values*
     ,@*props-css*
     ,@*props-colors*
@@ -596,10 +596,10 @@
      :create-type    :base
      :events         (,@*events-element*)
      :properties     ((:name "media"
-		       :attr "media")
-		      (:name "type"
-		       :prop "type")
-		      ,@*props-contents*))
+                       :attr "media")
+                      (:name "type"
+                       :prop "type")
+                      ,@*props-contents*))
    '(:name           "group"
      :description    "basic html"
      :create         nil
@@ -614,16 +614,16 @@
      :create-content "Label"
      :events         (,@*events-element*)
      :properties     ((:name "for"
-		       :get ,(lambda (control)
-			       (let ((f (attribute control "for")))
-				 (unless (equal "" f)
-				   (clog::js-query control (format nil "$('#~A').attr('data-clog-name')"
-								   f)))))
-		       :set ,(lambda (control obj)
-			       (setf (attribute control "for")
-				     (clog::js-query control (format nil "$(\"[data-clog-name='~A']\").attr('id')"
-										     (text obj))))))
-		      ,@*props-element*))
+                       :get ,(lambda (control)
+                               (let ((f (attribute control "for")))
+                                 (unless (equal "" f)
+                                   (clog::js-query control (format nil "$('#~A').attr('data-clog-name')"
+                                                                   f)))))
+                       :set ,(lambda (control obj)
+                               (setf (attribute control "for")
+                                     (clog::js-query control (format nil "$(\"[data-clog-name='~A']\").attr('id')"
+                                                                                     (text obj))))))
+                      ,@*props-element*))
    `(:name           "button"
      :description    "Button"
      :clog-type      clog:clog-button
@@ -648,12 +648,12 @@
      :create-value   ""
      :events         (,@*events-element*)
      :properties     ((:name "rows"
-		       :prop "rows")
-		      (:name "columns"
-		       :prop "columns")
-		      (:name "word wrap"
-		       :prop "wrap")
-		      ,@*props-form-element*))
+                       :prop "rows")
+                      (:name "columns"
+                       :prop "columns")
+                      (:name "word wrap"
+                       :prop "wrap")
+                      ,@*props-form-element*))
    `(:name           "dropdown"
      :description    "Drop down select"
      :clog-type      clog:clog-select
@@ -661,32 +661,32 @@
      :create-type    :base
      :events         (,@*events-element*)
      :properties     ((:name "multiple select"
-		       :get  ,(lambda (control)
-				(property control "multiple"))
-		       :set  ,(lambda (control obj)
-				(if (or (equalp (text obj) "true") (equalp (text obj) "multiple"))
-				    (setf (attribute control "multiple") t)
-				    (remove-attribute control "multiple"))
-				(property control "multiple")))
-		      ,@*props-form-element*))
+                       :get  ,(lambda (control)
+                                (property control "multiple"))
+                       :set  ,(lambda (control obj)
+                                (if (or (equalp (text obj) "true") (equalp (text obj) "multiple"))
+                                    (setf (attribute control "multiple") t)
+                                    (remove-attribute control "multiple"))
+                                (property control "multiple")))
+                      ,@*props-form-element*))
    `(:name           "listbox"
      :description    "Listbox select"
      :clog-type      clog:clog-select
      :create         clog:create-select
      :create-type    :base
      :setup          ,(lambda (control content control-record)
-			(declare (ignore content) (ignore control-record))
-			(setf (size control) "4"))
+                        (declare (ignore content) (ignore control-record))
+                        (setf (size control) "4"))
      :events         (,@*events-element*)
      :properties     ((:name "multiple select"
-		       :get  ,(lambda (control)
-				(property control "multiple"))
-		       :set  ,(lambda (control obj)
-				(if (or (equalp (text obj) "true") (equalp (text obj) "multiple"))
-				    (setf (attribute control "multiple") t)
-				    (remove-attribute control "multiple"))
-				(property control "multiple")))
-		      ,@*props-form-element*))
+                       :get  ,(lambda (control)
+                                (property control "multiple"))
+                       :set  ,(lambda (control obj)
+                                (if (or (equalp (text obj) "true") (equalp (text obj) "multiple"))
+                                    (setf (attribute control "multiple") t)
+                                    (remove-attribute control "multiple"))
+                                (property control "multiple")))
+                      ,@*props-form-element*))
    `(:name           "option"
      :description    "Option Item"
      :clog-type      clog:clog-option
@@ -695,24 +695,24 @@
      :create-type    :element
      :events         (,@*events-element*)
      :properties     ((:name "value"
-		       :prop "value")
-		      (:name "selected"
-		       :get  ,(lambda (control)
-				(property control "selected"))
-		       :set  ,(lambda (control obj)
-				(if (or (equalp (text obj) "true") (equalp (text obj) "selected"))
-				    (setf (attribute control "selected") t)
-				    (remove-attribute control "selected"))
-				(property control "selected")))
-		      (:name "disabled"
-		       :get  ,(lambda (control)
-				(property control "disabled"))
-		       :set  ,(lambda (control obj)
-				(if (or (equalp (text obj) "true") (equalp (text obj) "disabled"))
-				    (setf (attribute control "disabled") t)
-				    (remove-attribute control "disabled"))
-				(property control "disabled")))
-		      ,@*props-element*))
+                       :prop "value")
+                      (:name "selected"
+                       :get  ,(lambda (control)
+                                (property control "selected"))
+                       :set  ,(lambda (control obj)
+                                (if (or (equalp (text obj) "true") (equalp (text obj) "selected"))
+                                    (setf (attribute control "selected") t)
+                                    (remove-attribute control "selected"))
+                                (property control "selected")))
+                      (:name "disabled"
+                       :get  ,(lambda (control)
+                                (property control "disabled"))
+                       :set  ,(lambda (control obj)
+                                (if (or (equalp (text obj) "true") (equalp (text obj) "disabled"))
+                                    (setf (attribute control "disabled") t)
+                                    (remove-attribute control "disabled"))
+                                (property control "disabled")))
+                      ,@*props-element*))
    `(:name           "optgroup"
      :description    "Option Group"
      :clog-type      clog:clog-optgroup
@@ -721,29 +721,29 @@
      :create-type    :element
      :events         (,@*events-element*)
      :properties     ((:name "disabled"
-		       :get  ,(lambda (control)
-				(property control "disabled"))
-		       :set  ,(lambda (control obj)
-				(if (or (equalp (text obj) "true") (equalp (text obj) "disabled"))
-				    (setf (attribute control "disabled") t)
-				    (remove-attribute control "disabled"))
-				(property control "disabled")))
-		      ,@*props-element*))
+                       :get  ,(lambda (control)
+                                (property control "disabled"))
+                       :set  ,(lambda (control obj)
+                                (if (or (equalp (text obj) "true") (equalp (text obj) "disabled"))
+                                    (setf (attribute control "disabled") t)
+                                    (remove-attribute control "disabled"))
+                                (property control "disabled")))
+                      ,@*props-element*))
    `(:name           "image"
      :description    "Image"
      :clog-type      clog:clog-img
      :create         clog:create-img
      :create-type    :base
      :setup          ,(lambda (control content control-record)
-			(declare (ignore content) (ignore control-record))
-			(setf (url-src control) "/img/clogicon.png")
-			(setf (alt-text control) "Add image url"))
+                        (declare (ignore content) (ignore control-record))
+                        (setf (url-src control) "/img/clogicon.png")
+                        (setf (alt-text control) "Add image url"))
      :events         (,@*events-element*)
      :properties     ((:name "image url"
-		       :prop "src")
-		      (:name "alternative text"
-		       :prop "alt")
-		      ,@*props-base*))
+                       :prop "src")
+                      (:name "alternative text"
+                       :prop "alt")
+                      ,@*props-base*))
    `(:name           "meter"
      :description    "Meter"
      :clog-type      clog:clog-meter
@@ -751,18 +751,18 @@
      :create-type    :base
      :events         (,@*events-element*)
      :properties     ((:name "value"
-		       :prop "value")
-		      (:name "high"
-		       :prop "high")
-		      (:name "low"
-		       :prop "low")
-		      (:name "maximum"
-		       :prop "max")
-		      (:name "minimum"
-		       :prop "min")
-		      (:name "optimum"
-		       :prop "optimum")
-		      ,@*props-base*))
+                       :prop "value")
+                      (:name "high"
+                       :prop "high")
+                      (:name "low"
+                       :prop "low")
+                      (:name "maximum"
+                       :prop "max")
+                      (:name "minimum"
+                       :prop "min")
+                      (:name "optimum"
+                       :prop "optimum")
+                      ,@*props-base*))
    `(:name           "progress"
      :description    "Progress Bar"
      :clog-type      clog:clog-progress-bar
@@ -770,10 +770,10 @@
      :create-type    :base
      :events         (,@*events-element*)
      :properties     ((:name "value"
-		       :prop "value")
-		      (:name "maximum"
-		       :prop "max")
-		      ,@*props-base*))
+                       :prop "value")
+                      (:name "maximum"
+                       :prop "max")
+                      ,@*props-base*))
    `(:name           "dialog"
      :description    "Dialog"
      :clog-type      clog:clog-dialog
@@ -782,16 +782,16 @@
      :create-content ""
      :events         (,@*events-element*)
      :properties     ((:name "open"
-		       :get  ,(lambda (control)
-				(property control "open"))
-		       :set  ,(lambda (control obj)
-				(if (or (equalp (text obj) "true") (equalp (text obj) "open"))
-				    (setf (attribute control "open") t)
-				    (remove-attribute control "open"))
-				(property control "open")))
-		      (:name "return value"
-		       :prop "returnValue")
-		      ,@*props-element*))
+                       :get  ,(lambda (control)
+                                (property control "open"))
+                       :set  ,(lambda (control obj)
+                                (if (or (equalp (text obj) "true") (equalp (text obj) "open"))
+                                    (setf (attribute control "open") t)
+                                    (remove-attribute control "open"))
+                                (property control "open")))
+                      (:name "return value"
+                       :prop "returnValue")
+                      ,@*props-element*))
    '(:name           "group"
      :description    "forms"
      :create         nil
@@ -805,16 +805,16 @@
      :create-type    :base
      :events         (,@*events-element*)
      :properties     ((:name "action"
-		       :attr "action")
-		      (:name "target"
-		       :attr "target")
-		      (:name "method"
-		       :attr "method")
-		      (:name "encoding"
-		       :prop "encoding")
-		      (:name "form element count"
-		       :get ,(lambda (control) (form-element-count control)))
-		      ,@*props-element*))
+                       :attr "action")
+                      (:name "target"
+                       :attr "target")
+                      (:name "method"
+                       :attr "method")
+                      (:name "encoding"
+                       :prop "encoding")
+                      (:name "form element count"
+                       :get ,(lambda (control) (form-element-count control)))
+                      ,@*props-element*))
    `(:name           "input"
      :description    "Form Input"
      :clog-type      clog:clog-form-element
@@ -940,9 +940,9 @@
      :create-param   :image
      :create-value   ""
      :setup          ,(lambda (control content control-record)
-			(declare (ignore content) (ignore control-record))
-			(setf (url-src control) "/img/clogicon.png")
-			(setf (alt-text control) "Add image url"))
+                        (declare (ignore content) (ignore control-record))
+                        (setf (url-src control) "/img/clogicon.png")
+                        (setf (alt-text control) "Add image url"))
      :events         (,@*events-element*)
      :properties     (,@*props-form-element*))
    `(:name           "month"
@@ -1062,7 +1062,7 @@
      :create-content "span"
      :events         (,@*events-element*)
      :properties     (,@*props-contents*
-		      ,@*props-element*))
+                      ,@*props-element*))
    `(:name           "link"
      :description    "Link"
      :clog-type      clog:clog-a
@@ -1071,10 +1071,10 @@
      :create-content "HTML Link"
      :events         (,@*events-element*)
      :properties     ((:name "href link"
-		       :prop "href")
-		      (:name "target"
-		       :prop "target")
-		      ,@*props-element*))
+                       :prop "href")
+                      (:name "target"
+                       :prop "target")
+                      ,@*props-element*))
    `(:name           "hr"
      :description    "Horizontal Rule"
      :clog-type      clog:clog-hr
@@ -1104,10 +1104,10 @@
      :create-type    :base
      :events         (,@*events-element*)
      :properties     ((:name "list kind"
-		       :prop "list-style-type")
-		      (:name "list location"
-		       :prop "list-style-position")
-		      ,@*props-element*))
+                       :prop "list-style-type")
+                      (:name "list location"
+                       :prop "list-style-position")
+                      ,@*props-element*))
    `(:name           "ul"
      :description    "Unordered List"
      :clog-type      clog:clog-unordered-list
@@ -1115,8 +1115,8 @@
      :create-type    :base
      :events         (,@*events-element*)
      :properties     ((:name "value"
-		       :prop "value")
-		      ,@*props-element*))
+                       :prop "value")
+                      ,@*props-element*))
    `(:name           "li"
      :description    "List Item"
      :clog-type      clog:clog-list-item
@@ -1147,10 +1147,10 @@
      :create-content "Column"
      :events         (,@*events-element*)
      :properties     ((:name "column span"
-		       :attr "colspan")
-		      (:name "row span"
-		       :attr "rowspan")
-		      ,@*props-element*))
+                       :attr "colspan")
+                      (:name "row span"
+                       :attr "rowspan")
+                      ,@*props-element*))
    `(:name           "th"
      :description    "Table Heading"
      :clog-type      clog:clog-table-heading
@@ -1159,14 +1159,14 @@
      :create-content "Heading"
      :events         (,@*events-element*)
      :properties     ((:name "column span"
-		       :attr "colspan")
-		      (:name "row span"
-		       :attr "rowspan")
-		      (:name "abbreviated version"
-		       :attr "abbr")
-		      (:name "scope"
-		       :attr "rowspan")
-		      ,@*props-element*))
+                       :attr "colspan")
+                      (:name "row span"
+                       :attr "rowspan")
+                      (:name "abbreviated version"
+                       :attr "abbr")
+                      (:name "scope"
+                       :attr "rowspan")
+                      ,@*props-element*))
    `(:name           "tcolgroup"
      :description    "Table Column Group"
      :clog-type      clog:clog-table-column-group
@@ -1174,8 +1174,8 @@
      :create-type    :base
      :events         (,@*events-element*)
      :properties     ((:name "span"
-		       :attr "span")
-		      ,@*props-base*))
+                       :attr "span")
+                      ,@*props-base*))
    `(:name           "tcol"
      :description    "Table Column Group Item"
      :clog-type      clog:clog-table-column-group-item
@@ -1184,8 +1184,8 @@
      :create-content "Column Group Item"
      :events         (,@*events-element*)
      :properties     ((:name "span"
-		       :attr "span")
-		      ,@*props-base*))
+                       :attr "span")
+                      ,@*props-base*))
    `(:name           "thead"
      :description    "Table Head"
      :clog-type      clog:clog-table-head
@@ -1215,8 +1215,8 @@
      :create-content "Caption"
      :events         (,@*events-element*)
      :properties     ((:name "caption side"
-		       :style "caption-side")
-		      ,@*props-element*))
+                       :style "caption-side")
+                      ,@*props-element*))
    `(:name           "dl"
      :description    "Definition List"
      :clog-type      clog:clog-definition-list
@@ -1248,14 +1248,14 @@
      :create-content "Details"
      :events         (,@*events-element*)
      :properties     ((:name "open"
-		       :get  ,(lambda (control)
-				(property control "open"))
-		       :set  ,(lambda (control obj)
-				(if (or (equalp (text obj) "true") (equalp (text obj) "open"))
-				    (setf (attribute control "open") t)
-				    (remove-attribute control "open"))
-				(property control "open")))
-		      ,@*props-element*))
+                       :get  ,(lambda (control)
+                                (property control "open"))
+                       :set  ,(lambda (control obj)
+                                (if (or (equalp (text obj) "true") (equalp (text obj) "open"))
+                                    (setf (attribute control "open") t)
+                                    (remove-attribute control "open"))
+                                (property control "open")))
+                      ,@*props-element*))
    `(:name           "summary"
      :description    "Summary Block"
      :clog-type      clog:clog-summary
@@ -1276,44 +1276,44 @@
      :create         clog:create-audio
      :create-type    :base
      :events         (,@*events-multimedia*
-		      ,@*events-element*)
+                      ,@*events-element*)
      :properties     ((:name "media url"
-		       :prop "src")
-		      (:name "volume"
-		       :prop "volume")
-		      (:name "controls"
-		       :attr "controls")
-		      (:name "preload"
-		       :attr "preload")
-		      (:name "autoplay"
-		       :attr "autoplay")
-		      (:name "muted"
-		       :prop "muted")
-		      (:name "loop"
-		       :prop "loop")
-		      ,@*props-base*))
+                       :prop "src")
+                      (:name "volume"
+                       :prop "volume")
+                      (:name "controls"
+                       :attr "controls")
+                      (:name "preload"
+                       :attr "preload")
+                      (:name "autoplay"
+                       :attr "autoplay")
+                      (:name "muted"
+                       :prop "muted")
+                      (:name "loop"
+                       :prop "loop")
+                      ,@*props-base*))
    `(:name           "video"
      :description    "Video Player"
      :clog-type      clog:clog-video
      :create         clog:create-video
      :create-type    :base
      :events         (,@*events-multimedia*
-		      ,@*events-element*)
+                      ,@*events-element*)
      :properties     ((:name "media url"
-		       :prop "src")
-		      (:name "volume"
-		       :prop "volume")
-		      (:name "controls"
-		       :attr "controls")
-		      (:name "preload"
-		       :attr "preload")
-		      (:name "autoplay"
-		       :attr "autoplay")
-		      (:name "muted"
-		       :prop "muted")
-		      (:name "loop"
-		       :prop "loop")
-		      ,@*props-base*))
+                       :prop "src")
+                      (:name "volume"
+                       :prop "volume")
+                      (:name "controls"
+                       :attr "controls")
+                      (:name "preload"
+                       :attr "preload")
+                      (:name "autoplay"
+                       :attr "autoplay")
+                      (:name "muted"
+                       :prop "muted")
+                      (:name "loop"
+                       :prop "loop")
+                      ,@*props-base*))
    '(:name           "group"
      :description    "graphics"
      :create         nil
@@ -1339,51 +1339,51 @@
      :create         clog:create-database
      :create-type    :base
      :setup          ,(lambda (control content control-record)
-			(declare (ignore content) (ignore control-record))
-			(setf (attribute control "data-clog-dbi-dbtype") ":sqlite3")
-			(setf (attribute control "data-clog-dbi-dbname") ":memory:")
-			(setf (attribute control "data-clog-dbi-dbparams") ""))
+                        (declare (ignore content) (ignore control-record))
+                        (setf (attribute control "data-clog-dbi-dbtype") ":sqlite3")
+                        (setf (attribute control "data-clog-dbi-dbname") ":memory:")
+                        (setf (attribute control "data-clog-dbi-dbparams") ""))
      :on-setup       ,(lambda (control control-record)
-			(declare (ignore control-record))
-			(format nil "(setf (database-connection target) ~
-			               (dbi:connect ~A ~A :database-name \"~A\"))"
-				(attribute control "data-clog-dbi-dbtype")
-				(attribute control "data-clog-dbi-dbparams")
-				(attribute control "data-clog-dbi-dbname")))
+                        (declare (ignore control-record))
+                        (format nil "(setf (database-connection target) ~
+                                       (dbi:connect ~A ~A :database-name \"~A\"))"
+                                (attribute control "data-clog-dbi-dbtype")
+                                (attribute control "data-clog-dbi-dbparams")
+                                (attribute control "data-clog-dbi-dbname")))
      :events         (,@*events-element*)
      :properties     ((:name "database type"
-		       :attr "data-clog-dbi-dbtype")
-		      (:name "database params"
-		       :attr "data-clog-dbi-dbparams")
-		      (:name "database name"
-		       :attr "data-clog-dbi-dbname")
-		      ,@*props-element*))
+                       :attr "data-clog-dbi-dbtype")
+                      (:name "database params"
+                       :attr "data-clog-dbi-dbparams")
+                      (:name "database name"
+                       :attr "data-clog-dbi-dbname")
+                      ,@*props-element*))
    `(:name           "one-row"
      :description    "One Row"
      :clog-type      clog:clog-one-row
      :create         clog:create-one-row
      :create-type    :base
      :setup          ,(lambda (control content control-record)
-			(declare (ignore content) (ignore control-record))
-			(setf (attribute control "data-clog-one-row-db") "")
-			(setf (attribute control "data-clog-one-row-table") "")
-			(setf (attribute control "data-clog-one-row-where") "")
-			(setf (attribute control "data-clog-one-row-order") "")
-			(setf (attribute control "data-clog-one-row-limit") "")
-			(setf (attribute control "data-clog-one-row-master") "")
-			(setf (attribute control "data-clog-one-row-id-name") "rowid")
-			(setf (attribute control "data-clog-one-row-columns") "rowid"))
+                        (declare (ignore content) (ignore control-record))
+                        (setf (attribute control "data-clog-one-row-db") "")
+                        (setf (attribute control "data-clog-one-row-table") "")
+                        (setf (attribute control "data-clog-one-row-where") "")
+                        (setf (attribute control "data-clog-one-row-order") "")
+                        (setf (attribute control "data-clog-one-row-limit") "")
+                        (setf (attribute control "data-clog-one-row-master") "")
+                        (setf (attribute control "data-clog-one-row-id-name") "rowid")
+                        (setf (attribute control "data-clog-one-row-columns") "rowid"))
      :on-setup       ,(lambda (control control-record)
-			(declare (ignore control-record))
-			(let ((parent (attribute (parent-element control) "data-clog-name"))
-			      (cdb    (attribute control "data-clog-one-row-db"))
-			      (master (attribute control "data-clog-one-row-master")))
-			  (if (or (equal cdb "")
-				  (equal cdb "undefined"))
-			      (setf cdb parent))
-			  (when (equal master "")
-			    (setf master nil))
-			  (format nil "(setf (clog-database target) (clog-database (~A panel))) ~
+                        (declare (ignore control-record))
+                        (let ((parent (attribute (parent-element control) "data-clog-name"))
+                              (cdb    (attribute control "data-clog-one-row-db"))
+                              (master (attribute control "data-clog-one-row-master")))
+                          (if (or (equal cdb "")
+                                  (equal cdb "undefined"))
+                              (setf cdb parent))
+                          (when (equal master "")
+                            (setf master nil))
+                          (format nil "(setf (clog-database target) (clog-database (~A panel))) ~
                                        ~A ~
                                        (setf (table-name target) \"~A\") ~
                                        (setf (where-clause target) \"~A\") ~
@@ -1391,63 +1391,63 @@
                                        (setf (limit target) \"~A\") ~
                                        (setf (row-id-name target) \"~A\") ~
                                        (setf (table-columns target) '(~A))"
-				  cdb
-				  (if master
-				      (format nil "(set-master-one-row target (~A panel) \"~A\")"
-					      cdb master)
-				      "")
-				  (attribute control "data-clog-one-row-table")
-				  (attribute control "data-clog-one-row-where")
-				  (attribute control "data-clog-one-row-order")
-				  (attribute control "data-clog-one-row-limit")
-				  (attribute control "data-clog-one-row-id-name")
-				  (attribute control "data-clog-one-row-columns"))))
+                                  cdb
+                                  (if master
+                                      (format nil "(set-master-one-row target (~A panel) \"~A\")"
+                                              cdb master)
+                                      "")
+                                  (attribute control "data-clog-one-row-table")
+                                  (attribute control "data-clog-one-row-where")
+                                  (attribute control "data-clog-one-row-order")
+                                  (attribute control "data-clog-one-row-limit")
+                                  (attribute control "data-clog-one-row-id-name")
+                                  (attribute control "data-clog-one-row-columns"))))
      :events         ((:name        "on-fetch"
-		       :parameters  "target")
-		       ,@*events-element*)
+                       :parameters  "target")
+                       ,@*events-element*)
      :properties     ((:name "database control"
-		       :attr "data-clog-one-row-db")
-		      (:name "table name"
-		       :attr "data-clog-one-row-table")
-		      (:name "table row id name"
-		       :attr "data-clog-one-row-id-name")
-		      (:name "table columns"
-		       :attr "data-clog-one-row-columns")
-		      (:name "where clause (optional)"
-		       :attr "data-clog-one-row-where")
-		      (:name "order by (optional)"
-		       :attr "data-clog-one-row-order")
-		      (:name "limit (optional)"
-		       :attr "data-clog-one-row-limit")
-		      (:name "join to slot-name (optional)"
-		       :attr "data-clog-one-row-master")
-		      ,@*props-element*))
+                       :attr "data-clog-one-row-db")
+                      (:name "table name"
+                       :attr "data-clog-one-row-table")
+                      (:name "table row id name"
+                       :attr "data-clog-one-row-id-name")
+                      (:name "table columns"
+                       :attr "data-clog-one-row-columns")
+                      (:name "where clause (optional)"
+                       :attr "data-clog-one-row-where")
+                      (:name "order by (optional)"
+                       :attr "data-clog-one-row-order")
+                      (:name "limit (optional)"
+                       :attr "data-clog-one-row-limit")
+                      (:name "join to slot-name (optional)"
+                       :attr "data-clog-one-row-master")
+                      ,@*props-element*))
    `(:name           "db-table"
      :description    "Table Many Rows"
      :clog-type      clog:clog-db-table
      :create         clog:create-db-table
      :create-type    :base
      :setup          ,(lambda (control content control-record)
-			(declare (ignore content) (ignore control-record))
-			(setf (attribute control "data-clog-one-row-db") "")
-			(setf (attribute control "data-clog-one-row-table") "")
-			(setf (attribute control "data-clog-one-row-where") "")
-			(setf (attribute control "data-clog-one-row-order") "")
-			(setf (attribute control "data-clog-one-row-limit") "")
-			(setf (attribute control "data-clog-one-row-master") "")
-			(setf (attribute control "data-clog-one-row-id-name") "rowid")
-			(setf (attribute control "data-clog-one-row-columns") "rowid"))
+                        (declare (ignore content) (ignore control-record))
+                        (setf (attribute control "data-clog-one-row-db") "")
+                        (setf (attribute control "data-clog-one-row-table") "")
+                        (setf (attribute control "data-clog-one-row-where") "")
+                        (setf (attribute control "data-clog-one-row-order") "")
+                        (setf (attribute control "data-clog-one-row-limit") "")
+                        (setf (attribute control "data-clog-one-row-master") "")
+                        (setf (attribute control "data-clog-one-row-id-name") "rowid")
+                        (setf (attribute control "data-clog-one-row-columns") "rowid"))
      :on-setup       ,(lambda (control control-record)
-			(declare (ignore control-record))
-			(let ((parent (attribute (parent-element control) "data-clog-name"))
-			      (cdb    (attribute control "data-clog-one-row-db"))
-			      (master (attribute control "data-clog-one-row-master")))
-			  (if (or (equal cdb "")
-				  (equal cdb "undefined"))
-			      (setf cdb parent))
-			  (when (equal master "")
-			    (setf master nil))
-			  (format nil "(setf (clog-database target) (clog-database (~A panel))) ~
+                        (declare (ignore control-record))
+                        (let ((parent (attribute (parent-element control) "data-clog-name"))
+                              (cdb    (attribute control "data-clog-one-row-db"))
+                              (master (attribute control "data-clog-one-row-master")))
+                          (if (or (equal cdb "")
+                                  (equal cdb "undefined"))
+                              (setf cdb parent))
+                          (when (equal master "")
+                            (setf master nil))
+                          (format nil "(setf (clog-database target) (clog-database (~A panel))) ~
                                        ~A ~
                                        (setf (table-name target) \"~A\") ~
                                        (setf (where-clause target) \"~A\") ~
@@ -1455,73 +1455,73 @@
                                        (setf (limit target) \"~A\") ~
                                        (setf (row-id-name target) \"~A\") ~
                                        (setf (table-columns target) '(~A))"
-				  cdb
-				  (if master
-				      (format nil "(set-master-one-row target (~A panel) \"~A\")"
-					      cdb master)
-				      "")
-				  (attribute control "data-clog-one-row-table")
-				  (attribute control "data-clog-one-row-where")
-				  (attribute control "data-clog-one-row-order")
-				  (attribute control "data-clog-one-row-limit")
-				  (attribute control "data-clog-one-row-id-name")
-				  (attribute control "data-clog-one-row-columns"))))
+                                  cdb
+                                  (if master
+                                      (format nil "(set-master-one-row target (~A panel) \"~A\")"
+                                              cdb master)
+                                      "")
+                                  (attribute control "data-clog-one-row-table")
+                                  (attribute control "data-clog-one-row-where")
+                                  (attribute control "data-clog-one-row-order")
+                                  (attribute control "data-clog-one-row-limit")
+                                  (attribute control "data-clog-one-row-id-name")
+                                  (attribute control "data-clog-one-row-columns"))))
      :events         ((:name        "on-fetch"
-		       :parameters  "target")
-		      (:name        "on-header"
-		       :parameters  "target")
-		      (:name        "on-footer"
-		       :parameters  "target")
-		      (:name        "on-row"
-		       :parameters  "target table-row")
-		      (:name        "on-column"
-		       :parameters  "target column table-column")
-		       ,@*events-element*)
+                       :parameters  "target")
+                      (:name        "on-header"
+                       :parameters  "target")
+                      (:name        "on-footer"
+                       :parameters  "target")
+                      (:name        "on-row"
+                       :parameters  "target table-row")
+                      (:name        "on-column"
+                       :parameters  "target column table-column")
+                       ,@*events-element*)
      :properties     ((:name "database control"
-		       :attr "data-clog-one-row-db")
-		      (:name "table name"
-		       :attr "data-clog-one-row-table")
-		      (:name "table row id name"
-		       :attr "data-clog-one-row-id-name")
-		      (:name "table columns"
-		       :attr "data-clog-one-row-columns")
-		      (:name "where clause (optional)"
-		       :attr "data-clog-one-row-where")
-		      (:name "order by (optional)"
-		       :attr "data-clog-one-row-order")
-		      (:name "limit (optional)"
-		       :attr "data-clog-one-row-limit")
-		      (:name "join to slot-name (optional)"
-		       :attr "data-clog-one-row-master")
-		      ,@*props-element*))
+                       :attr "data-clog-one-row-db")
+                      (:name "table name"
+                       :attr "data-clog-one-row-table")
+                      (:name "table row id name"
+                       :attr "data-clog-one-row-id-name")
+                      (:name "table columns"
+                       :attr "data-clog-one-row-columns")
+                      (:name "where clause (optional)"
+                       :attr "data-clog-one-row-where")
+                      (:name "order by (optional)"
+                       :attr "data-clog-one-row-order")
+                      (:name "limit (optional)"
+                       :attr "data-clog-one-row-limit")
+                      (:name "join to slot-name (optional)"
+                       :attr "data-clog-one-row-master")
+                      ,@*props-element*))
    `(:name           "lookup-drop"
      :description    "Drop down table lookup"
      :clog-type      clog:clog-lookup
      :create         clog:create-lookup
      :create-type    :base
      :setup          ,(lambda (control content control-record)
-			(declare (ignore content) (ignore control-record))
-			(setf (attribute control "data-clog-one-row-db") "")
-			(setf (attribute control "data-clog-one-row-table") "")
-			(setf (attribute control "data-clog-lookup-value") "")
-			(setf (attribute control "data-clog-lookup-option") "")
-			(setf (attribute control "data-clog-one-row-where") "")
-			(setf (attribute control "data-clog-one-row-order") "")
-			(setf (attribute control "data-clog-one-row-limit") "")
-			(setf (attribute control "data-clog-one-row-master") "")
-			(setf (attribute control "data-clog-one-row-id-name") "rowid")
-			(setf (attribute control "data-clog-one-row-columns") "rowid"))
+                        (declare (ignore content) (ignore control-record))
+                        (setf (attribute control "data-clog-one-row-db") "")
+                        (setf (attribute control "data-clog-one-row-table") "")
+                        (setf (attribute control "data-clog-lookup-value") "")
+                        (setf (attribute control "data-clog-lookup-option") "")
+                        (setf (attribute control "data-clog-one-row-where") "")
+                        (setf (attribute control "data-clog-one-row-order") "")
+                        (setf (attribute control "data-clog-one-row-limit") "")
+                        (setf (attribute control "data-clog-one-row-master") "")
+                        (setf (attribute control "data-clog-one-row-id-name") "rowid")
+                        (setf (attribute control "data-clog-one-row-columns") "rowid"))
      :on-setup       ,(lambda (control control-record)
-			(declare (ignore control-record))
-			(let ((parent (attribute (parent-element control) "data-clog-name"))
-			      (cdb    (attribute control "data-clog-one-row-db"))
-			      (master (attribute control "data-clog-one-row-master")))
-			  (if (or (equal cdb "")
-				  (equal cdb "undefined"))
-			      (setf cdb parent))
-			  (when (equal master "")
-			    (setf master nil))
-			  (format nil "(setf (clog-database target) (clog-database (~A panel))) ~
+                        (declare (ignore control-record))
+                        (let ((parent (attribute (parent-element control) "data-clog-name"))
+                              (cdb    (attribute control "data-clog-one-row-db"))
+                              (master (attribute control "data-clog-one-row-master")))
+                          (if (or (equal cdb "")
+                                  (equal cdb "undefined"))
+                              (setf cdb parent))
+                          (when (equal master "")
+                            (setf master nil))
+                          (format nil "(setf (clog-database target) (clog-database (~A panel))) ~
                                        ~A ~
                                        (setf (table-name target) \"~A\") ~
                                        (setf (value-field target) :|~A|) ~
@@ -1531,80 +1531,80 @@
                                        (setf (limit target) \"~A\") ~
                                        (setf (row-id-name target) \"~A\") ~
                                        (setf (table-columns target) '(~A))"
-				  cdb
-				  (if master
-				      (format nil "(set-master-one-row target (~A panel) \"~A\")"
-					      cdb master)
-				      "")
-				  (attribute control "data-clog-one-row-table")
-				  (attribute control "data-clog-lookup-value")
-				  (attribute control "data-clog-lookup-option")
-				  (attribute control "data-clog-one-row-where")
-				  (attribute control "data-clog-one-row-order")
-				  (attribute control "data-clog-one-row-limit")
-				  (attribute control "data-clog-one-row-id-name")
-				  (attribute control "data-clog-one-row-columns"))))
+                                  cdb
+                                  (if master
+                                      (format nil "(set-master-one-row target (~A panel) \"~A\")"
+                                              cdb master)
+                                      "")
+                                  (attribute control "data-clog-one-row-table")
+                                  (attribute control "data-clog-lookup-value")
+                                  (attribute control "data-clog-lookup-option")
+                                  (attribute control "data-clog-one-row-where")
+                                  (attribute control "data-clog-one-row-order")
+                                  (attribute control "data-clog-one-row-limit")
+                                  (attribute control "data-clog-one-row-id-name")
+                                  (attribute control "data-clog-one-row-columns"))))
      :events         ((:name        "on-fetch"
-		       :parameters  "target")
-		       ,@*events-element*)
+                       :parameters  "target")
+                       ,@*events-element*)
      :properties     ((:name "multiple select"
-		       :get  ,(lambda (control)
-				(property control "multiple"))
-		       :set  ,(lambda (control obj)
-				(if (or (equalp (text obj) "true") (equalp (text obj) "multiple"))
-				    (setf (attribute control "multiple") t)
-				    (remove-attribute control "multiple"))
-				(property control "multiple")))
-		      (:name "database control"
-		       :attr "data-clog-one-row-db")
-		      (:name "table name"
-		       :attr "data-clog-one-row-table")
-		      (:name "table row id name"
-		       :attr "data-clog-one-row-id-name")
-		      (:name "table columns"
-		       :attr "data-clog-one-row-columns")
-		      (:name "value field"
-		       :attr "data-clog-lookup-value")
-		      (:name "value display field"
-		       :attr "data-clog-lookup-option")
-		      (:name "where clause (optional)"
-		       :attr "data-clog-one-row-where")
-		      (:name "order by (optional)"
-		       :attr "data-clog-one-row-order")
-		      (:name "limit (optional)"
-		       :attr "data-clog-one-row-limit")
-		      (:name "join to slot-name (optional)"
-		       :attr "data-clog-one-row-master")
-		      ,@*props-form-element*))
+                       :get  ,(lambda (control)
+                                (property control "multiple"))
+                       :set  ,(lambda (control obj)
+                                (if (or (equalp (text obj) "true") (equalp (text obj) "multiple"))
+                                    (setf (attribute control "multiple") t)
+                                    (remove-attribute control "multiple"))
+                                (property control "multiple")))
+                      (:name "database control"
+                       :attr "data-clog-one-row-db")
+                      (:name "table name"
+                       :attr "data-clog-one-row-table")
+                      (:name "table row id name"
+                       :attr "data-clog-one-row-id-name")
+                      (:name "table columns"
+                       :attr "data-clog-one-row-columns")
+                      (:name "value field"
+                       :attr "data-clog-lookup-value")
+                      (:name "value display field"
+                       :attr "data-clog-lookup-option")
+                      (:name "where clause (optional)"
+                       :attr "data-clog-one-row-where")
+                      (:name "order by (optional)"
+                       :attr "data-clog-one-row-order")
+                      (:name "limit (optional)"
+                       :attr "data-clog-one-row-limit")
+                      (:name "join to slot-name (optional)"
+                       :attr "data-clog-one-row-master")
+                      ,@*props-form-element*))
    `(:name           "lookup-list"
      :description    "Listbox table lookup"
      :clog-type      clog:clog-lookup
      :create         clog:create-lookup
      :create-type    :base
      :setup          ,(lambda (control content control-record)
-			(declare (ignore content) (ignore control-record))
-			(setf (size control) "4")
-			(setf (attribute control "data-clog-one-row-db") "")
-			(setf (attribute control "data-clog-one-row-table") "")
-			(setf (attribute control "data-clog-lookup-value") "")
-			(setf (attribute control "data-clog-lookup-option") "")
-			(setf (attribute control "data-clog-one-row-where") "")
-			(setf (attribute control "data-clog-one-row-order") "")
-			(setf (attribute control "data-clog-one-row-limit") "")
-			(setf (attribute control "data-clog-one-row-master") "")
-			(setf (attribute control "data-clog-one-row-id-name") "rowid")
-			(setf (attribute control "data-clog-one-row-columns") "rowid"))
+                        (declare (ignore content) (ignore control-record))
+                        (setf (size control) "4")
+                        (setf (attribute control "data-clog-one-row-db") "")
+                        (setf (attribute control "data-clog-one-row-table") "")
+                        (setf (attribute control "data-clog-lookup-value") "")
+                        (setf (attribute control "data-clog-lookup-option") "")
+                        (setf (attribute control "data-clog-one-row-where") "")
+                        (setf (attribute control "data-clog-one-row-order") "")
+                        (setf (attribute control "data-clog-one-row-limit") "")
+                        (setf (attribute control "data-clog-one-row-master") "")
+                        (setf (attribute control "data-clog-one-row-id-name") "rowid")
+                        (setf (attribute control "data-clog-one-row-columns") "rowid"))
      :on-setup       ,(lambda (control control-record)
-			(declare (ignore control-record))
-			(let ((parent (attribute (parent-element control) "data-clog-name"))
-			      (cdb    (attribute control "data-clog-one-row-db"))
-			      (master (attribute control "data-clog-one-row-master")))
-			  (if (or (equal cdb "")
-				  (equal cdb "undefined"))
-			      (setf cdb parent))
-			  (when (equal master "")
-			    (setf master nil))
-			  (format nil "(setf (clog-database target) (clog-database (~A panel))) ~
+                        (declare (ignore control-record))
+                        (let ((parent (attribute (parent-element control) "data-clog-name"))
+                              (cdb    (attribute control "data-clog-one-row-db"))
+                              (master (attribute control "data-clog-one-row-master")))
+                          (if (or (equal cdb "")
+                                  (equal cdb "undefined"))
+                              (setf cdb parent))
+                          (when (equal master "")
+                            (setf master nil))
+                          (format nil "(setf (clog-database target) (clog-database (~A panel))) ~
                                        ~A ~
                                        (setf (table-name target) \"~A\") ~
                                        (setf (value-field target) :|~A|) ~
@@ -1614,51 +1614,51 @@
                                        (setf (limit target) \"~A\") ~
                                        (setf (row-id-name target) \"~A\") ~
                                        (setf (table-columns target) '(~A))"
-				  cdb
-				  (if master
-				      (format nil "(set-master-one-row target (~A panel) \"~A\")"
-					      cdb master)
-				      "")
-				  (attribute control "data-clog-one-row-table")
-				  (attribute control "data-clog-lookup-value")
-				  (attribute control "data-clog-lookup-option")
-				  (attribute control "data-clog-one-row-where")
-				  (attribute control "data-clog-one-row-order")
-				  (attribute control "data-clog-one-row-limit")
-				  (attribute control "data-clog-one-row-id-name")
-				  (attribute control "data-clog-one-row-columns"))))
+                                  cdb
+                                  (if master
+                                      (format nil "(set-master-one-row target (~A panel) \"~A\")"
+                                              cdb master)
+                                      "")
+                                  (attribute control "data-clog-one-row-table")
+                                  (attribute control "data-clog-lookup-value")
+                                  (attribute control "data-clog-lookup-option")
+                                  (attribute control "data-clog-one-row-where")
+                                  (attribute control "data-clog-one-row-order")
+                                  (attribute control "data-clog-one-row-limit")
+                                  (attribute control "data-clog-one-row-id-name")
+                                  (attribute control "data-clog-one-row-columns"))))
      :events         ((:name        "on-fetch"
-		       :parameters  "target")
-		       ,@*events-element*)
+                       :parameters  "target")
+                       ,@*events-element*)
      :properties     ((:name "multiple select"
-		       :get  ,(lambda (control)
-				(property control "multiple"))
-		       :set  ,(lambda (control obj)
-				(if (or (equalp (text obj) "true") (equalp (text obj) "multiple"))
-				    (setf (attribute control "multiple") t)
-				    (remove-attribute control "multiple"))
-				(property control "multiple")))
-		      (:name "database control"
-		       :attr "data-clog-one-row-db")
-		      (:name "table name"
-		       :attr "data-clog-one-row-table")
-		      (:name "table row id name"
-		       :attr "data-clog-one-row-id-name")
-		      (:name "table columns"
-		       :attr "data-clog-one-row-columns")
-		      (:name "value field"
-		       :attr "data-clog-lookup-value")
-		      (:name "value display field"
-		       :attr "data-clog-lookup-option")
-		      (:name "where clause (optional)"
-		       :attr "data-clog-one-row-where")
-		      (:name "order by (optional)"
-		       :attr "data-clog-one-row-order")
-		      (:name "limit (optional)"
-		       :attr "data-clog-one-row-limit")
-		      (:name "join to slot-name (optional)"
-		       :attr "data-clog-one-row-master")
-		      ,@*props-form-element*))))
+                       :get  ,(lambda (control)
+                                (property control "multiple"))
+                       :set  ,(lambda (control obj)
+                                (if (or (equalp (text obj) "true") (equalp (text obj) "multiple"))
+                                    (setf (attribute control "multiple") t)
+                                    (remove-attribute control "multiple"))
+                                (property control "multiple")))
+                      (:name "database control"
+                       :attr "data-clog-one-row-db")
+                      (:name "table name"
+                       :attr "data-clog-one-row-table")
+                      (:name "table row id name"
+                       :attr "data-clog-one-row-id-name")
+                      (:name "table columns"
+                       :attr "data-clog-one-row-columns")
+                      (:name "value field"
+                       :attr "data-clog-lookup-value")
+                      (:name "value display field"
+                       :attr "data-clog-lookup-option")
+                      (:name "where clause (optional)"
+                       :attr "data-clog-one-row-where")
+                      (:name "order by (optional)"
+                       :attr "data-clog-one-row-order")
+                      (:name "limit (optional)"
+                       :attr "data-clog-one-row-limit")
+                      (:name "join to slot-name (optional)"
+                       :attr "data-clog-one-row-master")
+                      ,@*props-form-element*))))
 
 (defparameter *supported-templates*
   (list

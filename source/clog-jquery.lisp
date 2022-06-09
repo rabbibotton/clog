@@ -3,7 +3,7 @@
 ;;;; (c) 2020-2022 David Botton                                            ;;;;
 ;;;; License BSD 3 Clause                                                  ;;;;
 ;;;;                                                                       ;;;;
-;;;; clog-jquery.lisp                                                       ;;;;
+;;;; clog-jquery.lisp                                                      ;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (cl:in-package :clog)
@@ -36,8 +36,8 @@ Some sample jquery selectors:
     (clog-connection:execute
      (connection-id obj)
      (format nil
-	     "clog['~A']=$(\"~A\")"
-	     html-id jquery))
+             "clog['~A']=$(\"~A\")"
+             html-id jquery))
     (make-clog-element (connection-id obj) html-id :clog-type 'clog-jquery)))
 
 ;;;;;;;;;;;;
@@ -71,5 +71,4 @@ result or DEFAULT-ANSWER on time out."))
 
 (defmethod jquery-query ((obj clog-obj) method &key (default-answer nil))
   (js-query obj (format nil "~A.~A" (jquery obj) method)
-	    :default-answer default-answer))
-
+            :default-answer default-answer))

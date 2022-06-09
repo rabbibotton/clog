@@ -1,13 +1,12 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; CLOG - The Common Lisp Omnificent GUI                                 ;;;;
-;;;; (c) 2020-2021 David Botton                                            ;;;;
+;;;; (c) 2020-2022 David Botton                                            ;;;;
 ;;;; License BSD 3 Clause                                                  ;;;;
 ;;;;                                                                       ;;;;
 ;;;; clog-system.lisp                                                      ;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (cl:in-package :clog)
-
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Implementation - CLOG System
@@ -38,26 +37,26 @@ the same as the clog directy this overides the relative paths used in them.")
     (format t "Start new window handler on connection-id - ~A" connection-id))
   (let ((body (make-clog-body connection-id)))
     (let* ((path          (if clog-connection::*long-poll-url*
-			      clog-connection::*long-poll-url*
-			      (path-name (location body))))
-	   (on-new-window (gethash path *url-to-on-new-window*)))
+                              clog-connection::*long-poll-url*
+                              (path-name (location body))))
+           (on-new-window (gethash path *url-to-on-new-window*)))
       (unless on-new-window
-	(when *extended-routing*
-	    (maphash (lambda (k v)
-		       (unless (equal k "/")
-			 (when (ppcre:scan (format nil "^~A/" k) path)
-			   (setf on-new-window v))))
-		     *url-to-on-new-window*)))
+        (when *extended-routing*
+            (maphash (lambda (k v)
+                       (unless (equal k "/")
+                         (when (ppcre:scan (format nil "^~A/" k) path)
+                           (setf on-new-window v))))
+                     *url-to-on-new-window*)))
       (unless on-new-window
-	  (setf on-new-window (or (gethash :default *url-to-on-new-window*)
-				  (gethash "/" *url-to-on-new-window*))))
+          (setf on-new-window (or (gethash :default *url-to-on-new-window*)
+                                  (gethash "/" *url-to-on-new-window*))))
       (if on-new-window
-	  (progn
-	    (setf (connection-data-item body "clog-path") path)
-	    (setf (connection-data-item body "clog-body") body)
-	    (setf (connection-data-item body "clog-sync") (bordeaux-threads:make-lock))
-	    (funcall on-new-window body))
-	  (put-br (html-document body) "No route to on-new-window")))))
+          (progn
+            (setf (connection-data-item body "clog-path") path)
+            (setf (connection-data-item body "clog-body") body)
+            (setf (connection-data-item body "clog-sync") (bordeaux-threads:make-lock))
+            (funcall on-new-window body))
+          (put-br (html-document body) "No route to on-new-window")))))
 
 (defun initialize
     (on-new-window-handler
@@ -72,7 +71,7 @@ the same as the clog directy this overides the relative paths used in them.")
        (static-boot-html nil)
        (static-boot-js   nil)
        (static-root      (merge-pathnames "./static-files/"
-			    (asdf:system-source-directory :clog))))
+                            (asdf:system-source-directory :clog))))
   "Inititalize CLOG on a socket using HOST and PORT to serve BOOT-FILE
 as the default route to establish web-socket connections and static
 files located at STATIC-ROOT. The webserver used with CLACK can be
@@ -100,26 +99,26 @@ optimization, see tutorial 12 for an example."
   (unless *clog-running*
     (setf *clog-running* t)
     (setf *static-root* (if *overide-static-root*
-			    *overide-static-root*
-			    static-root))
+                            *overide-static-root*
+                            static-root))
     (clog-connection:initialize #'on-connect
-				:host             host
-				:port             port
-				:server           server
-				:long-poll-first  long-poll-first
-				:extended-routing extended-routing
-				:boot-file        boot-file
-				:boot-function    boot-function
-				:static-boot-html static-boot-html
-				:static-boot-js   static-boot-js
-				:static-root      *static-root*)))
+                                :host             host
+                                :port             port
+                                :server           server
+                                :long-poll-first  long-poll-first
+                                :extended-routing extended-routing
+                                :boot-file        boot-file
+                                :boot-function    boot-function
+                                :static-boot-html static-boot-html
+                                :static-boot-js   static-boot-js
+                                :static-root      *static-root*)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;
 ;; set-on-new-window ;;
 ;;;;;;;;;;;;;;;;;;;;;;;
 
 (defun set-on-new-window (on-new-window-handler
-			  &key (path "/") (boot-file "/boot.html"))
+                          &key (path "/") (boot-file "/boot.html"))
   "Set or change the ON-NEW-WINDOW-HANDLER for PATH using
 BOOT_FILE. Paths should always begin with a forward slash '/'. If PATH
 is set to :default any path without another route and there is no

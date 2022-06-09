@@ -48,7 +48,7 @@ for CLOG")
       (setf token nil))
     (unless token
       (when auth-path
-	(url-assign (window body) auth-path)))
+        (url-assign (window body) auth-path)))
     token))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -74,10 +74,10 @@ for CLOG")
 (defun set-on-authentication-change (body handler)
   (check-type body clog-body)
   (set-on-storage (window body) (lambda (obj data)
-				  (set-on-storage (window body) nil)
-				  (when (equalp (getf data :key)
-						"clog-auth-token")
-				    (funcall handler body)))))
+                                  (set-on-storage (window body) nil)
+                                  (when (equalp (getf data :key)
+                                                "clog-auth-token")
+                                    (funcall handler body)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Implementation - clog-auth - Authorization
@@ -105,6 +105,6 @@ for CLOG")
   "Given ROLE-LIST is action authorized. If action is nil returns t."
   (if action
       (dolist (role role-list nil)
-	(when (member action (gethash role *authorization-hash*))
-	  (return t)))
+        (when (member action (gethash role *authorization-hash*))
+          (return t)))
       t))

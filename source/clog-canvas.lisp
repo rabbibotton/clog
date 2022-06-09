@@ -20,26 +20,26 @@
 ;;;;;;;;;;;;;;;;;;;
 
 (defgeneric create-canvas (clog-obj &key width height
-				      class hidden html-id auto-place)
+                                      class hidden html-id auto-place)
   (:documentation "Create a new CLOG-Canvas as child of CLOG-OBJ if
 :AUTO-PLACE (default t) place-inside-bottom-of CLOG-OBJ."))
 
 (defmethod create-canvas ((obj clog-obj)
-			  &key (width 300) (height 150)
-			    (class nil) (hidden nil)
-			    (html-id nil) (auto-place t))
+                          &key (width 300) (height 150)
+                            (class nil) (hidden nil)
+                            (html-id nil) (auto-place t))
   (create-child obj (format nil "<canvas~A~A width=~A height=~A/>"
-			    (if class
-				(format nil " class='~A'"
-					(escape-string class))
-				"")
-			    (if hidden
-				" style='visibility:hidden;'"
-				"")
-			    width height)
-		:clog-type  'clog-canvas
-		:html-id    html-id
-		:auto-place auto-place))
+                            (if class
+                                (format nil " class='~A'"
+                                        (escape-string class))
+                                "")
+                            (if hidden
+                                " style='visibility:hidden;'"
+                                "")
+                            width height)
+                :clog-type  'clog-canvas
+                :html-id    html-id
+                :auto-place auto-place))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Implementation - clog-context2d
@@ -58,13 +58,13 @@
 (defmethod create-context2d ((obj clog-canvas))
   (let ((web-id (clog-connection:generate-id)))
     (clog-connection:execute (connection-id obj)
-		(format nil "clog['~A']=clog['~A'].getContext('2d')"
-			web-id
-			(html-id obj)))
+                (format nil "clog['~A']=clog['~A'].getContext('2d')"
+                        web-id
+                        (html-id obj)))
 
     (make-instance 'clog-context2d
-		   :connection-id (connection-id obj)
-		   :html-id web-id)))
+                   :connection-id (connection-id obj)
+                   :html-id web-id)))
 
 ;;;;;;;;;;;;;;;;
 ;; clear-rect ;;
@@ -75,7 +75,7 @@
 
 (defmethod clear-rect ((obj clog-context2d) x y width height)
   (execute obj (format nil "clearRect(~A,~A,~A,~A)"
-		       x y width height)))
+                       x y width height)))
 
 ;;;;;;;;;;;;;;;
 ;; fill-rect ;;
@@ -86,7 +86,7 @@
 
 (defmethod fill-rect ((obj clog-context2d) x y width height)
   (execute obj (format nil "fillRect(~A,~A,~A,~A)"
-		       x y width height)))
+                       x y width height)))
 
 ;;;;;;;;;;;;;;;;;
 ;; stroke-rect ;;
@@ -97,7 +97,7 @@
 
 (defmethod stroke-rect ((obj clog-context2d) x y width height)
   (execute obj (format nil "strokeRect(~A,~A,~A,~A)"
-		       x y width height)))
+                       x y width height)))
 
 ;;;;;;;;;;;;;;;
 ;; fill-text ;;
@@ -108,11 +108,11 @@
 
 (defmethod fill-text ((obj clog-context2d) text x y &key (max-width nil))
   (execute obj (format nil "fillText('~A',~A,~A~A)"
-		       (escape-string text)
-		       x y
-		       (if max-width
-			   (format nil ",~A" max-width)
-			   ""))))
+                       (escape-string text)
+                       x y
+                       (if max-width
+                           (format nil ",~A" max-width)
+                           ""))))
 ;;;;;;;;;;;;;;;;;
 ;; stroke-text ;;
 ;;;;;;;;;;;;;;;;;
@@ -122,11 +122,11 @@
 
 (defmethod stroke-text ((obj clog-context2d) text x y &key (max-width nil))
   (execute obj (format nil "strokeText('~A',~A,~A~A)"
-		       (escape-string text)
-		       x y
-		       (if max-width
-			   (format nil ",~A" max-width)
-			   ""))))
+                       (escape-string text)
+                       x y
+                       (if max-width
+                           (format nil ",~A" max-width)
+                           ""))))
 ;;;;;;;;;;;;;;;;;;
 ;; measure-text ;;
 ;;;;;;;;;;;;;;;;;;
@@ -373,7 +373,7 @@
 
 (defmethod bezier-curve-to ((obj clog-context2d) cp1x cp1y cp2x cp2y x y)
   (execute obj (format nil "bezierCurveTo(~A,~A,~A,~A,~A,~A)"
-		       cp1x cp1y cp2x cp2y x y)))
+                       cp1x cp1y cp2x cp2y x y)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;
 ;; quadratic-curve-to ;;
@@ -390,16 +390,16 @@
 ;;;;;;;;;
 
 (Defgeneric arc (clog-context2d x y radius start-angle end-angle
-		 &key anticlockwise)
+                 &key anticlockwise)
   (:documentation "Adds a circular arc to the current path."))
 
 (defmethod arc ((obj clog-context2d) x y radius start-angle end-angle
-		&key (anticlockwise nil))
+                &key (anticlockwise nil))
   (execute obj (format nil "arc(~A,~A,~A,~A,~A~A)"
-		       x y radius start-angle end-angle
-		       (if anticlockwise
-			   (format nil ",~A" anticlockwise)
-			   ""))))
+                       x y radius start-angle end-angle
+                       (if anticlockwise
+                           (format nil ",~A" anticlockwise)
+                           ""))))
 
 ;;;;;;;;;;;;
 ;; arc-to ;;
@@ -416,18 +416,18 @@
 ;;;;;;;;;;;;;
 
 (defgeneric ellipse (clog-context2d x y radius-x radius-y rotation
-		     start-angle end-angle
-		     &key anticlockwise)
+                     start-angle end-angle
+                     &key anticlockwise)
   (:documentation "Adds an elliptical arc to the current path."))
 
 (defmethod ellipse ((obj clog-context2d) x y radius-x radius-y rotation
-		    start-angle end-angle
-		    &key (anticlockwise nil))
+                    start-angle end-angle
+                    &key (anticlockwise nil))
   (execute obj (format nil "ellipse(~A,~A,~A,~A,~A,~A,~A~A)"
-		       x y radius-x radius-y rotation start-angle end-angle
-		       (if anticlockwise
-			   (format nil ",~A" anticlockwise)
-			   ""))))
+                       x y radius-x radius-y rotation start-angle end-angle
+                       (if anticlockwise
+                           (format nil ",~A" anticlockwise)
+                           ""))))
 
 ;;;;;;;;;;
 ;; rect ;;

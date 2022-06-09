@@ -28,22 +28,22 @@
 ;;;;;;;;;;;;;;;;;;;;;
 
 (defgeneric create-database (clog-obj
-			     &key hidden class html-id auto-place)
+                             &key hidden class html-id auto-place)
   (:documentation "Create a new CLOG-Database element, for use in
 CLOG-Builder. If not using builder use to connect:
     (dbi:connect (database-connection clog-obj) ...) or if a
 connection exists assign it to the database-connecton."))
 
 (defmethod create-database ((obj clog-obj)
-			    &key (hidden nil)
-			      (class nil)
-			      (html-id nil) (auto-place t))
+                            &key (hidden nil)
+                              (class nil)
+                              (html-id nil) (auto-place t))
   (let ((new-obj (change-class (create-div obj :content ""
-					       :hidden hidden
-					       :class class
-					       :html-id html-id
-					       :auto-place auto-place)
-			       'clog-database)))
+                                               :hidden hidden
+                                               :class class
+                                               :html-id html-id
+                                               :auto-place auto-place)
+                               'clog-database)))
     new-obj))
 
 (defgeneric clog-database (clog-obj)
@@ -126,24 +126,24 @@ connection exists assign it to the database-connecton."))
 ;;;;;;;;;;;;;;;;;;;;
 
 (defgeneric create-one-row (clog-obj &key clog-database
-				       hidden class html-id auto-place)
+                                       hidden class html-id auto-place)
   (:documentation "Create a new CLOG-One-Row element. If CLOG-OBJ is
 of type-of CLOG-DATABASE it is used as database source unless
 :CLOG-DATABASE is set."))
 
 (defmethod create-one-row ((obj clog-obj) &key (clog-database nil)
-					    (hidden nil)
-					    (class nil)
-					    (html-id nil) (auto-place t))
+                                            (hidden nil)
+                                            (class nil)
+                                            (html-id nil) (auto-place t))
   (let ((new-obj (change-class (create-div obj :content ""
-					       :hidden hidden
-					       :class class
-					       :html-id html-id
-					       :auto-place auto-place)
-			       'clog-one-row)))
+                                               :hidden hidden
+                                               :class class
+                                               :html-id html-id
+                                               :auto-place auto-place)
+                               'clog-one-row)))
     (if (and (typep obj 'clog-database) (not clog-database))
-	(setf (clog-database new-obj) obj)
-	(setf (clog-database new-obj) clog-database))
+        (setf (clog-database new-obj) obj)
+        (setf (clog-database new-obj) clog-database))
     new-obj))
 
 (defgeneric query-row (clog-one-row panel sql)
@@ -153,9 +153,9 @@ slots on panel will be set using DATA-LOAD-PLIST."))
 (defmethod query-row ((obj clog-one-row) panel sql)
   (setf (last-sql obj) sql)
   (setf (queryid obj) (dbi:execute
-		       (dbi:prepare
-			(database-connection (clog-database obj))
-			sql)))
+                       (dbi:prepare
+                        (database-connection (clog-database obj))
+                        sql)))
   (next-row obj panel))
 
 (defgeneric get-row (clog-one-row panel)
@@ -167,24 +167,24 @@ be set using DATA-LOAD-PLIST."))
   (let ((where (where-clause obj)))
     (when (slave-to-slot obj)
       (let ((field (slave-to-slot obj))
-	    (data  (car (data-write-list panel (list (slave-to-slot obj))))))
-	(when (consp (slave-to-slot obj))
-	  (setf field (car field)))
-	(setf where (format nil "~A='~A'~A"
-				field
-				data
-				(if (equal where "")
-				    ""
-				    (format nil " and ~A" where))))))
+            (data  (car (data-write-list panel (list (slave-to-slot obj))))))
+        (when (consp (slave-to-slot obj))
+          (setf field (car field)))
+        (setf where (format nil "~A='~A'~A"
+                                field
+                                data
+                                (if (equal where "")
+                                    ""
+                                    (format nil " and ~A" where))))))
     (setf (last-sql obj) (sql-select (table-name obj)
-				      (table-columns obj)
-				      :where where
-				      :order-by (order-by obj)
-				      :limit (limit obj)))
+                                      (table-columns obj)
+                                      :where where
+                                      :order-by (order-by obj)
+                                      :limit (limit obj)))
     (setf (queryid obj) (dbi:execute
-			 (dbi:prepare
-			  (database-connection (clog-database obj))
-			  (last-sql obj)))))
+                         (dbi:prepare
+                          (database-connection (clog-database obj))
+                          (last-sql obj)))))
     (next-row obj panel))
 
 (defgeneric next-row (clog-one-row panel)
@@ -198,13 +198,13 @@ using DATA-LOAD-PLIST."))
   (when (on-fetch obj)
     (funcall (on-fetch obj) obj))
   (setf (rowid obj) (data-load-plist panel
-				     (last-fetch obj)
-				     :row-id-name (row-id-name obj)))
+                                     (last-fetch obj)
+                                     :row-id-name (row-id-name obj)))
   (if (rowid obj)
       (dolist (slave (slaves obj))
-	(get-row slave panel))
+        (get-row slave panel))
       (unless (slave-to-slot obj)
-	(clear-row obj panel)))
+        (clear-row obj panel)))
   (rowid obj))
 
 (defgeneric insert-row (clog-one-row panel)
@@ -214,7 +214,7 @@ used to extract data from PANEL items and custom slots."))
 (defmethod insert-row ((obj clog-one-row) panel)
   (dbi:do-sql (database-connection (clog-database obj))
     (sql-insert* (table-name obj)
-		 (data-write-plist panel (table-columns obj)))))
+                 (data-write-plist panel (table-columns obj)))))
 
 (defgeneric update-row (clog-one-row panel)
   (:documentation "Update row in database table based on
@@ -224,8 +224,8 @@ on panel will be retrieved from PANEL using DATA-WRITE-PLIST."))
 (defmethod update-row ((obj clog-one-row) panel)
   (dbi:do-sql (database-connection (clog-database obj))
     (sql-update (table-name obj)
-		(data-write-plist panel (table-columns obj))
-		(format nil "~A=~A" (row-id-name obj) (rowid obj)))))
+                (data-write-plist panel (table-columns obj))
+                (format nil "~A=~A" (row-id-name obj) (rowid obj)))))
 
 (defgeneric delete-row (clog-one-row panel)
   (:documentation "Delete a row from a database table based on
@@ -233,9 +233,9 @@ current rowid and then call CLEAR-ROW"))
 (defmethod delete-row ((obj clog-one-row) panel)
   (dbi:do-sql (database-connection (clog-database obj))
     (format nil "delete from ~A where ~A=~A"
-	    (table-name obj)
-	    (row-id-name obj)
-	    (rowid obj)))
+            (table-name obj)
+            (row-id-name obj)
+            (rowid obj)))
   (clear-row obj panel))
 
 (defgeneric clear-row (clog-one-row panel)
@@ -293,30 +293,30 @@ new-row will block until on-fetch returns."))
   (:documentation "Create a new clog-lookup as child of CLOG-OBJ."))
 
 (defmethod create-lookup ((obj clog-obj)
-			  &key (clog-database nil)
-			    (name nil)
-			    (multiple nil)
-			    (label nil)
-			    (class nil)
-			    (html-id nil))
+                          &key (clog-database nil)
+                            (name nil)
+                            (multiple nil)
+                            (label nil)
+                            (class nil)
+                            (html-id nil))
   (let ((element (create-child
-		  obj (format nil "<select~A~A~A/>"
-			      (if multiple
-				  " multiple"
-				  "")
-			      (if name
-				  (format nil " name='~A'" name)
-				  "")
-			      (if class
-				  (format nil " class='~A'"
-					  (escape-string class))
-				  ""))
-		 :clog-type 'clog-lookup :html-id html-id :auto-place t)))
+                  obj (format nil "<select~A~A~A/>"
+                              (if multiple
+                                  " multiple"
+                                  "")
+                              (if name
+                                  (format nil " name='~A'" name)
+                                  "")
+                              (if class
+                                  (format nil " class='~A'"
+                                          (escape-string class))
+                                  ""))
+                 :clog-type 'clog-lookup :html-id html-id :auto-place t)))
     (when label
       (label-for label element))
     (if (and (typep obj 'clog-database) (not clog-database))
-	(setf (clog-database element) obj)
-	(setf (clog-database element) clog-database))
+        (setf (clog-database element) obj)
+        (setf (clog-database element) clog-database))
     element))
 
 (defmethod next-row ((obj clog-lookup) panel)
@@ -332,20 +332,20 @@ the displayed option."
     (setf (inner-html obj) "")
     (loop
       (let ((selected nil)
-	    (row      (dbi:fetch (queryid obj))))
-	(unless row
-	  (return))
-	(when (on-fetch obj)
-	  (funcall (on-fetch obj) obj))
-	(when (equal select-value (getf row (value-field obj)))
-	  (setf selected t)
-	  (setf (rowid obj) (data-load-plist panel
-					     (last-fetch obj)
-					     :row-id-name (row-id-name obj))))
-	(add-select-option obj
-			   (getf row (value-field obj))
-			   (getf row (option-field obj))
-			   :selected selected))))
+            (row      (dbi:fetch (queryid obj))))
+        (unless row
+          (return))
+        (when (on-fetch obj)
+          (funcall (on-fetch obj) obj))
+        (when (equal select-value (getf row (value-field obj)))
+          (setf selected t)
+          (setf (rowid obj) (data-load-plist panel
+                                             (last-fetch obj)
+                                             :row-id-name (row-id-name obj))))
+        (add-select-option obj
+                           (getf row (value-field obj))
+                           (getf row (option-field obj))
+                           :selected selected))))
   (dolist (slave (slaves obj))
     (get-row slave panel))
   (rowid obj))
@@ -384,27 +384,27 @@ the displayed option."
 ;;;;;;;;;;;;;;;;;;;;;
 
 (defgeneric create-db-table (clog-obj &key clog-database
-					hidden class html-id auto-place)
+                                        hidden class html-id auto-place)
   (:documentation "Create a new clog-db-table as child of CLOG-OBJ."))
 
 (defmethod create-db-table ((obj clog-obj)
-			 &key (clog-database nil)
-			   (hidden nil)
-			   (class nil) (html-id nil) (auto-place t))
+                         &key (clog-database nil)
+                           (hidden nil)
+                           (class nil) (html-id nil) (auto-place t))
   (let ((element (create-child obj (format nil "<table~A~A/>"
-					   (if hidden
-					       " style='visibility:hidden;'"
-					       "")
-					   (if class
-					       (format nil " class='~A'"
-						       (escape-string class))
-					       ""))
-			       :clog-type  'clog-db-table
-			       :html-id    html-id
-			       :auto-place auto-place)))
+                                           (if hidden
+                                               " style='visibility:hidden;'"
+                                               "")
+                                           (if class
+                                               (format nil " class='~A'"
+                                                       (escape-string class))
+                                               ""))
+                               :clog-type  'clog-db-table
+                               :html-id    html-id
+                               :auto-place auto-place)))
     (if (and (typep obj 'clog-database) (not clog-database))
-	(setf (clog-database element) obj)
-	(setf (clog-database element) clog-database))
+        (setf (clog-database element) obj)
+        (setf (clog-database element) clog-database))
     element))
 
 (defmethod next-row ((obj clog-db-table) panel)
@@ -419,17 +419,17 @@ the displayed option."
   (loop
     (let ((row (dbi:fetch (queryid obj))))
       (unless row
-	(return))
+        (return))
       (when (on-fetch obj)
-	(funcall (on-fetch obj) obj))
+        (funcall (on-fetch obj) obj))
       (let ((tr (create-table-row obj)))
-	(when (on-row obj)
-	  (funcall (on-row obj) obj tr))
-	(loop for (key value) on row by #'cddr while value
-	      do
-		 (let ((td (create-table-column obj :content value)))
-		   (when (on-column obj)
-		     (funcall (on-column obj) obj key td)))))))
+        (when (on-row obj)
+          (funcall (on-row obj) obj tr))
+        (loop for (key value) on row by #'cddr while value
+              do
+                 (let ((td (create-table-column obj :content value)))
+                   (when (on-column obj)
+                     (funcall (on-column obj) obj key td)))))))
   (when (on-footer obj)
     (funcall (on-footer obj) obj))
   (dolist (slave (slaves obj))

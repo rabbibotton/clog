@@ -1,13 +1,12 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; CLOG - The Common Lisp Omnificent GUI                                 ;;;;
-;;;; (c) 2020-2021 David Botton                                            ;;;;
+;;;; (c) 2020-2022 David Botton                                            ;;;;
 ;;;; License BSD 3 Clause                                                  ;;;;
 ;;;;                                                                       ;;;;
 ;;;; clog-window.lisp                                                      ;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (cl:in-package :clog)
-
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Implementation - clog-window
@@ -36,7 +35,7 @@ window."))
   (query obj "name"))
 
 (defgeneric set-window-name (clog-window value))
-  
+
 (defmethod set-window-name ((obj clog-window) value)
   (execute obj (format nil "name='~A'" (escape-string value)))
   value)
@@ -53,7 +52,7 @@ window."))
   (query obj "status"))
 
 (defgeneric set-status-bar (clog-window value))
-  
+
 (defmethod set-status-bar ((obj clog-window) value)
   (execute obj (format nil "status='~A'" (escape-string value)))
   value)
@@ -70,7 +69,7 @@ window."))
   (parse-integer (query obj "innerHeight") :junk-allowed t))
 
 (defgeneric set-inner-height (clog-window value))
-  
+
 (defmethod set-inner-height ((obj clog-window) value)
   (execute obj (format nil "innerHeight='~A'" (escape-string value)))
   value)
@@ -87,7 +86,7 @@ window."))
   (parse-integer (query obj "innerWidth") :junk-allowed t))
 
 (defgeneric set-inner-width (clog-window value))
-  
+
 (defmethod set-inner-width ((obj clog-window) value)
   (execute obj (format nil "innerWidth='~A'" (escape-string value)))
   value)
@@ -104,7 +103,7 @@ window."))
   (parse-integer (query obj "outerHeight") :junk-allowed t))
 
 (defgeneric set-outer-height (clog-window value))
-  
+
 (defmethod set-outer-height ((obj clog-window) value)
   (execute obj (format nil "outerHeight='~A'" (escape-string value)))
   value)
@@ -121,7 +120,7 @@ window."))
   (parse-integer (query obj "outerWidth") :junk-allowed t))
 
 (defgeneric set-outer-width (clog-window value))
-  
+
 (defmethod set-outer-width ((obj clog-window) value)
   (execute obj (format nil "outerWidth='~A'" (escape-string value)))
   value)
@@ -138,7 +137,7 @@ window."))
   (parse-integer (query obj "pageXOffset") :junk-allowed t))
 
 (defgeneric set-x-offset (clog-window value))
-  
+
 (defmethod set-x-offset ((obj clog-window) value)
   (execute obj (format nil "pageXOffset='~A'" (escape-string value)))
   value)
@@ -155,7 +154,7 @@ window."))
   (parse-integer (query obj "pageYOffset") :junk-allowed t))
 
 (defgeneric set-y-offset (clog-window value))
-  
+
 (defmethod set-y-offset ((obj clog-window) value)
   (execute obj (format nil "pageYOffset='~A'" (escape-string value)))
   value)
@@ -172,7 +171,7 @@ window."))
   (parse-integer (query obj "screenY") :junk-allowed t))
 
 (defgeneric set-top (clog-window value))
-  
+
 (defmethod set-top ((obj clog-window) value)
   (execute obj (format nil "screenY='~A'" (escape-string value)))
   value)
@@ -189,7 +188,7 @@ window."))
   (parse-integer (query obj "screenX") :junk-allowed t))
 
 (defgeneric set-left (clog-window value))
-  
+
 (defmethod set-left ((obj clog-window) value)
   (execute obj (format nil "screenX='~A'" (escape-string value)))
   value)
@@ -295,7 +294,7 @@ events and messages may not be trasmitted on most browsers."))
 
 (defmethod log-console ((obj clog-window) message)
   (execute obj (format nil "console.log('~A')"
-		       (escape-string message))))
+                       (escape-string message))))
 
 ;;;;;;;;;;;;;;;
 ;; log-error ;;
@@ -306,7 +305,7 @@ events and messages may not be trasmitted on most browsers."))
 
 (defmethod log-error ((obj clog-window) message)
   (execute obj (format nil "console.error('~A')"
-		       (escape-string message))))
+                       (escape-string message))))
 
 ;;;;;;;;;;;;;;;;;;
 ;; print-window ;;
@@ -388,9 +387,9 @@ CLOG-WINDOW is displayed (remote or local). In modern browsers it is
 very limitted to just open a new tab with url unless is a localhost url."))
 
 (defmethod open-window ((obj clog-window) url &key
-						(name "_blank")
-						(specs "")
-						(replace "false"))
+                                                (name "_blank")
+                                                (specs "")
+                                                (replace "false"))
   (execute obj (format nil "open('~A','~A','~A',~A)" url name specs replace)))
 
 ;;;;;;;;;;;;;;;;;;
@@ -463,7 +462,7 @@ ON-HASH-CHANGE-HANDLER is nil unbind the event."))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defgeneric set-on-orientation-change (clog-window
-				       on-orientation-change-handler)
+                                       on-orientation-change-handler)
   (:documentation "Set the ON-ORIENTATION-CHANGE-HANDLER for CLOG-OBJ.
 If ON-ORIENTATION-CHANGE-HANDLER is nil unbind the event."))
 
@@ -493,10 +492,10 @@ on-storage event is fired for changes to :local storage keys."))
 
 (defmethod set-on-storage ((obj clog-window) handler)
   (set-event obj "storage"
-	     (when handler
-	       (lambda (data)
-		 (funcall handler obj (parse-storage-event data))))
-	     :call-back-script storage-event-script))
+             (when handler
+               (lambda (data)
+                 (funcall handler obj (parse-storage-event data))))
+             :call-back-script storage-event-script))
 
 ;;;;;;;;;;;;;;;;;;;;
 ;; storage-length ;;
@@ -542,16 +541,16 @@ STORAGE-TYPE. (local = persistant or session)"))
 
 (defmethod storage-element ((obj clog-window) storage-type key-name)
   (query obj (format nil "~(~a~)Storage.getItem('~A')"
-		     storage-type
-		     (escape-string key-name))))
+                     storage-type
+                     (escape-string key-name))))
 
 (defgeneric set-storage-element (clog-window storage-type key-name value)
   (:documentation "Set storage-element."))
 
 (defmethod set-storage-element ((obj clog-window) storage-type key-name value)
   (execute obj (format nil "~(~a~)Storage.setItem('~A','~A')"
-		       storage-type
-		       (escape-string key-name)
-		       (escape-string value)))
+                       storage-type
+                       (escape-string key-name)
+                       (escape-string value)))
   value)
 (defsetf storage-element set-storage-element)

@@ -1,6 +1,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; CLOG - The Common Lisp Omnificent GUI                                 ;;;;
-;;;; (c) 2020-2021 David Botton                                            ;;;;
+;;;; (c) 2020-2022 David Botton                                            ;;;;
 ;;;; License BSD 3 Clause                                                  ;;;;
 ;;;;                                                                       ;;;;
 ;;;; clog-document.lisp                                                    ;;;;
@@ -31,12 +31,12 @@
   "Construct a new clog-document. (Private)"
   (make-instance
    'clog-document :connection-id connection-id :html-id "document"
-		  :document-element (make-instance 'clog-element
-						   :connection-id connection-id
-						   :html-id       "documentElement")
-		  :head-element (make-instance 'clog-element
-					       :connection-id connection-id
-					       :html-id "head")))
+                  :document-element (make-instance 'clog-element
+                                                   :connection-id connection-id
+                                                   :html-id       "documentElement")
+                  :head-element (make-instance 'clog-element
+                                               :connection-id connection-id
+                                               :html-id "head")))
 ;;;;;;;;;;;;;;;;;;;;;;
 ;; document-element ;;
 ;;;;;;;;;;;;;;;;;;;;;;
@@ -120,10 +120,10 @@ clog-document object. (Private)"))
   (query obj "title"))
 
 (defgeneric set-title (clog-document value))
-  
+
 (defmethod set-title ((obj clog-document) value)
   (execute obj
-	   (format nil "title='~A'" (clog-connection:escape-string value)))
+           (format nil "title='~A'" (clog-connection:escape-string value)))
   value)
 (defsetf title set-title)
 
@@ -156,8 +156,8 @@ clog-document object. (Private)"))
 
 (defmethod load-css ((obj clog-document) css-url)
   (jquery-execute (head-element obj)
-		  (format nil "append('<link rel=\"stylesheet\" href=\"~A\" type=\"text/css\">')"
-			  (escape-string css-url))))
+                  (format nil "append('<link rel=\"stylesheet\" href=\"~A\" type=\"text/css\">')"
+                          (escape-string css-url))))
 
 ;;;;;;;;;;;;;;;;;
 ;; load-script ;;
@@ -168,8 +168,8 @@ clog-document object. (Private)"))
 
 (defmethod load-script ((obj clog-document) script-url)
   (jquery-execute (head-element obj)
-		  (format nil "append('<script src=\"~A\">')"
-			  (escape-string script-url))))
+                  (format nil "append('<script src=\"~A\">')"
+                          (escape-string script-url))))
 
 ;;;;;;;;;
 ;; put ;;
@@ -216,7 +216,7 @@ clog-document object. (Private)"))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defgeneric set-on-full-screen-change (clog-document
-				       on-full-screen-change-handler)
+                                       on-full-screen-change-handler)
   (:documentation "Set the ON-FULL-SCREEN-CHANGE-HANDLER for CLOG-OBJ.
 If ON-FULL-SCREEN-CHANGE-HANDLER is nil unbind the event."))
 

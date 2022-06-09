@@ -1,6 +1,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; CLOG - The Common Lisp Omnificent GUI                                 ;;;;
-;;;; (c) 2020-2021 David Botton                                            ;;;;
+;;;; (c) 2020-2022 David Botton                                            ;;;;
 ;;;; License BSD 3 Clause                                                  ;;;;
 ;;;;                                                                       ;;;;
 ;;;; clog-window.lisp                                                      ;;;;
@@ -34,12 +34,12 @@
 (defun make-clog-body (connection-id)
   "Construct a new clog-body object."
   (let ((body (make-instance
-	       'clog-body
-	       :connection-id connection-id :html-id 0
-	       :window        (make-clog-window    connection-id)
-	       :html-document (make-clog-document  connection-id)
-	       :location      (make-clog-location  connection-id)
-	       :navigator     (make-clog-navigator connection-id))))
+               'clog-body
+               :connection-id connection-id :html-id 0
+               :window        (make-clog-window    connection-id)
+               :html-document (make-clog-document  connection-id)
+               :location      (make-clog-location  connection-id)
+               :navigator     (make-clog-navigator connection-id))))
     (set-body (html-document body) body)))
 
 ;;;;;;;;;
@@ -52,8 +52,8 @@ user close of connection / browser."))
 (defmethod run ((obj clog-body))
   (loop
     (if (validp obj)
-	(sleep 10)
-	(return))))
+        (sleep 10)
+        (return))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;
 ;; set-html-on-close ;;
@@ -93,4 +93,3 @@ with HTML."))
 
 (defgeneric navigator (clog-body)
   (:documentation "Reader for CLOG-Navigator object"))
-

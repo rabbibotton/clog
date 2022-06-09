@@ -1,6 +1,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; CLOG - The Common Lisp Omnificent GUI                                 ;;;;
-;;;; (c) 2020-2021 David Botton                                            ;;;;
+;;;; (c) 2020-2022 David Botton                                            ;;;;
 ;;;; License BSD 3 Clause                                                  ;;;;
 ;;;;                                                                       ;;;;
 ;;;; clog-helpers.lisp                                                     ;;;;
@@ -38,9 +38,9 @@
 (defun open-manual ()
   "Launches a browser with CLOG manual."
   (open-browser :url (format nil "~A"
-			     (merge-pathnames "./doc/clog-manual.html"
-				      (asdf:system-source-directory :clog)))))
-   
+                             (merge-pathnames "./doc/clog-manual.html"
+                                      (asdf:system-source-directory :clog)))))
+
 ;;;;;;;;;;;;;;;;;;
 ;; run-tutorial ;;
 ;;;;;;;;;;;;;;;;;;
@@ -49,8 +49,8 @@
   "Run tutorial NUM"
   (load-tutorial num)
   (funcall (symbol-function (find-symbol
-			     "START-TUTORIAL"
-			     (format nil "CLOG-TUT-~A" num)))))
+                             "START-TUTORIAL"
+                             (format nil "CLOG-TUT-~A" num)))))
 
 ;;;;;;;;;;;;;;;;;;;
 ;; load-tutorial ;;
@@ -59,7 +59,7 @@
 (defun load-tutorial (num)
   "Load tutorial NUM - use (clog-user:start-tutorial)"
   (let ((p (merge-pathnames (format nil "./tutorial/~2,'0d-tutorial.lisp" num)
-			    (asdf:system-source-directory :clog))))
+                            (asdf:system-source-directory :clog))))
     (load p)
     (format t "~%~% ---- The tutorial src is located at: ~A~%" p)))
 
@@ -71,8 +71,8 @@
   "Run demo NUM"
   (load-demo num)
   (funcall (symbol-function (find-symbol
-			     "START-DEMO"
-			     (format nil "CLOG-DEMO-~A" num)))))
+                             "START-DEMO"
+                             (format nil "CLOG-DEMO-~A" num)))))
 
 ;;;;;;;;;;;;;;;
 ;; load-demo ;;
@@ -81,7 +81,7 @@
 (defun load-demo (num)
   "Load demo NUM - use (clog-user:start-demo)"
   (let ((p (merge-pathnames (format nil "./demos/~2,'0d-demo.lisp" num)
-			    (asdf:system-source-directory :clog))))
+                            (asdf:system-source-directory :clog))))
     (load p)
     (format t "~%~% ---- The demo src is located at: ~A~%" p)))
 
@@ -96,13 +96,13 @@ set (logging to browser console), "
   (unless *clog-running*
     (initialize nil :boot-file "/debug.html"))
   (set-on-new-window (lambda (body)
-		       (clog-connection:debug-mode (connection-id body))
-		       (when clog-web-initialize
-			 (clog-web:clog-web-initialize body))
-		       (when clog-gui-initialize
-			 (clog-gui:clog-gui-initialize body))
-		       (setf clog-user::*body* body))
-		     :path "/repl")
+                       (clog-connection:debug-mode (connection-id body))
+                       (when clog-web-initialize
+                         (clog-web:clog-web-initialize body))
+                       (when clog-gui-initialize
+                         (clog-gui:clog-gui-initialize body))
+                       (setf clog-user::*body* body))
+                     :path "/repl")
   (open-browser :url "http://127.0.0.1:8080/repl")
   (format t "Use clog-user:*body* to access the clog-repl window."))
 
@@ -111,14 +111,14 @@ set (logging to browser console), "
 ;;;;;;;;;;;;;;;;;;;;;;;
 
 (defun save-body-to-file (file-name &key (body clog-user::*body*)
-				      (if-exists :error)
-				      if-does-not-exist
-				      external-format)
+                                      (if-exists :error)
+                                      if-does-not-exist
+                                      external-format)
   "Save the current html of BODY in the current state to FILE-NAME"
   (when (alexandria:write-string-into-file
-	 (outer-html (document-element (html-document body)))
-	 file-name
-	 :if-exists if-exists
-	 :if-does-not-exist if-does-not-exist
-	 :external-format external-format)
+         (outer-html (document-element (html-document body)))
+         file-name
+         :if-exists if-exists
+         :if-does-not-exist if-does-not-exist
+         :external-format external-format)
     t))

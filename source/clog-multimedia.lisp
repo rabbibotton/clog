@@ -1,13 +1,12 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; CLOG - The Common Lisp Omnificent GUI                                 ;;;;
-;;;; (c) 2020-2021 David Botton                                            ;;;;
+;;;; (c) 2020-2022 David Botton                                            ;;;;
 ;;;; License BSD 3 Clause                                                  ;;;;
 ;;;;                                                                       ;;;;
 ;;;; clog-mulitmedia.lisp                                                  ;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (cl:in-package :clog)
-
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Implementation - clog-multimedia
@@ -226,7 +225,7 @@ media type.
        audio/ogg
        audio/mp4
        audio/mp3
-   
+
      Common values, including codecs:
        video/ogg; codecs=\"theora, vorbis\"
        video/mp4; codecs=\"avc1.4D401E, mp4a.40.2\"
@@ -252,10 +251,10 @@ is nil unbind the event."))
 
 (defmethod set-on-media-abort ((obj clog-multimedia) handler)
   (set-event obj "abort"
-	     (when handler
-	       (lambda (data)
-		 (declare (ignore data))
-		 (funcall handler obj)))))
+             (when handler
+               (lambda (data)
+                 (declare (ignore data))
+                 (funcall handler obj)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;
 ;; set-on-media-error ;;
@@ -267,10 +266,10 @@ is nil unbind the event."))
 
 (defmethod set-on-media-error ((obj clog-multimedia) handler)
   (set-event obj "error"
-	     (when handler
-	       (lambda (data)
-		 (declare (ignore data))
-		 (funcall handler obj)))))
+             (when handler
+               (lambda (data)
+                 (declare (ignore data))
+                 (funcall handler obj)))))
 
 ;;;;;;;;;;;;;;;;;;;;;
 ;; set-on-can-play ;;
@@ -282,10 +281,10 @@ is nil unbind the event."))
 
 (defmethod set-on-can-play ((obj clog-multimedia) handler)
   (set-event obj "canplay"
-	     (when handler
-	       (lambda (data)
-		 (declare (ignore data))
-		 (funcall handler obj)))))
+             (when handler
+               (lambda (data)
+                 (declare (ignore data))
+                 (funcall handler obj)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; set-on-can-play-through ;;
@@ -297,10 +296,10 @@ HANDLER is nil unbind the event."))
 
 (defmethod set-on-can-play-through ((obj clog-multimedia) handler)
   (set-event obj "canplaythrough"
-	     (when handler
-	       (lambda (data)
-		 (declare (ignore data))
-		 (funcall handler obj)))))
+             (when handler
+               (lambda (data)
+                 (declare (ignore data))
+                 (funcall handler obj)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; set-on-duration-change ;;
@@ -312,10 +311,10 @@ HANDLER is nil unbind the event."))
 
 (defmethod set-on-duration-change ((obj clog-multimedia) handler)
   (set-event obj "durationchange"
-	     (when handler
-	       (lambda (data)
-		 (declare (ignore data))
-		 (funcall handler obj)))))
+             (when handler
+               (lambda (data)
+                 (declare (ignore data))
+                 (funcall handler obj)))))
 
 ;;;;;;;;;;;;;;;;;;;;
 ;; set-on-emptied ;;
@@ -327,10 +326,10 @@ HANDLER is nil unbind the event."))
 
 (defmethod set-on-emptied ((obj clog-multimedia) handler)
   (set-event obj "emptied"
-	     (when handler
-	       (lambda (data)
-		 (declare (ignore data))
-		 (funcall handler obj)))))
+             (when handler
+               (lambda (data)
+                 (declare (ignore data))
+                 (funcall handler obj)))))
 
 ;;;;;;;;;;;;;;;;;;
 ;; set-on-ended ;;
@@ -342,10 +341,10 @@ HANDLER is nil unbind the event."))
 
 (defmethod set-on-ended ((obj clog-multimedia) handler)
   (set-event obj "ended"
-	     (when handler
-	       (lambda (data)
-		 (declare (ignore data))
-		 (funcall handler obj)))))
+             (when handler
+               (lambda (data)
+                 (declare (ignore data))
+                 (funcall handler obj)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;
 ;; set-on-loaded-data ;;
@@ -357,10 +356,10 @@ HANDLER is nil unbind the event."))
 
 (defmethod set-on-loaded-data ((obj clog-multimedia) handler)
   (set-event obj "loadeddata"
-	     (when handler
-	       (lambda (data)
-		 (declare (ignore data))
-		 (funcall handler obj)))))
+             (when handler
+               (lambda (data)
+                 (declare (ignore data))
+                 (funcall handler obj)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; set-on-loaded-meta-data ;;
@@ -372,10 +371,10 @@ HANDLER is nil unbind the event."))
 
 (defmethod set-on-loaded-meta-data ((obj clog-multimedia) handler)
   (set-event obj "loadedmetadata"
-	     (when handler
-	       (lambda (data)
-		 (declare (ignore data))
-		 (funcall handler obj)))))
+             (when handler
+               (lambda (data)
+                 (declare (ignore data))
+                 (funcall handler obj)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;
 ;; set-on-load-start ;;
@@ -387,10 +386,10 @@ HANDLER is nil unbind the event."))
 
 (defmethod set-on-load-start ((obj clog-multimedia) handler)
   (set-event obj "loadstart"
-	     (when handler
-	       (lambda (data)
-		 (declare (ignore data))
-		 (funcall handler obj)))))
+             (when handler
+               (lambda (data)
+                 (declare (ignore data))
+                 (funcall handler obj)))))
 
 ;;;;;;;;;;;;;;;;;
 ;; set-on-play ;;
@@ -402,10 +401,10 @@ HANDLER is nil unbind the event."))
 
 (defmethod set-on-play ((obj clog-multimedia) handler)
   (set-event obj "play"
-	     (when handler
-	       (lambda (data)
-		 (declare (ignore data))
-		 (funcall handler obj)))))
+             (when handler
+               (lambda (data)
+                 (declare (ignore data))
+                 (funcall handler obj)))))
 
 ;;;;;;;;;;;;;;;;;;
 ;; set-on-pause ;;
@@ -417,10 +416,10 @@ HANDLER is nil unbind the event."))
 
 (defmethod set-on-pause ((obj clog-multimedia) handler)
   (set-event obj "pause"
-	     (when handler
-	       (lambda (data)
-		 (declare (ignore data))
-		 (funcall handler obj)))))
+             (when handler
+               (lambda (data)
+                 (declare (ignore data))
+                 (funcall handler obj)))))
 
 ;;;;;;;;;;;;;;;;;;;;
 ;; set-on-playing ;;
@@ -432,10 +431,10 @@ HANDLER is nil unbind the event."))
 
 (defmethod set-on-playing ((obj clog-multimedia) handler)
   (set-event obj "playing"
-	     (when handler
-	       (lambda (data)
-		 (declare (ignore data))
-		 (funcall handler obj)))))
+             (when handler
+               (lambda (data)
+                 (declare (ignore data))
+                 (funcall handler obj)))))
 
 ;;;;;;;;;;;;;;;;;;;;;
 ;; set-on-progress ;;
@@ -447,10 +446,10 @@ HANDLER is nil unbind the event."))
 
 (defmethod set-on-progress ((obj clog-multimedia) handler)
   (set-event obj "progress"
-	     (when handler
-	       (lambda (data)
-		 (declare (ignore data))
-		 (funcall handler obj)))))
+             (when handler
+               (lambda (data)
+                 (declare (ignore data))
+                 (funcall handler obj)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;
 ;; set-on-rate-change ;;
@@ -462,10 +461,10 @@ HANDLER is nil unbind the event."))
 
 (defmethod set-on-rate-change ((obj clog-multimedia) handler)
   (set-event obj "ratechange"
-	     (when handler
-	       (lambda (data)
-		 (declare (ignore data))
-		 (funcall handler obj)))))
+             (when handler
+               (lambda (data)
+                 (declare (ignore data))
+                 (funcall handler obj)))))
 
 ;;;;;;;;;;;;;;;;;;;
 ;; set-on-seeked ;;
@@ -477,10 +476,10 @@ HANDLER is nil unbind the event."))
 
 (defmethod set-on-seeked ((obj clog-multimedia) handler)
   (set-event obj "seeked"
-	     (when handler
-	       (lambda (data)
-		 (declare (ignore data))
-		 (funcall handler obj)))))
+             (when handler
+               (lambda (data)
+                 (declare (ignore data))
+                 (funcall handler obj)))))
 
 ;;;;;;;;;;;;;;;;;;;;
 ;; set-on-seeking ;;
@@ -492,10 +491,10 @@ HANDLER is nil unbind the event."))
 
 (defmethod set-on-seeking ((obj clog-multimedia) handler)
   (set-event obj "seeking"
-	     (when handler
-	       (lambda (data)
-		 (declare (ignore data))
-		 (funcall handler obj)))))
+             (when handler
+               (lambda (data)
+                 (declare (ignore data))
+                 (funcall handler obj)))))
 
 ;;;;;;;;;;;;;;;;;;;;
 ;; set-on-stalled ;;
@@ -507,10 +506,10 @@ HANDLER is nil unbind the event."))
 
 (defmethod set-on-stalled ((obj clog-multimedia) handler)
   (set-event obj "stalled"
-	     (when handler
-	       (lambda (data)
-		 (declare (ignore data))
-		 (funcall handler obj)))))
+             (when handler
+               (lambda (data)
+                 (declare (ignore data))
+                 (funcall handler obj)))))
 
 ;;;;;;;;;;;;;;;;;;;;
 ;; set-on-suspend ;;
@@ -522,10 +521,10 @@ HANDLER is nil unbind the event."))
 
 (defmethod set-on-suspend ((obj clog-multimedia) handler)
   (set-event obj "suspend"
-	     (when handler
-	       (lambda (data)
-		 (declare (ignore data))
-		 (funcall handler obj)))))
+             (when handler
+               (lambda (data)
+                 (declare (ignore data))
+                 (funcall handler obj)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;
 ;; set-on-time-update ;;
@@ -537,10 +536,10 @@ HANDLER is nil unbind the event."))
 
 (defmethod set-on-time-update ((obj clog-multimedia) handler)
   (set-event obj "timeupdate"
-	     (when handler
-	       (lambda (data)
-		 (declare (ignore data))
-		 (funcall handler obj)))))
+             (when handler
+               (lambda (data)
+                 (declare (ignore data))
+                 (funcall handler obj)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; set-on-volume-change ;;
@@ -552,10 +551,10 @@ HANDLER is nil unbind the event."))
 
 (defmethod set-on-volume-change ((obj clog-multimedia) handler)
   (set-event obj "volumechange"
-	     (when handler
-	       (lambda (data)
-		 (declare (ignore data))
-		 (funcall handler obj)))))
+             (when handler
+               (lambda (data)
+                 (declare (ignore data))
+                 (funcall handler obj)))))
 
 ;;;;;;;;;;;;;;;;;;;;
 ;; set-on-waiting ;;
@@ -567,10 +566,10 @@ HANDLER is nil unbind the event."))
 
 (defmethod set-on-waiting ((obj clog-multimedia) handler)
   (set-event obj "waiting"
-	     (when handler
-	       (lambda (data)
-		 (declare (ignore data))
-		 (funcall handler obj)))))
+             (when handler
+               (lambda (data)
+                 (declare (ignore data))
+                 (funcall handler obj)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Implementation - clog-audio
@@ -584,48 +583,48 @@ HANDLER is nil unbind the event."))
 ;;;;;;;;;;;;;;;;;;
 
 (defgeneric create-audio (clog-obj &key
-				     source
-				     controls
-				     preload
-				     autoplay
-				     autoloop
-				     muted
-				     html-id
-				     auto-place)
+                                     source
+                                     controls
+                                     preload
+                                     autoplay
+                                     autoloop
+                                     muted
+                                     html-id
+                                     auto-place)
   (:documentation "Create a CLOG Audio control"))
 
 (defmethod create-audio ((obj clog-obj)
-			 &key (source "")
-			   (controls t)
-			   (preload  nil)
-			   (autoplay nil)
-			   (autoloop nil)
-			   (muted    nil)
-			   (html-id  nil)
-			   (auto-place t))
+                         &key (source "")
+                           (controls t)
+                           (preload  nil)
+                           (autoplay nil)
+                           (autoloop nil)
+                           (muted    nil)
+                           (html-id  nil)
+                           (auto-place t))
   (create-child obj (format nil "<audio~A~A~A~A~A~A/>"
-			    (if (equal source "")
-				""
-				(format nil " src='~A'"
-					(escape-string source)))
-			    (if controls
-				" controls"
-				"")
-			    (if preload
-				" preload='auto'"
-				"")
-			    (if autoplay
-				" autoplay"
-				"")
-			    (if autoloop
-				" loop"
-				"")
-			    (if muted
-				" muted"
-				""))
-		:clog-type  'clog-audio
-		:html-id    html-id
-		:auto-place auto-place))
+                            (if (equal source "")
+                                ""
+                                (format nil " src='~A'"
+                                        (escape-string source)))
+                            (if controls
+                                " controls"
+                                "")
+                            (if preload
+                                " preload='auto'"
+                                "")
+                            (if autoplay
+                                " autoplay"
+                                "")
+                            (if autoloop
+                                " loop"
+                                "")
+                            (if muted
+                                " muted"
+                                ""))
+                :clog-type  'clog-audio
+                :html-id    html-id
+                :auto-place auto-place))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -636,52 +635,51 @@ HANDLER is nil unbind the event."))
   (:documentation "CLOG Video class."))
 
 (defgeneric create-video (clog-obj &key
-				     source
-				     controls
-				     preload
-				     poster
-				     autoplay
-				     autoloop
-				     muted
-				     html-id
-				     auto-place)
+                                     source
+                                     controls
+                                     preload
+                                     poster
+                                     autoplay
+                                     autoloop
+                                     muted
+                                     html-id
+                                     auto-place)
 (:documentation "Create a CLOG video control"))
 
 (defmethod create-video ((obj clog-obj)
-			&key (source "")
-			  (controls t)
-			  (preload  nil)
-			  (poster   "")
-			  (autoplay nil)
-			  (autoloop nil)
-			  (muted    nil)
-			  (html-id  nil)
-			  (auto-place t))
+                        &key (source "")
+                          (controls t)
+                          (preload  nil)
+                          (poster   "")
+                          (autoplay nil)
+                          (autoloop nil)
+                          (muted    nil)
+                          (html-id  nil)
+                          (auto-place t))
   (create-child obj (format nil "<video~A~A~A~A~A~A~A/>"
-			    (if (equal source "")
-				""
-				(format nil " src='~A'"
-					(escape-string source)))
-			    (if controls
-				" controls"
-				"")
-			    (if preload
-				" preload='auto'"
-				"")
-			    (if (equal poster "")
-				""
-				(format nil " poster='~A'"
-					(escape-string poster)))
-			    (if autoplay
-				" autoplay"
-				"")
-			    (if autoloop
-				" loop"
-				"")
-			    (if muted
-				" muted"
-				""))			    
-		:clog-type  'clog-video
-		:html-id    html-id
-		:auto-place auto-place))
-
+                            (if (equal source "")
+                                ""
+                                (format nil " src='~A'"
+                                        (escape-string source)))
+                            (if controls
+                                " controls"
+                                "")
+                            (if preload
+                                " preload='auto'"
+                                "")
+                            (if (equal poster "")
+                                ""
+                                (format nil " poster='~A'"
+                                        (escape-string poster)))
+                            (if autoplay
+                                " autoplay"
+                                "")
+                            (if autoloop
+                                " loop"
+                                "")
+                            (if muted
+                                " muted"
+                                ""))
+                :clog-type  'clog-video
+                :html-id    html-id
+                :auto-place auto-place))

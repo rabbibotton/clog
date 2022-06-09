@@ -32,37 +32,37 @@ levels of decleraton are used as the parent clog-obj. To bind a
 variable to any created clog object using :bind var. See tutorial 33
 and 22 for examples."
   (flet ((extract-bind (args)
-	   (when args
-	     (let ((fargs ())
-		    bind)
-	       (do* ((i 0)
-		      (x (nth i args) (nth i args)))
-		 ((>= i (length args)))
-		 (if (eql x :bind)
-		   (progn
-		     (setf bind (nth (1+ i) args))
-		     (incf i 2))
-		   (progn
-		     (push x fargs)
-		     (incf i))))
-	       (values (reverse fargs) bind)))))
+           (when args
+             (let ((fargs ())
+                    bind)
+               (do* ((i 0)
+                      (x (nth i args) (nth i args)))
+                 ((>= i (length args)))
+                 (if (eql x :bind)
+                   (progn
+                     (setf bind (nth (1+ i) args))
+                     (incf i 2))
+                   (progn
+                     (push x fargs)
+                     (incf i))))
+               (values (reverse fargs) bind)))))
     (let ((let-bindings ())
-	   (used-bindings ()))
+           (used-bindings ()))
       (labels ((create-from-spec (spec parent-binding)
-		 (destructuring-bind (gui-func-name args &body children)
-		   spec
-		   (multiple-value-bind (gui-func-args bind) (extract-bind args)
-		     (let* ((binding (or bind (gensym)))
-			     (create-func-name (intern (concatenate 'string "CREATE-" (symbol-name gui-func-name)))))
-		       (push `(,binding (,create-func-name ,parent-binding ,@gui-func-args)) let-bindings)
-		       (when (or bind children)
-			 (push binding used-bindings))
-		       (dolist (child-spec children)
-			 (create-from-spec child-spec binding)))))))
-	(create-from-spec spec obj)
-	`(let* ,(reverse let-bindings)
-	   (declare (ignore ,@(set-difference (mapcar #'first let-bindings) used-bindings)))
-	   ,@body)))))
+                 (destructuring-bind (gui-func-name args &body children)
+                   spec
+                   (multiple-value-bind (gui-func-args bind) (extract-bind args)
+                     (let* ((binding (or bind (gensym)))
+                             (create-func-name (intern (concatenate 'string "CREATE-" (symbol-name gui-func-name)))))
+                       (push `(,binding (,create-func-name ,parent-binding ,@gui-func-args)) let-bindings)
+                       (when (or bind children)
+                         (push binding used-bindings))
+                       (dolist (child-spec children)
+                         (create-from-spec child-spec binding)))))))
+        (create-from-spec spec obj)
+        `(let* ,(reverse let-bindings)
+           (declare (ignore ,@(set-difference (mapcar #'first let-bindings) used-bindings)))
+           ,@body)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Implementation - clog-group
@@ -84,8 +84,8 @@ CLOG-OBJ unless :NAME is set and is used instead."))
 
 (defmethod add ((group clog-group) clog-obj &key (name nil))
   (let ((id (if name
-		name
-		(html-id clog-obj))))
+                name
+                (html-id clog-obj))))
     (setf (gethash id (controls group)) clog-obj)))
 
 (defgeneric obj (clog-group name)
@@ -144,12 +144,12 @@ if str is NIL returns empty string otherwise returns nil."
   (if (and (not str) (not no-nil))
       nil
       (let ((res))
-	(setf res (format nil "~@[~A~]" str))
-	(setf res (ppcre:regex-replace-all "\\x22" res "\\x22"))
-	(setf res (ppcre:regex-replace-all "\\x27" res "\\x27"))
-	(setf res (ppcre:regex-replace-all "\\x0A" res "\\x0A"))
-	(setf res (ppcre:regex-replace-all "\\x0D" res "\\x0D"))
-	res)))
+        (setf res (format nil "~@[~A~]" str))
+        (setf res (ppcre:regex-replace-all "\\x22" res "\\x22"))
+        (setf res (ppcre:regex-replace-all "\\x27" res "\\x27"))
+        (setf res (ppcre:regex-replace-all "\\x0A" res "\\x0A"))
+        (setf res (ppcre:regex-replace-all "\\x0D" res "\\x0D"))
+        res)))
 
 ;;;;;;;;;;;;;;
 ;; lf-to-br ;;
@@ -204,31 +204,31 @@ alpha 0.0 - 1.0"
 ;; unit ;;
 ;;;;;;;;;;
 
-;; cm	centimeters
-;; mm	millimeters
-;; in	inches (1in = 96px = 2.54cm
-;; px  	pixels (1px = 1/96th of 1in)
-;; pt	points (1pt = 1/72 of 1in)
-;; pc	picas (1pc = 12 pt)
-;; em	Relative to the font-size of the element (2em means 2 times the size of the current font)	
-;; ex	Relative to the x-height of the current font (rarely used)	
-;; ch	Relative to the width of the "0" (zero)	
-;; rem	Relative to font-size of the root element	
-;; vw	Relative to 1% of the width of the viewport*	
-;; vh	Relative to 1% of the height of the viewport*	
-;; vmin	Relative to 1% of viewport's* smaller dimension	
-;; vmax	Relative to 1% of viewport's* larger dimension	
-;; %	Relative to the parent element
+;; cm   centimeters
+;; mm   millimeters
+;; in   inches (1in = 96px = 2.54cm
+;; px   pixels (1px = 1/96th of 1in)
+;; pt   points (1pt = 1/72 of 1in)
+;; pc   picas (1pc = 12 pt)
+;; em   Relative to the font-size of the element (2em means 2 times the size of the current font)
+;; ex   Relative to the x-height of the current font (rarely used)
+;; ch   Relative to the width of the "0" (zero)
+;; rem  Relative to font-size of the root element
+;; vw   Relative to 1% of the width of the viewport*
+;; vh   Relative to 1% of the height of the viewport*
+;; vmin Relative to 1% of viewport's* smaller dimension
+;; vmax Relative to 1% of viewport's* larger dimension
+;; %    Relative to the parent element
 ;;
 ;; * Viewport = the browser window size. If the viewport is 50cm wide, 1vw = 0.5cm.
 
 (deftype unit-type () '(member :cm :mm :in :px :pt :pc :em :ex :ch :rem :vw
-			 :vh :vmin :vmax :%))
+                         :vh :vmin :vmax :%))
 
 (defun unit (unit-type value)
   "produce a string from numeric value with UNIT-TYPE appended."
   (format nil "~A~A" value unit-type))
-  
+
 ;; https://www.w3schools.com/colors/colors_names.asp
 ;;
 ;; From - https://www.w3schools.com/

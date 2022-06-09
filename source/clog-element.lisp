@@ -31,7 +31,7 @@ element objects."))
 ;;;;;;;;;;;;;;;;;;;;;;
 
 (defun create-with-html (connection-id html
-			 &key (clog-type 'clog-element) (html-id nil))
+                         &key (clog-type 'clog-element) (html-id nil))
   "Create a new clog-element and attach it to HTML on
 CONNECTION-ID. There must be a single outer block that will be set to
 an internal id. The returned CLOG-Element requires placement or will
@@ -39,13 +39,13 @@ not be visible, ie. place-after, etc. as it exists in the javascript
 clog[] but is not in the DOM. If HTML-ID is nil one is generated.
 (private)"
   (let ((web-id (if html-id
-		    html-id
-		    (format nil "CLOG~A" (clog-connection:generate-id)))))
+                    html-id
+                    (format nil "CLOG~A" (clog-connection:generate-id)))))
     (clog-connection:execute
      connection-id
      (format nil
-	     "clog['~A']=$(\"~A\").get(0); $(clog['~A']).first().prop('id','~A')"
-	     web-id html web-id web-id))
+             "clog['~A']=$(\"~A\").get(0); $(clog['~A']).first().prop('id','~A')"
+             web-id html web-id web-id))
     (make-clog-element connection-id web-id :clog-type clog-type)))
 
 ;;;;;;;;;;;;
@@ -56,7 +56,7 @@ clog[] but is not in the DOM. If HTML-ID is nil one is generated.
   "Create a new clog-obj and attach an existing element with HTML-ID on
 CONNECTION-ID to it and then return it. The HTML-ID must be unique. (private)"
   (clog-connection:execute connection-id
-	      (format nil "clog['~A']=$('#~A').get(0)" html-id html-id))
+              (format nil "clog['~A']=$('#~A').get(0)" html-id html-id))
   (make-clog-element connection-id html-id))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -73,14 +73,14 @@ as child of CLOG-OBJ and if :AUTO-PLACE (default t) place-inside-bottom-of
 CLOG-OBJ. If HTML-ID is nil one will be generated."))
 
 (defmethod create-child ((obj clog-obj) html &key (html-id nil)
-					       (auto-place t)
-					       (clog-type 'clog-element))
+                                               (auto-place t)
+                                               (clog-type 'clog-element))
   (let ((child (create-with-html (connection-id obj) (escape-string html)
-				 :clog-type clog-type
-				 :html-id   html-id)))
+                                 :clog-type clog-type
+                                 :html-id   html-id)))
     (if auto-place
-	(place-inside-bottom-of obj child)
-	child)))
+        (place-inside-bottom-of obj child)
+        child)))
 
 ;;;;;;;;;;;;;;;;;;;;;
 ;; attach-as-child ;;
@@ -93,17 +93,17 @@ must be in DOM, ie placed or auto-placed. If new-id is true the HTML-ID
 after attachment is changed to one unique to this session."))
 
 (defmethod attach-as-child ((obj clog-obj) html-id
-			    &key (clog-type 'clog-element)
-			      (new-id nil))
+                            &key (clog-type 'clog-element)
+                              (new-id nil))
   (if new-id
       (let ((id (format nil "CLOG~A" (clog-connection:generate-id))))
-	(clog-connection:execute (connection-id obj)
-	 (format nil "$('#~A').attr('id','~A');clog['~A']=$('#~A').get(0)"
-		 html-id id id id))
-	(setf html-id id))
+        (clog-connection:execute (connection-id obj)
+         (format nil "$('#~A').attr('id','~A');clog['~A']=$('#~A').get(0)"
+                 html-id id id id))
+        (setf html-id id))
       (clog-connection:execute (connection-id obj)
-			       (format nil "clog['~A']=$('#~A').get(0)"
-				       html-id html-id)))
+                               (format nil "clog['~A']=$('#~A').get(0)"
+                                       html-id html-id)))
   (make-clog-element (connection-id obj) html-id :clog-type clog-type))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -118,16 +118,16 @@ after attachment is changed to one unique to this session."))
   (:documentation "Get/Setf css style."))
 
 (defmethod style ((obj clog-element) style-name
-		      &key (default-answer nil))
+                      &key (default-answer nil))
   (jquery-query obj (format nil "css('~A')" style-name)
-		:default-answer default-answer))
+                :default-answer default-answer))
 
 (defgeneric set-style (clog-element style-name value)
   (:documentation "Set css style."))
 
 (defmethod set-style ((obj clog-element) style-name value)
   (jquery-execute obj (format nil "css('~A','~A')"
-			      style-name (escape-string value)))
+                              style-name (escape-string value)))
   value)
 (defsetf style set-style)
 
@@ -136,13 +136,13 @@ after attachment is changed to one unique to this session."))
 
 (defmethod set-styles ((obj clog-element) style-list)
   (jquery-execute obj (format nil "css({~{~A~^,~}})"
-			      (remove nil (mapcar
-					   (lambda (n)
-					     (when n
-					       (format nil "'~A':'~A'"
-						       (first n)
-						       (second n))))
-					   style-list)))))
+                              (remove nil (mapcar
+                                           (lambda (n)
+                                             (when n
+                                               (format nil "'~A':'~A'"
+                                                       (first n)
+                                                       (second n))))
+                                           style-list)))))
 
 ;;;;;;;;;;;;;;;
 ;; attribute ;;
@@ -152,9 +152,9 @@ after attachment is changed to one unique to this session."))
   (:documentation "Get/Setf html tag attribute. (eg. src on img tag)"))
 
 (defmethod attribute ((obj clog-element) attribute-name
-		      &key (default-answer nil))
+                      &key (default-answer nil))
   (jquery-query obj (format nil "attr('~A')" attribute-name)
-		:default-answer default-answer))
+                :default-answer default-answer))
 
 (defgeneric remove-attribute (clog-element attribute-name)
   (:documentation "Remove html tag attribute. (eg. src on img tag)"))
@@ -168,7 +168,7 @@ after attachment is changed to one unique to this session."))
 
 (defmethod set-attribute ((obj clog-element) attribute-name value)
   (jquery-execute obj (format nil "attr('~A','~A')"
-			      attribute-name (escape-string value)))
+                              attribute-name (escape-string value)))
   value)
 (defsetf attribute set-attribute)
 
@@ -233,7 +233,7 @@ after attachment is changed to one unique to this session."))
 [special key] + Access_Key
 
    The [special key] per browser and platform is:
-  
+
     Browser              Windows       Linux           Mac
     -----------------    -------       -----           ---
     Internet Explorer     [Alt]         N/A            N/A
@@ -488,7 +488,7 @@ Additionally for forms get/setf the value."))
 
 (defmethod set-text-value ((obj clog-element) value)
   (jquery-execute obj (format nil "contents().not(~A.children()).get(0).nodeValue='~A'"
-			      (jquery obj) value)))
+                              (jquery obj) value)))
 
 (defsetf text-value set-text)
 
@@ -780,27 +780,27 @@ elements wrap around it."))
 ;;;;;;;;;;;;;
 
 (deftype display-type () '(member :none :block :inline :inline-block :flex
-			   :grid :inline-grid))
+                           :grid :inline-grid))
 
 (defgeneric display (clog-element)
   (:documentation "Get/Setf display. Display sets the CSS Display property that
 handles how elements are treated by the browser layout engine.
-   
+
     Common Values:
 
     none         - Remove Element from layout but remain in the DOM this is
                    similar to hiddenp, but not like visiblep that makes the
                    element not visible but still take up space in layout.
-   
+
     block        - Displays an element starting on a new line and stretches
                    out to the left and right as far as it can. e.g. <div> by
                    default
-   
+
     inline       - Wraps with text in a paragraph. e.g. <span> by default
-   
+
     inline-block - Flows with paragraph but will always fill from left to
                    right.
-   
+
     flex         - Turn this item in to a flexbox container. The flexbox
                    properties for container to adjust are:
 
@@ -894,7 +894,7 @@ and basis"))
 flex-basis (default :auto = use width or height) for CLOG-ELEMENT"))
 
 (defmethod set-flex ((obj clog-element)
-		     &key (grow 0) (shrink 1) (flex-basis :auto))
+                     &key (grow 0) (shrink 1) (flex-basis :auto))
   (setf (style obj "flex") (format nil "~A ~A ~A" grow shrink flex-basis)))
 
 
@@ -1453,24 +1453,24 @@ in UNITS (default :px)"))
 
 (defmethod set-geometry ((obj clog-element) &key left top right bottom width height (units :px))
   (jquery-execute obj (format nil "css({~A~A~A~A~A~A})"
-			      (if left
-				  (format nil "'left':'~A~A'," left units)
-				  "")
-			      (if top
-				  (format nil "'top':'~A~A'," top units)
-				  "")
-			      (if right
-				  (format nil "'right':'~A~A'," right units)
-				  "")
-			      (if bottom
-				  (format nil "'bottom':'~A~A'," bottom units)
-				  "")
-			      (if width
-				  (format nil "'width':'~A~A'," width units)
-				  "")
-			      (if height
-				  (format nil "'height':'~A~A'," height units)
-				  ""))))
+                              (if left
+                                  (format nil "'left':'~A~A'," left units)
+                                  "")
+                              (if top
+                                  (format nil "'top':'~A~A'," top units)
+                                  "")
+                              (if right
+                                  (format nil "'right':'~A~A'," right units)
+                                  "")
+                              (if bottom
+                                  (format nil "'bottom':'~A~A'," bottom units)
+                                  "")
+                              (if width
+                                  (format nil "'width':'~A~A'," width units)
+                                  "")
+                              (if height
+                                  (format nil "'height':'~A~A'," height units)
+                                  ""))))
 
 ;;;;;;;;;;
 ;; left ;;
@@ -1901,7 +1901,7 @@ is relative to origin of: padding-box|border-box|content-box"))
 
 (deftype background-clip-type ()
   '(member :border-box :padding-box :content-box :text))
-    
+
 (defgeneric background-clip (clog-element)
   (:documentation "Get/Setf background-clip. If an element's background extends
 underneath its border box, padding box, or content box."))
@@ -1958,7 +1958,7 @@ line-width - size or medium|thin|thick|length|initial|inherit"))
 
 (defmethod set-border ((obj clog-element) line-width border-style line-color)
   (setf (style obj "border") (format nil "~A ~A ~A"
-				     line-width border-style line-color)))
+                                     line-width border-style line-color)))
 
 ;;;;;;;;;;;;;;;;;;;
 ;; border-radius ;;
@@ -2019,7 +2019,7 @@ line-width - size or medium|thin|thick|length|initial|inherit"))
   '(member :none :hidden :dotted :dashed :solid :double
     :groove :ridge :inset :outset))
 
-(defgeneric outline (clog-element) 
+(defgeneric outline (clog-element)
   (:documentation "Get outline. <line-color> <outline-style> <line-width>"))
 
 (defmethod outline ((obj clog-element))
@@ -2035,7 +2035,7 @@ line-width -  size or medium|thin|thick|length|initial|inherit"))
 
 (defmethod set-outline ((obj clog-element) line-color outline-style line-width)
   (setf (style obj "outline") (format nil "~A ~A ~A"
-				      line-color outline-style line-width)))
+                                      line-color outline-style line-width)))
 
 ;;;;;;;;;;;;
 ;; margin ;;
@@ -2084,7 +2084,7 @@ VALUE can be - <length>|auto|initial|inherit"))
 
 (defmethod set-padding ((obj clog-element) top right bottom left)
   (setf (style obj "padding") (format nil "~A ~A ~A ~A"
-				      top right bottom left)))
+                                      top right bottom left)))
 (defsetf padding set-padding)
 
 ;;;;;;;;;;;;;;;;;;;;;;
@@ -2144,8 +2144,8 @@ A list of standard cursor types can be found at:
     ((obj clog-element)
      font-style font-variant font-weight font-height font-family)
   (setf (style obj "font")
-	(format nil "~A ~A ~A ~A ~A"
-		font-style font-variant font-weight font-height font-family)))
+        (format nil "~A ~A ~A ~A ~A"
+                font-style font-variant font-weight font-height font-family)))
 
 (defgeneric set-font-css (clog-element value)
   (:documentation "Set font VALUE for CLOG-ELEMENT"))
@@ -2208,7 +2208,7 @@ is set to :table-cell or for labels on form elements."))
 
 (defmethod add-class ((obj clog-element) css-class-name)
   (jquery-execute obj (format nil "addClass('~A')"
-			      (escape-string css-class-name))))
+                              (escape-string css-class-name))))
 
 ;;;;;;;;;;;;;;;;;;
 ;; remove-class ;;
@@ -2219,7 +2219,7 @@ is set to :table-cell or for labels on form elements."))
 
 (defmethod remove-class ((obj clog-element) css-class-name)
   (jquery-execute obj (format nil "removeClass('~A')"
-			      (escape-string css-class-name))))
+                              (escape-string css-class-name))))
 
 ;;;;;;;;;;;;;;;;;;
 ;; toggle-class ;;
@@ -2230,7 +2230,7 @@ is set to :table-cell or for labels on form elements."))
 
 (defmethod toggle-class ((obj clog-element) css-class-name)
   (jquery-execute obj (format nil "toggleClass('~A')"
-			      (escape-string css-class-name))))
+                              (escape-string css-class-name))))
 
 ;;;;;;;;;;;;;;;;;;;;;
 ;; remove-from-dom ;;

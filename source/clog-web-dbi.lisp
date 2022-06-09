@@ -34,16 +34,16 @@
   "Retrieve profile based on current authentication token. If there is
 no token or fails to match as user returns nil"
   (let* ((body  (connection-body obj))
-	 (token (clog-auth:get-authentication-token body)))
+         (token (clog-auth:get-authentication-token body)))
     (when token
       (let ((contents (dbi:fetch-all
-		       (dbi:execute
-			(dbi:prepare
-			 sql-connection
-			 "select * from users where token=?")
-			(list token)))))
-	(when contents
-	  (car contents))))))
+                       (dbi:execute
+                        (dbi:prepare
+                         sql-connection
+                         "select * from users where token=?")
+                        (list token)))))
+        (when contents
+          (car contents))))))
 
 ;;;;;;;;;;;
 ;; login ;;
@@ -54,11 +54,11 @@ no token or fails to match as user returns nil"
 if one is present and login fails."
   (check-type body clog-body)
   (let ((contents (dbi:fetch-all
-		   (dbi:execute
-		    (dbi:prepare
-		     sql-connection
-		     "select * from users where username=?")
-		    (list username)))))
+                   (dbi:execute
+                    (dbi:prepare
+                     sql-connection
+                     "select * from users where username=?")
+                    (list username)))))
     (when (and contents
                (cl-pass:check-password password (getf (car contents) :|password|)))
       (store-authentication-token body (getf (car contents) :|token|)))))
@@ -77,7 +77,7 @@ if one is present and login fails."
 ;;;;;;;;;;;;;
 
 (defun sign-up (body sql-connection &key (title "Sign Up")
-				      (next-step "/login"))
+                                      (next-step "/login"))
   "Setup a sign-up form and process a new sign-up"
   (check-type body clog-body)
   (clog-web-form
@@ -87,50 +87,50 @@ if one is present and login fails."
      ("Retype Password" "repass" :password))
    (lambda (result)
      (cond ((not
-	     (equal (form-result result "password")
-		    (form-result result "repass")))
-	    (clog-web-alert body "Mismatch"
-			    "The passwords do match."
-			    :time-out 3
-			    :place-top t))
-	   ((< (length (form-result result "password")) 4)
-	    (clog-web-alert body "Missize"
-			    "The passwords must at least 4 characters."
-			    :time-out 3
-			    :place-top t))
-	   ((< (length (form-result result "username")) 4)
-	    (clog-web-alert body "Missize"
-			    "The username must be at least 4 characters."
-			    :time-out 3
-			    :place-top t))
-	   (t
-	    (let ((contents (dbi:fetch-all
-			     (dbi:execute
-			      (dbi:prepare
-			       sql-connection
-			       "select username from users where username=?")
-			      (list (form-result result "username"))))))
-	      (cond (contents
-		     (clog-web-alert body "Exists"
-				     "The username is not available."
-				     :time-out 3
-				     :place-top t))
-		    (t
-		     (dbi:do-sql
-		       sql-connection
-		       (sql-insert*
-			"users"
-			`(:username ,(form-result result "username")
-			  :password ,(cl-pass:hash (form-result result "password"))
-			  :token    ,(make-token))))
-		     (url-replace (location body) next-step)))))))))
+             (equal (form-result result "password")
+                    (form-result result "repass")))
+            (clog-web-alert body "Mismatch"
+                            "The passwords do match."
+                            :time-out 3
+                            :place-top t))
+           ((< (length (form-result result "password")) 4)
+            (clog-web-alert body "Missize"
+                            "The passwords must at least 4 characters."
+                            :time-out 3
+                            :place-top t))
+           ((< (length (form-result result "username")) 4)
+            (clog-web-alert body "Missize"
+                            "The username must be at least 4 characters."
+                            :time-out 3
+                            :place-top t))
+           (t
+            (let ((contents (dbi:fetch-all
+                             (dbi:execute
+                              (dbi:prepare
+                               sql-connection
+                               "select username from users where username=?")
+                              (list (form-result result "username"))))))
+              (cond (contents
+                     (clog-web-alert body "Exists"
+                                     "The username is not available."
+                                     :time-out 3
+                                     :place-top t))
+                    (t
+                     (dbi:do-sql
+                       sql-connection
+                       (sql-insert*
+                        "users"
+                        `(:username ,(form-result result "username")
+                          :password ,(cl-pass:hash (form-result result "password"))
+                          :token    ,(make-token))))
+                     (url-replace (location body) next-step)))))))))
 
 ;;;;;;;;;;;;;;;;;;;;;
 ;; change-password ;;
 ;;;;;;;;;;;;;;;;;;;;;
 
 (defun change-password (body sql-connection &key (title "Change Password")
-					      (next-step "/"))
+                                              (next-step "/"))
   "Setup a change password form and handle change of password"
   (check-type body clog-body)
   (clog-web-form
@@ -140,40 +140,40 @@ if one is present and login fails."
      ("Retype Password" "repass" :password))
    (lambda (result)
      (cond ((not
-	     (equal (form-result result "password")
-		    (form-result result "repass")))
-	    (clog-web-alert body "Password Mismatch"
-			    "The new passwords do match."
-			    :time-out 3
-			    :place-top t))
-	   ((< (length (form-result result "password")) 4)
-	    (clog-web-alert body "Password Missize"
-			    "The new passwords must at least 4 characters."
-			    :time-out 3
-			    :place-top t))
-	   (t
-	    (let ((contents (dbi:fetch-all
-			     (dbi:execute
-			      (dbi:prepare
-			       sql-connection
-			       "select username, password from users where username=?")
-			      (list (getf (profile (get-web-site body)) :|username|))))))
-	      (cond ((and contents
+             (equal (form-result result "password")
+                    (form-result result "repass")))
+            (clog-web-alert body "Password Mismatch"
+                            "The new passwords do match."
+                            :time-out 3
+                            :place-top t))
+           ((< (length (form-result result "password")) 4)
+            (clog-web-alert body "Password Missize"
+                            "The new passwords must at least 4 characters."
+                            :time-out 3
+                            :place-top t))
+           (t
+            (let ((contents (dbi:fetch-all
+                             (dbi:execute
+                              (dbi:prepare
+                               sql-connection
+                               "select username, password from users where username=?")
+                              (list (getf (profile (get-web-site body)) :|username|))))))
+              (cond ((and contents
                           (cl-pass:check-password (form-result result "oldpass")
                                                   (getf (car contents) :|password|)))
-		     (dbi:do-sql
-		       sql-connection
-		       (sql-update
-			"users"
-			`(:password ,(cl-pass:hash (form-result result "password")))
-			"username=?")
-		       (list (getf (profile (get-web-site body)) :|username|)))
-		     (url-replace (location body) next-step))
-		    (t
-		     (clog-web-alert body "Old Password"
-				     "Old password is incorrect."
-				     :time-out 3
-				     :place-top t)))))))))
+                     (dbi:do-sql
+                       sql-connection
+                       (sql-update
+                        "users"
+                        `(:password ,(cl-pass:hash (form-result result "password")))
+                        "username=?")
+                       (list (getf (profile (get-web-site body)) :|username|)))
+                     (url-replace (location body) next-step))
+                    (t
+                     (clog-web-alert body "Old Password"
+                                     "Old password is incorrect."
+                                     :time-out 3
+                                     :place-top t)))))))))
 
 ;;;;;;;;;;;;;;;;;;;;
 ;; reset-password ;;
@@ -222,38 +222,38 @@ if one is present and login fails."
   (dbi:do-sql
     sql-connection
     (sql-insert* "content" `(:key        "main"
-			     :title      "Welcome to CLOG"
-			     :value      "Sample data"
-			     :createdate (,sql-timestamp-func))))
+                             :title      "Welcome to CLOG"
+                             :value      "Sample data"
+                             :createdate (,sql-timestamp-func))))
   (dbi:do-sql
     sql-connection
     (sql-insert* "users" `(:username "admin"
-			   :password ,(cl-pass:hash "admin")
-			   :token    ,(make-token)))))
+                           :password ,(cl-pass:hash "admin")
+                           :token    ,(make-token)))))
 
 ;;;;;;;;;;;;;;;;;;
 ;; load-content ;;
 ;;;;;;;;;;;;;;;;;;
 
 (defun load-content (sql-connection table key-value &key
-						      (key-col "key")
-						      where
-						      order-by)
+                                                      (key-col "key")
+                                                      where
+                                                      order-by)
   "Returns list of records found in TABLE where KEY-COL = KEY-VALUE and
 optional WHERE and ORDER-BY sql."
   (let ((contents (dbi:fetch-all
-		   (dbi:execute
-		    (dbi:prepare
-		     sql-connection
-		     (format nil "select * from ~A where ~A=? ~A ~A"
-			     table key-col
-			     (if where
-				 (format nil "and ~A" where)
-				 "")
-			     (if order-by
-				 (format nil "order by ~A" order-by)
-				 "")))
-		    (list key-value)))))
+                   (dbi:execute
+                    (dbi:prepare
+                     sql-connection
+                     (format nil "select * from ~A where ~A=? ~A ~A"
+                             table key-col
+                             (if where
+                                 (format nil "and ~A" where)
+                                 "")
+                             (if order-by
+                                 (format nil "order by ~A" order-by)
+                                 "")))
+                    (list key-value)))))
     contents))
 
 ;;;;;;;;;;;;;;;;;;;;;;
@@ -261,24 +261,24 @@ optional WHERE and ORDER-BY sql."
 ;;;;;;;;;;;;;;;;;;;;;;
 
 (defun clog-web-content (sql-connection
-			 &key
-			   (page               "main")
-			   (table              "content")
-			   (base-url           "/content")
-			   (follow-url-page    t)
-			   comment-table
-			   on-content
-			   on-comment
-			   on-new
-			   on-edit
-			   on-delete
-			   (can-admin          :content-admin)
-			   (can-comment        :content-comment)
-			   (can-show-comments  :content-show-comments)
-			   (can-edit           :content-edit)
-			   (content-order-by   "createdate")
-			   (comment-order-by   "createdate desc")
-			   (sql-timestamp-func *sqlite-timestamp*))
+                         &key
+                           (page               "main")
+                           (table              "content")
+                           (base-url           "/content")
+                           (follow-url-page    t)
+                           comment-table
+                           on-content
+                           on-comment
+                           on-new
+                           on-edit
+                           on-delete
+                           (can-admin          :content-admin)
+                           (can-comment        :content-comment)
+                           (can-show-comments  :content-show-comments)
+                           (can-edit           :content-edit)
+                           (content-order-by   "createdate")
+                           (comment-order-by   "createdate desc")
+                           (sql-timestamp-func *sqlite-timestamp*))
   "This is used to create PAGE based content. If more than one entry in
 TABLE is keyed for same PAGE, if theme is configured for it, displays
 a table of contents, followed by each content record, followed by
@@ -305,121 +305,121 @@ authorize on action set by CAN-COMMENT, CAN-ADMIN, CAN-SHOW-COMMENTS
 and if CAN-EDIT unless they are set to nil."
   (lambda (obj)
     (let* ((body    (connection-body obj))
-	   (theme   (theme (get-web-site body)))
-	   (prof    (profile (get-web-site body)))
-	   (roles   (roles (get-web-site body)))
-	   (url     (base-url-split base-url (path-name (location body)))))
+           (theme   (theme (get-web-site body)))
+           (prof    (profile (get-web-site body)))
+           (roles   (roles (get-web-site body)))
+           (url     (base-url-split base-url (path-name (location body)))))
       ;; set page to show content
       (when follow-url-page
-	(when (second url)
-	  (setf page (second url))))
+        (when (second url)
+          (setf page (second url))))
       ;; page content display
       (let ((pages (load-content sql-connection table page
-				 :order-by content-order-by)))
-	;; ask theme for table of contents or to allow add
-	(funcall theme obj :content-contents
-		 (list :content pages
-		       :do-add (when (clog-auth:is-authorized-p roles can-edit)
-				 (lambda (content)
-				   (push (list sql-timestamp-func) content)
-				   (push :createdate content)
-				   (push page content)
-				   (push :key content)
-				   (push page content)
-				   (push :username content)
-				   (when on-new
-				     (setf content (funcall on-new content)))
-				   (when content
-				     (dbi:do-sql
-				       sql-connection
-				       (sql-insert* table content)))))))
-	(dolist (content pages)
-	  (when content
-	    (when on-content
-	      (setf content (funcall on-content obj content)))
-	    (funcall theme obj :content-body
-		     (list :content content
-			   :save-edit (when (clog-auth:is-authorized-p roles can-edit)
-					(lambda (new-content)
-					  (when on-edit
-					    (setf new-content (funcall on-edit new-content)))
-					  (when new-content
-					    (dbi:do-sql
-					      sql-connection
-					      (sql-update table
-							  new-content
-							  "key=? and createdate=?")
-					      (list page (getf content :|createdate|)))
-					    (print (getf content :|createdate|)))))
-			   :do-delete (when (clog-auth:is-authorized-p roles can-edit)
-					(lambda ()
-					  (if on-delete
-					      (setf on-delete (setf on-delete (funcall on-delete obj page nil)))
-					      (setf on-delete t))
-					  (when on-delete
-					    (dbi:do-sql
-					      sql-connection
-					      (format nil "delete from ~A where key=? and createdate=?" table)
-					      (list page (getf content :|createdate|))))))
-			   :new-comment (when (clog-auth:is-authorized-p
-					       roles can-comment)
-					  (lambda (content)
-					    (push (list sql-timestamp-func) content)
-					    (push :|createdate| content)
-					    (push (list sql-timestamp-func) content)
-					    (push :|key| content)
-					    (push page content)
-					    (push :|parent| content)
-					    (push (getf prof :|username|) content)
-					    (push :|username| content)
-					    (when on-new
-					      (setf content (funcall on-new content)))
-					    (when content
-					      (dbi:do-sql
-						sql-connection
-						(sql-insert* comment-table content))))))))))
+                                 :order-by content-order-by)))
+        ;; ask theme for table of contents or to allow add
+        (funcall theme obj :content-contents
+                 (list :content pages
+                       :do-add (when (clog-auth:is-authorized-p roles can-edit)
+                                 (lambda (content)
+                                   (push (list sql-timestamp-func) content)
+                                   (push :createdate content)
+                                   (push page content)
+                                   (push :key content)
+                                   (push page content)
+                                   (push :username content)
+                                   (when on-new
+                                     (setf content (funcall on-new content)))
+                                   (when content
+                                     (dbi:do-sql
+                                       sql-connection
+                                       (sql-insert* table content)))))))
+        (dolist (content pages)
+          (when content
+            (when on-content
+              (setf content (funcall on-content obj content)))
+            (funcall theme obj :content-body
+                     (list :content content
+                           :save-edit (when (clog-auth:is-authorized-p roles can-edit)
+                                        (lambda (new-content)
+                                          (when on-edit
+                                            (setf new-content (funcall on-edit new-content)))
+                                          (when new-content
+                                            (dbi:do-sql
+                                              sql-connection
+                                              (sql-update table
+                                                          new-content
+                                                          "key=? and createdate=?")
+                                              (list page (getf content :|createdate|)))
+                                            (print (getf content :|createdate|)))))
+                           :do-delete (when (clog-auth:is-authorized-p roles can-edit)
+                                        (lambda ()
+                                          (if on-delete
+                                              (setf on-delete (setf on-delete (funcall on-delete obj page nil)))
+                                              (setf on-delete t))
+                                          (when on-delete
+                                            (dbi:do-sql
+                                              sql-connection
+                                              (format nil "delete from ~A where key=? and createdate=?" table)
+                                              (list page (getf content :|createdate|))))))
+                           :new-comment (when (clog-auth:is-authorized-p
+                                               roles can-comment)
+                                          (lambda (content)
+                                            (push (list sql-timestamp-func) content)
+                                            (push :|createdate| content)
+                                            (push (list sql-timestamp-func) content)
+                                            (push :|key| content)
+                                            (push page content)
+                                            (push :|parent| content)
+                                            (push (getf prof :|username|) content)
+                                            (push :|username| content)
+                                            (when on-new
+                                              (setf content (funcall on-new content)))
+                                            (when content
+                                              (dbi:do-sql
+                                                sql-connection
+                                                (sql-insert* comment-table content))))))))))
       ;; comments display
       (when (and (clog-auth:is-authorized-p roles can-show-comments)
-		 comment-table)
-	(let ((comments (load-content sql-connection comment-table page
-				      :key-col  "parent"
-				      :order-by comment-order-by)))
-	  (dolist (comment comments)
-	    (when on-comment
-	      (setf comment (funcall on-comment obj comment)))
-	    (funcall theme obj :content-comment
-		     (list :content comment
-			   :do-delete (when (or (clog-auth:is-authorized-p roles can-admin)
-						(and (getf prof :|username|)
-						     (equalp (getf comment :|username|)
-							     (getf prof    :|username|))))
-					(lambda ()
-					  (if on-delete
-					      (setf on-delete (funcall on-delete obj page (getf comment :|key|)))
-					      (setf on-delete t))
-					  (when on-delete
-					    (if (clog-auth:is-authorized-p roles can-admin)
-						(dbi:do-sql
-						  sql-connection
-						  (format nil "delete from ~A where key=? and parent=?"
-							  comment-table)
-						  (list (getf comment :|key|) page))
-						(dbi:do-sql
-						  sql-connection
-						  (format nil "delete from ~A where key=? and username=? and parent=?"
-							  comment-table)
-						  (list (getf comment :|key|) (getf prof :|username|) page))))))
-			   :save-edit (when (or (clog-auth:is-authorized-p roles can-admin)
-						(and (getf prof :|username|)
-						     (equalp (getf comment :|username|)
-							     (getf prof    :|username|))))
-					(lambda (content)
-					  (when on-edit
-					    (setf content (funcall on-edit content)))
-					  (when content
-					    (dbi:do-sql
-					      sql-connection
-					      (sql-update comment-table
-							  content
-							  "key=?")
-					      (list (getf comment :|key|))))))))))))))
+                 comment-table)
+        (let ((comments (load-content sql-connection comment-table page
+                                      :key-col  "parent"
+                                      :order-by comment-order-by)))
+          (dolist (comment comments)
+            (when on-comment
+              (setf comment (funcall on-comment obj comment)))
+            (funcall theme obj :content-comment
+                     (list :content comment
+                           :do-delete (when (or (clog-auth:is-authorized-p roles can-admin)
+                                                (and (getf prof :|username|)
+                                                     (equalp (getf comment :|username|)
+                                                             (getf prof    :|username|))))
+                                        (lambda ()
+                                          (if on-delete
+                                              (setf on-delete (funcall on-delete obj page (getf comment :|key|)))
+                                              (setf on-delete t))
+                                          (when on-delete
+                                            (if (clog-auth:is-authorized-p roles can-admin)
+                                                (dbi:do-sql
+                                                  sql-connection
+                                                  (format nil "delete from ~A where key=? and parent=?"
+                                                          comment-table)
+                                                  (list (getf comment :|key|) page))
+                                                (dbi:do-sql
+                                                  sql-connection
+                                                  (format nil "delete from ~A where key=? and username=? and parent=?"
+                                                          comment-table)
+                                                  (list (getf comment :|key|) (getf prof :|username|) page))))))
+                           :save-edit (when (or (clog-auth:is-authorized-p roles can-admin)
+                                                (and (getf prof :|username|)
+                                                     (equalp (getf comment :|username|)
+                                                             (getf prof    :|username|))))
+                                        (lambda (content)
+                                          (when on-edit
+                                            (setf content (funcall on-edit content)))
+                                          (when content
+                                            (dbi:do-sql
+                                              sql-connection
+                                              (sql-update comment-table
+                                                          content
+                                                          "key=?")
+                                              (list (getf comment :|key|))))))))))))))

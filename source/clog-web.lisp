@@ -190,8 +190,8 @@ create-web-menu-bar."))
 (defmethod web-menu-bar-height ((obj clog-obj))
   (let ((app (connection-data-item obj "clog-web")))
     (if (web-menu app)
-	(height (web-menu app))
-	0)))
+        (height (web-menu app))
+        0)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; create-web-menu-bar ;;
@@ -205,11 +205,11 @@ create-web-menu-bar."))
 clog-body."))
 
 (defmethod create-web-menu-bar ((obj clog-obj)
-				&key (class nil)
-				  (html-id nil))
+                                &key (class nil)
+                                  (html-id nil))
   (let* ((div (create-div obj :class class :html-id html-id))
-	 (tmp (create-span div)) ; corrects css issue with w3.css
-	 (app (connection-data-item obj "clog-web")))
+         (tmp (create-span div)) ; corrects css issue with w3.css
+         (app (connection-data-item obj "clog-web")))
     (declare (ignore tmp))
     (add-class div "w3-bar")
     (change-class div 'clog-web-menu-bar)
@@ -224,16 +224,16 @@ clog-body."))
   (:documentation "Drop down menu"))
 
 (defgeneric create-web-menu-drop-down (clog-web-menu-bar
-				       &key content class html-id)
+                                       &key content class html-id)
   (:documentation "Attached a menu bar drop-down to a CLOG-WEB-MENU-BAR"))
 
 (defmethod create-web-menu-drop-down ((obj clog-web-menu-bar)
-	          &key (content "")
-		    (class nil)
-		    (html-id nil))
+                  &key (content "")
+                    (class nil)
+                    (html-id nil))
   (let* ((hover  (create-div obj :class "w3-dropdown-hover"))
-	 (button (create-button hover :class "w3-button" :content content))
-	 (div    (create-div hover :class class :html-id html-id)))
+         (button (create-button hover :class "w3-button" :content content))
+         (div    (create-div hover :class class :html-id html-id)))
     (declare (ignore button))
     (add-class div "w3-dropdown-content")
     (add-class div "w3-bar-block")
@@ -247,27 +247,27 @@ clog-body."))
   (:documentation "Menu item"))
 
 (defgeneric create-web-menu-item (clog-web-menu-drop-down
-				  &key content
-				    link
-				    on-click
-				    class
-				    html-id)
+                                  &key content
+                                    link
+                                    on-click
+                                    class
+                                    html-id)
   (:documentation "Attached a menu item to a CLOG-WEB-MENU-DROP-DOWN.
 Use to set a link or on-click to set an on-click handler"))
 
 (defmethod create-web-menu-item ((obj clog-obj)
-				 &key (content "")
-				   (link nil)
-				   (on-click nil)
-				   (class nil)
-				   (html-id nil))
+                                 &key (content "")
+                                   (link nil)
+                                   (on-click nil)
+                                   (class nil)
+                                   (html-id nil))
   (let ((span
-	  (create-span (if link
-			   (create-a obj :class class :link link)
-			   obj)
-		       :content content
-		       :class (unless link class)
-		       :html-id html-id)))
+          (create-span (if link
+                           (create-a obj :class class :link link)
+                           obj)
+                       :content content
+                       :class (unless link class)
+                       :html-id html-id)))
     (add-class span "w3-bar-item")
     (add-class span "w3-button")
     (set-on-click span on-click)
@@ -282,38 +282,38 @@ Use to set a link or on-click to set an on-click handler"))
 icon ⤢ and full screen mode."))
 
 (defmethod create-web-menu-full-screen ((obj clog-web-menu-bar)
-					&key (html-id nil))
+                                        &key (html-id nil))
   (create-child obj
-    	  " <span class='w3-bar-item w3-right' style='user-select:none;'
-	     onClick='if (document.fullscreenElement==null) {
+          " <span class='w3-bar-item w3-right' style='user-select:none;'
+             onClick='if (document.fullscreenElement==null) {
                          documentElement.requestFullscreen()
                       } else {document.exitFullscreen();}'>⤢</span>"
-	  :html-id html-id
-	  :clog-type 'clog-web-menu-item))
+          :html-id html-id
+          :clog-type 'clog-web-menu-item))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; create-web-menu-icon ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defgeneric create-web-menu-icon (clog-web-menu-bar &key image-url
-						      on-click
-						      class
-						      html-id)
+                                                      on-click
+                                                      class
+                                                      html-id)
   (:documentation "Add icon as menu bar item."))
 
 (defmethod create-web-menu-icon ((obj clog-web-menu-bar)
-				 &key (image-url "/img/clogicon.png")
-				   (on-click nil)
-				   (class "w3-button w3-bar-item")
-				   (html-id nil))
+                                 &key (image-url "/img/clogicon.png")
+                                   (on-click nil)
+                                   (class "w3-button w3-bar-item")
+                                   (html-id nil))
   (set-on-click
    (create-child obj
-		 (format nil "<button class='~A'>~
+                 (format nil "<button class='~A'>~
                                 <img height=22 src='~A'></button>"
-			 class
-			 image-url)
-		 :html-id html-id
-		 :clog-type 'clog-web-menu-item)
+                         class
+                         image-url)
+                 :html-id html-id
+                 :clog-type 'clog-web-menu-item)
    on-click))
 
 
@@ -413,11 +413,11 @@ and right padding and 16x top and bottom margin. If hidden is t then then the
 visiblep propetery will be set to nil on creation."))
 
 (defmethod create-web-panel ((obj clog-obj) &key (content "")
-		 				  (hidden nil)
-						  (class nil)
-						  (html-id nil))
+                                                  (hidden nil)
+                                                  (class nil)
+                                                  (html-id nil))
   (let ((div (create-div obj :content content
-			     :hidden t :class class :html-id html-id)))
+                             :hidden t :class class :html-id html-id)))
     (add-class div "w3-panel")
     (unless hidden
       (setf (visiblep div) t))
@@ -431,18 +431,18 @@ visiblep propetery will be set to nil on creation."))
   (:documentation "Content for web content"))
 
 (defgeneric create-web-content (clog-obj &key content maximum-width
-					   hidden class html-id)
+                                           hidden class html-id)
   (:documentation "Create a clog-web-content. General container with 16px left
 and right padding. If hidden is t then then the visiblep propetery will be set
 to nil on creation."))
 
 (defmethod create-web-content ((obj clog-obj) &key (content "")
-						(maximum-width nil)
-		 				(hidden nil)
-						(class nil)
-						(html-id nil))
+                                                (maximum-width nil)
+                                                (hidden nil)
+                                                (class nil)
+                                                (html-id nil))
   (let ((div (create-div obj :content content
-			     :hidden t :class class :html-id html-id)))
+                             :hidden t :class class :html-id html-id)))
     (add-class div "w3-content")
     (when maximum-width
       (setf (maximum-width div) (unit "px" maximum-width)))
@@ -464,11 +464,11 @@ composit-location is called on the object of that content. If hidden is t then
 then the visiblep propetery will be set to nil on creation."))
 
 (defmethod create-web-compositor ((obj clog-obj) &key (content "")
-		 				  (hidden nil)
-						  (class nil)
-						  (html-id nil))
+                                                  (hidden nil)
+                                                  (class nil)
+                                                  (html-id nil))
   (let ((div (create-div obj :content content
-			     :hidden t :class class :html-id html-id)))
+                             :hidden t :class class :html-id html-id)))
     (add-class div "w3-display-container")
     (unless hidden
       (setf (visiblep div) t))
@@ -480,7 +480,7 @@ then the visiblep propetery will be set to nil on creation."))
 
 (deftype web-padding-class-type ()
   '(member :padding-small :padding :padding-large :padding-16 :padding-24
-    :padding-32 :padding-48 :padding-64	:padding-top-64 :padding-top-48
+    :padding-32 :padding-48 :padding-64 :padding-top-64 :padding-top-48
     :padding-top-48 :padding-top-32))
 
 (defgeneric composite-on-hover (clog-element)
@@ -493,14 +493,14 @@ then the visiblep propetery will be set to nil on creation."))
   (:documentation "Composite CLOG-ELEMENT to coordinate top left."))
 
 (defmethod composite-position ((obj clog-element)
-			       &key
-				 (top 0) (left 0)
-				 (padding-class nil))
+                               &key
+                                 (top 0) (left 0)
+                                 (padding-class nil))
   (add-class obj
      (format nil "w3-display-position~A"
-	     (if padding-class
-		 (format nil " w3-~A" (string-downcase padding-class))
-		 "")))
+             (if padding-class
+                 (format nil " w3-~A" (string-downcase padding-class))
+                 "")))
   (setf (top obj) (unit :px top))
   (setf (left obj) (unit :px left)))
 
@@ -508,100 +508,100 @@ then the visiblep propetery will be set to nil on creation."))
   (:documentation "Composite CLOG-ELEMENT on top-middle."))
 
 (defmethod composite-top-middle ((obj clog-element)
-				    &key (padding-class nil))
+                                    &key (padding-class nil))
   (add-class obj
      (format nil "w3-display-topmiddle~A"
-	     (if padding-class
-		 (format nil " w3-~A" (string-downcase padding-class))
-		 ""))))
+             (if padding-class
+                 (format nil " w3-~A" (string-downcase padding-class))
+                 ""))))
 
 (defgeneric composite-bottom-middle (clog-element &key padding-class)
   (:documentation "Composite CLOG-ELEMENT on bottom-middle."))
 
 (defmethod composite-bottom-middle ((obj clog-element)
-				    &key (padding-class nil))
+                                    &key (padding-class nil))
   (add-class obj
      (format nil "w3-display-bottommiddle~A"
-	     (if padding-class
-		 (format nil " w3-~A" (string-downcase padding-class))
-		 ""))))
+             (if padding-class
+                 (format nil " w3-~A" (string-downcase padding-class))
+                 ""))))
 
 (defgeneric composite-bottom-right (clog-element &key padding-class)
   (:documentation "Composite CLOG-ELEMENT on bottom-right."))
 
 (defmethod composite-bottom-right ((obj clog-element)
-				    &key (padding-class nil))
+                                    &key (padding-class nil))
   (add-class obj
      (format nil "w3-display-bottomright~A"
-	     (if padding-class
-		 (format nil " w3-~A" (string-downcase padding-class))
-		 ""))))
+             (if padding-class
+                 (format nil " w3-~A" (string-downcase padding-class))
+                 ""))))
 
 (defgeneric composite-bottom-left (clog-element &key padding-class)
   (:documentation "Composite CLOG-ELEMENT on bottom-left."))
 
 (defmethod composite-bottom-left ((obj clog-element)
-				    &key (padding-class nil))
+                                    &key (padding-class nil))
   (add-class obj
      (format nil "w3-display-bottomleft~A"
-	     (if padding-class
-		 (format nil " w3-~A" (string-downcase padding-class))
-		 ""))))
+             (if padding-class
+                 (format nil " w3-~A" (string-downcase padding-class))
+                 ""))))
 
 (defgeneric composite-top-right (clog-element &key padding-class)
   (:documentation "Composite CLOG-ELEMENT on top-right."))
 
 (defmethod composite-top-right ((obj clog-element)
-				    &key (padding-class nil))
+                                    &key (padding-class nil))
   (add-class obj
      (format nil "w3-display-topright~A"
-	     (if padding-class
-		 (format nil " w3-~A" (string-downcase padding-class))
-		 ""))))
+             (if padding-class
+                 (format nil " w3-~A" (string-downcase padding-class))
+                 ""))))
 
 (defgeneric composite-top-left (clog-element &key padding-class)
   (:documentation "Composite CLOG-ELEMENT on top-left."))
 
 (defmethod composite-top-left ((obj clog-element)
-				    &key (padding-class nil))
+                                    &key (padding-class nil))
   (add-class obj
      (format nil "w3-display-topleft~A"
-	     (if padding-class
-		 (format nil " w3-~A" (string-downcase padding-class))
-		 ""))))
+             (if padding-class
+                 (format nil " w3-~A" (string-downcase padding-class))
+                 ""))))
 
 (defgeneric composite-left (clog-element &key padding-class)
   (:documentation "Composite CLOG-ELEMENT on left."))
 
 (defmethod composite-left ((obj clog-element)
-				    &key (padding-class nil))
+                                    &key (padding-class nil))
   (add-class obj
      (format nil "w3-display-left~A"
-	     (if padding-class
-		 (format nil " w3-~A" (string-downcase padding-class))
-		 ""))))
+             (if padding-class
+                 (format nil " w3-~A" (string-downcase padding-class))
+                 ""))))
 
 (defgeneric composite-middle (clog-element &key padding-class)
   (:documentation "Composite CLOG-ELEMENT on middle."))
 
 (defmethod composite-middle ((obj clog-element)
-				    &key (padding-class nil))
+                                    &key (padding-class nil))
   (add-class obj
      (format nil "w3-display-middle~A"
-	     (if padding-class
-		 (format nil " w3-~A" (string-downcase padding-class))
-		 ""))))
+             (if padding-class
+                 (format nil " w3-~A" (string-downcase padding-class))
+                 ""))))
 
 (defgeneric composite-right (clog-element &key padding-class)
   (:documentation "Composite CLOG-ELEMENT on right."))
 
 (defmethod composite-right ((obj clog-element)
-				    &key (padding-class nil))
+                                    &key (padding-class nil))
   (add-class obj
      (format nil "w3-display-right~A"
-	     (if padding-class
-		 (format nil " w3-~A" (string-downcase padding-class))
-		 ""))))
+             (if padding-class
+                 (format nil " w3-~A" (string-downcase padding-class))
+                 ""))))
 
 ;;;;;;;;;;;;;;;;;;;;;
 ;; create-web-code ;;
@@ -611,17 +611,17 @@ then the visiblep propetery will be set to nil on creation."))
   (:documentation "Code for web code"))
 
 (defgeneric create-web-code (clog-obj &key content
-					   hidden class html-id)
+                                           hidden class html-id)
   (:documentation "Create a clog-web-code. Code content container.
 If hidden is t then then the visiblep propetery will be set
 to nil on creation."))
 
 (defmethod create-web-code ((obj clog-obj) &key (content "")
-		 				(hidden nil)
-						(class nil)
-						(html-id nil))
+                                                (hidden nil)
+                                                (class nil)
+                                                (html-id nil))
   (let ((div (create-div obj :content content
-			     :hidden t :class class :html-id html-id)))
+                             :hidden t :class class :html-id html-id)))
     (add-class div "w3-code")
     (unless hidden
       (setf (visiblep div) t))
@@ -641,11 +641,11 @@ technique. If hidden is t then then the visiblep propetery will be set
 to nil on creation."))
 
 (defmethod create-web-main ((obj clog-obj) &key (content "")
-		 				  (hidden nil)
-						  (class nil)
-						  (html-id nil))
+                                                  (hidden nil)
+                                                  (class nil)
+                                                  (html-id nil))
   (let ((div (create-div obj :content content
-			     :hidden t :class class :html-id html-id)))
+                             :hidden t :class class :html-id html-id)))
     (add-class div "w3-main")
     (unless hidden
       (setf (visiblep div) t))
@@ -668,11 +668,11 @@ to set the sidebar's size and set a margin equal to the size on the main
 container."))
 
 (defmethod create-web-sidebar ((obj clog-obj) &key (content "")
-		 				  (hidden nil)
-						  (class nil)
-						  (html-id nil))
+                                                  (hidden nil)
+                                                  (class nil)
+                                                  (html-id nil))
   (let ((div (create-div obj :content content
-			     :hidden t :class class :html-id html-id)))
+                             :hidden t :class class :html-id html-id)))
     (setf (display div) :none)
     (setf (visiblep div) t)
     (add-class div "w3-sidebar w3-bar-block")
@@ -693,11 +693,11 @@ If hidden is t then then the visiblep propetery will be set to nil on
 creation."))
 
 (defmethod create-web-sidebar-item ((obj clog-obj) &key (content "")
-		 				  (hidden nil)
-						  (class nil)
-						  (html-id nil))
+                                                  (hidden nil)
+                                                  (class nil)
+                                                  (html-id nil))
   (let ((item (create-button obj :content content
-				 :hidden t :class class :html-id html-id)))
+                                 :hidden t :class class :html-id html-id)))
     (add-class item "w3-bar-item w3-button")
     (unless hidden
       (setf (visiblep item) t))
@@ -726,8 +726,8 @@ If hidden is t then then the visiblep propetery will be set to nil on
 creation."))
 
 (defmethod create-web-auto-row ((obj clog-obj) &key (hidden nil)
-						 (class nil)
-						 (html-id nil))
+                                                 (class nil)
+                                                 (html-id nil))
   (let ((div (create-div obj :hidden t :class class :html-id html-id)))
     (add-class div "w3-cell-row")
     (unless hidden
@@ -744,22 +744,22 @@ creation."))
   (:documentation "Content for web content"))
 
 (defgeneric create-web-auto-column (clog-obj &key content vertical-align
-					   hidden class html-id)
+                                           hidden class html-id)
   (:documentation "Create a clog-web-auto-column. Container for auto-columns
 If hidden is t then then the visiblep propetery will be set to nil on
 creation."))
 
 (defmethod create-web-auto-column ((obj clog-obj) &key (content "")
-						  (vertical-align nil)
-		 				  (hidden nil)
-						  (class nil)
-						  (html-id nil))
+                                                  (vertical-align nil)
+                                                  (hidden nil)
+                                                  (class nil)
+                                                  (html-id nil))
   (let ((div (create-div obj :content content
-			     :hidden t :class class :html-id html-id)))
+                             :hidden t :class class :html-id html-id)))
     (add-class div "w3-cell")
     (when vertical-align
       (add-class div (format nil "w3-cell-~A"
-			     (string-downcase vertical-align))))
+                             (string-downcase vertical-align))))
     (unless hidden
       (setf (visiblep div) t))
     (change-class div 'clog-web-auto-column)))
@@ -786,13 +786,13 @@ right padding is addded. If hidden is t then then the visiblep propetery will
 be set to nil on creation."))
 
 (defmethod create-web-row ((obj clog-obj) &key (padding nil)
-		 			    (hidden nil)
-					    (class nil)
-					    (html-id nil))
+                                            (hidden nil)
+                                            (class nil)
+                                            (html-id nil))
   (let ((div (create-div obj :hidden t :class class :html-id html-id)))
     (if padding
-	(add-class div "w3-row-padding")
-	(add-class div "w3-row"))
+        (add-class div "w3-row-padding")
+        (add-class div "w3-row"))
     (unless hidden
       (setf (visiblep div) t))
     (change-class div 'clog-web-row)))
@@ -802,14 +802,14 @@ be set to nil on creation."))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (deftype web-container-size-type () '(member :half :third :twothird :quarter
-				      :threequarter :rest :col))
+                                      :threequarter :rest :col))
 
 (defclass clog-web-container (clog-div)()
   (:documentation "Container cells for web content in 12 column grid"))
 
 (defgeneric create-web-container (clog-obj &key content
-					     column-size
-					     hidden class html-id)
+                                             column-size
+                                             hidden class html-id)
   (:documentation "Create a clog-web-container. COLUMN-SIZE can be of type
 container-size-type when to set size displayed on medium and large screens
 or can use a string of \"s1-12 m1-12 l1-12\" s m or l followed by how many
@@ -819,12 +819,12 @@ be of type :w3-rest to fill space. If hidden is t then then the visiblep
 propetery will be set to nil on creation."))
 
 (defmethod create-web-container ((obj clog-obj) &key (content "")
-						  (column-size nil)
-		 				  (hidden nil)
-						  (class nil)
-						  (html-id nil))
+                                                  (column-size nil)
+                                                  (hidden nil)
+                                                  (class nil)
+                                                  (html-id nil))
   (let ((div (create-div obj :content content
-			     :hidden t :class class :html-id html-id)))
+                             :hidden t :class class :html-id html-id)))
     (add-class div "w3-container")
     (when column-size
       (add-class div (format nil "w3-~A" (string-downcase column-size))))
@@ -837,30 +837,30 @@ propetery will be set to nil on creation."))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defun clog-web-alert (obj title content &key
-					   (color-class "w3-red")
-					   (time-out nil)
-					   (place-top nil)
-					   (html-id nil))
+                                           (color-class "w3-red")
+                                           (time-out nil)
+                                           (place-top nil)
+                                           (html-id nil))
   "Create an alert toast with option :TIME-OUT. If place-top is t then alert
 is placed in DOM at top of OBJ instead of bottom of OBJ."
   (unless html-id
       (setf html-id (clog-connection:generate-id)))
   (let* ((panel    (create-child obj
-				 (format nil
+                                 (format nil
 "  <div class='w3-panel ~A w3-animate-right w3-display-container'>~
    <span id='~A-closer' class='w3-button w3-large w3-display-topright'>&times;</span>~
    <h3>~A</h3>~
    <p>~A</p>~
 </div>"
                               color-class
-			      html-id
-			      title
-			      content)
-				 :html-id html-id
-				 :auto-place nil)))
+                              html-id
+                              title
+                              content)
+                                 :html-id html-id
+                                 :auto-place nil)))
     (if place-top
-	(place-inside-top-of obj panel)
-	(place-inside-bottom-of obj panel))
+        (place-inside-top-of obj panel)
+        (place-inside-bottom-of obj panel))
     (set-on-click
      (attach-as-child obj (format nil "~A-closer" html-id))
      (lambda (obj)
@@ -875,12 +875,12 @@ is placed in DOM at top of OBJ instead of bottom of OBJ."
   (second (assoc key result :test #'equal)))
 
 (defun clog-web-form (obj content fields on-input &key (modal nil)
-						    (ok-text "OK")
-						    (cancel-text "Cancel")
-						    (border-class "w3-border")
-						    (text-class "w3-text-black")
-						    (color-class "w3-black")
-						    (html-id nil))
+                                                    (ok-text "OK")
+                                                    (cancel-text "Cancel")
+                                                    (border-class "w3-border")
+                                                    (text-class "w3-text-black")
+                                                    (color-class "w3-black")
+                                                    (html-id nil))
   "Create a form with CONTENT followed by FIELDS.
 FIELDS is a list of lists each list has:
 
@@ -906,87 +906,87 @@ if confirmed or nil if canceled. CANCEL-TEXT is only displayed if modal is t
 If clog-web-site is being used the class class setting will be replaced with
 the value if set in the theme settings."
   (let* ((app     (connection-data-item obj "clog-web"))
-	 (website (web-site app)))
+         (website (web-site app)))
     (when website
       (when (getf (settings website) :text-class)
-	(setf text-class (getf (settings website) :text-class)))
+        (setf text-class (getf (settings website) :text-class)))
       (when (getf (settings website) :border-class)
-	(setf border-class (getf (settings website) :border-class)))
+        (setf border-class (getf (settings website) :border-class)))
       (when (getf (settings website) :color-class)
-	(setf color-class (getf (settings website) :color-class)))))
+        (setf color-class (getf (settings website) :color-class)))))
   (unless html-id
     (setf html-id (clog-connection:generate-id)))
   (let* ((fls (format nil "~{~A~}"
-		      (mapcar (lambda (l)
-				(cond
-				  ((eq (third l) :select)
-				   (format nil
-					   "<p><label class='~A'>~A</label>~
-			       <select class='w3-select ~A' name='~A-~A'>~A</select></p>"
-					   text-class (first l)
-					   border-class html-id (second l)
-					   (format nil "~{~A~}"
-						   (mapcar (lambda (s)
-							     (format nil
-								     "<option value='~A' ~A>~A</option>"
-								     (second s)
-								     (if (third s)
-									 (third s)
-									 "")
-								     (first s)))
-							   (fourth l)))))
-				  ((eq (third l) :radio)
-				   (format nil
-					   "<p><label class='~A'>~A</label>~A</p>"
-					   text-class (first l)
-					   (format nil "~{~A~}"
-						   (mapcar (lambda (s)
-							     (format nil
-			       "<p><input type=radio class='w3-radio' name='~A-~A'~
+                      (mapcar (lambda (l)
+                                (cond
+                                  ((eq (third l) :select)
+                                   (format nil
+                                           "<p><label class='~A'>~A</label>~
+                               <select class='w3-select ~A' name='~A-~A'>~A</select></p>"
+                                           text-class (first l)
+                                           border-class html-id (second l)
+                                           (format nil "~{~A~}"
+                                                   (mapcar (lambda (s)
+                                                             (format nil
+                                                                     "<option value='~A' ~A>~A</option>"
+                                                                     (second s)
+                                                                     (if (third s)
+                                                                         (third s)
+                                                                         "")
+                                                                     (first s)))
+                                                           (fourth l)))))
+                                  ((eq (third l) :radio)
+                                   (format nil
+                                           "<p><label class='~A'>~A</label>~A</p>"
+                                           text-class (first l)
+                                           (format nil "~{~A~}"
+                                                   (mapcar (lambda (s)
+                                                             (format nil
+                               "<p><input type=radio class='w3-radio' name='~A-~A'~
                                       id='~A-~A-~A' value='~A' ~A> ~
                                      <label for='~A-~A-~A'>~A</label></p>"
-			                                      html-id (second l)
-							      html-id (second l) (second s)
-							      (second s)
-							      (if (third s)
-								  (third s)
-								  "")
-							      html-id (second l) (second s)
-							      (first s)))
-							   (fourth l)))))
-				  ((eq (third l) :checkbox)
-				   (format nil
-					   "<p><input class='w3-check' type='checkbox' ~
+                                                              html-id (second l)
+                                                              html-id (second l) (second s)
+                                                              (second s)
+                                                              (if (third s)
+                                                                  (third s)
+                                                                  "")
+                                                              html-id (second l) (second s)
+                                                              (first s)))
+                                                           (fourth l)))))
+                                  ((eq (third l) :checkbox)
+                                   (format nil
+                                           "<p><input class='w3-check' type='checkbox' ~
                                                   name='~A-~A' id='~A-~A' ~A> ~
                                                   <label class='~A' for='~A-~A'>~
                                                   ~A</label>~
                                             </p>"
-					   html-id (second l) html-id (second l)
-					   (if (fourth l)
-					       "checked"
-					       "")
-					   text-class html-id (second l)
-					   (first l)))
-				  ((third l)
-				   (format nil
-					   "<p><label class='~A'>~A</label>~
+                                           html-id (second l) html-id (second l)
+                                           (if (fourth l)
+                                               "checked"
+                                               "")
+                                           text-class html-id (second l)
+                                           (first l)))
+                                  ((third l)
+                                   (format nil
+                                           "<p><label class='~A'>~A</label>~
                                                  <input class='w3-input ~A' type='~A'~
                                                   name='~A-~A' id='~A-~A' value='~A'></p>"
-					   text-class (first l)
-					   border-class (third l)
-					   html-id (second l) html-id (second l)
-					   (if (fourth l)
-					       (fourth l)
-					       "")))
-				  (t
-				   (format nil
-					    "<p><label class='~A'>~A</label>~
+                                           text-class (first l)
+                                           border-class (third l)
+                                           html-id (second l) html-id (second l)
+                                           (if (fourth l)
+                                               (fourth l)
+                                               "")))
+                                  (t
+                                   (format nil
+                                            "<p><label class='~A'>~A</label>~
                                <input class='w3-input ~A' type='text' name='~A-~A' id='~A-~A'></p>"
                                             text-class (first l)
-					    border-class html-id (second l) html-id (second l)))))
-			      fields)))
-	 (win  (create-web-content obj
-				  :content        (format nil
+                                            border-class html-id (second l) html-id (second l)))))
+                              fields)))
+         (win  (create-web-content obj
+                                  :content        (format nil
 "<div class='w3-panel'>
 ~A
 <form class='w3-container' onSubmit='return false;'>
@@ -996,43 +996,43 @@ the value if set in the theme settings."
 </center>
 </form>
 </div>" (if content
-	    (format nil "<center>~A</center><br>" content)
-	    "")
+            (format nil "<center>~A</center><br>" content)
+            "")
         fls
-	color-class html-id ok-text ; ok
-	(if modal
-	    (format nil "&nbsp;<button class='w3-button ~A' style='width:7em' id='~A-cancel'>~A</button>"
-		    color-class html-id cancel-text)
-	    ""))
-				  :hidden          t
-				  :html-id         html-id))
-	 (ok     (attach-as-child win (format nil "~A-ok" html-id)))
-	 (cancel (if modal
-		     (attach-as-child win (format nil "~A-cancel" html-id))
-		     nil)))
+        color-class html-id ok-text ; ok
+        (if modal
+            (format nil "&nbsp;<button class='w3-button ~A' style='width:7em' id='~A-cancel'>~A</button>"
+                    color-class html-id cancel-text)
+            ""))
+                                  :hidden          t
+                                  :html-id         html-id))
+         (ok     (attach-as-child win (format nil "~A-ok" html-id)))
+         (cancel (if modal
+                     (attach-as-child win (format nil "~A-cancel" html-id))
+                     nil)))
     (declare (ignore cancel))
     (setf (visiblep win) t)
     (when modal
       (js-execute obj (format nil "$('[name=~A-~A]').focus()"
-			      html-id
-			      (cadar fields))))
+                              html-id
+                              (cadar fields))))
     (set-on-click ok (lambda (obj)
-		       (declare (ignore obj))
-		       (let ((result (mapcar
-				      (lambda (l)
-					`(,(second l)
-					  ,(let ((name (format nil "~A-~A" html-id (second l))))
-					     (cond ((eq (third l) :select)
-						    (select-value win name))
-						   ((eq (third l) :radio)
-						    (radio-value win name))
-						   ((eq (third l) :checkbox)
-						    (checkbox-value win name))
-						   (t
-						    (name-value win name))))))
-				      fields)))
-			 (funcall on-input result)))
-		  :one-time nil)))
+                       (declare (ignore obj))
+                       (let ((result (mapcar
+                                      (lambda (l)
+                                        `(,(second l)
+                                          ,(let ((name (format nil "~A-~A" html-id (second l))))
+                                             (cond ((eq (third l) :select)
+                                                    (select-value win name))
+                                                   ((eq (third l) :radio)
+                                                    (radio-value win name))
+                                                   ((eq (third l) :checkbox)
+                                                    (checkbox-value win name))
+                                                   (t
+                                                    (name-value win name))))))
+                                      fields)))
+                         (funcall on-input result)))
+                  :one-time nil)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Implementation - clog-web Websites
@@ -1044,21 +1044,21 @@ the value if set in the theme settings."
 
 (defclass clog-web-site ()
   ((theme     :initarg :theme
-	      :accessor theme)
+              :accessor theme)
    (profile   :initarg :profile
-	      :accessor profile)
+              :accessor profile)
    (roles     :initarg :roles
-	      :accessor roles)
+              :accessor roles)
    (settings  :initarg :settings
               :reader  settings)
    (url       :initarg :url
               :reader  url)
    (title     :initarg :title
-	      :reader title)
+              :reader title)
    (footer    :initarg :footer
-	      :reader footer)
+              :reader footer)
    (logo      :initarg :logo
-	      :reader logo))
+              :reader logo))
   (:documentation "Website information"))
 
 ;;;;;;;;;;;;;;;;;;;;;
@@ -1066,36 +1066,36 @@ the value if set in the theme settings."
 ;;;;;;;;;;;;;;;;;;;;;
 
 (defgeneric create-web-site (clog-obj &key
-					settings
-					profile
-					roles
-					theme
-					url
-					title
-					footer
-					logo)
+                                        settings
+                                        profile
+                                        roles
+                                        theme
+                                        url
+                                        title
+                                        footer
+                                        logo)
   (:documentation "Attach a clog-web-site to a CLOG-OBJ generally a
 clog-body."))
 
 (defmethod create-web-site ((obj clog-obj) &key
-					     settings
-					     (profile nil)
-					     (roles nil)
-					     (theme 'default-theme)
-					     (url "/")
-					     (title "")
-					     (footer "")
-					     (logo ""))
+                                             settings
+                                             (profile nil)
+                                             (roles nil)
+                                             (theme 'default-theme)
+                                             (url "/")
+                                             (title "")
+                                             (footer "")
+                                             (logo ""))
   (let ((website (make-instance 'clog-web-site
-				:settings settings
-				:profile  profile
-				:roles    roles
-				:theme    theme
-				:url      url
-				:title    title
-				:footer   footer
-				:logo     logo))
-	(app (connection-data-item obj "clog-web")))
+                                :settings settings
+                                :profile  profile
+                                :roles    roles
+                                :theme    theme
+                                :url      url
+                                :title    title
+                                :footer   footer
+                                :logo     logo))
+        (app (connection-data-item obj "clog-web")))
     (setf (web-site app) website)
     website))
 
@@ -1109,7 +1109,7 @@ connection"))
 
 (defmethod get-web-site ((obj clog-obj))
   (let* ((app     (connection-data-item obj "clog-web"))
-	 (website (web-site app)))
+         (website (web-site app)))
     website))
 
 ;;;;;;;;;;;;;;;;;;;;;
@@ -1126,10 +1126,10 @@ permission to PAGE"))
 
 (defmethod create-web-page ((obj clog-obj) page properties &key authorize)
   (if (or (and authorize
-		 (clog-auth:is-authorized-p (roles (get-web-site obj)) page))
-	    (not authorize))
+                 (clog-auth:is-authorized-p (roles (get-web-site obj)) page))
+            (not authorize))
     (funcall (theme (get-web-site obj))
-	     obj page properties)
+             obj page properties)
     (create-div obj :content "Authorization failure")))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -1146,9 +1146,9 @@ and no-script body information for search engines with DESCRIPTION."
   (lambda (path content)
     (declare (ignore path))
     (funcall (cl-template:compile-template content)
-	     (list :meta (format nil "<meta name='description' content='~A'>"
-				 description)
-		   :body description))))
+             (list :meta (format nil "<meta name='description' content='~A'>"
+                                 description)
+                   :body description))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; clog-web-routes-from-menu ;;
@@ -1160,7 +1160,7 @@ element."
   (dolist (drop-down menu)
     (dolist (item (second drop-down))
       (when (third item)
-	(set-on-new-window (third item) :path (second item))))))
+        (set-on-new-window (third item) :path (second item))))))
 
 ;;;;;;;;;;;;;;;;
 ;; base-url-p ;;
@@ -1188,5 +1188,5 @@ element."
   "Split path by / adjusting for base-url"
   (let ((s (ppcre:split "/" (adjust-for-base-url base-url url-path))))
     (if (equal (car s) "")
-	(cdr s)
-	s)))
+        (cdr s)
+        s)))
