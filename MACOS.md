@@ -47,8 +47,16 @@ using emacs (and if desire terminal version use emacs -nw) and then use M-x slim
    (clog:run-demo 1)
 ```
 
+Tip: If use emacs graphically, you may find it easier to set the
+apple command key to also act as a Meta key:
 
-Tips: If using emacs in the terminal (ie emacs -nw) in terminal
+```
+(setf ns-command-modifier 'meta)
+;; Since we map command to meta let meta ` switch frames
+(global-set-key "\M-`" 'other-frame)
+```
+
+Tip: If using emacs in the terminal (ie emacs -nw) in terminal
 preferances under profiles and under the default profile choose "Use
 Option as Meta". I also add the following to my ~/.emacs.d/init.el:
 
