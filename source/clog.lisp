@@ -123,12 +123,13 @@ embedded in a native template application.)"
   (flush-connection-cache      function)
 
   "CLOG-Obj - Internals for Extensions and Plugins"
-  (html-id      generic-function)
-  (execute      generic-function)
-  (query        generic-function)
-  (js-execute   generic-function)
-  (js-query     generic-function)
-  (set-on-event generic-function)
+  (html-id                generic-function)
+  (execute                generic-function)
+  (query                  generic-function)
+  (js-execute             generic-function)
+  (js-query               generic-function)
+  (set-on-event           generic-function)
+  (set-on-event-with-data generic-function)
 
   "CLOG-Obj - Event Handling"
   (set-on-resize             generic-function)

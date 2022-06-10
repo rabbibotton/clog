@@ -527,17 +527,44 @@ an application share per connection the same queue of serialized events."
 ;; set-on-event ;;
 ;;;;;;;;;;;;;;;;;;
 
-(defgeneric set-on-event (clog-obj event-name handler)
+(defgeneric set-on-event (clog-obj event-name handler &key cancel-event one-time)
   (:documentation "Set a HANDLER for EVENT-NAME on CLOG-OBJ. If handler is
 nil unbind all event handlers. (Internal)"))
 
-(defmethod set-on-event ((obj clog-obj) event-name handler)
+(defmethod set-on-event ((obj clog-obj) event-name handler
+			 &key
+			   (cancel-event nil)
+			   (one-time nil))
   (set-event obj event-name
              (when handler
                (lambda (data)
                  (declare (ignore data))
-                 (funcall handler obj)))))
+                 (funcall handler obj)))
+	     :cancel-event cancel-event
+	     :one-time     one-time))
 
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; set-on-event-with-date ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric set-on-event-with-data (clog-obj event-name handler
+				    &key cancel-event one-time)
+  (:documentation "Set a HANDLER for EVENT-NAME on CLOG-OBJ. If handler is nil unbind
+all event handlers. Handler is called with a data option passed from javascript
+calling the jQuery custom event mechanism .trigger('event_name', data) (Internal)"))
+
+(defmethod set-on-event-with-data ((obj clog-obj) event-name handler
+				   &key
+				     (cancel-event nil)
+				     (one-time     nil))
+  (set-event obj event-name
+             (when handler
+               (lambda (data)
+                 (funcall handler obj data)))
+	     :call-back-script "+data"
+	     :cancel-event cancel-event
+	     :one-time     one-time))
 
 ;;;;;;;;;;;;;;;;;;;
 ;; set-on-resize ;;
