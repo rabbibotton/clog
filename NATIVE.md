@@ -27,6 +27,8 @@ chrome --new-window --app="http://127.0.0.1:8080/builder"
 The documentation for ceramic is at:
 http://ceramic.github.io/
 
+Complete project at - https://github.com/rabbibotton/elect
+
 1. (ql:quickload :ceramic)
 2. (ceramic:setup)
 
