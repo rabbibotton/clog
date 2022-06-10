@@ -68,9 +68,17 @@ In the REPL let's load the new project:
   (start-app))
 ```
 
-5. I suggest starting from scratch at this point: M-x slime-restart-inferior-lisp
-6. (ql:quickload :elect)
-7. (elect:start-app)
+5. We need to add to the botton of on-new-window code to shutdown app.
+
+```
+  (clog:run body) ; wait while body is running
+  (ceramic:quit)  ; quit ceramic/electron
+  (clog:shutdown) ; shutdown clog
+```
+
+6. I suggest starting from scratch at this point: M-x slime-restart-inferior-lisp
+7. (ql:quickload :elect)
+8. (elect:start-app)
 
 That should start up a native application with your CLOG app
 
