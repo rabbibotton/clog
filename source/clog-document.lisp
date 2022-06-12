@@ -168,8 +168,33 @@ clog-document object. (Private)"))
 
 (defmethod load-script ((obj clog-document) script-url)
   (jquery-execute (head-element obj)
-                  (format nil "append('<script src=\"~A\">')"
-                          (escape-string script-url))))
+                  (format nil "append('<script src=\"~A\"></script>~
+     <script>$(clog[\\'document\\']).trigger(\\'on-load-script\\',~
+                                             \\'~A\\')</script>')"
+                          (escape-string script-url)
+			  (escape-string script-url))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;
+;; set-on-load-script ;;
+;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric set-on-load-script (clog-document handler
+				    &key cancel-event one-time)
+  (:documentation "Set a HANDLER for script load complete on CLOG-document.
+the handler (clog-obj data) data is the script-url used to load it.
+The handler should be installed on the document before calling load-script."))
+
+(defmethod set-on-load-script ((obj clog-document) handler
+			       &key
+				 (cancel-event nil)
+				 (one-time     nil))
+  (set-event obj "on-load-script"
+             (when handler
+               (lambda (data)
+                 (funcall handler obj data)))
+	     :call-back-script "+data"
+	     :cancel-event cancel-event
+	     :one-time     one-time))
 
 ;;;;;;;;;
 ;; put ;;
