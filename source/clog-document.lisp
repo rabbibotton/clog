@@ -167,7 +167,11 @@ clog-document object. (Private)"))
   (:documentation "Load script from SCRIPT-URL."))
 
 (defmethod load-script ((obj clog-document) script-url)
-  (jquery-execute (head-element obj)
+  ;; After we load the script from src we then fire the
+  ;; custom on-load-script event in the next line of
+  ;; script after the load as scripts are loaded
+  ;; synchronously.
+  (Jquery-execute (head-element obj)
                   (format nil "append('<script src=\"~A\"></script>~
      <script>$(clog[\\'document\\']).trigger(\\'on-load-script\\',~
                                              \\'~A\\')</script>')"

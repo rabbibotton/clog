@@ -95,7 +95,7 @@ frameworks and website frameworks. The CLOG package starts up the
 connectivity to the browser or other websocket client (often a browser
 embedded in a native template application.)</p>
 
-<p>STATUS: CLOG is complete and all work is on higher order additions, 
+<p>STATUS: CLOG is complete and all work is on higher order additions,
 such as full desktop over the web, database tools,etc. See below for
 some enhacements being worked on. CLOG is actually based on GNOGA, a
 framework I wrote for Ada in 2013 and used in commercial production
@@ -292,7 +292,7 @@ change the even hander, set-on-* function will need to be called.</p></li>
 <h2><a href="#CLOG:@CLOG-EVENT-DATA%20MGL-PAX:SECTION">3 CLOG Event Data</a></h2>
 
 <p>Some events in CLOG return in addition to the target event, event data.
-The data is passed in the second argument to the event handler as a 
+The data is passed in the second argument to the event handler as a
 property list. To retrieve the data use (getf data :property) the available
 properties (to use for :property) are based on the event type.</p>
 
@@ -819,10 +819,21 @@ dicarded, return <code>CLOG-OBJ</code>. (Internal)</p></li>
 <a id="CLOG:SET-ON-EVENT%20GENERIC-FUNCTION"></a></p>
 
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:SET-ON-EVENT%20GENERIC-FUNCTION" >SET-ON-EVENT</a></span></span> <span class="locative-args">CLOG-OBJ EVENT-NAME HANDLER</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:SET-ON-EVENT%20GENERIC-FUNCTION" >SET-ON-EVENT</a></span></span> <span class="locative-args">CLOG-OBJ EVENT-NAME HANDLER &amp;KEY CANCEL-EVENT ONE-TIME</span></span></p>
 
 <p>Set a <code>HANDLER</code> for <code>EVENT-NAME</code> on <code>CLOG-OBJ</code>. If handler is
 nil unbind all event handlers. (Internal)</p></li>
+</ul>
+
+<p><a id="x-28CLOG-3ASET-ON-EVENT-WITH-DATA-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG:SET-ON-EVENT-WITH-DATA%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:SET-ON-EVENT-WITH-DATA%20GENERIC-FUNCTION" >SET-ON-EVENT-WITH-DATA</a></span></span> <span class="locative-args">CLOG-OBJ EVENT-NAME HANDLER &amp;KEY CANCEL-EVENT ONE-TIME</span></span></p>
+
+<p>Set a <code>HANDLER</code> for <code>EVENT-NAME</code> on <code>CLOG-OBJ</code>. If handler is nil unbind
+all event handlers. Handler is called with a data option passed from javascript
+calling the jQuery custom event mechanism .trigger('event_name', data) (Internal)</p></li>
 </ul>
 
 <p>CLOG-Obj - Event Handling</p>
@@ -4586,7 +4597,7 @@ if <code>:HTML-ID</code> &quot;myid&quot; then the <code>HTML-ID</code> for cent
 clog-element but can be placed anywhere on a document and are applied as found
 in the document. Although they are not 'scoped'. Media is a css media query
 defaulting to all. To load CSS style sheets from files see <a href="#CLOG:LOAD-CSS%20GENERIC-FUNCTION" title="CLOG:LOAD-CSS GENERIC-FUNCTION"><code>LOAD-CSS</code></a> in
-clog-document. The add-style method can be used or can directly use the 
+clog-document. The add-style method can be used or can directly use the
 <a href="#CLOG:TEXT%20GENERIC-FUNCTION" title="CLOG:TEXT GENERIC-FUNCTION"><code>TEXT</code></a> method to access blocks content.</p></li>
 </ul>
 
@@ -6428,7 +6439,7 @@ The on-window-change clog-obj received is the new window</p></li>
 use jquery-ui to move/resize and will not work on mobile. When client-movement
 is t only on-window-move is fired once at start of drag and on-window-move-done
 at end of drag and on-window-resize at start of resize and
-on-window-resize-done at end of resize. If has-pinner a toggle wil appear on 
+on-window-resize-done at end of resize. If has-pinner a toggle wil appear on
 title bar to allow pinning the window in place, if keep-on-top t then when
 pinned also will keep-on-top. If had-pinned is nil and keep-on-top t then
 the window will be set to keep-on-top always.</p></li>
@@ -7538,14 +7549,36 @@ no token or fails to match as user returns nil</p></li>
 <a id="CLOG-WEB-DBI:SIGN-UP%20FUNCTION"></a></p>
 
 <ul>
-<li><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#CLOG-WEB-DBI:SIGN-UP%20FUNCTION" >SIGN-UP</a></span></span> <span class="locative-args">BODY SQL-CONNECTION &amp;KEY (TITLE &quot;Sign Up&quot;) (NEXT-STEP &quot;/login&quot;)</span></span></li>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#CLOG-WEB-DBI:SIGN-UP%20FUNCTION" >SIGN-UP</a></span></span> <span class="locative-args">BODY SQL-CONNECTION &amp;KEY (TITLE &quot;Sign Up&quot;) (NEXT-STEP &quot;/login&quot;)</span></span></p>
+
+<p>Setup a sign-up form and process a new sign-up</p></li>
+</ul>
+
+<p><a id="x-28CLOG-WEB-DBI-3ACHANGE-PASSWORD-20FUNCTION-29"></a>
+<a id="CLOG-WEB-DBI:CHANGE-PASSWORD%20FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#CLOG-WEB-DBI:CHANGE-PASSWORD%20FUNCTION" >CHANGE-PASSWORD</a></span></span> <span class="locative-args">BODY SQL-CONNECTION &amp;KEY (TITLE &quot;Change Password&quot;) (NEXT-STEP &quot;/&quot;)</span></span></p>
+
+<p>Setup a change password form and handle change of password</p></li>
+</ul>
+
+<p><a id="x-28CLOG-WEB-DBI-3ARESET-PASSWORD-20FUNCTION-29"></a>
+<a id="CLOG-WEB-DBI:RESET-PASSWORD%20FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#CLOG-WEB-DBI:RESET-PASSWORD%20FUNCTION" >RESET-PASSWORD</a></span></span> <span class="locative-args">SQL-CONNECTION USERNAME &amp;KEY (NEW-PASSWORD &quot;password&quot;)</span></span></p>
+
+<p>Reset <code>USERNAME</code>'s password to <code>:NEW-PASSWORD</code></p></li>
 </ul>
 
 <p><a id="x-28CLOG-WEB-DBI-3AMAKE-TOKEN-20FUNCTION-29"></a>
 <a id="CLOG-WEB-DBI:MAKE-TOKEN%20FUNCTION"></a></p>
 
 <ul>
-<li><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#CLOG-WEB-DBI:MAKE-TOKEN%20FUNCTION" >MAKE-TOKEN</a></span></span></span></li>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#CLOG-WEB-DBI:MAKE-TOKEN%20FUNCTION" >MAKE-TOKEN</a></span></span></span></p>
+
+<p>Create a unique token used to associate a browser with a user</p></li>
 </ul>
 
 <p><a id="x-28CLOG-WEB-DBI-3ALOAD-CONTENT-20FUNCTION-29"></a>
@@ -7562,7 +7595,9 @@ optional <code>WHERE</code> and <code>ORDER-BY</code> sql.</p></li>
 <a id="CLOG-WEB-DBI:CREATE-BASE-TABLES%20FUNCTION"></a></p>
 
 <ul>
-<li><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#CLOG-WEB-DBI:CREATE-BASE-TABLES%20FUNCTION" >CREATE-BASE-TABLES</a></span></span> <span class="locative-args">SQL-CONNECTION &amp;KEY (SQL-TIMESTAMP-FUNC <a href="#CLOG:*SQLITE-TIMESTAMP*%20VARIABLE" title="CLOG:*SQLITE-TIMESTAMP* VARIABLE"><code>*SQLITE-TIMESTAMP*</code></a>)</span></span></li>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#CLOG-WEB-DBI:CREATE-BASE-TABLES%20FUNCTION" >CREATE-BASE-TABLES</a></span></span> <span class="locative-args">SQL-CONNECTION &amp;KEY (SQL-TIMESTAMP-FUNC <a href="#CLOG:*SQLITE-TIMESTAMP*%20VARIABLE" title="CLOG:*SQLITE-TIMESTAMP* VARIABLE"><code>*SQLITE-TIMESTAMP*</code></a>)</span></span></p>
+
+<p>Create default tables</p></li>
 </ul>
 
 <p><a id="x-28CLOG-3A-40CLOG-WEB-THEMES-20MGL-PAX-3ASECTION-29"></a>
@@ -8268,6 +8303,17 @@ on-storage event is fired for changes to :local storage keys.</p></li>
 If <code>ON-FULL-SCREEN-CHANGE-HANDLER</code> is nil unbind the event.</p></li>
 </ul>
 
+<p><a id="x-28CLOG-3ASET-ON-LOAD-SCRIPT-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG:SET-ON-LOAD-SCRIPT%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:SET-ON-LOAD-SCRIPT%20GENERIC-FUNCTION" >SET-ON-LOAD-SCRIPT</a></span></span> <span class="locative-args">CLOG-DOCUMENT HANDLER &amp;KEY CANCEL-EVENT ONE-TIME</span></span></p>
+
+<p>Set a <code>HANDLER</code> for script load complete on CLOG-document.
+the handler (clog-obj data) data is the script-url used to load it.
+The handler should be installed on the document before calling load-script.</p></li>
+</ul>
+
 <p><a id="x-28CLOG-3A-40CLOG-LOCATION-20MGL-PAX-3ASECTION-29"></a>
 <a id="CLOG:@CLOG-LOCATION%20MGL-PAX:SECTION"></a></p>
 
@@ -8703,7 +8749,7 @@ keyboard-event-script:</p>
          <span class="paren3">(<span class="code">when handler
            <span class="paren4">(<span class="code"><i><span class="symbol">lambda</span></i> <span class="paren5">(<span class="code">data</span>)</span>
          <span class="paren5">(<span class="code">funcall handler obj <span class="paren6">(<span class="code">parse-keyboard-event data</span>)</span></span>)</span></span>)</span></span>)</span>
-         <span class="keyword">:call-back-script</span> keyboard-event-script</span>)</span></span>)</span>   </span></code></pre>
+         <span class="keyword">:call-back-script</span> keyboard-event-script</span>)</span></span>)</span></span></code></pre>
 
 <ul>
 <li>The script</li>
