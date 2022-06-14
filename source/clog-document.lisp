@@ -163,20 +163,31 @@ clog-document object. (Private)"))
 ;; load-script ;;
 ;;;;;;;;;;;;;;;;;
 
-(defgeneric load-script (clog-document script-url)
+(defgeneric load-script (clog-document script-url &key wait-for-load
+						    wait-timeout)
   (:documentation "Load script from SCRIPT-URL."))
 
-(defmethod load-script ((obj clog-document) script-url)
+(defmethod load-script ((obj clog-document) script-url &key (wait-for-load t)
+							 (wait-timeout 3))
   ;; After we load the script from src we then fire the
   ;; custom on-load-script event in the next line of
   ;; script after the load as scripts are loaded
   ;; synchronously.
-  (Jquery-execute (head-element obj)
-                  (format nil "append('<script src=\"~A\"></script>~
+  (let ((sem (bordeaux-threads:make-semaphore)))
+    (flet ((on-load (obj url)
+	     (declare (ignore obj))
+	     (when (equalp url script-url)
+	       (bordeaux-threads:signal-semaphore sem))))
+      (when wait-for-load
+	(set-on-load-script obj #'on-load :one-time t))
+      (jquery-execute (head-element obj)
+                      (format nil "append('<script src=\"~A\"></script>~
      <script>$(clog[\\'document\\']).trigger(\\'on-load-script\\',~
                                              \\'~A\\')</script>')"
-                          (escape-string script-url)
-			  (escape-string script-url))))
+                              (escape-string script-url)
+			      (escape-string script-url)))
+      (when wait-for-load
+	(bordeaux-threads:wait-on-semaphore sem :timeout wait-timeout)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;
 ;; set-on-load-script ;;
