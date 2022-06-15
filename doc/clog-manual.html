@@ -8250,9 +8250,12 @@ on-storage event is fired for changes to :local storage keys.</p></li>
 <a id="CLOG:LOAD-SCRIPT%20GENERIC-FUNCTION"></a></p>
 
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:LOAD-SCRIPT%20GENERIC-FUNCTION" >LOAD-SCRIPT</a></span></span> <span class="locative-args">CLOG-DOCUMENT SCRIPT-URL</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:LOAD-SCRIPT%20GENERIC-FUNCTION" >LOAD-SCRIPT</a></span></span> <span class="locative-args">CLOG-DOCUMENT SCRIPT-URL &amp;KEY WAIT-FOR-LOAD WAIT-TIMEOUT LOAD-ONLY-ONCE</span></span></p>
 
-<p>Load script from <code>SCRIPT-URL</code>.</p></li>
+<p>Load script from <code>SCRIPT-URL</code>. If <code>WAIT-FOR-LOAD</code>
+is t, load-script will not return until script load is completed or
+<code>WAIT-TIMEOUT</code> passes and load-script returns nil otherwise script-url.
+If <code>LOAD-ONLY-ONCE</code> is t first checks if previously loaded with load-script.</p></li>
 </ul>
 
 <p><a id="x-28CLOG-3APUT-20GENERIC-FUNCTION-29"></a>

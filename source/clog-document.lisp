@@ -164,30 +164,44 @@ clog-document object. (Private)"))
 ;;;;;;;;;;;;;;;;;
 
 (defgeneric load-script (clog-document script-url &key wait-for-load
-						    wait-timeout)
-  (:documentation "Load script from SCRIPT-URL."))
+						    wait-timeout
+						    load-only-once)
+  (:documentation "Load script from SCRIPT-URL. If WAIT-FOR-LOAD
+is t, load-script will not return until script load is completed or
+WAIT-TIMEOUT passes and load-script returns nil otherwise script-url.
+If LOAD-ONLY-ONCE is t first checks if previously loaded with load-script."))
 
 (defmethod load-script ((obj clog-document) script-url &key (wait-for-load t)
-							 (wait-timeout 3))
-  ;; After we load the script from src we then fire the
-  ;; custom on-load-script event in the next line of
-  ;; script after the load as scripts are loaded
-  ;; synchronously.
-  (let ((sem (bordeaux-threads:make-semaphore)))
-    (flet ((on-load (obj url)
-	     (declare (ignore obj))
-	     (when (equalp url script-url)
-	       (bordeaux-threads:signal-semaphore sem))))
-      (when wait-for-load
-	(set-on-load-script obj #'on-load :one-time t))
-      (jquery-execute (head-element obj)
-                      (format nil "append('<script src=\"~A\"></script>~
+							 (wait-timeout 3)
+							 (load-only-once t))
+  (let ((loaded (connection-data-item obj (format nil "clog-~A" script-url))))
+    (cond ((not (and load-only-once loaded))
+	   (let ((sem (bordeaux-threads:make-semaphore)))
+	     (flet ((on-load (obj url)
+		      (declare (ignore obj))
+		      (when (equalp url script-url)
+			(bordeaux-threads:signal-semaphore sem))))
+	       (when wait-for-load
+		 (set-on-load-script obj #'on-load :one-time t))
+	       ;; After we load the script from src we then fire the
+	       ;; custom on-load-script event in the next line of
+	       ;; script after the load as scripts are loaded
+	       ;; synchronously.
+	       (jquery-execute (head-element obj)
+			       (format nil "append('<script src=\"~A\"></script>~
      <script>$(clog[\\'document\\']).trigger(\\'on-load-script\\',~
                                              \\'~A\\')</script>')"
-                              (escape-string script-url)
-			      (escape-string script-url)))
-      (when wait-for-load
-	(bordeaux-threads:wait-on-semaphore sem :timeout wait-timeout)))))
+				       (escape-string script-url)
+				       (escape-string script-url)))
+	       (cond (load-only-once
+		      (when (bordeaux-threads:wait-on-semaphore sem :timeout wait-timeout)
+			(setf (connection-data-item obj (format nil "clog-~A" script-url)) t)
+			script-url))
+		     (t
+		      (setf (connection-data-item obj (format nil "clog-~A" script-url)) t)
+		      script-url)))))
+	  (t
+	   t))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;
 ;; set-on-load-script ;;
