@@ -129,15 +129,23 @@ BOOT-FILE will be used. If BOOT-FILE is nil path is removed."
       (setf (gethash path *url-to-on-new-window*) on-new-window-handler)
       (remhash path *url-to-on-new-window*)))
 
+;;;;;;;;;;;;;;;;;;
+;; is-running-p ;;
+;;;;;;;;;;;;;;;;;;
+
+(defun is-running-p ()
+  *clog-running*)
+
 ;;;;;;;;;;;;;;
 ;; shutdown ;;
 ;;;;;;;;;;;;;;
 
 (defun shutdown ()
   "Shutdown CLOG."
-  (clrhash *url-to-on-new-window*)
-  (setf *clog-running* nil)
-  (clog-connection:shutdown-clog))
+  (when *clog-running*
+    (clrhash *url-to-on-new-window*)
+    (setf *clog-running* nil)
+    (clog-connection:shutdown-clog)))
 
 ;;;;;;;;;;;;;;;;
 ;; debug-mode ;;

@@ -64,6 +64,7 @@ embedded in a native template application.)"
   "CLOG Startup and Shutdown"
   (initialize        function)
   (set-on-new-window function)
+  (is-running-p      function)
   (shutdown          function)
   (debug-mode        function)
   (open-browser      function))
