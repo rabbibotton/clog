@@ -1531,8 +1531,11 @@ of controls and double click to select control."
                                           ;; return empty string to prevent nav off page
                                           ""))))
 
-(defun clog-builder (&key (port 8080) static-root)
+(defun clog-builder (&key (port 8080) static-root system)
   "Start clog-builder."
+  (if system
+      (setf static-root (merge-pathnames "./www/"
+					 (asdf:system-source-directory system))))
   (if static-root
       (initialize nil :port port :static-root static-root)
       (initialize nil :port port))
