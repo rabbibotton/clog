@@ -102,8 +102,8 @@
 (defun remove-deleted-from-control-list (app panel-id)
   "Remove any deleted control from control-list"
   (maphash (lambda (html-id control)
-             (when (equalp (clog:js-query control (format nil "$.contains(document.documentElement, ~A)"
-                                                          (clog::script-id control))) "false")
+             (when (equalp (js-query control (format nil "$.contains(document.documentElement, ~A)"
+                                                     (clog::script-id control))) "false")
                (remove-from-control-list app panel-id html-id)))
            (get-control-list app panel-id)))
 
@@ -179,7 +179,7 @@
                  z.find('*').each(function(){if($(this).attr('id') !== undefined && ~
                  $(this).attr('id').substring(0,5)=='CLOGB'){$(this).removeAttr('id')}});~
                  z.html()"
-                                    (clog::jquery content)))
+                                    (jquery content)))
                   fname)
       (destroy data))
     (maphash
@@ -387,7 +387,7 @@ create-div's"
     (place-after control placer)
     (setf (box-sizing placer) :content-box)
     (setf (positioning placer) :absolute)
-    (clog::jquery-execute placer "draggable().resizable()")
+    (jquery-execute placer "draggable().resizable()")
     ;; setup control events
     (set-on-focus control (lambda (obj)
                             (declare (ignore obj))
@@ -403,23 +403,23 @@ create-div's"
                          (when win
                            (window-focus win)))
                        :cancel-event t)
-    (clog::set-on-event placer "resizestop"
-                        (lambda (obj)
-                          (set-geometry control :units ""
-                                                :width (width placer)
-                                                :height (height placer))
-                          (set-geometry placer :units ""
-                                               :width (client-width control)
-                                               :height (client-height control))
-                          (on-populate-control-properties-win content :win win)))
-    (clog::set-on-event placer "dragstop"
-                        (lambda (obj)
-                          (set-geometry control :units ""
-                                                :top (top placer)
-                                                :left (left placer))
-                          (set-geometry placer :top (top control)
-                                               :left (left control))
-                          (on-populate-control-properties-win content :win win)))))
+    (set-on-event placer "resizestop"
+                  (lambda (obj)
+                    (set-geometry control :units ""
+                                          :width (width placer)
+                                          :height (height placer))
+                    (set-geometry placer :units ""
+                                         :width (client-width control)
+                                         :height (client-height control))
+                    (on-populate-control-properties-win content :win win)))
+    (set-on-event placer "dragstop"
+                  (lambda (obj)
+                    (set-geometry control :units ""
+                                          :top (top placer)
+                                          :left (left placer))
+                    (set-geometry placer :top (top control)
+                                         :left (left control))
+                    (on-populate-control-properties-win content :win win)))))
 
 ;; Control selection utilities
 
@@ -479,7 +479,7 @@ not a temporary attached one when using select-control."
         ~{~A~}~
         if(e.attr('data-clog-type') === undefined){e.attr('data-clog-type','span')}})"
                        panel-uid
-                       (clog::jquery parent)
+                       (jquery parent)
                        (if paste
                            (prog1
                                (format nil "e.attr('data-clog-name', e.attr('data-clog-name')+'-'+~A);"
@@ -490,7 +490,7 @@ not a temporary attached one when using select-control."
                                  (format nil "if(p === undefined && t=='~A'){e.attr('data-clog-type','~A')}"
                                          (getf l :tag) (getf l :control)))
                                *import-types*))))
-      (clog::js-execute parent tmp))
+      (js-execute parent tmp))
     (let* ((data (first-child content))
            (name    (attribute data "data-clog-title"))
            (next-id (attribute data "data-clog-next-id"))
@@ -544,51 +544,58 @@ not a temporary attached one when using select-control."
                    (setf dct (attribute control "data-clog-name"))
                    (unless (equal dct "undefined")
                      (setf control (get-from-control-list app panel-id (html-id control)))
-                     (let ((vname (attribute control "data-clog-name")))
+                     (let ((vname (attribute control "data-clog-name"))
+			   (control-record (control-info (attribute control "data-clog-type"))))
                        (unless (and (>= (length vname) 5)
                                     (equalp (subseq vname 0 5) "none-"))
+			 ;; Add to members of the panel's class for each control
                          (push (format nil
                                        "    \(~A :reader ~A\)~%"
                                        vname
                                        vname)
                                cmembers)
+			 ;; On instance of class, set member value for each control
                          (push (format nil
                                        "    \(setf (slot-value panel '~A\) ~
                                             \(attach-as-child clog-obj \"~A\" :clog-type \'~A\ :new-id t)\)~%"
                                        vname
                                        (html-id control)
-                                       (format nil "CLOG:~A" (type-of control)))
+                                       (format nil "~S" (getf control-record :clog-type)))
                                vars)
-                         (let ((control-record (control-info (attribute control "data-clog-type"))))
-                           (dolist (event (getf control-record :events))
-                             (let ((handler (attribute control (format nil "data-~A" (getf event :name)))))
-                               (unless (or (equalp handler "undefined")
-                                           (equal handler ""))
-                                 (unless (equalp (getf event :name) "on-create")
+			 ;; On instance of class, set handers defined for each control
+                         (dolist (event (getf control-record :events))
+			   ;; Set regular handlers
+                           (let ((handler (attribute control (format nil "data-~A" (getf event :name)))))
+                             (unless (or (equalp handler "undefined")
+                                         (equal handler ""))
+                               (unless (equalp (getf event :name) "on-create")
+				 (let ((event-package (or (getf event :package) "clog")))
                                    (push (format nil
-                                         "    \(set-~A \(~A panel\) \(lambda \(~A\) \(declare \(ignorable ~A\)\) ~A\)\)~%"
-                                         (getf event :name)
-                                         vname
-                                         (getf event :parameters)
-                                         (getf event :parameters)
-                                         handler)
-                                         events)))))
-                           (let ((handler (attribute control "data-on-create")))
-                             (when (equalp handler "undefined")
-                               (setf handler ""))
-                             (when (getf control-record :on-setup)
-                               (setf handler (format nil "~A~A"
-                                                     (funcall (getf control-record :on-setup)
-                                                              control control-record)
-                                                     handler)))
-                             (unless (equal handler "")
-                               (push (format nil
-                                             "    \(let \(\(target \(~A panel\)\)\) ~
+						 "    \(~A:set-~A \(~A panel\) \(lambda \(~A\) \(declare \(ignorable ~A\)\) ~A\)\)~%"
+						 event-package
+						 (getf event :name)
+						 vname
+						 (getf event :parameters)
+						 (getf event :parameters)
+						 handler)
+					 events))))))
+			 ;; Set on-create (from user in builder) and on-setup (from control-record)
+                         (let ((handler (attribute control "data-on-create")))
+                           (when (equalp handler "undefined")
+                             (setf handler ""))
+                           (when (getf control-record :on-setup)
+                             (setf handler (format nil "~A~A"
+                                                   (funcall (getf control-record :on-setup)
+                                                            control control-record)
+                                                   handler)))
+                           (unless (equal handler "")
+                             (push (format nil
+                                           "    \(let \(\(target \(~A panel\)\)\) ~
                                              \(declare \(ignorable target\)\) ~
                                               ~A\)~%"
-                                             vname
-                                             handler)
-                                     events))))))
+                                           vname
+                                           handler)
+                                   events)))))
                      (add-siblings (first-child control)))
                    (setf control (next-sibling control))))))
       (add-siblings (first-child content)))
@@ -610,7 +617,7 @@ not a temporary attached one when using select-control."
                                                                       "var z=~a.clone();~
     z.find('*').each(function(){for(n in $(this).get(0).dataset){delete $(this).get(0).dataset[n]}});~
     z.html()"
-                                                                      (clog::jquery content)))
+                                                                      (jquery content)))
                                                     "\\\"")
                           cname
                           vars
@@ -729,7 +736,7 @@ not a temporary attached one when using select-control."
                            ,(lambda (obj)
                               (place-inside-bottom-of
                                (attach-as-child control
-                                                (clog::js-query
+                                                (js-query
                                                  control
                                                  (format nil "$(\"[data-clog-name='~A']\").attr('id')"
                                                          (text obj))))
@@ -1023,7 +1030,7 @@ of controls and double click to select control."
      z.find('*').each(function(){if($(this).attr('id') !== undefined && ~
      $(this).attr('id').substring(0,5)=='CLOGB'){$(this).removeAttr('id')}});~
      z.html()"
-                                                       (clog::jquery (current-control app)))))
+                                                       (jquery (current-control app)))))
                                (maphash
                                 (lambda (html-id control)
                                   (declare (ignore html-id))
@@ -1235,7 +1242,7 @@ of controls and double click to select control."
        z.find('*').each(function(){if($(this).attr('id') !== undefined && ~
        $(this).attr('id').substring(0,5)=='CLOGB'){$(this).removeAttr('id')}});~
        z.html()"
-                                                         (clog::jquery (current-control app)))))
+                                                         (jquery (current-control app)))))
                                  (maphash
                                   (lambda (html-id control)
                                     (declare (ignore html-id))

@@ -1658,7 +1658,14 @@
                        :attr "data-clog-one-row-limit")
                       (:name "join to slot-name (optional)"
                        :attr "data-clog-one-row-master")
-                      ,@*props-form-element*))))
+                      ,@*props-form-element*))
+   '(:name           "group"
+     :description    "custom controls"
+     :create         nil
+     :create-type    nil
+     :events         nil
+     :properties     nil)))
+
 
 (defparameter *supported-templates*
   (list
