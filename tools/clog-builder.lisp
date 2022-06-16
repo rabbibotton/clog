@@ -240,7 +240,7 @@ create-div's"
 ;; Control utilities
 
 (defun control-info (control-type-name)
-  "Return control informaton record for CONTROL-TYPE-NAME from the *supported-controls* list."
+  "Return the control-record for CONTROL-TYPE-NAME from supported controls."
   (if (equal control-type-name "clog-data")
        `(:name           "clog-data"
          :description    "Panel Properties"
@@ -256,6 +256,10 @@ create-div's"
                            :setup :read-only
                            :get  ,(lambda (control) (height control)))))
       (find-if (lambda (x) (equal (getf x :name) control-type-name)) *supported-controls*)))
+
+(defun add-supported-controls (control-records)
+  "Add a list of control-records to builder's supported controls."
+  (alexandria:appendf *supported-controls* control-records))
 
 (defun create-control (parent content control-record uid &key custom-query)
   "Return a new control based on CONTROL-RECORD as a child of PARENT"
@@ -1499,6 +1503,10 @@ of controls and double click to select control."
                             (lambda (obj)
                               (declare (ignore obj))
                               (open-window (window body) "https://rabbibotton.github.io/clog/clog-manual.html")))
+      (create-gui-menu-item help  :content "CLOG Tutorials"       :on-click
+                            (lambda (obj)
+                              (declare (ignore obj))
+                              (open-window (window body) "https://github.com/rabbibotton/clog/blob/main/LEARN.md")))
       (create-gui-menu-item help  :content "Lisp in Y Minutes"    :on-click
                             (lambda (obj)
                               (declare (ignore obj))

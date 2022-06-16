@@ -15,7 +15,11 @@
 
 (defpackage #:clog-tools
   (:use #:cl #:clog #:clog-gui #:clog-web)
-  (:export :clog-builder :clog-db-admin :clog-new-app))
+  (:export :clog-builder
+	   :add-supported-controls
+           :control-info
+           :clog-db-admin
+	   :clog-new-app))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Implementation - CLOG Utilities
