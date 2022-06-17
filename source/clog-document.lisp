@@ -161,8 +161,9 @@ returns css-url."))
     (cond ((not (and load-only-once loaded))
 	   (jquery-execute (head-element obj)
 			   (format nil "append('<link rel=\"stylesheet\" href=\"~A\" type=\"text/css\">')"
-				   (escape-string css-url))))
-	  (setf (connection-data-item obj (format nil "clog-~A" css-url)) t)
+				   (escape-string css-url)))
+	   (setf (connection-data-item obj (format nil "clog-~A" css-url)) t)
+	   css-url)
 	  (t
 	   t))))
 
