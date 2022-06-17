@@ -195,18 +195,21 @@ If LOAD-ONLY-ONCE is t first checks if previously loaded with load-script."))
 	       ;; custom on-load-script event in the next line of
 	       ;; script after the load as scripts are loaded
 	       ;; synchronously.
-	       (jquery-execute (head-element obj)
-			       (format nil "append('<script src=\"~A\"></script>~
-     <script>$(clog[\\'document\\']).trigger(\\'on-load-script\\',~
-                                             \\'~A\\')</script>')"
-				       (escape-string script-url)
-				       (escape-string script-url)))
+	       (js-execute obj
+		(format nil "$.getScript('~A', function() {~
+                            $(clog['document']).trigger('on-load-script',~
+                                                            '~A')})"
+			(escape-string script-url)
+			(escape-string script-url)))
 	       (cond (load-only-once
-		      (when (bordeaux-threads:wait-on-semaphore sem :timeout wait-timeout)
-			(setf (connection-data-item obj (format nil "clog-~A" script-url)) t)
+		      (when (bordeaux-threads:wait-on-semaphore
+			     sem :timeout wait-timeout)
+			(setf (connection-data-item obj (format nil "clog-~A"
+								script-url)) t)
 			script-url))
 		     (t
-		      (setf (connection-data-item obj (format nil "clog-~A" script-url)) t)
+		      (setf (connection-data-item obj (format nil "clog-~A"
+							      script-url)) t)
 		      script-url)))))
 	  (t
 	   t))))
