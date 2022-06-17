@@ -151,13 +151,20 @@ clog-document object. (Private)"))
 ;; load-css ;;
 ;;;;;;;;;;;;;;
 
-(defgeneric load-css (clog-document css-url)
-  (:documentation "Load css from CSS-URL."))
+(defgeneric load-css (clog-document css-url &key load-only-once)
+  (:documentation "Load css from CSS-URL. If LOAD-ONLY-ONCE load-css
+returns t if load-css previously called otherwise loads the css and
+returns css-url."))
 
-(defmethod load-css ((obj clog-document) css-url)
-  (jquery-execute (head-element obj)
-                  (format nil "append('<link rel=\"stylesheet\" href=\"~A\" type=\"text/css\">')"
-                          (escape-string css-url))))
+(defmethod load-css ((obj clog-document) css-url &key (load-only-once t))
+  (let ((loaded (connection-data-item obj (format nil "clog-~A" css-url))))
+    (cond ((not (and load-only-once loaded))
+	   (jquery-execute (head-element obj)
+			   (format nil "append('<link rel=\"stylesheet\" href=\"~A\" type=\"text/css\">')"
+				   (escape-string css-url))))
+	  (setf (connection-data-item obj (format nil "clog-~A" css-url)) t)
+	  (t
+	   t))))
 
 ;;;;;;;;;;;;;;;;;
 ;; load-script ;;
