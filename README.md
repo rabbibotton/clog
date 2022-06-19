@@ -28,7 +28,7 @@ embedded in a native template application.)
 
 [CLOG - Technical Overview and Purpose](CONCEPT.md)
 
-STATUS: CLOG 1.2 and CLOG Builder 1.1 released.
+STATUS: CLOG 1.3 and CLOG Builder 1.3 released.
 
 CLOG is actually based on GNOGA, a framework I wrote for Ada in 2013
 and used in commercial production code for the last 9+ years, i.e. the
@@ -256,7 +256,7 @@ CLOG Tutorials
 - [30-tutorial.lisp](tutorial/30-tutorial.lisp) - Instant websites - clog-web-site
 - [31-tutorial.lisp](tutorial/31-tutorial.lisp) - Database and Authority based websites - clog-web-dbi and clog-auth
 - [32-tutorial.lisp](tutorial/32-tutorial.lisp) - Database Managed Content websites - clog-web-content
-- [33-tutorial.lisp](tutorial/33-tutorial.lisp) - with-clog-create - Using a declartive syntax for GUIs
+- [33-tutorial.lisp](tutorial/33-tutorial.lisp) - with-clog-create - Using a declarative syntax for GUIs
 
 CLOG Demos
 
@@ -317,5 +317,7 @@ High Order Extensions to CLOG
   -  CLOG-DB-Table - Version of html table that are database connected
 
 - clog-auth - Authentication and authorization framework
+
+- clog-plugin - Custom Control Plug-in template for Builder and CLOG
 
 (See [FUTURE.md](FUTURE.md) for future plans)
