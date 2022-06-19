@@ -99,7 +99,7 @@ embedded in a native template application.)</p>
 such as full desktop over the web, database tools,etc. See below for
 some enhacements being worked on. CLOG is actually based on GNOGA, a
 framework I wrote for Ada in 2013 and used in commercial production
-code for the last 8+ years, i.e. the techiniques CLOG uses are solid
+code for the last 8+ years, i.e. the techniques CLOG uses are solid
 and proven.</p>
 
 <p>CLOG is being actively extended daily. Check the github discussion
@@ -398,6 +398,13 @@ BOOT_FILE. Paths should always begin with a forward slash '/'. If <code>PATH</co
 is set to :default any path without another route and there is no
 static file matching the requested path <code>ON-NEW-WINDOW-HANDLER</code> and
 <code>BOOT-FILE</code> will be used. If <code>BOOT-FILE</code> is nil path is removed.</p></li>
+</ul>
+
+<p><a id="x-28CLOG-3AIS-RUNNING-P-20FUNCTION-29"></a>
+<a id="CLOG:IS-RUNNING-P%20FUNCTION"></a></p>
+
+<ul>
+<li><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#CLOG:IS-RUNNING-P%20FUNCTION" >IS-RUNNING-P</a></span></span></span></li>
 </ul>
 
 <p><a id="x-28CLOG-3ASHUTDOWN-20FUNCTION-29"></a>
@@ -8241,9 +8248,11 @@ on-storage event is fired for changes to :local storage keys.</p></li>
 <a id="CLOG:LOAD-CSS%20GENERIC-FUNCTION"></a></p>
 
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:LOAD-CSS%20GENERIC-FUNCTION" >LOAD-CSS</a></span></span> <span class="locative-args">CLOG-DOCUMENT CSS-URL</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:LOAD-CSS%20GENERIC-FUNCTION" >LOAD-CSS</a></span></span> <span class="locative-args">CLOG-DOCUMENT CSS-URL &amp;KEY LOAD-ONLY-ONCE</span></span></p>
 
-<p>Load css from <code>CSS-URL</code>.</p></li>
+<p>Load css from <code>CSS-URL</code>. If <code>LOAD-ONLY-ONCE</code> load-css
+returns t if load-css previously called otherwise loads the css and
+returns css-url.</p></li>
 </ul>
 
 <p><a id="x-28CLOG-3ALOAD-SCRIPT-20GENERIC-FUNCTION-29"></a>
