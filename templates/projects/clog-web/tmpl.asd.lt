@@ -4,6 +4,10 @@
   :license  "BSD"
   :version "0.0.0"
   :serial t
-  :depends-on (#:clog)
+  :depends-on (#:clog) ; add clog plugins here as #:plugin for run time
   :components ((:file "<%= (@ sys-name) %>")))
+
+(asdf:defsystem #:<%= (@ sys-name) %>/tools
+  :depends-on (#:<%= (@ sys-name) %> #:clog/tools)
+  :components ()) ; add clog plugins here as #:plugin/tools for design time
 
