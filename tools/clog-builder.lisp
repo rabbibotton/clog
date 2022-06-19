@@ -220,11 +220,14 @@ create-div's"
        (ensure-directories-exist out-dir)
        (cond ((equalp (pathname-type file) tmpl-ext)
               (let* ((nfile (pathname-name file))
-                     (afile (if (equalp (pathname-name nfile) "tmpl")
-                                (format nil "~A~A.~A" out-dir sys-name (pathname-type nfile))
-                                (format nil "~A~A" out-dir nfile))))
-                (write-file (funcall (cl-template:compile-template (read-file src-file))
-                                     (list :sys-name sys-name))
+                     (afile (cond ((equalp (pathname-name nfile) "tmpl")
+                                    (format nil "~A~A.~A" out-dir sys-name (pathname-type nfile)))
+				   ((equalp (pathname-name nfile) "tmpl-tools")
+                                    (format nil "~A~A-tools.~A" out-dir sys-name (pathname-type nfile)))
+                                   (t
+				    (format nil "~A~A" out-dir nfile)))))
+		(write-file (funcall (cl-template:compile-template (read-file src-file))
+				     (list :sys-name sys-name))
                             afile)
                 (when panel
                   (create-div panel

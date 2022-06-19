@@ -1,0 +1,12 @@
+(asdf:defsystem #:<%= (@ sys-name) %>
+  :description "New CLOG System"
+  :author "some@one.com"
+  :license  "BSD"
+  :version "0.0.0"
+  :serial t
+  :depends-on (#:clog)
+  :components ((:file "<%= (@ sys-name) %>")))
+
+(asdf:defsystem #:<%= (@ sys-name) %>/tools
+  :depends-on (#:<%= (@ sys-name) %> #:clog/tools)
+  :components ((:file "<%= (@ sys-name) %>-tools")))

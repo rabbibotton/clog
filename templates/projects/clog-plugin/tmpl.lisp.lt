@@ -1,0 +1,101 @@
+(defpackage #:<%= (@ sys-name) %>
+  (:use #:cl #:clog)
+  (:export <%= (@ sys-name) %>-element
+	   create-<%= (@ sys-name) %>-element
+	   create-<%= (@ sys-name) %>-design
+           init-<%= (@ sys-name) %>
+	   attach-<%= (@ sys-name) %>
+           start-test))
+
+(in-package :<%= (@ sys-name) %>)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Implementation - <%= (@ sys-name) %>-element
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defclass <%= (@ sys-name) %>-element (clog-element)()
+  (:documentation " <%= (@ sys-name) %> Element Object."))
+
+(defgeneric create-<%= (@ sys-name) %>-element (clog-obj &key hidden class html-id auto-place)
+  (:documentation "Create a new <%= (@ sys-name) %>-element as child of CLOG-OBJ."))
+
+(defmethod create-<%= (@ sys-name) %>-element ((obj clog:clog-obj)
+					 &key
+					   (hidden nil)
+					   (class nil)
+					   (html-id nil)
+					       (auto-place t))
+  "Not used by builder, but used to create in non-builder code"
+  (let ((new-obj (create-div obj
+			     :class class
+			     :hidden hidden
+			     :html-id html-id
+			     :auto-place auto-place)))
+    (set-geometry new-obj :width 200 :height 100)
+    (attach-<%= (@ sys-name) %> new-obj)
+    (change-class new-obj '<%= (@ sys-name) %>-element)))
+
+(defgeneric create-<%= (@ sys-name) %>-design (clog-obj &key hidden class html-id auto-place)
+  (:documentation "Create a new <%= (@ sys-name) %>-element as child of CLOG-OBJ to display
+in builder representing <%= (@ sys-name) %> at design time."))
+
+(defmethod create-<%= (@ sys-name) %>-design ((obj clog:clog-obj)
+					&key
+					  (hidden nil)
+					  (class nil)
+					  (html-id nil)
+					  (auto-place t))
+  (let ((new-obj (create-div obj
+			     :class class
+			     :hidden hidden
+			     :html-id html-id
+			     :auto-place auto-place)))
+    (set-geometry new-obj :width 200 :height 100)
+    (setf (background-color new-obj) :black)
+    new-obj))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Events - <%= (@ sys-name) %>-element
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Properties - <%= (@ sys-name) %>-element
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Methods - <%= (@ sys-name) %>-element
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Implementation - js binding
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defun init-<%= (@ sys-name) %> (obj)
+  (check-type obj clog:clog-obj)
+  ;; Only init once
+  ;; use load-css for any css files to load
+  ;; ise load-script for any js files to load
+  )
+
+
+(defun attach-<%= (@ sys-name) %> (obj)
+  "Initialize plugin"
+  (init-<%= (@ sys-name) %> obj))
+
+(defun on-test-<%= (@ sys-name) %> (body)
+  (clog:debug-mode body)
+  ;; Use the panel-box-layout to center horizontally
+  ;; and vertically our div on the screen.
+  (let* ((layout (create-panel-box-layout body))
+	 (test   (create-<%= (@ sys-name) %>-element (center-panel layout))))
+    (center-children (center-panel layout))))
+  
+(defun start-test ()
+  (initialize 'on-test-<%= (@ sys-name) %>
+   :static-root (merge-pathnames "./www/"
+		  (asdf:system-source-directory :<%= (@ sys-name) %>)))
+  (open-browser))
+
