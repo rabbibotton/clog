@@ -59,16 +59,33 @@ CLOG is developed with ECL and SBCL, it is tested fairly regulary on
  Linux, Windows, Rasberry Pi (running Ubuntu), M1 and Intel Mac. It
  should in theory work out of the box on any system with Quicklisp
  (although you could hand install) and CLACK (easily switched out
- and the ecl Android/iPhone branch doesn't use).
+ and the ecl Android/iPhone branch for example doesn't use).
 
-CLOG is in QuickLisp (ql:quickload :clog), but you likely want to live
-on the bleeding edge and use UltraLisp or clone the github repo into
+CLOG is in QuickLisp (ql:quickload :clog), however I recommend
+installing UltraSlip into your QuickLisp as you likely want the
+most up to date version. You can also clone the github repo into
 ~/common-lisp directory [or other quicklisp/asdf findable directory
 (push "path/to/dir/of/projects" ql:*local-project-directories*) ]:
 
 ```
+For git:
+
 cd ~/common-lisp
 git clone https://github.com/rabbibotton/clog.git
+
+
+For UltraLisp (RECOMMENDED):
+
+To add lUtraLisp to quicklisp install:
+(ql-dist:install-dist "http://dist.ultralisp.org/"
+                      :prompt nil)
+
+To update to latest packages do often to get the latest:
+(ql:update-all-dists)
+
+Then as always:
+(ql:quickload :clog)
+
 ```
 
 To load this package and work through tutorials (assuming you
