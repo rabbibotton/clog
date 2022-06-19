@@ -182,7 +182,7 @@
   ;; git clone https://github.com/ajaxorg/ace-builds/
   ;; and uncomment this line and comment out the next:
   ;; (load-script (html-document body) "/ace-builds/src-noconflict/ace.js")
-  (load-script (html-document body) "https://pagecdn.io/lib/ace/1.4.12/ace.js")
+  (load-script (html-document body) "https://cdnjs.cloudflare.com/ajax/libs/ace/1.6.0/ace.js")
   (add-class body "w3-teal")
   (let* ((menu  (create-gui-menu-bar body))
 	 (icon  (create-gui-menu-icon menu :on-click #'do-ide-help-about))
