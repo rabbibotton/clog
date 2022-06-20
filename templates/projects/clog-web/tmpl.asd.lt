@@ -8,6 +8,6 @@
   :components ((:file "<%= (@ sys-name) %>")))
 
 (asdf:defsystem #:<%= (@ sys-name) %>/tools
-  :depends-on (#:<%= (@ sys-name) %> #:clog/tools)
-  :components ()) ; add clog plugins here as #:plugin/tools for design time
+  :depends-on (#:<%= (@ sys-name) %> #:clog/tools) ; add clog plugins here as #:plugin/tools for design time
+  :components ())
 
