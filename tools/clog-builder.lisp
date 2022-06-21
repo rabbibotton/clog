@@ -261,8 +261,14 @@ create-div's"
       (find-if (lambda (x) (equal (getf x :name) control-type-name)) *supported-controls*)))
 
 (defun add-supported-controls (control-records)
-  "Add a list of control-records to builder's supported controls."
-  (alexandria:appendf *supported-controls* control-records))
+  "Add a list of control-records to builder's supported controls. If control exists it is
+replaced."
+  (dolist (r control-records)
+    (setf *supported-controls*
+	  (append (remove-if (lambda (x)
+			       (equal (getf x :name) (getf r :name)))
+			     *supported-controls*)
+		  (list r)))))
 
 (defun create-control (parent content control-record uid &key custom-query)
   "Return a new control based on CONTROL-RECORD as a child of PARENT"
