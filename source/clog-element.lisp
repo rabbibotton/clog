@@ -490,7 +490,7 @@ Additionally for forms get/setf the value."))
   (jquery-execute obj (format nil "contents().not(~A.children()).get(0).nodeValue='~A'"
                               (jquery obj) value)))
 
-(defsetf text-value set-text)
+(defsetf text-value set-text-value)
 
 ;;;;;;;;;;;;;;;;;;;;
 ;; text-direction ;;
