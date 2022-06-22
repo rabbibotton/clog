@@ -645,7 +645,8 @@ the browser contents in case of connection loss."
 ;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defun compiled-boot-html (path content)
-  "Returns a compiled version of current version of boot.html"
+  "Returns a compiled version version of boot.html. The compiled boot.html
+uses the jQuery CDN instead of the static js files."
 "<!doctype HTML>
 <HTML>
    <HEAD>
@@ -654,7 +655,9 @@ the browser contents in case of connection loss."
       <meta http-equiv='Expires' content='0' />
       <meta charset='utf-8'>
       <meta name='viewport' content='width=device-width, initial-scale=1'>
-      <script src='/js/jquery.min.js' type='text/javascript'></script>
+      <script src='https://code.jquery.com/jquery-3.6.0.min.js'
+              integrity='sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4='
+              crossorigin='anonymous'></script>
       <script src='/js/boot.js' type='text/javascript'></script>
       <noscript><%= (@ meta) %></noscript>
    </HEAD>
