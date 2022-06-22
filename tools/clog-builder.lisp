@@ -420,8 +420,7 @@ replaced."
                            (window-focus win)))
                        :cancel-event t)
     (set-on-event placer "resizestop"
-                  (lambda (obj)
-		    (declare (ignore obj))
+        (lambda (obj)
 		    (set-properties-after-geomentry-change obj))
 		  :cancel-event t)
     (set-on-event placer "drag"
@@ -432,7 +431,7 @@ replaced."
                                           :left (left placer))))
     (set-on-event placer "dragstop"
                   (lambda (obj)
-		    (declare (ignore obj))
+                    (declare (ignore obj))
                     (set-geometry control :units ""
                                           :top (top placer)
                                           :left (left placer))
@@ -494,9 +493,7 @@ not a temporary attached one when using select-control."
 
 (defun add-sub-controls (parent content &key win paste)
   "Setup html imported in to CONTENT starting with PARENT for use with Builder"
-  (let ((app       (connection-data-item content "builder-app-data"))
-        (panel-uid (get-universal-time))
-        (panel-id  (html-id content)))
+  (let ((panel-uid (get-universal-time)))
     ;; Assign any elements with no id, an id, name and type
     (let ((tmp (format nil
                        "var clog_id=~A; var clog_nid=1;~
@@ -929,7 +926,9 @@ of controls and double click to select control."
                (control-list (create-table content)))
           (setf (control-properties-win app) win)
           (setf (properties-list app) control-list)
-          (set-on-window-close win (lambda (obj) (setf (control-properties-win app) nil)))
+          (set-on-window-close win (lambda (obj)
+                                     (declare (ignore obj))
+                                     (setf (control-properties-win app) nil)))
           (setf (positioning control-list) :absolute)
           (set-geometry control-list :units "" :left 0 :top 0 :bottom 0 :width "100%")))))
 
@@ -947,7 +946,9 @@ of controls and double click to select control."
                (control-list (create-table content)))
           (setf (control-events-win app) win)
           (setf (events-list app) control-list)
-          (set-on-window-close win (lambda (obj) (setf (control-events-win app) nil)))
+          (set-on-window-close win (lambda (obj)
+                                     (declare (ignore obj))
+                                     (setf (control-events-win app) nil)))
           (setf (positioning control-list) :absolute)
           (set-geometry control-list :units "" :left 0 :top 0 :bottom 0 :width "100%")))))
 
@@ -964,7 +965,9 @@ of controls and double click to select control."
                (content      (window-content win))
                (control-list (create-select content)))
           (setf (control-pallete-win app) win)
-          (set-on-window-close win (lambda (obj) (setf (control-pallete-win app) nil)))
+          (set-on-window-close win (lambda (obj)
+                                     (declare (ignore obj))
+                                     (setf (control-pallete-win app) nil)))
           (setf (positioning control-list) :absolute)
           (setf (size control-list) 2)
           (set-geometry control-list :units "" :left 0 :top 0 :bottom 0 :width "100%")
@@ -989,7 +992,9 @@ of controls and double click to select control."
           (setf (advisory-title (window-content win))
                 (format nil "Drag and drop order~%Double click non-focusable~%~
                              <ctrl> place static~%<shift> child to selected"))
-          (set-on-window-close win (lambda (obj) (setf (control-list-win app) nil)))))))
+          (set-on-window-close win (lambda (obj)
+                                     (declare (ignore obj))
+                                     (setf (control-list-win app) nil)))))))
 
 (defun on-new-builder-panel (obj)
   "Open new panel"
@@ -1044,6 +1049,7 @@ of controls and double click to select control."
                            (on-populate-control-list-win content)))
     (set-on-window-size-done win
                              (lambda (obj)
+                               (declare (ignore obj))
                                (on-populate-control-properties-win content :win win)))
     ;; setup tool bar events
     (set-on-click btn-copy (lambda (obj)
@@ -1417,7 +1423,8 @@ of controls and double click to select control."
                                :link link))
          (txt-link   (create-div txt-area
                                  :content (format nil "<br><center>~A</center>" link)))
-         content panel-id)
+         content)
+         (declare (ignore page-link txt-link))
     (setf (gethash panel-uid *app-sync-hash*) app)
     (setf (gethash (format nil "~A-win" panel-uid) *app-sync-hash*) win)
     (setf (gethash (format nil "~A-link" panel-uid) *app-sync-hash*)
