@@ -504,7 +504,8 @@ an application share per connection the same queue of serialized events."
   (:documentation "Get/Setf from connection-data the item-name in hash."))
 
 (defmethod connection-data-item ((obj clog-obj) item-name)
-  (gethash item-name (connection-data obj)))
+  (ignore-errors
+   (gethash item-name (connection-data obj))))
 
 (defgeneric set-connection-data-item (clog-obj item-name value)
   (:documentation "Set connection-data the item-name in hash."))
