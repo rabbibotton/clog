@@ -156,7 +156,8 @@ with DEFAULT-ANSWER in case of a time out. (Private)"
 the default answer. (Private)"
   (handler-case
       (progn
-        (bordeaux-threads:wait-on-semaphore (gethash id *queries-sems*) :timeout timeout)
+        (bordeaux-threads:wait-on-semaphore (gethash id *queries-sems*)
+                                            :timeout timeout)
         (let ((answer (gethash id *queries*)))
           (remhash id *queries*)
           (remhash id *queries-sems*)
@@ -180,7 +181,8 @@ the default answer. (Private)"
              (setf id (generate-id))
              (setf (gethash connection *connections*) id)
              (setf (gethash id *connection-ids*) connection)
-             (setf (gethash id *connection-data*) (make-hash-table* :test #'equal))
+             (setf (gethash id *connection-data*)
+		   (make-hash-table* :test #'equal))
              (setf (gethash "connection-id" (get-connection-data id)) id)
              (format t "New connection id - ~A - ~A~%" id connection)
              (websocket-driver:send connection
@@ -230,7 +232,8 @@ the default answer. (Private)"
                         (handler-case
                             (let* ((event-hash (get-connection-data id))
                                    (event      (when event-hash
-                                                 (gethash event-id event-hash))))
+                                                 (gethash event-id
+							  event-hash))))
                               (when event
                                 (funcall event data)))
                           (t (c)

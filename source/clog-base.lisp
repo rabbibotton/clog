@@ -130,7 +130,8 @@ flushed with FLUSH-CONNECTION-CACHE or a query is made."
 
 (defmethod js-query ((obj clog-obj) script &key (default-answer nil))
   (flush-connection-cache obj)
-  (clog-connection:query (connection-id obj) script :default-answer default-answer))
+  (clog-connection:query (connection-id obj) script
+                         :default-answer default-answer))
 
 ;;;;;;;;;;;;;
 ;; execute ;;
@@ -381,7 +382,9 @@ result or if time out DEFAULT-ANSWER. see JQUERY-QUERY (Internal)"))
   (:documentation "Set html property."))
 
 (defmethod set-property ((obj clog-obj) property-name value)
-  (jquery-execute obj (format nil "prop('~A','~A')" property-name (escape-string value)))
+  (jquery-execute obj (format nil "prop('~A','~A')"
+                              property-name
+                              (escape-string value)))
   value)
 (defsetf property set-property)
 
@@ -528,21 +531,22 @@ an application share per connection the same queue of serialized events."
 ;; set-on-event ;;
 ;;;;;;;;;;;;;;;;;;
 
-(defgeneric set-on-event (clog-obj event-name handler &key cancel-event one-time)
+(defgeneric set-on-event (clog-obj event-name handler
+                          &key cancel-event one-time)
   (:documentation "Set a HANDLER for EVENT-NAME on CLOG-OBJ. If handler is
 nil unbind all event handlers. (Internal)"))
 
 (defmethod set-on-event ((obj clog-obj) event-name handler
-			 &key
-			   (cancel-event nil)
-			   (one-time nil))
+                         &key
+                           (cancel-event nil)
+                           (one-time nil))
   (set-event obj event-name
              (when handler
                (lambda (data)
                  (declare (ignore data))
                  (funcall handler obj)))
-	     :cancel-event cancel-event
-	     :one-time     one-time))
+             :cancel-event cancel-event
+             :one-time     one-time))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -550,22 +554,23 @@ nil unbind all event handlers. (Internal)"))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defgeneric set-on-event-with-data (clog-obj event-name handler
-				    &key cancel-event one-time)
-  (:documentation "Set a HANDLER for EVENT-NAME on CLOG-OBJ. If handler is nil unbind
-all event handlers. Handler is called with a data option passed from javascript
-calling the jQuery custom event mechanism .trigger('event_name', data) (Internal)"))
+                                    &key cancel-event one-time)
+  (:documentation "Set a HANDLER for EVENT-NAME on CLOG-OBJ.
+ If handler is nil unbind all event handlers. Handler is called with a data
+option passed from javascript calling the jQuery custom event mechanism
+.trigger('event_name', data) (Internal)"))
 
 (defmethod set-on-event-with-data ((obj clog-obj) event-name handler
-				   &key
-				     (cancel-event nil)
-				     (one-time     nil))
+                                   &key
+                                     (cancel-event nil)
+                                     (one-time     nil))
   (set-event obj event-name
              (when handler
                (lambda (data)
                  (funcall handler obj data)))
-	     :call-back-script "+data"
-	     :cancel-event cancel-event
-	     :one-time     one-time))
+             :call-back-script "+data"
+             :cancel-event cancel-event
+             :one-time     one-time))
 
 ;;;;;;;;;;;;;;;;;;;
 ;; set-on-resize ;;
@@ -649,8 +654,8 @@ is nil unbind the event."))
 ;;;;;;;;;;;;;;;;;;;;;
 
 (defgeneric set-on-drag-end (clog-obj on-drag-end-handler)
-  (:documentation "Set the ON-DRAG-END-HANDLER for CLOG-OBJ. If ON-DRAG-END-HANDLER
-is nil unbind the event."))
+  (:documentation "Set the ON-DRAG-END-HANDLER for CLOG-OBJ.
+ If ON-DRAG-END-HANDLER is nil unbind the event."))
 
 (defmethod set-on-drag-end ((obj clog-obj) handler)
   (set-on-event obj "dragend" handler))
@@ -660,8 +665,8 @@ is nil unbind the event."))
 ;;;;;;;;;;;;;;;;;;;;;;;
 
 (defgeneric set-on-drag-enter (clog-obj on-drag-enter-handler)
-  (:documentation "Set the ON-DRAG-ENTER-HANDLER for CLOG-OBJ. If ON-DRAG-ENTER-HANDLER
-is nil unbind the event."))
+  (:documentation "Set the ON-DRAG-ENTER-HANDLER for CLOG-OBJ.
+ If ON-DRAG-ENTER-HANDLER is nil unbind the event."))
 
 (defmethod set-on-drag-enter ((obj clog-obj) handler)
   (set-on-event obj "dragenter" handler))
@@ -672,8 +677,8 @@ is nil unbind the event."))
 ;;;;;;;;;;;;;;;;;;;;;;;
 
 (defgeneric set-on-drag-leave (clog-obj on-drag-leave-handler)
-  (:documentation "Set the ON-DRAG-LEAVE-HANDLER for CLOG-OBJ. If ON-DRAG-LEAVE-HANDLER
-is nil unbind the event."))
+  (:documentation "Set the ON-DRAG-LEAVE-HANDLER for CLOG-OBJ.
+ If ON-DRAG-LEAVE-HANDLER is nil unbind the event."))
 
 (defmethod set-on-drag-leave ((obj clog-obj) handler)
   (set-on-event obj "dragleave" handler))
@@ -683,8 +688,8 @@ is nil unbind the event."))
 ;;;;;;;;;;;;;;;;;;;;;;
 
 (defgeneric set-on-drag-over (clog-obj on-drag-over-handler)
-  (:documentation "Set the ON-DRAG-OVER-HANDLER for CLOG-OBJ. If ON-DRAG-OVER-HANDLER
-is nil unbind the event."))
+  (:documentation "Set the ON-DRAG-OVER-HANDLER for CLOG-OBJ.
+ If ON-DRAG-OVER-HANDLER is nil unbind the event."))
 
 (defmethod set-on-drag-over ((obj clog-obj) handler)
   (set-event obj "dragover"
@@ -906,8 +911,8 @@ replace on an on-context-menu event."))
 ;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defgeneric set-on-mouse-enter (clog-obj on-mouse-enter-handler)
-  (:documentation "Set the ON-MOUSE-ENTER-HANDLER for CLOG-OBJ. If ON-MOUSE-ENTER-HANDLER
-is nil unbind the event."))
+  (:documentation "Set the ON-MOUSE-ENTER-HANDLER for CLOG-OBJ.
+ If ON-MOUSE-ENTER-HANDLER is nil unbind the event."))
 
 (defmethod set-on-mouse-enter ((obj clog-obj) handler)
   (set-on-event obj "mouseenter" handler))
@@ -917,8 +922,8 @@ is nil unbind the event."))
 ;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defgeneric set-on-mouse-leave (clog-obj on-mouse-leave-handler)
-  (:documentation "Set the ON-MOUSE-LEAVE-HANDLER for CLOG-OBJ. If ON-MOUSE-LEAVE-HANDLER
-is nil unbind the event."))
+  (:documentation "Set the ON-MOUSE-LEAVE-HANDLER for CLOG-OBJ.
+If ON-MOUSE-LEAVE-HANDLER is nil unbind the event."))
 
 (defmethod set-on-mouse-leave ((obj clog-obj) handler)
   (set-on-event obj "mouseleave" handler))
@@ -928,8 +933,8 @@ is nil unbind the event."))
 ;;;;;;;;;;;;;;;;;;;;;;;
 
 (defgeneric set-on-mouse-over (clog-obj on-mouse-over-handler)
-  (:documentation "Set the ON-MOUSE-OVER-HANDLER for CLOG-OBJ. If ON-MOUSE-OVER-HANDLER
-is nil unbind the event."))
+  (:documentation "Set the ON-MOUSE-OVER-HANDLER for CLOG-OBJ.
+If ON-MOUSE-OVER-HANDLER is nil unbind the event."))
 
 (defmethod set-on-mouse-over ((obj clog-obj) handler)
   (set-on-event obj "mouseover" handler))
@@ -939,8 +944,8 @@ is nil unbind the event."))
 ;;;;;;;;;;;;;;;;;;;;;;
 
 (defgeneric set-on-mouse-out (clog-obj on-mouse-out-handler)
-  (:documentation "Set the ON-MOUSE-OUT-HANDLER for CLOG-OBJ. If ON-MOUSE-OUT-HANDLER
-is nil unbind the event."))
+  (:documentation "Set the ON-MOUSE-OUT-HANDLER for CLOG-OBJ.
+ If ON-MOUSE-OUT-HANDLER is nil unbind the event."))
 
 (defmethod set-on-mouse-out ((obj clog-obj) handler)
   (set-on-event obj "mouseout" handler))
@@ -949,12 +954,14 @@ is nil unbind the event."))
 ;; set-on-mouse-down ;;
 ;;;;;;;;;;;;;;;;;;;;;;;
 
-(defgeneric set-on-mouse-down (clog-obj on-mouse-down-handler &key one-time cancel-event)
+(defgeneric set-on-mouse-down (clog-obj on-mouse-down-handler
+                               &key one-time cancel-event)
   (:documentation "Set the ON-MOUSE-DOWN-HANDLER for CLOG-OBJ. If
 ON-MOUSE-DOWN-HANDLER is nil unbind the event. If cancel-event is true event
 does not bubble."))
 
-(defmethod set-on-mouse-down ((obj clog-obj) handler &key (one-time nil) (cancel-event nil))
+(defmethod set-on-mouse-down ((obj clog-obj) handler
+                              &key (one-time nil) (cancel-event nil))
   (set-event obj "mousedown"
              (when handler
                (lambda (data)
@@ -998,8 +1005,8 @@ ON-MOUSE-MOVE-HANDLER is nil unbind the event."))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defgeneric set-on-pointer-enter (clog-obj on-pointer-enter-handler)
-  (:documentation "Set the ON-POINTER-ENTER-HANDLER for CLOG-OBJ. If ON-POINTER-ENTER-HANDLER
-is nil unbind the event."))
+  (:documentation "Set the ON-POINTER-ENTER-HANDLER for CLOG-OBJ.
+ If ON-POINTER-ENTER-HANDLER is nil unbind the event."))
 
 (defmethod set-on-pointer-enter ((obj clog-obj) handler)
   (set-on-event obj "pointerenter" handler))
@@ -1009,8 +1016,8 @@ is nil unbind the event."))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defgeneric set-on-pointer-leave (clog-obj on-pointer-leave-handler)
-  (:documentation "Set the ON-POINTER-LEAVE-HANDLER for CLOG-OBJ. If ON-POINTER-LEAVE-HANDLER
-is nil unbind the event."))
+  (:documentation "Set the ON-POINTER-LEAVE-HANDLER for CLOG-OBJ.
+ If ON-POINTER-LEAVE-HANDLER is nil unbind the event."))
 
 (defmethod set-on-pointer-leave ((obj clog-obj) handler)
   (set-on-event obj "pointerleave" handler))
@@ -1020,8 +1027,8 @@ is nil unbind the event."))
 ;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defgeneric set-on-pointer-over (clog-obj on-pointer-over-handler)
-  (:documentation "Set the ON-POINTER-OVER-HANDLER for CLOG-OBJ. If ON-POINTER-OVER-HANDLER
-is nil unbind the event."))
+  (:documentation "Set the ON-POINTER-OVER-HANDLER for CLOG-OBJ.
+ If ON-POINTER-OVER-HANDLER is nil unbind the event."))
 
 (defmethod set-on-pointer-over ((obj clog-obj) handler)
   (set-on-event obj "pointerover" handler))
@@ -1031,8 +1038,8 @@ is nil unbind the event."))
 ;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defgeneric set-on-pointer-out (clog-obj on-pointer-out-handler)
-  (:documentation "Set the ON-POINTER-OUT-HANDLER for CLOG-OBJ. If ON-POINTER-OUT-HANDLER
-is nil unbind the event."))
+  (:documentation "Set the ON-POINTER-OUT-HANDLER for CLOG-OBJ.
+ If ON-POINTER-OUT-HANDLER is nil unbind the event."))
 
 (defmethod set-on-pointer-out ((obj clog-obj) handler)
   (set-on-event obj "pointerout" handler))
@@ -1048,7 +1055,9 @@ ON-POINTER-DOWN-HANDLER is nil unbind the event. If cancel event is t the
 even does not bubble."))
 
 (defmethod set-on-pointer-down ((obj clog-obj) handler
-                                &key (capture-pointer nil) (one-time nil) (cancel-event nil))
+                                &key (capture-pointer nil)
+                                  (one-time nil)
+                                  (cancel-event nil))
   (set-event obj "pointerdown"
              (when handler
                (lambda (data)

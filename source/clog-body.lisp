@@ -60,8 +60,8 @@ user close of connection / browser."))
 ;;;;;;;;;;;;;;;;;;;;;;;
 
 (defgeneric set-html-on-close (clog-body html)
-  (:documentation "In case of connection loss to this CLOG-BODY, replace the browser contents
-with HTML."))
+  (:documentation "In case of connection loss to this CLOG-BODY,
+replace the browser contents with HTML."))
 
 (defmethod set-html-on-close ((obj clog-body) html)
   (clog-connection:set-html-on-close (connection-id obj) html))
