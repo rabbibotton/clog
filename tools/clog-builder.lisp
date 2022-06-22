@@ -400,7 +400,7 @@ replaced."
     (place-after control placer)
     (setf (box-sizing placer) :content-box)
     (setf (positioning placer) :absolute)
-    (jquery-execute placer (format nil "draggable().resizable({alsoResize:'#~A'})"
+    (jquery-execute placer (format nil "draggable().resizable({alsoResize:'#~A',autoHide:true})"
 				   (html-id control)))
     ;; setup control events
     (set-on-focus control (lambda (obj)
