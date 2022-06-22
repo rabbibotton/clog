@@ -14,6 +14,13 @@ git clone https://github.com/fare/asdf.git
 
 - Go to - https://marketplace.visualstudio.com/items?itemName=rheller.alive
 
+You need to insure you have pre-requisites installed so open sbcl or slime in Emacs and run;
+
+(ql:quickload :cl-json)
+(ql:quickload :bordeaux-threads)
+(ql:quickload :usocket)
+(ql:quickload :flexi-streams)
+
 Click install and follow directions
 
 - Cmd+Shift+P - type shell command <enter>
@@ -21,3 +28,5 @@ Click install and follow directions
 Go through install
 
 - load up a .lisp file and the REPL should load
+
+More info on using VSCode - https://lispcookbook.github.io/cl-cookbook/vscode-alive.html

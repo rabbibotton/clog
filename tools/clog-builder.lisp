@@ -407,7 +407,6 @@ replaced."
 				   (html-id control)))
     ;; setup control events
     (set-on-focus control (lambda (obj)
-                            (declare (ignore obj))
                             ;; set focus is bound in case control
                             ;; is set to static or reached using
                             ;; tab selection
