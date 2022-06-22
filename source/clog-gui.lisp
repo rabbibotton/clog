@@ -456,24 +456,25 @@ The on-window-change clog-obj received is the new window"))
     (setf (on-window-change app) handler)))
 
 (defmethod fire-on-window-change (obj app)
-  "Fire handler if set. Change the value of current-win to clog-obj (Private)"
-  (when (current-win app)
-    (fire-on-window-blur (current-win app)))
-  (unless obj
-    (let (new-order
-          (order -9999))
-      (maphash (lambda (key value)
-                 (declare (ignore key))
-                 (setf new-order (z-index value))
-                 (when (>= new-order order)
-                   (setf order new-order)
-                   (setf obj value)))
-               (windows app))))
-  (setf (current-win app) obj)
-  (when (on-window-change app)
-    (funcall (on-window-change app) obj))
-  (when obj
-    (fire-on-window-focus obj)))
+  "Fire handler if set. Change the value of current-win to obj (Private)"
+  (unless (eq obj (current-win app))
+    (when (current-win app)
+      (fire-on-window-blur (current-win app)))
+    (unless obj
+      (let (new-order
+            (order -9999))
+	(maphash (lambda (key value)
+                   (declare (ignore key))
+                   (setf new-order (z-index value))
+                   (when (>= new-order order)
+                     (setf order new-order)
+                     (setf obj value)))
+		 (windows app))))
+    (setf (current-win app) obj)
+    (when (on-window-change app)
+      (funcall (on-window-change app) obj))
+    (when obj
+      (fire-on-window-focus obj))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Implementation - Individual Windows

@@ -93,6 +93,9 @@
 
 (defparameter *props-location*
   `((:name "top"
+     :setup ,(lambda (control td1 td2)
+	       (declare (ignore control td1))
+	       (add-class td2 "clog-prop-top"))
      :get ,(lambda (control)
              (if (equal (positioning control) "static")
                  "n/a"
@@ -100,6 +103,9 @@
      :set ,(lambda (control obj)
              (setf (top control) (text obj))))
     (:name "left"
+     :setup ,(lambda (control td1 td2)
+	       (declare (ignore control td1))
+	       (add-class td2 "clog-prop-left"))
      :get  ,(lambda (control)
               (if (equal (positioning control) "static")
                   "n/a"
@@ -107,6 +113,9 @@
      :set  ,(lambda (control obj)
               (setf (left control) (text obj))))
     (:name "bottom"
+     :setup ,(lambda (control td1 td2)
+	       (declare (ignore control td1))
+	       (add-class td2 "clog-prop-bottom"))
      :get ,(lambda (control)
              (if (equal (positioning control) "static")
                  "n/a"
@@ -114,6 +123,9 @@
      :set ,(lambda (control obj)
              (setf (bottom control) (text obj))))
     (:name "right"
+     :setup ,(lambda (control td1 td2)
+	       (declare (ignore control td1))
+	       (add-class td2 "clog-prop-right"))
      :get  ,(lambda (control)
               (if (equal (positioning control) "static")
                   "n/a"
@@ -146,10 +158,22 @@
                  nil)))))
 
 (defparameter *props-with-height*
-  '((:name "width"
-     :setf clog:width)
+  `((:name "width"
+     :setup ,(lambda (control td1 td2)
+	       (declare (ignore control td1))
+	       (add-class td2 "clog-prop-width"))
+     :set  ,(lambda (control obj)
+              (setf (width control) (text obj)))
+     :get  ,(lambda (control)
+              (width control)))
     (:name "height"
-     :setf clog:height)))
+     :setup ,(lambda (control td1 td2)
+	       (declare (ignore control td1))
+	       (add-class td2 "clog-prop-height"))
+     :set  ,(lambda (control obj)
+              (setf (height control) (text obj)))
+     :get  ,(lambda (control)
+              (height control)))))
 
 (defparameter *props-form-values*
   `((:name "value"

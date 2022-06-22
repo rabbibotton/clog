@@ -37,7 +37,7 @@
    (properties-lock
     :accessor properties-lock
     :initform (bordeaux-threads:make-lock)
-    :documentation "Sync refres properties and event window")
+    :documentation "Sync refresh properties and event window")
    (control-properties-win
     :accessor control-properties-win
     :initform nil
@@ -422,20 +422,36 @@ replaced."
                        :cancel-event t)
     (set-on-event placer "resizestop"
                   (lambda (obj)
-                    (on-populate-control-properties-win content :win win)))
+		    (declare (ignore obj))
+		    (set-properties-after-geomentry-change obj))
+		  :cancel-event t)
     (set-on-event placer "drag"
                   (lambda (obj)
+		    (declare (ignore obj))
                     (set-geometry control :units ""
                                           :top (top placer)
                                           :left (left placer))))
     (set-on-event placer "dragstop"
                   (lambda (obj)
+		    (declare (ignore obj))
                     (set-geometry control :units ""
                                           :top (top placer)
                                           :left (left placer))
                     (set-geometry placer :top (top control)
                                          :left (left control))
-                    (on-populate-control-properties-win content :win win)))))
+		    (set-properties-after-geomentry-change control)))))
+
+(defun set-properties-after-geomentry-change (control)
+  "Set properties window geometry setting"
+  (flet ((set-prop (n val)
+	   (js-execute control (format nil "$('.clog-prop-~A').text('~A')"
+				       n val))))
+    (set-prop "top" (top control))
+    (set-prop "left" (left control))
+    (set-prop "right" (right control))
+    (set-prop "bottom" (bottom control))
+    (set-prop "width" (client-width control))
+    (set-prop "height" (client-height control))))
 
 ;; Control selection utilities
 
@@ -465,16 +481,17 @@ manipulation of the control's location and size."
   "Select CONTROL as the current control and highlight its placer.
 The actual original clog object used for creation must be used and
 not a temporary attached one when using select-control."
-  (let ((app    (connection-data-item control "builder-app-data"))
-        (placer (get-placer control)))
-    (deselect-current-control app)
-    (set-geometry placer :top (position-top control)
-                         :left (position-left control)
-                         :width (client-width control)
-                         :height (client-height control))
-    (setf (current-control app) control)
-    (set-border placer (unit "px" 2) :solid :blue)
-    (on-populate-control-properties-win control)))
+    (let ((app    (connection-data-item control "builder-app-data"))
+          (placer (get-placer control)))
+      (unless (eq control (current-control app))
+	(deselect-current-control app)
+	(set-geometry placer :top (position-top control)
+                             :left (position-left control)
+                             :width (client-width control)
+                             :height (client-height control))
+	(setf (current-control app) control)
+	(set-border placer (unit "px" 2) :solid :blue)
+	(on-populate-control-properties-win control))))
 
 (defun add-sub-controls (parent content &key win paste)
   "Setup html imported in to CONTENT starting with PARENT for use with Builder"
