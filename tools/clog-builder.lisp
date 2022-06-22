@@ -402,7 +402,7 @@ replaced."
     (place-after control placer)
     (setf (box-sizing placer) :content-box)
     (setf (positioning placer) :absolute)
-    (jquery-execute placer (format nil "draggable({snap:'.placer',snapMode:'inner'})~
+    (jquery-execute placer (format nil "draggable({snap:'.placer',snapMode:'inner',cursor:'crosshair'})~
                                         .resizable({alsoResize:'#~A',autoHide:true})"
 				   (html-id control)))
     ;; setup control events
