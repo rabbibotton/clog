@@ -419,13 +419,12 @@ replaced."
                        :cancel-event t)
     (set-on-event placer "resizestop"
                   (lambda (obj)
-                    (set-geometry control :units ""
-                                          :width (width placer)
-                                          :height (height placer))
-                    (set-geometry placer :units ""
-                                         :width (client-width control)
-                                         :height (client-height control))
                     (on-populate-control-properties-win content :win win)))
+    (set-on-event placer "drag"
+                  (lambda (obj)
+                    (set-geometry control :units ""
+                                          :top (top placer)
+                                          :left (left placer))))
     (set-on-event placer "dragstop"
                   (lambda (obj)
                     (set-geometry control :units ""
