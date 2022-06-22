@@ -390,7 +390,9 @@ replaced."
   "Setup CONTROL by creating pacer and setting up events for manipulation"
   (let ((app      (connection-data-item content "builder-app-data"))
         (panel-id (html-id content))
-        (placer   (create-div control :auto-place nil :html-id (format nil "p-~A" (html-id control)))))
+        (placer   (create-div control :auto-place nil
+				      :class "placer"
+				      :html-id (format nil "p-~A" (html-id control)))))
     (add-to-control-list app panel-id control)
     ;; setup placer
     (set-geometry placer :top (position-top control)
@@ -400,7 +402,8 @@ replaced."
     (place-after control placer)
     (setf (box-sizing placer) :content-box)
     (setf (positioning placer) :absolute)
-    (jquery-execute placer (format nil "draggable().resizable({alsoResize:'#~A',autoHide:true})"
+    (jquery-execute placer (format nil "draggable({snap:'.placer',snapMode:'inner'})~
+                                        .resizable({alsoResize:'#~A',autoHide:true})"
 				   (html-id control)))
     ;; setup control events
     (set-on-focus control (lambda (obj)
