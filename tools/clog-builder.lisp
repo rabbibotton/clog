@@ -376,9 +376,9 @@ replaced."
              (set-geometry control
                            :left (getf data :x)
                            :top (getf data :y))
+             (add-sub-controls control content :win win)
              (setup-control content control :win win)
              (select-control control)
-             (add-sub-controls control content :win win)
              (on-populate-control-list-win content)
              t)
             (t
@@ -396,7 +396,7 @@ replaced."
                                       :class "placer"
                                       :html-id (format nil "p-~A" (html-id control)))))
     (add-to-control-list app panel-id control)
-    ;; setup placer
+    ;; run configured on-load
     (set-geometry placer :top (position-top control)
                          :left (position-left control)
                          :width (client-width control)
@@ -493,7 +493,7 @@ not a temporary attached one when using select-control."
         (set-border placer (unit "px" 2) :solid :blue)
         (on-populate-control-properties-win control))))
 
-(defun add-sub-controls (parent content &key win paste on-load)
+(defun add-sub-controls (parent content &key win paste)
   "Setup html imported in to CONTENT starting with PARENT for use with Builder"
   (let ((panel-uid (get-universal-time)))
     ;; Assign any elements with no id, an id, name and type
@@ -509,7 +509,7 @@ not a temporary attached one when using select-control."
         ~A ~
         ~{~A~}~
         if(e.attr('data-clog-type') === undefined){e.attr('data-clog-type','span')}})"
-                       panel-uid
+                       (1+ panel-uid)
                        (jquery parent)
                        (if paste
                            (prog1
@@ -522,20 +522,21 @@ not a temporary attached one when using select-control."
                                          (getf l :tag) (getf l :control)))
                                *import-types*))))
       (js-execute parent tmp))
-    (let* ((data (first-child content))
-           (name    (attribute data "data-clog-title"))
-           (next-id (attribute data "data-clog-next-id"))
-           (slots   (attribute data "data-custom-slots"))
-           (package (attribute data "data-in-package")))
-      (unless (equalp next-id "undefined")
-        (setf-next-id content next-id))
-      (unless (equalp package "undefined")
-        (setf (attribute content "data-in-package") package))
-      (unless (equalp slots "undefined")
-        (setf (attribute content "data-custom-slots") slots))
-      (unless (equalp name "undefined")
-        (setf (attribute content "data-clog-name") name)
-        (destroy data)))
+    (unless paste
+      (let* ((data (first-child content))
+             (name    (attribute data "data-clog-title"))
+             (next-id (attribute data "data-clog-next-id"))
+             (slots   (attribute data "data-custom-slots"))
+             (package (attribute data "data-in-package")))
+        (unless (equalp next-id "undefined")
+          (setf-next-id content next-id))
+        (unless (equalp package "undefined")
+          (setf (attribute content "data-in-package") package))
+        (unless (equalp slots "undefined")
+          (setf (attribute content "data-custom-slots") slots))
+	(unless (equalp name "undefined")
+          (setf (attribute content "data-clog-name") name)
+          (destroy data))))
     (labels ((add-siblings (control)
                (let (dct)
                  (loop
@@ -543,11 +544,9 @@ not a temporary attached one when using select-control."
                    (setf dct (attribute control "data-clog-type"))
                    (unless (equal dct "undefined")
                      (change-class control (getf (control-info dct) :clog-type))
-                     (when (getf (control-info dct) :on-load)
-                       (funcall (getf (control-info dct) :on-load) control (control-info dct)))
-                     (setup-control content control :win win)
-                     (add-siblings (first-child control)))
-                   (setf control (next-sibling control))))))
+ 		     (setup-control content control :win win)
+		     (add-siblings (first-child control)))
+		   (setf control (next-sibling control))))))
       (add-siblings (first-child parent)))))
 
 ;; Code rendering utlities
@@ -810,9 +809,9 @@ not a temporary attached one when using select-control."
                                                       :width (client-width control)
                                                       :height (client-height control)))))))))))))
 
-(defun on-populate-loaded-window (content &key win on-load)
+(defun on-populate-loaded-window (content &key win)
   "Setup html imported in to CONTENT for use with Builder"
-  (add-sub-controls content content :win win :on-load on-load))
+  (add-sub-controls content content :win win))
 
 (defun on-populate-control-list-win (content)
   "Populate the control-list-window to allow drag and drop adjust of order
@@ -1074,9 +1073,9 @@ of controls and double click to select control."
                                                (format nil
                                                        "var z=~a.clone(); z=$('<div />').append(z);~
      z.find('*').each(function(){~
-     if($(this).attr('data-clog-composite-control') == 't'){$(this).text('')}~
-     if($(this).attr('id') !== undefined && ~
-       $(this).attr('id').substring(0,5)=='CLOGB'){$(this).removeAttr('id')}});~
+       if($(this).attr('data-clog-composite-control') == 't'){$(this).text('')}~
+       if($(this).attr('id') !== undefined && ~
+         $(this).attr('id').substring(0,5)=='CLOGB'){$(this).removeAttr('id')}});~
      z.html()"
                                                        (jquery (current-control app)))))
                                (maphash
@@ -1098,9 +1097,9 @@ of controls and double click to select control."
                                   (setf (attribute control "data-clog-name")
                                         (format nil "~A-~A" "copy" (next-id content)))
                                   (incf-next-id content)
+                                  (add-sub-controls control content :win win :paste t)
                                   (setup-control content control :win win)
                                   (select-control control)
-                                  (add-sub-controls control content :win win :paste t)
                                   (on-populate-control-list-win content))))))
     (set-on-click btn-del (lambda (obj)
                             (declare (ignore obj))
@@ -1136,7 +1135,7 @@ of controls and double click to select control."
                                                      (setf (inner-html content)
                                                            (escape-string (read-file fname)))
                                                      (clrhash (get-control-list app panel-id))
-                                                     (on-populate-loaded-window content :win win :on-load t)
+                                                     (on-populate-loaded-window content :win win)
                                                      (setf (window-title win) (attribute content "data-clog-name")))))))
     (set-on-click btn-save (lambda (obj)
                              (server-file-dialog obj "Save Panel As.." file-name
@@ -1288,9 +1287,9 @@ of controls and double click to select control."
                                                  (format nil
                                                          "var z=~a.clone(); z=$('<div />').append(z);~
        z.find('*').each(function(){~
-       if($(this).attr('data-clog-composite-control') == 't'){$(this).text('')}~
-       if($(this).attr('id') !== undefined && ~
-         $(this).attr('id').substring(0,5)=='CLOGB'){$(this).removeAttr('id')}});~
+         if($(this).attr('data-clog-composite-control') == 't'){$(this).text('')}~
+         if($(this).attr('id') !== undefined && ~
+           $(this).attr('id').substring(0,5)=='CLOGB'){$(this).removeAttr('id')}});~
        z.html()"
                                                          (jquery (current-control app)))))
                                  (maphash
@@ -1312,9 +1311,9 @@ of controls and double click to select control."
                                       (setf (attribute control "data-clog-name")
                                             (format nil "~A-~A" "copy" (next-id content)))
                                       (incf-next-id content)
+                                      (add-sub-controls control content :win win :paste t)
                                       (setup-control content control :win win)
                                       (select-control control)
-                                      (add-sub-controls control content :win win :paste t)
                                       (on-populate-control-list-win content))))))
       (set-on-click btn-del (lambda (obj)
                               (declare (ignore obj))
@@ -1351,7 +1350,7 @@ of controls and double click to select control."
                                                        (setf (inner-html content)
                                                              (escape-string (read-file fname)))
                                                        (clrhash (get-control-list app panel-id))
-                                                       (on-populate-loaded-window content :win win :on-load t)
+                                                       (on-populate-loaded-window content :win win)
                                                        (setf (title (html-document body)) (attribute content "data-clog-name"))
                                                        (setf (window-title win) (attribute content "data-clog-name")))))))
       (set-on-click btn-save (lambda (obj)
