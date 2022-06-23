@@ -65,7 +65,7 @@ CLOG is in QuickLisp (ql:quickload :clog), however I recommend
 installing UltraSlip into your QuickLisp as you likely want the
 most up to date version. You can also clone the github repo into
 ~/common-lisp directory [or other quicklisp/asdf findable directory
-(push "path/to/dir/of/projects" ql:*local-project-directories*) ]:
+(push #P"path/to/dir/of/projects" ql:*local-project-directories*) ]:
 
 ```
 For git:
