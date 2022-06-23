@@ -176,8 +176,10 @@
       (write-file (js-query content
                             (format nil
                                     "var z=~a.clone();~
-                 z.find('*').each(function(){if($(this).attr('id') !== undefined && ~
-                 $(this).attr('id').substring(0,5)=='CLOGB'){$(this).removeAttr('id')}});~
+                 z.find('*').each(function(){~
+                   if($(this).attr('data-clog-composite-control') == 't'){$(this).text('')}~
+                   if($(this).attr('id') !== undefined && ~
+                     $(this).attr('id').substring(0,5)=='CLOGB'){$(this).removeAttr('id')}});~
                  z.html()"
                                     (jquery content)))
                   fname)
@@ -391,8 +393,8 @@ replaced."
   (let ((app      (connection-data-item content "builder-app-data"))
         (panel-id (html-id content))
         (placer   (create-div control :auto-place nil
-				      :class "placer"
-				      :html-id (format nil "p-~A" (html-id control)))))
+                                      :class "placer"
+                                      :html-id (format nil "p-~A" (html-id control)))))
     (add-to-control-list app panel-id control)
     ;; setup placer
     (set-geometry placer :top (position-top control)
@@ -404,7 +406,7 @@ replaced."
     (setf (positioning placer) :absolute)
     (jquery-execute placer (format nil "draggable({snap:'.placer',snapMode:'inner',cursor:'crosshair'})~
                                         .resizable({alsoResize:'#~A',autoHide:true})"
-				   (html-id control)))
+                                   (html-id control)))
     ;; setup control events
     (set-on-focus control (lambda (obj)
                             ;; set focus is bound in case control
@@ -421,11 +423,11 @@ replaced."
                        :cancel-event t)
     (set-on-event placer "resizestop"
         (lambda (obj)
-		    (set-properties-after-geomentry-change obj))
-		  :cancel-event t)
+                    (set-properties-after-geomentry-change obj))
+                  :cancel-event t)
     (set-on-event placer "drag"
                   (lambda (obj)
-		    (declare (ignore obj))
+                    (declare (ignore obj))
                     (set-geometry control :units ""
                                           :top (top placer)
                                           :left (left placer))))
@@ -437,13 +439,13 @@ replaced."
                                           :left (left placer))
                     (set-geometry placer :top (top control)
                                          :left (left control))
-		    (set-properties-after-geomentry-change control)))))
+                    (set-properties-after-geomentry-change control)))))
 
 (defun set-properties-after-geomentry-change (control)
   "Set properties window geometry setting"
   (flet ((set-prop (n val)
-	   (js-execute control (format nil "$('.clog-prop-~A').text('~A')"
-				       n val))))
+           (js-execute control (format nil "$('.clog-prop-~A').text('~A')"
+                                       n val))))
     (set-prop "top" (top control))
     (set-prop "left" (left control))
     (set-prop "right" (right control))
@@ -482,16 +484,16 @@ not a temporary attached one when using select-control."
     (let ((app    (connection-data-item control "builder-app-data"))
           (placer (get-placer control)))
       (unless (eq control (current-control app))
-	(deselect-current-control app)
-	(set-geometry placer :top (position-top control)
+        (deselect-current-control app)
+        (set-geometry placer :top (position-top control)
                              :left (position-left control)
                              :width (client-width control)
                              :height (client-height control))
-	(setf (current-control app) control)
-	(set-border placer (unit "px" 2) :solid :blue)
-	(on-populate-control-properties-win control))))
+        (setf (current-control app) control)
+        (set-border placer (unit "px" 2) :solid :blue)
+        (on-populate-control-properties-win control))))
 
-(defun add-sub-controls (parent content &key win paste)
+(defun add-sub-controls (parent content &key win paste on-load)
   "Setup html imported in to CONTENT starting with PARENT for use with Builder"
   (let ((panel-uid (get-universal-time)))
     ;; Assign any elements with no id, an id, name and type
@@ -541,6 +543,8 @@ not a temporary attached one when using select-control."
                    (setf dct (attribute control "data-clog-type"))
                    (unless (equal dct "undefined")
                      (change-class control (getf (control-info dct) :clog-type))
+                     (when (getf (control-info dct) :on-load)
+                       (funcall (getf (control-info dct) :on-load) control (control-info dct)))
                      (setup-control content control :win win)
                      (add-siblings (first-child control)))
                    (setf control (next-sibling control))))))
@@ -644,7 +648,9 @@ not a temporary attached one when using select-control."
                                                     (js-query content
                                                               (format nil
                                                                       "var z=~a.clone();~
-    z.find('*').each(function(){for(n in $(this).get(0).dataset){delete $(this).get(0).dataset[n]}});~
+    z.find('*').each(function(){~
+      if($(this).attr('data-clog-composite-control') == 't'){$(this).text('')}~
+      for(n in $(this).get(0).dataset){delete $(this).get(0).dataset[n]}});~
     z.html()"
                                                                       (jquery content)))
                                                     "\\\"")
@@ -804,9 +810,9 @@ not a temporary attached one when using select-control."
                                                       :width (client-width control)
                                                       :height (client-height control)))))))))))))
 
-(defun on-populate-loaded-window (content &key win)
+(defun on-populate-loaded-window (content &key win on-load)
   "Setup html imported in to CONTENT for use with Builder"
-  (add-sub-controls content content :win win))
+  (add-sub-controls content content :win win :on-load on-load))
 
 (defun on-populate-control-list-win (content)
   "Populate the control-list-window to allow drag and drop adjust of order
@@ -819,9 +825,10 @@ of controls and double click to select control."
           (let ((win (window-content (control-list-win app))))
             (setf (inner-html win) "")
             (labels ((add-siblings (control sim)
-                       (let (dln)
+                       (let (dln dcc)
                          (loop
                            (when (equal (html-id control) "undefined") (return))
+			   (setf dcc (attribute control "data-clog-composite-control"))
                            (setf dln (attribute control "data-clog-name"))
                            (unless (equal dln "undefined")
                              (let ((list-item (create-div win :content (format nil "&#8597; ~A~A" sim dln)))
@@ -887,7 +894,8 @@ of controls and double click to select control."
                                                 (on-populate-control-list-win content))))
                                (set-on-drag-start list-item (lambda (obj)(declare (ignore obj))())
                                                   :drag-data (html-id control))
-                               (add-siblings (first-child control) (format nil "~A&#8594;" sim))))
+			       (when (equal dcc "undefined") ; when t is not a composite control
+				 (add-siblings (first-child control) (format nil "~A&#8594;" sim)))))
                            (setf control (next-sibling control))))))
               (add-siblings (first-child content) ""))))))))
 
@@ -1065,8 +1073,10 @@ of controls and double click to select control."
                                      (js-query content
                                                (format nil
                                                        "var z=~a.clone(); z=$('<div />').append(z);~
-     z.find('*').each(function(){if($(this).attr('id') !== undefined && ~
-     $(this).attr('id').substring(0,5)=='CLOGB'){$(this).removeAttr('id')}});~
+     z.find('*').each(function(){~
+     if($(this).attr('data-clog-composite-control') == 't'){$(this).text('')}~
+     if($(this).attr('id') !== undefined && ~
+       $(this).attr('id').substring(0,5)=='CLOGB'){$(this).removeAttr('id')}});~
      z.html()"
                                                        (jquery (current-control app)))))
                                (maphash
@@ -1126,7 +1136,7 @@ of controls and double click to select control."
                                                      (setf (inner-html content)
                                                            (escape-string (read-file fname)))
                                                      (clrhash (get-control-list app panel-id))
-                                                     (on-populate-loaded-window content :win win)
+                                                     (on-populate-loaded-window content :win win :on-load t)
                                                      (setf (window-title win) (attribute content "data-clog-name")))))))
     (set-on-click btn-save (lambda (obj)
                              (server-file-dialog obj "Save Panel As.." file-name
@@ -1277,8 +1287,10 @@ of controls and double click to select control."
                                        (js-query content
                                                  (format nil
                                                          "var z=~a.clone(); z=$('<div />').append(z);~
-       z.find('*').each(function(){if($(this).attr('id') !== undefined && ~
-       $(this).attr('id').substring(0,5)=='CLOGB'){$(this).removeAttr('id')}});~
+       z.find('*').each(function(){~
+       if($(this).attr('data-clog-composite-control') == 't'){$(this).text('')}~
+       if($(this).attr('id') !== undefined && ~
+         $(this).attr('id').substring(0,5)=='CLOGB'){$(this).removeAttr('id')}});~
        z.html()"
                                                          (jquery (current-control app)))))
                                  (maphash
@@ -1339,7 +1351,7 @@ of controls and double click to select control."
                                                        (setf (inner-html content)
                                                              (escape-string (read-file fname)))
                                                        (clrhash (get-control-list app panel-id))
-                                                       (on-populate-loaded-window content :win win)
+                                                       (on-populate-loaded-window content :win win :on-load t)
                                                        (setf (title (html-document body)) (attribute content "data-clog-name"))
                                                        (setf (window-title win) (attribute content "data-clog-name")))))))
       (set-on-click btn-save (lambda (obj)
