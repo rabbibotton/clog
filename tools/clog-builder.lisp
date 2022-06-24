@@ -1018,7 +1018,7 @@ of controls and double click to select control."
                                        :left-width 0 :right-width 0
                                        :top-height 33 :bottom-height 0))
          (tool-bar  (create-div (top-panel box) :class "w3-center"))
-	 (btn-class "w3-button w3-white w3-border w3-border-black")
+	 (btn-class "w3-button w3-white w3-border w3-border-black w3-ripple")
          (btn-copy  (create-img tool-bar :alt-text "copy" :url-src "/img/icons/copy.png" :class btn-class))
          (btn-paste (create-img tool-bar :alt-text "paste" :url-src "/img/icons/paste.png" :class btn-class))
          (btn-cut   (create-img tool-bar :alt-text "cut" :url-src "/img/icons/cut.png" :class btn-class))
@@ -1186,7 +1186,7 @@ of controls and double click to select control."
                         :package (attribute content "data-in-package"))))
     (set-on-click btn-rndr
                   (lambda (obj)
-                    (server-file-dialog obj "Save As.." file-name
+                    (server-file-dialog obj "Render As.." file-name
                                         (lambda (fname)
                                           (window-focus win)
                                           (when fname
@@ -1275,21 +1275,33 @@ of controls and double click to select control."
     (init-control-list app panel-id)
     (let* ((pbox      (create-panel-box-layout (window-content win)
                                          :left-width 0 :right-width 0
-                                         :top-height 30 :bottom-height 0))
-           (tool-bar  (top-panel pbox))
-           (btn-del   (create-button tool-bar :content "Del"))
-           (btn-copy  (create-button tool-bar :content "Copy"))
-           (btn-paste (create-button tool-bar :content "Paste"))
-           (btn-sim   (create-button tool-bar :content "Sim"))
-           (btn-test  (create-button tool-bar :content "Run"))
-           (btn-rndr  (create-button tool-bar :content "Rndr"))
-           (btn-save  (create-button tool-bar :content "Save"))
-           (btn-load  (create-button tool-bar :content "Load"))
-           (btn-exp   (create-button tool-bar :content "Export"))
+                                         :top-height 33 :bottom-height 0))
+           (tool-bar  (create-div (top-panel pbox) :class "w3-center"))
+	   (btn-class "w3-button w3-white w3-border w3-border-black w3-ripple")
+           (btn-copy  (create-img tool-bar :alt-text "copy" :url-src "/img/icons/copy.png" :class btn-class))
+           (btn-paste (create-img tool-bar :alt-text "paste" :url-src "/img/icons/paste.png" :class btn-class))
+           (btn-cut   (create-img tool-bar :alt-text "cut" :url-src "/img/icons/cut.png" :class btn-class))
+           (btn-del   (create-img tool-bar :alt-text "delete" :url-src "/img/icons/delete.png" :class btn-class))
+           (btn-sim   (create-img tool-bar :alt-text "simulate" :url-src "/img/icons/walk.png" :class btn-class))
+           (btn-test  (create-img tool-bar :alt-text "test" :url-src "/img/icons/run.png" :class btn-class))
+           (btn-rndr  (create-img tool-bar :alt-text "render" :url-src "/img/icons/rndr.png" :class btn-class))
+           (btn-save  (create-img tool-bar :alt-text "save" :url-src "/img/icons/save.png" :class btn-class))
+           (btn-load  (create-img tool-bar :alt-text "load" :url-src "/img/icons/open.png" :class btn-class))
+           (btn-exp   (create-img tool-bar :alt-text "export" :url-src "/img/icons/export.png" :class btn-class))
            (wcontent  (center-panel pbox)))
+      (setf (background-color (top-panel pbox)) :black)
+      (setf (height btn-copy) "12px")
+      (setf (height btn-paste) "12px")
+      (setf (height btn-cut) "12px")
+      (setf (height btn-del) "12px")
+      (setf (height btn-sim) "12px")
+      (setf (height btn-test) "12px")
+      (setf (height btn-rndr) "12px")
+      (setf (height btn-save) "12px")
+      (setf (height btn-load) "12px")
+      (setf (height btn-exp) "12px")
       (create-div wcontent :content
                   "<br><center>Drop and work with controls on it's window.</center>")
-      (setf (background-color tool-bar) :silver)
       ;; setup tool bar events
       (set-on-click btn-exp (lambda (obj)
                               (server-file-dialog obj "Export as Boot HTML" "./"
@@ -1308,80 +1320,83 @@ of controls and double click to select control."
                                                          (place-after control (get-placer control)))
                                                        (get-control-list app panel-id)))))))
       (flet (;; copy
-	     (copy (obj)
+             (copy (obj)
                (when (current-control app)
-		 (maphash
+                 (maphash
                   (lambda (html-id control)
                     (declare (ignore html-id))
                     (place-inside-bottom-of (bottom-panel box)
                                             (get-placer control)))
                   (get-control-list app panel-id))
-		 (setf (copy-buf app)
+                 (setf (copy-buf app)
                        (js-query content
-				 (format nil
-					 "var z=~a.clone(); z=$('<div />').append(z);~
+                                 (format nil
+                                         "var z=~a.clone(); z=$('<div />').append(z);~
      z.find('*').each(function(){~
        if($(this).attr('data-clog-composite-control') == 't'){$(this).text('')}~
        if($(this).attr('id') !== undefined && ~
          $(this).attr('id').substring(0,5)=='CLOGB'){$(this).removeAttr('id')}});~
      z.html()"
-					 (jquery (current-control app)))))
-		 (system-clipboard-write obj (copy-buf app))
-		 (maphash
+                                         (jquery (current-control app)))))
+                 (system-clipboard-write obj (copy-buf app))
+                 (maphash
                   (lambda (html-id control)
                     (declare (ignore html-id))
                     (place-after control (get-placer control)))
                   (get-control-list app panel-id))))
-	     ;; paste
-	     (paste (obj)
+             ;; paste
+             (paste (obj)
                (bordeaux-threads:with-lock-held ((new-control-lock app))
-		 (let ((buf (or (system-clipboard-read obj)
-				(copy-buf app))))
-		   (when buf
+                 (let ((buf (or (system-clipboard-read obj)
+                                (copy-buf app))))
+                   (when buf
                      (let ((control (create-control content content
-						    `(:name "custom"
+                                                    `(:name "custom"
                                                       :create-type :paste)
-						    (format nil "CLOGB~A~A"
-							    (get-universal-time)
-							    (next-id content))
-						    :custom-query buf)))
+                                                    (format nil "CLOGB~A~A"
+                                                            (get-universal-time)
+                                                            (next-id content))
+                                                    :custom-query buf)))
                        (setf (attribute control "data-clog-name")
                              (format nil "~A-~A" "copy" (next-id content)))
                        (incf-next-id content)
                        (add-sub-controls control content :win win :paste t)
-		       (let ((cr (control-info (attribute control "data-clog-type"))))
-			 (when (getf cr :on-load)
-			   (funcall (getf cr :on-load) control cr)))
+                       (let ((cr (control-info (attribute control "data-clog-type"))))
+                         (when (getf cr :on-load)
+                           (funcall (getf cr :on-load) control cr)))
                        (setup-control content control :win win)
                        (select-control control)
                        (on-populate-control-list-win content))))))
-	     ;; delete
-	     (del (obj)
+             ;; delete
+             (del (obj)
                (declare (ignore obj))
                (when (current-control app)
-		 (delete-current-control app panel-id (html-id (current-control app)))
-		 (on-populate-control-properties-win content :win win)
-		 (on-populate-control-list-win content))))
-	;; set up del/cut/copy/paste handlers
-	(set-on-copy content #'copy)
-	(set-on-click btn-copy #'copy)
-	(set-on-paste content #'paste)
-	(set-on-click btn-paste #'paste)
-	(set-on-click btn-del #'del)
-	(set-on-cut content (lambda (obj)
-			      (copy obj)
-			      (del obj))))
+                 (delete-current-control app panel-id (html-id (current-control app)))
+                 (on-populate-control-properties-win content :win win)
+                 (on-populate-control-list-win content))))
+        ;; set up del/cut/copy/paste handlers
+        (set-on-copy content #'copy)
+        (set-on-click btn-copy #'copy)
+        (set-on-paste content #'paste)
+        (set-on-click btn-paste #'paste)
+        (set-on-click btn-del #'del)
+        (set-on-cut content (lambda (obj)
+                              (copy obj)
+                              (del obj)))
+        (set-on-click btn-cut (lambda (obj)
+                                (copy obj)
+                                (del obj))))
       (set-on-click btn-sim (lambda (obj)
                               (declare (ignore obj))
                               (cond (in-simulation
-                                     (setf (text btn-sim) "Simulate")
+                                     (setf (url-src btn-sim) "/img/icons/walk.png")
                                      (setf in-simulation nil)
                                      (maphash (lambda (html-id control)
                                                 (declare (ignore html-id))
                                                 (setf (hiddenp (get-placer control)) nil))
                                               (get-control-list app panel-id)))
                                     (t
-                                     (setf (text btn-sim) "Develop")
+                                     (setf (url-src btn-sim) "/img/icons/construction.png")
                                      (deselect-current-control app)
                                      (on-populate-control-properties-win content :win win)
                                      (setf in-simulation t)
@@ -1419,7 +1434,7 @@ of controls and double click to select control."
                         :custom-boot custom-boot)))
       (set-on-click btn-rndr
                     (lambda (obj)
-                      (server-file-dialog obj "Save As.." file-name
+                      (server-file-dialog obj "Render As.." file-name
                                           (lambda (fname)
                                             (window-focus win)
                                             (when fname
@@ -1463,7 +1478,7 @@ of controls and double click to select control."
 (defun on-new-builder-page (obj &key custom-boot url-launch)
   "Open new page"
   (let* ((app (connection-data-item obj "builder-app-data"))
-         (win (create-gui-window obj :top 40 :left 220 :width 400 :client-movement t))
+         (win (create-gui-window obj :top 40 :left 220 :width 500 :client-movement t))
          (panel-uid  (format nil "~A" (get-universal-time))) ;; unique id for panel
          (boot-loc   (if custom-boot
                          "builder-custom"
