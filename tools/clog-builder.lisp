@@ -288,11 +288,11 @@ replaced."
                                             custom-query
                                             :html-id uid))
                                   ((eq create-type :paste)
-                                   (let ((c (funcall (getf control-record :create) parent
-                                                     custom-query
-                                                     :html-id uid)))
-                                     (setf control-type-name (attribute c "data-clog-type"))
-                                     (change-class c (getf (control-info control-type-name) :clog-type))
+                                   (let ((c (create-child parent custom-query
+							  :html-id uid)))
+				     (setf control-type-name (attribute c "data-clog-type"))
+				     (let ((cr (control-info control-type-name)))
+                                       (change-class c (getf cr :clog-type)))
                                      c))
                                   ((eq create-type :element)
                                    (funcall (getf control-record :create) parent
@@ -396,7 +396,7 @@ replaced."
                                       :class "placer"
                                       :html-id (format nil "p-~A" (html-id control)))))
     (add-to-control-list app panel-id control)
-    ;; run configured on-load
+    ;; setup placer
     (set-geometry placer :top (position-top control)
                          :left (position-left control)
                          :width (client-width control)
@@ -544,6 +544,8 @@ not a temporary attached one when using select-control."
                    (setf dct (attribute control "data-clog-type"))
                    (unless (equal dct "undefined")
                      (change-class control (getf (control-info dct) :clog-type))
+		     (when (getf (control-info dct) :on-load)
+		       (funcall (getf (control-info dct) :on-load) control (control-info dct)))
  		     (setup-control content control :win win)
 		     (add-siblings (first-child control)))
 		   (setf control (next-sibling control))))))
@@ -1089,15 +1091,18 @@ of controls and double click to select control."
                               (when (copy-buf app)
                                 (let ((control (create-control content content
                                                                `(:name "custom"
-                                                                 :clog-type      clog:clog-element
-                                                                 :create         clog:create-child
-                                                                 :create-type    :paste)
-                                                               (format nil "CLOGB~A" (get-universal-time))
+                                                                 :create-type :paste)
+							       (format nil "CLOGB~A~A"
+								       (get-universal-time)
+								       (next-id content))
                                                                :custom-query (copy-buf app))))
                                   (setf (attribute control "data-clog-name")
                                         (format nil "~A-~A" "copy" (next-id content)))
                                   (incf-next-id content)
                                   (add-sub-controls control content :win win :paste t)
+				  (let ((cr (control-info (attribute control "data-clog-type"))))
+                                    (when (getf cr :on-load)
+				      (funcall (getf cr :on-load) control cr)))
                                   (setup-control content control :win win)
                                   (select-control control)
                                   (on-populate-control-list-win content))))))
@@ -1303,15 +1308,18 @@ of controls and double click to select control."
                                   (when (copy-buf app)
                                     (let ((control (create-control content content
                                                                    `(:name "custom"
-                                                                     :clog-type      clog:clog-element
-                                                                     :create         clog:create-child
-                                                                     :create-type    :paste)
-                                                                   (format nil "CLOGB~A" (get-universal-time))
+                                                                     :create-type :paste)
+								   (format nil "CLOGB~A~A"
+									   (get-universal-time)
+									   (next-id content))
                                                                    :custom-query (copy-buf app))))
                                       (setf (attribute control "data-clog-name")
                                             (format nil "~A-~A" "copy" (next-id content)))
                                       (incf-next-id content)
                                       (add-sub-controls control content :win win :paste t)
+				      (let ((cr (control-info (attribute control "data-clog-type"))))
+					(when (getf cr :on-load)
+					  (funcall (getf cr :on-load) control cr)))
                                       (setup-control content control :win win)
                                       (select-control control)
                                       (on-populate-control-list-win content))))))
