@@ -1160,7 +1160,8 @@ of controls and double click to select control."
                                                            (escape-string (read-file fname)))
                                                      (clrhash (get-control-list app panel-id))
                                                      (on-populate-loaded-window content :win win)
-                                                     (setf (window-title win) (attribute content "data-clog-name")))))))
+                                                     (setf (window-title win) (attribute content "data-clog-name"))
+						     (on-populate-control-list-win content))))))
     (set-on-click btn-save (lambda (obj)
                              (server-file-dialog obj "Save Panel As.." file-name
                                                  (lambda (fname)
@@ -1407,7 +1408,8 @@ of controls and double click to select control."
                                                        (clrhash (get-control-list app panel-id))
                                                        (on-populate-loaded-window content :win win)
                                                        (setf (title (html-document body)) (attribute content "data-clog-name"))
-                                                       (setf (window-title win) (attribute content "data-clog-name")))))))
+                                                       (setf (window-title win) (attribute content "data-clog-name"))
+						       (on-populate-control-list-win content))))))
       (set-on-click btn-save (lambda (obj)
                                (server-file-dialog obj "Save Page As.." file-name
                                                    (lambda (fname)
