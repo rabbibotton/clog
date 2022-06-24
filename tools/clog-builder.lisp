@@ -1034,7 +1034,7 @@ of controls and double click to select control."
     (setf-next-id content 1)
     (setf (overflow content) :auto)
     (init-control-list app panel-id)
-    ;; setup panel window
+    ;; Setup panel window
     (let ((panel-name (format nil "panel-~A" (incf (next-panel-id app)))))
       (setf (window-title win) panel-name)
       (setf (attribute content "data-clog-name") panel-name))
@@ -1064,58 +1064,70 @@ of controls and double click to select control."
                                (declare (ignore obj))
                                (on-populate-control-properties-win content :win win)))
     ;; setup tool bar events
-    (set-on-click btn-copy (lambda (obj)
-                             (when (current-control app)
-                               (maphash
-                                (lambda (html-id control)
-                                  (declare (ignore html-id))
-                                  (place-inside-bottom-of (bottom-panel box)
-                                                          (get-placer control)))
-                                (get-control-list app panel-id))
-                               (setf (copy-buf app)
-                                     (js-query content
-                                               (format nil
-                                                       "var z=~a.clone(); z=$('<div />').append(z);~
+    (flet (;; copy
+	   (copy (obj)
+             (when (current-control app)
+               (maphash
+                (lambda (html-id control)
+                  (declare (ignore html-id))
+                  (place-inside-bottom-of (bottom-panel box)
+                                          (get-placer control)))
+                (get-control-list app panel-id))
+               (setf (copy-buf app)
+                     (js-query content
+                               (format nil
+                                       "var z=~a.clone(); z=$('<div />').append(z);~
      z.find('*').each(function(){~
        if($(this).attr('data-clog-composite-control') == 't'){$(this).text('')}~
        if($(this).attr('id') !== undefined && ~
          $(this).attr('id').substring(0,5)=='CLOGB'){$(this).removeAttr('id')}});~
      z.html()"
-                                                       (jquery (current-control app)))))
-			       (system-clipboard-write obj (copy-buf app))
-                               (maphash
-                                (lambda (html-id control)
-                                  (declare (ignore html-id))
-                                  (place-after control (get-placer control)))
-                                (get-control-list app panel-id)))))
-  (set-on-click btn-paste (lambda (obj)
-                            (bordeaux-threads:with-lock-held ((new-control-lock app))
-			      (let ((buf (or (system-clipboard-read obj)
-					     (copy-buf app))))
-				(when buf
-                                  (let ((control (create-control content content
-								 `(:name "custom"
-                                                                   :create-type :paste)
-								 (format nil "CLOGB~A~A"
-									 (get-universal-time)
-									 (next-id content))
-								 :custom-query buf)))
-                                    (setf (attribute control "data-clog-name")
-                                          (format nil "~A-~A" "copy" (next-id content)))
-                                    (incf-next-id content)
-                                    (add-sub-controls control content :win win :paste t)
-				    (let ((cr (control-info (attribute control "data-clog-type"))))
-                                      (when (getf cr :on-load)
-					(funcall (getf cr :on-load) control cr)))
-                                    (setup-control content control :win win)
-                                    (select-control control)
-                                    (on-populate-control-list-win content)))))))
-    (set-on-click btn-del (lambda (obj)
-                            (declare (ignore obj))
-                            (when (current-control app)
-                              (delete-current-control app panel-id (html-id (current-control app)))
-                              (on-populate-control-properties-win content :win win)
-                              (on-populate-control-list-win content))))
+                                       (jquery (current-control app)))))
+	       (system-clipboard-write obj (copy-buf app))
+               (maphash
+                (lambda (html-id control)
+                  (declare (ignore html-id))
+                  (place-after control (get-placer control)))
+                (get-control-list app panel-id))))
+	   ;; paste
+	   (paste (obj)
+             (bordeaux-threads:with-lock-held ((new-control-lock app))
+	       (let ((buf (or (system-clipboard-read obj)
+			      (copy-buf app))))
+		 (when buf
+                   (let ((control (create-control content content
+						  `(:name "custom"
+                                                    :create-type :paste)
+						  (format nil "CLOGB~A~A"
+							  (get-universal-time)
+							  (next-id content))
+						  :custom-query buf)))
+                     (setf (attribute control "data-clog-name")
+                           (format nil "~A-~A" "copy" (next-id content)))
+                     (incf-next-id content)
+                     (add-sub-controls control content :win win :paste t)
+		     (let ((cr (control-info (attribute control "data-clog-type"))))
+                       (when (getf cr :on-load)
+			 (funcall (getf cr :on-load) control cr)))
+                     (setup-control content control :win win)
+                     (select-control control)
+                     (on-populate-control-list-win content))))))
+	   ;; delete
+	   (del (obj)
+             (declare (ignore obj))
+             (when (current-control app)
+               (delete-current-control app panel-id (html-id (current-control app)))
+               (on-populate-control-properties-win content :win win)
+               (on-populate-control-list-win content))))
+      ;; set up del/cut/copy/paste handlers
+      (set-on-copy content #'copy)
+      (set-on-click btn-copy #'copy)
+      (set-on-paste content #'paste)
+      (set-on-click btn-paste #'paste)
+      (set-on-click btn-del #'del)
+      (set-on-cut content (lambda (obj)
+			    (copy obj)
+			    (del obj))))
     (set-on-click btn-sim (lambda (obj)
                             (declare (ignore obj))
                             (cond (in-simulation
@@ -1282,58 +1294,70 @@ of controls and double click to select control."
                                                          (declare (ignore html-id))
                                                          (place-after control (get-placer control)))
                                                        (get-control-list app panel-id)))))))
-      (set-on-click btn-copy (lambda (obj)
-                               (when (current-control app)
-                                 (maphash
-                                  (lambda (html-id control)
-                                    (declare (ignore html-id))
-                                    (place-inside-bottom-of (bottom-panel box)
-                                                            (get-placer control)))
-                                  (get-control-list app panel-id))
-                                 (setf (copy-buf app)
-                                       (js-query content
-                                                 (format nil
-                                                         "var z=~a.clone(); z=$('<div />').append(z);~
-       z.find('*').each(function(){~
-         if($(this).attr('data-clog-composite-control') == 't'){$(this).text('')}~
-         if($(this).attr('id') !== undefined && ~
-           $(this).attr('id').substring(0,5)=='CLOGB'){$(this).removeAttr('id')}});~
-       z.html()"
-                                                         (jquery (current-control app)))))
-				 (system-clipboard-write obj (copy-buf app))
-                                 (maphash
-                                  (lambda (html-id control)
-                                    (declare (ignore html-id))
-                                    (place-after control (get-placer control)))
-                                  (get-control-list app panel-id)))))
-      (set-on-click btn-paste (lambda (obj)
-                                (bordeaux-threads:with-lock-held ((new-control-lock app))
-				  (let ((buf (or (system-clipboard-read obj)
-						 (copy-buf app))))
-				    (when buf
-                                      (let ((control (create-control content content
-                                                                     `(:name "custom"
-                                                                       :create-type :paste)
-								     (format nil "CLOGB~A~A"
-									     (get-universal-time)
-									     (next-id content))
-                                                                     :custom-query buf)))
-					(setf (attribute control "data-clog-name")
-                                              (format nil "~A-~A" "copy" (next-id content)))
-					(incf-next-id content)
-					(add-sub-controls control content :win win :paste t)
-					(let ((cr (control-info (attribute control "data-clog-type"))))
-					  (when (getf cr :on-load)
-					    (funcall (getf cr :on-load) control cr)))
-					(setup-control content control :win win)
-					(select-control control)
-					(on-populate-control-list-win content)))))))
-      (set-on-click btn-del (lambda (obj)
-                              (declare (ignore obj))
-                              (when (current-control app)
-                                (delete-current-control app panel-id (html-id (current-control app)))
-                                (on-populate-control-properties-win content :win win)
-                                (on-populate-control-list-win content))))
+      (flet (;; copy
+	     (copy (obj)
+               (when (current-control app)
+		 (maphash
+                  (lambda (html-id control)
+                    (declare (ignore html-id))
+                    (place-inside-bottom-of (bottom-panel box)
+                                            (get-placer control)))
+                  (get-control-list app panel-id))
+		 (setf (copy-buf app)
+                       (js-query content
+				 (format nil
+					 "var z=~a.clone(); z=$('<div />').append(z);~
+     z.find('*').each(function(){~
+       if($(this).attr('data-clog-composite-control') == 't'){$(this).text('')}~
+       if($(this).attr('id') !== undefined && ~
+         $(this).attr('id').substring(0,5)=='CLOGB'){$(this).removeAttr('id')}});~
+     z.html()"
+					 (jquery (current-control app)))))
+		 (system-clipboard-write obj (copy-buf app))
+		 (maphash
+                  (lambda (html-id control)
+                    (declare (ignore html-id))
+                    (place-after control (get-placer control)))
+                  (get-control-list app panel-id))))
+	     ;; paste
+	     (paste (obj)
+               (bordeaux-threads:with-lock-held ((new-control-lock app))
+		 (let ((buf (or (system-clipboard-read obj)
+				(copy-buf app))))
+		   (when buf
+                     (let ((control (create-control content content
+						    `(:name "custom"
+                                                      :create-type :paste)
+						    (format nil "CLOGB~A~A"
+							    (get-universal-time)
+							    (next-id content))
+						    :custom-query buf)))
+                       (setf (attribute control "data-clog-name")
+                             (format nil "~A-~A" "copy" (next-id content)))
+                       (incf-next-id content)
+                       (add-sub-controls control content :win win :paste t)
+		       (let ((cr (control-info (attribute control "data-clog-type"))))
+			 (when (getf cr :on-load)
+			   (funcall (getf cr :on-load) control cr)))
+                       (setup-control content control :win win)
+                       (select-control control)
+                       (on-populate-control-list-win content))))))
+	     ;; delete
+	     (del (obj)
+               (declare (ignore obj))
+               (when (current-control app)
+		 (delete-current-control app panel-id (html-id (current-control app)))
+		 (on-populate-control-properties-win content :win win)
+		 (on-populate-control-list-win content))))
+	;; set up del/cut/copy/paste handlers
+	(set-on-copy content #'copy)
+	(set-on-click btn-copy #'copy)
+	(set-on-paste content #'paste)
+	(set-on-click btn-paste #'paste)
+	(set-on-click btn-del #'del)
+	(set-on-cut content (lambda (obj)
+			      (copy obj)
+			      (del obj))))
       (set-on-click btn-sim (lambda (obj)
                               (declare (ignore obj))
                               (cond (in-simulation
