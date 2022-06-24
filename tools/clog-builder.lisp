@@ -30,14 +30,14 @@
     :accessor properties-list
     :initform nil
     :documentation "Property list in properties window")
-   (events-list
-    :accessor events-list
-    :initform nil
-    :documentation "Property list in events window")
    (control-properties-win
     :accessor control-properties-win
     :initform nil
     :documentation "Current control properties window")
+   (events-list
+    :accessor events-list
+    :initform nil
+    :documentation "Property list in events window")
    (control-events-win
     :accessor control-events-win
     :initform nil
@@ -916,23 +916,41 @@ of controls and double click to select control."
 
 (defun on-show-control-properties-win (obj)
   "Show control properties window"
-  (let ((app (connection-data-item obj "builder-app-data")))
-    (if (control-properties-win app)
-        (window-focus (control-properties-win app))
-        (let* ((win          (create-gui-window obj :title "Control Properties"
-                                                    :left 630
-                                                    :top 40
-                                                    :height 510 :width 400
-                                                    :has-pinner t :client-movement t))
-               (content      (window-content win))
-               (control-list (create-table content)))
-          (setf (control-properties-win app) win)
-          (setf (properties-list app) control-list)
-          (set-on-window-close win (lambda (obj)
-                                     (declare (ignore obj))
-                                     (setf (control-properties-win app) nil)))
-          (setf (positioning control-list) :absolute)
-          (set-geometry control-list :units "" :left 0 :top 0 :bottom 0 :width "100%")))))
+  (let* ((app (connection-data-item obj "builder-app-data"))
+	 (is-hidden  nil)
+	 (content  (create-panel (connection-body obj) :positioning :fixed
+						       :overflow    :scroll
+						       :width 400
+						       :top 40
+						       :right 0 :bottom 0
+						       :class "w3-border"))
+         (side-panel (create-panel content :top 0 :left 0 :bottom 0 :width 10))
+         (control-list (create-table content))
+         (pallete (create-select content)))
+    (setf (background-color pallete) :gray)
+    (setf (color pallete) :white)
+    (setf (positioning pallete) :absolute)
+    (setf (size pallete) 2)
+    (set-geometry pallete :units "" :left "10px" :top 0 :height "220px" :width "96%")
+    (setf (advisory-title pallete) (format nil "<ctrl> place static~%<shift> child to selected"))
+    (setf (select-tool app) pallete)
+    (dolist (control *supported-controls*)
+      (if (equal (getf control :name) "group")
+          (add-select-optgroup pallete (getf control :description))
+          (add-select-option pallete (getf control :name) (getf control :description))))
+    (setf (background-color side-panel) :black)
+    (setf (background-color content) :gray)
+    (set-on-click side-panel (lambda (obj)
+			       (cond (is-hidden
+				      (setf (width content) "400px")
+				      (setf is-hidden nil))
+				     (t
+				      (setf (width content) "10px")
+				      (setf is-hidden t)))))
+    (setf (control-properties-win app) content)
+    (setf (properties-list app) control-list)
+    (setf (positioning control-list) :absolute)
+    (set-geometry control-list :units "" :left "10px" :top "220px" :width "98%")))
 
 (defun on-show-control-events-win (obj)
   "Show control events window"
@@ -940,9 +958,9 @@ of controls and double click to select control."
     (if (control-events-win app)
         (window-focus (control-events-win app))
         (let* ((win          (create-gui-window obj :title "Control Events"
-                                                    :left 220
+                                                    :left 0
                                                     :top 350
-                                                    :height 200 :width 400
+                                                    :height 200 :width 620
                                                     :has-pinner t :client-movement t))
                (content      (window-content win))
                (control-list (create-table content)))
@@ -954,40 +972,15 @@ of controls and double click to select control."
           (setf (positioning control-list) :absolute)
           (set-geometry control-list :units "" :left 0 :top 0 :bottom 0 :width "100%")))))
 
-(defun on-show-control-pallete-win (obj)
-  "Show control pallete"
-  (let ((app (connection-data-item obj "builder-app-data")))
-    (if (control-pallete-win app)
-        (window-focus (control-pallete-win app))
-        (let* ((win          (create-gui-window obj :title "Control Pallete"
-                                                    :top 40
-                                                    :left 0
-                                                    :height 300 :width 200
-                                                    :has-pinner t :client-movement t))
-               (content      (window-content win))
-               (control-list (create-select content)))
-          (setf (control-pallete-win app) win)
-          (set-on-window-close win (lambda (obj)
-                                     (declare (ignore obj))
-                                     (setf (control-pallete-win app) nil)))
-          (setf (positioning control-list) :absolute)
-          (setf (size control-list) 2)
-          (set-geometry control-list :units "" :left 0 :top 0 :bottom 0 :width "100%")
-          (setf (advisory-title control-list) (format nil "<ctrl> place static~%<shift> child to selected"))
-          (setf (select-tool app) control-list)
-          (dolist (control *supported-controls*)
-            (if (equal (getf control :name) "group")
-                (add-select-optgroup control-list (getf control :description))
-                (add-select-option control-list (getf control :name) (getf control :description))))))))
-
 (defun on-show-control-list-win (obj)
   "Show control list for selecting and manipulating controls by name"
   (let ((app (connection-data-item obj "builder-app-data")))
     (if (control-list-win app)
         (window-focus (control-list-win app))
         (let* ((win (create-gui-window obj :title "Control List"
-                                           :top 350
+                                           :top 40
                                            :left 0
+					   :height 300
                                            :width 200
                                            :has-pinner t :client-movement t)))
           (setf (control-list-win app) win)
@@ -1013,7 +1006,6 @@ of controls and double click to select control."
          (btn-paste (create-img tool-bar :alt-text "paste" :url-src "/img/icons/paste.png" :class btn-class))
          (btn-cut   (create-img tool-bar :alt-text "cut" :url-src "/img/icons/cut.png" :class btn-class))
          (btn-del   (create-img tool-bar :alt-text "delete" :url-src "/img/icons/delete.png" :class btn-class))
-         ;;(btn-sim   (create-button tool-bar :content "Sim"))
          (btn-test  (create-img tool-bar :alt-text "test" :url-src "/img/icons/run.png" :class btn-class))
          (btn-rndr  (create-img tool-bar :alt-text "render" :url-src "/img/icons/rndr.png" :class btn-class))
          (btn-save  (create-img tool-bar :alt-text "save" :url-src "/img/icons/save.png" :class btn-class))
@@ -1131,25 +1123,6 @@ of controls and double click to select control."
       (set-on-click btn-cut (lambda (obj)
 			      (copy obj)
 			      (del obj))))
-    ;; (set-on-click btn-sim (lambda (obj)
-    ;;                         (declare (ignore obj))
-    ;;                         (cond (in-simulation
-    ;;                                (setf (text btn-sim) "Simulate")
-    ;;                                (setf in-simulation nil)
-    ;;                                (maphash (lambda (html-id control)
-    ;;                                           (declare (ignore html-id))
-    ;;                                           (setf (hiddenp (get-placer control)) nil))
-    ;;                                         (get-control-list app panel-id)))
-    ;;                               (t
-    ;;                                (setf (text btn-sim) "Develop")
-    ;;                                (deselect-current-control app)
-    ;;                                (on-populate-control-properties-win content :win win)
-    ;;                                (setf in-simulation t)
-    ;;                                (maphash (lambda (html-id control)
-    ;;                                           (declare (ignore html-id))
-    ;;                                           (setf (hiddenp (get-placer control)) t))
-    ;;                                         (get-control-list app panel-id))
-    ;;                                (focus (first-child content))))))
     (set-on-click btn-load (lambda (obj)
                              (server-file-dialog obj "Load Panel" file-name
                                                  (lambda (fname)
@@ -1574,7 +1547,8 @@ of controls and double click to select control."
     (clog-gui-initialize body)
     (add-class body "w3-blue-grey")
     (setf (z-index (create-panel body :positioning :fixed
-                                      :bottom 0 :right 0
+				      :units ""
+                                      :bottom 0
                                       :content (format nil "static-root: ~A" clog::*static-root*)))
           -9999)
     (let* ((menu  (create-gui-menu-bar body))
@@ -1595,8 +1569,6 @@ of controls and double click to select control."
                             (lambda (obj)
                               (declare (ignore obj))
                               (open-window (window body) "/dbadmin")))
-      (create-gui-menu-item tools :content "Control Pallete"    :on-click 'on-show-control-pallete-win)
-      (create-gui-menu-item tools :content "Control Properties" :on-click 'on-show-control-properties-win)
       (create-gui-menu-item tools :content "Control Events"     :on-click 'on-show-control-events-win)
       (create-gui-menu-item tools :content "Control List"       :on-click 'on-show-control-list-win)
       (create-gui-menu-item win   :content "Maximize All"       :on-click #'maximize-all-windows)
@@ -1632,10 +1604,9 @@ of controls and double click to select control."
                               (open-window (window body) "https://getbootstrap.com/docs/5.1/getting-started/introduction/")))
       (create-gui-menu-item help  :content "About CLOG Builder"   :on-click #'on-help-about-builder)
       (create-gui-menu-full-screen menu))
-    (on-show-control-pallete-win body)
+    (on-show-control-properties-win body)
     (on-show-control-list-win body)
     (on-show-control-events-win body)
-    (on-show-control-properties-win body)
     (on-new-builder-panel body)
     (set-on-before-unload (window body) (lambda(obj)
                                           (declare (ignore obj))
