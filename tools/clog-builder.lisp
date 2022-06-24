@@ -34,10 +34,6 @@
     :accessor events-list
     :initform nil
     :documentation "Property list in events window")
-   (properties-lock
-    :accessor properties-lock
-    :initform (bordeaux-threads:make-lock)
-    :documentation "Sync refresh properties and event window")
    (control-properties-win
     :accessor control-properties-win
     :initform nil
@@ -50,10 +46,6 @@
     :accessor control-list-win
     :initform nil
     :documentation "Current control list window")
-   (control-list-win-lock
-    :accessor control-list-win-lock
-    :initform (bordeaux-threads:make-lock)
-    :documentation "Sync refresh control-list-win")
    (control-pallete-win
     :accessor control-pallete-win
     :initform nil
@@ -723,96 +715,95 @@ not a temporary attached one when using select-control."
   "Populate the control properties for the current control"
   ;; obj if current-control is nil must be content
   (let ((app (connection-data-item obj "builder-app-data")))
-    (bordeaux-threads:with-lock-held ((properties-lock app))
-      (on-populate-control-events-win obj)
-      (let* ((prop-win (control-properties-win app))
-             (control  (if (current-control app)
-                           (current-control app)
-                           obj))
-             (placer   (when control
-                         (get-placer control)))
-             (table    (properties-list app)))
-        (when prop-win
-          (setf (inner-html table) "")
-          (let ((info  (control-info (attribute control "data-clog-type")))
-                props)
-            (dolist (prop (reverse (getf info :properties)))
-              (cond ((eq (third prop) :style)
-                     (push `(,(getf prop :name) ,(style control (getf prop :style)) ,(getf prop :setup)
-                             ,(lambda (obj)
-                                (setf (style control (getf prop :style)) (text obj))))
-                           props))
-                    ((or (eq (third prop) :get)
-                         (eq (third prop) :set)
-                         (eq (third prop) :setup))
-                     (push `(,(getf prop :name) ,(when (getf prop :get)
-                                                   (funcall (getf prop :get) control))
-                             ,(getf prop :setup)
-                             ,(lambda (obj)
-                                (when (getf prop :set)
-                                  (funcall (getf prop :set) control obj))))
-                           props))
-                    ((eq (third prop) :setf)
-                     (push `(,(getf prop :name) ,(funcall (getf prop :setf) control) ,(getf prop :setup)
-                             ,(lambda (obj)
-                                (funcall (find-symbol (format nil "SET-~A" (getf prop :setf)) :clog) control (text obj))))
-                           props))
-                    ((eq (third prop) :prop)
-                     (push `(,(getf prop :name) ,(property control (getf prop :prop)) ,(getf prop :setup)
-                             ,(lambda (obj)
-                                (setf (property control (getf prop :prop)) (text obj))))
-                           props))
-                    ((eq (third prop) :attr)
-                     (push `(,(getf prop :name) ,(attribute control (getf prop :attr)) ,(getf prop :setup)
-                             ,(lambda (obj)
-                                (setf (attribute control (getf prop :attr)) (text obj))))
-                           props))
-                    (t (print "Configuration error."))))
-            (when (current-control app)
-              (push
-               `("parent"  ,(attribute (parent-element control) "data-clog-name")
-                           nil
+    (on-populate-control-events-win obj)
+    (let* ((prop-win (control-properties-win app))
+           (control  (if (current-control app)
+                         (current-control app)
+                         obj))
+           (placer   (when control
+                       (get-placer control)))
+           (table    (properties-list app)))
+      (when prop-win
+        (setf (inner-html table) "")
+        (let ((info  (control-info (attribute control "data-clog-type")))
+              props)
+          (dolist (prop (reverse (getf info :properties)))
+            (cond ((eq (third prop) :style)
+                   (push `(,(getf prop :name) ,(style control (getf prop :style)) ,(getf prop :setup)
                            ,(lambda (obj)
-                              (place-inside-bottom-of
-                               (attach-as-child control
-                                                (js-query
-                                                 control
-                                                 (format nil "$(\"[data-clog-name='~A']\").attr('id')"
-                                                         (text obj))))
-                               control)
-                              (place-after control placer)))
-               props))
+                              (setf (style control (getf prop :style)) (text obj))))
+                         props))
+                  ((or (eq (third prop) :get)
+                       (eq (third prop) :set)
+                       (eq (third prop) :setup))
+                   (push `(,(getf prop :name) ,(when (getf prop :get)
+                                                 (funcall (getf prop :get) control))
+                           ,(getf prop :setup)
+                           ,(lambda (obj)
+                              (when (getf prop :set)
+                                (funcall (getf prop :set) control obj))))
+                         props))
+                  ((eq (third prop) :setf)
+                   (push `(,(getf prop :name) ,(funcall (getf prop :setf) control) ,(getf prop :setup)
+                           ,(lambda (obj)
+                              (funcall (find-symbol (format nil "SET-~A" (getf prop :setf)) :clog) control (text obj))))
+                         props))
+                  ((eq (third prop) :prop)
+                   (push `(,(getf prop :name) ,(property control (getf prop :prop)) ,(getf prop :setup)
+                           ,(lambda (obj)
+                              (setf (property control (getf prop :prop)) (text obj))))
+                         props))
+                  ((eq (third prop) :attr)
+                   (push `(,(getf prop :name) ,(attribute control (getf prop :attr)) ,(getf prop :setup)
+                           ,(lambda (obj)
+                              (setf (attribute control (getf prop :attr)) (text obj))))
+                         props))
+                  (t (print "Configuration error."))))
+          (when (current-control app)
             (push
-             `("name"    ,(attribute control "data-clog-name")
+             `("parent"  ,(attribute (parent-element control) "data-clog-name")
                          nil
                          ,(lambda (obj)
-                            (setf (attribute control "data-clog-name") (text obj))
-                            (when (equal (getf info :name) "clog-data")
-                              (setf (window-title win) (text obj)))))
-             props)
-            (dolist (item props)
-              (let* ((tr  (create-table-row table))
-                     (td1 (create-table-column tr :content (first item)))
-                     (td2 (if (second item)
-                              (create-table-column tr :content (second item))
-                              (create-table-column tr))))
-                (setf (width td1) "30%")
-                (setf (width td2) "70%")
-                (setf (spellcheckp td2) nil)
-                (set-border td1 "1px" :dotted :black)
-                (cond ((third item)
-                       (unless (eq (third item) :read-only)
-                         (setf (editablep td2) (funcall (third item) control td1 td2))))
-                      (t
-                       (setf (editablep td2) t)))
-                (set-on-blur td2
-                             (lambda (obj)
-                               (funcall (fourth item) obj)
-                               (when placer
-                                 (set-geometry placer :top (position-top control)
-                                                      :left (position-left control)
-                                                      :width (client-width control)
-                                                      :height (client-height control)))))))))))))
+                            (place-inside-bottom-of
+                             (attach-as-child control
+                                              (js-query
+                                               control
+                                               (format nil "$(\"[data-clog-name='~A']\").attr('id')"
+                                                       (text obj))))
+                             control)
+                            (place-after control placer)))
+             props))
+          (push
+           `("name"    ,(attribute control "data-clog-name")
+                       nil
+                       ,(lambda (obj)
+                          (setf (attribute control "data-clog-name") (text obj))
+                          (when (equal (getf info :name) "clog-data")
+                            (setf (window-title win) (text obj)))))
+           props)
+          (dolist (item props)
+            (let* ((tr  (create-table-row table))
+                   (td1 (create-table-column tr :content (first item)))
+                   (td2 (if (second item)
+                            (create-table-column tr :content (second item))
+                            (create-table-column tr))))
+              (setf (width td1) "30%")
+              (setf (width td2) "70%")
+              (setf (spellcheckp td2) nil)
+              (set-border td1 "1px" :dotted :black)
+              (cond ((third item)
+                     (unless (eq (third item) :read-only)
+                       (setf (editablep td2) (funcall (third item) control td1 td2))))
+                    (t
+                     (setf (editablep td2) t)))
+              (set-on-blur td2
+                           (lambda (obj)
+                             (funcall (fourth item) obj)
+                             (when placer
+                               (set-geometry placer :top (position-top control)
+                                                    :left (position-left control)
+                                                    :width (client-width control)
+                                                    :height (client-height control))))))))))))
 
 (defun on-populate-loaded-window (content &key win)
   "Setup html imported in to CONTENT for use with Builder"
@@ -822,86 +813,85 @@ not a temporary attached one when using select-control."
   "Populate the control-list-window to allow drag and drop adjust of order
 of controls and double click to select control."
   (let ((app (connection-data-item content "builder-app-data")))
-    (bordeaux-threads:with-lock-held ((control-list-win-lock app))
-      (let ((panel-id (html-id content))
-            (last-ctl nil))
-        (when (control-list-win app)
-          (let ((win (window-content (control-list-win app))))
-            (setf (inner-html win) "")
-            (labels ((add-siblings (control sim)
-                       (let (dln dcc)
-                         (loop
-                           (when (equal (html-id control) "undefined") (return))
-			   (setf dcc (attribute control "data-clog-composite-control"))
-                           (setf dln (attribute control "data-clog-name"))
-                           (unless (equal dln "undefined")
-                             (let ((list-item (create-div win :content (format nil "&#8597; ~A~A" sim dln)))
-                                   (status    (hiddenp (get-placer control))))
-                               (if status
-                                   (setf (background-color list-item) :gray)
-                                   (setf (background-color list-item) :lightgray))
-                               (setf (draggablep list-item) t)
-                               (setf (attribute list-item "data-clog-control") (html-id control))
-                               ;; click to select item
-                               (set-on-mouse-down list-item
-                                                  (lambda (obj data)
+    (let ((panel-id (html-id content))
+          (last-ctl nil))
+      (when (control-list-win app)
+        (let ((win (window-content (control-list-win app))))
+          (setf (inner-html win) "")
+          (labels ((add-siblings (control sim)
+                     (let (dln dcc)
+                       (loop
+                         (when (equal (html-id control) "undefined") (return))
+			 (setf dcc (attribute control "data-clog-composite-control"))
+                         (setf dln (attribute control "data-clog-name"))
+                         (unless (equal dln "undefined")
+                           (let ((list-item (create-div win :content (format nil "&#8597; ~A~A" sim dln)))
+                                 (status    (hiddenp (get-placer control))))
+                             (if status
+                                 (setf (background-color list-item) :gray)
+                                 (setf (background-color list-item) :lightgray))
+                             (setf (draggablep list-item) t)
+                             (setf (attribute list-item "data-clog-control") (html-id control))
+                             ;; click to select item
+                             (set-on-mouse-down list-item
+                                                (lambda (obj data)
+                                                  (let* ((html-id (attribute obj "data-clog-control"))
+                                                         (control (get-from-control-list app
+                                                                                         panel-id
+                                                                                         html-id)))
+                                                    (cond ((or (getf data :shift-key)
+                                                               (getf data :ctrl-key))
+                                                           (when (drop-new-control app content data)
+                                                             (incf-next-id content)))
+                                                          (t
+                                                           (when last-ctl
+                                                             (set-border last-ctl "0px" :dotted :blue))
+                                                           (set-border list-item "2px" :dotted :blue)
+                                                           (setf last-ctl list-item)
+                                                           (select-control control))))))
+                             (set-on-double-click list-item
+                                                  (lambda (obj)
                                                     (let* ((html-id (attribute obj "data-clog-control"))
                                                            (control (get-from-control-list app
                                                                                            panel-id
-                                                                                           html-id)))
-                                                      (cond ((or (getf data :shift-key)
-                                                                 (getf data :ctrl-key))
-                                                             (when (drop-new-control app content data)
-                                                               (incf-next-id content)))
-                                                            (t
-                                                             (when last-ctl
-                                                               (set-border last-ctl "0px" :dotted :blue))
-                                                             (set-border list-item "2px" :dotted :blue)
-                                                             (setf last-ctl list-item)
-                                                             (select-control control))))))
-                               (set-on-double-click list-item
-                                                    (lambda (obj)
-                                                      (let* ((html-id (attribute obj "data-clog-control"))
-                                                             (control (get-from-control-list app
-                                                                                             panel-id
-                                                                                             html-id))
-                                                             (placer  (get-placer control))
-                                                             (state   (hiddenp placer)))
-                                                        (setf (hiddenp placer) (not state))
-                                                        (select-control control)
-                                                        (on-populate-control-list-win content))))
-                               ;; drag and drop to change
-                               (set-on-drag-over list-item (lambda (obj)(declare (ignore obj))()))
-                               (set-on-drop list-item
-                                            (lambda (obj data)
-                                              (let* ((id       (attribute obj "data-clog-control"))
-                                                     (control1 (get-from-control-list app
-                                                                                      panel-id
-                                                                                      id))
-                                                     (control2 (get-from-control-list app
-                                                                                      panel-id
-                                                                                      (getf data :drag-data)))
-                                                     (placer1  (get-placer control1))
-                                                     (placer2  (get-placer control2)))
-                                                (if (getf data :shift-key)
-                                                    (place-inside-bottom-of control1 control2)
-                                                    (place-before control1 control2))
-                                                (place-after control2 placer2)
-                                                (set-geometry placer1 :top (position-top control1)
-                                                                      :left (position-left control1)
-                                                                      :width (client-width control1)
-                                                                      :height (client-height control1))
-                                                (set-geometry placer2 :top (position-top control2)
-                                                                      :left (position-left control2)
-                                                                      :width (client-width control2)
-                                                                      :height (client-height control2))
-                                                (on-populate-control-list-win content))))
-                               (set-on-drag-start list-item (lambda (obj)(declare (ignore obj))())
-                                                  :drag-data (html-id control))
-			       (when (equal dcc "undefined") ; when t is not a composite control
-				 (add-siblings (first-child control) (format nil "~A&#8594;" sim)))))
-                           (setf control (next-sibling control))))))
-              (add-siblings (first-child content) ""))))))))
+                                                                                           html-id))
+                                                           (placer  (get-placer control))
+                                                           (state   (hiddenp placer)))
+                                                      (setf (hiddenp placer) (not state))
+                                                      (select-control control)
+                                                      (on-populate-control-list-win content))))
+                             ;; drag and drop to change
+                             (set-on-drag-over list-item (lambda (obj)(declare (ignore obj))()))
+                             (set-on-drop list-item
+                                          (lambda (obj data)
+                                            (let* ((id       (attribute obj "data-clog-control"))
+                                                   (control1 (get-from-control-list app
+                                                                                    panel-id
+                                                                                    id))
+                                                   (control2 (get-from-control-list app
+                                                                                    panel-id
+                                                                                    (getf data :drag-data)))
+                                                   (placer1  (get-placer control1))
+                                                   (placer2  (get-placer control2)))
+                                              (if (getf data :shift-key)
+                                                  (place-inside-bottom-of control1 control2)
+                                                  (place-before control1 control2))
+                                              (place-after control2 placer2)
+                                              (set-geometry placer1 :top (position-top control1)
+                                                                    :left (position-left control1)
+                                                                    :width (client-width control1)
+                                                                    :height (client-height control1))
+                                              (set-geometry placer2 :top (position-top control2)
+                                                                    :left (position-left control2)
+                                                                    :width (client-width control2)
+                                                                    :height (client-height control2))
+                                              (on-populate-control-list-win content))))
+                             (set-on-drag-start list-item (lambda (obj)(declare (ignore obj))())
+                                                :drag-data (html-id control))
+			     (when (equal dcc "undefined") ; when t is not a composite control
+			       (add-siblings (first-child control) (format nil "~A&#8594;" sim)))))
+                         (setf control (next-sibling control))))))
+            (add-siblings (first-child content) "")))))))
 
 ;; Menu handlers
 
