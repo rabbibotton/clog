@@ -922,7 +922,11 @@ embedded in a native template application.)"
   (cookie-enabled-p generic-function)
   (language         generic-function)
   (user-agent       generic-function)
-  (vendor           generic-function))
+  (vendor           generic-function)
+
+  "CLOG-Navigator - Clipboard"
+  (system-clipboard-write generic-function)
+  (system-clipboard-read  generic-function))
 
 (defsection @clog-location (:title "CLOG Location Objects")
   "Clog-Location - CLOG Location Objects"
