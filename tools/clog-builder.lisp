@@ -936,6 +936,7 @@ of controls and double click to select control."
 				     (t
 				      (setf (width content) "10px")
 				      (setf is-hidden t)))))
+    (setf (overflow content) :auto)
     (setf (positioning control-list) :absolute)
     (set-geometry control-list :units "" :left "10px" :top "0px" :right 0)))
 
