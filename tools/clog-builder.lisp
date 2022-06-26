@@ -925,21 +925,11 @@ of controls and double click to select control."
 						       :right 0 :bottom 0
 						       :class "w3-border"))
          (side-panel (create-panel content :top 0 :left 0 :bottom 0 :width 10))
-         (control-list (create-table content))
-         (pallete (create-select content)))
-    (setf (background-color pallete) :gray)
-    (setf (color pallete) :white)
-    (setf (positioning pallete) :absolute)
-    (setf (size pallete) 2)
-    (set-geometry pallete :units "" :left "10px" :top 0 :height "220px" :width "96%")
-    (setf (advisory-title pallete) (format nil "<ctrl> place static~%<shift> child to selected"))
-    (setf (select-tool app) pallete)
-    (dolist (control *supported-controls*)
-      (if (equal (getf control :name) "group")
-          (add-select-optgroup pallete (getf control :description))
-          (add-select-option pallete (getf control :name) (getf control :description))))
+         (control-list (create-table content)))
     (setf (background-color side-panel) :black)
     (setf (background-color content) :gray)
+    (setf (control-properties-win app) content)
+    (setf (properties-list app) control-list)
     (set-on-click side-panel (lambda (obj)
 			       (cond (is-hidden
 				      (setf (width content) "400px")
@@ -947,10 +937,8 @@ of controls and double click to select control."
 				     (t
 				      (setf (width content) "10px")
 				      (setf is-hidden t)))))
-    (setf (control-properties-win app) content)
-    (setf (properties-list app) control-list)
     (setf (positioning control-list) :absolute)
-    (set-geometry control-list :units "" :left "10px" :top "220px" :width "98%")))
+    (set-geometry control-list :units "" :left "10px" :top "0px" :width "98%")))
 
 (defun on-show-control-events-win (obj)
   "Show control events window"	 
@@ -958,7 +946,7 @@ of controls and double click to select control."
     (if (control-events-win app)
         (window-focus (control-events-win app))
         (let* ((win          (create-gui-window obj :title "Control Events"
-                                                    :left 180
+                                                    :left 222
                                                     :top 480
                                                     :height 200 :width 600
                                                     :has-pinner t :client-movement t))
@@ -978,12 +966,24 @@ of controls and double click to select control."
 	 (is-hidden  nil)
 	 (content  (create-panel (connection-body obj) :positioning :fixed
 						       :overflow    :scroll
-						       :width 175
+						       :width 220
 						       :top 40
 						       :left 0 :bottom 0
 						       :class "w3-border"))
          (side-panel (create-panel content :top 0 :right 0 :bottom 0 :width 10))
-	 (control-list (create-panel content :top 0 :left 0 :bottom 0 :right 10)))
+	 (control-list (create-panel content :height 200 :left 0 :bottom 0 :right 10))
+         (pallete (create-select content)))
+    (setf (background-color pallete) :gray)
+    (setf (color pallete) :white)
+    (setf (positioning pallete) :absolute)
+    (setf (size pallete) 2)
+    (set-geometry pallete :units "" :left "0px" :top 0 :bottom "200px" :width "95%")
+    (setf (advisory-title pallete) (format nil "<ctrl> place static~%<shift> child to selected"))
+    (setf (select-tool app) pallete)
+    (dolist (control *supported-controls*)
+      (if (equal (getf control :name) "group")
+          (add-select-optgroup pallete (getf control :description))
+          (add-select-option pallete (getf control :name) (getf control :description))))
     (setf (overflow control-list) :scroll)
     (setf (control-list-win app) control-list)
     (setf (advisory-title content)
@@ -993,7 +993,7 @@ of controls and double click to select control."
     (setf (background-color content) :gray)
     (set-on-click side-panel (lambda (obj)
 			       (cond (is-hidden
-				      (setf (width content) "175px")
+				      (setf (width content) "220px")
 				      (setf is-hidden nil))
 				     (t
 				      (setf (width content) "10px")
@@ -1002,7 +1002,7 @@ of controls and double click to select control."
 (defun on-new-builder-panel (obj)
   "Open new panel"
   (let* ((app (connection-data-item obj "builder-app-data"))
-         (win (create-gui-window obj :top 40 :left 180
+         (win (create-gui-window obj :top 40 :left 222
                                      :width 600 :height 430
                                      :client-movement t))
          (box (create-panel-box-layout (window-content win)
@@ -1555,7 +1555,7 @@ of controls and double click to select control."
     (clog-gui-initialize body)
     (add-class body "w3-blue-grey")
     (setf (z-index (create-panel body :positioning :fixed
-                                      :bottom 0 :left 180
+                                      :bottom 0 :left 222
                                       :content (format nil "static-root: ~A" clog::*static-root*)))
           -9999)
     (let* ((menu  (create-gui-menu-bar body))
