@@ -597,7 +597,7 @@
 (defparameter *supported-controls*
   (list
    '(:name           "group"
-     :description    "tools"
+     :description    "Tools"
      :create         nil
      :create-type    nil
      :events         nil
@@ -628,7 +628,7 @@
                        :prop "type")
                       ,@*props-contents*))
    '(:name           "group"
-     :description    "basic html"
+     :description    "Basic HTML Controls"
      :create         nil
      :create-type    nil
      :events         nil
@@ -820,7 +820,7 @@
                        :prop "returnValue")
                       ,@*props-element*))
    '(:name           "group"
-     :description    "forms"
+     :description    "Form Controls"
      :create         nil
      :create-type    nil
      :events         nil
@@ -1076,7 +1076,7 @@
      :events         (,@*events-element*)
      :properties     (,@*props-base*))
    '(:name           "group"
-     :description    "text display"
+     :description    "Text Display Elements"
      :create         nil
      :create-type    nil
      :events         nil
@@ -1292,7 +1292,7 @@
      :events         (,@*events-element*)
      :properties     (,@*props-element*))
    '(:name           "group"
-     :description    "multi-media"
+     :description    "Multi-Media Controls"
      :create         nil
      :create-type    nil
      :events         nil
@@ -1342,7 +1342,7 @@
                        :prop "loop")
                       ,@*props-base*))
    '(:name           "group"
-     :description    "graphics"
+     :description    "Graphics Controls"
      :create         nil
      :create-type    nil
      :events         nil
@@ -1355,7 +1355,7 @@
      :events         (,@*events-element*)
      :properties     (,@*props-base*))
    '(:name           "group"
-     :description    "database"
+     :description    "Database Controls"
      :create         nil
      :create-type    nil
      :events         nil
@@ -1687,7 +1687,7 @@
                        :attr "data-clog-one-row-master")
                       ,@*props-form-element*))
    '(:name           "group"
-     :description    "custom controls"
+     :description    "Custom Controls"
      :create         nil
      :create-type    nil
      :events         nil

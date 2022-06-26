@@ -816,7 +816,7 @@ of controls and double click to select control."
     (let ((panel-id (html-id content))
           (last-ctl nil))
       (when (control-list-win app)
-        (let ((win (window-content (control-list-win app))))
+        (let ((win (control-list-win app)))
           (setf (inner-html win) "")
           (labels ((add-siblings (control sim)
                      (let (dln dcc)
@@ -828,8 +828,8 @@ of controls and double click to select control."
                            (let ((list-item (create-div win :content (format nil "&#8597; ~A~A" sim dln)))
                                  (status    (hiddenp (get-placer control))))
                              (if status
-                                 (setf (background-color list-item) :gray)
-                                 (setf (background-color list-item) :lightgray))
+                                 (setf (color list-item) :darkred)
+                                 (setf (background-color list-item) :grey))
                              (setf (draggablep list-item) t)
                              (setf (attribute list-item "data-clog-control") (html-id control))
                              ;; click to select item
@@ -953,14 +953,14 @@ of controls and double click to select control."
     (set-geometry control-list :units "" :left "10px" :top "220px" :width "98%")))
 
 (defun on-show-control-events-win (obj)
-  "Show control events window"
+  "Show control events window"	 
   (let ((app (connection-data-item obj "builder-app-data")))
     (if (control-events-win app)
         (window-focus (control-events-win app))
         (let* ((win          (create-gui-window obj :title "Control Events"
-                                                    :left 0
-                                                    :top 350
-                                                    :height 200 :width 620
+                                                    :left 180
+                                                    :top 480
+                                                    :height 200 :width 600
                                                     :has-pinner t :client-movement t))
                (content      (window-content win))
                (control-list (create-table content)))
@@ -974,28 +974,36 @@ of controls and double click to select control."
 
 (defun on-show-control-list-win (obj)
   "Show control list for selecting and manipulating controls by name"
-  (let ((app (connection-data-item obj "builder-app-data")))
-    (if (control-list-win app)
-        (window-focus (control-list-win app))
-        (let* ((win (create-gui-window obj :title "Control List"
-                                           :top 40
-                                           :left 0
-					   :height 300
-                                           :width 200
-                                           :has-pinner t :client-movement t)))
-          (setf (control-list-win app) win)
-          (setf (advisory-title (window-content win))
-                (format nil "Drag and drop order~%Double click non-focusable~%~
-                             <ctrl> place static~%<shift> child to selected"))
-          (set-on-window-close win (lambda (obj)
-                                     (declare (ignore obj))
-                                     (setf (control-list-win app) nil)))))))
+  (let* ((app (connection-data-item obj "builder-app-data"))
+	 (is-hidden  nil)
+	 (content  (create-panel (connection-body obj) :positioning :fixed
+						       :overflow    :scroll
+						       :width 175
+						       :top 40
+						       :left 0 :bottom 0
+						       :class "w3-border"))
+         (side-panel (create-panel content :top 0 :right 0 :bottom 0 :width 10))
+	 (control-list (create-panel content :top 0 :left 0 :bottom 0 :right 10)))
+    (setf (overflow control-list) :scroll)
+    (setf (control-list-win app) control-list)
+    (setf (advisory-title content)
+          (format nil "Drag and drop order~%Double click non-focusable~%~
+                             <ctrl> place as static~%<shift> child to selected"))
+    (setf (background-color side-panel) :black)
+    (setf (background-color content) :gray)
+    (set-on-click side-panel (lambda (obj)
+			       (cond (is-hidden
+				      (setf (width content) "175px")
+				      (setf is-hidden nil))
+				     (t
+				      (setf (width content) "10px")
+				      (setf is-hidden t)))))))
 
 (defun on-new-builder-panel (obj)
   "Open new panel"
   (let* ((app (connection-data-item obj "builder-app-data"))
-         (win (create-gui-window obj :top 40 :left 220
-                                     :width 400 :height 300
+         (win (create-gui-window obj :top 40 :left 180
+                                     :width 600 :height 430
                                      :client-movement t))
          (box (create-panel-box-layout (window-content win)
                                        :left-width 0 :right-width 0
@@ -1482,7 +1490,7 @@ of controls and double click to select control."
   (let ((about (create-gui-window obj
                                   :title   "About"
                                   :content "<div class='w3-black'>
-                                         <center><img src='/img/clogwicon.png'></center>
+                                         <center><img src='/img/icons/clog-icon.png'></center>
                                          <center>CLOG</center>
                                          <center>The Common Lisp Omnificent GUI</center></div>
                                          <div><p><center>
@@ -1547,12 +1555,12 @@ of controls and double click to select control."
     (clog-gui-initialize body)
     (add-class body "w3-blue-grey")
     (setf (z-index (create-panel body :positioning :fixed
-				      :units ""
-                                      :bottom 0
+                                      :bottom 0 :left 180
                                       :content (format nil "static-root: ~A" clog::*static-root*)))
           -9999)
     (let* ((menu  (create-gui-menu-bar body))
-           (icon  (create-gui-menu-icon menu :on-click #'on-help-about-builder))
+           (icon  (create-gui-menu-icon menu :image-url "/img/icons/clog-icon.png"
+					     :on-click  #'on-help-about-builder))
            (file  (create-gui-menu-drop-down menu :content "Builder"))
            (tools (create-gui-menu-drop-down menu :content "Tools"))
            (win   (create-gui-menu-drop-down menu :content "Window"))
@@ -1570,7 +1578,6 @@ of controls and double click to select control."
                               (declare (ignore obj))
                               (open-window (window body) "/dbadmin")))
       (create-gui-menu-item tools :content "Control Events"     :on-click 'on-show-control-events-win)
-      (create-gui-menu-item tools :content "Control List"       :on-click 'on-show-control-list-win)
       (create-gui-menu-item win   :content "Maximize All"       :on-click #'maximize-all-windows)
       (create-gui-menu-item win   :content "Normalize All"      :on-click #'normalize-all-windows)
       (create-gui-menu-window-select win)
