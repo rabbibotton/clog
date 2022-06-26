@@ -409,6 +409,34 @@ replaced."
                             ;; tab selection
                             (select-control obj)))
     ;; setup placer events
+    (setf (tab-index placer) "-1") ; must have a tab-index to accept keyboard input
+    (focus placer)
+    (set-on-key-down placer
+		     (lambda (obj data)
+		       (declare (ignore obj))
+		       (let ((key   (getf data :key))
+			     (shift (getf data :shift-key)))
+			 (cond ((equal key "ArrowUp")
+				(if shift
+				    (set-geometry control :height (1- (height control)))
+				    (set-geometry control :top (1- (position-top control)))))
+			       ((equal key "ArrowDown")
+				(if shift
+				    (set-geometry control :height (1+ (height control)))
+				    (set-geometry control :top (1+ (position-top control)))))
+			       ((equal key "ArrowRight")
+				(if shift
+				    (set-geometry control :width (1+ (width control)))
+				    (set-geometry control :left (1+ (position-left control)))))
+			       ((equal key "ArrowLeft")
+				(if shift
+				    (set-geometry control :width (1- (width control)))
+				    (set-geometry control :left (1- (position-left control))))))
+                         (set-geometry placer :top (position-top control)
+                                              :left (position-left control)
+					      :width (client-width control)
+					      :height (client-height control))
+			 (set-properties-after-geomentry-change control))))
     (set-on-mouse-down placer
                        (lambda (obj data)
                          (declare (ignore obj) (ignore data))
