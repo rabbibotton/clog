@@ -918,12 +918,13 @@ of controls and double click to select control."
   "Show control properties window"
   (let* ((app (connection-data-item obj "builder-app-data"))
 	 (is-hidden  nil)
-	 (content  (create-panel (connection-body obj) :positioning :fixed
-						       :width 400
-						       :top 40
-						       :right 0 :bottom 0
-						       :class "w3-border"))
-         (side-panel (create-panel content :top 0 :left 0 :bottom 0 :width 10))
+	 (panel  (create-panel (connection-body obj) :positioning :fixed
+						     :width 400
+						     :top 40
+						     :right 0 :bottom 0
+						     :class "w3-border"))
+	 (content (create-panel panel :width 390 :top 0 :right 0 :bottom 0))
+         (side-panel (create-panel panel :top 0 :left 0 :bottom 0 :width 10))
          (control-list (create-table content)))
     (setf (background-color side-panel) :black)
     (setf (background-color content) :gray)
@@ -931,14 +932,14 @@ of controls and double click to select control."
     (setf (properties-list app) control-list)
     (set-on-click side-panel (lambda (obj)
 			       (cond (is-hidden
-				      (setf (width content) "400px")
+				      (setf (width panel) "400px")
 				      (setf is-hidden nil))
 				     (t
-				      (setf (width content) "10px")
+				      (setf (width panel) "10px")
 				      (setf is-hidden t)))))
     (setf (overflow content) :auto)
     (setf (positioning control-list) :absolute)
-    (set-geometry control-list :units "" :left "10px" :top "0px" :right 0)))
+    (set-geometry control-list :left 0 :top 0 :right 0)))
 
 (defun on-show-control-events-win (obj)
   "Show control events window"	 
