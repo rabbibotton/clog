@@ -90,7 +90,7 @@ during attachment. (Private)"))
 
 (defgeneric js-execute (clog-obj script)
   (:documentation "Execure SCRIPT on browser. Result is
-dicarded, return CLOG-OBJ. (Internal)"))
+discarded, return CLOG-OBJ. (Internal)"))
 
 (defmethod js-execute ((obj clog-obj) script)
   (if *connection-cache*
@@ -139,7 +139,7 @@ flushed with FLUSH-CONNECTION-CACHE or a query is made."
 
 (defgeneric execute (clog-obj method)
   (:documentation "Execute the JavaScript METHOD on OBJ. Result is
-dicarded. see JQUERY-EXECUTE (Internal)"))
+discarded. see JQUERY-EXECUTE (Internal)"))
 
 (defmethod execute ((obj clog-obj) method)
   (js-execute obj (format nil "~A.~A" (script-id obj) method)))
