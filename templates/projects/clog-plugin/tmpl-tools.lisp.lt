@@ -30,12 +30,21 @@
 	   :setup          ,(lambda (control content control-record)
                               (declare (ignore content) (ignore control-record))
 			      ;; default custom attribute values and events at design time
+			      
+			      ;; tell the builder this is a composite control, ie made of multiple
+			      ;; controls
+			      ;; (setf (attribute control "data-clog-composite-control") "t")			      
 			      )
 	   ;; code to run at _run time_ after all controls attached to panel
 	   :on-setup       ,(lambda (control control-record)
                               (declare (ignore control control-record))
 			      ;; initialization at run time and apply custom attributes
 			      (format nil "(<%= (@ sys-name) %>:attach-<%= (@ sys-name) %> target)"))
+	   ;; code to run at _design time_ on load from .clog file or paste
+	   ;; :on-load        ,(lambda (control control-record)
+	   ;;		      (declare (ignore control-record))
+	   ;;                 ;; code to attach functionality if your create for design time
+           ;;		      )
 	   ;; events handled
            :events         (,@clog-tools::*events-element*)
 	   ;; properties handled
