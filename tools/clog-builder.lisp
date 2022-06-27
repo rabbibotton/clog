@@ -318,7 +318,7 @@ replaced."
     control))
 
 (defun drop-new-control (app content data &key win)
-  "Create new control droppend at event DATA location on CONTENT of WIN"
+  "Create new control dropped at event DATA location on CONTENT of WIN"
   ;; any click on panel directly will focus window
   (when win
     (window-focus win))
@@ -341,12 +341,13 @@ replaced."
         (do-drop-new-control app content data :win win))))
 
 (defun do-drop-new-control (app content data &key win custom-query)
-  "Create new control droppend at event DATA on CONTENT of WIN)"
+  "Create new control dropped at event DATA on CONTENT of WIN)"
   ;; create control
   (bordeaux-threads:with-lock-held ((new-control-lock app))
     (let* ((control-record    (control-info (value (select-tool app))))
            (control-type-name (getf control-record :name))
-           (positioning       (if (getf data :ctrl-key)
+           (positioning       (if (or (getf data :ctrl-key)
+				      (getf data :meta-key))
                                   :static
                                   :absolute))
            (parent            (when (getf data :shift-key)
@@ -365,7 +366,7 @@ replaced."
              ;; setup control
              (setf (attribute control "data-clog-name")
                    (format nil "~A-~A" control-type-name (next-id content)))
-             (setf (value (select-tool app)) 0)
+             (setf (value (select-tool app)) "")
              (setf (box-sizing control) :content-box)
              (setf (positioning control) positioning)
              (set-geometry control
@@ -451,12 +452,14 @@ replaced."
     (set-on-mouse-down placer
                        (lambda (obj data)
                          (declare (ignore obj))
-			 (let ((ctrl  (getf data :ctrl-key))
-			       (meta  (getf data :meta-key))
+			 (let ((last  (current-control app))
 			       (shift (getf data :shift-key)))
-			   (cond ((and (current-control app)
+			   (if (not (equal (value (select-tool app)) ""))
+			       (when (do-drop-new-control app content data :win win)
+				 (incf-next-id content)))
+			   (cond ((and last
 				       shift)
-				  (let* ((control1 (current-control app))
+				  (let* ((control1 last)
 					 (control2 control)
 					 (placer1  (get-placer control1))
 					 (placer2  (get-placer control2)))
@@ -470,8 +473,7 @@ replaced."
                                               (set-geometry placer2 :top (position-top control2)
                                                                     :left (position-left control2)
                                                                     :width (client-width control2)
-                                                                    :height (client-height control2))
-                                              (on-populate-control-list-win content))
+                                                                    :height (client-height control2)))
 				  (on-populate-control-properties-win content)
 				  (on-populate-control-list-win content))
 				 (t
@@ -479,6 +481,10 @@ replaced."
                            (when win
                              (window-focus win))))
                        :cancel-event t)
+    (set-on-mouse-double-click placer
+			       (lambda (obj data)
+				 (setf (hiddenp placer) t)
+				 (on-populate-control-list-win content)))
     (set-on-event placer "resizestop"
         (lambda (obj)
                     (set-properties-after-geomentry-change obj))
@@ -903,7 +909,8 @@ of controls and double click to select control."
                                                                                          panel-id
                                                                                          html-id)))
                                                     (cond ((or (getf data :shift-key)
-                                                               (getf data :ctrl-key))
+                                                               (getf data :ctrl-key)
+							       (getf data :meta-key))
                                                            (when (drop-new-control app content data)
                                                              (incf-next-id content)))
                                                           (t
