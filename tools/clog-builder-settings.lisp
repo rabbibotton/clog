@@ -640,16 +640,24 @@
      :create-type    :element
      :create-content "Label"
      :events         (,@*events-element*)
+     :setup          ,(lambda (control content control-record)
+                        (declare (ignore content  control-record))
+			(setf (attribute control "data-clog-for") ""))
+     :on-setup       ,(lambda (control control-record)
+			(declare (ignore control-record))
+			(unless (equal (attribute control "data-clog-for") "")
+			  (format nil
+			    "(setf (attribute target \"for\") ~
+                               (clog:js-query target \"$('[data-clog-name=\\\\'~A\\\\']\').attr('id')\"))"
+				  (attribute control "data-clog-for"))))
      :properties     ((:name "for"
                        :get ,(lambda (control)
-                               (let ((f (attribute control "for")))
-                                 (unless (equal "" f)
-                                   (clog::js-query control (format nil "$('#~A').attr('data-clog-name')"
-                                                                   f)))))
+			       (attribute control "data-clog-for"))
                        :set ,(lambda (control obj)
+			       (setf (attribute control "data-clog-for") (text obj))
                                (setf (attribute control "for")
-                                     (clog::js-query control (format nil "$(\"[data-clog-name='~A']\").attr('id')"
-                                                                                     (text obj))))))
+                                     (js-query control (format nil "$(\"[data-clog-name='~A']\").attr('id')"
+                                                               (text obj))))))
                       ,@*props-element*))
    `(:name           "button"
      :description    "Button"

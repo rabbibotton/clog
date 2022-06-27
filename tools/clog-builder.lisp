@@ -973,6 +973,7 @@ of controls and double click to select control."
   "Render, evalute and run code for panel"
   (let* ((result (capture-eval (format nil "~A~% (clog:set-on-new-window~
                                                (lambda (body)~
+                                                 (clog:debug-mode body)~
                                                  ~A
                                                  (create-~A body)) ~A:path \"/test\")~
                                                  (clog:open-browser :url \"http://127.0.0.1:8080/test\")"
