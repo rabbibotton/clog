@@ -260,7 +260,8 @@ replaced."
   (dolist (r control-records)
     (setf *supported-controls*
 	  (append (remove-if (lambda (x)
-			       (equal (getf x :name) (getf r :name)))
+			       (unless (equalp (getf x :name) "group")
+				 (equal (getf x :name) (getf r :name))))
 			     *supported-controls*)
 		  (list r)))))
 

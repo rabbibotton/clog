@@ -2,7 +2,13 @@
 
 (progn
   (clog-tools:add-supported-controls
-   (list `(;; unique name to control used to identify it the .clog xml
+   (list '(:name           "group"
+	   :description    "<%= (@ sys-name) %> Controls"
+	   :create         nil
+	   :create-type    nil
+	   :events         nil
+	   :properties     nil)
+	  `(;; unique name to control used to identify it the .clog xml
            :name           "<%= (@ sys-name) %>"
 	   ;; how control appears in builder control list 
 	   :description    "<%= (@ sys-name) %>"
