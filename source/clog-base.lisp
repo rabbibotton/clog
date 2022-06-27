@@ -349,19 +349,16 @@ result or if time out DEFAULT-ANSWER. see JQUERY-QUERY (Internal)"))
   (let ((hook (format nil "~A:~A" (html-id obj) event)))
     (cond (handler
            (bind-event-script
-            obj event (format nil "~Aws.send('E:~A '~A)~A~A~A"
+            obj event (format nil "~Aws.send('E:~A '~A)~A~@[~A~]~@[~A~]"
                               eval-script
                               hook
                               call-back-script
                               post-eval
-                              (if one-time
-                                  (format nil "; ~A.off('~A')"
-                                          (jquery obj)
-                                          event)
-                                  "")
-                              (if cancel-event
-                                  "; return false"
-                                  "")))
+                              (when one-time
+                                (format nil "; ~A.off('~A')"
+                                        (jquery obj)
+                                        event))
+                              (when cancel-event "; return false")))
            (setf (gethash hook (connection-data obj)) handler))
           (t
            (unbind-event-script obj event)

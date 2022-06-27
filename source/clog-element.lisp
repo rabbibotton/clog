@@ -132,7 +132,7 @@ after attachment is changed to one unique to this session."))
 (defsetf style set-style)
 
 (defgeneric set-styles (clog-element style-list)
-  (:documentation "Set css styles using a list of list of name value pairs."))
+  (:documentation "Set css styles using a list of lists of name value pairs."))
 
 (defmethod set-styles ((obj clog-element) style-list)
   (jquery-execute obj (format nil "css({~{~A~^,~}})"
@@ -1470,25 +1470,19 @@ parent in the DOM."))
 
 (defmethod set-geometry ((obj clog-element) &key left top right bottom
                                               width height (units :px))
-  (jquery-execute obj (format nil "css({~A~A~A~A~A~A})"
-                              (if left
-                                  (format nil "'left':'~A~A'," left units)
-                                  "")
-                              (if top
-                                  (format nil "'top':'~A~A'," top units)
-                                  "")
-                              (if right
-                                  (format nil "'right':'~A~A'," right units)
-                                  "")
-                              (if bottom
-                                  (format nil "'bottom':'~A~A'," bottom units)
-                                  "")
-                              (if width
-                                  (format nil "'width':'~A~A'," width units)
-                                  "")
-                              (if height
-                                  (format nil "'height':'~A~A'," height units)
-                                  ""))))
+  (jquery-execute obj (format nil "css({~@[~a~]~@[~a~]~@[~a~]~@[~a~]~@[~a~]~@[~a~]})"
+                              (when left
+                                  (format nil "'left':'~A~A'," left units))
+                              (when top
+                                  (format nil "'top':'~A~A'," top units))
+                              (when right
+                                  (format nil "'right':'~A~A'," right units))
+                              (when bottom
+                                  (format nil "'bottom':'~A~A'," bottom units))
+                              (when width
+                                  (format nil "'width':'~A~A'," width units))
+                              (when height
+                                  (format nil "'height':'~A~A'," height units)))))
 
 ;;;;;;;;;;
 ;; left ;;
