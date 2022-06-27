@@ -714,8 +714,11 @@ not a temporary attached one when using select-control."
                                                               (format nil
                                                                       "var z=~a.clone();~
     z.find('*').each(function(){~
+      var m=$(this).attr('data-clog-name');
       if($(this).attr('data-clog-composite-control') == 't'){$(this).text('')}~
-      for(n in $(this).get(0).dataset){delete $(this).get(0).dataset[n]}});~
+      for(n in $(this).get(0).dataset){delete $(this).get(0).dataset[n]}~
+      if(m){$(this).attr('data-clog-name', m);}~
+    });~
     z.html()"
                                                                       (jquery content)))
                                                     "\\\"")
