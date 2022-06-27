@@ -50,10 +50,6 @@
     :accessor control-pallete-win
     :initform nil
     :documentation "Current control pallete window")
-   (new-control-lock
-    :accessor new-control-lock
-    :initform (bordeaux-threads:make-lock)
-    :documentation "Sync creating new controls")
    (control-lists
     :accessor control-lists
     :initform (make-hash-table* :test #'equalp)
@@ -344,46 +340,46 @@ replaced."
 (defun do-drop-new-control (app content data &key win custom-query)
   "Create new control dropped at event DATA on CONTENT of WIN)"
   ;; create control
-  (bordeaux-threads:with-lock-held ((new-control-lock app))
-    (let* ((control-record    (control-info (value (select-tool app))))
-           (control-type-name (getf control-record :name))
-           (positioning       (if (or (getf data :ctrl-key)
-				      (getf data :meta-key))
-                                  :static
-                                  :absolute))
-           (parent            (when (getf data :shift-key)
-                                (current-control app)))
-           (control           (create-control (if parent
-                                                  parent
-                                                  content)
-                                              content
-                                              control-record
-                                              (format nil "CLOGB~A~A"
-                                                      (get-universal-time)
-                                                      (next-id content))
-                                              :custom-query custom-query)))
-      (cond (control
-             ;; panel directly clicked with a control type selected
-             ;; setup control
-             (setf (attribute control "data-clog-name")
-                   (format nil "~A-~A" control-type-name (next-id content)))
-             (setf (value (select-tool app)) "")
-             (setf (box-sizing control) :content-box)
-             (setf (positioning control) positioning)
-             (set-geometry control
-                           :left (getf data :x)
-                           :top (getf data :y))
-             (add-sub-controls control content :win win)
-             (setup-control content control :win win)
-             (select-control control)
-             (on-populate-control-list-win content)
-             t)
-            (t
-             ;; panel directly clicked with select tool or no control type to add
-             (deselect-current-control app)
-             (on-populate-control-properties-win content :win win)
-             (on-populate-control-list-win content)
-             nil)))))
+  (let* ((control-record    (control-info (value (select-tool app))))
+         (control-type-name (getf control-record :name))
+         (positioning       (if (or (getf data :ctrl-key)
+				    (getf data :meta-key))
+                                :static
+                                :absolute))
+         (parent            (when (getf data :shift-key)
+                              (current-control app)))
+         (control           (create-control (if parent
+                                                parent
+                                                content)
+                                            content
+                                            control-record
+                                            (format nil "CLOGB~A~A"
+                                                    (get-universal-time)
+                                                    (next-id content))
+                                            :custom-query custom-query)))
+    (cond (control
+           ;; panel directly clicked with a control type selected
+           ;; setup control
+           (setf (attribute control "data-clog-name")
+                 (format nil "~A-~A" control-type-name (next-id content)))
+           (setf (value (select-tool app)) "")
+           (setf (box-sizing control) :content-box)
+           (setf (positioning control) positioning)
+           (set-geometry control
+                         :left (getf data :x)
+                         :top (getf data :y))
+	   (unless (equalp (attribute control "data-clog-composite-control") "t")
+             (add-sub-controls control content :win win))
+           (setup-control content control :win win)
+           (select-control control)
+           (on-populate-control-list-win content)
+           t)
+          (t
+           ;; panel directly clicked with select tool or no control type to add
+           (deselect-current-control app)
+           (on-populate-control-properties-win content :win win)
+           (on-populate-control-list-win content)
+           nil))))
 
 (defun setup-control (content control &key win)
   "Setup CONTROL by creating pacer and setting up events for manipulation"
@@ -535,12 +531,11 @@ manipulation of the control's location and size."
 
 (defun delete-current-control (app panel-id html-id)
   "Delete the current control"
-  (bordeaux-threads:with-lock-held ((new-control-lock app))
-    (remove-from-control-list app panel-id html-id)
-    (destroy (get-placer (current-control app)))
-    (destroy (current-control app))
-    (setf (current-control app) nil)
-    (remove-deleted-from-control-list app panel-id)))
+  (remove-from-control-list app panel-id html-id)
+  (destroy (get-placer (current-control app)))
+  (destroy (current-control app))
+  (setf (current-control app) nil)
+  (remove-deleted-from-control-list app panel-id))
 
 (defun select-control (control)
   "Select CONTROL as the current control and highlight its placer.
@@ -1167,27 +1162,26 @@ of controls and double click to select control."
                 (get-control-list app panel-id))))
 	   ;; paste
 	   (paste (obj)
-             (bordeaux-threads:with-lock-held ((new-control-lock app))
-	       (let ((buf (or (system-clipboard-read obj)
-			      (copy-buf app))))
-		 (when buf
-                   (let ((control (create-control content content
-						  `(:name "custom"
-                                                    :create-type :paste)
-						  (format nil "CLOGB~A~A"
-							  (get-universal-time)
-							  (next-id content))
-						  :custom-query buf)))
-                     (setf (attribute control "data-clog-name")
-                           (format nil "~A-~A" "copy" (next-id content)))
-                     (incf-next-id content)
-                     (add-sub-controls control content :win win :paste t)
-		     (let ((cr (control-info (attribute control "data-clog-type"))))
-                       (when (getf cr :on-load)
-			 (funcall (getf cr :on-load) control cr)))
-                     (setup-control content control :win win)
-                     (select-control control)
-                     (on-populate-control-list-win content))))))
+	     (let ((buf (or (system-clipboard-read obj)
+			    (copy-buf app))))
+	       (when buf
+                 (let ((control (create-control content content
+						`(:name "custom"
+                                                  :create-type :paste)
+						(format nil "CLOGB~A~A"
+							(get-universal-time)
+							(next-id content))
+						:custom-query buf)))
+                   (setf (attribute control "data-clog-name")
+                         (format nil "~A-~A" "copy" (next-id content)))
+                   (incf-next-id content)
+                   (add-sub-controls control content :win win :paste t)
+		   (let ((cr (control-info (attribute control "data-clog-type"))))
+                     (when (getf cr :on-load)
+		       (funcall (getf cr :on-load) control cr)))
+                   (setup-control content control :win win)
+                   (select-control control)
+                   (on-populate-control-list-win content)))))
 	   ;; delete
 	   (del (obj)
              (declare (ignore obj))
@@ -1394,27 +1388,26 @@ of controls and double click to select control."
                   (get-control-list app panel-id))))
              ;; paste
              (paste (obj)
-               (bordeaux-threads:with-lock-held ((new-control-lock app))
-                 (let ((buf (or (system-clipboard-read obj)
-                                (copy-buf app))))
-                   (when buf
-                     (let ((control (create-control content content
-                                                    `(:name "custom"
-                                                      :create-type :paste)
-                                                    (format nil "CLOGB~A~A"
-                                                            (get-universal-time)
-                                                            (next-id content))
-                                                    :custom-query buf)))
-                       (setf (attribute control "data-clog-name")
-                             (format nil "~A-~A" "copy" (next-id content)))
-                       (incf-next-id content)
-                       (add-sub-controls control content :win win :paste t)
-                       (let ((cr (control-info (attribute control "data-clog-type"))))
-                         (when (getf cr :on-load)
-                           (funcall (getf cr :on-load) control cr)))
-                       (setup-control content control :win win)
-                       (select-control control)
-                       (on-populate-control-list-win content))))))
+               (let ((buf (or (system-clipboard-read obj)
+                              (copy-buf app))))
+                 (when buf
+                   (let ((control (create-control content content
+                                                  `(:name "custom"
+                                                    :create-type :paste)
+                                                  (format nil "CLOGB~A~A"
+                                                          (get-universal-time)
+                                                          (next-id content))
+                                                  :custom-query buf)))
+                     (setf (attribute control "data-clog-name")
+                           (format nil "~A-~A" "copy" (next-id content)))
+                     (incf-next-id content)
+                     (add-sub-controls control content :win win :paste t)
+                     (let ((cr (control-info (attribute control "data-clog-type"))))
+                       (when (getf cr :on-load)
+                         (funcall (getf cr :on-load) control cr)))
+                     (setup-control content control :win win)
+                     (select-control control)
+                     (on-populate-control-list-win content)))))
              ;; delete
              (del (obj)
                (declare (ignore obj))
