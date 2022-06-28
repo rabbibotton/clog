@@ -741,9 +741,14 @@ browser width)."))
 (defgeneric create-section (clog-obj section
                             &key content
 			      style hidden class html-id auto-place)
-  (:documentation "Create a new CLOG-Section of section type  as child of
+  (:documentation "Create a new CLOG-Section of section type as child of
 CLOG-OBJ with CONTENT and if :AUTO-PLACE (default t) place-inside-bottom-of
-CLOG-OBJ"))
+CLOG-OBJ.
+
+SECTION-TYPE -
+   :address :article :aside :header :main :nav
+   :p :pre :section :blockquote :h1 :h2 :h3 :h4 :h5 :h6
+   :hgroup"))
 
 (defmethod create-section ((obj clog-obj) section
                            &key (content "")
@@ -786,7 +791,12 @@ CLOG-OBJ"))
 			     style hidden class html-id auto-place)
   (:documentation "Create a new CLOG-Phrase of phrase type  as child of
 CLOG-OBJ with CONTENT and if :AUTO-PLACE (default t) place-inside-bottom-of
-CLOG-OBJ"))
+CLOG-OBJ
+
+PHRASE-TYPE -
+  :abbr :code :strong :em :dfn :samp :kbd :var
+  :marked :del :ins :s :q :big :small :time :tt :cite
+  :i :b :u :sub :su :center"))
 
 (defmethod create-phrase ((obj clog-obj) phrase
                           &key (content "")
@@ -856,7 +866,15 @@ and if :AUTO-PLACE (default t) place-inside-bottom-of CLOG-OBJ"))
                              :upper-alpha :upper-latin :upper-roman))
 
 (defgeneric list-kind (clog-ordered-list)
-  (:documentation "Get/Setf list list-kind."))
+  (:documentation "Get/Setf list list-kind.
+
+LIST-KIND-TYPE -
+  :disc :armenian :circle :cjk-ideographic
+  :decimal :decimal-leading-zero :georgian :hebrew
+  :hiragana :hiragana-iroha :katakana
+  :katakana-iroha :lower-alpha :lower-greek
+  :lower-latin :lower-roman :none :square
+  :upper-alpha :upper-latin :upper-roman"))
 
 (defmethod list-kind ((obj clog-ordered-list))
   (style obj "list-style-type"))
@@ -875,8 +893,8 @@ and if :AUTO-PLACE (default t) place-inside-bottom-of CLOG-OBJ"))
 (deftype list-location-type () '(member :inside :outside))
 
 (defgeneric list-location (clog-ordered-list)
-  (:documentation "Get/Setf list list-location. Default
-is outside."))
+  (:documentation "Get/Setf list list-location (:inside or :outside).
+Default is outside."))
 
 (defmethod list-location ((obj clog-ordered-list))
   (style obj "list-style-position"))
