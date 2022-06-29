@@ -1602,7 +1602,7 @@ of controls and double click to select control."
 (defun on-new-builder-page (obj &key custom-boot url-launch)
   "Open new page"
   (let* ((app (connection-data-item obj "builder-app-data"))
-         (win (create-gui-window obj :top 40 :left 225 :width 500 :client-movement t))
+         (win (create-gui-window obj :top 40 :left 225 :width 600 :client-movement t))
          (panel-uid  (format nil "~A" (get-universal-time))) ;; unique id for panel
          (boot-loc   (if custom-boot
                          "builder-custom"
