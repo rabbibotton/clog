@@ -53,7 +53,7 @@
    (control-lists
     :accessor control-lists
     :initform (make-hash-table* :test #'equalp)
-    :documentation "Panel to Control List hash table")))
+    :documentation "Panel -> Control List - hash table")))
 
 ;; Cross page syncing
 
@@ -140,9 +140,10 @@
    (with-open-file (outstream outfile :direction :output :if-exists action-if-exists)
      (write-sequence string outstream)))
 
-(defun save-panel (fname content panel-id hide-loc)
-  "Save panel to FNAME"
-  (let ((app (connection-data-item content "builder-app-data")))
+(defun panel-snap-shot (content panel-id hide-loc)
+  "Take a snap shot of panel"
+  (let (snap
+	(app (connection-data-item content "builder-app-data")))
     (maphash
      (lambda (html-id control)
        (declare (ignore html-id))
@@ -161,23 +162,28 @@
             (attribute content "data-clog-next-id"))
       (setf (attribute data "data-clog-title")
             (attribute content "data-clog-name"))
-      (write-file (js-query content
-                            (format nil
-                                    "var z=~a.clone();~
+      (setf snap (js-query content
+                           (format nil
+                                   "var z=~a.clone();~
                  z.find('*').each(function(){~
                    if($(this).attr('data-clog-composite-control') == 't'){$(this).text('')}~
                    if($(this).attr('id') !== undefined && ~
                      $(this).attr('id').substring(0,5)=='CLOGB'){$(this).removeAttr('id')}});~
                  z.html()"
-                                    (jquery content)))
-                  fname)
+                                   (jquery content))))
       (destroy data))
     (maphash
      (lambda (html-id control)
        (declare (ignore html-id))
        (place-after control (get-placer control)))
-     (get-control-list app panel-id))))
+     (get-control-list app panel-id))
+    snap))
+  
 
+(defun save-panel (fname content panel-id hide-loc)
+  "Save panel to FNAME"
+  (write-file (panel-snap-shot content panel-id hide-loc) fname))
+  
 ;; Template Utilities
 
 (defun walk-files-and-directories (path process)
@@ -372,6 +378,7 @@ replaced."
              (add-sub-controls control content :win win))
            (setup-control content control :win win)
            (select-control control)
+	   (jquery-execute control "trigger('clog-builder-snap-shot')")
            (on-populate-control-list-win content)
            t)
           (t
@@ -504,6 +511,7 @@ replaced."
 
 (defun set-properties-after-geomentry-change (control)
   "Set properties window geometry setting"
+  (jquery-execute control "trigger('clog-builder-snap-shot')")
   (flet ((set-prop (n val)
            (js-execute control (format nil "$('.clog-prop-~A').text('~A')"
                                        n val))))
@@ -777,7 +785,8 @@ not a temporary attached one when using select-control."
             (setf (text-value editor) (second item))
             (set-on-blur editor
                          (lambda (obj)
-                           (funcall (fifth item) obj)))))))))
+                           (funcall (fifth item) obj)
+			   (jquery-execute control "trigger('clog-builder-snap-shot')")))))))))
 
 (defun on-populate-control-properties-win (obj &key win)
   "Populate the control properties for the current control"
@@ -793,7 +802,7 @@ not a temporary attached one when using select-control."
            (table    (properties-list app)))
       (when prop-win
         (setf (inner-html table) "")
-        (let ((info  (control-info (attribute control "data-clog-type")))
+        (let ((info (control-info (attribute control "data-clog-type")))
               props)
           (dolist (prop (reverse (getf info :properties)))
             (cond ((eq (third prop) :style)
@@ -867,6 +876,7 @@ not a temporary attached one when using select-control."
               (set-on-blur td2
                            (lambda (obj)
                              (funcall (fourth item) obj)
+			     (jquery-execute control "trigger('clog-builder-snap-shot')")			     
                              (when placer
                                (set-geometry placer :top (position-top control)
                                                     :left (position-left control)
@@ -1085,12 +1095,16 @@ of controls and double click to select control."
          (btn-paste (create-img tool-bar :alt-text "paste" :url-src "/img/icons/paste.png" :class btn-class))
          (btn-cut   (create-img tool-bar :alt-text "cut" :url-src "/img/icons/cut.png" :class btn-class))
          (btn-del   (create-img tool-bar :alt-text "delete" :url-src "/img/icons/delete.png" :class btn-class))
+         (btn-undo  (create-img tool-bar :alt-text "undo" :url-src "/img/icons/undo.png" :class btn-class))
+         (btn-redo  (create-img tool-bar :alt-text "undo" :url-src "/img/icons/redo.png" :class btn-class))
          (btn-test  (create-img tool-bar :alt-text "test" :url-src "/img/icons/run.png" :class btn-class))
          (btn-rndr  (create-img tool-bar :alt-text "render" :url-src "/img/icons/rndr.png" :class btn-class))
          (btn-save  (create-img tool-bar :alt-text "save" :url-src "/img/icons/save.png" :class btn-class))
          (btn-load  (create-img tool-bar :alt-text "load" :url-src "/img/icons/open.png" :class btn-class))
          (content   (center-panel box))
-         (in-simulation nil)
+         (in-simulation    nil)
+	 (undo-chain       nil)
+	 (redo-chain       nil)
          (file-name        "")
          (render-file-name "")
          (panel-id  (html-id content)))
@@ -1099,6 +1113,8 @@ of controls and double click to select control."
     (setf (height btn-paste) "12px")
     (setf (height btn-cut) "12px")
     (setf (height btn-del) "12px")
+    (setf (height btn-undo) "12px")
+    (setf (height btn-redo) "12px")
     (setf (height btn-test) "12px")
     (setf (height btn-rndr) "12px")
     (setf (height btn-save) "12px")
@@ -1201,6 +1217,36 @@ of controls and double click to select control."
       (set-on-click btn-cut (lambda (obj)
 			      (copy obj)
 			      (del obj))))
+    (set-on-click btn-undo (lambda (obj)
+			     (declare (ignore obj))
+			     (when undo-chain
+			       (setf (inner-html content)
+				     (escape-string (let ((val (pop undo-chain)))
+						      (push val redo-chain)
+						      val)))
+                               (clrhash (get-control-list app panel-id))
+                               (on-populate-loaded-window content :win win)
+                               (setf (window-title win) (attribute content "data-clog-name"))
+			       (on-populate-control-properties-win content :win win)
+			       (on-populate-control-events-win content)
+			       (on-populate-control-list-win content))))
+    (set-on-event content "clog-builder-snap-shot"
+		  (lambda (obj)
+		    (declare (ignore obj))
+		    (push (panel-snap-shot content panel-id (bottom-panel box)) undo-chain)))
+    (set-on-click btn-redo (lambda (obj)
+			     (declare (ignore obj))
+			     (when redo-chain
+			       (setf (inner-html content)
+				     (escape-string (let ((val (pop redo-chain)))
+						      (push val undo-chain)
+						      val)))
+                               (clrhash (get-control-list app panel-id))
+                               (on-populate-loaded-window content :win win)
+                               (setf (window-title win) (attribute content "data-clog-name"))
+			       (on-populate-control-properties-win content :win win)
+			       (on-populate-control-events-win content)
+			       (on-populate-control-list-win content))))			     
     (set-on-click btn-load (lambda (obj)
                              (server-file-dialog obj "Load Panel" file-name
                                                  (lambda (fname)
@@ -1260,6 +1306,8 @@ of controls and double click to select control."
                                                  :top-height 0 :bottom-height 0))
          (content       (center-panel box))
          (in-simulation nil)
+	 (undo-chain       nil)
+	 (redo-chain       nil)
          (file-name        "")
          (render-file-name "")
          (panel-id      (html-id content)))
@@ -1324,6 +1372,8 @@ of controls and double click to select control."
            (btn-paste (create-img tool-bar :alt-text "paste" :url-src "/img/icons/paste.png" :class btn-class))
            (btn-cut   (create-img tool-bar :alt-text "cut" :url-src "/img/icons/cut.png" :class btn-class))
            (btn-del   (create-img tool-bar :alt-text "delete" :url-src "/img/icons/delete.png" :class btn-class))
+           (btn-undo  (create-img tool-bar :alt-text "delete" :url-src "/img/icons/undo.png" :class btn-class))
+           (btn-redo  (create-img tool-bar :alt-text "delete" :url-src "/img/icons/redo.png" :class btn-class))
            (btn-sim   (create-img tool-bar :alt-text "simulate" :url-src "/img/icons/walk.png" :class btn-class))
            (btn-test  (create-img tool-bar :alt-text "test" :url-src "/img/icons/run.png" :class btn-class))
            (btn-rndr  (create-img tool-bar :alt-text "render" :url-src "/img/icons/rndr.png" :class btn-class))
@@ -1336,6 +1386,8 @@ of controls and double click to select control."
       (setf (height btn-paste) "12px")
       (setf (height btn-cut) "12px")
       (setf (height btn-del) "12px")
+      (setf (height btn-undo) "12px")
+      (setf (height btn-redo) "12px")
       (setf (height btn-sim) "12px")
       (setf (height btn-test) "12px")
       (setf (height btn-rndr) "12px")
@@ -1446,6 +1498,36 @@ of controls and double click to select control."
                                                 (setf (hiddenp (get-placer control)) t))
                                               (get-control-list app panel-id))
                                      (focus (first-child content))))))
+      (set-on-click btn-undo (lambda (obj)
+			       (declare (ignore obj))
+			       (when undo-chain
+				 (setf (inner-html content)
+				       (escape-string (let ((val (pop undo-chain)))
+							(push val redo-chain)
+							val)))
+				 (clrhash (get-control-list app panel-id))
+				 (on-populate-loaded-window content :win win)
+				 (setf (window-title win) (attribute content "data-clog-name"))
+				 (on-populate-control-properties-win content :win win)
+				 (on-populate-control-events-win content)
+				 (on-populate-control-list-win content))))
+      (set-on-event content "clog-builder-snap-shot"
+		    (lambda (obj)
+		      (declare (ignore obj))
+		      (push (panel-snap-shot content panel-id (bottom-panel box)) undo-chain)))
+      (set-on-click btn-redo (lambda (obj)
+			       (declare (ignore obj))
+			       (when redo-chain
+				 (setf (inner-html content)
+				       (escape-string (let ((val (pop redo-chain)))
+							(push val undo-chain)
+							val)))
+				 (clrhash (get-control-list app panel-id))
+				 (on-populate-loaded-window content :win win)
+				 (setf (window-title win) (attribute content "data-clog-name"))
+				 (on-populate-control-properties-win content :win win)
+				 (on-populate-control-events-win content)
+				 (on-populate-control-list-win content))))			     
       (set-on-click btn-load (lambda (obj)
                                (declare (ignore obj))
                                (server-file-dialog win "Load Panel" file-name
