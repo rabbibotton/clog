@@ -1103,16 +1103,16 @@ of controls and double click to select control."
                                        :top-height 33 :bottom-height 0))
          (tool-bar  (create-div (top-panel box) :class "w3-center"))
 	 (btn-class "w3-button w3-white w3-border w3-border-black w3-ripple")
-         (btn-copy  (create-img tool-bar :alt-text "copy" :url-src "/img/icons/copy.png" :class btn-class))
-         (btn-paste (create-img tool-bar :alt-text "paste" :url-src "/img/icons/paste.png" :class btn-class))
-         (btn-cut   (create-img tool-bar :alt-text "cut" :url-src "/img/icons/cut.png" :class btn-class))
-         (btn-del   (create-img tool-bar :alt-text "delete" :url-src "/img/icons/delete.png" :class btn-class))
-         (btn-undo  (create-img tool-bar :alt-text "undo" :url-src "/img/icons/undo.png" :class btn-class))
-         (btn-redo  (create-img tool-bar :alt-text "undo" :url-src "/img/icons/redo.png" :class btn-class))
-         (btn-test  (create-img tool-bar :alt-text "test" :url-src "/img/icons/run.png" :class btn-class))
-         (btn-rndr  (create-img tool-bar :alt-text "render" :url-src "/img/icons/rndr.png" :class btn-class))
-         (btn-save  (create-img tool-bar :alt-text "save" :url-src "/img/icons/save.png" :class btn-class))
-         (btn-load  (create-img tool-bar :alt-text "load" :url-src "/img/icons/open.png" :class btn-class))
+         (btn-copy  (create-img tool-bar :alt-text "copy"     :url-src img-btn-copy  :class btn-class))
+         (btn-paste (create-img tool-bar :alt-text "paste"    :url-src img-btn-paste :class btn-class))
+         (btn-cut   (create-img tool-bar :alt-text "cut"      :url-src img-btn-cut   :class btn-class))
+         (btn-del   (create-img tool-bar :alt-text "delete"   :url-src img-btn-del   :class btn-class))
+         (btn-undo  (create-img tool-bar :alt-text "undo"     :url-src img-btn-undo  :class btn-class))
+         (btn-redo  (create-img tool-bar :alt-text "redo"     :url-src img-btn-redo  :class btn-class))
+         (btn-test  (create-img tool-bar :alt-text "test"     :url-src img-btn-test  :class btn-class))
+         (btn-rndr  (create-img tool-bar :alt-text "render"   :url-src img-btn-rndr  :class btn-class))
+         (btn-save  (create-img tool-bar :alt-text "save"     :url-src img-btn-save  :class btn-class))
+         (btn-load  (create-img tool-bar :alt-text "load"     :url-src img-btn-load  :class btn-class))
          (content   (center-panel box))
          (in-simulation    nil)
 	 (undo-chain       nil)
@@ -1383,18 +1383,18 @@ of controls and double click to select control."
                                          :top-height 33 :bottom-height 0))
            (tool-bar  (create-div (top-panel pbox) :class "w3-center"))
 	   (btn-class "w3-button w3-white w3-border w3-border-black w3-ripple")
-           (btn-copy  (create-img tool-bar :alt-text "copy" :url-src "/img/icons/copy.png" :class btn-class))
-           (btn-paste (create-img tool-bar :alt-text "paste" :url-src "/img/icons/paste.png" :class btn-class))
-           (btn-cut   (create-img tool-bar :alt-text "cut" :url-src "/img/icons/cut.png" :class btn-class))
-           (btn-del   (create-img tool-bar :alt-text "delete" :url-src "/img/icons/delete.png" :class btn-class))
-           (btn-undo  (create-img tool-bar :alt-text "delete" :url-src "/img/icons/undo.png" :class btn-class))
-           (btn-redo  (create-img tool-bar :alt-text "delete" :url-src "/img/icons/redo.png" :class btn-class))
-           (btn-sim   (create-img tool-bar :alt-text "simulate" :url-src "/img/icons/walk.png" :class btn-class))
-           (btn-test  (create-img tool-bar :alt-text "test" :url-src "/img/icons/run.png" :class btn-class))
-           (btn-rndr  (create-img tool-bar :alt-text "render" :url-src "/img/icons/rndr.png" :class btn-class))
-           (btn-save  (create-img tool-bar :alt-text "save" :url-src "/img/icons/save.png" :class btn-class))
-           (btn-load  (create-img tool-bar :alt-text "load" :url-src "/img/icons/open.png" :class btn-class))
-           (btn-exp   (create-img tool-bar :alt-text "export" :url-src "/img/icons/export.png" :class btn-class))
+           (btn-copy  (create-img tool-bar :alt-text "copy"     :url-src img-btn-copy  :class btn-class))
+           (btn-paste (create-img tool-bar :alt-text "paste"    :url-src img-btn-paste :class btn-class))
+           (btn-cut   (create-img tool-bar :alt-text "cut"      :url-src img-btn-cut   :class btn-class))
+           (btn-del   (create-img tool-bar :alt-text "delete"   :url-src img-btn-del   :class btn-class))
+           (btn-undo  (create-img tool-bar :alt-text "undo"     :url-src img-btn-undo  :class btn-class))
+           (btn-redo  (create-img tool-bar :alt-text "redo"     :url-src img-btn-redo  :class btn-class))
+           (btn-sim   (create-img tool-bar :alt-text "simulate" :url-src img-btn-sim   :class btn-class))
+           (btn-test  (create-img tool-bar :alt-text "test"     :url-src img-btn-test  :class btn-class))
+           (btn-rndr  (create-img tool-bar :alt-text "render"   :url-src img-btn-rndr  :class btn-class))
+           (btn-save  (create-img tool-bar :alt-text "save"     :url-src img-btn-save  :class btn-class))
+           (btn-load  (create-img tool-bar :alt-text "load"     :url-src img-btn-load  :class btn-class))
+           (btn-exp   (create-img tool-bar :alt-text "export"   :url-src img-btn-exp   :class btn-class))
            (wcontent  (center-panel pbox)))
       (setf (background-color (top-panel pbox)) :black)
       (setf (height btn-copy) "12px")
@@ -1499,14 +1499,14 @@ of controls and double click to select control."
       (set-on-click btn-sim (lambda (obj)
                               (declare (ignore obj))
                               (cond (in-simulation
-                                     (setf (url-src btn-sim) "/img/icons/walk.png")
+                                     (setf (url-src btn-sim) img-btn-sim)
                                      (setf in-simulation nil)
                                      (maphash (lambda (html-id control)
                                                 (declare (ignore html-id))
                                                 (setf (hiddenp (get-placer control)) nil))
                                               (get-control-list app panel-id)))
                                     (t
-                                     (setf (url-src btn-sim) "/img/icons/construction.png")
+                                     (setf (url-src btn-sim) img-btn-cons)
                                      (deselect-current-control app)
                                      (on-populate-control-properties-win content :win win)
                                      (setf in-simulation t)
@@ -1658,14 +1658,15 @@ of controls and double click to select control."
   "Open about box"
   (let ((about (create-gui-window obj
                                   :title   "About"
-                                  :content "<div class='w3-black'>
-                                         <center><img src='/img/icons/clog-icon.png'></center>
+                                  :content (format nil "<div class='w3-black'>
+                                         <center><img src='~A'></center>
                                          <center>CLOG</center>
                                          <center>The Common Lisp Omnificent GUI</center></div>
                                          <div><p><center>
                                            <a target=_blank href='https://github.com/sponsors/rabbibotton'>CLOG Builder</a>
                                            </center>
                                          <center>(c) 2022 - David Botton</center></p></div>"
+						   img-clog-icon)
                                   :width   200
                                   :height  215
                                   :hidden  t)))
@@ -1735,7 +1736,7 @@ of controls and double click to select control."
                                       :content (format nil "static-root: ~A" clog::*static-root*)))
           -9999)
     (let* ((menu  (create-gui-menu-bar body))
-           (icon  (create-gui-menu-icon menu :image-url "/img/icons/clog-icon.png"
+           (icon  (create-gui-menu-icon menu :image-url img-clog-icon
 					     :on-click  #'on-help-about-builder))
            (file  (create-gui-menu-drop-down menu :content "Builder"))
            (tools (create-gui-menu-drop-down menu :content "Tools"))

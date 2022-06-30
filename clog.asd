@@ -55,4 +55,5 @@
 	       (:file "clog-templates")
 	       (:file "clog-new-app")
 	       (:file "clog-builder")
-	       (:file "image-to-data")))
+	       (:file "image-to-data")
+	       (:file "clog-builder-images")))
