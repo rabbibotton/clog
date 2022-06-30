@@ -452,6 +452,7 @@ replaced."
                                               :left (position-left control)
                                               :width (client-width control)
                                               :height (client-height control))
+                         (jquery-execute placer "trigger('clog-builder-snap-shot')")
                          (set-properties-after-geomentry-change control))))
     (set-on-mouse-down placer
                        (lambda (obj data)
@@ -1241,7 +1242,9 @@ of controls and double click to select control."
 			       (on-populate-control-list-win content))))
     (set-on-event content "clog-builder-snap-shot"
 		  (lambda (obj)
-		    (push (panel-snap-shot content panel-id (bottom-panel box)) undo-chain)))
+		    (declare (ignore obj))
+		    (push (panel-snap-shot content panel-id (bottom-panel box)) undo-chain)
+		    (focus (get-placer (current-control app)))))
     (set-on-click btn-redo (lambda (obj)
 			     (declare (ignore obj))
 			     (when redo-chain
