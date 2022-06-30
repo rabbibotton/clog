@@ -378,8 +378,8 @@ replaced."
              (add-sub-controls control content :win win))
            (setup-control content control :win win)
            (select-control control)
-	   (jquery-execute control "trigger('clog-builder-snap-shot')")
            (on-populate-control-list-win content)
+	   (jquery-execute (get-placer content) "trigger('clog-builder-snap-shot')")
            t)
           (t
            ;; panel directly clicked with select tool or no control type to add
@@ -423,52 +423,52 @@ replaced."
 			     (ctrl  (getf data :ctrl-key))
 			     (meta  (getf data :meta-key))
 			     (shift (getf data :shift-key)))
-			 (cond ((equal key "ArrowUp")
-				(if shift
-				    (set-geometry control :height (1- (height control)))
-				    (set-geometry control :top (1- (position-top control)))))
-			       ((equal key "ArrowDown")
-				(if shift
-				    (set-geometry control :height (1+ (height control)))
-				    (set-geometry control :top (1+ (position-top control)))))
-			       ((equal key "ArrowRight")
-				(if shift
-				    (set-geometry control :width (1+ (width control)))
-				    (set-geometry control :left (1+ (position-left control)))))
-			       ((equal key "ArrowLeft")
-				(if shift
-				    (set-geometry control :width (1- (width control)))
-				    (set-geometry control :left (1- (position-left control)))))
-			       ((and (equal key "c")
-				     (or meta ctrl))
-				(blur placer))
-			       ((and (equal key "v")
-				     (or meta ctrl))
-				(blur placer))
-			       ((and (equal key "x")
-				     (or meta ctrl))
-				(blur placer)))
+                         (cond ((equal key "ArrowUp")
+                                (if shift
+                                    (set-geometry control :height (1- (height control)))
+                                    (set-geometry control :top (1- (position-top control)))))
+                               ((equal key "ArrowDown")
+                                (if shift
+                                    (set-geometry control :height (1+ (height control)))
+                                    (set-geometry control :top (1+ (position-top control)))))
+                               ((equal key "ArrowRight")
+                                (if shift
+                                    (set-geometry control :width (1+ (width control)))
+                                    (set-geometry control :left (1+ (position-left control)))))
+                               ((equal key "ArrowLeft")
+                                (if shift
+                                    (set-geometry control :width (1- (width control)))
+                                    (set-geometry control :left (1- (position-left control)))))
+                               ((and (equal key "c")
+                                     (or meta ctrl))
+                                (blur placer))
+                               ((and (equal key "v")
+                                     (or meta ctrl))
+                                (blur placer))
+                               ((and (equal key "x")
+                                     (or meta ctrl))
+                                (blur placer)))
                          (set-geometry placer :top (position-top control)
                                               :left (position-left control)
-					      :width (client-width control)
-					      :height (client-height control))
-			 (set-properties-after-geomentry-change control))))
+                                              :width (client-width control)
+                                              :height (client-height control))
+                         (set-properties-after-geomentry-change control))))
     (set-on-mouse-down placer
                        (lambda (obj data)
                          (declare (ignore obj))
-			 (let ((last  (current-control app))
-			       (shift (getf data :shift-key)))
-			   (if (not (equal (value (select-tool app)) ""))
-			       (when (do-drop-new-control app content data :win win)
-				 (incf-next-id content)))
-			   (cond ((and last
-				       shift)
-				  (let* ((control1 last)
-					 (control2 control)
-					 (placer1  (get-placer control1))
-					 (placer2  (get-placer control2)))
-				    (place-inside-bottom-of control1 control2)
-				    (place-after control2 placer2)
+                         (let ((last  (current-control app))
+                               (shift (getf data :shift-key)))
+                           (if (not (equal (value (select-tool app)) ""))
+                               (when (do-drop-new-control app content data :win win)
+                                 (incf-next-id content)))
+                           (cond ((and last
+                                       shift)
+                                  (let* ((control1 last)
+                                         (control2 control)
+                                         (placer1  (get-placer control1))
+                                         (placer2  (get-placer control2)))
+                                    (place-inside-bottom-of control1 control2)
+                                    (place-after control2 placer2)
                                               (place-after control2 placer2)
                                               (set-geometry placer1 :top (position-top control1)
                                                                     :left (position-left control1)
@@ -478,27 +478,32 @@ replaced."
                                                                     :left (position-left control2)
                                                                     :width (client-width control2)
                                                                     :height (client-height control2)))
-				  (on-populate-control-properties-win content)
-				  (on-populate-control-list-win content))
-				 (t
-				  (select-control control)))
+                                  (on-populate-control-properties-win content)
+                                  (on-populate-control-list-win content))
+                                 (t
+                                  (select-control control)))
                            (when win
                              (window-focus win))))
                        :cancel-event t)
     (set-on-mouse-double-click placer
-			       (lambda (obj data)
-				 (setf (hiddenp placer) t)
-				 (on-populate-control-list-win content)))
+                               (lambda (obj data)
+                                 (setf (hiddenp placer) t)
+                                 (on-populate-control-list-win content)))
+    (set-on-event placer "resize"
+        (lambda (obj)
+          (set-properties-after-geomentry-change obj)))
     (set-on-event placer "resizestop"
         (lambda (obj)
-                    (set-properties-after-geomentry-change obj))
-                  :cancel-event t)
+          (set-properties-after-geomentry-change obj)
+	  (jquery-execute placer "trigger('clog-builder-snap-shot')"))
+        :cancel-event t)
     (set-on-event placer "drag"
                   (lambda (obj)
                     (declare (ignore obj))
                     (set-geometry control :units ""
                                           :top (top placer)
-                                          :left (left placer))))
+                                          :left (left placer))
+		    (set-properties-after-geomentry-change control)))
     (set-on-event placer "dragstop"
                   (lambda (obj)
                     (declare (ignore obj))
@@ -507,11 +512,11 @@ replaced."
                                           :left (left placer))
                     (set-geometry placer :top (top control)
                                          :left (left control))
+		    (jquery-execute placer "trigger('clog-builder-snap-shot')")
                     (set-properties-after-geomentry-change control)))))
 
 (defun set-properties-after-geomentry-change (control)
   "Set properties window geometry setting"
-  (jquery-execute control "trigger('clog-builder-snap-shot')")
   (flet ((set-prop (n val)
            (js-execute control (format nil "$('.clog-prop-~A').text('~A')"
                                        n val))))
@@ -521,6 +526,7 @@ replaced."
     (set-prop "bottom" (bottom control))
     (set-prop "width" (client-width control))
     (set-prop "height" (client-height control))))
+
 
 ;; Control selection utilities
 
@@ -787,7 +793,7 @@ not a temporary attached one when using select-control."
                          (lambda (obj)
 			   (declare (ignore obj))
                            (funcall (fifth item) obj)
-			   (jquery-execute control "trigger('clog-builder-snap-shot')")))))))))
+			   (jquery-execute (get-placer control) "trigger('clog-builder-snap-shot')")))))))))
 
 (defun on-populate-control-properties-win (obj &key win)
   "Populate the control properties for the current control"
@@ -878,8 +884,8 @@ not a temporary attached one when using select-control."
                 (set-on-blur td2
                              (lambda (obj)
                                (funcall (fourth item) obj)
-                               (jquery-execute control "trigger('clog-builder-snap-shot')")
                                (when placer
+				 (jquery-execute placer "trigger('clog-builder-snap-shot')")
                                  (set-geometry placer :top (position-top control)
                                                       :left (position-left control)
                                                       :width (client-width control)
@@ -1235,7 +1241,6 @@ of controls and double click to select control."
 			       (on-populate-control-list-win content))))
     (set-on-event content "clog-builder-snap-shot"
 		  (lambda (obj)
-		    (declare (ignore obj))
 		    (push (panel-snap-shot content panel-id (bottom-panel box)) undo-chain)))
     (set-on-click btn-redo (lambda (obj)
 			     (declare (ignore obj))
