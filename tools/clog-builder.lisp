@@ -142,42 +142,43 @@
 
 (defun panel-snap-shot (content panel-id hide-loc)
   "Take a snap shot of panel"
-  (let (snap
-	(app (connection-data-item content "builder-app-data")))
-    (maphash
-     (lambda (html-id control)
-       (declare (ignore html-id))
-       (place-inside-bottom-of hide-loc
-                               (get-placer control)))
-     (get-control-list app panel-id))
-    (let ((data
-            (create-child content "<data />"
-                          :html-id (format nil "I~A" (get-universal-time)))))
-      (place-inside-top-of content data)
-      (setf (attribute data "data-in-package")
-            (attribute content "data-in-package"))
-      (setf (attribute data "data-custom-slots")
-            (attribute content "data-custom-slots"))
-      (setf (attribute data "data-clog-next-id")
-            (attribute content "data-clog-next-id"))
-      (setf (attribute data "data-clog-title")
-            (attribute content "data-clog-name"))
-      (setf snap (js-query content
-                           (format nil
-                                   "var z=~a.clone();~
+  (with-sync-event (content)
+    (let (snap
+	  (app (connection-data-item content "builder-app-data")))
+      (maphash
+       (lambda (html-id control)
+	 (declare (ignore html-id))
+	 (place-inside-bottom-of hide-loc
+				 (get-placer control)))
+       (get-control-list app panel-id))
+      (let ((data
+              (create-child content "<data />"
+                            :html-id (format nil "I~A" (get-universal-time)))))
+	(place-inside-top-of content data)
+	(setf (attribute data "data-in-package")
+              (attribute content "data-in-package"))
+	(setf (attribute data "data-custom-slots")
+              (attribute content "data-custom-slots"))
+	(setf (attribute data "data-clog-next-id")
+              (attribute content "data-clog-next-id"))
+	(setf (attribute data "data-clog-title")
+              (attribute content "data-clog-name"))
+	(setf snap (js-query content
+                             (format nil
+                                     "var z=~a.clone();~
                  z.find('*').each(function(){~
                    if($(this).attr('data-clog-composite-control') == 't'){$(this).text('')}~
                    if($(this).attr('id') !== undefined && ~
                      $(this).attr('id').substring(0,5)=='CLOGB'){$(this).removeAttr('id')}});~
                  z.html()"
-                                   (jquery content))))
-      (destroy data))
-    (maphash
-     (lambda (html-id control)
-       (declare (ignore html-id))
-       (place-after control (get-placer control)))
-     (get-control-list app panel-id))
-    snap))
+                                     (jquery content))))
+	(destroy data))
+      (maphash
+       (lambda (html-id control)
+	 (declare (ignore html-id))
+	 (place-after control (get-placer control)))
+       (get-control-list app panel-id))
+      snap)))
 
 
 (defun save-panel (fname content panel-id hide-loc)
@@ -1208,14 +1209,16 @@ of controls and double click to select control."
 		       (funcall (getf cr :on-load) control cr)))
                    (setup-control content control :win win)
                    (select-control control)
-                   (on-populate-control-list-win content)))))
+                   (on-populate-control-list-win content)
+		   (jquery-execute (get-placer content) "trigger('clog-builder-snap-shot')")))))
 	   ;; delete
 	   (del (obj)
              (declare (ignore obj))
              (when (current-control app)
                (delete-current-control app panel-id (html-id (current-control app)))
                (on-populate-control-properties-win content :win win)
-               (on-populate-control-list-win content))))
+               (on-populate-control-list-win content)
+	       (jquery-execute (get-placer content) "trigger('clog-builder-snap-shot')"))))
       ;; set up del/cut/copy/paste handlers
       (set-on-copy content #'copy)
       (set-on-click btn-copy #'copy)
@@ -1243,6 +1246,7 @@ of controls and double click to select control."
     (set-on-event content "clog-builder-snap-shot"
 		  (lambda (obj)
 		    (declare (ignore obj))
+		    (setf redo-chain nil)
 		    (push (panel-snap-shot content panel-id (bottom-panel box)) undo-chain)
 		    (focus (get-placer (current-control app)))))
     (set-on-click btn-redo (lambda (obj)
@@ -1469,14 +1473,16 @@ of controls and double click to select control."
                          (funcall (getf cr :on-load) control cr)))
                      (setup-control content control :win win)
                      (select-control control)
-                     (on-populate-control-list-win content)))))
+                     (on-populate-control-list-win content)
+		     (jquery-execute (get-placer content) "trigger('clog-builder-snap-shot')")))))
              ;; delete
              (del (obj)
                (declare (ignore obj))
                (when (current-control app)
                  (delete-current-control app panel-id (html-id (current-control app)))
                  (on-populate-control-properties-win content :win win)
-                 (on-populate-control-list-win content))))
+                 (on-populate-control-list-win content)
+		 (jquery-execute (get-placer content) "trigger('clog-builder-snap-shot')"))))
         ;; set up del/cut/copy/paste handlers
         (set-on-copy content #'copy)
         (set-on-click btn-copy #'copy)
@@ -1523,6 +1529,7 @@ of controls and double click to select control."
       (set-on-event content "clog-builder-snap-shot"
 		    (lambda (obj)
 		      (declare (ignore obj))
+		      (setf redo-chain nil)
 		      (push (panel-snap-shot content panel-id (bottom-panel box)) undo-chain)))
       (set-on-click btn-redo (lambda (obj)
 			       (declare (ignore obj))
