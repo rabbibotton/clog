@@ -1248,7 +1248,8 @@ of controls and double click to select control."
 		    (declare (ignore obj))
 		    (setf redo-chain nil)
 		    (push (panel-snap-shot content panel-id (bottom-panel box)) undo-chain)
-		    (focus (get-placer (current-control app)))))
+		    (when (current-control app)
+		      (focus (get-placer (current-control app))))))
     (set-on-click btn-redo (lambda (obj)
 			     (declare (ignore obj))
 			     (when redo-chain
@@ -1530,7 +1531,9 @@ of controls and double click to select control."
 		    (lambda (obj)
 		      (declare (ignore obj))
 		      (setf redo-chain nil)
-		      (push (panel-snap-shot content panel-id (bottom-panel box)) undo-chain)))
+		      (push (panel-snap-shot content panel-id (bottom-panel box)) undo-chain)
+		      (when (current-control app)
+			(focus (get-placer (current-control app))))))
       (set-on-click btn-redo (lambda (obj)
 			       (declare (ignore obj))
 			       (when redo-chain
@@ -1712,6 +1715,13 @@ of controls and double click to select control."
              (t
               (window-close (win panel))))))))
 
+(defun on-image-to-data (obj)
+  "Menu option to create new project from template"
+  (let* ((win (create-gui-window obj :title "Convert Images to Data"
+                                     :width 450 :height 200)))
+    (create-image-to-data (window-content win))
+    (window-center win)))
+
 (defun on-new-builder (body)
   "Launch instance of the CLOG Builder"
   (set-html-on-close body "Connection Lost")
@@ -1744,6 +1754,7 @@ of controls and double click to select control."
                               (declare (ignore obj))
                               (open-window (window body) "/dbadmin")))
       (create-gui-menu-item tools :content "Control Events"     :on-click 'on-show-control-events-win)
+      (create-gui-menu-item tools :content "Image to Data"      :on-click 'on-image-to-data)
       (create-gui-menu-item win   :content "Maximize All"       :on-click #'maximize-all-windows)
       (create-gui-menu-item win   :content "Normalize All"      :on-click #'normalize-all-windows)
       (create-gui-menu-window-select win)
@@ -1785,6 +1796,22 @@ of controls and double click to select control."
                                           (declare (ignore obj))
                                           ;; return empty string to prevent nav off page
                                           ""))))
+(defun on-convert-image (body)
+  (let ((params (form-multipart-data body)))
+    (create-div body :content params)
+    (destructuring-bind (stream fname content-type)
+	(form-data-item params "filename")
+      (create-div body :content (format nil "filename = ~A - (contents printed in REPL)" fname))
+      (let ((s (flexi-streams:make-flexi-stream stream))
+	    (b (make-string 1000))
+	    (pic-data ""))
+	(setf pic-data (format nil "data:~A;base64,~A" content-type
+			       (with-output-to-string (out) 
+				 (s-base64:encode-base64 s out))))
+	(create-img body :url-src pic-data)
+	(create-br body)
+	(create-div body :content "User the following as a url source:")
+	(set-geometry (create-text-area body :value pic-data) :width 500 :height 400)))))
 
 (defun clog-builder (&key (port 8080) static-root system)
   "Start clog-builder."
@@ -1797,4 +1824,5 @@ of controls and double click to select control."
   (set-on-new-window 'on-new-builder :path "/builder")
   (set-on-new-window 'on-new-db-admin :path "/dbadmin")
   (set-on-new-window 'on-attach-builder-page :path "/builder-page")
+  (set-on-new-window 'on-convert-image :path "/image-to-data")
   (open-browser :url (format nil "http://127.0.0.1:~A/builder" port)))
