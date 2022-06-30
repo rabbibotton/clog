@@ -1811,7 +1811,9 @@ of controls and double click to select control."
 	(create-img body :url-src pic-data)
 	(create-br body)
 	(create-div body :content "User the following as a url source:")
-	(set-geometry (create-text-area body :value pic-data) :width 500 :height 400)))))
+	(set-geometry (create-text-area body :value pic-data) :width 500 :height 400)
+	(create-br body)
+	(create-div body :content (format nil "For example:<br>(create-img body :url-src \"~A\")" pic-data))))))
 
 (defun clog-builder (&key (port 8080) static-root system)
   "Start clog-builder."
