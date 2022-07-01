@@ -908,6 +908,11 @@ of controls and double click to select control."
 	(when (control-list-win app)
           (let ((win (control-list-win app)))
             (setf (inner-html win) "")
+	    (set-on-mouse-click (create-div win :content (attribute content "data-clog-name"))
+				(lambda (obj data)
+				  (deselect-current-control app)
+				  (on-populate-control-properties-win content :win win)
+				  (on-populate-control-list-win content)))
             (labels ((add-siblings (control sim)
                        (let (dln dcc)
 			 (loop
