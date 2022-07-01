@@ -107,6 +107,14 @@
     :accessor last-x
     :initform 0
     :documentation "Last default open x point")
+   (body-left-offset
+    :accessor body-left-offset
+    :initform 0
+    :documentation "Offset for maximize on left side")
+   (body-right-offset
+    :accessor body-right-offset
+    :initform 0
+    :documentation "Offset for maximize on right side")
    (last-y
     :accessor last-y
     :initform 0
@@ -162,12 +170,18 @@
 ;; clog-gui-initialize ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defun clog-gui-initialize (clog-body &key (w3-css-url "/css/w3.css")
+(defun clog-gui-initialize (clog-body &key
+					(body-left-offset 0)
+					(body-right-offset 0)
+					(w3-css-url "/css/w3.css")
                                         (jquery-ui-css "/css/jquery-ui.css")
                                         (jquery-ui "/js/jquery-ui.js"))
   "Initializes clog-gui and installs a clog-gui object on connection.
-If W3-CSS-URL has not been loaded before is installed unless is nil."
-  (create-clog-gui clog-body)
+If W3-CSS-URL has not been loaded before is installed unless is nil.
+BODY-LEFT-OFFSET and BODY-RIGHT-OFFSET limit width on maximize."  
+  (let ((app (create-clog-gui clog-body)))
+    (setf (body-left-offset app) body-left-offset)
+    (setf (body-right-offset app) body-right-offset))
   (set-on-full-screen-change (html-document clog-body)
                              (lambda (obj)
                                (when (current-window obj)
@@ -895,6 +909,10 @@ the browser."))
       (setf (top obj) (unit :px (menu-bar-height obj)))
       (setf (left obj) (unit :px 0))
       (setf (width obj) (unit :vw 100))
+      (setf (left obj) (unit :px (body-left-offset app)))
+      (setf (width obj) (- (width obj)
+			   (body-left-offset app)
+			   (body-right-offset app)))
       (setf (height obj)
             (- (inner-height (window (body app))) (menu-bar-height obj)))
       (fire-on-window-size-done obj))))

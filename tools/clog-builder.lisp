@@ -1759,7 +1759,7 @@ of controls and double click to select control."
   (let ((app (make-instance 'builder-app-data)))
     (setf (connection-data-item body "builder-app-data") app)
     (setf (title (html-document body)) "CLOG Builder")
-    (clog-gui-initialize body)
+    (clog-gui-initialize body :body-left-offset 10 :body-right-offset 10)
     (add-class body "w3-blue-grey")
     (setf (z-index (create-panel body :positioning :fixed
                                       :bottom 0 :left 222
