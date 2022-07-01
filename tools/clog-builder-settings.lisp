@@ -676,6 +676,20 @@
      :events         (,@*events-element*)
      :properties     (,@*props-flex*
 		      ,@*props-element*))
+   `(:name           "flex-row-rev"
+     :description    "Row Reverse Align"
+     :clog-type      clog:clog-div
+     :create         clog:create-div
+     :create-type    :element
+     :create-content ""
+     :setup          ,(lambda (control content control-record)
+                        (declare (ignore content  control-record))
+			(set-geometry control :width 200 :height 28)
+			(setf (display control) :flex)
+			(setf (flex-direction control) :row-reverse))
+     :events         (,@*events-element*)
+     :properties     (,@*props-flex*
+		      ,@*props-element*))
    `(:name           "flex-col"
      :description    "Column Align"
      :clog-type      clog:clog-div
@@ -687,6 +701,20 @@
 			(set-geometry control :width 100 :height 200)
 			(setf (display control) :flex)
 			(setf (flex-direction control) :column))
+     :events         (,@*events-element*)
+     :properties     (,@*props-flex*
+		      ,@*props-element*))
+   `(:name           "flex-col-rev"
+     :description    "Column Reverse Align"
+     :clog-type      clog:clog-div
+     :create         clog:create-div
+     :create-type    :element
+     :create-content ""
+     :setup          ,(lambda (control content control-record)
+                        (declare (ignore content  control-record))
+			(set-geometry control :width 100 :height 200)
+			(setf (display control) :flex)
+			(setf (flex-direction control) :column-reverse))
      :events         (,@*events-element*)
      :properties     (,@*props-flex*
 		      ,@*props-element*))
