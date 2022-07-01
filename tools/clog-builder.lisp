@@ -866,7 +866,8 @@ not a temporary attached one when using select-control."
                          ,(lambda (obj)
                             (setf (attribute control "data-clog-name") (text obj))
                             (when (equal (getf info :name) "clog-data")
-                              (setf (window-title win) (text obj)))))
+			      (when win
+				(setf (window-title win) (text obj))))))
              props)
             (dolist (item props)
               (let* ((tr  (create-table-row table))
@@ -911,7 +912,7 @@ of controls and double click to select control."
 	    (set-on-mouse-click (create-div win :content (attribute content "data-clog-name"))
 				(lambda (obj data)
 				  (deselect-current-control app)
-				  (on-populate-control-properties-win content :win win)
+				  (on-populate-control-properties-win content :win nil)
 				  (on-populate-control-list-win content)))
             (labels ((add-siblings (control sim)
                        (let (dln dcc)
