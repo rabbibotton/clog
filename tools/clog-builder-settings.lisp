@@ -390,12 +390,39 @@
     (:name "z index"
      :style "z-index")))
 
+(defparameter *props-flex*
+`((:name "flex-direction"
+   :style "flex-direction")
+  (:name "flex-wrap"
+   :style "flex-wrap")
+  (:name "flex-flow"
+   :style "flex-flow")
+  (:name "justify-content"
+   :style "justify-content")
+  (:name "align-items"
+   :style "align-items")
+  (:name "align-content"
+   :style "align-content")))
+
+(defparameter *props-flex-item*
+`((:name "flex-grow"
+   :style "flex-grow")
+  (:name "flex-shrink"
+   :style "flex-shrink")
+  (:name "flex-basis"
+   :style "flex-basis")
+  (:name "align-self"
+   :style "align-self")
+  (:name "order"
+   :style "order")))
+
 (defparameter *props-base*
   `(,@*props-location*
     ,@*props-with-height*
     ,@*props-css*
     ,@*props-colors*
     ,@*props-display*
+    ,@*props-flex-item*
     ,@*props-nav*))
 
 (defparameter *props-element*
@@ -405,6 +432,7 @@
     ,@*props-css*
     ,@*props-colors*
     ,@*props-display*
+    ,@*props-flex-item*
     ,@*props-nav*
     ,@*props-contents*))
 
@@ -444,6 +472,7 @@
     ,@*props-css*
     ,@*props-colors*
     ,@*props-display*
+    ,@*props-flex-item*
     ,@*props-nav*))
 
 (defparameter *events-multimedia*
@@ -628,6 +657,55 @@
                        :prop "type")
                       ,@*props-contents*))
    '(:name           "group"
+     :description    "Alignment Controls"
+     :create         nil
+     :create-type    nil
+     :events         nil
+     :properties     nil)
+   `(:name           "flex-row"
+     :description    "Row Align"
+     :clog-type      clog:clog-div
+     :create         clog:create-div
+     :create-type    :element
+     :create-content ""
+     :setup          ,(lambda (control content control-record)
+                        (declare (ignore content  control-record))
+			(set-geometry control :width 200 :height 28)
+			(setf (display control) :flex)
+			(setf (flex-direction control) :row))
+     :events         (,@*events-element*)
+     :properties     (,@*props-flex*
+		      ,@*props-element*))
+   `(:name           "flex-col"
+     :description    "Column Align"
+     :clog-type      clog:clog-div
+     :create         clog:create-div
+     :create-type    :element
+     :create-content ""
+     :setup          ,(lambda (control content control-record)
+                        (declare (ignore content  control-record))
+			(set-geometry control :width 100 :height 200)
+			(setf (display control) :flex)
+			(setf (flex-direction control) :column))
+     :events         (,@*events-element*)
+     :properties     (,@*props-flex*
+		      ,@*props-element*))
+   `(:name           "flex-center"
+     :description    "Center Align"
+     :clog-type      clog:clog-div
+     :create         clog:create-div
+     :create-type    :element
+     :create-content ""
+     :setup          ,(lambda (control content control-record)
+                        (declare (ignore content  control-record))
+			(set-geometry control :width 200 :height 200)
+			(setf (display control) :flex)
+			(setf (align-items control) :center)
+			(setf (justify-content control) :center))
+     :events         (,@*events-element*)
+     :properties     (,@*props-flex*
+		      ,@*props-element*))
+   '(:name           "group"
      :description    "Basic HTML Controls"
      :create         nil
      :create-type    nil
@@ -641,7 +719,7 @@
      :create-content "Label"
      :events         (,@*events-element*)
      :setup          ,(lambda (control content control-record)
-                        (declare (ignore content  control-record))
+                        (declare (ignore content control-record))
 			(setf (attribute control "data-clog-for") ""))
      :on-setup       ,(lambda (control control-record)
 			(declare (ignore control-record))
