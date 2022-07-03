@@ -1062,18 +1062,19 @@ of controls and double click to select control."
 
 (defun on-show-control-list-win (obj)
   "Show control list for selecting and manipulating controls by name"
-  (let* ((app (connection-data-item obj "builder-app-data"))
-	 (is-hidden  nil)
-	 (content  (create-panel (connection-body obj) :positioning :fixed
+  (let* ((app          (connection-data-item obj "builder-app-data"))
+	 (is-hidden    nil)
+	 (content      (create-panel (connection-body obj) :positioning :fixed
 						       :width 220
 						       :top 40
 						       :left 0 :bottom 0
 						       :class "w3-border"))
-         (side-panel (create-panel content :top 0 :right 0 :bottom 0 :width 10))
-	 (sheight    (height content))
+         (side-panel   (create-panel content :top 0 :right 0 :bottom 0 :width 10))
+	 (sheight      (height content))
 	 (divider      (create-panel content :top (/ sheight 2) :height 5 :left 0 :right 10))
 	 (control-list (create-panel content :height (- (/ sheight 2) 5) :left 0 :bottom 0 :right 10))
-         (pallete (create-select content)))
+         (pallete      (create-select content))
+	 (adj-size     0))
     (setf (background-color divider) :black)
     (setf (background-color content) :gray)
     (setf (background-color pallete) :gray)
@@ -1092,8 +1093,16 @@ of controls and double click to select control."
     (setf (advisory-title content)
           (format nil "Drag and drop order~%Double click non-focusable~%~
                              <ctrl> place as static~%<shift> child to selected"))
-    (setf (background-color side-panel) :black)    
+    (setf (background-color side-panel) :black)
+    (set-on-resize (window (connection-body obj))
+		   (lambda (obj)
+		     (declare (ignore obj))
+		     (setf sheight (height content))
+		     (set-geometry pallete :left 0 :top 0 :height (/ sheight 2) :right 10)
+		     (set-geometry divider :top (/ sheight 2) :height 5 :left 0 :right 10)
+		     (set-geometry control-list :height (- (/ sheight 2) 5) :left 0 :bottom 0 :right 10)))
     (set-on-click side-panel (lambda (obj)
+			       (declare (ignore obj))
 			       (cond (is-hidden
 				      (setf (width content) "220px")
 				      (setf is-hidden nil))
