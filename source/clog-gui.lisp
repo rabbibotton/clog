@@ -178,7 +178,7 @@
                                         (jquery-ui "/js/jquery-ui.js"))
   "Initializes clog-gui and installs a clog-gui object on connection.
 If W3-CSS-URL has not been loaded before is installed unless is nil.
-BODY-LEFT-OFFSET and BODY-RIGHT-OFFSET limit width on maximize."  
+BODY-LEFT-OFFSET and BODY-RIGHT-OFFSET limit width on maximize."
   (let ((app (create-clog-gui clog-body)))
     (setf (body-left-offset app) body-left-offset)
     (setf (body-right-offset app) body-right-offset))
@@ -1703,6 +1703,7 @@ machine, upon close ON-FILE-NAME called with filename or nil if failure."
                                   :html-id         html-id))
          (box    (create-div (window-content win) :class "w3-panel"))
          (form   (create-form box))
+	 (fname  (file-namestring initial-dir))
          (dirs   (create-select form))
          (files  (create-select form))
          (input  (create-form-element form :input :label
@@ -1727,18 +1728,21 @@ machine, upon close ON-FILE-NAME called with filename or nil if failure."
     (setf (visiblep win) t)
     (when modal
       (window-make-modal win))
-    (flet ((populate-dirs (dir)
-             (setf (inner-html dirs) "")
-             (add-select-option dirs (format nil "~A" dir) ".")
-             (setf (value input) (truename dir))
-             (unless (or (equalp dir "/") (equalp dir #P"/"))
-               (add-select-option dirs (format nil "~A../" dir) ".."))
-             (dolist (item (uiop:subdirectories dir))
-               (add-select-option dirs item item)))
+    (flet ((populate-dirs (d)
+	     (let ((dir (directory-namestring d)))
+               (setf (inner-html dirs) "")
+               (add-select-option dirs (format nil "~A" dir) ".")
+               (setf (value input) (if (equal fname "")
+				       (truename dir)
+				       (format nil "~A~A" (truename dir) fname)))
+               (unless (or (equalp dir "/") (equalp dir #P"/"))
+		 (add-select-option dirs (format nil "~A../" dir) ".."))
+               (dolist (item (uiop:subdirectories dir))
+		 (add-select-option dirs item item))))
            (populate-files (dir)
-             (setf (inner-html files) "")
-             (dolist (item (uiop:directory-files dir))
-               (add-select-option files item (file-namestring item))))
+	     (setf (inner-html files) "")
+	     (dolist (item (uiop:directory-files (directory-namestring dir)))
+	       (add-select-option files item (file-namestring item))))
            (caret-at-end ()
              (focus input)
              (js-execute win (format nil "~A.setSelectionRange(~A.value.length,~A.value.length)"
@@ -1748,7 +1752,8 @@ machine, upon close ON-FILE-NAME called with filename or nil if failure."
       (populate-dirs initial-dir)
       (populate-files initial-dir)
       (when initial-filename
-        (setf (value input) (truename initial-filename))
+	(ignore-errors
+         (setf (value input) (truename initial-filename)))
         (caret-at-end))
       (set-on-change files (lambda (obj)
                              (declare (ignore obj))

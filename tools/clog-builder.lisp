@@ -1279,7 +1279,7 @@ of controls and double click to select control."
                                (on-populate-control-properties-win content :win win)
                                (on-populate-control-list-win content))))
     (set-on-click btn-load (lambda (obj)
-                             (server-file-dialog obj "Load Panel" file-name
+                             (server-file-dialog obj "Load Panel" (directory-namestring file-name)
                                                  (lambda (fname)
                                                    (window-focus win)
                                                    (when fname
@@ -1291,6 +1291,8 @@ of controls and double click to select control."
                                                      (setf (window-title win) (attribute content "data-clog-name"))
                                                      (on-populate-control-list-win content))))))
     (set-on-click btn-save (lambda (obj)
+			     (when (equal file-name "")
+			       (setf file-name (format nil "~A.clog" (attribute content "data-clog-name"))))
                              (server-file-dialog obj "Save Panel As.." file-name
                                                  (lambda (fname)
                                                    (window-focus win)
@@ -1305,7 +1307,13 @@ of controls and double click to select control."
                         :package (attribute content "data-in-package"))))
     (set-on-click btn-rndr
                   (lambda (obj)
-                    (server-file-dialog obj "Render As.." file-name
+		    (when (equal render-file-name "")
+		      (if (equal file-name "")
+			  (setf render-file-name (format nil "~A.lisp" (attribute content "data-clog-name")))
+			  (setf render-file-name (format nil "~A~A.lisp"
+				(directory-namestring file-name)
+				(pathname-name file-name)))))
+                    (server-file-dialog obj "Render As.." render-file-name
                                         (lambda (fname)
                                           (window-focus win)
                                           (when fname
@@ -1578,7 +1586,7 @@ of controls and double click to select control."
 				 (on-populate-control-list-win content))))
       (set-on-click btn-load (lambda (obj)
                                (declare (ignore obj))
-                               (server-file-dialog win "Load Panel" file-name
+                               (server-file-dialog win "Load Panel" (directory-namestring file-name)
                                                    (lambda (fname)
                                                      (window-focus win)
                                                      (when fname
@@ -1591,6 +1599,8 @@ of controls and double click to select control."
                                                        (setf (window-title win) (attribute content "data-clog-name"))
 						       (on-populate-control-list-win content))))))
       (set-on-click btn-save (lambda (obj)
+			       (when (equal file-name "")
+				 (setf file-name (format nil "~A.clog" (attribute content "data-clog-name"))))
                                (server-file-dialog obj "Save Page As.." file-name
                                                    (lambda (fname)
                                                      (window-focus win)
@@ -1606,7 +1616,13 @@ of controls and double click to select control."
                         :custom-boot custom-boot)))
       (set-on-click btn-rndr
                     (lambda (obj)
-                      (server-file-dialog obj "Render As.." file-name
+		      (when (equal render-file-name "")
+			(if (equal file-name "")
+			    (setf render-file-name (format nil "~A.lisp" (attribute content "data-clog-name")))
+			    (setf render-file-name (format nil "~A~A.lisp"
+							   (directory-namestring file-name)
+							   (pathname-name file-name)))))
+                      (server-file-dialog obj "Render As.." render-file-name
                                           (lambda (fname)
                                             (window-focus win)
                                             (when fname
