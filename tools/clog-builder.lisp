@@ -379,14 +379,14 @@ replaced."
              (add-sub-controls control content :win win))
            (setup-control content control :win win)
            (select-control control)
-           (on-populate-control-list-win content)
+           (on-populate-control-list-win content :win win)
 	   (jquery-execute (get-placer content) "trigger('clog-builder-snap-shot')")
            t)
           (t
            ;; panel directly clicked with select tool or no control type to add
            (deselect-current-control app)
            (on-populate-control-properties-win content :win win)
-           (on-populate-control-list-win content)
+           (on-populate-control-list-win content :win win)
            nil))))
 
 (defun setup-control (content control &key win)
@@ -480,8 +480,8 @@ replaced."
                                                                     :left (position-left control2)
                                                                     :width (client-width control2)
                                                                     :height (client-height control2)))
-                                  (on-populate-control-properties-win content)
-                                  (on-populate-control-list-win content))
+                                  (on-populate-control-properties-win content :win win)
+                                  (on-populate-control-list-win content :win win))
                                  (t
                                   (select-control control)))
                            (when win
@@ -490,7 +490,7 @@ replaced."
     (set-on-mouse-double-click placer
                                (lambda (obj data)
                                  (setf (hiddenp placer) t)
-                                 (on-populate-control-list-win content)))
+                                 (on-populate-control-list-win content :win win)))
     (set-on-event placer "resize"
         (lambda (obj)
           (set-properties-after-geomentry-change obj)))
@@ -899,7 +899,7 @@ not a temporary attached one when using select-control."
   (with-sync-event (content)
     (add-sub-controls content content :win win)))
 
-(defun on-populate-control-list-win (content)
+(defun on-populate-control-list-win (content &key win)
   "Populate the control-list-window to allow drag and drop adjust of order
 of controls and double click to select control."
   (with-sync-event (content)
@@ -907,13 +907,13 @@ of controls and double click to select control."
       (let ((panel-id (html-id content))
             (last-ctl nil))
 	(when (control-list-win app)
-          (let ((win (control-list-win app)))
-            (setf (inner-html win) "")
-	    (set-on-mouse-click (create-div win :content (attribute content "data-clog-name"))
+          (let ((lwin (control-list-win app)))
+            (setf (inner-html lwin) "")
+	    (set-on-mouse-click (create-div lwin :content (attribute content "data-clog-name"))
 				(lambda (obj data)
 				  (deselect-current-control app)
-				  (on-populate-control-properties-win content :win nil)
-				  (on-populate-control-list-win content)))
+				  (on-populate-control-properties-win content :win win)
+				  (on-populate-control-list-win content :win win)))
             (labels ((add-siblings (control sim)
                        (let (dln dcc)
 			 (loop
@@ -921,7 +921,7 @@ of controls and double click to select control."
 			   (setf dcc (attribute control "data-clog-composite-control"))
                            (setf dln (attribute control "data-clog-name"))
                            (unless (equal dln "undefined")
-                             (let ((list-item (create-div win :content (format nil "&#8597; ~A~A" sim dln)))
+                             (let ((list-item (create-div lwin :content (format nil "&#8597; ~A~A" sim dln)))
                                    (status    (hiddenp (get-placer control))))
                                (if status
                                    (setf (color list-item) :darkred)
@@ -956,7 +956,7 @@ of controls and double click to select control."
                                                              (state   (hiddenp placer)))
 							(setf (hiddenp placer) (not state))
 							(select-control control)
-							(on-populate-control-list-win content))))
+							(on-populate-control-list-win content :win win))))
                                ;; drag and drop to change
                                (set-on-drag-over list-item (lambda (obj)(declare (ignore obj))()))
                                (set-on-drop list-item
@@ -982,8 +982,8 @@ of controls and double click to select control."
                                                                       :left (position-left control2)
                                                                       :width (client-width control2)
                                                                       :height (client-height control2))
-						(on-populate-control-properties-win content)
-						(on-populate-control-list-win content))))
+						(on-populate-control-properties-win content :win win)
+						(on-populate-control-list-win content :win win))))
                                (set-on-drag-start list-item (lambda (obj)(declare (ignore obj))())
                                                   :drag-data (html-id control))
 			       (when (equal dcc "undefined") ; when t is not a composite control
@@ -1159,13 +1159,13 @@ of controls and double click to select control."
     (setf (attribute content "data-custom-slots") "")
     ;; activate associated windows on open
     (on-populate-control-properties-win content :win win)
-    (on-populate-control-list-win content)
+    (on-populate-control-list-win content :win win)
     ;; setup window events
     (set-on-window-focus win
                          (lambda (obj)
                            (declare (ignore obj))
                            (on-populate-control-properties-win content :win win)
-                           (on-populate-control-list-win content)))
+                           (on-populate-control-list-win content :win win)))
     (set-on-window-close win
                          (lambda (obj)
                            (declare (ignore obj))
@@ -1173,7 +1173,7 @@ of controls and double click to select control."
                            (setf (current-control app) nil)
                            (destroy-control-list app panel-id)
                            (on-populate-control-properties-win content :win win)
-                           (on-populate-control-list-win content)))
+                           (on-populate-control-list-win content :win win)))
     (set-on-window-size-done win
                              (lambda (obj)
                                (declare (ignore obj))
@@ -1225,7 +1225,7 @@ of controls and double click to select control."
                        (funcall (getf cr :on-load) control cr)))
                    (setup-control content control :win win)
                    (select-control control)
-                   (on-populate-control-list-win content)
+                   (on-populate-control-list-win content :win win)
                    (jquery-execute (get-placer content) "trigger('clog-builder-snap-shot')")))))
            ;; delete
            (del (obj)
@@ -1233,7 +1233,7 @@ of controls and double click to select control."
              (when (current-control app)
                (delete-current-control app panel-id (html-id (current-control app)))
                (on-populate-control-properties-win content :win win)
-               (on-populate-control-list-win content)
+               (on-populate-control-list-win content :win win)
                (jquery-execute (get-placer content) "trigger('clog-builder-snap-shot')"))))
       ;; set up del/cut/copy/paste handlers
       (set-on-copy content #'copy)
@@ -1258,7 +1258,7 @@ of controls and double click to select control."
                                (on-populate-loaded-window content :win win)
                                (setf (window-title win) (attribute content "data-clog-name"))
                                (on-populate-control-properties-win content :win win)
-                               (on-populate-control-list-win content))))
+                               (on-populate-control-list-win content :win win))))
     (set-on-event content "clog-builder-snap-shot"
                   (lambda (obj)
                     (declare (ignore obj))
@@ -1277,7 +1277,7 @@ of controls and double click to select control."
                                (on-populate-loaded-window content :win win)
                                (setf (window-title win) (attribute content "data-clog-name"))
                                (on-populate-control-properties-win content :win win)
-                               (on-populate-control-list-win content))))
+                               (on-populate-control-list-win content :win win))))
     (set-on-click btn-load (lambda (obj)
                              (server-file-dialog obj "Load Panel" (directory-namestring file-name)
                                                  (lambda (fname)
@@ -1289,7 +1289,7 @@ of controls and double click to select control."
                                                      (clrhash (get-control-list app panel-id))
                                                      (on-populate-loaded-window content :win win)
                                                      (setf (window-title win) (attribute content "data-clog-name"))
-                                                     (on-populate-control-list-win content))))))
+                                                     (on-populate-control-list-win content :win win))))))
     (set-on-click btn-save (lambda (obj)
 			     (when (equal file-name "")
 			       (setf file-name (format nil "~A.clog" (attribute content "data-clog-name"))))
@@ -1379,13 +1379,13 @@ of controls and double click to select control."
     ;; activate associated windows on open
     (deselect-current-control app)
     (on-populate-control-properties-win content :win win)
-    (on-populate-control-list-win content)
+    (on-populate-control-list-win content :win win)
     ;; setup window events
     (set-on-window-focus win
                          (lambda (obj)
                            (declare (ignore obj))
                            (on-populate-control-properties-win content :win win)
-                           (on-populate-control-list-win content)))
+                           (on-populate-control-list-win content :win win)))
     (set-on-window-close win
                          (lambda (obj)
                            (declare (ignore obj))
@@ -1510,7 +1510,7 @@ of controls and double click to select control."
                          (funcall (getf cr :on-load) control cr)))
                      (setup-control content control :win win)
                      (select-control control)
-                     (on-populate-control-list-win content)
+                     (on-populate-control-list-win content :win win)
 		     (jquery-execute (get-placer content) "trigger('clog-builder-snap-shot')")))))
              ;; delete
              (del (obj)
@@ -1518,7 +1518,7 @@ of controls and double click to select control."
                (when (current-control app)
                  (delete-current-control app panel-id (html-id (current-control app)))
                  (on-populate-control-properties-win content :win win)
-                 (on-populate-control-list-win content)
+                 (on-populate-control-list-win content :win win)
 		 (jquery-execute (get-placer content) "trigger('clog-builder-snap-shot')"))))
         ;; set up del/cut/copy/paste handlers
         (set-on-copy content #'copy)
@@ -1564,7 +1564,7 @@ of controls and double click to select control."
 				 (on-populate-loaded-window content :win win)
 				 (setf (window-title win) (attribute content "data-clog-name"))
 				 (on-populate-control-properties-win content :win win)
-				 (on-populate-control-list-win content))))
+				 (on-populate-control-list-win content :win win))))
       (set-on-event content "clog-builder-snap-shot"
 		    (lambda (obj)
 		      (declare (ignore obj))
@@ -1583,7 +1583,7 @@ of controls and double click to select control."
 				 (on-populate-loaded-window content :win win)
 				 (setf (window-title win) (attribute content "data-clog-name"))
 				 (on-populate-control-properties-win content :win win)
-				 (on-populate-control-list-win content))))
+				 (on-populate-control-list-win content :win win))))
       (set-on-click btn-load (lambda (obj)
                                (declare (ignore obj))
                                (server-file-dialog win "Load Panel" (directory-namestring file-name)
@@ -1597,7 +1597,7 @@ of controls and double click to select control."
                                                        (on-populate-loaded-window content :win win)
                                                        (setf (title (html-document body)) (attribute content "data-clog-name"))
                                                        (setf (window-title win) (attribute content "data-clog-name"))
-						       (on-populate-control-list-win content))))))
+						       (on-populate-control-list-win content :win win))))))
       (set-on-click btn-save (lambda (obj)
 			       (when (equal file-name "")
 				 (setf file-name (format nil "~A.clog" (attribute content "data-clog-name"))))
