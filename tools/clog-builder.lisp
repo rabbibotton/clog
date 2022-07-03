@@ -1070,14 +1070,17 @@ of controls and double click to select control."
 						       :left 0 :bottom 0
 						       :class "w3-border"))
          (side-panel (create-panel content :top 0 :right 0 :bottom 0 :width 10))
-	 (control-list (create-panel content :height 200 :left 0 :bottom 0 :right 10))
+	 (sheight    (height content))
+	 (divider      (create-panel content :top (/ sheight 2) :height 10 :left 0 :right 10))
+	 (control-list (create-panel content :height (- (/ sheight 2) 10) :left 0 :bottom 0 :right 10))
          (pallete (create-select content)))
+    (setf (background-color divider) :black)
     (setf (background-color content) :gray)
     (setf (background-color pallete) :gray)
     (setf (color pallete) :white)
     (setf (positioning pallete) :absolute)
     (setf (size pallete) 2)
-    (set-geometry pallete :units "" :left "0px" :top 0 :bottom "200px" :right "10px")
+    (set-geometry pallete :left 0 :top 0 :height (/ sheight 2) :right 10)
     (setf (advisory-title pallete) (format nil "<ctrl> place static~%<shift> child to selected"))
     (setf (select-tool app) pallete)
     (dolist (control *supported-controls*)
@@ -1089,7 +1092,7 @@ of controls and double click to select control."
     (setf (advisory-title content)
           (format nil "Drag and drop order~%Double click non-focusable~%~
                              <ctrl> place as static~%<shift> child to selected"))
-    (setf (background-color side-panel) :black)
+    (setf (background-color side-panel) :black)    
     (set-on-click side-panel (lambda (obj)
 			       (cond (is-hidden
 				      (setf (width content) "220px")
