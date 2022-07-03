@@ -14,6 +14,10 @@
     :accessor copy-buf
     :initform nil
     :documentation "Copy buffer")
+   (copy-history-win
+    :accessor copy-history-win
+    :initform nil
+    :documentation "Copy history window")
    (next-panel-id
     :accessor next-panel-id
     :initform 0
@@ -1060,6 +1064,27 @@ of controls and double click to select control."
           (setf (positioning control-list) :absolute)
           (set-geometry control-list :units "" :left 0 :top 0 :bottom 0 :width "100%")))))
 
+(defun on-show-copy-history-win (obj)
+  "Create and show copy/but history"
+  (let ((app (connection-data-item obj "builder-app-data")))
+    (if (copy-history-win app)
+	(progn
+	  (setf (hiddenp (copy-history-win app)) nil)
+          (window-focus (copy-history-win app)))
+        (let* ((win          (create-gui-window obj :title "Copy History"
+                                                    :left 225
+                                                    :top 480
+                                                    :height 400 :width 600
+                                                    :has-pinner t :client-movement t)))
+	  (window-center win)
+	  (setf (hiddenp win) t)
+	  (setf (overflow (window-content win)) :scroll)
+          (setf (copy-history-win app) win)
+          (set-on-window-can-close win (lambda (obj)
+					 (declare (ignore obj))
+					 (setf (hiddenp win) t)
+					 nil))))))
+
 (defun on-show-control-list-win (obj)
   "Show control list for selecting and manipulating controls by name"
   (let* ((app          (connection-data-item obj "builder-app-data"))
@@ -1231,6 +1256,10 @@ of controls and double click to select control."
      z.html()"
                                        (jquery (current-control app)))))
                (system-clipboard-write obj (copy-buf app))
+	       (let ((c (create-text-area (window-content (copy-history-win app))
+					  :value (copy-buf app))))
+                 (place-inside-top-of (window-content (copy-history-win app)) c)
+                 (setf (width c) "100%"))
                (maphash
                 (lambda (html-id control)
                   (declare (ignore html-id))
@@ -1323,8 +1352,8 @@ of controls and double click to select control."
                                                      (setf (window-title win) (attribute content "data-clog-name"))
                                                      (on-populate-control-list-win content :win win))))))
     (set-on-click btn-save (lambda (obj)
-			     (when (equal file-name "")
-			       (setf file-name (format nil "~A.clog" (attribute content "data-clog-name"))))
+                             (when (equal file-name "")
+                               (setf file-name (format nil "~A.clog" (attribute content "data-clog-name"))))
                              (server-file-dialog obj "Save Panel As.." file-name
                                                  (lambda (fname)
                                                    (window-focus win)
@@ -1339,12 +1368,12 @@ of controls and double click to select control."
                         :package (attribute content "data-in-package"))))
     (set-on-click btn-rndr
                   (lambda (obj)
-		    (when (equal render-file-name "")
-		      (if (equal file-name "")
-			  (setf render-file-name (format nil "~A.lisp" (attribute content "data-clog-name")))
-			  (setf render-file-name (format nil "~A~A.lisp"
-				(directory-namestring file-name)
-				(pathname-name file-name)))))
+                    (when (equal render-file-name "")
+                      (if (equal file-name "")
+                          (setf render-file-name (format nil "~A.lisp" (attribute content "data-clog-name")))
+                          (setf render-file-name (format nil "~A~A.lisp"
+                                (directory-namestring file-name)
+                                (pathname-name file-name)))))
                     (server-file-dialog obj "Render As.." render-file-name
                                         (lambda (fname)
                                           (window-focus win)
@@ -1377,8 +1406,8 @@ of controls and double click to select control."
                                                  :top-height 0 :bottom-height 0))
          (content       (center-panel box))
          (in-simulation nil)
-	 (undo-chain       nil)
-	 (redo-chain       nil)
+         (undo-chain       nil)
+         (redo-chain       nil)
          (file-name        "")
          (render-file-name "")
          (panel-id      (html-id content)))
@@ -1438,7 +1467,7 @@ of controls and double click to select control."
                                          :left-width 0 :right-width 0
                                          :top-height 33 :bottom-height 0))
            (tool-bar  (create-div (top-panel pbox) :class "w3-center"))
-	   (btn-class "w3-button w3-white w3-border w3-border-black w3-ripple")
+           (btn-class "w3-button w3-white w3-border w3-border-black w3-ripple")
            (btn-copy  (create-img tool-bar :alt-text "copy"     :url-src img-btn-copy  :class btn-class))
            (btn-paste (create-img tool-bar :alt-text "paste"    :url-src img-btn-paste :class btn-class))
            (btn-cut   (create-img tool-bar :alt-text "cut"      :url-src img-btn-cut   :class btn-class))
@@ -1516,6 +1545,10 @@ of controls and double click to select control."
      z.html()"
                                          (jquery (current-control app)))))
                  (system-clipboard-write obj (copy-buf app))
+		 (let ((c (create-text-area (window-content (copy-history-win app))
+					    :value (copy-buf app))))
+		   (place-inside-top-of (window-content (copy-history-win app)) c)
+		   (setf (width c) "100%"))
                  (maphash
                   (lambda (html-id control)
                     (declare (ignore html-id))
@@ -1833,6 +1866,7 @@ of controls and double click to select control."
                               (declare (ignore obj))
                               (open-window (window body) "/dbadmin")))
       (create-gui-menu-item tools :content "Control Events"     :on-click 'on-show-control-events-win)
+      (create-gui-menu-item tools :content "Copy/Cut History"   :on-click 'on-show-copy-history-win)
       (create-gui-menu-item tools :content "Image to Data"      :on-click 'on-image-to-data)
       (create-gui-menu-item win   :content "Maximize All"       :on-click #'maximize-all-windows)
       (create-gui-menu-item win   :content "Normalize All"      :on-click #'normalize-all-windows)
@@ -1870,6 +1904,7 @@ of controls and double click to select control."
     (on-show-control-properties-win body)
     (on-show-control-list-win body)
     (on-show-control-events-win body)
+    (on-show-copy-history-win body)
     (on-new-builder-panel body)
     (set-on-before-unload (window body) (lambda(obj)
                                           (declare (ignore obj))
