@@ -64,7 +64,7 @@ CLOG is developed with ECL and SBCL, it is tested fairly regulary on
 
 CLOG is in QuickLisp (ql:quickload :clog), however I recommend
 installing UltraSlip into your QuickLisp as you likely want the
-most up to date version. You can also clone the github repo into
+most up to date version or you can also clone the github repo into
 ~/common-lisp directory [or other quicklisp/asdf findable directory
 (push #P"path/to/dir/of/projects" ql:*local-project-directories*) ]:
 
@@ -75,13 +75,13 @@ cd ~/common-lisp
 git clone https://github.com/rabbibotton/clog.git
 
 
-For UltraLisp (RECOMMENDED):
+To add UltraLisp to QuickLisp (_RECOMMENDED_):
 
-To add lUtraLisp to quicklisp install:
+To add UtraLisp to quicklisp install:
 (ql-dist:install-dist "http://dist.ultralisp.org/"
                       :prompt nil)
 
-To update to latest packages do often to get the latest:
+To update to latest packages do _often_ to get the latest:
 (ql:update-all-dists)
 
 Then as always:
