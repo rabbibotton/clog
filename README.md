@@ -63,7 +63,7 @@ CLOG is developed with ECL and SBCL, it is tested fairly regulary on
  and the ecl Android/iPhone branch for example doesn't use).
 
 CLOG is in QuickLisp (ql:quickload :clog), however I recommend
-installing UltraSlip into your QuickLisp as you likely want the
+installing Ultralisp into your QuickLisp as you likely want the
 most up to date version or you can also clone the github repo into
 ~/common-lisp directory [or other quicklisp/asdf findable directory
 (push #P"path/to/dir/of/projects" ql:*local-project-directories*) ]:
