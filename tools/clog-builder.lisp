@@ -1105,6 +1105,8 @@ of controls and double click to select control."
 	       (set-geometry divider :top (- (/ sheight 2) adj-size))
 	       (set-geometry control-list :height (+ (- (/ sheight 2) 10) adj-size)))))
       (set-on-resize (window (connection-body obj)) #'on-size)
+      (set-on-full-screen-change (html-document (connection-body obj)) #'on-size)
+      (set-on-orientation-change (window (connection-body obj)) #'on-size)
       (set-on-pointer-down divider (lambda (obj data)
 				     (set-on-pointer-up (connection-body obj)
 							(lambda (obj data)
