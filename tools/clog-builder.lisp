@@ -1257,7 +1257,8 @@ of controls and double click to select control."
                                        (jquery (current-control app)))))
                (system-clipboard-write obj (copy-buf app))
 	       (let ((c (create-text-area (window-content (copy-history-win app))
-					  :value (copy-buf app))))
+					  :value (copy-buf app)
+					  :auto-place nil)))
                  (place-inside-top-of (window-content (copy-history-win app)) c)
                  (setf (width c) "100%"))
                (maphash
@@ -1546,7 +1547,8 @@ of controls and double click to select control."
                                          (jquery (current-control app)))))
                  (system-clipboard-write obj (copy-buf app))
 		 (let ((c (create-text-area (window-content (copy-history-win app))
-					    :value (copy-buf app))))
+					    :value (copy-buf app)
+					    :auto-place nil)))
 		   (place-inside-top-of (window-content (copy-history-win app)) c)
 		   (setf (width c) "100%"))
                  (maphash
