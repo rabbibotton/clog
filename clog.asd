@@ -56,4 +56,5 @@
 	       (:file "clog-new-app")
 	       (:file "clog-builder")
 	       (:file "image-to-data")
+	       (:file "quick-start")
 	       (:file "clog-builder-images")))

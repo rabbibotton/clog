@@ -1836,6 +1836,15 @@ of controls and double click to select control."
     (create-image-to-data (window-content win))
     (window-center win)))
 
+(defun on-quick-start (obj)
+  "Open quick start"
+  (let* ((app (connection-data-item obj "builder-app-data"))
+         (win (create-gui-window obj :title "Quick Start"
+				     :top 40 :left 225
+				     :width 600 :height 400
+				     :client-movement t)))
+    (create-quick-start (window-content win))))
+
 (defun on-new-builder (body)
   "Launch instance of the CLOG Builder"
   (set-html-on-close body "Connection Lost")
@@ -1873,6 +1882,7 @@ of controls and double click to select control."
       (create-gui-menu-item win   :content "Maximize All"       :on-click #'maximize-all-windows)
       (create-gui-menu-item win   :content "Normalize All"      :on-click #'normalize-all-windows)
       (create-gui-menu-window-select win)
+      (create-gui-menu-item help  :content "CLOG Quick Start"     :on-click 'on-quick-start)
       (create-gui-menu-item help  :content "CLOG Manual"          :on-click
                             (lambda (obj)
                               (declare (ignore obj))
