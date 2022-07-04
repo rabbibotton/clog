@@ -1109,7 +1109,7 @@ of controls and double click to select control."
     (setf (color pallete) :white)
     (setf (positioning pallete) :absolute)
     (setf (size pallete) 2)
-    (setf (advisory-title pallete) (format nil "<ctrl> place static~%<shift> child to selected"))
+    (setf (advisory-title pallete) (format nil "<ctrl/cmd> place static~%<shift> child to current selection"))
     (setf (select-tool app) pallete)
     (dolist (control *supported-controls*)
       (if (equal (getf control :name) "group")
@@ -1119,7 +1119,7 @@ of controls and double click to select control."
     (setf (control-list-win app) control-list)
     (setf (advisory-title content)
           (format nil "Drag and drop order~%Double click non-focusable~%~
-                             <ctrl> place as static~%<shift> child to selected"))
+                             <ctrl/cmd> place as static~%<shift> child to current selection"))
     (setf (background-color side-panel) :black)
     (flet ((on-size (obj)
 	     (declare (ignore obj))
