@@ -677,10 +677,7 @@
 				     (declare (ignore obj))
 				     (add-class control (value dd))
 				     (set-property-display control "class" (css-class-name control))))
-		 nil)))
-
-
-    ))
+		 nil)))))
 
 (defparameter *events-multimedia*
   '((:name "on-media-abort"
@@ -1641,7 +1638,7 @@
      :create-content "w3-button"
      :setup          ,(lambda (control content control-record)
                         (declare (ignore content control-record))
-                        (setf (css-class-name control) "w3-button w3-ripple w3-black"))
+                        (setf (css-class-name control) "w3-button w3-ripple w3-border"))
      :events         (,@*events-element*)
      :properties     (,@*props-w3css*
                       ,@*props-element*))
@@ -1653,7 +1650,7 @@
      :create-content "w3-btn"
      :setup          ,(lambda (control content control-record)
                         (declare (ignore content control-record))
-                        (setf (css-class-name control) "w3-btn w3-ripple w3-black"))
+                        (setf (css-class-name control) "w3-btn w3-ripple w3-border"))
      :events         (,@*events-element*)
      :properties     (,@*props-w3css*
                       ,@*props-element*))
@@ -1795,7 +1792,7 @@
      :setup          ,(lambda (control content control-record)
                         (declare (ignore content control-record))
                         (set-geometry control :width 200 :height 100)
-                        (setf (css-class-name control) "w3-container w3-card-4"))
+                        (setf (css-class-name control) "w3-container w3-card-2"))
      :events         (,@*events-element*)
      :properties     (,@*props-w3css*
                       ,@*props-element*))
