@@ -229,6 +229,11 @@ Other samples of CLOG on the web:
 - [CLOG on iOS and Android](https://www.reddit.com/r/lisp/comments/tl46of/would_it_be_cool_to_run_a_clog_app_on_mobile_you/)
 - [Learn CLOG Dashboard](https://gist.github.com/mmontone/3a5a8a57675750e99ffb7fa64f40bc39#file-clog-learn-lisp)
 
+Websites/apps made with CLOG
+
+- clogpower.com
+- ackfock.com
+
 CLOG Builder Tutorials
 
 1. Chat App
