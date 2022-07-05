@@ -337,7 +337,13 @@
 
 (defparameter *props-css*
   `((:name "css classes"
-     :prop "className")))
+     :setup ,(lambda (control td1 td2)
+	       (declare (ignore control td1))
+	       (add-class td2 "clog-prop-class"))
+     :get  ,(lambda (control)
+              (property control "className"))
+     :set  ,(lambda (control obj)
+              (setf (property control "className") (text obj))))))
 
 (defparameter *props-display*
   `((:name "hidden"
@@ -474,6 +480,207 @@
     ,@*props-display*
     ,@*props-flex-item*
     ,@*props-nav*))
+
+(defparameter *props-w3css*
+  `((:name "Add Color Class"
+     :setup ,(lambda (control td1 td2)
+	       (declare (ignore td1))
+	       (let ((dd (create-select td2)))
+		 (add-select-options dd `("" "w3-amber" "w3-aqua" "w3-blue" "w3-light-blue"
+					     "w3-brown" "w3-cyan" "w3-blue-grey" "w3-green"
+					     "w3-light-green" "w3-indigo" "w3-khaki" "w3-lime"
+					     "w3-orange" "w3-deep-orange" "w3-pink" "w3-purple"
+					     "w3-deep-purple" "w3-red" "w3-sand" "w3-teal"
+					     "w3-yellow" "w3-white" "w3-black" "w3-grey"
+					     "w3-light-grey" "w3-dark-grey" "w3-pale-red"
+					     "w3-pale-green" "w3-pale-yellow" "w3-pale-blue"))
+		 (set-on-change dd (lambda (obj)
+				     (declare (ignore obj))
+				     (add-class control (value dd))
+				     (set-property-display control "class" (css-class-name control))))
+		 nil)))
+    (:name "Add Text Color Class"
+     :setup ,(lambda (control td1 td2)
+	       (declare (ignore td1))
+	       (let ((dd (create-select td2)))
+		 (add-select-options dd `("" "w3-text-amber" "w3-text-aqua" "w3-text-blue" "w3-text-light-blue"
+					     "w3-text-brown" "w3-text-cyan" "w3-text-blue-grey" "w3-text-green"
+					     "w3-text-light-green" "w3-text-indigo" "w3-text-khaki" "w3-text-lime"
+					     "w3-text-orange" "w3-text-deep-orange" "w3-text-pink" "w3-text-purple"
+					     "w3-text-deep-purple" "w3-text-red" "w3-text-sand" "w3-text-teal"
+					     "w3-text-yellow" "w3-text-white" "w3-text-black" "w3-text-grey"
+					     "w3-text-light-grey" "w3-text-dark-grey" "w3-text-pale-red"
+					     "w3-text-pale-green" "w3-text-pale-yellow" "w3-text-pale-blue"))
+		 (set-on-change dd (lambda (obj)
+				     (declare (ignore obj))
+				     (add-class control (value dd))
+				     (set-property-display control "class" (css-class-name control))))
+		 nil)))
+    (:name "Add Hover Text Color Class"
+     :setup ,(lambda (control td1 td2)
+	       (declare (ignore td1))
+	       (let ((dd (create-select td2)))
+		 (add-select-options dd `("" "w3-hover-text-amber" "w3-hover-text-aqua" "w3-hover-text-blue" "w3-hover-text-light-blue"
+					     "w3-hover-text-brown" "w3-hover-text-cyan" "w3-hover-text-blue-grey" "w3-hover-text-green"
+					     "w3-hover-text-light-green" "w3-hover-text-indigo" "w3-hover-text-khaki" "w3-hover-text-lime"
+					     "w3-hover-text-orange" "w3-hover-text-deep-orange" "w3-hover-text-pink" "w3-hover-text-purple"
+					     "w3-hover-text-deep-purple" "w3-hover-text-red" "w3-hover-text-sand" "w3-hover-text-teal"
+					     "w3-hover-text-yellow" "w3-hover-text-white" "w3-hover-text-black" "w3-hover-text-grey"
+					     "w3-hover-text-light-grey" "w3-hover-text-dark-grey" "w3-hover-text-pale-red"
+					     "w3-hover-text-pale-green" "w3-hover-text-pale-yellow" "w3-hover-text-pale-blue"))
+		 (set-on-change dd (lambda (obj)
+				     (declare (ignore obj))
+				     (add-class control (value dd))
+				     (set-property-display control "class" (css-class-name control))))
+		 nil)))
+    (:name "Add Border Class"
+     :setup ,(lambda (control td1 td2)
+	       (declare (ignore td1))
+	       (let ((dd (create-select td2)))
+		 (add-select-options dd `("" "w3-border" "w3-border-top" "w3-border-right" "w3-border-bottom"
+					     "w3-border-left" "w3-border-0" "w3-bottombar" "w3-leftbar"
+					     "w3-rightbar" "w3-topbar"))
+		 (set-on-change dd (lambda (obj)
+				     (declare (ignore obj))
+				     (add-class control (value dd))
+				     (set-property-display control "class" (css-class-name control))))
+		 nil)))
+    (:name "Add Border Color Class"
+     :setup ,(lambda (control td1 td2)
+	       (declare (ignore td1))
+	       (let ((dd (create-select td2)))
+		 (add-select-options dd `("" "w3-border-amber" "w3-border-aqua" "w3-border-blue" "w3-border-light-blue"
+					     "w3-border-brown" "w3-border-cyan" "w3-border-blue-grey" "w3-border-green"
+					     "w3-border-light-green" "w3-border-indigo" "w3-border-khaki" "w3-border-lime"
+					     "w3-border-orange" "w3-border-deep-orange" "w3-border-pink" "w3-border-purple"
+					     "w3-border-deep-purple" "w3-border-red" "w3-border-sand" "w3-border-teal"
+					     "w3-border-yellow" "w3-border-white" "w3-border-black" "w3-border-grey"
+					     "w3-border-light-grey" "w3-border-dark-grey" "w3-border-pale-red"
+					     "w3-border-pale-green" "w3-border-pale-yellow" "w3-border-pale-blue"))
+		 (set-on-change dd (lambda (obj)
+				     (declare (ignore obj))
+				     (add-class control (value dd))
+				     (set-property-display control "class" (css-class-name control))))
+		 nil)))
+    (:name "Add Hover Border Color Class"
+     :setup ,(lambda (control td1 td2)
+	       (declare (ignore td1))
+	       (let ((dd (create-select td2)))
+		 (add-select-options dd `("" "w3-hover-border-amber" "w3-hover-border-aqua" "w3-hover-border-blue" "w3-hover-border-light-blue"
+					     "w3-hover-border-brown" "w3-hover-border-cyan" "w3-hover-border-blue-grey" "w3-hover-border-green"
+					     "w3-hover-border-light-green" "w3-hover-border-indigo" "w3-hover-border-khaki" "w3-hover-border-lime"
+					     "w3-hover-border-orange" "w3-hover-border-deep-orange" "w3-hover-border-pink" "w3-hover-border-purple"
+					     "w3-hover-border-deep-purple" "w3-hover-border-red" "w3-hover-border-sand" "w3-hover-border-teal"
+					     "w3-hover-border-yellow" "w3-hover-border-white" "w3-hover-border-black" "w3-hover-border-grey"
+					     "w3-hover-border-light-grey" "w3-hover-border-dark-grey" "w3-hover-border-pale-red"
+					     "w3-hover-border-pale-green" "w3-hover-border-pale-yellow" "w3-hover-border-pale-blue"))
+		 (set-on-change dd (lambda (obj)
+				     (declare (ignore obj))
+				     (add-class control (value dd))
+				     (set-property-display control "class" (css-class-name control))))
+		 nil)))
+    (:name "Add Round Class"
+     :setup ,(lambda (control td1 td2)
+	       (declare (ignore td1))
+	       (let ((dd (create-select td2)))
+		 (add-select-options dd `("" "w3-circle" "w3-round-small" "w3-round" "w3-round-medium"
+					     "w3-round-large" "w3-round-xlarge" "w3-round-xxlarge"))
+		 (set-on-change dd (lambda (obj)
+				     (declare (ignore obj))
+				     (add-class control (value dd))
+				     (set-property-display control "class" (css-class-name control))))
+		 nil)))
+    (:name "Add 3D Class"
+     :setup ,(lambda (control td1 td2)
+	       (declare (ignore td1))
+	       (let ((dd (create-select td2)))
+		 (add-select-options dd `("" "w3-card" "w3-card-2" "w3-card-4" "w3-hover-shadow" "w3-hoverable" "w3-hover-none"))
+		 (set-on-change dd (lambda (obj)
+				     (declare (ignore obj))
+				     (add-class control (value dd))
+				     (set-property-display control "class" (css-class-name control))))
+		 nil)))
+    (:name "Add Visibility Class"
+     :setup ,(lambda (control td1 td2)
+	       (declare (ignore td1))
+	       (let ((dd (create-select td2)))
+		 (add-select-options dd `("" "w3-opacity" "w3-opacity-min" "w3-opacity-max"
+					     "w3-grayscale" "w3-grayscale-min" "w3-grayscale-max"
+					     "w3-sepia" "w3-sepia-min" "w3-sepia-max"
+					     "w3-hover-opacity" "w3-hover-grayscale" "w3-hover-sepia"
+					     "w3-hover-opacity-off"))
+		 (set-on-change dd (lambda (obj)
+				     (declare (ignore obj))
+				     (add-class control (value dd))
+				     (set-property-display control "class" (css-class-name control))))
+		 nil)))
+    (:name "Add Font Class"
+     :setup ,(lambda (control td1 td2)
+	       (declare (ignore td1))
+	       (let ((dd (create-select td2)))
+		 (add-select-options dd `("" "w3-serif" "w3-sans-serif" "w3-cursive" "w3-monospace"
+					     "w3-wide"))
+		 (set-on-change dd (lambda (obj)
+				     (declare (ignore obj))
+				     (add-class control (value dd))
+				     (set-property-display control "class" (css-class-name control))))
+		 nil)))
+    (:name "Add Size Class"
+     :setup ,(lambda (control td1 td2)
+	       (declare (ignore td1))
+	       (let ((dd (create-select td2)))
+		 (add-select-options dd `("" "w3-tiny" "w3-small" "w3-medium" "w3-large"
+					     "w3-xlarge" "w3-xxlarge" "w3-xxxlarge" "w3-jumbo"))
+		 (set-on-change dd (lambda (obj)
+				     (declare (ignore obj))
+				     (add-class control (value dd))
+				     (set-property-display control "class" (css-class-name control))))
+		 nil)))
+    (:name "Add Alignmnet Class"
+     :setup ,(lambda (control td1 td2)
+	       (declare (ignore td1))
+	       (let ((dd (create-select td2)))
+		 (add-select-options dd `("" "w3-mobile" "w3-responsive"
+					     "w3-left-align" "w3-right-align" "w3-justify"
+					     "w3-center" "w3-right" "w3-left" "w3-top" "w3-bottom" "w3-block"
+					     "w3-bar" "w3-bar-block" "w3-bar-item" "w3-sidebar"
+					     "w3-show-inline-block" "w3-dropdown-hover"
+					     "w3-dropdown-click" "w3-collapse"
+					     "w3-hide-small" "w3-hide-medium" "w3-hide-large"))
+		 (set-on-change dd (lambda (obj)
+				     (declare (ignore obj))
+				     (add-class control (value dd))
+				     (set-property-display control "class" (css-class-name control))))
+		 nil)))
+    (:name "Add Margins/Padding Class"
+     :setup ,(lambda (control td1 td2)
+	       (declare (ignore td1))
+	       (let ((dd (create-select td2)))
+		 (add-select-options dd `("" "w3-margin" "w3-margin-top" "w3-margin-right"
+					     "w3-margin-bottom" "w3-margin-left" "w3-section"
+					     "w3-padding" "w3-padding-small" "w3-padding-large"
+					     "w3-padding-16" "w3-padding-24" "w3-padding-32"
+					     "w3-padding-48" "w3-padding-64"))
+		 (set-on-change dd (lambda (obj)
+				     (declare (ignore obj))
+				     (add-class control (value dd))
+				     (set-property-display control "class" (css-class-name control))))
+		 nil)))
+    (:name "Add Animation Class"
+     :setup ,(lambda (control td1 td2)
+	       (declare (ignore td1))
+	       (let ((dd (create-select td2)))
+		 (add-select-options dd `("" "w3-animate-top" "w3-animate-bottom" "w3-animate-left"
+					     "w3-animate-right" "w3-animate-opacity" "w3-animate-zoom"
+					     "w3-animate-fading" "w3-animate-input" "w3-spin"))
+		 (set-on-change dd (lambda (obj)
+				     (declare (ignore obj))
+				     (add-class control (value dd))
+				     (set-property-display control "class" (css-class-name control))))
+		 nil)))
+
+
+    ))
 
 (defparameter *events-multimedia*
   '((:name "on-media-abort"
@@ -1264,6 +1471,7 @@
      :create         clog:create-list-item
      :create-type    :element
      :create-content "List Item"
+     :positioning    :static
      :events         (,@*events-element*)
      :properties     (,@*props-element*))
    `(:name           "table"
@@ -1271,6 +1479,9 @@
      :clog-type      clog:clog-table
      :create         clog:create-table
      :create-type    :base
+     :setup          ,(lambda (control content control-record)
+			(declare (ignore content control-record))
+			(set-geometry control :width 200 :height 100))
      :events         (,@*events-element*)
      :properties     (,@*props-base*))
    `(:name           "tr"
@@ -1278,6 +1489,7 @@
      :clog-type      clog:clog-table-row
      :create         clog:create-table-row
      :create-type    :base
+     :positioning    :static
      :events         (,@*events-element*)
      :properties     (,@*props-base*))
    `(:name           "td"
@@ -1286,6 +1498,7 @@
      :create         clog:create-table-column
      :create-type    :element
      :create-content "Column"
+     :positioning    :static
      :events         (,@*events-element*)
      :properties     ((:name "column span"
                        :attr "colspan")
@@ -1298,6 +1511,7 @@
      :create         clog:create-table-heading
      :create-type    :element
      :create-content "Heading"
+     :positioning    :static
      :events         (,@*events-element*)
      :properties     ((:name "column span"
                        :attr "colspan")
@@ -1313,6 +1527,7 @@
      :clog-type      clog:clog-table-column-group
      :create         clog:create-table-column-group
      :create-type    :base
+     :positioning    :static
      :events         (,@*events-element*)
      :properties     ((:name "span"
                        :attr "span")
@@ -1323,6 +1538,7 @@
      :create         clog:create-table-column-group-item
      :create-type    :base
      :create-content "Column Group Item"
+     :positioning    :static
      :events         (,@*events-element*)
      :properties     ((:name "span"
                        :attr "span")
@@ -1332,6 +1548,7 @@
      :clog-type      clog:clog-table-head
      :create         clog:create-table-head
      :create-type    :base
+     :positioning    :static
      :events         (,@*events-element*)
      :properties     (,@*props-base*))
    `(:name           "tbody"
@@ -1339,6 +1556,7 @@
      :clog-type      clog:clog-table-body
      :create         clog:create-table-body
      :create-type    :base
+     :positioning    :static
      :events         (,@*events-element*)
      :properties     (,@*props-base*))
    `(:name           "tfoot"
@@ -1346,6 +1564,7 @@
      :clog-type      clog:clog-table-footer
      :create         clog:create-table-footer
      :create-type    :base
+     :positioning    :static
      :events         (,@*events-element*)
      :properties     (,@*props-base*))
    `(:name           "tcaption"
@@ -1354,6 +1573,7 @@
      :create         clog:create-table-caption
      :create-type    :element
      :create-content "Caption"
+     :positioning    :static
      :events         (,@*events-element*)
      :properties     ((:name "caption side"
                        :style "caption-side")
@@ -1371,6 +1591,7 @@
      :create         clog:create-term
      :create-content "Term"
      :create-type    :element
+     :positioning    :static
      :events         (,@*events-element*)
      :properties     (,@*props-element*))
    `(:name           "dd"
@@ -1379,6 +1600,7 @@
      :create         clog:create-description
      :create-content "Description"
      :create-type    :element
+     :positioning    :static
      :events         (,@*events-element*)
      :properties     (,@*props-element*))
    `(:name           "details"
@@ -1405,6 +1627,204 @@
      :create-type    :element
      :events         (,@*events-element*)
      :properties     (,@*props-element*))
+   '(:name           "group"
+     :description    "W3.CSS Controls"
+     :create         nil
+     :create-type    nil
+     :events         nil
+     :properties     nil)
+   `(:name           "w3-button"
+     :description    "W3-Button"
+     :clog-type      clog:clog-button
+     :create         clog:create-button
+     :create-type    :element
+     :create-content "w3-button"
+     :setup          ,(lambda (control content control-record)
+                        (declare (ignore content control-record))
+                        (setf (css-class-name control) "w3-button w3-ripple w3-black"))
+     :events         (,@*events-element*)
+     :properties     (,@*props-w3css*
+                      ,@*props-element*))
+   `(:name           "w3-btn"
+     :description    "W3-Btn"
+     :clog-type      clog:clog-button
+     :create         clog:create-button
+     :create-type    :element
+     :create-content "w3-btn"
+     :setup          ,(lambda (control content control-record)
+                        (declare (ignore content control-record))
+                        (setf (css-class-name control) "w3-btn w3-ripple w3-black"))
+     :events         (,@*events-element*)
+     :properties     (,@*props-w3css*
+                      ,@*props-element*))
+   `(:name           "w3-image"
+     :description    "W3-Image"
+     :clog-type      clog:clog-img
+     :create         clog:create-img
+     :create-type    :base
+     :setup          ,(lambda (control content control-record)
+                        (declare (ignore content) (ignore control-record))
+                        (setf (url-src control) "/img/clogicon.png")
+                        (setf (alt-text control) "Add image url")
+                        (setf (css-class-name control) "w3-image"))
+     :events         (,@*events-element*)
+     :properties     ((:name "image url"
+                       :prop "src")
+                      (:name "alternative text"
+                       :prop "alt")
+                      ,@*props-w3css*
+                      ,@*props-base*))
+   `(:name           "w3-input"
+     :description    "W3-Form Input"
+     :clog-type      clog:clog-form-element
+     :create         clog:create-form-element
+     :create-type    :form
+     :create-param   :text
+     :create-value   ""
+     :setup          ,(lambda (control content control-record)
+                        (declare (ignore content control-record))
+                        (set-geometry control :width 200)
+                        (setf (css-class-name control) "w3-input"))
+     :events         (,@*events-element*)
+     :properties     (,@*props-w3css*
+                      ,@*props-form-element*))
+   `(:name           "w3-checkbox"
+     :description    "W3-Form Checkbox"
+     :clog-type      clog:clog-form-element
+     :create         clog:create-form-element
+     :create-type    :form
+     :create-param   :checkbox
+     :create-value   ""
+     :setup          ,(lambda (control content control-record)
+                        (declare (ignore content control-record))
+                        (setf (css-class-name control) "w3-check"))
+     :events         (,@*events-element*)
+     :properties     (,@*props-w3css*
+                      ,@*props-form-element*))
+   `(:name           "w3-radio"
+     :description    "W3-Form Radio Button"
+     :clog-type      clog:clog-form-element
+     :create         clog:create-form-element
+     :create-type    :form
+     :create-param   :radio
+     :create-value   ""
+     :setup          ,(lambda (control content control-record)
+                        (declare (ignore content control-record))
+                        (setf (css-class-name control) "w3-radio"))
+     :events         (,@*events-element*)
+     :properties     (,@*props-w3css*
+                      ,@*props-form-element*))
+   `(:name           "w3-dropdown"
+     :description    "W3-Drop down select"
+     :clog-type      clog:clog-select
+     :create         clog:create-select
+     :create-type    :base
+     :setup          ,(lambda (control content control-record)
+                        (declare (ignore content control-record))
+                        (set-geometry control :width 200)
+                        (setf (css-class-name control) "w3-select"))
+     :events         (,@*events-element*)
+     :properties     ((:name "multiple select"
+                       :get  ,(lambda (control)
+                                (property control "multiple"))
+                       :set  ,(lambda (control obj)
+                                (if (or (equalp (text obj) "true") (equalp (text obj) "multiple"))
+                                    (setf (attribute control "multiple") t)
+                                    (remove-attribute control "multiple"))
+                                (property control "multiple")))
+                      ,@*props-w3css*
+                      ,@*props-form-element*))
+   `(:name           "w3-table"
+     :description    "W3-Table"
+     :clog-type      clog:clog-table
+     :create         clog:create-table
+     :create-type    :base
+     :setup          ,(lambda (control content control-record)
+                        (declare (ignore content control-record))
+                        (set-geometry control :width 200 :height 100)
+                        (setf (css-class-name control) "w3-table w3-striped w3-border w3-bordered w3-hoverable"))
+     :events         (,@*events-element*)
+     :properties     (,@*props-w3css*
+                      ,@*props-base*))
+   `(:name           "w3-ul"
+     :description    "W3-Unordered List"
+     :clog-type      clog:clog-unordered-list
+     :create         clog:create-unordered-list
+     :create-type    :base
+     :setup          ,(lambda (control content control-record)
+                        (declare (ignore content control-record))
+                        (set-geometry control :width 200 :height 100)
+                        (setf (css-class-name control) "w3-ul w3-hoverable"))
+     :events         (,@*events-element*)
+     :properties     ((:name "value"
+                       :prop "value")
+                      ,@*props-w3css*
+                      ,@*props-element*))
+   `(:name           "w3-badge"
+     :description    "W3-Badge"
+     :clog-type      clog:clog-span
+     :create         clog:create-span
+     :create-type    :element
+     :create-content "7"
+     :setup          ,(lambda (control content control-record)
+                        (declare (ignore content control-record))
+                        (setf (css-class-name control) "w3-badge"))
+     :events         (,@*events-element*)
+     :properties     (,@*props-w3css*
+                      ,@*props-contents*
+                      ,@*props-element*))
+   `(:name           "w3-tag"
+     :description    "W3-Tag"
+     :clog-type      clog:clog-span
+     :create         clog:create-span
+     :create-type    :element
+     :create-content "tag"
+     :setup          ,(lambda (control content control-record)
+                        (declare (ignore content control-record))
+                        (setf (css-class-name control) "w3-tag"))
+     :events         (,@*events-element*)
+     :properties     (,@*props-w3css*
+                      ,@*props-contents*
+                      ,@*props-element*))
+   `(:name           "w3-container"
+     :description    "W3-Container"
+     :clog-type      clog:clog-div
+     :create         clog:create-div
+     :create-type    :element
+     :create-content "w3-container"
+     :setup          ,(lambda (control content control-record)
+                        (declare (ignore content control-record))
+                        (set-geometry control :width 200 :height 100)
+                        (setf (css-class-name control) "w3-container w3-card-4"))
+     :events         (,@*events-element*)
+     :properties     (,@*props-w3css*
+                      ,@*props-element*))
+   `(:name           "w3-code-div"
+     :description    "W3-Code-Div"
+     :clog-type      clog:clog-div
+     :create         clog:create-div
+     :create-type    :element
+     :create-content "code"
+     :setup          ,(lambda (control content control-record)
+                        (declare (ignore content control-record))
+                        (set-geometry control :width 200 :height 100)
+                        (setf (css-class-name control) "w3-code w3-border"))
+     :events         (,@*events-element*)
+     :properties     (,@*props-w3css*
+                      ,@*props-element*))
+   `(:name           "w3-codespan"
+     :description    "W3-Codespan"
+     :clog-type      clog:clog-span
+     :create         clog:create-span
+     :create-type    :element
+     :create-content "code span"
+     :setup          ,(lambda (control content control-record)
+                        (declare (ignore content control-record))
+                        (setf (css-class-name control) "w3-codespan"))
+     :events         (,@*events-element*)
+     :properties     (,@*props-w3css*
+                      ,@*props-contents*
+                      ,@*props-element*))
    '(:name           "group"
      :description    "Multi-Media Controls"
      :create         nil

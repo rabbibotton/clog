@@ -14,7 +14,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defclass <%= (@ sys-name) %>-element (clog-element)()
-  (:documentation " <%= (@ sys-name) %> Element Object."))
+  (:documentation "<%= (@ sys-name) %> Element Object."))
 
 (defgeneric create-<%= (@ sys-name) %>-element (clog-obj &key hidden class html-id auto-place)
   (:documentation "Create a new <%= (@ sys-name) %>-element as child of CLOG-OBJ."))

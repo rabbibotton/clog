@@ -353,10 +353,13 @@ replaced."
   ;; create control
   (let* ((control-record    (control-info (value (select-tool app))))
          (control-type-name (getf control-record :name))
-         (positioning       (if (or (getf data :ctrl-key)
-				    (getf data :meta-key))
-                                :static
-                                :absolute))
+         (positioning       (cond ((or (getf data :ctrl-key)
+				       (getf data :meta-key))
+                                   :static)
+				  ((getf control-record :positioning)
+				   (getf control-record :positioning))
+				  (t
+                                   :absolute)))
          (parent            (when (getf data :shift-key)
                               (current-control app)))
          (control           (create-control (if parent
@@ -521,17 +524,19 @@ replaced."
 		    (jquery-execute placer "trigger('clog-builder-snap-shot')")
                     (set-properties-after-geomentry-change control)))))
 
+(defun set-property-display (control property value)
+  "Set property in the currently displayed property panel"
+  (js-execute control (format nil "$('.clog-prop-~A').text('~A')"
+                              property value)))
+
 (defun set-properties-after-geomentry-change (control)
   "Set properties window geometry setting"
-  (flet ((set-prop (n val)
-           (js-execute control (format nil "$('.clog-prop-~A').text('~A')"
-                                       n val))))
-    (set-prop "top" (top control))
-    (set-prop "left" (left control))
-    (set-prop "right" (right control))
-    (set-prop "bottom" (bottom control))
-    (set-prop "width" (client-width control))
-    (set-prop "height" (client-height control))))
+    (set-property-display control "top" (top control))
+    (set-property-display control "left" (left control))
+    (set-property-display control "right" (right control))
+    (set-property-display control "bottom" (bottom control))
+    (set-property-display control "width" (client-width control))
+    (set-property-display control "height" (client-height control)))
 
 
 ;; Control selection utilities
