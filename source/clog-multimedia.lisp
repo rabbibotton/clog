@@ -44,7 +44,7 @@
   (:documentation "Get/Setf media in seconds property."))
 
 (defmethod media-duration ((obj clog-multimedia))
-  (parse-float (property obj "duration") :type 'double-float :junk-allowed t))
+  (parse-float (property obj "duration" :default-answer 0) :type 'double-float :junk-allowed t))
 
 ;;;;;;;;;;;;;;;;;;
 ;; media-source ;;
@@ -71,7 +71,7 @@
   (:documentation "Get/Setf postion of media in seconds."))
 
 (defmethod media-position ((obj clog-multimedia))
-  (parse-float (property obj "currentTime") :type 'double-float :junk-allowed t))
+  (parse-float (property obj "currentTime" :default-answer 0) :type 'double-float :junk-allowed t))
 
 (defgeneric set-media-position (clog-multimedia value)
   (:documentation "Set media source VALUE for CLOG-MULTIMEDIA"))
@@ -165,7 +165,7 @@ duration."))
   (:documentation "Get/Setf media volume, not system volume. 0.0 .. 1.0"))
 
 (defmethod media-volume ((obj clog-multimedia))
-  (parse-float (property obj "volume") :type 'double-float :junk-allowed t))
+  (parse-float (property obj "volume" :default-answer 0) :type 'double-float :junk-allowed t))
 
 (defgeneric set-media-volume (clog-multimedia value)
   (:documentation "Set media source VALUE for CLOG-MULTIMEDIA"))
