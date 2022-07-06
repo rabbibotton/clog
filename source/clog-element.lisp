@@ -1353,7 +1353,7 @@ Note: z-index only works on Elements with Position Type of absolute,
       relative and fixed."))
 
 (defmethod z-index ((obj clog-element))
-  (parse-integer (style obj "z-index") :default-answer 0 :junk-allowed t))
+  (parse-integer (style obj "z-index" :default-answer 0) :junk-allowed t))
 
 (defgeneric set-z-index (clog-element value)
   (:documentation "Set z-index VALUE for CLOG-ELEMENT"))
