@@ -1351,6 +1351,7 @@ of controls and double click to select control."
                                                    (window-focus win)
                                                    (when fname
                                                      (setf file-name fname)
+						     (setf render-file-name "")
                                                      (setf (inner-html content)
                                                            (escape-string (read-file fname)))
                                                      (clrhash (get-control-list app panel-id))
@@ -1663,6 +1664,7 @@ of controls and double click to select control."
                                                      (window-focus win)
                                                      (when fname
                                                        (setf file-name fname)
+						       (setf render-file-name "")
                                                        (setf (inner-html content)
                                                              (escape-string (read-file fname)))
                                                        (clrhash (get-control-list app panel-id))
