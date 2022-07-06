@@ -346,23 +346,26 @@ result or if time out DEFAULT-ANSWER. see JQUERY-QUERY (Internal)"))
                         (post-eval "")
                         (cancel-event nil)
                         (one-time nil))
-  (let ((hook (format nil "~A:~A" (html-id obj) event)))
-    (cond (handler
-           (bind-event-script
-            obj event (format nil "~Aws.send('E:~A '~A)~A~@[~A~]~@[~A~]"
-                              eval-script
-                              hook
-                              call-back-script
-                              post-eval
-                              (when one-time
-                                (format nil "; ~A.off('~A')"
-                                        (jquery obj)
-                                        event))
-                              (when cancel-event "; return false")))
-           (setf (gethash hook (connection-data obj)) handler))
-          (t
-           (unbind-event-script obj event)
-           (remhash hook (connection-data obj))))))
+  (let ((hook (format nil "~A:~A" (html-id obj) event))
+	(cd   (connection-data obj)))
+    (if cd
+	(cond (handler
+               (bind-event-script
+		obj event (format nil "~Aws.send('E:~A '~A)~A~@[~A~]~@[~A~]"
+				  eval-script
+				  hook
+				  call-back-script
+				  post-eval
+				  (when one-time
+                                    (format nil "; ~A.off('~A')"
+                                            (jquery obj)
+                                            event))
+				  (when cancel-event "; return false")))
+	       (setf (gethash hook cd) handler))
+	      (t
+               (unbind-event-script obj event)
+               (remhash hook cd)))
+	(format t "Attempt to set event on non-existant connection."))))
 
 ;;;;;;;;;;;;;;
 ;; property ;;
@@ -393,7 +396,7 @@ result or if time out DEFAULT-ANSWER. see JQUERY-QUERY (Internal)"))
   (:documentation "Get/Setf html height in pixels."))
 
 (defmethod height ((obj clog-obj))
-  (parse-integer (jquery-query obj "height()") :junk-allowed t))
+  (parse-integer (jquery-query obj "height()" :default-answer 0) :junk-allowed t))
 
 (defgeneric set-height (clog-obj value)
   (:documentation "Set height VALUE for CLOG-OBJ"))
@@ -411,7 +414,7 @@ result or if time out DEFAULT-ANSWER. see JQUERY-QUERY (Internal)"))
   (:documentation "Get/Setf html width in pixels."))
 
 (defmethod width ((obj clog-obj))
-  (parse-integer (jquery-query obj "width()") :junk-allowed t))
+  (parse-integer (jquery-query obj "width()" :default-answer 0) :junk-allowed t))
 
 (defgeneric set-width (clog-obj value)
   (:documentation "Set width VALUE for CLOG-OBJ"))
@@ -508,7 +511,7 @@ an application share per connection the same queue of serialized events."
    (gethash item-name (connection-data obj))))
 
 (defgeneric set-connection-data-item (clog-obj item-name value)
-  (:documentation "Set connection-data the item-name in hash."))
+  (:documentation "Set in connection-data the item-name with value."))
 
 (defmethod set-connection-data-item ((obj clog-obj) item-name value)
   (bordeaux-threads:with-lock-held ((connection-data-mutex obj))
@@ -522,7 +525,8 @@ an application share per connection the same queue of serialized events."
 
 (defmethod remove-connection-data-item ((obj clog-obj) item-name)
   (bordeaux-threads:with-lock-held ((connection-data-mutex obj))
-    (remhash item-name (connection-data obj))))
+    (ignore-errors
+     (remhash item-name (connection-data obj)))))
 
 ;;;;;;;;;;;;;;;;;;
 ;; set-on-event ;;

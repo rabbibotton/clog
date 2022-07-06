@@ -31,8 +31,9 @@ embedded in a native template application.)
 STATUS: CLOG 1.4 and CLOG Builder 1.4 released.
 
 CLOG is actually based on GNOGA, a framework I wrote for Ada in 2013
-and used in commercial production code for the last 9+ years, i.e. the
-techniques CLOG uses are solid and proven.
+and used in commercial production code for the last 9+ years. CLOG
+itself is already used in commerical products, corporate websites,
+and other opensource projects.
 
 CLOG is being actively extended with tools and custom controls daily but the
 core API is stable and proven. Check the github discussion boards for the
