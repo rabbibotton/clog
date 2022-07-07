@@ -145,10 +145,11 @@ if str is NIL returns empty string otherwise returns nil."
       nil
       (let ((res))
         (setf res (format nil "~@[~A~]" str))
-        (setf res (ppcre:regex-replace-all "\\x22" res "\\x22"))
-        (setf res (ppcre:regex-replace-all "\\x27" res "\\x27"))
-        (setf res (ppcre:regex-replace-all "\\x0A" res "\\x0A"))
-        (setf res (ppcre:regex-replace-all "\\x0D" res "\\x0D"))
+        (setf res (ppcre:regex-replace-all "\\\\" res "\\\\\\\\")) ; \
+        (setf res (ppcre:regex-replace-all "\\x22" res "\\x22"))   ; "
+        (setf res (ppcre:regex-replace-all "\\x27" res "\\x27"))   ; '
+        (setf res (ppcre:regex-replace-all "\\x0A" res "\\x0A"))   ; \n
+        (setf res (ppcre:regex-replace-all "\\x0D" res "\\x0D"))   ; \r
         res)))
 
 ;;;;;;;;;;;;;;

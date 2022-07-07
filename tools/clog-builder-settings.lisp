@@ -854,6 +854,7 @@
      :clog-type      clog:clog-style-block
      :create         clog:create-style-block
      :create-type    :base
+     :positioning    :static
      :events         (,@*events-element*)
      :properties     ((:name "media"
                        :attr "media")
@@ -1896,6 +1897,7 @@
      :clog-type      clog:clog-database
      :create         clog:create-database
      :create-type    :base
+     :positioning    :static
      :setup          ,(lambda (control content control-record)
                         (declare (ignore content) (ignore control-record))
                         (setf (attribute control "data-clog-dbi-dbtype") ":sqlite3")
@@ -1904,10 +1906,14 @@
      :on-setup       ,(lambda (control control-record)
                         (declare (ignore control-record))
                         (format nil "(setf (database-connection target) ~
-                                       (dbi:connect ~A ~A :database-name \"~A\"))"
+                                       (dbi:connect ~A ~A :database-name ~A))"
                                 (attribute control "data-clog-dbi-dbtype")
                                 (attribute control "data-clog-dbi-dbparams")
-                                (attribute control "data-clog-dbi-dbname")))
+				(let ((dbi-name (attribute control "data-clog-dbi-dbname")))
+				  (if (equal (char dbi-name 0) #\*)
+				      dbi-name
+				      (format nil "\"~A\""
+					      dbi-name)))))
      :events         (,@*events-element*)
      :properties     ((:name "database type"
                        :attr "data-clog-dbi-dbtype")
@@ -1921,6 +1927,7 @@
      :clog-type      clog:clog-one-row
      :create         clog:create-one-row
      :create-type    :base
+     :positioning    :static
      :setup          ,(lambda (control content control-record)
                         (declare (ignore content) (ignore control-record))
                         (setf (attribute control "data-clog-one-row-db") "")
@@ -1985,6 +1992,7 @@
      :clog-type      clog:clog-db-table
      :create         clog:create-db-table
      :create-type    :base
+     :positioning    :static
      :setup          ,(lambda (control content control-record)
                         (declare (ignore content) (ignore control-record))
                         (setf (attribute control "data-clog-one-row-db") "")
