@@ -606,7 +606,7 @@ HANDLER is nil unbind the event."))
                             (if (equal source "")
                                 ""
                                 (format nil " src='~A'"
-                                        (escape-string source)))
+                                        (escape-to-single-quote-in-tag source)))
                             (if controls
                                 " controls"
                                 "")
@@ -660,7 +660,7 @@ HANDLER is nil unbind the event."))
                             (if (equal source "")
                                 ""
                                 (format nil " src='~A'"
-                                        (escape-string source)))
+                                        (escape-to-single-quote-in-tag source)))
                             (if controls
                                 " controls"
                                 "")
@@ -670,7 +670,7 @@ HANDLER is nil unbind the event."))
                             (if (equal poster "")
                                 ""
                                 (format nil " poster='~A'"
-                                        (escape-string poster)))
+                                        (escape-to-single-quote-in-tag poster)))
                             (if autoplay
                                 " autoplay"
                                 "")

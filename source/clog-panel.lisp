@@ -71,10 +71,10 @@ nil. Resizable only works if overflow is set to :SCROLL"))
   (create-child obj
      (format nil "<div~A style='~A~A~A~A~A~A~A~A~A~A~A~A~A~A~A~A~A~A~A~A'>~A</div>"
              (if class
-                 (format nil " class='~A'" (escape-string class))
+                 (format nil " class='~A'" (escape-to-single-quote-in-tag class))
                  "")
              (if style
-                 (format nil "~A;" (escape-string style))
+                 (format nil "~A;" (escape-to-single-quote-in-tag style))
                  "")
              (if left
                  (format nil "left:~A~A;" left units)
@@ -129,12 +129,12 @@ nil. Resizable only works if overflow is set to :SCROLL"))
                  "")
              (if positioning
                  (format nil "position:~A;"
-                         (escape-string positioning))
+                         (escape-to-single-quote-in-tag positioning))
                  "")
              (if hidden
                  "visibility:hidden;"
                  "")
-             (escape-string content))
+             content)
      :clog-type  'clog-panel
      :html-id    html-id
      :auto-place auto-place))
@@ -288,7 +288,7 @@ is set to nil."))
                                               (auto-place t))
   (let ((parent (create-child obj (format nil "<div~A~A~A~A/>"
                                           (if class
-                                              (format nil " class='~A'" (escape-string class))
+                                              (format nil " class='~A'" (escape-to-single-quote-in-tag class))
                                               "")
                                           (if width
                                               (format nil " width='~A'" width)

@@ -518,10 +518,37 @@ brower."
 (defun escape-string (str)
   "Escape STR for sending to browser script."
   (let ((res))
-    (setf res (ppcre:regex-replace-all "\\x22" str "\\x22"))
-    (setf res (ppcre:regex-replace-all "\\x27" res "\\x27"))
-    (setf res (ppcre:regex-replace-all "\\x0A" res "\\x0A"))
-    (setf res (ppcre:regex-replace-all "\\x0D" res "\\x0D"))
+    (setf res (ppcre:regex-replace-all "\\x22" str "\\x22")) ;; double quote
+    (setf res (ppcre:regex-replace-all "\\x27" res "\\x27")) ;; single quote
+    (setf res (ppcre:regex-replace-all "\\x0A" res "\\x0A")) ;; \n
+    (setf res (ppcre:regex-replace-all "\\x0D" res "\\x0D")) ;; \r
+    res))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; escape-to-single-quote-in-tag ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defun escape-to-single-quote-in-tag (str)
+  "Escape STR for placing inside single quoted string inside HTML tag."
+  (let ((res))
+    (setf res (format nil "~@[~A~]" str))
+    (setf res (ppcre:regex-replace-all "\\x27" res "&#39;")) ;; single quote
+    (setf res (ppcre:regex-replace-all "\\x0A" res "&#10;")) ;; \n
+    (setf res (ppcre:regex-replace-all "\\x0D" res "&#13;")) ;; \r
+    res))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; escape-to-single-quote-in-js ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defun escape-to-single-quote-in-js (str)
+  "Escape STR for placing inside single quoted string inside javascript."
+  (let ((res))
+    (setf res (format nil "~@[~A~]" str))
+    (setf res (ppcre:regex-replace-all "\\\\" res "\\\\\\\\"))
+    (setf res (ppcre:regex-replace-all "\\x27" res "\\\\'")) ;; single quote
+    (setf res (ppcre:regex-replace-all "\\x0A" res "\\n")) ;; \n
+    (setf res (ppcre:regex-replace-all "\\x0D" res "\\r")) ;; \r
     res))
 
 ;;;;;;;;;;;;;
@@ -597,7 +624,7 @@ reistablish connectivity."
 (defun put (connection-id text)
   "Write TEXT to document object of CONNECTION-ID with out new line."
   (execute connection-id
-           (format nil "document.write('~A');" (escape-string text))))
+           (format nil "document.write('~A');" (escape-to-single-quote-in-js text))))
 
 ;;;;;;;;;;;;;;
 ;; put-line ;;
@@ -607,7 +634,7 @@ reistablish connectivity."
   "Write TEXT to document object of CONNECTION-ID with new line and
 HTML <br />."
   (execute connection-id
-           (format nil "document.writeln('~A<br />');" (escape-string text))))
+           (format nil "document.writeln('~A<br />');" (escape-to-single-quote-in-js text))))
 
 ;;;;;;;;;;;;;;
 ;; new-line ;;
@@ -623,7 +650,7 @@ HTML <br />."
 
 (defun alert-box (connection-id message)
   "Create an alert box on CONNECTION-ID with MESSAGE"
-  (execute connection-id (format nil "alert('~A');" (escape-string message))))
+  (execute connection-id (format nil "alert('~A');" (escape-to-single-quote-in-js message))))
 
 ;;;;;;;;;;;;;;;;
 ;; debug-mode ;;
@@ -641,7 +668,7 @@ HTML <br />."
   "Set the client side variable clog['html_on_close'] to replace
 the browser contents in case of connection loss."
   (execute connection-id (format nil "clog['html_on_close']='~A'"
-                                 (escape-string html))))
+                                 (escape-to-single-quote-in-js html))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;
 ;; compiled-boot-html ;;

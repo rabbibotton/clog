@@ -31,7 +31,7 @@
   (create-child obj (format nil "<canvas~A~A width=~A height=~A/>"
                             (if class
                                 (format nil " class='~A'"
-                                        (escape-string class))
+                                        (escape-to-single-quote-in-tag class))
                                 "")
                             (if hidden
                                 " style='visibility:hidden;'"
@@ -108,7 +108,7 @@
 
 (defmethod fill-text ((obj clog-context2d) text x y &key (max-width nil))
   (execute obj (format nil "fillText('~A',~A,~A~A)"
-                       (escape-string text)
+                       (escape-to-single-quote-in-js text)
                        x y
                        (if max-width
                            (format nil ",~A" max-width)
@@ -122,7 +122,7 @@
 
 (defmethod stroke-text ((obj clog-context2d) text x y &key (max-width nil))
   (execute obj (format nil "strokeText('~A',~A,~A~A)"
-                       (escape-string text)
+                       (escape-to-single-quote-in-js text)
                        x y
                        (if max-width
                            (format nil ",~A" max-width)

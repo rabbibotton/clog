@@ -44,8 +44,8 @@ clog[] but is not in the DOM. If HTML-ID is nil one is generated.
     (clog-connection:execute
      connection-id
      (format nil
-             "clog['~A']=$(\"~A\").get(0); $(clog['~A']).first().prop('id','~A')"
-             web-id html web-id web-id))
+             "clog['~A']=$('~A').get(0); $(clog['~A']).first().prop('id','~A')"
+             (escape-to-single-quote-in-js web-id) (escape-to-single-quote-in-js html) web-id web-id))
     (make-clog-element connection-id web-id :clog-type clog-type)))
 
 ;;;;;;;;;;;;
@@ -75,7 +75,7 @@ CLOG-OBJ. If HTML-ID is nil one will be generated."))
 (defmethod create-child ((obj clog-obj) html &key (html-id nil)
                                                (auto-place t)
                                                (clog-type 'clog-element))
-  (let ((child (create-with-html (connection-id obj) (escape-string html)
+  (let ((child (create-with-html (connection-id obj) html
                                  :clog-type clog-type
                                  :html-id   html-id)))
     (if auto-place
@@ -127,7 +127,7 @@ after attachment is changed to one unique to this session."))
 
 (defmethod set-style ((obj clog-element) style-name value)
   (jquery-execute obj (format nil "css('~A','~A')"
-                              style-name (escape-string value)))
+                              style-name (escape-to-single-quote-in-js value)))
   value)
 (defsetf style set-style)
 
@@ -168,7 +168,7 @@ after attachment is changed to one unique to this session."))
 
 (defmethod set-attribute ((obj clog-element) attribute-name value)
   (jquery-execute obj (format nil "attr('~A','~A')"
-                              attribute-name (escape-string value)))
+                              attribute-name (escape-to-single-quote-in-js value)))
   value)
 (defsetf attribute set-attribute)
 
@@ -395,7 +395,7 @@ lost forever."))
   (:documentation "Set inner-html VALUE for CLOG-ELEMENT"))
 
 (defmethod set-inner-html ((obj clog-element) value)
-  (jquery-execute obj (format nil "html('~A')" (escape-string value)))
+  (jquery-execute obj (format nil "html('~A')" (escape-to-single-quote-in-js value)))
   value)
 (defsetf inner-html set-inner-html)
 
@@ -467,7 +467,7 @@ Normally index follows normal sequence of elements."))
   (:documentation "Set text VALUE for CLOG-ELEMENT"))
 
 (defmethod set-text ((obj clog-element) value)
-  (jquery-execute obj (format nil "text('~A')" (escape-string value)))
+  (jquery-execute obj (format nil "text('~A')" (escape-to-single-quote-in-js value)))
   value)
 (defsetf text set-text)
 
@@ -1353,7 +1353,7 @@ Note: z-index only works on Elements with Position Type of absolute,
       relative and fixed."))
 
 (defmethod z-index ((obj clog-element))
-  (parse-integer (style obj "z-index") :default-answer 0 :junk-allowed t))
+  (parse-integer (style obj "z-index") :junk-allowed t))
 
 (defgeneric set-z-index (clog-element value)
   (:documentation "Set z-index VALUE for CLOG-ELEMENT"))
@@ -1692,7 +1692,7 @@ parent in the DOM."))
   (:documentation "Set inner-height VALUE for CLOG-ELEMENT"))
 
 (defmethod set-inner-height ((obj clog-element) value)
-  (jquery-execute obj (format nil "innerHeight('~A')" (escape-string value)))
+  (jquery-execute obj (format nil "innerHeight('~A')" (escape-to-single-quote-in-js value)))
   value)
 (defsetf inner-height set-inner-height)
 
@@ -1710,7 +1710,7 @@ parent in the DOM."))
   (:documentation "Set inner-width VALUE for CLOG-ELEMENT"))
 
 (defmethod set-inner-width ((obj clog-element) value)
-  (jquery-execute obj (format nil "innerWidth('~A')" (escape-string value)))
+  (jquery-execute obj (format nil "innerWidth('~A')" (escape-to-single-quote-in-js value)))
   value)
 (defsetf inner-width set-inner-width)
 
@@ -2221,7 +2221,7 @@ is set to :table-cell or for labels on form elements."))
 
 (defmethod add-class ((obj clog-element) css-class-name)
   (jquery-execute obj (format nil "addClass('~A')"
-                              (escape-string css-class-name))))
+                              (escape-to-single-quote-in-js css-class-name))))
 
 ;;;;;;;;;;;;;;;;;;
 ;; remove-class ;;
@@ -2232,7 +2232,7 @@ is set to :table-cell or for labels on form elements."))
 
 (defmethod remove-class ((obj clog-element) css-class-name)
   (jquery-execute obj (format nil "removeClass('~A')"
-                              (escape-string css-class-name))))
+                              (escape-to-single-quote-in-js css-class-name))))
 
 ;;;;;;;;;;;;;;;;;;
 ;; toggle-class ;;
@@ -2243,7 +2243,7 @@ is set to :table-cell or for labels on form elements."))
 
 (defmethod toggle-class ((obj clog-element) css-class-name)
   (jquery-execute obj (format nil "toggleClass('~A')"
-                              (escape-string css-class-name))))
+                              (escape-to-single-quote-in-js css-class-name))))
 
 ;;;;;;;;;;;;;;;;;;;;;
 ;; remove-from-dom ;;

@@ -71,7 +71,7 @@
 				      (format nil
 					      "editor_~A.setValue('~A');editor_~A.moveCursorTo(0,0);"
 					      (html-id (current-window obj))
-					      (escape-string (read-file fname))
+					      (escape-to-single-quote-in-js (read-file fname))
 					      (html-id (current-window obj))))))))
 
 (defun do-ide-file-save-as (obj)
@@ -152,7 +152,7 @@
 	(setf cw (current-window obj))
 	(js-execute obj (format nil "editor_~A.setValue('~A');editor_~A.moveCursorTo(0,0);"
 				(html-id cw)
-				(escape-string result)
+				(escape-to-single-quote-in-js result)
 				(html-id cw)))))))
 
 (defun do-ide-help-about (obj)

@@ -83,12 +83,14 @@ embedded in a native template application.)"
   (obj           generic-function)
 
   "CLOG JS utilities"
-  (js-true-p     function)
-  (p-true-js     function)
-  (js-on-p       function)
-  (p-on-js       function)
-  (escape-string function)
-  (lf-to-br      function)
+  (js-true-p                     function)
+  (p-true-js                     function)
+  (js-on-p                       function)
+  (p-on-js                       function)
+  (escape-string                 function)
+  (escape-to-single-quote-in-tag function)
+  (escape-to-single-quote-in-js  function)
+  (lf-to-br                      function)
 
   "CLOG Color utilities"
   (rgb           function)

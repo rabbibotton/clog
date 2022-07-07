@@ -123,7 +123,7 @@ clog-document object. (Private)"))
 
 (defmethod set-title ((obj clog-document) value)
   (execute obj
-           (format nil "title='~A'" (clog-connection:escape-string value)))
+           (format nil "title='~A'" (escape-to-single-quote-in-tag value)))
   value)
 (defsetf title set-title)
 
@@ -199,8 +199,8 @@ If LOAD-ONLY-ONCE is t first checks if previously loaded with load-script."))
 		(format nil "$.getScript('~A', function() {~
                             $(clog['document']).trigger('on-load-script',~
                                                             '~A')})"
-			(escape-string script-url)
-			(escape-string script-url)))
+			(escape-to-single-quote-in-js script-url)
+			(escape-to-single-quote-in-js script-url)))
 	       (cond (load-only-once
 		      (when (bordeaux-threads:wait-on-semaphore
 			     sem :timeout wait-timeout)
@@ -244,7 +244,7 @@ The handler should be installed on the document before calling load-script."))
   (:documentation "Write text to browser document object."))
 
 (defmethod put ((obj clog-document) message)
-  (execute obj (format nil "write('~A')" (escape-string message))))
+  (execute obj (format nil "write('~A')" (escape-to-single-quote-in-js message))))
 
 ;;;;;;;;;;;;;;
 ;; put-line ;;
@@ -254,7 +254,7 @@ The handler should be installed on the document before calling load-script."))
   (:documentation "Write text to browser document object with new-line."))
 
 (defmethod put-line ((obj clog-document) message)
-  (execute obj (format nil "writeln('~A')" (escape-string message))))
+  (execute obj (format nil "writeln('~A')" (escape-to-single-quote-in-js message))))
 
 ;;;;;;;;;;;;
 ;; put-br ;;
@@ -264,7 +264,7 @@ The handler should be installed on the document before calling load-script."))
   (:documentation "Write text to browser document object with <\br>new-line."))
 
 (defmethod put-br ((obj clog-document) message)
-  (execute obj (format nil "writeln('~A<\br>')" (escape-string message))))
+  (execute obj (format nil "writeln('~A<\br>')" (escape-to-single-quote-in-js message))))
 
 ;;;;;;;;;;;;;;
 ;; new-line ;;

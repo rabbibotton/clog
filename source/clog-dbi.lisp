@@ -309,7 +309,7 @@ new-row will block until on-fetch returns."))
                                   "")
                               (if class
                                   (format nil " class='~A'"
-                                          (escape-string class))
+                                          (escape-to-single-quote-in-tag class))
                                   ""))
                  :clog-type 'clog-lookup :html-id html-id :auto-place t)))
     (when label
@@ -397,7 +397,7 @@ the displayed option."
                                                "")
                                            (if class
                                                (format nil " class='~A'"
-                                                       (escape-string class))
+                                                       (escape-to-single-quote-in-tag class))
                                                ""))
                                :clog-type  'clog-db-table
                                :html-id    html-id

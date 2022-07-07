@@ -43,14 +43,14 @@ place-inside-bottom-of CLOG-OBJ.
   (create-child obj (format nil "<a~@[~a~]~@[~a~] target='~A' href='~A'>~A</a>"
                             (when class
                               (format nil " class='~A'"
-                                      (escape-string class)))
+                                      (escape-to-single-quote-in-tag class)))
 			    (when (or hidden style)
 			      (format nil " style='~@[~a~]~@[~a~]'"
 				      (when hidden "visibility:hidden;")
-				      style))
-                            (escape-string target)
-                            (escape-string link)
-                            (escape-string content))
+				      (escape-to-single-quote-in-tag style)))
+                            (escape-to-single-quote-in-tag target)
+                            (escape-to-single-quote-in-tag link)
+                            content)
                 :clog-type  'clog-a
                 :html-id    html-id
                 :auto-place auto-place))
@@ -112,7 +112,7 @@ line break and if :AUTO-PLACE (default t) place-inside-bottom-of CLOG-OBJ"))
   (create-child obj (format nil "<br~@[~A~]~@[~A~]/>"
                             (when class
                               (format nil " class='~A'"
-                                      (escape-string class)))
+                                      (escape-to-single-quote-in-tag class)))
 			    (when (or hidden style)
 			      (format nil " style='~@[~a~]~@[~a~]'"
 				      (when hidden "visibility:hidden;")
@@ -147,12 +147,12 @@ CLOG-OBJ"))
   (create-child obj (format nil "<button~@[~A~]~@[~A~]>~A</button>"
                             (when class
                               (format nil " class='~A'"
-                                      (escape-string class)))
+                                      (escape-to-single-quote-in-tag class)))
 			    (when (or hidden style)
 			      (format nil " style='~@[~a~]~@[~a~]'"
 				      (when hidden "visibility:hidden;")
-				      style))
-                            (escape-string content))
+				      (escape-to-single-quote-in-tag style)))
+                            content)
                 :clog-type  'clog-button
                 :html-id    html-id
                 :auto-place auto-place))
@@ -202,12 +202,12 @@ CLOG-OBJ. If hidden is true visiblep is set to nil."))
   (create-child obj (format nil "<div~@[~A~]~@[~A~]>~A</div>"
                             (when class
                               (format nil " class='~A'"
-                                      (escape-string class)))
+                                      (escape-to-single-quote-in-tag class)))
 			    (when (or hidden style)
 			      (format nil " style='~@[~a~]~@[~a~]'"
 				      (when hidden "visibility:hidden;")
-				      style))
-                            (escape-string content))
+				      (escape-to-single-quote-in-tag style)))
+                            content)
                 :clog-type  'clog-div
                 :html-id    html-id
                 :auto-place auto-place))
@@ -239,12 +239,12 @@ firefox and dialog does not work at all on IE."))
   (create-child obj (format nil "<dialog~@[~A~]~@[~A~]>~A</dialog>"
                             (when class
                               (format nil " class='~A'"
-                                      (escape-string class)))
+                                      (escape-to-single-quote-in-tag class)))
 			    (when (or hidden style)
 			      (format nil " style='~@[~a~]~@[~a~]'"
 				      (when hidden "visibility:hidden;")
-				      style))
-                            (escape-string content))
+				      (escape-to-single-quote-in-tag style)))
+                            content)
                 :clog-type  'clog-dialog
                 :html-id    html-id
                 :auto-place auto-place))
@@ -333,7 +333,7 @@ CLOG-OBJ"))
   (create-child obj (format nil "<hr~@[~A~]~@[~A~]/>"
                             (when class
                               (format nil " class='~A'"
-                                      (escape-string class)))
+                                      (escape-to-single-quote-in-tag class)))
 			    (when (or hidden style)
 			      (format nil " style='~@[~a~]~@[~a~]'"
 				      (when hidden "visibility:hidden;")
@@ -372,13 +372,13 @@ placing image to constrain image size."))
   (create-child obj (format nil "<img~@[~A~]~@[~A~] src='~A' alt='~A'>)"
                             (when class
                               (format nil " class='~A'"
-                                      (escape-string class)))
+                                      (escape-to-single-quote-in-tag class)))
 			    (when (or hidden style)
 			      (format nil " style='~@[~a~]~@[~a~]'"
 				      (when hidden "visibility:hidden;")
-				      style))
-                            (escape-string url-src)
-                            (escape-string alt-text))
+				      (escape-to-single-quote-in-tag style)))
+                            (escape-to-single-quote-in-tag url-src)
+                            (escape-to-single-quote-in-tag alt-text))
                 :clog-type  'clog-img
                 :html-id    html-id
                 :auto-place auto-place))
@@ -456,7 +456,7 @@ place-inside-bottom-of CLOG-OBJ."))
                             value high low maximum minimum optimum
                             (when class
                               (format nil " class='~A'"
-                                      (escape-string class)))
+                                      (escape-to-single-quote-in-tag class)))
 			    (when (or hidden style)
 			      (format nil " style='~@[~a~]~@[~a~]'"
 				      (when hidden "visibility:hidden;")
@@ -601,7 +601,7 @@ place-inside-bottom-of CLOG-OBJ."))
                             value maximum
                             (when class
                               (format nil " class='~A'"
-                                      (escape-string class)))
+                                      (escape-to-single-quote-in-tag class)))
 			    (when (or hidden style)
 			      (format nil " style='~@[~a~]~@[~a~]'"
 				      (when hidden "visibility:hidden;")
@@ -675,12 +675,12 @@ CLOG-OBJ"))
   (create-child obj (format nil "<p~@[~A~]~@[~A~]>~A</p>"
                             (when class
                               (format nil " class='~A'"
-                                      (escape-string class)))
+                                      (escape-to-single-quote-in-tag class)))
 			    (when (or hidden style)
 			      (format nil " style='~@[~a~]~@[~a~]'"
 				      (when hidden "visibility:hidden;")
-				      style))
-                            (escape-string content))
+				      (escape-to-single-quote-in-tag style)))
+                            content)
                 :clog-type  'clog-p
                 :html-id    html-id
                 :auto-place auto-place))
@@ -713,12 +713,12 @@ browser width)."))
   (create-child obj (format nil "<span~@[~A~]~@[~A~]>~A</span>"
                             (when class
                               (format nil " class='~A'"
-                                      (escape-string class)))
+                                      (escape-to-single-quote-in-tag class)))
 			    (when (or hidden style)
 			      (format nil " style='~@[~a~]~@[~a~]'"
 				      (when hidden "visibility:hidden;")
-				      style))
-                            (escape-string content))
+				      (escape-to-single-quote-in-tag style)))
+                            content)
                 :clog-type  'clog-span
                 :html-id    html-id
                 :auto-place auto-place))
@@ -760,12 +760,12 @@ SECTION-TYPE -
                             section
                             (when class
                               (format nil " class='~A'"
-                                      (escape-string class)))
+                                      (escape-to-single-quote-in-tag class)))
 			    (when (or hidden style)
 			      (format nil " style='~@[~a~]~@[~a~]'"
 				      (when hidden "visibility:hidden;")
-				      style))
-                            (escape-string content)
+				      (escape-to-single-quote-in-tag style)))
+                            content
                             section)
                 :clog-type  'clog-section
                 :html-id    html-id
@@ -809,12 +809,12 @@ PHRASE-TYPE -
                             phrase
                             (when class
                               (format nil " class='~A'"
-                                      (escape-string class)))
+                                      (escape-to-single-quote-in-tag class)))
 			    (when (or hidden style)
 			      (format nil " style='~@[~a~]~@[~a~]'"
 				      (when hidden "visibility:hidden;")
-				      style))
-                            (escape-string content)
+				      (escape-to-single-quote-in-tag style)))
+                            content
                             phrase)
                 :clog-type  'clog-phrase
                 :html-id    html-id
@@ -845,7 +845,7 @@ and if :AUTO-PLACE (default t) place-inside-bottom-of CLOG-OBJ"))
   (create-child obj (format nil "<ol~@[~A~]~@[~A~]/>"
                             (when class
                               (format nil " class='~A'"
-                                      (escape-string class)))
+                                      (escape-to-single-quote-in-tag class)))
 			    (when (or hidden style)
 			      (format nil " style='~@[~a~]~@[~a~]'"
 				      (when hidden "visibility:hidden;")
@@ -931,7 +931,7 @@ and if :AUTO-PLACE (default t) place-inside-bottom-of CLOG-OBJ"))
   (create-child obj (format nil "<ul~@[~A~]~@[~A~]/>"
                             (when class
                               (format nil " class='~A'"
-                                      (escape-string class)))
+                                      (escape-to-single-quote-in-tag class)))
 			    (when (or hidden style)
 			      (format nil " style='~@[~a~]~@[~a~]'"
 				      (when hidden "visibility:hidden;")
@@ -964,12 +964,12 @@ and if :AUTO-PLACE (default t) place-inside-bottom-of CLOG-OBJ"))
   (create-child obj (format nil "<li~@[~A~]~@[~A~]>~A</li>"
                             (when class
                               (format nil " class='~A'"
-                                      (escape-string class)))
+                                      (escape-to-single-quote-in-tag class)))
 			    (when (or hidden style)
 			      (format nil " style='~@[~a~]~@[~a~]'"
 				      (when hidden "visibility:hidden;")
-				      style))
-                            (escape-string content))
+				      (escape-to-single-quote-in-tag style)))
+                            content)
                 :clog-type  'clog-list-item
                 :html-id    html-id
                 :auto-place auto-place))
@@ -1016,7 +1016,7 @@ and if :AUTO-PLACE (default t) place-inside-bottom-of CLOG-OBJ"))
   (create-child obj (format nil "<dl~@[~A~]~@[~A~]/>"
                             (when class
                               (format nil " class='~A'"
-                                      (escape-string class)))
+                                      (escape-to-single-quote-in-tag class)))
 			    (when (or hidden style)
 			      (format nil " style='~@[~a~]~@[~a~]'"
 				      (when hidden "visibility:hidden;")
@@ -1051,12 +1051,12 @@ and if :AUTO-PLACE (default t) place-inside-bottom-of CLOG-OBJ"))
   (create-child obj (format nil "<dt~@[~A~]~@[~A~]>~A</dt>"
                             (when class
                               (format nil " class='~A'"
-                                      (escape-string class)))
+                                      (escape-to-single-quote-in-tag class)))
 			    (when (or hidden style)
 			      (format nil " style='~@[~a~]~@[~a~]'"
 				      (when hidden "visibility:hidden;")
-				      style))
-                            (escape-string content))
+				      (escape-to-single-quote-in-tag style)))
+                            content)
                 :clog-type  'clog-term
                 :html-id    html-id
                 :auto-place auto-place))
@@ -1088,12 +1088,12 @@ and if :AUTO-PLACE (default t) place-inside-bottom-of CLOG-OBJ"))
   (create-child obj (format nil "<dd~@[~A~]~@[~A~]>~A</dd>"
                             (when class
                               (format nil " class='~A'"
-                                      (escape-string class)))
+                                      (escape-to-single-quote-in-tag class)))
 			    (when (or hidden style)
 			      (format nil " style='~@[~a~]~@[~a~]'"
 				      (when hidden "visibility:hidden;")
-				      style))
-                            (escape-string content))
+				      (escape-to-single-quote-in-tag style)))
+                            content)
                 :clog-type  'clog-description
                 :html-id    html-id
                 :auto-place auto-place))
@@ -1119,7 +1119,7 @@ and if :AUTO-PLACE (default t) place-inside-bottom-of CLOG-OBJ"))
   (create-child obj (format nil "<table~@[~A~]~@[~A~]/>"
                             (when class
                               (format nil " class='~A'"
-                                      (escape-string class)))
+                                      (escape-to-single-quote-in-tag class)))
 			    (when (or hidden style)
 			      (format nil " style='~@[~a~]~@[~a~]'"
 				      (when hidden "visibility:hidden;")
@@ -1150,7 +1150,7 @@ and if :AUTO-PLACE (default t) place-inside-bottom-of CLOG-OBJ"))
   (create-child obj (format nil "<tr~@[~A~]~@[~A~]/>"
                             (when class
                               (format nil " class='~A'"
-                                      (escape-string class)))
+                                      (escape-to-single-quote-in-tag class)))
 			    (when (or hidden style)
 			      (format nil " style='~@[~a~]~@[~a~]'"
 				      (when hidden "visibility:hidden;")
@@ -1194,12 +1194,12 @@ and if :AUTO-PLACE (default t) place-inside-bottom-of CLOG-OBJ"))
                             row-span
                             (when class
                               (format nil " class='~A'"
-                                      (escape-string class)))
+                                      (escape-to-single-quote-in-tag class)))
 			    (when (or hidden style)
 			      (format nil " style='~@[~a~]~@[~a~]'"
 				      (when hidden "visibility:hidden;")
-				      style))
-                            (escape-string content))
+				      (escape-to-single-quote-in-tag style)))
+                            content)
                 :clog-type  'clog-table-column
                 :html-id    html-id
                 :auto-place auto-place))
@@ -1239,12 +1239,12 @@ and if :AUTO-PLACE (default t) place-inside-bottom-of CLOG-OBJ"))
                             row-span
                             (when class
                               (format nil " class='~A'"
-                                      (escape-string class)))
+                                      (escape-to-single-quote-in-tag class)))
 			    (when (or hidden style)
 			      (format nil " style='~@[~a~]~@[~a~]'"
 				      (when hidden "visibility:hidden;")
-				      style))
-                            (escape-string content))
+				      (escape-to-single-quote-in-tag style)))
+                            content)
                 :clog-type  'clog-table-heading
                 :html-id    html-id
                 :auto-place auto-place))
@@ -1271,7 +1271,7 @@ and if :AUTO-PLACE (default t) place-inside-bottom-of CLOG-OBJ"))
   (create-child obj (format nil "<thead~@[~A~]~@[~A~]/>"
                             (when class
                               (format nil " class='~A'"
-                                      (escape-string class)))
+                                      (escape-to-single-quote-in-tag class)))
 			    (when (or hidden style)
 			      (format nil " style='~@[~a~]~@[~a~]'"
 				      (when hidden "visibility:hidden;")
@@ -1302,7 +1302,7 @@ and if :AUTO-PLACE (default t) place-inside-bottom-of CLOG-OBJ"))
   (create-child obj (format nil "<tbody~@[~A~]~@[~A~]/>"
                             (when class
                               (format nil " class='~A'"
-                                      (escape-string class)))
+                                      (escape-to-single-quote-in-tag class)))
 			    (when (or hidden style)
 			      (format nil " style='~@[~a~]~@[~a~]'"
 				      (when hidden "visibility:hidden;")
@@ -1338,12 +1338,12 @@ and if :AUTO-PLACE (default t) place-inside-bottom-of CLOG-OBJ"))
   (create-child obj (format nil "<caption~@[~A~]~@[~A~]/>~A</caption>"
                             (when class
                               (format nil " class='~A'"
-                                      (escape-string class)))
+                                      (escape-to-single-quote-in-tag class)))
 			    (when (or hidden style)
 			      (format nil " style='~@[~a~]~@[~a~]'"
 				      (when hidden "visibility:hidden;")
-				      style))
-                            (escape-string content))
+				      (escape-to-single-quote-in-tag style)))
+                            content)
                 :clog-type  'clog-table-caption
                 :html-id    html-id
                 :auto-place auto-place))
@@ -1370,7 +1370,7 @@ and if :AUTO-PLACE (default t) place-inside-bottom-of CLOG-OBJ"))
   (create-child obj (format nil "<tfoot~@[~A~]~@[~A~]/>"
                             (when class
                               (format nil " class='~A'"
-                                      (escape-string class)))
+                                      (escape-to-single-quote-in-tag class)))
 			    (when (or hidden style)
 			      (format nil " style='~@[~a~]~@[~a~]'"
 				      (when hidden "visibility:hidden;")
@@ -1402,7 +1402,7 @@ and if :AUTO-PLACE (default t) place-inside-bottom-of CLOG-OBJ"))
   (create-child obj (format nil "<colgroup~@[~A~]~@[~A~]/>"
                             (when class
                               (format nil " class='~A'"
-                                      (escape-string class)))
+                                      (escape-to-single-quote-in-tag class)))
 			    (when (or hidden style)
 			      (format nil " style='~@[~a~]~@[~a~]'"
 				      (when hidden "visibility:hidden;")
@@ -1440,7 +1440,7 @@ and if :AUTO-PLACE (default t) place-inside-bottom-of CLOG-OBJ"))
                             column-span
                             (when class
                               (format nil " class='~A'"
-                                      (escape-string class)))
+                                      (escape-to-single-quote-in-tag class)))
 			    (when (or hidden style)
 			      (format nil " style='~@[~a~]~@[~a~]'"
 				      (when hidden "visibility:hidden;")
@@ -1475,12 +1475,12 @@ CLOG-OBJ. If hidden is true visiblep is set to nil."))
   (create-child obj (format nil "<details~@[~A~]~@[~A~]>~A</details>"
                             (when class
                               (format nil " class='~A'"
-                                      (escape-string class)))
+                                      (escape-to-single-quote-in-tag class)))
                             (when (or hidden style)
                               (format nil " style='~@[~a~]~@[~a~]'"
                                       (when hidden "visibility:hidden;")
-                                      style))
-                            (escape-string content))
+                                      (escape-to-single-quote-in-tag style)))
+                            content)
                 :clog-type  'clog-details
                 :html-id    html-id
                 :auto-place auto-place))
@@ -1532,12 +1532,12 @@ object for drop reveal."))
   (create-child obj (format nil "<summary~@[~A~]~@[~A~]>~A</summary>"
                             (when class
                               (format nil " class='~A'"
-                                      (escape-string class)))
+                                      (escape-to-single-quote-in-tag class)))
 			    (when (or hidden style)
 			      (format nil " style='~@[~a~]~@[~a~]'"
 				      (when hidden "visibility:hidden;")
-				      style))
-                            (escape-string content))
+				      (escape-to-single-quote-in-tag style)))
+                            content)
                 :clog-type  'clog-summary
                 :html-id    html-id
                 :auto-place auto-place))

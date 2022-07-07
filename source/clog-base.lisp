@@ -383,8 +383,8 @@ result or if time out DEFAULT-ANSWER. see JQUERY-QUERY (Internal)"))
 
 (defmethod set-property ((obj clog-obj) property-name value)
   (jquery-execute obj (format nil "prop('~A','~A')"
-                              property-name
-                              (escape-string value)))
+                              (escape-to-single-quote-in-js property-name)
+                              (escape-to-single-quote-in-js value)))
   value)
 (defsetf property set-property)
 
@@ -402,7 +402,7 @@ result or if time out DEFAULT-ANSWER. see JQUERY-QUERY (Internal)"))
   (:documentation "Set height VALUE for CLOG-OBJ"))
 
 (defmethod set-height ((obj clog-obj) value)
-  (jquery-execute obj (format nil "height('~A')" (escape-string value)))
+  (jquery-execute obj (format nil "height('~A')" (escape-to-single-quote-in-js value)))
   value)
 (defsetf height set-height)
 
@@ -420,7 +420,7 @@ result or if time out DEFAULT-ANSWER. see JQUERY-QUERY (Internal)"))
   (:documentation "Set width VALUE for CLOG-OBJ"))
 
 (defmethod set-width ((obj clog-obj) value)
-  (jquery-execute obj (format nil "width('~A')" (escape-string value)))
+  (jquery-execute obj (format nil "width('~A')" (escape-to-single-quote-in-js value)))
   value)
 (defsetf width set-width)
 

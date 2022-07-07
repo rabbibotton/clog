@@ -72,7 +72,7 @@
 
 (defmethod system-clipboard-write ((obj clog-obj) text)
   (js-execute obj (format nil "navigator.clipboard.writeText('~A')"
-			  (escape-string text))))
+			  (escape-to-single-quote-in-js text))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; system-clipboard-read ;;

@@ -145,11 +145,38 @@ if str is NIL returns empty string otherwise returns nil."
       nil
       (let ((res))
         (setf res (format nil "~@[~A~]" str))
-        (setf res (ppcre:regex-replace-all "\\x22" res "\\x22"))
-        (setf res (ppcre:regex-replace-all "\\x27" res "\\x27"))
-        (setf res (ppcre:regex-replace-all "\\x0A" res "\\x0A"))
-        (setf res (ppcre:regex-replace-all "\\x0D" res "\\x0D"))
+        (setf res (ppcre:regex-replace-all "\\x22" res "\\x22")) ;; double quote
+        (setf res (ppcre:regex-replace-all "\\x27" res "\\x27")) ;; single quote
+        (setf res (ppcre:regex-replace-all "\\x0A" res "\\x0A")) ;; \n
+        (setf res (ppcre:regex-replace-all "\\x0D" res "\\x0D")) ;; \r
         res)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; escape-to-single-quote-in-tag ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defun escape-to-single-quote-in-tag (str)
+  "Escape STR for placing inside single quoted string inside HTML tag."
+  (let ((res))
+    (setf res (format nil "~@[~A~]" str))
+    (setf res (ppcre:regex-replace-all "\\x27" res "&#39;")) ;; single quote
+    (setf res (ppcre:regex-replace-all "\\x0A" res "&#10;")) ;; \n
+    (setf res (ppcre:regex-replace-all "\\x0D" res "&#13;")) ;; \r
+    res))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; escape-to-single-quote-in-js ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defun escape-to-single-quote-in-js (str)
+  "Escape STR for placing inside single quoted string inside javascript."
+  (let ((res))
+    (setf res (format nil "~@[~A~]" str))
+    (setf res (ppcre:regex-replace-all "\\\\" res "\\\\\\\\"))
+    (setf res (ppcre:regex-replace-all "\\x27" res "\\\\'")) ;; single quote
+    (setf res (ppcre:regex-replace-all "\\x0A" res "\\n")) ;; \n
+    (setf res (ppcre:regex-replace-all "\\x0D" res "\\r")) ;; \r
+    res))
 
 ;;;;;;;;;;;;;;
 ;; lf-to-br ;;
