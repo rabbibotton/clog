@@ -34,8 +34,8 @@ TEXT method to access blocks content."))
                                  (media "all")
                                  (html-id nil) (auto-place t))
   (create-child obj (format nil "<style media='~A'>~A</style>"
-                            (escape-string media)
-                            (escape-string content))
+                            (escape-string media :html t)
+                            (escape-string content :html t))
                 :clog-type  'clog-style-block
                 :html-id    html-id
                 :auto-place auto-place))

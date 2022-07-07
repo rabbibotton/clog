@@ -31,7 +31,7 @@
   (create-child obj (format nil "<canvas~A~A width=~A height=~A/>"
                             (if class
                                 (format nil " class='~A'"
-                                        (escape-string class))
+                                        (escape-string class :html t))
                                 "")
                             (if hidden
                                 " style='visibility:hidden;'"

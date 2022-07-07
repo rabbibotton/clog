@@ -93,7 +93,7 @@ doing file upload use multipart/form-data"))
                         target
                         (when class
                           (format nil " class='~A'"
-                                  (escape-string class)))
+                                  (escape-string class :html t)))
 			(when (or hidden style)
 			  (format nil " style='~@[~a~]~@[~a~]'"
 				  (when hidden "visibility:hidden;")
@@ -225,16 +225,16 @@ clog-form in the DOM. The radio ELEMENT-TYPE groups by NAME."))
 				  (auto-place t))
   (let ((element (create-child
                   obj (format nil "<input type='~A'~@[~A~]~@[~A~]~@[~A~]~@[~A~]/>"
-                              (escape-string element-type)
+                              (escape-string element-type :html t)
                               (when class
                                 (format nil " class='~A'"
-                                        (escape-string class)))
+                                        (escape-string class :html t)))
 			      (when (or hidden style)
 				(format nil " style='~@[~a~]~@[~a~]'"
 					(when hidden "visibility:hidden;")
 					style))
-                              (when value (format nil " value='~A'" value))
-                              (when name  (format nil " name='~A'" name)))
+                              (when value (format nil " value='~A'" (escape-string value :html t)))
+                              (when name  (format nil " name='~A'" (escape-string name :html t))))
                   :clog-type  'clog-form-element
                   :html-id    html-id
                   :auto-place auto-place)))
@@ -767,12 +767,12 @@ virtual keyboards."))
                             (when label-for (html-id label-for))
                             (when class
                               (format nil " class='~A'"
-                                      (escape-string class)))
+                                      (escape-string class :html t)))
 			    (when (or hidden style)
 			      (format nil " style='~@[~a~]~@[~a~]'"
 				      (when hidden "visibility:hidden;")
 				      style))
-                            (escape-string content))
+                            content)
                 :clog-type  'clog-label
 		:html-id    html-id
 		:auto-place auto-place))
@@ -811,7 +811,7 @@ virtual keyboards."))
   (create-child obj (format nil "<fieldset~@[~A~]~@[~A~]>~@[~A~]</fieldset>"
                               (when class
                                 (format nil " class='~A'"
-                                        (escape-string class)))
+                                        (escape-string class :html t)))
 			      (when (or hidden style)
 				(format nil " style='~@[~a~]~@[~a~]'"
 					(when hidden "visibility:hidden;")
@@ -855,12 +855,12 @@ virtual keyboards."))
                     name columns rows
                     (when class
                       (format nil " class='~A'"
-                              (escape-string class)))
+                              (escape-string class :html t)))
 		    (when (or hidden style)
 		      (format nil " style='~@[~a~]~@[~a~]'"
 			      (when hidden "visibility:hidden;")
 			      style))
-                    (escape-string value))
+                    (escape-string value :html t))
             :clog-type  'clog-text-area
 	    :html-id    html-id
 	    :auto-place auto-place)))
@@ -971,12 +971,12 @@ virtual keyboards."))
   (create-child obj (format nil "<legend~@[~A~]~@[~A~]>~A</legend>"
                             (when class
                                 (format nil " class='~A'"
-                                        (escape-string class)))
+                                        (escape-string class :html t)))
 			    (when (or hidden style)
 			      (format nil " style='~@[~a~]~@[~a~]'"
 				      (when hidden "visibility:hidden;")
 				      style))
-                            (escape-string content))
+                            content)
                 :clog-type  'clog-legend
 		:html-id    html-id
 		:auto-place auto-place))
@@ -1014,7 +1014,7 @@ optionally fill in with contents of data-list."))
   (:documentation "Add option VALUE to data-list."))
 
 (defmethod add-option ((obj clog-data-list) value)
-  (create-child obj (format nil "<option value='~A'>" (escape-string value))
+  (create-child obj (format nil "<option value='~A'>" (escape-string value :html t))
                 :clog-type 'clog-element :auto-place t))
 
 ;;;;;;;;;;;;;;;;;
@@ -1058,7 +1058,7 @@ optionally fill in with contents of data-list."))
                               (when name (format nil " name='~A'" name))
                               (when class
                                 (format nil " class='~A'"
-                                        (escape-string class)))
+                                        (escape-string class :html t)))
 			      (when (or hidden style)
 				(format nil " style='~@[~a~]~@[~a~]'"
 					(when hidden "visibility:hidden;")
@@ -1081,8 +1081,8 @@ optionally fill in with contents of data-list."))
   (create-child obj (format nil "<option~@[~A~]~@[~A~] value='~A'>~A</option>"
                             (when selected " selected")
 			    (when disabled " disabled")
-                            (escape-string value)
-                            (escape-string content))
+                            (escape-string value :html t)
+                            content)
                 :clog-type 'clog-element :auto-place t))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;
@@ -1105,7 +1105,7 @@ optionally fill in with contents of data-list."))
 
 (defmethod add-select-optgroup ((obj clog-select) content)
   (create-child obj (format nil "<optgroup label='~A'/>"
-                            (escape-string content))
+                            content)
                 :clog-type 'clog-element :auto-place t))
 
 ;;;;;;;;;;;;;;;;;
@@ -1150,10 +1150,10 @@ or CLOG Data-List objects."));
                             (when selected " selected")
                             (when disabled " disabled")
                             (when value (format nil " value='~A'"
-						(escape-string value)))
+						(escape-string value :html t)))
                             (when class
                               (format nil " class='~A'"
-                                      (escape-string class)))
+                                      (escape-string class :html t)))
 			    (when (or hidden style)
 			      (format nil " style='~@[~a~]~@[~a~]'"
 				      (when hidden "visibility:hidden;")
@@ -1206,7 +1206,7 @@ or CLOG Data-List objects."));
                             content
                             (when class
                               (format nil " class='~A'"
-                                      (escape-string class)))
+                                      (escape-string class :html t)))
 			    (when (or hidden style)
 			      (format nil " style='~@[~a~]~@[~a~]'"
 				      (when hidden "visibility:hidden;")

@@ -138,17 +138,27 @@ CLOG-OBJ unless :NAME is set and is used instead."))
 ;; escape-string ;;
 ;;;;;;;;;;;;;;;;;;;
 
-(defun escape-string (str &key (no-nil nil))
+(defun escape-string (str &key (no-nil nil) (html nil))
   "Escape STR for sending to browser script. If no-nil is t (default is nil)
-if str is NIL returns empty string otherwise returns nil."
+if str is NIL returns empty string otherwise returns nil. If html is t the
+quotes are changed to html entities and \n and \r are eliminated. Escape
+string is ues for wire readiness i.e. ability to be evaluated client side
+and not for security purposes or html escapes."
   (if (and (not str) (not no-nil))
       nil
       (let ((res))
         (setf res (format nil "~@[~A~]" str))
-        (setf res (ppcre:regex-replace-all "\\x22" res "\\x22"))   ; "
-        (setf res (ppcre:regex-replace-all "\\x27" res "\\x27"))   ; '
-        (setf res (ppcre:regex-replace-all "\\x0A" res "\\x0A"))   ; \n
-        (setf res (ppcre:regex-replace-all "\\x0D" res "\\x0D"))   ; \r
+	(setf res (ppcre:regex-replace-all "\\x5C" res "\\x5C")) ; \
+	(cond (html
+               (setf res (ppcre:regex-replace-all "\\x22" res "&#x22")) ; "
+               (setf res (ppcre:regex-replace-all "\\x27" res "&#x27")) ; '
+               (setf res (ppcre:regex-replace-all "\\x0A" res "")) ; \n
+               (setf res (ppcre:regex-replace-all "\\x0D" res ""))) ; \r
+	      (t
+               (setf res (ppcre:regex-replace-all "\\x22" res "\\x22")) ; "
+               (setf res (ppcre:regex-replace-all "\\x27" res "\\x27")) ; '
+               (setf res (ppcre:regex-replace-all "\\x0A" res "\\x0A")) ; \n
+               (setf res (ppcre:regex-replace-all "\\x0D" res "\\x0D")))) ; \r
         res)))
 
 ;;;;;;;;;;;;;;

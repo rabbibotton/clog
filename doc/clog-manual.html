@@ -549,10 +549,13 @@ their <a href="#CLOG:HTML-ID%20GENERIC-FUNCTION" title="CLOG:HTML-ID GENERIC-FUN
 <a id="CLOG:ESCAPE-STRING%20FUNCTION"></a></p>
 
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#CLOG:ESCAPE-STRING%20FUNCTION" >ESCAPE-STRING</a></span></span> <span class="locative-args">STR &amp;KEY (NO-NIL <code>NIL</code>)</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#CLOG:ESCAPE-STRING%20FUNCTION" >ESCAPE-STRING</a></span></span> <span class="locative-args">STR &amp;KEY (NO-NIL <code>NIL</code>) (HTML <code>NIL</code>)</span></span></p>
 
 <p>Escape <code>STR</code> for sending to browser script. If no-nil is t (default is nil)
-if str is <code>NIL</code> returns empty string otherwise returns nil.</p></li>
+if str is <code>NIL</code> returns empty string otherwise returns nil. If html is t the
+quotes are changed to html entities and n and r are eliminated. Escape
+string is ues for wire readiness i.e. ability to be evaluated client side
+and not for security purposes or html escapes.</p></li>
 </ul>
 
 <p><a id="x-28CLOG-3ALF-TO-BR-20FUNCTION-29"></a>

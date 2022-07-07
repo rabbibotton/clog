@@ -1364,12 +1364,12 @@ Calls on-input with input box contents or nil if canceled."
                    (format nil "<input type='text' id='~A-input' size='~A' value='~A'>"
                            html-id
                            size
-                           (escape-string default-value))
+                           (escape-string default-value :html t))
                    (format nil "<textarea id='~A-input' cols='~A' rows='~A'>~A</textarea>"
                            html-id
                            size
                            rows
-                           (escape-string default-value))))
+                           (escape-string default-value :html t))))
          (win  (create-gui-window obj
                                   :title          title
                                   :content        (format nil
