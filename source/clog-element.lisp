@@ -60,7 +60,7 @@ CONNECTION-ID to it and then return it. The HTML-ID must be unique. (private)"
   (make-clog-element connection-id html-id))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Low Level  - clog-element
+;; Low Level - clog-element
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;;;;;;;;;;;;;;;;;;

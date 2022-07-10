@@ -1008,8 +1008,7 @@ of controls and double click to select control."
                                                (lambda (body)~
                                                  (clog:debug-mode body)~
                                                  ~A
-                                                 (create-~A body)) ~A:path \"/test\")~
-                                                 (clog:open-browser :url \"http://127.0.0.1:8080/test\")"
+                                                 (create-~A body)) ~A:path \"/test\")"
                                        form-string
                                        (if custom-boot
                                            ""
@@ -1020,6 +1019,7 @@ of controls and double click to select control."
                                            (format nil ":boot-file \"~A\" " custom-boot)
                                            ""))
                                :eval-in-package package)))
+    (open-window (window (connection-body obj)) "http://127.0.0.1:8080/test")
     (alert-dialog obj result :title "Eval Result")))
 
 (defun on-show-control-properties-win (obj)
@@ -1772,7 +1772,7 @@ of controls and double click to select control."
             (destroy txt-area)
             (remhash (format nil "~A-link" panel-uid) *app-sync-hash*)))
     (unless url-launch
-      (open-browser :url link))))
+      (open-window (window (connection-body obj)) link))))
 
 (defun on-help-about-builder (obj)
   "Open about box"
