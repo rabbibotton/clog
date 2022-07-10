@@ -1030,7 +1030,7 @@ of controls and double click to select control."
 						     :width 400
 						     :top 40
 						     :right 0 :bottom 0
-						     :class "w3-border"))
+						     :class "w3-border-left"))
 	 (content (create-panel panel :width 390 :top 0 :right 0 :bottom 0))
          (side-panel (create-panel panel :top 0 :left 0 :bottom 0 :width 10))
          (control-list (create-table content)))
@@ -1098,7 +1098,7 @@ of controls and double click to select control."
 						       :width 220
 						       :top 40
 						       :left 0 :bottom 0
-						       :class "w3-border"))
+						       :class "w3-border-right"))
          (side-panel   (create-panel content :top 0 :right 0 :bottom 0 :width 10))
 	 (sheight      (floor (/ (height content) 2)))
 	 (divider      (create-panel content :top sheight :height 10 :left 0 :right 10))
