@@ -142,7 +142,7 @@ CLOG-OBJ unless :NAME is set and is used instead."))
   "Escape STR for sending to browser script. If no-nil is t (default is nil)
 if str is NIL returns empty string otherwise returns nil. If html is t the
 quotes are changed to html entities and \n and \r are eliminated. Escape
-string is ues for wire readiness i.e. ability to be evaluated client side
+string is used for wire readiness i.e. ability to be evaluated client side
 and not for security purposes or html escapes."
   (if (and (not str) (not no-nil))
       nil
