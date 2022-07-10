@@ -490,7 +490,7 @@ Additionally for forms get/setf the value."))
 (defmethod set-text-value ((obj clog-element) value)
   (jquery-execute obj
     (format nil "contents().not(~A.children()).get(0).nodeValue='~A'"
-            (jquery obj) value)))
+            (jquery obj) (escape-string value))))
 
 (defsetf text-value set-text-value)
 
