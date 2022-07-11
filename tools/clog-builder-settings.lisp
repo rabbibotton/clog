@@ -333,7 +333,10 @@
 
 (defparameter *props-text*
   `((:name "text"
-     :setf clog:text-value)))
+     :get  ,(lambda (control)
+              (text-value control))
+     :set  ,(lambda (control obj)
+              (setf (text-value control) (text obj))))))
 
 (defparameter *props-css*
   `((:name "css classes"

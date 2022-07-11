@@ -438,9 +438,8 @@ have this set true ever. Autofocus on element when form loaded."))
 (defmethod text-value ((obj clog-form-element))
   (property obj "value"))
 
-(defmethod set-text-value ((obj clog-form-element) value)
+(defmethod (setf text-value) (value (obj clog-form-element))
   (setf (property obj "value") value))
-(defsetf text-value set-text-value)
 
 ;;;;;;;;;;;;;;;;;
 ;; radio-value ;;

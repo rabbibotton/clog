@@ -484,15 +484,13 @@ Additionally for forms get/setf the value."))
   (jquery-query obj (format nil "contents().not(~A.children()).text()"
                             (jquery obj))))
 
-(defgeneric set-text-value (clog-element value)
+(defgeneric (setf text-value) (value clog-element)
   (:documentation "Set text-value to VALUE for CLOG-ELEMENT"))
 
-(defmethod set-text-value ((obj clog-element) value)
+(defmethod (setf text-value) (value (obj clog-element))
   (jquery-execute obj
     (format nil "contents().not(~A.children()).get(0).nodeValue='~A'"
             (jquery obj) (escape-string value))))
-
-(defsetf text-value set-text-value)
 
 ;;;;;;;;;;;;;;;;;;;;
 ;; text-direction ;;

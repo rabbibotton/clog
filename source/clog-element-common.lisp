@@ -483,9 +483,8 @@ place-inside-bottom-of CLOG-OBJ."))
 (defmethod text-value ((obj clog-meter))
   (property obj "value"))
 
-(defmethod set-text-value ((obj clog-meter) value)
+(defmethod (setf text-value) (value (obj clog-meter))
   (setf (property obj "value") value))
-(defsetf text-value set-text-value)
 
 ;;;;;;;;;;
 ;; high ;;
@@ -592,7 +591,7 @@ place-inside-bottom-of CLOG-OBJ."))
 
 (defmethod create-progress-bar ((obj clog-obj) &key (value 0)
                                                  (maximum 100)
-						 (style nil)
+                                                 (style nil)
                                                  (hidden nil)
                                                  (class nil)
                                                  (html-id nil)
@@ -602,10 +601,10 @@ place-inside-bottom-of CLOG-OBJ."))
                             (when class
                               (format nil " class='~A'"
                                       (escape-string class :html t)))
-			    (when (or hidden style)
-			      (format nil " style='~@[~a~]~@[~a~]'"
-				      (when hidden "visibility:hidden;")
-				      style)))
+                            (when (or hidden style)
+                              (format nil " style='~@[~a~]~@[~a~]'"
+                                      (when hidden "visibility:hidden;")
+                                      style)))
                 :clog-type  'clog-progress-bar
                 :html-id    html-id
                 :auto-place auto-place))
@@ -628,9 +627,8 @@ place-inside-bottom-of CLOG-OBJ."))
 (defmethod text-value ((obj clog-progress-bar))
   (property obj "value"))
 
-(defmethod set-text-value ((obj clog-progress-bar) value)
+(defmethod (setf text-value) (value (obj clog-progress-bar))
   (setf (property obj "value") value))
-(defsetf text-value set-text-value)
 
 ;;;;;;;;;;;;;
 ;; maximum ;;

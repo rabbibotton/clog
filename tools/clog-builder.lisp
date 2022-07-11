@@ -796,7 +796,11 @@ not a temporary attached one when using select-control."
                    (setf editor td2)
                    (setf (editablep td2) (funcall (fourth item) control td1 td2)))
                   (t
-                   (setf editor (create-text-area td2))
+                   ;; (setf editor (clog-ace:create-clog-ace-element td2))
+                   ;; (setf (clog-ace:theme editor) "ace/theme/xcode")
+                   ;; (setf (clog-ace:mode editor) "ace/mode/lisp")
+                   ;; (setf (clog-ace:tab-size editor) 2)
+		   (setf editor (create-text-area td2))
                    (setf (spellcheckp editor) nil)
                    (setf (width editor) "95%"))) ; leave space for scroll bar
             (setf (text-value editor) (second item))
