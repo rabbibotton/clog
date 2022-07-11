@@ -177,13 +177,13 @@
 
 (defparameter *props-form-values*
   `((:name "value"
-     :setf clog:value)
+     :prop "value")
     (:name "default value"
      :prop "defaultValue")
     (:name "place holder"
      :prop "placeholder")
     (:name "name on form"
-     :setf clog:name)
+     :prop "name")
     (:name "size"
      :prop "size")
     (:name "image url"
