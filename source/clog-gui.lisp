@@ -219,13 +219,12 @@ create-gui-menu-bar."))
   (let ((app (connection-data-item obj "clog-gui")))
     (menu app)))
 
-(defgeneric set-menu-bar (clog-obj value)
+(defgeneric (setf menu-bar) (value clog-obj)
   (:documentation "Set window menu-bar"))
 
-(defmethod set-menu-bar ((obj clog-obj) value)
+(defmethod (setf menu-bar) (value (obj clog-obj))
   (let ((app (connection-data-item obj "clog-gui")))
     (setf (menu app) value)))
-(defsetf menu-bar set-menu-bar)
 
 ;;;;;;;;;;;;;;;;;;;;;
 ;; menu-bar-height ;;
@@ -827,14 +826,13 @@ the window will be set to keep-on-top always."))
 (defmethod window-title ((obj clog-gui-window))
   (inner-html (win-title obj)))
 
-(defgeneric set-window-title (clog-gui-window value)
+(defgeneric (setf window-title) (value clog-gui-window)
   (:documentation "Set window title"))
 
-(defmethod set-window-title ((obj clog-gui-window) value)
+(defmethod (setf window-title) (value (obj clog-gui-window))
   (when (window-select-item obj)
     (setf (inner-html (window-select-item obj)) value))
   (setf (inner-html (win-title obj)) value))
-(defsetf window-title set-window-title)
 
 ;;;;;;;;;;;;;;;;;;;;
 ;; window-content ;;

@@ -122,14 +122,13 @@ after attachment is changed to one unique to this session."))
   (jquery-query obj (format nil "css('~A')" style-name)
                 :default-answer default-answer))
 
-(defgeneric set-style (clog-element style-name value)
+(defgeneric (setf style) (value clog-element style-name)
   (:documentation "Set css style."))
 
-(defmethod set-style ((obj clog-element) style-name value)
+(defmethod (setf style) (value (obj clog-element) style-name)
   (jquery-execute obj (format nil "css('~A','~A')"
                               style-name (escape-string value)))
   value)
-(defsetf style set-style)
 
 (defgeneric set-styles (clog-element style-list)
   (:documentation "Set css styles using a list of lists of name value pairs."))
@@ -163,14 +162,13 @@ after attachment is changed to one unique to this session."))
   (jquery-execute obj (format nil "removeAttr('~A')" attribute-name))
   attribute-name)
 
-(defgeneric set-attribute (clog-element attribute-name value)
+(defgeneric (setf attribute) (value clog-element attribute-name)
   (:documentation "Set html tag attribute."))
 
-(defmethod set-attribute ((obj clog-element) attribute-name value)
+(defmethod (setf attribute) (value (obj clog-element) attribute-name)
   (jquery-execute obj (format nil "attr('~A','~A')"
                               attribute-name (escape-string value)))
   value)
-(defsetf attribute set-attribute)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Placement  - clog-element
@@ -245,12 +243,11 @@ after attachment is changed to one unique to this session."))
 (defmethod access-key ((obj clog-element))
   (property obj "accessKey"))
 
-(defgeneric set-access-key (clog-element value)
+(defgeneric (setf access-key) (value clog-element)
   (:documentation "Set access-key VALUE for CLOG-ELEMENT"))
 
-(defmethod set-access-key ((obj clog-element) value)
+(defmethod (setf access-key) (value (obj clog-element))
   (setf (property obj "accessKey") value))
-(defsetf access-key set-access-key)
 
 ;;;;;;;;;;;;;;;;;;;;
 ;; advisory-title ;;
@@ -264,12 +261,11 @@ elements a tool tip."))
 (defmethod advisory-title ((obj clog-element))
   (property obj "title"))
 
-(defgeneric set-advisory-title (clog-element value)
+(defgeneric (setf advisory-title) (value clog-element)
   (:documentation "Set advisory-title VALUE for CLOG-ELEMENT"))
 
-(defmethod set-advisory-title ((obj clog-element) value)
+(defmethod (setf advisory-title) (value (obj clog-element))
   (setf (property obj "title") value))
-(defsetf advisory-title set-advisory-title)
 
 ;;;;;;;;;;;;;;;;;;;;
 ;; css-class-name ;;
@@ -283,12 +279,11 @@ for adding and removing individual or groups of classes in an easier way."))
 (defmethod css-class-name ((obj clog-element))
   (property obj "className"))
 
-(defgeneric set-css-class-name (clog-element value)
+(defgeneric (setf css-class-name) (value clog-element)
   (:documentation "Set css-class-name VALUE for CLOG-ELEMENT"))
 
-(defmethod set-css-class-name ((obj clog-element) value)
+(defmethod (setf css-class-name) (value (obj clog-element))
   (setf (property obj "className") value))
-(defsetf css-class-name set-css-class-name)
 
 ;;;;;;;;;;;;;;;
 ;; editablep ;;
@@ -301,12 +296,11 @@ content editable, even non-form types in most browsers."))
 (defmethod editablep ((obj clog-element))
   (js-true-p (property obj "isContentEditable")))
 
-(defgeneric set-editablep (clog-element value)
+(defgeneric (setf editablep) (value clog-element)
   (:documentation "Set editable VALUE for CLOG-ELEMENT"))
 
-(defmethod set-editablep ((obj clog-element) value)
+(defmethod (setf editablep) (value (obj clog-element))
   (setf (property obj "contentEditable") (p-true-js value)))
-(defsetf editablep set-editablep)
 
 ;;;;;;;;;;;;;;;;
 ;; draggablep ;;
@@ -321,12 +315,11 @@ See clog-base.lisp"))
 (defmethod draggablep ((obj clog-element))
   (js-true-p (property obj "draggable")))
 
-(defgeneric set-draggablep (clog-element value)
+(defgeneric (setf draggablep) (value clog-element)
   (:documentation "Set draggablep VALUE for CLOG-ELEMENT"))
 
-(defmethod set-draggablep ((obj clog-element) value)
+(defmethod (setf draggablep) (value (obj clog-element))
   (setf (property obj "draggable") (p-true-js value)))
-(defsetf draggablep set-draggablep)
 
 ;;;;;;;;;;;;;
 ;; hiddenp ;;
@@ -342,14 +335,13 @@ setting display (None)."))
   (unless (equalp (attribute obj "hidden") "undefined")
     t))
 
-(defgeneric set-hiddenp (clog-element value)
+(defgeneric (setf hiddenp) (value clog-element)
   (:documentation "Set hiddenp VALUE for CLOG-ELEMENT"))
 
-(defmethod set-hiddenp ((obj clog-element) value)
+(defmethod (setf hiddenp) (value (obj clog-element))
   (if value
       (setf (attribute obj "hidden") t)
       (remove-attribute obj "hidden")))
-(defsetf hiddenp set-hiddenp)
 
 ;;;;;;;;;;;;;;
 ;; visiblep ;;
@@ -367,14 +359,13 @@ Note: that each property, visiblep, hiddenp and display (None) all work
 (defmethod visiblep ((obj clog-element))
   (equalp (style obj "visibility") "visible"))
 
-(defgeneric set-visiblep (clog-element value)
+(defgeneric (setf visiblep) (value clog-element)
   (:documentation "Set visiblep VALUE for CLOG-ELEMENT"))
 
-(defmethod set-visiblep ((obj clog-element) value)
+(defmethod (setf visiblep) (value (obj clog-element))
   (if value
       (setf (style obj "visibility") "visible")
       (setf (style obj "visibility") "hidden")))
-(defsetf visiblep set-visiblep)
 
 ;;;;;;;;;;;;;;;;
 ;; inner-html ;;
@@ -391,13 +382,12 @@ lost forever."))
 (defmethod inner-html ((obj clog-element))
   (jquery-query obj "html()"))
 
-(defgeneric set-inner-html (clog-element value)
+(defgeneric (setf inner-html) (value clog-element)
   (:documentation "Set inner-html VALUE for CLOG-ELEMENT"))
 
-(defmethod set-inner-html ((obj clog-element) value)
+(defmethod (setf inner-html) (value (obj clog-element))
   (jquery-execute obj (format nil "html('~A')" (escape-string value)))
   value)
-(defsetf inner-html set-inner-html)
 
 ;;;;;;;;;;;;;;;;
 ;; outer-html ;;
@@ -421,12 +411,11 @@ spell checking if Editable is also true."))
 (defmethod spellcheckp ((obj clog-element))
   (js-true-p (attribute obj "spellcheck")))
 
-(defgeneric set-spellcheckp (clog-element value)
+(defgeneric (setf spellcheckp) (value clog-element)
   (:documentation "Set spellcheckp VALUE for CLOG-ELEMENT"))
 
-(defmethod set-spellcheckp ((obj clog-element) value)
+(defmethod (setf spellcheckp) (value (obj clog-element))
   (setf (attribute obj "spellcheck") (p-true-js value)))
-(defsetf spellcheckp set-spellcheckp)
 
 ;;;;;;;;;;;;;;;
 ;; tab-index ;;
@@ -440,12 +429,11 @@ Normally index follows normal sequence of elements."))
 (defmethod tab-index ((obj clog-element))
   (property obj "tabindex"))
 
-(defgeneric set-tab-index (clog-element value)
+(defgeneric (setf tab-index) (value clog-element)
   (:documentation "Set tab-index VALUE for CLOG-ELEMENT"))
 
-(defmethod set-tab-index ((obj clog-element) value)
+(defmethod (setf tab-index) (value (obj clog-element))
   (setf (property obj "tabindex") value))
-(defsetf tab-index set-tab-index)
 
 ;;;;;;;;;;
 ;; text ;;
@@ -463,13 +451,12 @@ Normally index follows normal sequence of elements."))
 (defmethod text ((obj clog-element))
   (jquery-query obj "text()"))
 
-(defgeneric set-text (clog-element value)
+(defgeneric (setf text) (value clog-element)
   (:documentation "Set text VALUE for CLOG-ELEMENT"))
 
-(defmethod set-text ((obj clog-element) value)
+(defmethod (setf text) (value (obj clog-element))
   (jquery-execute obj (format nil "text('~A')" (escape-string value)))
   value)
-(defsetf text set-text)
 
 ;;;;;;;;;;;;;;;;
 ;; text-value ;;
@@ -504,12 +491,11 @@ Additionally for forms get/setf the value."))
 (defmethod text-direction ((obj clog-element))
   (property obj "dir"))
 
-(defgeneric set-text-direction (clog-element value)
+(defgeneric (setf text-direction) (value clog-element)
   (:documentation "Set text-direction VALUE for CLOG-ELEMENT"))
 
-(defmethod set-text-direction ((obj clog-element) value)
+(defmethod (setf text-direction) (value (obj clog-element))
   (setf (property obj "dir") value))
-(defsetf text-direction set-text-direction)
 
 ;;;;;;;;;;;;;;;;;;;
 ;; language-code ;;
@@ -521,12 +507,11 @@ Additionally for forms get/setf the value."))
 (defmethod language-code ((obj clog-element))
   (property obj "lang"))
 
-(defgeneric set-language-code (clog-element value)
+(defgeneric (setf language-code) (value clog-element)
   (:documentation "Set language-code VALUE for CLOG-ELEMENT"))
 
-(defmethod set-language-code ((obj clog-element) value)
+(defmethod (setf language-code) (value (obj clog-element))
   (setf (property obj "lang") value))
-(defsetf language-code set-language-code)
 
 ;;;;;;;;;;;;;;;;;;;
 ;; position-left ;;
@@ -658,12 +643,11 @@ content is scrolled to the left. For RTL languages is negative."))
   (parse-integer (property obj "scrollLeft" :default-answer 0)
                  :junk-allowed t))
 
-(defgeneric set-scroll-left (clog-element value)
+(defgeneric (setf scroll-left) (value clog-element)
   (:documentation "Set scroll-left VALUE for CLOG-ELEMENT"))
 
-(defmethod set-scroll-left ((obj clog-element) value)
+(defmethod (setf scroll-left) (value (obj clog-element))
   (setf (property obj "scrollLeft") value))
-(defsetf scroll-left set-scroll-left)
 
 ;;;;;;;;;;;;;;;;
 ;; scroll-top ;;
@@ -677,12 +661,11 @@ content has been scrolled upward."))
   (parse-integer (property obj "scrollTop" :default-answer 0)
                  :junk-allowed t))
 
-(defgeneric set-scroll-top (clog-element value)
+(defgeneric (setf scroll-top) (value clog-element)
   (:documentation "Set scroll-top VALUE for CLOG-ELEMENT"))
 
-(defmethod set-scroll-top ((obj clog-element) value)
+(defmethod (setf scroll-top) (value (obj clog-element))
   (setf (property obj "scrollTop") value))
-(defsetf scroll-top set-scroll-top)
 
 ;;;;;;;;;;;;;;;;;;
 ;; scroll-width ;;
@@ -736,12 +719,11 @@ scroll and conent area as a whole. The default is content-box"))
 (defmethod box-sizing ((obj clog-element))
   (style obj "box-sizing"))
 
-(defgeneric set-box-sizing (clog-element value)
+(defgeneric (setf box-sizing) (value clog-element)
   (:documentation "Set box-sizing VALUE for CLOG-ELEMENT"))
 
-(defmethod set-box-sizing ((obj clog-element) value)
+(defmethod (setf box-sizing) (value (obj clog-element))
   (setf (style obj "box-sizing") value))
-(defsetf box-sizing set-box-sizing)
 
 ;;;;;;;;;;;;;;;;
 ;; clear-side ;;
@@ -757,12 +739,11 @@ if the right or left side of block should be clear of any 'floated' Element."))
 (defmethod clear-side ((obj clog-element))
   (style obj "clear"))
 
-(defgeneric set-clear-side (clog-element value)
+(defgeneric (setf clear-side) (value clog-element)
   (:documentation "Set clear-side VALUE for CLOG-ELEMENT"))
 
-(defmethod set-clear-side ((obj clog-element) value)
+(defmethod (setf clear-side) (value (obj clog-element))
   (setf (style obj "clear") value))
-(defsetf clear-side set-clear-side)
 
 ;;;;;;;;;;;;;;;;
 ;; float-wrap ;;
@@ -778,12 +759,11 @@ elements wrap around it."))
 (defmethod float-wrap ((obj clog-element))
   (style obj "float"))
 
-(defgeneric set-float-wrap (clog-element value)
+(defgeneric (setf float-wrap) (value clog-element)
   (:documentation "Set float-wrap VALUE for CLOG-ELEMENT"))
 
-(defmethod set-float-wrap ((obj clog-element) value)
+(defmethod (setf float-wrap) (value (obj clog-element))
   (setf (style obj "float") value))
-(defsetf float-wrap set-float-wrap)
 
 ;;;;;;;;;;;;;
 ;; display ;;
@@ -863,12 +843,11 @@ handles how elements are treated by the browser layout engine.
 (defmethod display ((obj clog-element))
   (style obj "display"))
 
-(defgeneric set-display (clog-element value)
+(defgeneric (setf display) (value clog-element)
   (:documentation "Set display VALUE for CLOG-ELEMENT"))
 
-(defmethod set-display ((obj clog-element) value)
+(defmethod (setf display) (value (obj clog-element))
   (setf (style obj "display") value))
-(defsetf display set-display)
 
 ;;;;;;;;;;;
 ;; order ;;
@@ -881,12 +860,11 @@ not actual order in document or tab order etc."))
 (defmethod order ((obj clog-element))
   (style obj "order"))
 
-(defgeneric set-order (clog-element value)
+(defgeneric (setf order) (value clog-element)
   (:documentation "Set order VALUE for CLOG-ELEMENT"))
 
-(defmethod set-order ((obj clog-element) value)
+(defmethod (setf order) (value (obj clog-element))
   (setf (style obj "order") value))
-(defsetf order set-order)
 
 ;;;;;;;;;;
 ;; flex ;;
@@ -921,12 +899,11 @@ flex-basis (default :auto = use width or height) for CLOG-ELEMENT"))
 (defmethod flex-wrap ((obj clog-element))
   (style obj "flex-wrap"))
 
-(defgeneric set-flex-wrap (clog-element value)
+(defgeneric (setf flex-wrap) (value clog-element)
   (:documentation "Set flex-wrap VALUE for CLOG-ELEMENT"))
 
-(defmethod set-flex-wrap ((obj clog-element) value)
+(defmethod (setf flex-wrap) (value (obj clog-element))
   (setf (style obj "flex-wrap") value))
-(defsetf flex-wrap set-flex-wrap)
 
 ;;;;;;;;;;;;;;;;;;;;
 ;; flex-direction ;;
@@ -941,12 +918,11 @@ flex-basis (default :auto = use width or height) for CLOG-ELEMENT"))
 (defmethod flex-direction ((obj clog-element))
   (style obj "flex-direction"))
 
-(defgeneric set-flex-direction (clog-element value)
+(defgeneric (setf flex-direction) (value clog-element)
   (:documentation "Set flex-direction VALUE for CLOG-ELEMENT"))
 
-(defmethod set-flex-direction ((obj clog-element) value)
+(defmethod (setf flex-direction) (value (obj clog-element))
   (setf (style obj "flex-direction") value))
-(defsetf flex-direction set-flex-direction)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; grid-template-columns ;;
@@ -958,12 +934,11 @@ flex-basis (default :auto = use width or height) for CLOG-ELEMENT"))
 (defmethod grid-template-columns ((obj clog-element))
   (style obj "grid-template-columns"))
 
-(defgeneric set-grid-template-columns (clog-element value)
+(defgeneric (setf grid-template-columns) (value clog-element)
   (:documentation "Set grid-template-columns VALUE for CLOG-ELEMENT"))
 
-(defmethod set-grid-template-columns ((obj clog-element) value)
+(defmethod (setf grid-template-columns) (value (obj clog-element))
   (setf (style obj "grid-template-columns") value))
-(defsetf grid-template-columns set-grid-template-columns)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;
 ;; grid-template-rows ;;
@@ -975,12 +950,11 @@ flex-basis (default :auto = use width or height) for CLOG-ELEMENT"))
 (defmethod grid-template-rows ((obj clog-element))
   (style obj "grid-template-rows"))
 
-(defgeneric set-grid-template-rows (clog-element value)
+(defgeneric (setf grid-template-rows) (value clog-element)
   (:documentation "Set grid-template-rows VALUE for CLOG-ELEMENT"))
 
-(defmethod set-grid-template-rows ((obj clog-element) value)
+(defmethod (setf grid-template-rows) (value (obj clog-element))
   (setf (style obj "grid-template-rows") value))
-(defsetf grid-template-rows set-grid-template-rows)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; grid-template-areas ;;
@@ -992,12 +966,11 @@ flex-basis (default :auto = use width or height) for CLOG-ELEMENT"))
 (defmethod grid-template-areas ((obj clog-element))
   (style obj "grid-template-areas"))
 
-(defgeneric set-grid-template-areas (clog-element value)
+(defgeneric (setf grid-template-areas) (value clog-element)
   (:documentation "Set grid-template-areas VALUE for CLOG-ELEMENT"))
 
-(defmethod set-grid-template-areas ((obj clog-element) value)
+(defmethod (setf grid-template-areas) (value (obj clog-element))
   (setf (style obj "grid-template-areas") value))
-(defsetf grid-template-areas set-grid-template-areas)
 
 ;;;;;;;;;;;;;;;;
 ;; column-gap ;;
@@ -1009,12 +982,11 @@ flex-basis (default :auto = use width or height) for CLOG-ELEMENT"))
 (defmethod column-gap ((obj clog-element))
   (style obj "column-gap"))
 
-(defgeneric set-column-gap (clog-element value)
+(defgeneric (setf column-gap) (value clog-element)
   (:documentation "Set column-gap VALUE for CLOG-ELEMENT"))
 
-(defmethod set-column-gap ((obj clog-element) value)
+(defmethod (setf column-gap) (value (obj clog-element))
   (setf (style obj "column-gap") value))
-(defsetf column-gap set-column-gap)
 
 ;;;;;;;;;;;;;
 ;; row-gap ;;
@@ -1026,12 +998,11 @@ flex-basis (default :auto = use width or height) for CLOG-ELEMENT"))
 (defmethod row-gap ((obj clog-element))
   (style obj "row-gap"))
 
-(defgeneric set-row-gap (clog-element value)
+(defgeneric (setf row-gap) (value clog-element)
   (:documentation "Set row-gap VALUE for CLOG-ELEMENT"))
 
-(defmethod set-row-gap ((obj clog-element) value)
+(defmethod (setf row-gap) (value (obj clog-element))
   (setf (style obj "row-gap") value))
-(defsetf row-gap set-row-gap)
 
 ;;;;;;;;;;;;;;;;;;;;;;;
 ;; grid-auto-columns ;;
@@ -1043,12 +1014,11 @@ flex-basis (default :auto = use width or height) for CLOG-ELEMENT"))
 (defmethod grid-auto-columns ((obj clog-element))
   (style obj "grid-auto-columns"))
 
-(defgeneric set-grid-auto-columns (clog-element value)
+(defgeneric (setf grid-auto-columns) (value clog-element)
   (:documentation "Set grid-auto-columns VALUE for CLOG-ELEMENT"))
 
-(defmethod set-grid-auto-columns ((obj clog-element) value)
+(defmethod (setf grid-auto-columns) (value (obj clog-element))
   (setf (style obj "grid-auto-columns") value))
-(defsetf grid-auto-columns set-grid-auto-columns)
 
 ;;;;;;;;;;;;;;;;;;;;
 ;; grid-auto-rows ;;
@@ -1060,12 +1030,11 @@ flex-basis (default :auto = use width or height) for CLOG-ELEMENT"))
 (defmethod grid-auto-rows ((obj clog-element))
   (style obj "grid-auto-rows"))
 
-(defgeneric set-grid-auto-rows (clog-element value)
+(defgeneric (setf grid-auto-rows) (value clog-element)
   (:documentation "Set grid-auto-rows VALUE for CLOG-ELEMENT"))
 
-(defmethod set-grid-auto-rows ((obj clog-element) value)
+(defmethod (setf grid-auto-rows) (value (obj clog-element))
   (setf (style obj "grid-auto-rows") value))
-(defsetf grid-auto-rows set-grid-auto-rows)
 
 ;;;;;;;;;;;;;;;;;;;;
 ;; grid-auto-flow ;;
@@ -1077,12 +1046,11 @@ flex-basis (default :auto = use width or height) for CLOG-ELEMENT"))
 (defmethod grid-auto-flow ((obj clog-element))
   (style obj "grid-auto-flow"))
 
-(defgeneric set-grid-auto-flow (clog-element value)
+(defgeneric (setf grid-auto-flow) (value clog-element)
   (:documentation "Set grid-auto-flow VALUE for CLOG-ELEMENT"))
 
-(defmethod set-grid-auto-flow ((obj clog-element) value)
+(defmethod (setf grid-auto-flow) (value (obj clog-element))
   (setf (style obj "grid-auto-flow") value))
-(defsetf grid-auto-flow set-grid-auto-flow)
 
 ;;;;;;;;;;;;;;;;;;;;;;;
 ;; grid-column-start ;;
@@ -1094,12 +1062,11 @@ flex-basis (default :auto = use width or height) for CLOG-ELEMENT"))
 (defmethod grid-column-start ((obj clog-element))
   (style obj "grid-column-start"))
 
-(defgeneric set-grid-column-start (clog-element value)
+(defgeneric (setf grid-column-start) (value clog-element)
   (:documentation "Set grid-column-start VALUE for CLOG-ELEMENT"))
 
-(defmethod set-grid-column-start ((obj clog-element) value)
+(defmethod (setf grid-column-start) (value (obj clog-element))
   (setf (style obj "grid-column-start") value))
-(defsetf grid-column-start set-grid-column-start)
 
 ;;;;;;;;;;;;;;;;;;;;;
 ;; grid-column-end ;;
@@ -1111,12 +1078,11 @@ flex-basis (default :auto = use width or height) for CLOG-ELEMENT"))
 (defmethod grid-column-end ((obj clog-element))
   (style obj "grid-column-end"))
 
-(defgeneric set-grid-column-end (clog-element value)
+(defgeneric (setf grid-column-end) (value clog-element)
   (:documentation "Set grid-column-end VALUE for CLOG-ELEMENT"))
 
-(defmethod set-grid-column-end ((obj clog-element) value)
+(defmethod (setf grid-column-end) (value (obj clog-element))
   (setf (style obj "grid-column-end") value))
-(defsetf grid-column-end set-grid-column-end)
 
 ;;;;;;;;;;;;;;;;;;;;
 ;; grid-row-start ;;
@@ -1128,12 +1094,11 @@ flex-basis (default :auto = use width or height) for CLOG-ELEMENT"))
 (defmethod grid-row-start ((obj clog-element))
   (style obj "grid-row-start"))
 
-(defgeneric set-grid-row-start (clog-element value)
+(defgeneric (setf grid-row-start) (value clog-element)
   (:documentation "Set grid-row-start VALUE for CLOG-ELEMENT"))
 
-(defmethod set-grid-row-start ((obj clog-element) value)
+(defmethod (setf grid-row-start) (value (obj clog-element))
   (setf (style obj "grid-row-start") value))
-(defsetf grid-row-start set-grid-row-start)
 
 ;;;;;;;;;;;;;;;;;;
 ;; grid-row-end ;;
@@ -1145,12 +1110,11 @@ flex-basis (default :auto = use width or height) for CLOG-ELEMENT"))
 (defmethod grid-row-end ((obj clog-element))
   (style obj "grid-row-end"))
 
-(defgeneric set-grid-row-end (clog-element value)
+(defgeneric (setf grid-row-end) (value clog-element)
   (:documentation "Set grid-row-end VALUE for CLOG-ELEMENT"))
 
-(defmethod set-grid-row-end ((obj clog-element) value)
+(defmethod (setf grid-row-end) (value (obj clog-element))
   (setf (style obj "grid-row-end") value))
-(defsetf grid-row-end set-grid-row-end)
 
 ;;;;;;;;;;;;;;;;;
 ;; align-items ;;
@@ -1166,12 +1130,11 @@ flex-basis (default :auto = use width or height) for CLOG-ELEMENT"))
 (defmethod align-items ((obj clog-element))
   (style obj "align-items"))
 
-(defgeneric set-align-items (clog-element value)
+(defgeneric (setf align-items) (value clog-element)
   (:documentation "Set align-items VALUE for CLOG-ELEMENT"))
 
-(defmethod set-align-items ((obj clog-element) value)
+(defmethod (setf align-items) (value (obj clog-element))
   (setf (style obj "align-items") value))
-(defsetf align-items set-align-items)
 
 ;;;;;;;;;;;;;;;;
 ;; align-self ;;
@@ -1188,12 +1151,11 @@ in a flexbox/grid."))
 (defmethod align-self ((obj clog-element))
   (style obj "align-self"))
 
-(defgeneric set-align-self (clog-element value)
+(defgeneric (setf align-self) (value clog-element)
   (:documentation "Set align-self VALUE for CLOG-ELEMENT"))
 
-(defmethod set-align-self ((obj clog-element) value)
+(defmethod (setf align-self) (value (obj clog-element))
   (setf (style obj "align-self") value))
-(defsetf align-self set-align-self)
 
 ;;;;;;;;;;;;;;;;;;;
 ;; justify-items ;;
@@ -1209,12 +1171,11 @@ in a flexbox/grid."))
 (defmethod justify-items ((obj clog-element))
   (style obj "justify-items"))
 
-(defgeneric set-justify-items (clog-element value)
+(defgeneric (setf justify-items) (value clog-element)
   (:documentation "Set justify-items VALUE for CLOG-ELEMENT"))
 
-(defmethod set-justify-items ((obj clog-element) value)
+(defmethod (setf justify-items) (value (obj clog-element))
   (setf (style obj "justify-items") value))
-(defsetf justify-items set-justify-items)
 
 ;;;;;;;;;;;;;;;;;;
 ;; justify-self ;;
@@ -1230,12 +1191,11 @@ in a flexbox/grid."))
 (defmethod justify-self ((obj clog-element))
   (style obj "justify-self"))
 
-(defgeneric set-justify-self (clog-element value)
+(defgeneric (setf justify-self) (value clog-element)
   (:documentation "Set justify-self VALUE for CLOG-ELEMENT"))
 
-(defmethod set-justify-self ((obj clog-element) value)
+(defmethod (setf justify-self) (value (obj clog-element))
   (setf (style obj "justify-self") value))
-(defsetf justify-self set-justify-self)
 
 ;;;;;;;;;;;;;;;;;;;;;
 ;; justify-content ;;
@@ -1252,12 +1212,11 @@ in a flexbox/grid."))
 (defmethod justify-content ((obj clog-element))
   (style obj "justify-content"))
 
-(defgeneric set-justify-content (clog-element value)
+(defgeneric (setf justify-content) (value clog-element)
   (:documentation "Set justify-content VALUE for CLOG-ELEMENT"))
 
-(defmethod set-justify-content ((obj clog-element) value)
+(defmethod (setf justify-content) (value (obj clog-element))
   (setf (style obj "justify-content") value))
-(defsetf justify-content set-justify-content)
 
 ;;;;;;;;;;;;;;;;;;;
 ;; align-content ;;
@@ -1274,12 +1233,11 @@ on opposite sides of each other or grid on column axis."))
 (defmethod align-content ((obj clog-element))
   (style obj "align-content"))
 
-(defgeneric set-align-content (clog-element value)
+(defgeneric (setf align-content) (value clog-element)
   (:documentation "Set align-content VALUE for CLOG-ELEMENT"))
 
-(defmethod set-align-content ((obj clog-element) value)
+(defmethod (setf align-content) (value (obj clog-element))
   (setf (style obj "align-content") value))
-(defsetf align-content set-align-content)
 
 ;;;;;;;;;;;;;;
 ;; overflow ;;
@@ -1294,12 +1252,11 @@ an element's box. The default is visible - no clipping."))
 (defmethod overflow ((obj clog-element))
   (style obj "overflow"))
 
-(defgeneric set-overflow (clog-element value)
+(defgeneric (setf overflow) (value clog-element)
   (:documentation "Set overflow VALUE for CLOG-ELEMENT"))
 
-(defmethod set-overflow ((obj clog-element) value)
+(defmethod (setf overflow) (value (obj clog-element))
   (setf (style obj "overflow") value))
-(defsetf overflow set-overflow)
 
 ;;;;;;;;;;;;;;;;
 ;; overflow-x ;;
@@ -1314,12 +1271,11 @@ an element's box for X. The default is Visible - no clipping."))
 (defmethod overflow-x ((obj clog-element))
   (style obj "overflow-x"))
 
-(defgeneric set-overflow-x (clog-element value)
+(defgeneric (setf overflow-x) (value clog-element)
   (:documentation "Set overflow-x VALUE for CLOG-ELEMENT"))
 
-(defmethod set-overflow-x ((obj clog-element) value)
+(defmethod (setf overflow-x) (value (obj clog-element))
   (setf (style obj "overflow-x") value))
-(defsetf overflow-x set-overflow-x)
 
 ;;;;;;;;;;;;;;;;
 ;; overflow-y ;;
@@ -1334,12 +1290,11 @@ an element's box for Y. The default is Visible - no clipping."))
 (defmethod overflow-y ((obj clog-element))
   (style obj "overflow-y"))
 
-(defgeneric set-overflow-y (clog-element value)
+(defgeneric (setf overflow-y) (value clog-element)
   (:documentation "Set overflow-y VALUE for CLOG-ELEMENT"))
 
-(defmethod set-overflow-y ((obj clog-element) value)
+(defmethod (setf overflow-y) (value (obj clog-element))
   (setf (style obj "overflow-y") value))
-(defsetf overflow-y set-overflow-y)
 
 ;;;;;;;;;;;;;
 ;; z-index ;;
@@ -1353,12 +1308,11 @@ Note: z-index only works on Elements with Position Type of absolute,
 (defmethod z-index ((obj clog-element))
   (parse-integer (style obj "z-index" :default-answer 0) :junk-allowed t))
 
-(defgeneric set-z-index (clog-element value)
+(defgeneric (setf z-index) (value clog-element)
   (:documentation "Set z-index VALUE for CLOG-ELEMENT"))
 
-(defmethod set-z-index ((obj clog-element) value)
+(defmethod (setf z-index) (value (obj clog-element))
   (setf (style obj "z-index") value))
-(defsetf z-index set-z-index)
 
 ;;;;;;;;;;;;;;;
 ;; resizable ;;
@@ -1374,12 +1328,11 @@ resizeable sets if element can be resized by user."))
 (defmethod resizable ((obj clog-element))
   (style obj "resize"))
 
-(defgeneric set-resizable (clog-element value)
+(defgeneric (setf resizable) (value clog-element)
   (:documentation "Set resizable VALUE for CLOG-ELEMENT"))
 
-(defmethod set-resizable ((obj clog-element) value)
+(defmethod (setf resizable) (value (obj clog-element))
   (setf (style obj "resize") value))
-(defsetf resizable set-resizable)
 
 ;;;;;;;;;;;;;;;;;
 ;; positioning ;;
@@ -1403,12 +1356,11 @@ right, top and bottom are interpreted.
 (defmethod positioning ((obj clog-element))
   (style obj "position"))
 
-(defgeneric set-positioning (clog-element value)
+(defgeneric (setf positioning) (value clog-element)
   (:documentation "Set positioning VALUE for CLOG-ELEMENT"))
 
-(defmethod set-positioning ((obj clog-element) value)
+(defmethod (setf positioning) (value (obj clog-element))
   (setf (style obj "position") value))
-(defsetf positioning set-positioning)
 
 ;;;;;;;;;;;;;;;;;;
 ;; position-top ;;
@@ -1492,12 +1444,11 @@ parent in the DOM."))
 (defmethod left ((obj clog-element))
   (style obj "left"))
 
-(defgeneric set-left (clog-element value)
+(defgeneric (setf left) (value clog-element)
   (:documentation "Set left VALUE for CLOG-ELEMENT"))
 
-(defmethod set-left ((obj clog-element) value)
+(defmethod (setf left) (value (obj clog-element))
   (setf (style obj "left") value))
-(defsetf left set-left)
 
 ;;;;;;;;;;;
 ;; right ;;
@@ -1509,12 +1460,11 @@ parent in the DOM."))
 (defmethod right ((obj clog-element))
   (style obj "right"))
 
-(defgeneric set-right (clog-element value)
+(defgeneric (setf right) (value clog-element)
   (:documentation "Set right VALUE for CLOG-ELEMENT"))
 
-(defmethod set-right ((obj clog-element) value)
+(defmethod (setf right) (value (obj clog-element))
   (setf (style obj "right") value))
-(defsetf right set-right)
 
 ;;;;;;;;;
 ;; top ;;
@@ -1526,12 +1476,11 @@ parent in the DOM."))
 (defmethod top ((obj clog-element))
   (style obj "top"))
 
-(defgeneric set-top (clog-element value)
+(defgeneric (setf top) (value clog-element)
   (:documentation "Set top VALUE for CLOG-ELEMENT"))
 
-(defmethod set-top ((obj clog-element) value)
+(defmethod (setf top) (value (obj clog-element))
   (setf (style obj "top") value))
-(defsetf top set-top)
 
 ;;;;;;;;;;;;
 ;; bottom ;;
@@ -1543,12 +1492,11 @@ parent in the DOM."))
 (defmethod bottom ((obj clog-element))
   (style obj "bottom"))
 
-(defgeneric set-bottom (clog-element value)
+(defgeneric (setf bottom) (value clog-element)
   (:documentation "Set bottom VALUE for CLOG-ELEMENT"))
 
-(defmethod set-bottom ((obj clog-element) value)
+(defmethod (setf bottom) (value (obj clog-element))
   (setf (style obj "bottom") value))
-(defsetf bottom set-bottom)
 
 ;;;;;;;;;;;;;;;;
 ;; box-height ;;
@@ -1560,12 +1508,11 @@ parent in the DOM."))
 (defmethod box-height ((obj clog-element))
   (style obj "height"))
 
-(defgeneric set-box-height (clog-element value)
+(defgeneric (setf box-height) (value clog-element)
   (:documentation "Set box-height VALUE for CLOG-ELEMENT"))
 
-(defmethod set-box-height ((obj clog-element) value)
+(defmethod (setf box-height) (value (obj clog-element))
   (setf (style obj "height") value))
-(defsetf box-height set-box-height)
 
 ;;;;;;;;;;;;;;;
 ;; box-width ;;
@@ -1577,12 +1524,11 @@ parent in the DOM."))
 (defmethod box-width ((obj clog-element))
   (style obj "width"))
 
-(defgeneric set-box-width (clog-element value)
+(defgeneric (setf box-width) (value clog-element)
   (:documentation "Set box-width VALUE for CLOG-ELEMENT"))
 
-(defmethod set-box-width ((obj clog-element) value)
+(defmethod (setf box-width) (value (obj clog-element))
   (setf (style obj "width") value))
-(defsetf box-width set-box-width)
 
 ;;;;;;;;;;;;;;;;;;;;
 ;; maximum-height ;;
@@ -1594,12 +1540,11 @@ parent in the DOM."))
 (defmethod maximum-height ((obj clog-element))
   (style obj "max-height"))
 
-(defgeneric set-maximum-height (clog-element value)
+(defgeneric (setf maximum-height) (value clog-element)
   (:documentation "Set maximum-height VALUE for CLOG-ELEMENT"))
 
-(defmethod set-maximum-height ((obj clog-element) value)
+(defmethod (setf maximum-height) (value (obj clog-element))
   (setf (style obj "max-height") value))
-(defsetf maximum-height set-maximum-height)
 
 ;;;;;;;;;;;;;;;;;;;
 ;; maximum-width ;;
@@ -1611,12 +1556,11 @@ parent in the DOM."))
 (defmethod maximum-width ((obj clog-element))
   (style obj "max-width"))
 
-(defgeneric set-maximum-width (clog-element value)
+(defgeneric (setf maximum-width) (value clog-element)
   (:documentation "Set maximum-width VALUE for CLOG-ELEMENT"))
 
-(defmethod set-maximum-width ((obj clog-element) value)
+(defmethod (setf maximum-width) (value (obj clog-element))
   (setf (style obj "max-width") value))
-(defsetf maximum-width set-maximum-width)
 
 ;;;;;;;;;;;;;;;;;;;;
 ;; minimum-height ;;
@@ -1628,12 +1572,11 @@ parent in the DOM."))
 (defmethod minimum-height ((obj clog-element))
   (style obj "min-height"))
 
-(defgeneric set-minimum-height (clog-element value)
+(defgeneric (setf minimum-height) (value clog-element)
   (:documentation "Set minimum-height VALUE for CLOG-ELEMENT"))
 
-(defmethod set-minimum-height ((obj clog-element) value)
+(defmethod (setf minimum-height) (value (obj clog-element))
   (setf (style obj "min-height") value))
-(defsetf minimum-height set-minimum-height)
 
 ;;;;;;;;;;;;;;;;;;;
 ;; minimum-width ;;
@@ -1645,12 +1588,11 @@ parent in the DOM."))
 (defmethod minimum-width ((obj clog-element))
   (style obj "min-width"))
 
-(defgeneric set-minimum-width (clog-element value)
+(defgeneric (setf minimum-width) (value clog-element)
   (:documentation "Set minimum-width VALUE for CLOG-ELEMENT"))
 
-(defmethod set-minimum-width ((obj clog-element) value)
+(defmethod (setf minimum-width) (value (obj clog-element))
   (setf (style obj "min-width") value))
-(defsetf minimum-width set-minimum-width)
 
 ;;;;;;;;;;;;;;;;;;;;
 ;; maximum-height ;;
@@ -1662,12 +1604,11 @@ parent in the DOM."))
 (defmethod maximum-height ((obj clog-element))
   (style obj "max-height"))
 
-(defgeneric set-maximum-height (clog-element value)
+(defgeneric (setf maximum-height) (value clog-element)
   (:documentation "Set maximum-height VALUE for CLOG-ELEMENT"))
 
-(defmethod set-maximum-height ((obj clog-element) value)
+(defmethod (setf maximum-height) (value (obj clog-element))
   (setf (style obj "max-height") value))
-(defsetf maximum-height set-maximum-height)
 
 ;;  For reference:
 ;;  | Margin | Border | Padding | Scroll | [Element] | Scroll | Padding ...
@@ -1686,13 +1627,12 @@ parent in the DOM."))
 (defmethod inner-height ((obj clog-element))
   (jquery-query obj "innerHeight()"))
 
-(defgeneric set-inner-height (clog-element value)
+(defgeneric (setf inner-height) (value clog-element)
   (:documentation "Set inner-height VALUE for CLOG-ELEMENT"))
 
-(defmethod set-inner-height ((obj clog-element) value)
+(defmethod (setf inner-height) (value (obj clog-element))
   (jquery-execute obj (format nil "innerHeight('~A')" (escape-string value)))
   value)
-(defsetf inner-height set-inner-height)
 
 ;;;;;;;;;;;;;;;;;
 ;; inner-width ;;
@@ -1704,13 +1644,12 @@ parent in the DOM."))
 (defmethod inner-width ((obj clog-element))
   (jquery-query obj "innerWidth()"))
 
-(defgeneric set-inner-width (clog-element value)
+(defgeneric (setf inner-width) (value clog-element)
   (:documentation "Set inner-width VALUE for CLOG-ELEMENT"))
 
-(defmethod set-inner-width ((obj clog-element) value)
+(defmethod (setf inner-width) (value (obj clog-element))
   (jquery-execute obj (format nil "innerWidth('~A')" (escape-string value)))
   value)
-(defsetf inner-width set-inner-width)
 
 ;;;;;;;;;;;;;;;;;;
 ;; outer-height ;;
@@ -1766,12 +1705,11 @@ margin."))
 (defmethod color ((obj clog-element))
   (style obj "color"))
 
-(defgeneric set-color (clog-element value)
+(defgeneric (setf color) (value clog-element)
   (:documentation "Set color VALUE for CLOG-ELEMENT"))
 
-(defmethod set-color ((obj clog-element) value)
+(defmethod (setf color) (value (obj clog-element))
   (setf (style obj "color") value))
-(defsetf color set-color)
 
 ;;;;;;;;;;;;;
 ;; opacity ;;
@@ -1783,12 +1721,11 @@ margin."))
 (defmethod opacity ((obj clog-element))
   (style obj "opacity"))
 
-(defgeneric set-opacity (clog-element value)
+(defgeneric (setf opacity) (value clog-element)
   (:documentation "Set opacity VALUE for CLOG-ELEMENT"))
 
-(defmethod set-opacity ((obj clog-element) value)
+(defmethod (setf opacity) (value (obj clog-element))
   (setf (style obj "opacity") value))
-(defsetf opacity set-opacity)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; background-attachment ;;
@@ -1802,12 +1739,11 @@ margin."))
 (defmethod background-attachment ((obj clog-element))
   (style obj "background-attachment"))
 
-(defgeneric set-background-attachment (clog-element value)
+(defgeneric (setf background-attachment) (value clog-element)
   (:documentation "Set background-attachment VALUE for CLOG-ELEMENT"))
 
-(defmethod set-background-attachment ((obj clog-element) value)
+(defmethod (setf background-attachment) (value (obj clog-element))
   (setf (style obj "background-attachment") value))
-(defsetf background-attachment set-background-attachment)
 
 ;;;;;;;;;;;;;;;;;;;;;;
 ;; background-color ;;
@@ -1819,12 +1755,11 @@ margin."))
 (defmethod background-color ((obj clog-element))
   (style obj "background-color"))
 
-(defgeneric set-background-color (clog-element value)
+(defgeneric (setf background-color) (value clog-element)
   (:documentation "Set background-color VALUE for CLOG-ELEMENT"))
 
-(defmethod set-background-color ((obj clog-element) value)
+(defmethod (setf background-color) (value (obj clog-element))
   (setf (style obj "background-color") value))
-(defsetf background-color set-background-color)
 
 ;;;;;;;;;;;;;;;;;;;;;;
 ;; background-image ;;
@@ -1837,14 +1772,13 @@ margin."))
 (defmethod background-image ((obj clog-element))
   (style obj "background-image"))
 
-(defgeneric set-background-image (clog-element value)
+(defgeneric (setf background-image) (value clog-element)
   (:documentation "Set background-image VALUE for CLOG-ELEMENT"))
 
-(defmethod set-background-image ((obj clog-element) value)
+(defmethod (setf background-image) (value (obj clog-element))
   (if value
       (setf (style obj "background-image") (format nil "url('~A')" value))
       (setf (style obj "background-image") "none")))
-(defsetf background-image set-background-image)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; background-position ;;
@@ -1857,12 +1791,11 @@ left/right/center/top/bottom | %x %y | x y"))
 (defmethod background-position ((obj clog-element))
   (style obj "background-position"))
 
-(defgeneric set-background-position (clog-element value)
+(defgeneric (setf background-position) (value clog-element)
   (:documentation "Set background-position VALUE for CLOG-ELEMENT"))
 
-(defmethod set-background-position ((obj clog-element) value)
+(defmethod (setf background-position) (value (obj clog-element))
   (setf (style obj "background-position") value))
-(defsetf background-position set-background-position)
 
 ;;;;;;;;;;;;;;;;;;;;;;;
 ;; background-origin ;;
@@ -1878,12 +1811,11 @@ is relative to origin of: padding-box|border-box|content-box"))
 (defmethod background-origin ((obj clog-element))
   (style obj "background-origin"))
 
-(defgeneric set-background-origin (clog-element value)
+(defgeneric (setf background-origin) (value clog-element)
   (:documentation "Set background-origin VALUE for CLOG-ELEMENT"))
 
-(defmethod set-background-origin ((obj clog-element) value)
+(defmethod (setf background-origin) (value (obj clog-element))
   (setf (style obj "background-origin") value))
-(defsetf background-origin set-background-origin)
 
 ;;;;;;;;;;;;;;;;;;;;;;;
 ;; background-repeat ;;
@@ -1899,12 +1831,11 @@ is relative to origin of: padding-box|border-box|content-box"))
 (defmethod background-repeat ((obj clog-element))
   (style obj "background-repeat"))
 
-(defgeneric set-background-repeat (clog-element value)
+(defgeneric (setf background-repeat) (value clog-element)
   (:documentation "Set background-repeat VALUE for CLOG-ELEMENT"))
 
-(defmethod set-background-repeat ((obj clog-element) value)
+(defmethod (setf background-repeat) (value (obj clog-element))
   (setf (style obj "background-repeat") value))
-(defsetf background-repeat set-background-repeat)
 
 ;;;;;;;;;;;;;;;;;;;;;
 ;; background-clip ;;
@@ -1920,12 +1851,11 @@ underneath its border box, padding box, or content box."))
 (defmethod background-clip ((obj clog-element))
   (style obj "background-clip"))
 
-(defgeneric set-background-clip (clog-element value)
+(defgeneric (setf background-clip) (value clog-element)
   (:documentation "Set background-clip VALUE for CLOG-ELEMENT"))
 
-(defmethod set-background-clip ((obj clog-element) value)
+(defmethod (setf background-clip) (value (obj clog-element))
   (setf (style obj "background-clip") value))
-(defsetf background-clip set-background-clip)
 
 ;;;;;;;;;;;;;;;;;;;;;
 ;; background-size ;;
@@ -1938,12 +1868,11 @@ auto | w h | % = cover of parent | contain"))
 (defmethod background-size ((obj clog-element))
   (style obj "background-size"))
 
-(defgeneric set-background-size (clog-element value)
+(defgeneric (setf background-size) (value clog-element)
   (:documentation "Set background-size VALUE for CLOG-ELEMENT"))
 
-(defmethod set-background-size ((obj clog-element) value)
+(defmethod (setf background-size) (value (obj clog-element))
   (setf (style obj "background-size") value))
-(defsetf background-size set-background-size)
 
 ;;;;;;;;;;;;
 ;; border ;;
@@ -1981,12 +1910,11 @@ line-width - size or medium|thin|thick|length|initial|inherit"))
 (defmethod border-radius ((obj clog-element))
   (style obj "border-radius"))
 
-(defgeneric set-border-radius (clog-element value)
+(defgeneric (setf border-radius) (value clog-element)
   (:documentation "Set border-radius VALUE for CLOG-ELEMENT"))
 
-(defmethod set-border-radius ((obj clog-element) value)
+(defmethod (setf border-radius) (value (obj clog-element))
   (setf (style obj "border-radius") value))
-(defsetf border-radius set-border-radius)
 
 ;;;;;;;;;;;;;;;;
 ;; box-shadow ;;
@@ -1998,12 +1926,11 @@ line-width - size or medium|thin|thick|length|initial|inherit"))
 (defmethod box-shadow ((obj clog-element))
   (style obj "box-shadow"))
 
-(defgeneric set-box-shadow (clog-element value)
+(defgeneric (setf box-shadow) (value clog-element)
   (:documentation "Set box-shadow. See https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Background_and_Borders/Box-shadow_generator"))
 
-(defmethod set-box-shadow ((obj clog-element) value)
+(defmethod (setf box-shadow) (value (obj clog-element))
   (setf (style obj "box-shadow") value))
-(defsetf box-shadow set-box-shadow)
 
 ;;;;;;;;;;;;;;;;;
 ;; text-shadow ;;
@@ -2015,12 +1942,11 @@ line-width - size or medium|thin|thick|length|initial|inherit"))
 (defmethod text-shadow ((obj clog-element))
   (style obj "text-shadow"))
 
-(defgeneric set-text-shadow (clog-element value)
+(defgeneric (setf text-shadow) (value clog-element)
   (:documentation "Set text-shadow. See https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Background_and_Borders/Text-shadow_generator"))
 
-(defmethod set-text-shadow ((obj clog-element) value)
+(defmethod (setf text-shadow) (value (obj clog-element))
   (setf (style obj "text-shadow") value))
-(defsetf text-shadow set-text-shadow)
 
 ;;;;;;;;;;;;;
 ;; outline ;;
@@ -2096,7 +2022,6 @@ VALUE can be - <length>|auto|initial|inherit"))
 (defmethod set-padding ((obj clog-element) top right bottom left)
   (setf (style obj "padding") (format nil "~A ~A ~A ~A"
                                       top right bottom left)))
-(defsetf padding set-padding)
 
 ;;;;;;;;;;;;;;;;;;;;;;
 ;; set-padding-side ;;
@@ -2123,12 +2048,11 @@ A list of standard cursor types can be found at:
 (defmethod cursor ((obj clog-element))
   (style obj "cursor"))
 
-(defgeneric set-cursor (clog-element value)
+(defgeneric (setf cursor) (value clog-element)
   (:documentation "Set cursor VALUE for CLOG-ELEMENT"))
 
-(defmethod set-cursor ((obj clog-element) value)
+(defmethod (setf cursor) (value (obj clog-element))
   (setf (style obj "cursor") value))
-(defsetf cursor set-cursor)
 
 ;;;;;;;;;;
 ;; font ;;
@@ -2158,12 +2082,11 @@ A list of standard cursor types can be found at:
         (format nil "~A ~A ~A ~A ~A"
                 font-style font-variant font-weight font-height font-family)))
 
-(defgeneric set-font-css (clog-element value)
+(defgeneric (setf font-css) (value clog-element)
   (:documentation "Set font VALUE for CLOG-ELEMENT"))
 
-(defmethod set-font-css ((obj clog-element) value)
+(defmethod (setf font-css) (value (obj clog-element))
   (setf (style obj "font") value))
-(defsetf font set-font-css)
 
 ;;;;;;;;;;;;;;;;;;;;
 ;; text-alignment ;;
@@ -2178,12 +2101,11 @@ A list of standard cursor types can be found at:
 (defmethod text-alignment ((obj clog-element))
   (style obj "text-align"))
 
-(defgeneric set-text-alignment (clog-element value)
+(defgeneric (setf text-alignment) (value clog-element)
   (:documentation "Set text-alignment VALUE for CLOG-ELEMENT"))
 
-(defmethod set-text-alignment ((obj clog-element) value)
+(defmethod (setf text-alignment) (value (obj clog-element))
   (setf (style obj "text-align") value))
-(defsetf text-alignment set-text-alignment)
 
 ;;;;;;;;;;;;;;;;;;;;
 ;; vertical-align ;;
@@ -2199,12 +2121,11 @@ is set to :table-cell or for labels on form elements."))
 (defmethod vertical-align ((obj clog-element))
   (style obj "vertical-align"))
 
-(defgeneric set-vertical-align (clog-element value)
+(defgeneric (setf vertical-align) (value clog-element)
   (:documentation "Set vertical-align VALUE for CLOG-ELEMENT"))
 
-(defmethod set-vertical-align ((obj clog-element) value)
+(defmethod (setf vertical-align) (value (obj clog-element))
   (setf (style obj "vertical-align") value))
-(defsetf vertical-align set-vertical-align)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Methods - clog-element

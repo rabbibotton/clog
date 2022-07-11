@@ -34,12 +34,11 @@ window."))
 (defmethod window-name ((obj clog-window))
   (query obj "name"))
 
-(defgeneric set-window-name (clog-window value))
+(defgeneric (setf window-name) (value clog-window))
 
-(defmethod set-window-name ((obj clog-window) value)
+(defmethod (setf window-name) (value (obj clog-window))
   (execute obj (format nil "name='~A'" (escape-string value)))
   value)
-(defsetf window-name set-window-name)
 
 ;;;;;;;;;;;;;;;;
 ;; status-bar ;;
@@ -51,12 +50,11 @@ window."))
 (defmethod status-bar ((obj clog-window))
   (query obj "status"))
 
-(defgeneric set-status-bar (clog-window value))
+(defgeneric (setf status-bar) (value clog-window))
 
-(defmethod set-status-bar ((obj clog-window) value)
+(defmethod (setf status-bar) (value (obj clog-window))
   (execute obj (format nil "status='~A'" (escape-string value)))
   value)
-(defsetf status-bar set-status-bar)
 
 ;;;;;;;;;;;;;;;;;;
 ;; inner-height ;;
@@ -68,12 +66,11 @@ window."))
 (defmethod inner-height ((obj clog-window))
   (parse-integer (query obj "innerHeight" :default-answer 0) :junk-allowed t))
 
-(defgeneric set-inner-height (clog-window value))
+(defgeneric (setf inner-height) (value clog-window))
 
-(defmethod set-inner-height ((obj clog-window) value)
+(defmethod (setf inner-height) (value (obj clog-window))
   (execute obj (format nil "innerHeight='~A'" (escape-string value)))
   value)
-(defsetf inner-height set-inner-height)
 
 ;;;;;;;;;;;;;;;;;
 ;; inner-width ;;
@@ -85,12 +82,11 @@ window."))
 (defmethod inner-width ((obj clog-window))
   (parse-integer (query obj "innerWidth" :default-answer 0) :junk-allowed t))
 
-(defgeneric set-inner-width (clog-window value))
+(defgeneric (setf inner-width) (value clog-window))
 
-(defmethod set-inner-width ((obj clog-window) value)
+(defmethod (setf inner-width) (value (obj clog-window))
   (execute obj (format nil "innerWidth='~A'" (escape-string value)))
   value)
-(defsetf inner-width set-inner-width)
 
 ;;;;;;;;;;;;;;;;;;
 ;; outer-height ;;
@@ -102,12 +98,11 @@ window."))
 (defmethod outer-height ((obj clog-window))
   (parse-integer (query obj "outerHeight" :default-answer 0) :junk-allowed t))
 
-(defgeneric set-outer-height (clog-window value))
+(defgeneric (setf outer-height) (value clog-window))
 
-(defmethod set-outer-height ((obj clog-window) value)
+(defmethod (setf outer-height) (value (obj clog-window))
   (execute obj (format nil "outerHeight='~A'" (escape-string value)))
   value)
-(defsetf outer-height set-outer-height)
 
 ;;;;;;;;;;;;;;;;;
 ;; outer-width ;;
@@ -119,12 +114,11 @@ window."))
 (defmethod outer-width ((obj clog-window))
   (parse-integer (query obj "outerWidth" :default-answer 0) :junk-allowed t))
 
-(defgeneric set-outer-width (clog-window value))
+(defgeneric (setf outer-width) (value clog-window))
 
-(defmethod set-outer-width ((obj clog-window) value)
+(defmethod (setf outer-width) (value (obj clog-window))
   (execute obj (format nil "outerWidth='~A'" (escape-string value)))
   value)
-(defsetf outer-width set-outer-width)
 
 ;;;;;;;;;;;;;;
 ;; x-offset ;;
@@ -136,12 +130,11 @@ window."))
 (defmethod x-offset ((obj clog-window))
   (parse-integer (query obj "pageXOffset" :default-answer 0) :junk-allowed t))
 
-(defgeneric set-x-offset (clog-window value))
+(defgeneric (setf x-offset) (value clog-window))
 
-(defmethod set-x-offset ((obj clog-window) value)
+(defmethod (setf x-offset) (value (obj clog-window))
   (execute obj (format nil "pageXOffset='~A'" (escape-string value)))
   value)
-(defsetf x-offset set-x-offset)
 
 ;;;;;;;;;;;;;;
 ;; y-offset ;;
@@ -153,12 +146,11 @@ window."))
 (defmethod y-offset ((obj clog-window))
   (parse-integer (query obj "pageYOffset" :default-answer 0) :junk-allowed t))
 
-(defgeneric set-y-offset (clog-window value))
+(defgeneric (setf y-offset) (value clog-window))
 
-(defmethod set-y-offset ((obj clog-window) value)
+(defmethod (setf y-offset) (value (obj clog-window))
   (execute obj (format nil "pageYOffset='~A'" (escape-string value)))
   value)
-(defsetf y-offset set-y-offset)
 
 ;;;;;;;;;
 ;; top ;;
@@ -170,12 +162,11 @@ window."))
 (defmethod top ((obj clog-window))
   (parse-integer (query obj "screenY" :default-answer 0) :junk-allowed t))
 
-(defgeneric set-top (clog-window value))
+(defgeneric (setf top) (value clog-window))
 
-(defmethod set-top ((obj clog-window) value)
+(defmethod (setf top) (value (obj clog-window))
   (execute obj (format nil "screenY='~A'" (escape-string value)))
   value)
-(defsetf top set-top)
 
 ;;;;;;;;;;
 ;; left ;;
@@ -187,12 +178,11 @@ window."))
 (defmethod left ((obj clog-window))
   (parse-integer (query obj "screenX" :default-answer 0) :junk-allowed t))
 
-(defgeneric set-left (clog-window value))
+(defgeneric (setf left) (value clog-window))
 
-(defmethod set-left ((obj clog-window) value)
+(defmethod (setf left) (value (obj clog-window))
   (execute obj (format nil "screenX='~A'" (escape-string value)))
   value)
-(defsetf left set-left)
 
 ;;;;;;;;;;;;;;;;;
 ;; pixel-ratio ;;
@@ -544,13 +534,12 @@ STORAGE-TYPE. (local = persistant or session)"))
                      storage-type
                      (escape-string key-name))))
 
-(defgeneric set-storage-element (clog-window storage-type key-name value)
+(defgeneric (setf storage-element) (value clog-window storage-type key-name)
   (:documentation "Set storage-element."))
 
-(defmethod set-storage-element ((obj clog-window) storage-type key-name value)
+(defmethod (setf storage-element) (value (obj clog-window) storage-type key-name)
   (execute obj (format nil "~(~a~)Storage.setItem('~A','~A')"
                        storage-type
                        (escape-string key-name)
                        (escape-string value)))
   value)
-(defsetf storage-element set-storage-element)

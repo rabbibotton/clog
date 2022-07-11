@@ -8,7 +8,6 @@
 
 (cl:in-package :clog)
 
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Implementation - clog-location
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -34,12 +33,11 @@
 (defmethod url ((obj clog-location))
   (property obj "href"))
 
-(defgeneric set-url (clog-location value)
+(defgeneric (setf url) (value clog-location)
   (:documentation "Set url VALUE for CLOG-LOCATION"))
 
-(defmethod set-url ((obj clog-location) value)
+(defmethod (setf url) (value (obj clog-location))
   (setf (property obj "href") value))
-(defsetf url set-url)
 
 ;;;;;;;;;;
 ;; hash ;;
@@ -51,12 +49,11 @@
 (defmethod hash ((obj clog-location))
   (property obj "hash"))
 
-(defgeneric set-hash (clog-location value)
+(defgeneric (setf hash) (value clog-location)
   (:documentation "Set hash VALUE for CLOG-LOCATION"))
 
-(defmethod set-hash ((obj clog-location) value)
+(defmethod (setf hash) (value (obj clog-location))
   (setf (property obj "hash") value))
-(defsetf hash set-hash)
 
 ;;;;;;;;;;
 ;; host ;;
@@ -68,12 +65,11 @@
 (defmethod host ((obj clog-location))
   (property obj "host"))
 
-(defgeneric set-host (clog-location value)
+(defgeneric (setf host) (value clog-location)
   (:documentation "Set host VALUE for CLOG-LOCATION"))
 
-(defmethod set-host ((obj clog-location) value)
+(defmethod (setf host) (value (obj clog-location))
   (setf (property obj "host") value))
-(defsetf host set-host)
 
 ;;;;;;;;;;;;;;;
 ;; host-name ;;
@@ -85,12 +81,11 @@
 (defmethod host-name ((obj clog-location))
   (property obj "hostname"))
 
-(defgeneric set-host-name (clog-location value)
+(defgeneric (setf host-name) (value clog-location)
   (:documentation "Set host-name VALUE for CLOG-LOCATION"))
 
-(defmethod set-host-name ((obj clog-location) value)
+(defmethod (setf host-name) (value (obj clog-location))
   (setf (property obj "hostname") value))
-(defsetf host-name set-host-name)
 
 ;;;;;;;;;;;;
 ;; origin ;;
@@ -112,12 +107,11 @@
 (defmethod path-name ((obj clog-location))
   (property obj "pathname"))
 
-(defgeneric set-path-name (clog-location value)
+(defgeneric (setf path-name) (value clog-location)
   (:documentation "Set path-name VALUE for CLOG-LOCATION"))
 
-(defmethod set-path-name ((obj clog-location) value)
+(defmethod (setf path-name) (value (obj clog-location))
   (setf (property obj "pathname") value))
-(defsetf path-name set-path-name)
 
 ;;;;;;;;;;
 ;; port ;;
@@ -129,12 +123,11 @@
 (defmethod port ((obj clog-location))
   (property obj "port"))
 
-(defgeneric set-port (clog-location value)
+(defgeneric (setf port) (value clog-location)
   (:documentation "Set port VALUE for CLOG-LOCATION"))
 
-(defmethod set-port ((obj clog-location) value)
+(defmethod (setf port) (value (obj clog-location))
   (setf (property obj "port") value))
-(defsetf port set-port)
 
 ;;;;;;;;;;;;;;
 ;; protocol ;;
@@ -146,12 +139,11 @@
 (defmethod protocol ((obj clog-location))
   (property obj "protocol"))
 
-(defgeneric set-protocol (clog-location value)
+(defgeneric (setf protocol) (value clog-location)
   (:documentation "Set protocol VALUE for CLOG-LOCATION"))
 
-(defmethod set-protocol ((obj clog-location) value)
+(defmethod (setf protocol) (value (obj clog-location))
   (setf (property obj "protocol") value))
-(defsetf protocol set-protocol)
 
 ;;;;;;;;;;;;;;;;
 ;; url-search ;;
@@ -163,12 +155,11 @@
 (defmethod url-search ((obj clog-location))
   (property obj "search"))
 
-(defgeneric set-url-search (clog-location value)
+(defgeneric (setf url-search) (value clog-location)
   (:documentation "Set url-search VALUE for CLOG-LOCATION"))
 
-(defmethod set-url-search ((obj clog-location) value)
+(defmethod (setf url-search) (value (obj clog-location))
   (setf (property obj "search") value))
-(defsetf url-search set-url-search)
 
 ;;;;;;;;;;;;
 ;; reload ;;

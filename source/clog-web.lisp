@@ -172,13 +172,12 @@ create-web-menu-bar."))
   (let ((app (connection-data-item obj "clog-web")))
     (web-menu app)))
 
-(defgeneric set-web-menu-bar (clog-obj value)
+(defgeneric (setf web-menu-bar) (value clog-obj)
   (:documentation "Set window web-menu-bar"))
 
-(defmethod set-web-menu-bar ((obj clog-obj) value)
+(defmethod (setf web-menu-bar) (value (obj clog-obj))
   (let ((app (connection-data-item obj "clog-web")))
     (setf (web-menu app) value)))
-(defsetf web-menu-bar set-web-menu-bar)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; web-menu-bar-height ;;

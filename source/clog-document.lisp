@@ -119,13 +119,12 @@ clog-document object. (Private)"))
 (defmethod title ((obj clog-document))
   (query obj "title"))
 
-(defgeneric set-title (clog-document value))
+(defgeneric (setf title) (value clog-document))
 
-(defmethod set-title ((obj clog-document) value)
+(defmethod (setf title) (value (obj clog-document))
   (execute obj
            (format nil "title='~A'" (clog-connection:escape-string value)))
   value)
-(defsetf title set-title)
 
 ;;;;;;;;;;;;;;;;;;
 ;; document-url ;;

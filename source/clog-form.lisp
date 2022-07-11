@@ -142,14 +142,13 @@ doing file upload use multipart/form-data"))
 (defmethod autocompletep ((obj clog-form))
   (js-on-p (property obj "autocompletep")))
 
-(defgeneric set-autocompletep (clog-form autocompletep)
+(defgeneric (setf autocompletep) (autocompletep clog-form)
   (:documentation "Set autocompletep for CLOG-FORM"))
 
-(defmethod set-autocompletep ((obj clog-form) autocompletep)
+(defmethod (setf autocompletep) (autocompletep (obj clog-form))
   (if autocompletep
       (setf (attribute obj "autocomplete") "true")
       (remove-attribute obj "autocomplete")))
-(defsetf autocompletep set-autocompletep)
 
 ;;;;;;;;;;;;;;
 ;; encoding ;;
@@ -164,12 +163,11 @@ doing file upload use multipart/form-data"))
 (defmethod encoding ((obj clog-form))
   (property obj "encoding"))
 
-(defgeneric set-encoding (clog-form encoding)
+(defgeneric (setf encoding) (encoding clog-form)
   (:documentation "Set encoding for CLOG-FORM"))
 
-(defmethod set-encoding ((obj clog-form) encoding)
+(defmethod (setf encoding) (encoding (obj clog-form))
   (setf (property obj "encoding") encoding))
-(defsetf encoding set-encoding)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;
 ;; validate-on-submit ;;
@@ -181,14 +179,13 @@ doing file upload use multipart/form-data"))
 (defmethod validate-on-submit ((obj clog-form))
   (not (js-true-p (property obj "noValidate"))))
 
-(defgeneric set-validate-on-submit (clog-form value)
+(defgeneric (setf validate-on-submit) (value clog-form)
   (:documentation "Set VALIDATE-ON-SUBMIT for CLOG-FORM"))
 
-(defmethod set-validate-on-submit ((obj clog-form) value)
+(defmethod (setf validate-on-submit) (value (obj clog-form))
   (if (not value)
       (setf (attribute obj "noValidate") "true")
       (remove-attribute obj "noValidate")))
-(defsetf validate-on-submit set-validate-on-submit)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Implementation - clog-form-clement
@@ -252,14 +249,13 @@ clog-form in the DOM. The radio ELEMENT-TYPE groups by NAME."))
 (defmethod autocomplete ((obj clog-form-element))
   (property obj "autocomplete"))
 
-(defgeneric set-autocomplete (clog-form-element value)
+(defgeneric (setf autocomplete) (value clog-form-element)
   (:documentation "Set autocomplete AUTOCOMPLETE for CLOG-FORM-ELEMENT"))
 
-(defmethod set-autocomplete ((obj clog-form-element) value)
+(defmethod (setf autocomplete) (value (obj clog-form-element))
   (if value
       (setf (attribute obj "autocomplete") "true")
       (remove-attribute obj "autocomplete")))
-(defsetf autocomplete set-autocomplete)
 
 ;;;;;;;;;;;;;;;;
 ;; autofocusp ;;
@@ -272,14 +268,13 @@ have this set true ever. Autofocus on element when form loaded."))
 (defmethod autofocusp ((obj clog-form-element))
   (js-true-p (attribute obj "autofocus")))
 
-(defgeneric set-autofocusp (clog-form-element value)
+(defgeneric (setf autofocusp) (value clog-form-element)
   (:documentation "Set autofocusp AUTOFOCUSP for CLOG-FORM-ELEMENT"))
 
-(defmethod set-autofocusp ((obj clog-form-element) value)
+(defmethod (setf autofocusp) (value (obj clog-form-element))
   (if value
       (setf (attribute obj "autofocus") "true")
       (remove-attribute obj "autofocus")))
-(defsetf autofocusp set-autofocusp)
 
 ;;;;;;;;;;;;;;;;;;
 ;; place-holder ;;
@@ -291,12 +286,11 @@ have this set true ever. Autofocus on element when form loaded."))
 (defmethod place-holder ((obj clog-form-element))
   (property obj "placeholder"))
 
-(defgeneric set-place-holder (clog-form-element value)
+(defgeneric (setf place-holder) (value clog-form-element)
   (:documentation "Set placeholder PLACE-HOLDER for CLOG-FORM-ELEMENT"))
 
-(defmethod set-place-holder ((obj clog-form-element) value)
+(defmethod (setf place-holder) (value (obj clog-form-element))
   (setf (property obj "placeholder") value))
-(defsetf place-holder set-place-holder)
 
 ;;;;;;;;;;;;;;;
 ;; disabledp ;;
@@ -308,14 +302,13 @@ have this set true ever. Autofocus on element when form loaded."))
 (defmethod disabledp ((obj clog-form-element))
   (js-true-p (property obj "disabled")))
 
-(defgeneric set-disabledp (clog-form-element value)
+(defgeneric (setf disabledp) (value clog-form-element)
   (:documentation "Set disabledp DISABLEDP for CLOG-FORM-ELEMENT"))
 
-(defmethod set-disabledp ((obj clog-form-element) value)
+(defmethod (setf disabledp) (value (obj clog-form-element))
   (if value
       (setf (attribute obj "disabled") "true")
       (remove-attribute obj "disabled")))
-(defsetf disabledp set-disabledp)
 
 ;;;;;;;;;;;;;;;;;
 ;; read-only-p ;;
@@ -327,14 +320,13 @@ have this set true ever. Autofocus on element when form loaded."))
 (defmethod read-only-p ((obj clog-form-element))
   (js-true-p (property obj "readonly")))
 
-(defgeneric set-read-only-p (clog-form-element value)
+(defgeneric (setf read-only-p) (value clog-form-element)
   (:documentation "Set read-only-p READ-ONLY-P for CLOG-FORM-ELEMENT"))
 
-(defmethod set-read-only-p ((obj clog-form-element) value)
+(defmethod (setf read-only-p) (value (obj clog-form-element))
   (if value
       (setf (attribute obj "readonly") "true")
       (remove-attribute obj "readonly")))
-(defsetf read-only-p set-read-only-p)
 
 ;;;;;;;;;;;;;;;
 ;; requiredp ;;
@@ -346,14 +338,13 @@ have this set true ever. Autofocus on element when form loaded."))
 (defmethod requiredp ((obj clog-form-element))
   (js-true-p (property obj "required")))
 
-(defgeneric set-requiredp (clog-form-element value)
+(defgeneric (setf requiredp) (value clog-form-element)
   (:documentation "Set requiredp REQUIREDP for CLOG-FORM-ELEMENT"))
 
-(defmethod set-requiredp ((obj clog-form-element) value)
+(defmethod (setf requiredp) (value (obj clog-form-element))
   (if value
       (setf (attribute obj "required") "true")
       (remove-attribute obj "required")))
-(defsetf requiredp set-requiredp)
 
 ;;;;;;;;;;;;;;;
 ;; multiplep ;;
@@ -365,14 +356,13 @@ have this set true ever. Autofocus on element when form loaded."))
 (defmethod multiplep ((obj clog-form-element))
   (js-true-p (property obj "multiple")))
 
-(defgeneric set-multiplep (clog-form-element value)
+(defgeneric (setf multiplep) (value clog-form-element)
   (:documentation "Set multiplep MULTIPLEP for CLOG-FORM-ELEMENT"))
 
-(defmethod set-multiplep ((obj clog-form-element) value)
+(defmethod (setf multiplep) (value (obj clog-form-element))
   (if value
       (setf (attribute obj "multiple") "true")
       (remove-attribute obj "multiple")))
-(defsetf multiplep set-multiplep)
 
 ;;;;;;;;;;
 ;; name ;;
@@ -388,12 +378,11 @@ have this set true ever. Autofocus on element when form loaded."))
 (defmethod name ((obj clog-form-element))
   (property obj "name"))
 
-(defgeneric set-name (clog-form-element value)
+(defgeneric (setf name) (value clog-form-element)
   (:documentation "Set name VALUE for CLOG-FORM-ELEMENT"))
 
-(defmethod set-name ((obj clog-form-element) value)
+(defmethod (setf name) (value (obj clog-form-element))
   (setf (property obj "name") value))
-(defsetf name set-name)
 
 ;;;;;;;;;;;;;;;;;;;
 ;; default-value ;;
@@ -407,12 +396,11 @@ have this set true ever. Autofocus on element when form loaded."))
 (defmethod default-value ((obj clog-form-element))
   (property obj "defaultValue"))
 
-(defgeneric set-default-value (clog-form-element value)
+(defgeneric (setf default-value) (value clog-form-element)
   (:documentation "Set default-value VALUE for CLOG-FORM-ELEMENT"))
 
-(defmethod set-default-value ((obj clog-form-element) value)
+(defmethod (setf default-value) (value (obj clog-form-element))
   (setf (property obj "defaultValue") value))
-(defsetf default-value set-default-value)
 
 ;;;;;;;;;;;
 ;; value ;;
@@ -426,12 +414,11 @@ have this set true ever. Autofocus on element when form loaded."))
 (defmethod value ((obj clog-form-element))
   (property obj "value"))
 
-(defgeneric set-value (clog-form-element value)
+(defgeneric (setf value) (value clog-form-element)
   (:documentation "Set value VALUE for CLOG-FORM-ELEMENT"))
 
-(defmethod set-value ((obj clog-form-element) value)
+(defmethod (setf value) (value (obj clog-form-element))
   (setf (property obj "value") value))
-(defsetf value set-value)
 
 ;; overloading of text-value to equal value on forms
 
@@ -506,12 +493,11 @@ be unique name on entire document."))
 (defmethod pattern ((obj clog-form-element))
   (property obj "pattern"))
 
-(defgeneric set-pattern (clog-form-element value)
+(defgeneric (setf pattern) (value clog-form-element)
   (:documentation "Set pattern VALUE for CLOG-FORM-ELEMENT"))
 
-(defmethod set-pattern ((obj clog-form-element) value)
+(defmethod (setf pattern) (value (obj clog-form-element))
   (setf (property obj "pattern") value))
-(defsetf pattern set-pattern)
 
 ;;;;;;;;;;;;;
 ;; minimum ;;
@@ -523,12 +509,11 @@ be unique name on entire document."))
 (defmethod minimum ((obj clog-form-element))
   (property obj "min"))
 
-(defgeneric set-minimum (clog-form-element value)
+(defgeneric (setf minimum) (value clog-form-element)
   (:documentation "Set minimum VALUE for CLOG-FORM-ELEMENT"))
 
-(defmethod set-minimum ((obj clog-form-element) value)
+(defmethod (setf minimum) (value (obj clog-form-element))
   (setf (property obj "min") value))
-(defsetf minimum set-minimum)
 
 ;;;;;;;;;;;;;
 ;; maximum ;;
@@ -540,12 +525,11 @@ be unique name on entire document."))
 (defmethod maximum ((obj clog-form-element))
   (property obj "max"))
 
-(defgeneric set-maximum (clog-form-element value)
+(defgeneric (setf maximum) (value clog-form-element)
   (:documentation "Set maximum VALUE for CLOG-FORM-ELEMENT"))
 
-(defmethod set-maximum ((obj clog-form-element) value)
+(defmethod (setf maximum) (value (obj clog-form-element))
   (setf (property obj "max") value))
-(defsetf maximum set-maximum)
 
 ;;;;;;;;;;;;;;;;;;
 ;; element-step ;;
@@ -557,12 +541,11 @@ be unique name on entire document."))
 (defmethod element-step ((obj clog-form-element))
   (property obj "step"))
 
-(defgeneric set-element-step (clog-form-element value)
+(defgeneric (setf element-step) (value clog-form-element)
   (:documentation "Set element-step VALUE for CLOG-FORM-ELEMENT"))
 
-(defmethod set-element-step ((obj clog-form-element) value)
+(defmethod (setf element-step) (value (obj clog-form-element))
   (setf (property obj "step") value))
-(defsetf element-step set-element-step)
 
 ;;;;;;;;;;
 ;; size ;;
@@ -574,12 +557,11 @@ be unique name on entire document."))
 (defmethod size ((obj clog-form-element))
   (property obj "size"))
 
-(defgeneric set-size (clog-form-element value)
+(defgeneric (setf size) (value clog-form-element)
   (:documentation "Set size VALUE for CLOG-FORM-ELEMENT"))
 
-(defmethod set-size ((obj clog-form-element) value)
+(defmethod (setf size) (value (obj clog-form-element))
   (setf (property obj "size") value))
-(defsetf size set-size)
 
 ;;;;;;;;;;;;;;;;;;;;
 ;; minimum-length ;;
@@ -591,12 +573,11 @@ be unique name on entire document."))
 (defmethod minimum-length ((obj clog-form-element))
   (property obj "minlength"))
 
-(defgeneric set-minimum-length (clog-form-element value)
+(defgeneric (setf minimum-length) (value clog-form-element)
   (:documentation "Set minimum-length VALUE for CLOG-FORM-ELEMENT"))
 
-(defmethod set-minimum-length ((obj clog-form-element) value)
+(defmethod (setf minimum-length) (value (obj clog-form-element))
   (setf (property obj "minlength") value))
-(defsetf minimum-length set-minimum-length)
 
 ;;;;;;;;;;;;;;;;;;;;
 ;; maximum-length ;;
@@ -608,12 +589,11 @@ be unique name on entire document."))
 (defmethod maximum-length ((obj clog-form-element))
   (property obj "maxlength"))
 
-(defgeneric set-maximum-length (clog-form-element value)
+(defgeneric (setf maximum-length) (value clog-form-element)
   (:documentation "Set maximum-length VALUE for CLOG-FORM-ELEMENT"))
 
-(defmethod set-maximum-length ((obj clog-form-element) value)
+(defmethod (setf maximum-length) (value (obj clog-form-element))
   (setf (property obj "maxlength") value))
-(defsetf maximum-length set-maximum-length)
 
 ;;;;;;;;;;;;
 ;; select ;;
@@ -657,12 +637,11 @@ the File form element type.
 (defmethod file-accept ((obj clog-form-element))
   (attribute obj "accept"))
 
-(defgeneric set-file-accept (clog-form-element value)
+(defgeneric (setf file-accept) (value clog-form-element)
   (:documentation "Set file-accept VALUE for CLOG-FORM-ELEMENT"))
 
-(defmethod set-file-accept ((obj clog-form-element) value)
+(defmethod (setf file-accept) (value (obj clog-form-element))
   (setf (attribute obj "accept") value))
-(defsetf file-accept set-file-accept)
 
 ;;;;;;;;;;;;;
 ;; url-src ;;
@@ -674,12 +653,11 @@ the File form element type.
 (defmethod url-src ((obj clog-form-element))
   (property obj "src"))
 
-(defgeneric set-url-src (clog-form-element value)
+(defgeneric (setf url-src) (value clog-form-element)
   (:documentation "Set url-src VALUE for CLOG-FORM-ELEMENT"))
 
-(defmethod set-url-src ((obj clog-form-element) value)
+(defmethod (setf url-src) (value (obj clog-form-element))
   (setf (property obj "src") value))
-(defsetf url-src set-url-src)
 
 ;;;;;;;;;;;;;;
 ;; alt-text ;;
@@ -691,12 +669,11 @@ the File form element type.
 (defmethod alt-text ((obj clog-form-element))
   (attribute obj "alt"))
 
-(defgeneric set-alt-text (clog-form-element value)
+(defgeneric (setf alt-text) (value clog-form-element)
   (:documentation "Set alt-text VALUE for CLOG-FORM-ELEMENT"))
 
-(defmethod set-alt-text ((obj clog-form-element) value)
+(defmethod (setf alt-text) (value (obj clog-form-element))
   (setf (attribute obj "alt") value))
-(defsetf alt-text set-alt-text)
 
 ;;;;;;;;;;;;;;
 ;; checkedp ;;
@@ -708,14 +685,13 @@ the File form element type.
 (defmethod checkedp ((obj clog-form-element))
   (js-true-p (property obj "checked")))
 
-(defgeneric set-checkedp (clog-form-element value)
+(defgeneric (setf checkedp) (value clog-form-element)
   (:documentation "Set VALUE if checkedp for CLOG-FORM-ELEMENT"))
 
-(defmethod set-checkedp ((obj clog-form-element) value)
+(defmethod (setf checkedp) (value (obj clog-form-element))
   (if value
       (setf (attribute obj "checked") "true")
       (remove-attribute obj "checked")))
-(defsetf checkedp set-checkedp)
 
 ;;;;;;;;;;;;;;;;
 ;; input-mode ;;
@@ -731,12 +707,11 @@ virtual keyboards."))
 (defmethod input-mode ((obj clog-form-element))
   (attribute obj "inputmode"))
 
-(defgeneric set-input-mode (clog-form-element value)
+(defgeneric (setf input-mode) (value clog-form-element)
   (:documentation "Set input-mode VALUE for CLOG-FORM-ELEMENT"))
 
-(defmethod set-input-mode ((obj clog-form-element) value)
+(defmethod (setf input-mode) (value (obj clog-form-element))
   (setf (attribute obj "inputmode") value))
-(defsetf input-mode set-input-mode)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Implementation - clog-label
@@ -878,12 +853,11 @@ virtual keyboards."))
 (defmethod word-wrap ((obj clog-text-area))
   (property obj "wrap"))
 
-(defgeneric set-word-wrap (clog-text-area value)
+(defgeneric (setf word-wrap) (value clog-text-area)
   (:documentation "Set word-wrap WORD-WRAP for CLOG-TEXT-AREA"))
 
-(defmethod set-word-wrap ((obj clog-text-area) value)
+(defmethod (setf word-wrap) (value (obj clog-text-area))
   (setf (property obj "wrap") value))
-(defsetf word-wrap set-word-wrap)
 
 ;;;;;;;;;;;;;;;
 ;; word-wrap ;;
@@ -895,12 +869,11 @@ virtual keyboards."))
 (defmethod word-wrap ((obj clog-text-area))
   (property obj "wrap"))
 
-(defgeneric set-word-wrap (clog-text-area value)
+(defgeneric (setf word-wrap) (value clog-text-area)
   (:documentation "Set word-wrap WORD-WRAP for CLOG-TEXT-AREA"))
 
-(defmethod set-word-wrap ((obj clog-text-area) value)
+(defmethod (setf word-wrap) (value (obj clog-text-area))
   (setf (property obj "wrap") value))
-(defsetf word-wrap set-word-wrap)
 
 ;;;;;;;;;;;;;
 ;; columns ;;
@@ -912,12 +885,11 @@ virtual keyboards."))
 (defmethod columns ((obj clog-text-area))
   (property obj "cols"))
 
-(defgeneric set-columns (clog-text-area value)
+(defgeneric (setf columns) (value clog-text-area)
   (:documentation "Set columns COLUMNS for CLOG-TEXT-AREA"))
 
-(defmethod set-columns ((obj clog-text-area) value)
+(defmethod (setf columns) (value (obj clog-text-area))
   (setf (property obj "cols") value))
-(defsetf columns set-columns)
 
 ;;;;;;;;;;
 ;; rows ;;
@@ -929,12 +901,11 @@ virtual keyboards."))
 (defmethod rows ((obj clog-text-area))
   (property obj "rows"))
 
-(defgeneric set-rows (clog-text-area value)
+(defgeneric (setf rows) (value clog-text-area)
   (:documentation "Set rows ROWS for CLOG-TEXT-AREA"))
 
-(defmethod set-rows ((obj clog-text-area) value)
+(defmethod (setf rows) (value (obj clog-text-area))
   (setf (property obj "rows") value))
-(defsetf rows set-rows)
 
 ;;;;;;;;;;;;;;;;;;;;
 ;; disable-resize ;;
@@ -1172,12 +1143,11 @@ or CLOG Data-List objects."));
 (defmethod selectedp ((obj clog-form-element))
   (js-true-p (property obj "selected")))
 
-(defgeneric set-selectedp (clog-form-element value)
+(defgeneric (setf selectedp) (value clog-form-element)
   (:documentation "Set selectedp VALUE for CLOG-FORM-ELEMENT"))
 
-(defmethod set-selectedp ((obj clog-form-element) value)
+(defmethod (setf selectedp) (value (obj clog-form-element))
   (setf (property obj "selected") (p-true-js value)))
-(defsetf selectedp set-selectedp)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Implementation - clog-optgroup

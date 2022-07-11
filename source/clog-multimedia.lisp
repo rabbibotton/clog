@@ -29,12 +29,11 @@
 (defmethod loop-mediap ((obj clog-multimedia))
   (js-true-p (property obj "loop")))
 
-(defgeneric set-loop-mediap (clog-multimedia value)
+(defgeneric (setf loop-mediap) (value clog-multimedia)
   (:documentation "Set loop-media VALUE for CLOG-MULTIMEDIA"))
 
-(defmethod set-loop-mediap ((obj clog-multimedia) value)
+(defmethod (setf loop-mediap) (value (obj clog-multimedia))
   (setf (property obj "loop") (p-true-js value)))
-(defsetf loop-mediap set-loop-mediap)
 
 ;;;;;;;;;;;;;;;;;;;;
 ;; media-duration ;;
@@ -56,12 +55,11 @@
 (defmethod media-source ((obj clog-multimedia))
   (property obj "src"))
 
-(defgeneric set-media-source (clog-multimedia value)
+(defgeneric (setf media-source) (value clog-multimedia)
   (:documentation "Set media source VALUE for CLOG-MULTIMEDIA"))
 
-(defmethod set-media-source ((obj clog-multimedia) value)
+(defmethod (setf media-source) (value (obj clog-multimedia))
   (setf (property obj "src") value))
-(defsetf media-source set-media-source)
 
 ;;;;;;;;;;;;;;;;;;;;
 ;; media-position ;;
@@ -73,12 +71,11 @@
 (defmethod media-position ((obj clog-multimedia))
   (parse-float (property obj "currentTime" :default-answer 0) :type 'double-float :junk-allowed t))
 
-(defgeneric set-media-position (clog-multimedia value)
+(defgeneric (setf media-position) (value clog-multimedia)
   (:documentation "Set media source VALUE for CLOG-MULTIMEDIA"))
 
-(defmethod set-media-position ((obj clog-multimedia) value)
+(defmethod (setf media-position) (value (obj clog-multimedia))
   (setf (property obj "currentTime") value))
-(defsetf media-position set-media-position)
 
 ;;;;;;;;;;;;
 ;; mutedp ;;
@@ -90,12 +87,11 @@
 (defmethod mutedp ((obj clog-multimedia))
   (js-true-p (property obj "muted")))
 
-(defgeneric set-mutedp (clog-multimedia value)
+(defgeneric (setf mutedp) (value clog-multimedia)
   (:documentation "Set muted VALUE for CLOG-MULTIMEDIA"))
 
-(defmethod set-mutedp ((obj clog-multimedia) value)
+(defmethod (setf mutedp) (value (obj clog-multimedia))
   (setf (property obj "muted") (p-true-js value)))
-(defsetf mutedp set-mutedp)
 
 ;;;;;;;;;;;;;
 ;; pausedp ;;
@@ -139,12 +135,11 @@ Common values - 1.0 normal, 0.5 half speed, -1.0 reverse"))
 (defmethod playback-rate ((obj clog-multimedia))
   (property obj "playbackRate"))
 
-(defgeneric set-playback-rate (clog-multimedia value)
+(defgeneric (setf playback-rate) (value clog-multimedia)
   (:documentation "Set media source VALUE for CLOG-MULTIMEDIA"))
 
-(defmethod set-playback-rate ((obj clog-multimedia) value)
+(defmethod (setf playback-rate) (value (obj clog-multimedia))
   (setf (property obj "playbackRate") value))
-(defsetf playback-rate set-playback-rate)
 
 ;;;;;;;;;;;;;;;;;;;;;
 ;; ready-to-play-p ;;
@@ -167,12 +162,11 @@ duration."))
 (defmethod media-volume ((obj clog-multimedia))
   (parse-float (property obj "volume" :default-answer 0) :type 'double-float :junk-allowed t))
 
-(defgeneric set-media-volume (clog-multimedia value)
+(defgeneric (setf media-volume) (value clog-multimedia)
   (:documentation "Set media source VALUE for CLOG-MULTIMEDIA"))
 
-(defmethod set-media-volume ((obj clog-multimedia) value)
+(defmethod (setf media-volume) (value (obj clog-multimedia))
   (setf (property obj "volume") value))
-(defsetf media-volume set-media-volume)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Methods - clog-multimedia

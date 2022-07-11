@@ -65,12 +65,11 @@ place-inside-bottom-of CLOG-OBJ.
 (defmethod link ((obj clog-a))
   (property obj "href"))
 
-(defgeneric set-link (clog-a value)
+(defgeneric (setf link) (value clog-a)
   (:documentation "Set link VALUE for CLOG-A"))
 
-(defmethod set-link ((obj clog-a) value)
+(defmethod (setf link) (value (obj clog-a))
   (setf (property obj "href") value))
-(defsetf link set-link)
 
 ;;;;;;;;;;;;
 ;; target ;;
@@ -82,12 +81,11 @@ place-inside-bottom-of CLOG-OBJ.
 (defmethod target ((obj clog-a))
   (property obj "target"))
 
-(defgeneric set-target (clog-a value)
+(defgeneric (setf target) (value clog-a)
   (:documentation "Set target VALUE for CLOG-A"))
 
-(defmethod set-target ((obj clog-a) value)
+(defmethod (setf targe)t (value (obj clog-a))
   (setf (property obj "target") value))
-(defsetf target set-target)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Implementation - clog-br
@@ -167,14 +165,13 @@ CLOG-OBJ"))
 (defmethod disabledp ((obj clog-button))
   (js-true-p (property obj "disabled")))
 
-(defgeneric set-disabledp (clog-button value)
+(defgeneric (setf disabledp) (value clog-button)
   (:documentation "Set editable VALUE for CLOG-BUTTON"))
 
-(defmethod set-disabledp ((obj clog-button) value)
+(defmethod (setf disabledp) (value (obj clog-button))
   (if value
       (setf (property obj "disabled") (p-true-js value))
       (remove-attribute obj "disabled")))
-(defsetf disabledp set-editable)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Implementation - clog-div
@@ -259,12 +256,11 @@ firefox and dialog does not work at all on IE."))
 (defmethod return-value ((obj clog-dialog))
   (property obj "returnValue"))
 
-(defgeneric set-return-value (clog-dialog value)
+(defgeneric (setf return-value) (value clog-dialog)
   (:documentation "Set return-value VALUE for CLOG-DIALOG"))
 
-(defmethod set-return-value ((obj clog-dialog) value)
+(defmethod (setf return-value) (value (obj clog-dialog))
   (setf (property obj "returnValue") value))
-(defsetf return-value set-return-value)
 
 ;;;;;;;;;;;;;;;;;;
 ;; dialog-openp ;;
@@ -277,14 +273,13 @@ firefox and dialog does not work at all on IE."))
   (unless (equalp (attribute obj "open") "undefined")
     t))
 
-(defgeneric set-dialog-openp (clog-dialog value)
+(defgeneric (setf dialog-openp) (value clog-dialog)
   (:documentation "Set dialog-openp VALUE for CLOG-DIALOG"))
 
-(defmethod set-dialog-openp ((obj clog-dialog) value)
+(defmethod (setf dialog-openp) (value (obj clog-dialog))
   (if value
       (setf (attribute obj "open") t)
       (remove-attribute obj "open")))
-(defsetf dialog-openp set-dialog-openp)
 
 ;;;;;;;;;;;;;;;;;
 ;; show-dialog ;;
@@ -393,12 +388,11 @@ placing image to constrain image size."))
 (defmethod url-src ((obj clog-img))
   (property obj "src"))
 
-(defgeneric set-url-src (clog-img value)
+(defgeneric (setf url-src) (value clog-img)
   (:documentation "Set url-src VALUE for CLOG-IMG"))
 
-(defmethod set-url-src ((obj clog-img) value)
+(defmethod (setf url-src) (value (obj clog-img))
   (setf (property obj "src") value))
-(defsetf url-src set-url-src)
 
 ;;;;;;;;;;;;;;
 ;; alt-text ;;
@@ -410,12 +404,11 @@ placing image to constrain image size."))
 (defmethod alt-text ((obj clog-img))
   (attribute obj "alt"))
 
-(defgeneric set-alt-text (clog-img value)
+(defgeneric (setf alt-text) (value clog-img)
   (:documentation "Set alt-text VALUE for CLOG-IMG"))
 
-(defmethod set-alt-text ((obj clog-img) value)
+(defmethod (setf alt-text) (value (obj clog-img))
   (setf (attribute obj "alt") value))
-(defsetf alt-text set-alt-text)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Implementation - clog-meter
@@ -472,9 +465,8 @@ place-inside-bottom-of CLOG-OBJ."))
 (defmethod value ((obj clog-meter))
   (property obj "value"))
 
-(defmethod set-value ((obj clog-meter) value)
+(defmethod (setf value) (value (obj clog-meter))
   (setf (property obj "value") value))
-(defsetf value set-value)
 
 ;;;;;;;;;;;;;;;;
 ;; text-value ;;
@@ -496,12 +488,11 @@ place-inside-bottom-of CLOG-OBJ."))
 (defmethod high ((obj clog-meter))
   (property obj "high"))
 
-(defgeneric set-high (clog-meter high)
-  (:documentation "Set high HIGH for CLOG-METER"))
+(defgeneric (setf high) (high clog-meter)
+  (:documentation "Set HIGH for CLOG-METER"))
 
-(defmethod set-high ((obj clog-meter) high)
+(defmethod (setf high) (high (obj clog-meter))
   (setf (property obj "high") high))
-(defsetf high set-high)
 
 ;;;;;;;;;
 ;; low ;;
@@ -513,12 +504,11 @@ place-inside-bottom-of CLOG-OBJ."))
 (defmethod low ((obj clog-meter))
   (property obj "low"))
 
-(defgeneric set-low (clog-meter low)
-  (:documentation "Set low LOW for CLOG-METER"))
+(defgeneric (setf low) (low clog-meter)
+  (:documentation "Set LOW for CLOG-METER"))
 
-(defmethod set-low ((obj clog-meter) low)
+(defmethod (setf low) (low (obj clog-meter))
   (setf (property obj "low") low))
-(defsetf low set-low)
 
 ;;;;;;;;;;;;;
 ;; maximum ;;
@@ -530,12 +520,11 @@ place-inside-bottom-of CLOG-OBJ."))
 (defmethod maximum ((obj clog-meter))
   (property obj "max"))
 
-(defgeneric set-maximum (clog-meter maximum)
+(defgeneric (setf maximum) (maximum clog-meter)
   (:documentation "Set maximum MAXIMUM for CLOG-METER"))
 
-(defmethod set-maximum ((obj clog-meter) maximum)
+(defmethod (setf maximum) (maximum (obj clog-meter))
   (setf (property obj "max") maximum))
-(defsetf maximum set-maximum)
 
 ;;;;;;;;;;;;;
 ;; minimum ;;
@@ -547,12 +536,12 @@ place-inside-bottom-of CLOG-OBJ."))
 (defmethod minimum ((obj clog-meter))
   (property obj "min"))
 
-(defgeneric set-minimum (clog-meter minimum)
+(defgeneric (setf minimum) (minimum clog-meter)
   (:documentation "Set minimum MINIMUM for CLOG-METER"))
 
-(defmethod set-minimum ((obj clog-meter) minimum)
+(defmethod (setf minimum) (minimum (obj clog-meter))
   (setf (property obj "min") minimum))
-(defsetf minimum set-minimum)
+
 
 ;;;;;;;;;;;;;
 ;; optimum ;;
@@ -564,12 +553,11 @@ place-inside-bottom-of CLOG-OBJ."))
 (defmethod optimum ((obj clog-meter))
   (property obj "optimum"))
 
-(defgeneric set-optimum (clog-meter optimum)
+(defgeneric (setf optimum) (optimum clog-meter)
   (:documentation "Set optimum OPTIMUM for CLOG-METER"))
 
-(defmethod set-optimum ((obj clog-meter) optimum)
+(defmethod (setf optimum) (optimum (obj clog-meter))
   (setf (property obj "optimum") optimum))
-(defsetf optimum set-optimum)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Implementation - clog-progress-bar
@@ -616,9 +604,8 @@ place-inside-bottom-of CLOG-OBJ."))
 (defmethod value ((obj clog-progress-bar))
   (property obj "value"))
 
-(defmethod set-value ((obj clog-progress-bar) value)
+(defmethod (setf value) (value (obj clog-progress-bar))
   (setf (property obj "value") value))
-(defsetf value set-value)
 
 ;;;;;;;;;;;;;;;;
 ;; text-value ;;
@@ -640,12 +627,11 @@ place-inside-bottom-of CLOG-OBJ."))
 (defmethod maximum ((obj clog-progress-bar))
   (property obj "max"))
 
-(defgeneric set-maximum (clog-progress-bar maximum)
+(defgeneric (setf maximum) (maximum clog-progress-bar)
   (:documentation "Set maximum MAXIMUM for CLOG-PROGRESS-BAR"))
 
-(defmethod set-maximum ((obj clog-progress-bar) maximum)
+(defmethod (setf maximum) (maximum (obj clog-progress-bar))
   (setf (property obj "max") maximum))
-(defsetf maximum set-maximum)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Implementation - clog-p
@@ -877,12 +863,11 @@ LIST-KIND-TYPE -
 (defmethod list-kind ((obj clog-ordered-list))
   (style obj "list-style-type"))
 
-(defgeneric set-list-kind (clog-ordered-list value)
+(defgeneric (setf list-kind) (value clog-ordered-list)
   (:documentation "Set list-kind VALUE for  CLOG-ORDERED-LIST"))
 
-(defmethod set-list-kind ((obj clog-ordered-list) value)
+(defmethod (setf list-kind) (value (obj clog-ordered-list))
   (setf (style obj "list-style-type") value))
-(defsetf list-kind set-list-kind)
 
 ;;;;;;;;;;;;;;;;;;;
 ;; list-location ;;
@@ -897,12 +882,11 @@ Default is outside."))
 (defmethod list-location ((obj clog-ordered-list))
   (style obj "list-style-position"))
 
-(defgeneric set-list-location (clog-ordered-list value)
+(defgeneric (setf list-location) (value clog-ordered-list)
   (:documentation "Set list-location VALUE for CLOG-ORDERED-LIST"))
 
-(defmethod set-list-location ((obj clog-ordered-list) value)
+(defmethod (setf list-location) (value (obj clog-ordered-list))
   (setf (style obj "list-style-position") value))
-(defsetf list-location set-list-location)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Implementation - clog-unordered-list
@@ -982,12 +966,11 @@ and if :AUTO-PLACE (default t) place-inside-bottom-of CLOG-OBJ"))
 (defmethod item-value ((obj clog-list-item))
   (property obj "value"))
 
-(defgeneric set-item-value (clog-list-item value)
+(defgeneric (setf item-value) (value clog-list-item)
   (:documentation "Set item-value VALUE for  CLOG-LIST-ITEM"))
 
-(defmethod set-item-value ((obj clog-list-item) value)
+(defmethod (setf item-value) (value (obj clog-list-item))
   (setf (property obj "value") value))
-(defsetf item-value set-item-value)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Implementation - clog-definition-list
@@ -1494,14 +1477,13 @@ CLOG-OBJ. If hidden is true visiblep is set to nil."))
   (unless (equalp (attribute obj "open") "undefined")
     t))
 
-(defgeneric set-details-openp (clog-details value)
+(defgeneric (setf details-openp) (value clog-details)
   (:documentation "Set details-openp VALUE for CLOG-DETAILS"))
 
-(defmethod set-details-openp ((obj clog-details) value)
+(defmethod (setf details-openp) (value (obj clog-details))
   (if value
       (setf (attribute obj "open") t)
       (remove-attribute obj "open")))
-(defsetf details-openp set-details-openp)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Implementation - clog-summary

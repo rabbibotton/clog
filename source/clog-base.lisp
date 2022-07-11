@@ -378,15 +378,14 @@ result or if time out DEFAULT-ANSWER. see JQUERY-QUERY (Internal)"))
   (jquery-query obj (format nil "prop('~A')" property-name)
                 :default-answer default-answer))
 
-(defgeneric set-property (clog-obj property-name value)
+(defgeneric (setf property) (value clog-obj property-name)
   (:documentation "Set html property."))
 
-(defmethod set-property ((obj clog-obj) property-name value)
+(defmethod (setf property) (value (obj clog-obj) property-name)
   (jquery-execute obj (format nil "prop('~A','~A')"
                               property-name
                               (escape-string value)))
   value)
-(defsetf property set-property)
 
 ;;;;;;;;;;;;
 ;; height ;;
@@ -398,13 +397,12 @@ result or if time out DEFAULT-ANSWER. see JQUERY-QUERY (Internal)"))
 (defmethod height ((obj clog-obj))
   (parse-integer (jquery-query obj "height()" :default-answer 0) :junk-allowed t))
 
-(defgeneric set-height (clog-obj value)
+(defgeneric (setf height) (value clog-obj)
   (:documentation "Set height VALUE for CLOG-OBJ"))
 
-(defmethod set-height ((obj clog-obj) value)
+(defmethod (setf height) (value (obj clog-obj))
   (jquery-execute obj (format nil "height('~A')" (escape-string value)))
   value)
-(defsetf height set-height)
 
 ;;;;;;;;;;;
 ;; width ;;
@@ -416,13 +414,12 @@ result or if time out DEFAULT-ANSWER. see JQUERY-QUERY (Internal)"))
 (defmethod width ((obj clog-obj))
   (parse-integer (jquery-query obj "width()" :default-answer 0) :junk-allowed t))
 
-(defgeneric set-width (clog-obj value)
+(defgeneric (setf width) (value clog-obj)
   (:documentation "Set width VALUE for CLOG-OBJ"))
 
-(defmethod set-width ((obj clog-obj) value)
+(defmethod (setf width) (value (obj clog-obj))
   (jquery-execute obj (format nil "width('~A')" (escape-string value)))
   value)
-(defsetf width set-width)
 
 ;;;;;;;;;;;
 ;; focus ;;
@@ -504,24 +501,23 @@ an application share per connection the same queue of serialized events."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defgeneric connection-data-item (clog-obj item-name)
-  (:documentation "Get/Setf from connection-data the item-name in hash."))
+  (:documentation "Get/Setf item-name from connection-data."))
 
 (defmethod connection-data-item ((obj clog-obj) item-name)
   (ignore-errors
    (gethash item-name (connection-data obj))))
 
-(defgeneric set-connection-data-item (clog-obj item-name value)
-  (:documentation "Set in connection-data the item-name with value."))
+(defgeneric (setf connection-data-item) (value clog-obj item-name)
+  (:documentation "Set connection-data item-name with value."))
 
-(defmethod set-connection-data-item ((obj clog-obj) item-name value)
+(defmethod (setf connection-data-item) (value (obj clog-obj) item-name)
   (bordeaux-threads:with-lock-held ((connection-data-mutex obj))
     (ignore-errors
      (setf (gethash item-name (connection-data obj)) value)))
   value)
-(defsetf connection-data-item set-connection-data-item)
 
 (defgeneric remove-connection-data-item (clog-obj item-name)
-  (:documentation "Remove from connection-data the item-name in hash."))
+  (:documentation "Remove item-name from connection-data."))
 
 (defmethod remove-connection-data-item ((obj clog-obj) item-name)
   (bordeaux-threads:with-lock-held ((connection-data-mutex obj))
