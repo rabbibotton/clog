@@ -48,7 +48,7 @@
   :components ((:file "clog-docs")))
 
 (asdf:defsystem #:clog/tools
-  :depends-on (#:clog #:s-base64)
+  :depends-on (#:clog #:clog-ace #:s-base64)
   :pathname "tools/"
   :components ((:file "clog-db-admin")
 	       (:file "clog-builder-settings")

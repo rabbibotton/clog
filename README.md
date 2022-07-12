@@ -70,10 +70,11 @@ most up to date version or you can also clone the github repo into
 (push #P"path/to/dir/of/projects" ql:*local-project-directories*) ]:
 
 ```
-For git:
+For git (you need the ace editor plug in for the builder too from git):
 
 cd ~/common-lisp
 git clone https://github.com/rabbibotton/clog.git
+git clone https://github.com/rabbibotton/clog-ace.git
 
 
 To add UltraLisp to QuickLisp (_RECOMMENDED_):

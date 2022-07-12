@@ -41,7 +41,11 @@
    (events-list
     :accessor events-list
     :initform nil
-    :documentation "Property list in events window")
+    :documentation "Event list in events window")
+   (event-editor
+    :accessor event-editor
+    :initform nil
+    :documentation "Editor in events window")
    (control-events-win
     :accessor control-events-win
     :initform nil
@@ -542,8 +546,8 @@ replaced."
 ;; Control selection utilities
 
 (defun get-placer (control)
-  "Get placer for CONTROL. A placer is a div placed on top of the control and
-prevents access to use or activate the control directylu and allows
+  "Get placer for CONTROL. A placer is a div placed on top of CONTROL and
+prevents access to use or activate the control directy and allows
 manipulation of the control's location and size."
   (when control
     (attach-as-child control (format nil "p-~A" (html-id control)))))
@@ -759,56 +763,50 @@ not a temporary attached one when using select-control."
   ;; obj if current-control is nil must be content
   (let* ((app       (connection-data-item obj "builder-app-data"))
          (event-win (control-events-win app))
+	 (elist     (events-list app))
          (control   (if (current-control app)
                         (current-control app)
-                        obj))
-         (table     (events-list app)))
+                        obj)))
     (when event-win
-      (setf (inner-html table) "")
-      (let ((info  (control-info (attribute control "data-clog-type")))
-            events)
-        (dolist (event (reverse (getf info :events)))
-          (let ((attr (format nil "data-~A" (getf event :name))))
-            (push `(,(getf event :name)
-                    ,(let ((txt (attribute control attr)))
-		       (if (equalp txt "undefined")
-                           ""
-                           txt))
-                    ,(getf event :parameters)
-                    ,(getf event :setup)
-                    ,(lambda (obj)
-		       (let ((txt (text-value obj)))
-                         (if (or (equal txt "")
-                                 (equalp txt "undefined"))
-                             (remove-attribute control attr)
-                             (setf (attribute control attr) (text-value obj))))))
-                  events)))
-        (dolist (item events)
-          (let* ((tr     (create-table-row table))
-                 (td1    (create-table-column tr :content (first item)))
-                 (td2    (create-table-column tr))
-                 (editor nil))
-            (setf (width td1) "30%")
-            (setf (width td2) "70%")
-            (set-border td1 "1px" :dotted :black)
-            (setf (advisory-title td1) (format nil "params: panel ~A" (third item)))
-            (cond ((fourth item)
-                   (setf editor td2)
-                   (setf (editablep td2) (funcall (fourth item) control td1 td2)))
-                  (t
-                   ;; (setf editor (clog-ace:create-clog-ace-element td2))
-                   ;; (setf (clog-ace:theme editor) "ace/theme/xcode")
-                   ;; (setf (clog-ace:mode editor) "ace/mode/lisp")
-                   ;; (setf (clog-ace:tab-size editor) 2)
-		   (setf editor (create-text-area td2))
-                   (setf (spellcheckp editor) nil)
-                   (setf (width editor) "95%"))) ; leave space for scroll bar
-            (setf (text-value editor) (second item))
-            (set-on-blur editor
-                         (lambda (obj)
-			   (declare (ignore obj))
-                           (funcall (fifth item) obj)
-			   (jquery-execute (get-placer control) "trigger('clog-builder-snap-shot')")))))))))
+      (setf (inner-html elist) "")
+      (remove-attribute elist "data-current-event")
+      (set-on-blur (event-editor app) nil)
+      (set-on-change elist nil)
+      (let ((info (control-info (attribute control "data-clog-type"))))
+        (add-select-option elist "" "Select Event")
+        (setf (text-value (event-editor app)) "")
+        (labels ((on-blur (obj)
+                   (let ((attr (attribute elist "data-current-event")))
+                     (unless (equalp attr "undefined")
+                       (let ((txt (text-value (event-editor app))))
+                         (cond ((or (equal txt "")
+                                    (equalp txt "undefined"))
+                                (remove-attribute control attr))
+                               (t
+                                (setf (attribute control attr) (text-value (event-editor app))))))
+                       (jquery-execute (get-placer control) "trigger('clog-builder-snap-shot')")))))
+          (set-on-change elist (lambda (obj)
+                                 (declare (ignore obj))
+                                 (let ((event (select-value elist "clog-events")))
+                                   (cond ((equal event "")
+                                          (set-on-blur (event-editor app) nil)
+                                          (setf (text-value (event-editor app)) ""))
+                                         (t
+                                          (let* ((attr (format nil "data-~A" event))
+                                                 (txt  (attribute control attr)))
+                                            (setf (text-value (event-editor app))
+                                                  (if (equalp txt "undefined")
+                                                      ""
+                                                      txt))
+                                            (setf (attribute elist "data-current-event") attr)
+                                            (focus (event-editor app))
+                                            (set-on-blur (event-editor app) #'on-blur))))))))
+        (dolist (event (getf info :events))
+          (add-select-option elist
+                             (getf event :name)
+                             (format nil "~A (panel ~A)"
+                                     (getf event :name)
+                                     (getf event :parameters))))))))
 
 (defun on-populate-control-properties-win (obj &key win)
   "Populate the control properties for the current control"
@@ -874,8 +872,8 @@ not a temporary attached one when using select-control."
                          ,(lambda (obj)
                             (setf (attribute control "data-clog-name") (text obj))
                             (when (equal (getf info :name) "clog-data")
-			      (when win
-				(setf (window-title win) (text obj))))))
+                              (when win
+                                (setf (window-title win) (text obj))))))
              props)
             (dolist (item props)
               (let* ((tr  (create-table-row table))
@@ -896,7 +894,7 @@ not a temporary attached one when using select-control."
                              (lambda (obj)
                                (funcall (fourth item) obj)
                                (when placer
-				 (jquery-execute placer "trigger('clog-builder-snap-shot')")
+                                 (jquery-execute placer "trigger('clog-builder-snap-shot')")
                                  (set-geometry placer :top (position-top control)
                                                       :left (position-left control)
                                                       :width (client-width control)
@@ -914,19 +912,19 @@ of controls and double click to select control."
     (let ((app (connection-data-item content "builder-app-data")))
       (let ((panel-id (html-id content))
             (last-ctl nil))
-	(when (control-list-win app)
+        (when (control-list-win app)
           (let ((lwin (control-list-win app)))
             (setf (inner-html lwin) "")
-	    (set-on-mouse-click (create-div lwin :content (attribute content "data-clog-name"))
-				(lambda (obj data)
-				  (deselect-current-control app)
-				  (on-populate-control-properties-win content :win win)
-				  (on-populate-control-list-win content :win win)))
+            (set-on-mouse-click (create-div lwin :content (attribute content "data-clog-name"))
+                                (lambda (obj data)
+                                  (deselect-current-control app)
+                                  (on-populate-control-properties-win content :win win)
+                                  (on-populate-control-list-win content :win win)))
             (labels ((add-siblings (control sim)
                        (let (dln dcc)
-			 (loop
+                         (loop
                            (when (equal (html-id control) "undefined") (return))
-			   (setf dcc (attribute control "data-clog-composite-control"))
+                           (setf dcc (attribute control "data-clog-composite-control"))
                            (setf dln (attribute control "data-clog-name"))
                            (unless (equal dln "undefined")
                              (let ((list-item (create-div lwin :content (format nil "&#8597; ~A~A" sim dln)))
@@ -944,8 +942,8 @@ of controls and double click to select control."
                                                                                            panel-id
                                                                                            html-id)))
                                                       (cond ((or (getf data :shift-key)
-								 (getf data :ctrl-key)
-								 (getf data :meta-key))
+                                                                 (getf data :ctrl-key)
+                                                                 (getf data :meta-key))
                                                              (when (drop-new-control app content data)
                                                                (incf-next-id content)))
                                                             (t
@@ -962,9 +960,9 @@ of controls and double click to select control."
                                                                                              html-id))
                                                              (placer  (get-placer control))
                                                              (state   (hiddenp placer)))
-							(setf (hiddenp placer) (not state))
-							(select-control control)
-							(on-populate-control-list-win content :win win))))
+                                                        (setf (hiddenp placer) (not state))
+                                                        (select-control control)
+                                                        (on-populate-control-list-win content :win win))))
                                ;; drag and drop to change
                                (set-on-drag-over list-item (lambda (obj)(declare (ignore obj))()))
                                (set-on-drop list-item
@@ -978,24 +976,24 @@ of controls and double click to select control."
                                                                                       (getf data :drag-data)))
                                                      (placer1  (get-placer control1))
                                                      (placer2  (get-placer control2)))
-						(if (getf data :shift-key)
+                                                (if (getf data :shift-key)
                                                     (place-inside-bottom-of control1 control2)
                                                     (place-before control1 control2))
-						(place-after control2 placer2)
-						(set-geometry placer1 :top (position-top control1)
+                                                (place-after control2 placer2)
+                                                (set-geometry placer1 :top (position-top control1)
                                                                       :left (position-left control1)
                                                                       :width (client-width control1)
                                                                       :height (client-height control1))
-						(set-geometry placer2 :top (position-top control2)
+                                                (set-geometry placer2 :top (position-top control2)
                                                                       :left (position-left control2)
                                                                       :width (client-width control2)
                                                                       :height (client-height control2))
-						(on-populate-control-properties-win content :win win)
-						(on-populate-control-list-win content :win win))))
+                                                (on-populate-control-properties-win content :win win)
+                                                (on-populate-control-list-win content :win win))))
                                (set-on-drag-start list-item (lambda (obj)(declare (ignore obj))())
                                                   :drag-data (html-id control))
-			       (when (equal dcc "undefined") ; when t is not a composite control
-				 (add-siblings (first-child control) (format nil "~A&#8594;" sim)))))
+                               (when (equal dcc "undefined") ; when t is not a composite control
+                                 (add-siblings (first-child control) (format nil "~A&#8594;" sim)))))
                            (setf control (next-sibling control))))))
               (add-siblings (first-child content) ""))))))))
 
@@ -1024,13 +1022,13 @@ of controls and double click to select control."
 (defun on-show-control-properties-win (obj)
   "Show control properties window"
   (let* ((app (connection-data-item obj "builder-app-data"))
-	 (is-hidden  nil)
-	 (panel  (create-panel (connection-body obj) :positioning :fixed
-						     :width 400
-						     :top 40
-						     :right 0 :bottom 0
-						     :class "w3-border-left"))
-	 (content (create-panel panel :width 390 :top 0 :right 0 :bottom 0))
+         (is-hidden  nil)
+         (panel  (create-panel (connection-body obj) :positioning :fixed
+                                                     :width 400
+                                                     :top 40
+                                                     :right 0 :bottom 0
+                                                     :class "w3-border-left"))
+         (content (create-panel panel :width 390 :top 0 :right 0 :bottom 0))
          (side-panel (create-panel panel :top 0 :left 0 :bottom 0 :width 10))
          (control-list (create-table content)))
     (setf (background-color side-panel) :black)
@@ -1038,12 +1036,12 @@ of controls and double click to select control."
     (setf (control-properties-win app) content)
     (setf (properties-list app) control-list)
     (set-on-click side-panel (lambda (obj)
-			       (cond (is-hidden
-				      (setf (width panel) "400px")
-				      (setf is-hidden nil))
-				     (t
-				      (setf (width panel) "10px")
-				      (setf is-hidden t)))))
+                               (cond (is-hidden
+                                      (setf (width panel) "400px")
+                                      (setf is-hidden nil))
+                                     (t
+                                      (setf (width panel) "10px")
+                                      (setf is-hidden t)))))
     (setf (overflow content) :auto)
     (setf (positioning control-list) :absolute)
     (set-geometry control-list :left 0 :top 0 :right 0)))
@@ -1053,20 +1051,30 @@ of controls and double click to select control."
   (let ((app (connection-data-item obj "builder-app-data")))
     (if (control-events-win app)
         (window-focus (control-events-win app))
-        (let* ((win          (create-gui-window obj :title "Control Events"
-                                                    :left 225
-                                                    :top 480
-                                                    :height 200 :width 600
-                                                    :has-pinner t :client-movement t))
-               (content      (window-content win))
-               (control-list (create-table content)))
+        (let* ((win     (create-gui-window obj :title "Control Events"
+                                               :left 225
+                                               :top 480
+                                               :height 200 :width 645
+                                               :has-pinner t :client-movement t))
+               (content (window-content win)))
           (setf (control-events-win app) win)
-          (setf (events-list app) control-list)
+          (setf (events-list app) (create-select content :name "clog-events"))
+	  (setf (positioning (events-list app)) :absolute)
+	  (set-geometry (events-list app) :top 5 :left 5 :right 5)
+	  (setf (event-editor app) (clog-ace:create-clog-ace-element content))
+	  (setf (positioning (event-editor app)) :absolute)
+	  (setf (width (event-editor app)) "")
+	  (setf (height (event-editor app)) "")
+	  (set-geometry (event-editor app) :top 35 :left 5 :right 5 :bottom 5)
+	  (clog-ace:resize (event-editor app))
+          (setf (clog-ace:theme (event-editor app)) "ace/theme/xcode")
+          (setf (clog-ace:mode (event-editor app)) "ace/mode/lisp")
+          (setf (clog-ace:tab-size (event-editor app)) 2)
           (set-on-window-close win (lambda (obj)
                                      (declare (ignore obj))
-                                     (setf (control-events-win app) nil)))
-          (setf (positioning control-list) :absolute)
-          (set-geometry control-list :units "" :left 0 :top 0 :bottom 0 :width "100%")))))
+				     (setf (event-editor app) nil)
+				     (setf (events-list app) nil)
+                                     (setf (control-events-win app) nil)))))))
 
 (defun on-show-copy-history-win (obj)
   "Create and show copy/but history"
@@ -1163,7 +1171,7 @@ of controls and double click to select control."
   "Open new panel"
   (let* ((app (connection-data-item obj "builder-app-data"))
          (win (create-gui-window obj :top 40 :left 225
-                                     :width 600 :height 430
+                                     :width 645 :height 430
                                      :client-movement t))
          (box (create-panel-box-layout (window-content win)
                                        :left-width 0 :right-width 0
