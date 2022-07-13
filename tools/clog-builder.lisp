@@ -1079,6 +1079,7 @@ of controls and double click to select control."
           (setf (positioning (events-list app)) :absolute)
           (set-geometry (events-list app) :top 5 :left 5 :right 5)
           (setf (event-editor app) (clog-ace:create-clog-ace-element content))
+	  (clog-ace:set-auto-completion (event-editor app) t)
           (setf (positioning (event-editor app)) :absolute)
           (setf (width (event-editor app)) "")
           (setf (height (event-editor app)) "")
