@@ -170,6 +170,15 @@ after attachment is changed to one unique to this session."))
                               attribute-name (escape-string value)))
   value)
 
+(defgeneric has-attribute (clog-element attribute-name)
+  (:documentation "Returns t if ATTRIBUTE-NAME exists on CLOG-ELEMENT"))
+
+(defmethod has-attribute ((obj clog-element) attribute-name)
+  (when (equal (jquery-query obj (format nil "attr('~A')!==undefined"
+                                         attribute-name))
+               "true")
+    t))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Placement  - clog-element
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

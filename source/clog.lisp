@@ -202,6 +202,7 @@ embedded in a native template application.)"
   (set-styles       generic-function)
   (attribute        generic-function)
   (remove-attribute generic-function)
+  (has-attribute    generic-function)
 
   "CLOG-Element - Properties"
   (access-key          generic-function)

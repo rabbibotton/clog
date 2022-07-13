@@ -1083,11 +1083,18 @@ optionally fill in with contents of data-list."))
 ;;;;;;;;;;;;;;;;;
 
 (defgeneric select-text (clog-obj)
-  (:documentation "Returns the text of selected item."))
+  (:documentation "Get/Setf the text of selected item."))
 
 (defmethod select-text ((obj clog-obj))
-  (clog-connection:query (connection-id obj)
-            (format nil "$('#~A option:selected').text()" (html-id obj))))
+  (js-query obj (format nil "$('#~A option:selected').text()" (html-id obj))))
+
+(defgeneric (setf select-text) (value clog-obj)
+  (:documentation "Setf the text of selected item."))
+
+(defmethod (setf select-text) (value (obj clog-obj))
+  (js-execute obj (format nil "$('#~A option:selected').text('~A')"
+			  (html-id obj)
+			  (escape-string value))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Implementation - clog-option
