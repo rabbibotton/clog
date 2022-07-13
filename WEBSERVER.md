@@ -29,6 +29,13 @@ how I configure my CLOG based servers:
 </VirtualHost>
 ```
 
+Make sure you have the following modules installed in apache
+```
+a2enmod proxy
+a2enmod proxy_http
+a2enmod proxy_wstunnel
+```
+
 I make sure that my start funtion ends with a busy wait like - (loop (sleep 360))
 or the process will return and the service end.
 
