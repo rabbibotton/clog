@@ -11,5 +11,5 @@
              to your ~~/common-lisp directory or other asdf / quicklisp~%~
              directory. Then follow the directions in the 28-tutorial/README.md ~%~
             directory."
-	  (merge-pathnames "./tutorial/28-tutorial/hello-builder/"
-			   (asdf:system-source-directory :clog))))
+          (merge-pathnames "./tutorial/28-tutorial/hello-builder/"
+                           (asdf:system-source-directory :clog))))

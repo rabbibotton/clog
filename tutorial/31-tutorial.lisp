@@ -25,11 +25,11 @@
 
                       ; Menu         Menu Item   URL       Handler   Actions Auth
 (defparameter *menu* `(("Features" (("Login"     "/login"  on-login  :login)
-				    ("Signup"    "/signup" on-signup :signup)
-				    ("Main"      "/main"   on-main   :main)
-				    ("Logout"    "/logout" on-logout :logout)))
-		       ("Admin"    (("User List" "/users"  on-users  :users)))
-		       ("Help"     (("About"     "/about"  on-about))))
+                                    ("Signup"    "/signup" on-signup :signup)
+                                    ("Main"      "/main"   on-main   :main)
+                                    ("Logout"    "/logout" on-logout :logout)))
+                       ("Admin"    (("User List" "/users"  on-users  :users)))
+                       ("Help"     (("About"     "/about"  on-about))))
   "Setup website menu")
 
 (defun start-tutorial ()
@@ -51,9 +51,9 @@
       (create-base-tables *sql-connection*)))
   ;; Setup clog, using long polling for web crawlers and some meta info
   (initialize 'on-main
-	      :long-poll-first t
-	      :boot-function (clog-web-meta
-			      "clogpower.com - CLOG - the common lisp omnificent gui"))
+              :long-poll-first t
+              :boot-function (clog-web-meta
+                              "clogpower.com - CLOG - the common lisp omnificent gui"))
   (clog-web-routes-from-menu *menu*)
   (open-browser))
 
@@ -68,24 +68,24 @@
   (clog-web-initialize body)
   ;; Instantly reload other windows open on authentication change
   (set-on-authentication-change body (lambda (body)
-				       (url-replace (location body) "/")))
+                                       (url-replace (location body) "/")))
   ;; Initialzie the clog-web-site environment
   (let ((profile (get-profile body *sql-connection*)))
     (create-web-site body
-		     :settings '(:color-class  "w3-blue-gray"
-				 :border-class ""
-				 :signup-link  "/signup"
-				 :login-link   "/login")
-		     :profile profile
-		     :roles (if profile
-				(if (equalp "admin"
-					    (getf profile :|username|))
-				    '(:member :admin)
-				    '(:member))
-				'(:guest))
-		     :title "CLOG - The Common Lisp Omnificent GUI"
-		     :footer "(c) 2022 David Botton"
-		     :logo "/img/clog-liz.png")))
+                     :settings '(:color-class  "w3-blue-gray"
+                                 :border-class ""
+                                 :signup-link  "/signup"
+                                 :login-link   "/login")
+                     :profile profile
+                     :roles (if profile
+                                (if (equalp "admin"
+                                            (getf profile :|username|))
+                                    '(:member :admin)
+                                    '(:member))
+                                '(:guest))
+                     :title "CLOG - The Common Lisp Omnificent GUI"
+                     :footer "(c) 2022 David Botton"
+                     :logo "/img/clog-liz.png")))
 
 ;;
 ;; URL Path Handlers
@@ -97,15 +97,15 @@
   (create-web-page
    body
    :login `(:menu      ,*menu*
-	    :on-submit ,(lambda (obj)
-			  (if (login body *sql-connection*
-				     (name-value obj "username")
-				     (name-value obj "password"))
-			      ;; url-replace removes login from history stack
-			      (url-replace (location body) "/main")
-			      (clog-web-alert obj "Invalid" "The username and password are invalid."
-					      :time-out 3
-					      :place-top t))))
+            :on-submit ,(lambda (obj)
+                          (if (login body *sql-connection*
+                                     (name-value obj "username")
+                                     (name-value obj "password"))
+                              ;; url-replace removes login from history stack
+                              (url-replace (location body) "/main")
+                              (clog-web-alert obj "Invalid" "The username and password are invalid."
+                                              :time-out 3
+                                              :place-top t))))
    ;; don't authorize use of page if logged in
    :authorize t))
 
@@ -116,33 +116,33 @@
 (defun on-signup (body)
   (init-site body)
   (create-web-page body
-		   :signup `(:menu    ,*menu*
-			     :content ,(lambda (body)
-					 (sign-up body *sql-connection*)))
-		   ;; don't authorize use of page if logged in
-		   :authorize t))
+                   :signup `(:menu    ,*menu*
+                             :content ,(lambda (body)
+                                         (sign-up body *sql-connection*)))
+                   ;; don't authorize use of page if logged in
+                   :authorize t))
 
 (defun on-main (body)
   (init-site body)
   (create-web-page body :main `(:menu    ,*menu*
-				:content "I am the main page")))
+                                :content "I am the main page")))
 
 (defun on-about (body)
   (init-site body)
   (create-web-page body :about `(:menu    ,*menu*
-				 :content "About Me")))
+                                 :content "About Me")))
 
 (defun on-users (body)
   (init-site body)
   (create-web-page body :users
-		   `(:menu    ,*menu*
-		     :content ,(lambda (body)
-				 (let ((users (dbi:fetch-all
-					       (dbi:execute
-						(dbi:prepare
-						 *sql-connection*
-						 "select * from users")))))
-				   (dolist (user users)
-				     (create-div body :content (getf user :|username|))))))
-		   ;; don't authorize use of page unless you are the admin
-			:authorize t))
+                   `(:menu    ,*menu*
+                     :content ,(lambda (body)
+                                 (let ((users (dbi:fetch-all
+                                               (dbi:execute
+                                                (dbi:prepare
+                                                 *sql-connection*
+                                                 "select * from users")))))
+                                   (dolist (user users)
+                                     (create-div body :content (getf user :|username|))))))
+                   ;; don't authorize use of page unless you are the admin
+                        :authorize t))

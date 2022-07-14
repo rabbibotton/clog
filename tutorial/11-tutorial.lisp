@@ -40,30 +40,30 @@
   (debug-mode body)
   ;; Setup form
   (let* ((form         (attach-as-child body "form1" :clog-type 'clog-form))
-	 (good-button  (attach-as-child body "button1id"))
-	 (scary-button (attach-as-child body "button2id")))
+         (good-button  (attach-as-child body "button1id"))
+         (scary-button (attach-as-child body "button2id")))
     (flet ((on-click-good (obj)
-	     (declare (ignore obj))
-	     (let ((alert-div (create-div body)))
-	       (place-before form alert-div)
-	       (setf (hiddenp form) t)
-	       ;; Bootstrap specific markup
-	       (setf (css-class-name alert-div) "alert alert-success")
-	       (setf (attribute alert-div "role") "alert")
-	       ;; We collect the data from the hidden form elements
-	       ;; using radio-value and name-value (for other types if
-	       ;; input other than radio buttons) or we could bind each
-	       ;; control (using ATTACH-AS-CHILD)and seek their value
-	       ;; directly. See tutorial 17 and to deal with forms in
-	       ;; the old html page model of "put" and "get"
-	       (setf (inner-html alert-div)
-		     (format nil "<pre>radios value : ~A</pre><br>
+             (declare (ignore obj))
+             (let ((alert-div (create-div body)))
+               (place-before form alert-div)
+               (setf (hiddenp form) t)
+               ;; Bootstrap specific markup
+               (setf (css-class-name alert-div) "alert alert-success")
+               (setf (attribute alert-div "role") "alert")
+               ;; We collect the data from the hidden form elements
+               ;; using radio-value and name-value (for other types if
+               ;; input other than radio buttons) or we could bind each
+               ;; control (using ATTACH-AS-CHILD)and seek their value
+               ;; directly. See tutorial 17 and to deal with forms in
+               ;; the old html page model of "put" and "get"
+               (setf (inner-html alert-div)
+                     (format nil "<pre>radios value : ~A</pre><br>
                            <pre>textinput value : ~A</pre><br>"
-			     (radio-value form "radios")
-			     (name-value form "textinput")))))
-	   (on-click-scary (obj)
-	     (declare (ignore obj))
-	     (reset form)))
+                             (radio-value form "radios")
+                             (name-value form "textinput")))))
+           (on-click-scary (obj)
+             (declare (ignore obj))
+             (reset form)))
     ;; We need to override the boostrap default to submit the form html style
     (set-on-submit form (lambda (obj)(declare (ignore obj))()))
     (set-on-click good-button #'on-click-good)

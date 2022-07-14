@@ -7,10 +7,10 @@
 ;; Demonstrate drag and drop
 (defun on-new-window (body)
   (let* ((target1 (create-div body))
-	 (target2 (create-div body))
-	 (object  (create-div target1))
-	 (msg     (create-div body
-		    :content "Drag green box to other yellow box")))
+         (target2 (create-div body))
+         (object  (create-div target1))
+         (msg     (create-div body
+                    :content "Drag green box to other yellow box")))
     ;; Instructions
     (setf (positioning msg) :fixed)
     (setf (top msg) "125px")
@@ -45,14 +45,14 @@
     (set-on-drag-over target1 (lambda (obj)(declare (ignore obj))()))
     ;; 5 the target on-drop event is set
     (set-on-drop target1 (lambda (obj data)
-			   (declare (ignore obj) (ignore data))
-			   (place-inside-bottom-of target1 object)))
+                           (declare (ignore obj) (ignore data))
+                           (place-inside-bottom-of target1 object)))
     ;; Set up other box 1 also as target for returning drag box
     (set-on-drag-over target2 (lambda (obj)(declare (ignore obj))()))
     (set-on-drop target2 (lambda (obj data)
-			   (declare (ignore obj))
-			   (print (getf data :drag-data))
-			   (place-inside-bottom-of target2 object)))))
+                           (declare (ignore obj))
+                           (print (getf data :drag-data))
+                           (place-inside-bottom-of target2 object)))))
 
 (defun start-tutorial ()
   "Start tutorial."

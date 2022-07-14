@@ -94,8 +94,8 @@
 (defparameter *props-location*
   `((:name "top"
      :setup ,(lambda (control td1 td2)
-	       (declare (ignore control td1))
-	       (add-class td2 "clog-prop-top"))
+               (declare (ignore control td1))
+               (add-class td2 "clog-prop-top"))
      :get ,(lambda (control)
              (if (equal (positioning control) "static")
                  "n/a"
@@ -104,8 +104,8 @@
              (setf (top control) (text obj))))
     (:name "left"
      :setup ,(lambda (control td1 td2)
-	       (declare (ignore control td1))
-	       (add-class td2 "clog-prop-left"))
+               (declare (ignore control td1))
+               (add-class td2 "clog-prop-left"))
      :get  ,(lambda (control)
               (if (equal (positioning control) "static")
                   "n/a"
@@ -114,8 +114,8 @@
               (setf (left control) (text obj))))
     (:name "bottom"
      :setup ,(lambda (control td1 td2)
-	       (declare (ignore control td1))
-	       (add-class td2 "clog-prop-bottom"))
+               (declare (ignore control td1))
+               (add-class td2 "clog-prop-bottom"))
      :get ,(lambda (control)
              (if (equal (positioning control) "static")
                  "n/a"
@@ -124,8 +124,8 @@
              (setf (bottom control) (text obj))))
     (:name "right"
      :setup ,(lambda (control td1 td2)
-	       (declare (ignore control td1))
-	       (add-class td2 "clog-prop-right"))
+               (declare (ignore control td1))
+               (add-class td2 "clog-prop-right"))
      :get  ,(lambda (control)
               (if (equal (positioning control) "static")
                   "n/a"
@@ -145,9 +145,9 @@
                                           "fixed"))
                  (set-on-change dd (lambda (obj)
                                      (declare (ignore obj))
-				     (when (equalp (value dd) "static")
-				       (setf (top control) "")
-				       (setf (left control) ""))
+                                     (when (equalp (value dd) "static")
+                                       (setf (top control) "")
+                                       (setf (left control) ""))
                                      (setf (positioning control) (value dd))
                                      (set-geometry (get-placer control)
                                                    :top (position-top control)
@@ -160,16 +160,16 @@
 (defparameter *props-with-height*
   `((:name "width"
      :setup ,(lambda (control td1 td2)
-	       (declare (ignore control td1))
-	       (add-class td2 "clog-prop-width"))
+               (declare (ignore control td1))
+               (add-class td2 "clog-prop-width"))
      :set  ,(lambda (control obj)
               (setf (width control) (text obj)))
      :get  ,(lambda (control)
               (width control)))
     (:name "height"
      :setup ,(lambda (control td1 td2)
-	       (declare (ignore control td1))
-	       (add-class td2 "clog-prop-height"))
+               (declare (ignore control td1))
+               (add-class td2 "clog-prop-height"))
      :set  ,(lambda (control obj)
               (setf (height control) (text obj)))
      :get  ,(lambda (control)
@@ -341,8 +341,8 @@
 (defparameter *props-css*
   `((:name "css classes"
      :setup ,(lambda (control td1 td2)
-	       (declare (ignore control td1))
-	       (add-class td2 "clog-prop-class"))
+               (declare (ignore control td1))
+               (add-class td2 "clog-prop-class"))
      :get  ,(lambda (control)
               (property control "className"))
      :set  ,(lambda (control obj)
@@ -487,200 +487,200 @@
 (defparameter *props-w3css*
   `((:name "Add Color Class"
      :setup ,(lambda (control td1 td2)
-	       (declare (ignore td1))
-	       (let ((dd (create-select td2)))
-		 (add-select-options dd `("" "w3-amber" "w3-aqua" "w3-blue" "w3-light-blue"
-					     "w3-brown" "w3-cyan" "w3-blue-grey" "w3-green"
-					     "w3-light-green" "w3-indigo" "w3-khaki" "w3-lime"
-					     "w3-orange" "w3-deep-orange" "w3-pink" "w3-purple"
-					     "w3-deep-purple" "w3-red" "w3-sand" "w3-teal"
-					     "w3-yellow" "w3-white" "w3-black" "w3-grey"
-					     "w3-light-grey" "w3-dark-grey" "w3-pale-red"
-					     "w3-pale-green" "w3-pale-yellow" "w3-pale-blue"))
-		 (set-on-change dd (lambda (obj)
-				     (declare (ignore obj))
-				     (add-class control (value dd))
-				     (set-property-display control "class" (css-class-name control))))
-		 nil)))
+               (declare (ignore td1))
+               (let ((dd (create-select td2)))
+                 (add-select-options dd `("" "w3-amber" "w3-aqua" "w3-blue" "w3-light-blue"
+                                             "w3-brown" "w3-cyan" "w3-blue-grey" "w3-green"
+                                             "w3-light-green" "w3-indigo" "w3-khaki" "w3-lime"
+                                             "w3-orange" "w3-deep-orange" "w3-pink" "w3-purple"
+                                             "w3-deep-purple" "w3-red" "w3-sand" "w3-teal"
+                                             "w3-yellow" "w3-white" "w3-black" "w3-grey"
+                                             "w3-light-grey" "w3-dark-grey" "w3-pale-red"
+                                             "w3-pale-green" "w3-pale-yellow" "w3-pale-blue"))
+                 (set-on-change dd (lambda (obj)
+                                     (declare (ignore obj))
+                                     (add-class control (value dd))
+                                     (set-property-display control "class" (css-class-name control))))
+                 nil)))
     (:name "Add Text Color Class"
      :setup ,(lambda (control td1 td2)
-	       (declare (ignore td1))
-	       (let ((dd (create-select td2)))
-		 (add-select-options dd `("" "w3-text-amber" "w3-text-aqua" "w3-text-blue" "w3-text-light-blue"
-					     "w3-text-brown" "w3-text-cyan" "w3-text-blue-grey" "w3-text-green"
-					     "w3-text-light-green" "w3-text-indigo" "w3-text-khaki" "w3-text-lime"
-					     "w3-text-orange" "w3-text-deep-orange" "w3-text-pink" "w3-text-purple"
-					     "w3-text-deep-purple" "w3-text-red" "w3-text-sand" "w3-text-teal"
-					     "w3-text-yellow" "w3-text-white" "w3-text-black" "w3-text-grey"
-					     "w3-text-light-grey" "w3-text-dark-grey" "w3-text-pale-red"
-					     "w3-text-pale-green" "w3-text-pale-yellow" "w3-text-pale-blue"))
-		 (set-on-change dd (lambda (obj)
-				     (declare (ignore obj))
-				     (add-class control (value dd))
-				     (set-property-display control "class" (css-class-name control))))
-		 nil)))
+               (declare (ignore td1))
+               (let ((dd (create-select td2)))
+                 (add-select-options dd `("" "w3-text-amber" "w3-text-aqua" "w3-text-blue" "w3-text-light-blue"
+                                             "w3-text-brown" "w3-text-cyan" "w3-text-blue-grey" "w3-text-green"
+                                             "w3-text-light-green" "w3-text-indigo" "w3-text-khaki" "w3-text-lime"
+                                             "w3-text-orange" "w3-text-deep-orange" "w3-text-pink" "w3-text-purple"
+                                             "w3-text-deep-purple" "w3-text-red" "w3-text-sand" "w3-text-teal"
+                                             "w3-text-yellow" "w3-text-white" "w3-text-black" "w3-text-grey"
+                                             "w3-text-light-grey" "w3-text-dark-grey" "w3-text-pale-red"
+                                             "w3-text-pale-green" "w3-text-pale-yellow" "w3-text-pale-blue"))
+                 (set-on-change dd (lambda (obj)
+                                     (declare (ignore obj))
+                                     (add-class control (value dd))
+                                     (set-property-display control "class" (css-class-name control))))
+                 nil)))
     (:name "Add Hover Text Color Class"
      :setup ,(lambda (control td1 td2)
-	       (declare (ignore td1))
-	       (let ((dd (create-select td2)))
-		 (add-select-options dd `("" "w3-hover-text-amber" "w3-hover-text-aqua" "w3-hover-text-blue" "w3-hover-text-light-blue"
-					     "w3-hover-text-brown" "w3-hover-text-cyan" "w3-hover-text-blue-grey" "w3-hover-text-green"
-					     "w3-hover-text-light-green" "w3-hover-text-indigo" "w3-hover-text-khaki" "w3-hover-text-lime"
-					     "w3-hover-text-orange" "w3-hover-text-deep-orange" "w3-hover-text-pink" "w3-hover-text-purple"
-					     "w3-hover-text-deep-purple" "w3-hover-text-red" "w3-hover-text-sand" "w3-hover-text-teal"
-					     "w3-hover-text-yellow" "w3-hover-text-white" "w3-hover-text-black" "w3-hover-text-grey"
-					     "w3-hover-text-light-grey" "w3-hover-text-dark-grey" "w3-hover-text-pale-red"
-					     "w3-hover-text-pale-green" "w3-hover-text-pale-yellow" "w3-hover-text-pale-blue"))
-		 (set-on-change dd (lambda (obj)
-				     (declare (ignore obj))
-				     (add-class control (value dd))
-				     (set-property-display control "class" (css-class-name control))))
-		 nil)))
+               (declare (ignore td1))
+               (let ((dd (create-select td2)))
+                 (add-select-options dd `("" "w3-hover-text-amber" "w3-hover-text-aqua" "w3-hover-text-blue" "w3-hover-text-light-blue"
+                                             "w3-hover-text-brown" "w3-hover-text-cyan" "w3-hover-text-blue-grey" "w3-hover-text-green"
+                                             "w3-hover-text-light-green" "w3-hover-text-indigo" "w3-hover-text-khaki" "w3-hover-text-lime"
+                                             "w3-hover-text-orange" "w3-hover-text-deep-orange" "w3-hover-text-pink" "w3-hover-text-purple"
+                                             "w3-hover-text-deep-purple" "w3-hover-text-red" "w3-hover-text-sand" "w3-hover-text-teal"
+                                             "w3-hover-text-yellow" "w3-hover-text-white" "w3-hover-text-black" "w3-hover-text-grey"
+                                             "w3-hover-text-light-grey" "w3-hover-text-dark-grey" "w3-hover-text-pale-red"
+                                             "w3-hover-text-pale-green" "w3-hover-text-pale-yellow" "w3-hover-text-pale-blue"))
+                 (set-on-change dd (lambda (obj)
+                                     (declare (ignore obj))
+                                     (add-class control (value dd))
+                                     (set-property-display control "class" (css-class-name control))))
+                 nil)))
     (:name "Add Border Class"
      :setup ,(lambda (control td1 td2)
-	       (declare (ignore td1))
-	       (let ((dd (create-select td2)))
-		 (add-select-options dd `("" "w3-border" "w3-border-top" "w3-border-right" "w3-border-bottom"
-					     "w3-border-left" "w3-border-0" "w3-bottombar" "w3-leftbar"
-					     "w3-rightbar" "w3-topbar"))
-		 (set-on-change dd (lambda (obj)
-				     (declare (ignore obj))
-				     (add-class control (value dd))
-				     (set-property-display control "class" (css-class-name control))))
-		 nil)))
+               (declare (ignore td1))
+               (let ((dd (create-select td2)))
+                 (add-select-options dd `("" "w3-border" "w3-border-top" "w3-border-right" "w3-border-bottom"
+                                             "w3-border-left" "w3-border-0" "w3-bottombar" "w3-leftbar"
+                                             "w3-rightbar" "w3-topbar"))
+                 (set-on-change dd (lambda (obj)
+                                     (declare (ignore obj))
+                                     (add-class control (value dd))
+                                     (set-property-display control "class" (css-class-name control))))
+                 nil)))
     (:name "Add Border Color Class"
      :setup ,(lambda (control td1 td2)
-	       (declare (ignore td1))
-	       (let ((dd (create-select td2)))
-		 (add-select-options dd `("" "w3-border-amber" "w3-border-aqua" "w3-border-blue" "w3-border-light-blue"
-					     "w3-border-brown" "w3-border-cyan" "w3-border-blue-grey" "w3-border-green"
-					     "w3-border-light-green" "w3-border-indigo" "w3-border-khaki" "w3-border-lime"
-					     "w3-border-orange" "w3-border-deep-orange" "w3-border-pink" "w3-border-purple"
-					     "w3-border-deep-purple" "w3-border-red" "w3-border-sand" "w3-border-teal"
-					     "w3-border-yellow" "w3-border-white" "w3-border-black" "w3-border-grey"
-					     "w3-border-light-grey" "w3-border-dark-grey" "w3-border-pale-red"
-					     "w3-border-pale-green" "w3-border-pale-yellow" "w3-border-pale-blue"))
-		 (set-on-change dd (lambda (obj)
-				     (declare (ignore obj))
-				     (add-class control (value dd))
-				     (set-property-display control "class" (css-class-name control))))
-		 nil)))
+               (declare (ignore td1))
+               (let ((dd (create-select td2)))
+                 (add-select-options dd `("" "w3-border-amber" "w3-border-aqua" "w3-border-blue" "w3-border-light-blue"
+                                             "w3-border-brown" "w3-border-cyan" "w3-border-blue-grey" "w3-border-green"
+                                             "w3-border-light-green" "w3-border-indigo" "w3-border-khaki" "w3-border-lime"
+                                             "w3-border-orange" "w3-border-deep-orange" "w3-border-pink" "w3-border-purple"
+                                             "w3-border-deep-purple" "w3-border-red" "w3-border-sand" "w3-border-teal"
+                                             "w3-border-yellow" "w3-border-white" "w3-border-black" "w3-border-grey"
+                                             "w3-border-light-grey" "w3-border-dark-grey" "w3-border-pale-red"
+                                             "w3-border-pale-green" "w3-border-pale-yellow" "w3-border-pale-blue"))
+                 (set-on-change dd (lambda (obj)
+                                     (declare (ignore obj))
+                                     (add-class control (value dd))
+                                     (set-property-display control "class" (css-class-name control))))
+                 nil)))
     (:name "Add Hover Border Color Class"
      :setup ,(lambda (control td1 td2)
-	       (declare (ignore td1))
-	       (let ((dd (create-select td2)))
-		 (add-select-options dd `("" "w3-hover-border-amber" "w3-hover-border-aqua" "w3-hover-border-blue" "w3-hover-border-light-blue"
-					     "w3-hover-border-brown" "w3-hover-border-cyan" "w3-hover-border-blue-grey" "w3-hover-border-green"
-					     "w3-hover-border-light-green" "w3-hover-border-indigo" "w3-hover-border-khaki" "w3-hover-border-lime"
-					     "w3-hover-border-orange" "w3-hover-border-deep-orange" "w3-hover-border-pink" "w3-hover-border-purple"
-					     "w3-hover-border-deep-purple" "w3-hover-border-red" "w3-hover-border-sand" "w3-hover-border-teal"
-					     "w3-hover-border-yellow" "w3-hover-border-white" "w3-hover-border-black" "w3-hover-border-grey"
-					     "w3-hover-border-light-grey" "w3-hover-border-dark-grey" "w3-hover-border-pale-red"
-					     "w3-hover-border-pale-green" "w3-hover-border-pale-yellow" "w3-hover-border-pale-blue"))
-		 (set-on-change dd (lambda (obj)
-				     (declare (ignore obj))
-				     (add-class control (value dd))
-				     (set-property-display control "class" (css-class-name control))))
-		 nil)))
+               (declare (ignore td1))
+               (let ((dd (create-select td2)))
+                 (add-select-options dd `("" "w3-hover-border-amber" "w3-hover-border-aqua" "w3-hover-border-blue" "w3-hover-border-light-blue"
+                                             "w3-hover-border-brown" "w3-hover-border-cyan" "w3-hover-border-blue-grey" "w3-hover-border-green"
+                                             "w3-hover-border-light-green" "w3-hover-border-indigo" "w3-hover-border-khaki" "w3-hover-border-lime"
+                                             "w3-hover-border-orange" "w3-hover-border-deep-orange" "w3-hover-border-pink" "w3-hover-border-purple"
+                                             "w3-hover-border-deep-purple" "w3-hover-border-red" "w3-hover-border-sand" "w3-hover-border-teal"
+                                             "w3-hover-border-yellow" "w3-hover-border-white" "w3-hover-border-black" "w3-hover-border-grey"
+                                             "w3-hover-border-light-grey" "w3-hover-border-dark-grey" "w3-hover-border-pale-red"
+                                             "w3-hover-border-pale-green" "w3-hover-border-pale-yellow" "w3-hover-border-pale-blue"))
+                 (set-on-change dd (lambda (obj)
+                                     (declare (ignore obj))
+                                     (add-class control (value dd))
+                                     (set-property-display control "class" (css-class-name control))))
+                 nil)))
     (:name "Add Round Class"
      :setup ,(lambda (control td1 td2)
-	       (declare (ignore td1))
-	       (let ((dd (create-select td2)))
-		 (add-select-options dd `("" "w3-circle" "w3-round-small" "w3-round" "w3-round-medium"
-					     "w3-round-large" "w3-round-xlarge" "w3-round-xxlarge"))
-		 (set-on-change dd (lambda (obj)
-				     (declare (ignore obj))
-				     (add-class control (value dd))
-				     (set-property-display control "class" (css-class-name control))))
-		 nil)))
+               (declare (ignore td1))
+               (let ((dd (create-select td2)))
+                 (add-select-options dd `("" "w3-circle" "w3-round-small" "w3-round" "w3-round-medium"
+                                             "w3-round-large" "w3-round-xlarge" "w3-round-xxlarge"))
+                 (set-on-change dd (lambda (obj)
+                                     (declare (ignore obj))
+                                     (add-class control (value dd))
+                                     (set-property-display control "class" (css-class-name control))))
+                 nil)))
     (:name "Add 3D Class"
      :setup ,(lambda (control td1 td2)
-	       (declare (ignore td1))
-	       (let ((dd (create-select td2)))
-		 (add-select-options dd `("" "w3-card" "w3-card-2" "w3-card-4" "w3-hover-shadow" "w3-hoverable" "w3-hover-none"))
-		 (set-on-change dd (lambda (obj)
-				     (declare (ignore obj))
-				     (add-class control (value dd))
-				     (set-property-display control "class" (css-class-name control))))
-		 nil)))
+               (declare (ignore td1))
+               (let ((dd (create-select td2)))
+                 (add-select-options dd `("" "w3-card" "w3-card-2" "w3-card-4" "w3-hover-shadow" "w3-hoverable" "w3-hover-none"))
+                 (set-on-change dd (lambda (obj)
+                                     (declare (ignore obj))
+                                     (add-class control (value dd))
+                                     (set-property-display control "class" (css-class-name control))))
+                 nil)))
     (:name "Add Visibility Class"
      :setup ,(lambda (control td1 td2)
-	       (declare (ignore td1))
-	       (let ((dd (create-select td2)))
-		 (add-select-options dd `("" "w3-opacity" "w3-opacity-min" "w3-opacity-max"
-					     "w3-grayscale" "w3-grayscale-min" "w3-grayscale-max"
-					     "w3-sepia" "w3-sepia-min" "w3-sepia-max"
-					     "w3-hover-opacity" "w3-hover-grayscale" "w3-hover-sepia"
-					     "w3-hover-opacity-off"))
-		 (set-on-change dd (lambda (obj)
-				     (declare (ignore obj))
-				     (add-class control (value dd))
-				     (set-property-display control "class" (css-class-name control))))
-		 nil)))
+               (declare (ignore td1))
+               (let ((dd (create-select td2)))
+                 (add-select-options dd `("" "w3-opacity" "w3-opacity-min" "w3-opacity-max"
+                                             "w3-grayscale" "w3-grayscale-min" "w3-grayscale-max"
+                                             "w3-sepia" "w3-sepia-min" "w3-sepia-max"
+                                             "w3-hover-opacity" "w3-hover-grayscale" "w3-hover-sepia"
+                                             "w3-hover-opacity-off"))
+                 (set-on-change dd (lambda (obj)
+                                     (declare (ignore obj))
+                                     (add-class control (value dd))
+                                     (set-property-display control "class" (css-class-name control))))
+                 nil)))
     (:name "Add Font Class"
      :setup ,(lambda (control td1 td2)
-	       (declare (ignore td1))
-	       (let ((dd (create-select td2)))
-		 (add-select-options dd `("" "w3-serif" "w3-sans-serif" "w3-cursive" "w3-monospace"
-					     "w3-wide"))
-		 (set-on-change dd (lambda (obj)
-				     (declare (ignore obj))
-				     (add-class control (value dd))
-				     (set-property-display control "class" (css-class-name control))))
-		 nil)))
+               (declare (ignore td1))
+               (let ((dd (create-select td2)))
+                 (add-select-options dd `("" "w3-serif" "w3-sans-serif" "w3-cursive" "w3-monospace"
+                                             "w3-wide"))
+                 (set-on-change dd (lambda (obj)
+                                     (declare (ignore obj))
+                                     (add-class control (value dd))
+                                     (set-property-display control "class" (css-class-name control))))
+                 nil)))
     (:name "Add Size Class"
      :setup ,(lambda (control td1 td2)
-	       (declare (ignore td1))
-	       (let ((dd (create-select td2)))
-		 (add-select-options dd `("" "w3-tiny" "w3-small" "w3-medium" "w3-large"
-					     "w3-xlarge" "w3-xxlarge" "w3-xxxlarge" "w3-jumbo"))
-		 (set-on-change dd (lambda (obj)
-				     (declare (ignore obj))
-				     (add-class control (value dd))
-				     (set-property-display control "class" (css-class-name control))))
-		 nil)))
+               (declare (ignore td1))
+               (let ((dd (create-select td2)))
+                 (add-select-options dd `("" "w3-tiny" "w3-small" "w3-medium" "w3-large"
+                                             "w3-xlarge" "w3-xxlarge" "w3-xxxlarge" "w3-jumbo"))
+                 (set-on-change dd (lambda (obj)
+                                     (declare (ignore obj))
+                                     (add-class control (value dd))
+                                     (set-property-display control "class" (css-class-name control))))
+                 nil)))
     (:name "Add Alignmnet Class"
      :setup ,(lambda (control td1 td2)
-	       (declare (ignore td1))
-	       (let ((dd (create-select td2)))
-		 (add-select-options dd `("" "w3-mobile" "w3-responsive"
-					     "w3-left-align" "w3-right-align" "w3-justify"
-					     "w3-center" "w3-right" "w3-left" "w3-top" "w3-bottom" "w3-block"
-					     "w3-bar" "w3-bar-block" "w3-bar-item" "w3-sidebar"
-					     "w3-show-inline-block" "w3-dropdown-hover"
-					     "w3-dropdown-click" "w3-collapse"
-					     "w3-hide-small" "w3-hide-medium" "w3-hide-large"))
-		 (set-on-change dd (lambda (obj)
-				     (declare (ignore obj))
-				     (add-class control (value dd))
-				     (set-property-display control "class" (css-class-name control))))
-		 nil)))
+               (declare (ignore td1))
+               (let ((dd (create-select td2)))
+                 (add-select-options dd `("" "w3-mobile" "w3-responsive"
+                                             "w3-left-align" "w3-right-align" "w3-justify"
+                                             "w3-center" "w3-right" "w3-left" "w3-top" "w3-bottom" "w3-block"
+                                             "w3-bar" "w3-bar-block" "w3-bar-item" "w3-sidebar"
+                                             "w3-show-inline-block" "w3-dropdown-hover"
+                                             "w3-dropdown-click" "w3-collapse"
+                                             "w3-hide-small" "w3-hide-medium" "w3-hide-large"))
+                 (set-on-change dd (lambda (obj)
+                                     (declare (ignore obj))
+                                     (add-class control (value dd))
+                                     (set-property-display control "class" (css-class-name control))))
+                 nil)))
     (:name "Add Margins/Padding Class"
      :setup ,(lambda (control td1 td2)
-	       (declare (ignore td1))
-	       (let ((dd (create-select td2)))
-		 (add-select-options dd `("" "w3-margin" "w3-margin-top" "w3-margin-right"
-					     "w3-margin-bottom" "w3-margin-left" "w3-section"
-					     "w3-padding" "w3-padding-small" "w3-padding-large"
-					     "w3-padding-16" "w3-padding-24" "w3-padding-32"
-					     "w3-padding-48" "w3-padding-64"))
-		 (set-on-change dd (lambda (obj)
-				     (declare (ignore obj))
-				     (add-class control (value dd))
-				     (set-property-display control "class" (css-class-name control))))
-		 nil)))
+               (declare (ignore td1))
+               (let ((dd (create-select td2)))
+                 (add-select-options dd `("" "w3-margin" "w3-margin-top" "w3-margin-right"
+                                             "w3-margin-bottom" "w3-margin-left" "w3-section"
+                                             "w3-padding" "w3-padding-small" "w3-padding-large"
+                                             "w3-padding-16" "w3-padding-24" "w3-padding-32"
+                                             "w3-padding-48" "w3-padding-64"))
+                 (set-on-change dd (lambda (obj)
+                                     (declare (ignore obj))
+                                     (add-class control (value dd))
+                                     (set-property-display control "class" (css-class-name control))))
+                 nil)))
     (:name "Add Animation Class"
      :setup ,(lambda (control td1 td2)
-	       (declare (ignore td1))
-	       (let ((dd (create-select td2)))
-		 (add-select-options dd `("" "w3-animate-top" "w3-animate-bottom" "w3-animate-left"
-					     "w3-animate-right" "w3-animate-opacity" "w3-animate-zoom"
-					     "w3-animate-fading" "w3-animate-input" "w3-spin"))
-		 (set-on-change dd (lambda (obj)
-				     (declare (ignore obj))
-				     (add-class control (value dd))
-				     (set-property-display control "class" (css-class-name control))))
-		 nil)))))
+               (declare (ignore td1))
+               (let ((dd (create-select td2)))
+                 (add-select-options dd `("" "w3-animate-top" "w3-animate-bottom" "w3-animate-left"
+                                             "w3-animate-right" "w3-animate-opacity" "w3-animate-zoom"
+                                             "w3-animate-fading" "w3-animate-input" "w3-spin"))
+                 (set-on-change dd (lambda (obj)
+                                     (declare (ignore obj))
+                                     (add-class control (value dd))
+                                     (set-property-display control "class" (css-class-name control))))
+                 nil)))))
 
 (defparameter *events-multimedia*
   '((:name "on-media-abort"
@@ -878,12 +878,12 @@
      :create-content ""
      :setup          ,(lambda (control content control-record)
                         (declare (ignore content  control-record))
-			(set-geometry control :width 200 :height 28)
-			(setf (display control) :flex)
-			(setf (flex-direction control) :row))
+                        (set-geometry control :width 200 :height 28)
+                        (setf (display control) :flex)
+                        (setf (flex-direction control) :row))
      :events         (,@*events-element*)
      :properties     (,@*props-flex*
-		      ,@*props-element*))
+                      ,@*props-element*))
    `(:name           "flex-row-rev"
      :description    "Row Reverse Align"
      :clog-type      clog:clog-div
@@ -892,12 +892,12 @@
      :create-content ""
      :setup          ,(lambda (control content control-record)
                         (declare (ignore content  control-record))
-			(set-geometry control :width 200 :height 28)
-			(setf (display control) :flex)
-			(setf (flex-direction control) :row-reverse))
+                        (set-geometry control :width 200 :height 28)
+                        (setf (display control) :flex)
+                        (setf (flex-direction control) :row-reverse))
      :events         (,@*events-element*)
      :properties     (,@*props-flex*
-		      ,@*props-element*))
+                      ,@*props-element*))
    `(:name           "flex-col"
      :description    "Column Align"
      :clog-type      clog:clog-div
@@ -906,12 +906,12 @@
      :create-content ""
      :setup          ,(lambda (control content control-record)
                         (declare (ignore content  control-record))
-			(set-geometry control :width 100 :height 200)
-			(setf (display control) :flex)
-			(setf (flex-direction control) :column))
+                        (set-geometry control :width 100 :height 200)
+                        (setf (display control) :flex)
+                        (setf (flex-direction control) :column))
      :events         (,@*events-element*)
      :properties     (,@*props-flex*
-		      ,@*props-element*))
+                      ,@*props-element*))
    `(:name           "flex-col-rev"
      :description    "Column Reverse Align"
      :clog-type      clog:clog-div
@@ -920,12 +920,12 @@
      :create-content ""
      :setup          ,(lambda (control content control-record)
                         (declare (ignore content  control-record))
-			(set-geometry control :width 100 :height 200)
-			(setf (display control) :flex)
-			(setf (flex-direction control) :column-reverse))
+                        (set-geometry control :width 100 :height 200)
+                        (setf (display control) :flex)
+                        (setf (flex-direction control) :column-reverse))
      :events         (,@*events-element*)
      :properties     (,@*props-flex*
-		      ,@*props-element*))
+                      ,@*props-element*))
    `(:name           "flex-center"
      :description    "Center Align"
      :clog-type      clog:clog-div
@@ -934,13 +934,13 @@
      :create-content ""
      :setup          ,(lambda (control content control-record)
                         (declare (ignore content  control-record))
-			(set-geometry control :width 200 :height 200)
-			(setf (display control) :flex)
-			(setf (align-items control) :center)
-			(setf (justify-content control) :center))
+                        (set-geometry control :width 200 :height 200)
+                        (setf (display control) :flex)
+                        (setf (align-items control) :center)
+                        (setf (justify-content control) :center))
      :events         (,@*events-element*)
      :properties     (,@*props-flex*
-		      ,@*props-element*))
+                      ,@*props-element*))
    '(:name           "group"
      :description    "Basic HTML Controls"
      :create         nil
@@ -956,19 +956,19 @@
      :events         (,@*events-element*)
      :setup          ,(lambda (control content control-record)
                         (declare (ignore content control-record))
-			(setf (attribute control "data-clog-for") ""))
+                        (setf (attribute control "data-clog-for") ""))
      :on-setup       ,(lambda (control control-record)
-			(declare (ignore control-record))
-			(unless (equal (attribute control "data-clog-for") "")
-			  (format nil
-			    "(setf (attribute target \"for\") ~
+                        (declare (ignore control-record))
+                        (unless (equal (attribute control "data-clog-for") "")
+                          (format nil
+                            "(setf (attribute target \"for\") ~
                                (clog:js-query target \"$('[data-clog-name=\\\\'~A\\\\']\').attr('id')\"))"
-				  (attribute control "data-clog-for"))))
+                                  (attribute control "data-clog-for"))))
      :properties     ((:name "for"
                        :get ,(lambda (control)
-			       (attribute control "data-clog-for"))
+                               (attribute control "data-clog-for"))
                        :set ,(lambda (control obj)
-			       (setf (attribute control "data-clog-for") (text obj))
+                               (setf (attribute control "data-clog-for") (text obj))
                                (setf (attribute control "for")
                                      (js-query control (format nil "$(\"[data-clog-name='~A']\").attr('id')"
                                                                (text obj))))))
@@ -1481,8 +1481,8 @@
      :create         clog:create-table
      :create-type    :base
      :setup          ,(lambda (control content control-record)
-			(declare (ignore content control-record))
-			(set-geometry control :width 200 :height 100))
+                        (declare (ignore content control-record))
+                        (set-geometry control :width 200 :height 100))
      :events         (,@*events-element*)
      :properties     (,@*props-base*))
    `(:name           "tr"
@@ -1912,11 +1912,11 @@
                                        (dbi:connect ~A ~A :database-name ~A))"
                                 (attribute control "data-clog-dbi-dbtype")
                                 (attribute control "data-clog-dbi-dbparams")
-				(let ((dbi-name (attribute control "data-clog-dbi-dbname")))
-				  (if (equal (char dbi-name 0) #\*)
-				      dbi-name
-				      (format nil "\"~A\""
-					      dbi-name)))))
+                                (let ((dbi-name (attribute control "data-clog-dbi-dbname")))
+                                  (if (equal (char dbi-name 0) #\*)
+                                      dbi-name
+                                      (format nil "\"~A\""
+                                              dbi-name)))))
      :events         (,@*events-element*)
      :properties     ((:name "database type"
                        :attr "data-clog-dbi-dbtype")

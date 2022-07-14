@@ -20,9 +20,9 @@
          (counter (create-section body :p :content (connection-data-item body "counter"))))
     (declare (ignorable title))
     (set-on-click inc-button (lambda (obj)
-			       ;; this works as we update the counter
-			       (funcall #'inc-count obj)
-			       (setf (text counter) (connection-data-item body "counter"))))
+                               ;; this works as we update the counter
+                               (funcall #'inc-count obj)
+                               (setf (text counter) (connection-data-item body "counter"))))
     ;; you are not updating the couhter here
     (set-on-click dec-button #'dec-count)
     (run body)))

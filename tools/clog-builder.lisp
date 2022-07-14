@@ -152,26 +152,26 @@
   "Take a snap shot of panel"
   (with-sync-event (content)
     (let (snap
-	  (app (connection-data-item content "builder-app-data")))
+          (app (connection-data-item content "builder-app-data")))
       (maphash
        (lambda (html-id control)
-	 (declare (ignore html-id))
-	 (place-inside-bottom-of hide-loc
-				 (get-placer control)))
+         (declare (ignore html-id))
+         (place-inside-bottom-of hide-loc
+                                 (get-placer control)))
        (get-control-list app panel-id))
       (let ((data
               (create-child content "<data />"
                             :html-id (format nil "I~A" (get-universal-time)))))
-	(place-inside-top-of content data)
-	(setf (attribute data "data-in-package")
+        (place-inside-top-of content data)
+        (setf (attribute data "data-in-package")
               (attribute content "data-in-package"))
-	(setf (attribute data "data-custom-slots")
+        (setf (attribute data "data-custom-slots")
               (attribute content "data-custom-slots"))
-	(setf (attribute data "data-clog-next-id")
+        (setf (attribute data "data-clog-next-id")
               (attribute content "data-clog-next-id"))
-	(setf (attribute data "data-clog-title")
+        (setf (attribute data "data-clog-title")
               (attribute content "data-clog-name"))
-	(setf snap (js-query content
+        (setf snap (js-query content
                              (format nil
                                      "var z=~a.clone();~
                  z.find('*').each(function(){~
@@ -180,11 +180,11 @@
                      $(this).attr('id').substring(0,5)=='CLOGB'){$(this).removeAttr('id')}});~
                  z.html()"
                                      (jquery content))))
-	(destroy data))
+        (destroy data))
       (maphash
        (lambda (html-id control)
-	 (declare (ignore html-id))
-	 (place-after control (get-placer control)))
+         (declare (ignore html-id))
+         (place-after control (get-placer control)))
        (get-control-list app panel-id))
       snap)))
 
@@ -227,12 +227,12 @@ create-div's"
               (let* ((nfile (pathname-name file))
                      (afile (cond ((equalp (pathname-name nfile) "tmpl")
                                     (format nil "~A~A.~A" out-dir sys-name (pathname-type nfile)))
-				   ((equalp (pathname-name nfile) "tmpl-tools")
+                                   ((equalp (pathname-name nfile) "tmpl-tools")
                                     (format nil "~A~A-tools.~A" out-dir sys-name (pathname-type nfile)))
                                    (t
-				    (format nil "~A~A" out-dir nfile)))))
-		(write-file (funcall (cl-template:compile-template (read-file src-file))
-				     (list :sys-name sys-name))
+                                    (format nil "~A~A" out-dir nfile)))))
+                (write-file (funcall (cl-template:compile-template (read-file src-file))
+                                     (list :sys-name sys-name))
                             afile)
                 (when panel
                   (create-div panel
@@ -270,11 +270,11 @@ create-div's"
 replaced."
   (dolist (r control-records)
     (setf *supported-controls*
-	  (append (remove-if (lambda (x)
-			       (unless (equalp (getf x :name) "group")
-				 (equal (getf x :name) (getf r :name))))
-			     *supported-controls*)
-		  (list r)))))
+          (append (remove-if (lambda (x)
+                               (unless (equalp (getf x :name) "group")
+                                 (equal (getf x :name) (getf r :name))))
+                             *supported-controls*)
+                  (list r)))))
 
 (defun create-control (parent content control-record uid &key custom-query)
   "Return a new control based on CONTROL-RECORD as a child of PARENT"
@@ -293,9 +293,9 @@ replaced."
                                             :html-id uid))
                                   ((eq create-type :paste)
                                    (let ((c (create-child parent custom-query
-							  :html-id uid)))
-				     (setf control-type-name (attribute c "data-clog-type"))
-				     (when (equalp control-type-name "undefined")
+                                                          :html-id uid)))
+                                     (setf control-type-name (attribute c "data-clog-type"))
+                                     (when (equalp control-type-name "undefined")
                                        (setf (attribute c "data-clog-type") "div")
                                        (setf control-type-name "div"))
                                      (let ((cr (control-info control-type-name)))
@@ -358,11 +358,11 @@ replaced."
   (let* ((control-record    (control-info (value (select-tool app))))
          (control-type-name (getf control-record :name))
          (positioning       (cond ((or (getf data :ctrl-key)
-				       (getf data :meta-key))
+                                       (getf data :meta-key))
                                    :static)
-				  ((getf control-record :positioning)
-				   (getf control-record :positioning))
-				  (t
+                                  ((getf control-record :positioning)
+                                   (getf control-record :positioning))
+                                  (t
                                    :absolute)))
          (parent            (when (getf data :shift-key)
                               (current-control app)))
@@ -386,12 +386,12 @@ replaced."
            (set-geometry control
                          :left (getf data :x)
                          :top (getf data :y))
-	   (unless (equalp (attribute control "data-clog-composite-control") "t")
+           (unless (equalp (attribute control "data-clog-composite-control") "t")
              (add-sub-controls control content :win win))
            (setup-control content control :win win)
            (select-control control)
            (on-populate-control-list-win content :win win)
-	   (jquery-execute (get-placer content) "trigger('clog-builder-snap-shot')")
+           (jquery-execute (get-placer content) "trigger('clog-builder-snap-shot')")
            t)
           (t
            ;; panel directly clicked with select tool or no control type to add
@@ -429,12 +429,12 @@ replaced."
     (setf (tab-index placer) "-1") ; must have a tab-index to accept keyboard input
     (focus placer)
     (set-on-key-down placer
-		     (lambda (obj data)
-		       (declare (ignore obj))
-		       (let ((key   (getf data :key))
-			     (ctrl  (getf data :ctrl-key))
-			     (meta  (getf data :meta-key))
-			     (shift (getf data :shift-key)))
+                     (lambda (obj data)
+                       (declare (ignore obj))
+                       (let ((key   (getf data :key))
+                             (ctrl  (getf data :ctrl-key))
+                             (meta  (getf data :meta-key))
+                             (shift (getf data :shift-key)))
                          (cond ((equal key "ArrowUp")
                                 (if shift
                                     (set-geometry control :height (1- (height control)))
@@ -508,7 +508,7 @@ replaced."
     (set-on-event placer "resizestop"
         (lambda (obj)
           (set-properties-after-geomentry-change obj)
-	  (jquery-execute placer "trigger('clog-builder-snap-shot')"))
+          (jquery-execute placer "trigger('clog-builder-snap-shot')"))
         :cancel-event t)
     (set-on-event placer "drag"
                   (lambda (obj)
@@ -516,7 +516,7 @@ replaced."
                     (set-geometry control :units ""
                                           :top (top placer)
                                           :left (left placer))
-		    (set-properties-after-geomentry-change control)))
+                    (set-properties-after-geomentry-change control)))
     (set-on-event placer "dragstop"
                   (lambda (obj)
                     (declare (ignore obj))
@@ -525,7 +525,7 @@ replaced."
                                           :left (left placer))
                     (set-geometry placer :top (top control)
                                          :left (left control))
-		    (jquery-execute placer "trigger('clog-builder-snap-shot')")
+                    (jquery-execute placer "trigger('clog-builder-snap-shot')")
                     (set-properties-after-geomentry-change control)))))
 
 (defun set-property-display (control property value)
@@ -1088,7 +1088,7 @@ of controls and double click to select control."
                                          (lambda (obj prefix)
                                            (declare (ignore obj))
                                            (car (swank:completions prefix "CLOG")))
-					 :meta "swank")
+                                         :meta "swank")
           (setf (positioning (event-editor app)) :absolute)
           (setf (width (event-editor app)) "")
           (setf (height (event-editor app)) "")
@@ -1166,36 +1166,36 @@ of controls and double click to select control."
     (flet ((on-size (obj)
              (declare (ignore obj))
              (setf sheight (floor (/ (height content) 2)))
-	     (when (and (> (- sheight adj-size) 5)
-			(> (+ (- sheight 10) adj-size) 5))
-	       (set-geometry pallete :height (- sheight adj-size))
-	       (set-geometry divider :top (- sheight adj-size))
-	       (set-geometry control-list :height (+ (- sheight 10) adj-size)))))
+             (when (and (> (- sheight adj-size) 5)
+                        (> (+ (- sheight 10) adj-size) 5))
+               (set-geometry pallete :height (- sheight adj-size))
+               (set-geometry divider :top (- sheight adj-size))
+               (set-geometry control-list :height (+ (- sheight 10) adj-size)))))
       (set-on-resize (window (connection-body obj)) #'on-size)
       (set-on-full-screen-change (html-document (connection-body obj)) #'on-size)
       (set-on-orientation-change (window (connection-body obj)) #'on-size)
       (set-on-pointer-down divider (lambda (obj data)
-				     (setf (getf data :client-y) (+ adj-size
-								    (getf data :client-y)))
-				     (set-on-pointer-up (connection-body obj)
-							(lambda (obj data)
-							  (declare (ignore data))
-							  (set-on-pointer-up (connection-body obj) nil)
-							  (set-on-pointer-move (connection-body obj) nil)))
-				     (set-on-pointer-move (connection-body obj)
-							  (lambda (obj new-data)
-							    (setf adj-size (- (getf data :client-y)
-									      (getf new-data :client-y)))
-							    (on-size obj))))
-			   :capture-pointer t))
+                                     (setf (getf data :client-y) (+ adj-size
+                                                                    (getf data :client-y)))
+                                     (set-on-pointer-up (connection-body obj)
+                                                        (lambda (obj data)
+                                                          (declare (ignore data))
+                                                          (set-on-pointer-up (connection-body obj) nil)
+                                                          (set-on-pointer-move (connection-body obj) nil)))
+                                     (set-on-pointer-move (connection-body obj)
+                                                          (lambda (obj new-data)
+                                                            (setf adj-size (- (getf data :client-y)
+                                                                              (getf new-data :client-y)))
+                                                            (on-size obj))))
+                           :capture-pointer t))
     (set-on-click side-panel (lambda (obj)
-			       (declare (ignore obj))
-			       (cond (is-hidden
-				      (setf (width content) "220px")
-				      (setf is-hidden nil))
-				     (t
-				      (setf (width content) "10px")
-				      (setf is-hidden t)))))))
+                               (declare (ignore obj))
+                               (cond (is-hidden
+                                      (setf (width content) "220px")
+                                      (setf is-hidden nil))
+                                     (t
+                                      (setf (width content) "10px")
+                                      (setf is-hidden t)))))))
 
 (defun on-new-builder-panel (obj)
   "Open new panel"
@@ -1207,7 +1207,7 @@ of controls and double click to select control."
                                        :left-width 0 :right-width 0
                                        :top-height 33 :bottom-height 0))
          (tool-bar  (create-div (top-panel box) :class "w3-center"))
-	 (btn-class "w3-button w3-white w3-border w3-border-black w3-ripple")
+         (btn-class "w3-button w3-white w3-border w3-border-black w3-ripple")
          (btn-copy  (create-img tool-bar :alt-text "copy"     :url-src img-btn-copy  :class btn-class))
          (btn-paste (create-img tool-bar :alt-text "paste"    :url-src img-btn-paste :class btn-class))
          (btn-cut   (create-img tool-bar :alt-text "cut"      :url-src img-btn-cut   :class btn-class))
@@ -1220,8 +1220,8 @@ of controls and double click to select control."
          (btn-load  (create-img tool-bar :alt-text "load"     :url-src img-btn-load  :class btn-class))
          (content   (center-panel box))
          (in-simulation    nil)
-	 (undo-chain       nil)
-	 (redo-chain       nil)
+         (undo-chain       nil)
+         (redo-chain       nil)
          (file-name        "")
          (render-file-name "")
          (panel-id  (html-id content)))
@@ -1298,9 +1298,9 @@ of controls and double click to select control."
      z.html()"
                                        (jquery (current-control app)))))
                (system-clipboard-write obj (copy-buf app))
-	       (let ((c (create-text-area (window-content (copy-history-win app))
-					  :value (copy-buf app)
-					  :auto-place nil)))
+               (let ((c (create-text-area (window-content (copy-history-win app))
+                                          :value (copy-buf app)
+                                          :auto-place nil)))
                  (place-inside-top-of (window-content (copy-history-win app)) c)
                  (setf (width c) "100%"))
                (maphash
@@ -1388,7 +1388,7 @@ of controls and double click to select control."
                                                    (window-focus win)
                                                    (when fname
                                                      (setf file-name fname)
-						     (setf render-file-name "")
+                                                     (setf render-file-name "")
                                                      (setf (inner-html content)
                                                            (read-file fname))
                                                      (clrhash (get-control-list app panel-id))
@@ -1589,11 +1589,11 @@ of controls and double click to select control."
      z.html()"
                                          (jquery (current-control app)))))
                  (system-clipboard-write obj (copy-buf app))
-		 (let ((c (create-text-area (window-content (copy-history-win app))
-					    :value (copy-buf app)
-					    :auto-place nil)))
-		   (place-inside-top-of (window-content (copy-history-win app)) c)
-		   (setf (width c) "100%"))
+                 (let ((c (create-text-area (window-content (copy-history-win app))
+                                            :value (copy-buf app)
+                                            :auto-place nil)))
+                   (place-inside-top-of (window-content (copy-history-win app)) c)
+                   (setf (width c) "100%"))
                  (maphash
                   (lambda (html-id control)
                     (declare (ignore html-id))
@@ -1621,7 +1621,7 @@ of controls and double click to select control."
                      (setup-control content control :win win)
                      (select-control control)
                      (on-populate-control-list-win content :win win)
-		     (jquery-execute (get-placer content) "trigger('clog-builder-snap-shot')")))))
+                     (jquery-execute (get-placer content) "trigger('clog-builder-snap-shot')")))))
              ;; delete
              (del (obj)
                (declare (ignore obj))
@@ -1629,7 +1629,7 @@ of controls and double click to select control."
                  (delete-current-control app panel-id (html-id (current-control app)))
                  (on-populate-control-properties-win content :win win)
                  (on-populate-control-list-win content :win win)
-		 (jquery-execute (get-placer content) "trigger('clog-builder-snap-shot')"))))
+                 (jquery-execute (get-placer content) "trigger('clog-builder-snap-shot')"))))
         ;; set up del/cut/copy/paste handlers
         (set-on-copy content #'copy)
         (set-on-click btn-copy #'copy)
@@ -1646,7 +1646,7 @@ of controls and double click to select control."
                               (declare (ignore obj))
                               (cond (in-simulation
                                      (setf (url-src btn-sim) img-btn-sim)
-				     (setf (advisory-title btn-sim) "start simulation")
+                                     (setf (advisory-title btn-sim) "start simulation")
                                      (setf in-simulation nil)
                                      (maphash (lambda (html-id control)
                                                 (declare (ignore html-id))
@@ -1654,7 +1654,7 @@ of controls and double click to select control."
                                               (get-control-list app panel-id)))
                                     (t
                                      (setf (url-src btn-sim) img-btn-cons)
-				     (setf (advisory-title btn-sim) "construction mode")
+                                     (setf (advisory-title btn-sim) "construction mode")
                                      (deselect-current-control app)
                                      (on-populate-control-properties-win content :win win)
                                      (setf in-simulation t)
@@ -1664,36 +1664,36 @@ of controls and double click to select control."
                                               (get-control-list app panel-id))
                                      (focus (first-child content))))))
       (set-on-click btn-undo (lambda (obj)
-			       (declare (ignore obj))
-			       (when undo-chain
-				 (setf (inner-html content)
-				       (let ((val (pop undo-chain)))
-					 (push val redo-chain)
-					 val))
-				 (clrhash (get-control-list app panel-id))
-				 (on-populate-loaded-window content :win win)
-				 (setf (window-title win) (attribute content "data-clog-name"))
-				 (on-populate-control-properties-win content :win win)
-				 (on-populate-control-list-win content :win win))))
+                               (declare (ignore obj))
+                               (when undo-chain
+                                 (setf (inner-html content)
+                                       (let ((val (pop undo-chain)))
+                                         (push val redo-chain)
+                                         val))
+                                 (clrhash (get-control-list app panel-id))
+                                 (on-populate-loaded-window content :win win)
+                                 (setf (window-title win) (attribute content "data-clog-name"))
+                                 (on-populate-control-properties-win content :win win)
+                                 (on-populate-control-list-win content :win win))))
       (set-on-event content "clog-builder-snap-shot"
-		    (lambda (obj)
-		      (declare (ignore obj))
-		      (setf redo-chain nil)
-		      (push (panel-snap-shot content panel-id (bottom-panel box)) undo-chain)
-		      (when (current-control app)
-			(focus (get-placer (current-control app))))))
+                    (lambda (obj)
+                      (declare (ignore obj))
+                      (setf redo-chain nil)
+                      (push (panel-snap-shot content panel-id (bottom-panel box)) undo-chain)
+                      (when (current-control app)
+                        (focus (get-placer (current-control app))))))
       (set-on-click btn-redo (lambda (obj)
-			       (declare (ignore obj))
-			       (when redo-chain
-				 (setf (inner-html content)
-				       (let ((val (pop redo-chain)))
-					 (push val undo-chain)
-					 val))
-				 (clrhash (get-control-list app panel-id))
-				 (on-populate-loaded-window content :win win)
-				 (setf (window-title win) (attribute content "data-clog-name"))
-				 (on-populate-control-properties-win content :win win)
-				 (on-populate-control-list-win content :win win))))
+                               (declare (ignore obj))
+                               (when redo-chain
+                                 (setf (inner-html content)
+                                       (let ((val (pop redo-chain)))
+                                         (push val undo-chain)
+                                         val))
+                                 (clrhash (get-control-list app panel-id))
+                                 (on-populate-loaded-window content :win win)
+                                 (setf (window-title win) (attribute content "data-clog-name"))
+                                 (on-populate-control-properties-win content :win win)
+                                 (on-populate-control-list-win content :win win))))
       (set-on-click btn-load (lambda (obj)
                                (declare (ignore obj))
                                (server-file-dialog win "Load Panel" (directory-namestring file-name)
@@ -1701,17 +1701,17 @@ of controls and double click to select control."
                                                      (window-focus win)
                                                      (when fname
                                                        (setf file-name fname)
-						       (setf render-file-name "")
+                                                       (setf render-file-name "")
                                                        (setf (inner-html content)
                                                              (read-file fname))
                                                        (clrhash (get-control-list app panel-id))
                                                        (on-populate-loaded-window content :win win)
                                                        (setf (title (html-document body)) (attribute content "data-clog-name"))
                                                        (setf (window-title win) (attribute content "data-clog-name"))
-						       (on-populate-control-list-win content :win win))))))
+                                                       (on-populate-control-list-win content :win win))))))
       (set-on-click btn-save (lambda (obj)
-			       (when (equal file-name "")
-				 (setf file-name (format nil "~A.clog" (attribute content "data-clog-name"))))
+                               (when (equal file-name "")
+                                 (setf file-name (format nil "~A.clog" (attribute content "data-clog-name"))))
                                (server-file-dialog obj "Save Page As.." file-name
                                                    (lambda (fname)
                                                      (window-focus win)
@@ -1727,12 +1727,12 @@ of controls and double click to select control."
                         :custom-boot custom-boot)))
       (set-on-click btn-rndr
                     (lambda (obj)
-		      (when (equal render-file-name "")
-			(if (equal file-name "")
-			    (setf render-file-name (format nil "~A.lisp" (attribute content "data-clog-name")))
-			    (setf render-file-name (format nil "~A~A.lisp"
-							   (directory-namestring file-name)
-							   (pathname-name file-name)))))
+                      (when (equal render-file-name "")
+                        (if (equal file-name "")
+                            (setf render-file-name (format nil "~A.lisp" (attribute content "data-clog-name")))
+                            (setf render-file-name (format nil "~A~A.lisp"
+                                                           (directory-namestring file-name)
+                                                           (pathname-name file-name)))))
                       (server-file-dialog obj "Render As.." render-file-name
                                           (lambda (fname)
                                             (window-focus win)
@@ -1823,7 +1823,7 @@ of controls and double click to select control."
                                            <a target=_blank href='https://github.com/sponsors/rabbibotton'>CLOG Builder</a>
                                            </center>
                                          <center>(c) 2022 - David Botton</center></p></div>"
-						   img-clog-icon)
+                                                   img-clog-icon)
                                   :width   200
                                   :height  215
                                   :hidden  t)))
@@ -1884,9 +1884,9 @@ of controls and double click to select control."
   "Open quick start"
   (let* ((app (connection-data-item obj "builder-app-data"))
          (win (create-gui-window obj :title "Quick Start"
-				     :top 40 :left 225
-				     :width 600 :height 400
-				     :client-movement t)))
+                                     :top 40 :left 225
+                                     :width 600 :height 400
+                                     :client-movement t)))
     (create-quick-start (window-content win))))
 
 (defun on-new-builder (body)
@@ -1903,7 +1903,7 @@ of controls and double click to select control."
           -9999)
     (let* ((menu  (create-gui-menu-bar body))
            (icon  (create-gui-menu-icon menu :image-url img-clog-icon
-					     :on-click  #'on-help-about-builder))
+                                             :on-click  #'on-help-about-builder))
            (file  (create-gui-menu-drop-down menu :content "Builder"))
            (tools (create-gui-menu-drop-down menu :content "Tools"))
            (win   (create-gui-menu-drop-down menu :content "Window"))
@@ -1970,26 +1970,26 @@ of controls and double click to select control."
   (let ((params (form-multipart-data body)))
     (create-div body :content params)
     (destructuring-bind (stream fname content-type)
-	(form-data-item params "filename")
+        (form-data-item params "filename")
       (create-div body :content (format nil "filename = ~A - (contents printed in REPL)" fname))
       (let ((s (flexi-streams:make-flexi-stream stream))
-	    (b (make-string 1000))
-	    (pic-data ""))
-	(setf pic-data (format nil "data:~A;base64,~A" content-type
-			       (with-output-to-string (out)
-				 (s-base64:encode-base64 s out))))
-	(create-img body :url-src pic-data)
-	(create-br body)
-	(create-div body :content "User the following as a url source:")
-	(set-geometry (create-text-area body :value pic-data) :width 500 :height 400)
-	(create-br body)
-	(create-div body :content (format nil "For example:<br>(create-img body :url-src \"~A\")" pic-data))))))
+            (b (make-string 1000))
+            (pic-data ""))
+        (setf pic-data (format nil "data:~A;base64,~A" content-type
+                               (with-output-to-string (out)
+                                 (s-base64:encode-base64 s out))))
+        (create-img body :url-src pic-data)
+        (create-br body)
+        (create-div body :content "User the following as a url source:")
+        (set-geometry (create-text-area body :value pic-data) :width 500 :height 400)
+        (create-br body)
+        (create-div body :content (format nil "For example:<br>(create-img body :url-src \"~A\")" pic-data))))))
 
 (defun clog-builder (&key (port 8080) static-root system)
   "Start clog-builder."
   (if system
       (setf static-root (merge-pathnames "./www/"
-					 (asdf:system-source-directory system))))
+                                         (asdf:system-source-directory system))))
   (if static-root
       (initialize nil :port port :static-root static-root)
       (initialize nil :port port))

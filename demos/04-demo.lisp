@@ -37,7 +37,7 @@
   ;;
   ;; Header
   (setf (head app) (create-web-panel body :content "<h3>Demo 4:</h3><p>A simple Lisp CMS</p>"
-					  :class   "w3-yellow"))
+                                          :class   "w3-yellow"))
   ;; Sidebar
   (setf (side app) (create-web-sidebar body))
   (setf (box-width (side app)) (unit :px side-panel-size))
@@ -58,14 +58,14 @@
 (defun new-content (app)
   (setf (inner-html (main app)) "")
   (let ((new-page  (create-form-element (main app) :text :value "New Title"))
-	(tmp       (create-br (main app)))
-	(text-area (create-text-area (main app) :rows 10 :columns 40)))
+        (tmp       (create-br (main app)))
+        (text-area (create-text-area (main app) :rows 10 :columns 40)))
     (declare (ignore tmp))
     (create-br (main app))
     (set-on-click (create-button (main app) :content "Insert")
-		  (lambda (obj)
-		    (declare (ignore obj))
-		    (insert-content app new-page text-area)))))
+                  (lambda (obj)
+                    (declare (ignore obj))
+                    (insert-content app new-page text-area)))))
 
 (defun update-content (app page text-area)
   (dbi:do-sql
@@ -84,84 +84,84 @@
 (defun edit-content (app page)
   (setf (inner-html (main app)) "")
   (let ((contents (dbi:fetch-all
-		   (dbi:execute
-		    (dbi:prepare
-		     *sql-connection*
-		     "select main from config where menu= ?")
-		    (list page)))))
+                   (dbi:execute
+                    (dbi:prepare
+                     *sql-connection*
+                     "select main from config where menu= ?")
+                    (list page)))))
     (dolist (content contents)
       (let ((text-area (create-text-area (main app) :rows 10 :columns 40
-						    :value (second content))))
-	(create-br (main app))
-	(set-on-click (create-button (main app) :content "Update")
-		      (lambda (obj)
-			(declare (ignore obj))
-			(update-content app page text-area)))
-	(unless (equal page "Home")
-	  (set-on-click (create-button (main app) :content "Delete")
-			(lambda (obj)
-			  (declare (ignore obj))
-			  (delete-content app page))))))))
+                                                    :value (second content))))
+        (create-br (main app))
+        (set-on-click (create-button (main app) :content "Update")
+                      (lambda (obj)
+                        (declare (ignore obj))
+                        (update-content app page text-area)))
+        (unless (equal page "Home")
+          (set-on-click (create-button (main app) :content "Delete")
+                        (lambda (obj)
+                          (declare (ignore obj))
+                          (delete-content app page))))))))
 
 (defun route-content (app page)
   (setf (inner-html (main app)) "")
   (let ((contents (dbi:fetch-all
-		   (dbi:execute
-		    (dbi:prepare
-		     *sql-connection*
-		     "select main from config where menu= ?")
-		    (list page)))))
+                   (dbi:execute
+                    (dbi:prepare
+                     *sql-connection*
+                     "select main from config where menu= ?")
+                    (list page)))))
     (dolist (content contents)
       (setf (inner-html (main app)) (second content))
       (create-br (main app))
       (create-br (main app))
       (when (sysop app)
-	(set-on-click (create-a (main app) :content "edit")
-		      (lambda (obj)
-			(declare (ignore obj))
-			(edit-content app page)))))))
+        (set-on-click (create-a (main app) :content "edit")
+                      (lambda (obj)
+                        (declare (ignore obj))
+                        (edit-content app page)))))))
 (defun id-me (app)
   (setf (inner-html (main app)) "")
   (clog-web-form (main app) "Validate:"
-		 '(("Password" "pass" :password))
-		 (lambda (res)
-		   (if (equal (second (first res)) sysop-password)
-		       (progn
-			 (setf (sysop app) t)
-			 (reset-menu app)
-			 (setf (inner-html (main app)) "You are logged in."))
-		       (setf (inner-html (main app)) "Invalid password.")))))
+                 '(("Password" "pass" :password))
+                 (lambda (res)
+                   (if (equal (second (first res)) sysop-password)
+                       (progn
+                         (setf (sysop app) t)
+                         (reset-menu app)
+                         (setf (inner-html (main app)) "You are logged in."))
+                       (setf (inner-html (main app)) "Invalid password.")))))
 
 (defun reset-menu (app)
   (setf (inner-html (side app)) "")
   (let ((menu-items (dbi:fetch-all
-		     (dbi:execute
-		      (dbi:prepare *sql-connection*
-				   "select menu from config")))))
+                     (dbi:execute
+                      (dbi:prepare *sql-connection*
+                                   "select menu from config")))))
     (dolist (menu-item menu-items)
       (set-on-click
        (create-web-sidebar-item (side app) :content (second menu-item))
        (lambda (obj)
-	 (declare (ignore obj))
-	 (route-content app (second menu-item))))))
+         (declare (ignore obj))
+         (route-content app (second menu-item))))))
   (create-br (side app))
   (if (sysop app)
       (progn
-	(set-on-click (create-a (side app) :content "new")
-		      (lambda (obj)
-			(declare (ignore obj))
-			(new-content app)))
-	(create-br (side app))
-	(set-on-click (create-a (side app) :content "logout")
-		      (lambda (obj)
-			(declare (ignore obj))
-			(setf (sysop app) nil)
-			(reset-menu app)
-			(route-content app "Home"))))
+        (set-on-click (create-a (side app) :content "new")
+                      (lambda (obj)
+                        (declare (ignore obj))
+                        (new-content app)))
+        (create-br (side app))
+        (set-on-click (create-a (side app) :content "logout")
+                      (lambda (obj)
+                        (declare (ignore obj))
+                        (setf (sysop app) nil)
+                        (reset-menu app)
+                        (route-content app "Home"))))
       (set-on-click (create-a (side app) :content "login")
-		    (lambda (obj)
-		      (declare (ignore obj))
-		      (id-me app)))))
+                    (lambda (obj)
+                      (declare (ignore obj))
+                      (id-me app)))))
 
 (defun on-new-window (body)
   (set-html-on-close body "Connection Lost")

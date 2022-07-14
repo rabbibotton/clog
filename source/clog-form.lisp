@@ -78,8 +78,8 @@ doing file upload use multipart/form-data"))
                           (method :none)
                           (target "_self")
                           (encoding "application/x-www-form-urlencoded")
-			  (style nil)
-			  (hidden nil)
+                          (style nil)
+                          (hidden nil)
                           (class nil)
                           (html-id nil)
                           (auto-place t))
@@ -94,13 +94,13 @@ doing file upload use multipart/form-data"))
                         (when class
                           (format nil " class='~A'"
                                   (escape-string class :html t)))
-			(when (or hidden style)
-			  (format nil " style='~@[~a~]~@[~a~]'"
-				  (when hidden "visibility:hidden;")
-				  style)))
+                        (when (or hidden style)
+                          (format nil " style='~@[~a~]~@[~a~]'"
+                                  (when hidden "visibility:hidden;")
+                                  style)))
                 :clog-type  'clog-form
-		:html-id    html-id
-		:auto-place auto-place))
+                :html-id    html-id
+                :auto-place auto-place))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;
 ;; form-element-count ;;
@@ -216,20 +216,20 @@ clog-form in the DOM. The radio ELEMENT-TYPE groups by NAME."))
                                   (value nil)
                                   (label nil)
                                   (class nil)
-				  (style nil)
+                                  (style nil)
                                   (hidden nil)
                                   (html-id nil)
-				  (auto-place t))
+                                  (auto-place t))
   (let ((element (create-child
                   obj (format nil "<input type='~A'~@[~A~]~@[~A~]~@[~A~]~@[~A~]/>"
                               (escape-string element-type :html t)
                               (when class
                                 (format nil " class='~A'"
                                         (escape-string class :html t)))
-			      (when (or hidden style)
-				(format nil " style='~@[~a~]~@[~a~]'"
-					(when hidden "visibility:hidden;")
-					style))
+                              (when (or hidden style)
+                                (format nil " style='~@[~a~]~@[~a~]'"
+                                        (when hidden "visibility:hidden;")
+                                        style))
                               (when value (format nil " value='~A'" (escape-string value :html t)))
                               (when name  (format nil " name='~A'" (escape-string name :html t))))
                   :clog-type  'clog-form-element
@@ -726,30 +726,30 @@ virtual keyboards."))
 
 
 (defgeneric create-label (clog-obj &key content
-				     style hidden label-for class html-id
-				     auto-place)
+                                     style hidden label-for class html-id
+                                     auto-place)
   (:documentation "Create a new clog-label as child of CLOG-OBJ."))
 
 (defmethod create-label ((obj clog-obj) &key (content "")
                                           (label-for nil)
-					  (style nil)
-					  (hidden nil)
+                                          (style nil)
+                                          (hidden nil)
                                           (class nil)
                                           (html-id nil)
-					  (auto-place t))
+                                          (auto-place t))
   (create-child obj (format nil "<label for='~@[~A~]'~@[~A~]~@[~A~]>~A</label>"
                             (when label-for (html-id label-for))
                             (when class
                               (format nil " class='~A'"
                                       (escape-string class :html t)))
-			    (when (or hidden style)
-			      (format nil " style='~@[~a~]~@[~a~]'"
-				      (when hidden "visibility:hidden;")
-				      style))
+                            (when (or hidden style)
+                              (format nil " style='~@[~a~]~@[~a~]'"
+                                      (when hidden "visibility:hidden;")
+                                      style))
                             content)
                 :clog-type  'clog-label
-		:html-id    html-id
-		:auto-place auto-place))
+                :html-id    html-id
+                :auto-place auto-place))
 
 ;;;;;;;;;;;;;;;
 ;; label-for ;;
@@ -773,28 +773,28 @@ virtual keyboards."))
 ;;;;;;;;;;;;;;;;;;;;;
 
 (defgeneric create-fieldset (clog-obj &key legend hidden
-					style class html-id auto-place)
+                                        style class html-id auto-place)
   (:documentation "Create a new clog-fieldset as child of CLOG-OBJ."))
 
 (defmethod create-fieldset ((obj clog-obj) &key (legend nil)
-					     (style nil)
-					     (hidden nil)
+                                             (style nil)
+                                             (hidden nil)
                                              (class nil)
                                              (html-id nil)
-					     (auto-place t))
+                                             (auto-place t))
   (create-child obj (format nil "<fieldset~@[~A~]~@[~A~]>~@[~A~]</fieldset>"
                               (when class
                                 (format nil " class='~A'"
                                         (escape-string class :html t)))
-			      (when (or hidden style)
-				(format nil " style='~@[~a~]~@[~a~]'"
-					(when hidden "visibility:hidden;")
-					style))
+                              (when (or hidden style)
+                                (format nil " style='~@[~a~]~@[~a~]'"
+                                        (when hidden "visibility:hidden;")
+                                        style))
                               (when legend
                                 (format nil "<legend>~A</legend>" legend)))
                 :clog-type  'clog-fieldset
-		:html-id    html-id
-		:auto-place auto-place))
+                :html-id    html-id
+                :auto-place auto-place))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Implementation - clog-text-area
@@ -809,7 +809,7 @@ virtual keyboards."))
 
 (defgeneric create-text-area (clog-obj
                               &key columns rows name value label
-				style hidden class html-id auto-place)
+                                style hidden class html-id auto-place)
   (:documentation "Create a new clog-text-area as child of CLOG-OBJ."))
 
 (defmethod create-text-area ((obj clog-obj)
@@ -818,11 +818,11 @@ virtual keyboards."))
                                (name "")
                                (value "")
                                (label nil)
-			       (style nil)
-			       (hidden nil)
+                               (style nil)
+                               (hidden nil)
                                (class nil)
                                (html-id nil)
-			       (auto-place t))
+                               (auto-place t))
   (let ((element
           (create-child obj
             (format nil "<textarea name='~A' cols='~A' rows='~A'~@[~A~]~@[~A~]>~A</textarea>"
@@ -830,14 +830,14 @@ virtual keyboards."))
                     (when class
                       (format nil " class='~A'"
                               (escape-string class :html t)))
-		    (when (or hidden style)
-		      (format nil " style='~@[~a~]~@[~a~]'"
-			      (when hidden "visibility:hidden;")
-			      style))
+                    (when (or hidden style)
+                      (format nil " style='~@[~a~]~@[~a~]'"
+                              (when hidden "visibility:hidden;")
+                              style))
                     (escape-string value :html t))
             :clog-type  'clog-text-area
-	    :html-id    html-id
-	    :auto-place auto-place)))
+            :html-id    html-id
+            :auto-place auto-place)))
 
     (when label
       (label-for label element))
@@ -929,27 +929,27 @@ virtual keyboards."))
 ;;;;;;;;;;;;;;;;;;;
 
 (defgeneric create-legend (clog-obj &key content
-				      style hidden class html-id auto-place)
+                                      style hidden class html-id auto-place)
   (:documentation "Create a new clog-legend as child of CLOG-OBJ."))
 
 (defmethod create-legend ((obj clog-obj) &key (content "")
-					   (style nil)
-					   (hidden nil)
+                                           (style nil)
+                                           (hidden nil)
                                            (class nil)
                                            (html-id nil)
-					   (auto-place t))
+                                           (auto-place t))
   (create-child obj (format nil "<legend~@[~A~]~@[~A~]>~A</legend>"
                             (when class
                                 (format nil " class='~A'"
                                         (escape-string class :html t)))
-			    (when (or hidden style)
-			      (format nil " style='~@[~a~]~@[~a~]'"
-				      (when hidden "visibility:hidden;")
-				      style))
+                            (when (or hidden style)
+                              (format nil " style='~@[~a~]~@[~a~]'"
+                                      (when hidden "visibility:hidden;")
+                                      style))
                             content)
                 :clog-type  'clog-legend
-		:html-id    html-id
-		:auto-place auto-place))
+                :html-id    html-id
+                :auto-place auto-place))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Implementation - clog-data-list
@@ -967,7 +967,7 @@ virtual keyboards."))
 optionally fill in with contents of data-list."))
 
 (defmethod create-data-list ((obj clog-obj) &key (data-list nil)
-					      (html-id nil) (auto-place t))
+                                              (html-id nil) (auto-place t))
   (let ((element (create-child obj "<datalist />"
                                :clog-type  'clog-data-list
                                :html-id    html-id
@@ -1010,18 +1010,18 @@ optionally fill in with contents of data-list."))
 ;;;;;;;;;;;;;;;;;;;
 
 (defgeneric create-select (clog-obj &key name multiple label
-				      style hidden class html-id auto-place)
+                                      style hidden class html-id auto-place)
   (:documentation "Create a new clog-select as child of CLOG-OBJ."))
 
 (defmethod create-select ((obj clog-obj)
                           &key (name nil)
                             (multiple nil)
                             (label nil)
-			    (style nil)
-			    (hidden nil)
+                            (style nil)
+                            (hidden nil)
                             (class nil)
                             (html-id nil)
-			    (auto-place t))
+                            (auto-place t))
   (let ((element (create-child
                   obj (format nil "<select~@[~A~]~@[~A~]~@[~A~]~@[~A~]/>"
                               (when multiple " multiple")
@@ -1029,13 +1029,13 @@ optionally fill in with contents of data-list."))
                               (when class
                                 (format nil " class='~A'"
                                         (escape-string class :html t)))
-			      (when (or hidden style)
-				(format nil " style='~@[~a~]~@[~a~]'"
-					(when hidden "visibility:hidden;")
-					style)))
+                              (when (or hidden style)
+                                (format nil " style='~@[~a~]~@[~a~]'"
+                                        (when hidden "visibility:hidden;")
+                                        style)))
                   :clog-type  'clog-select
-		  :html-id    html-id
-		  :auto-place auto-place)))
+                  :html-id    html-id
+                  :auto-place auto-place)))
     (when label
       (label-for label element))
     element))
@@ -1050,7 +1050,7 @@ optionally fill in with contents of data-list."))
 (defmethod add-select-option ((obj clog-select) value content &key selected disabled)
   (create-child obj (format nil "<option~@[~A~]~@[~A~] value='~A'>~A</option>"
                             (when selected " selected")
-			    (when disabled " disabled")
+                            (when disabled " disabled")
                             (escape-string value :html t)
                             content)
                 :clog-type 'clog-element :auto-place t))
@@ -1093,8 +1093,8 @@ optionally fill in with contents of data-list."))
 
 (defmethod (setf select-text) (value (obj clog-obj))
   (js-execute obj (format nil "$('#~A option:selected').text('~A')"
-			  (html-id obj)
-			  (escape-string value))))
+                          (html-id obj)
+                          (escape-string value))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Implementation - clog-option
@@ -1110,7 +1110,7 @@ or CLOG Data-List objects."));
 
 (defgeneric create-option (clog-obj
                            &key content value selected disabled
-			     style hidden class html-id auto-place)
+                             style hidden class html-id auto-place)
   (:documentation "Create a new clog-option as child of CLOG-OBJ."))
 
 (defmethod create-option ((obj clog-obj) &key
@@ -1118,27 +1118,27 @@ or CLOG Data-List objects."));
                                            (value nil)
                                            (selected nil)
                                            (disabled nil)
-					   (style nil)
-					   (hidden nil)
+                                           (style nil)
+                                           (hidden nil)
                                            (class nil)
                                            (html-id nil)
-					   (auto-place t))
+                                           (auto-place t))
   (create-child obj (format nil "<option~@[~A~]~@[~A~]~@[~A~]~@[~A~]~@[~A~]>~A</option>"
                             (when selected " selected")
                             (when disabled " disabled")
                             (when value (format nil " value='~A'"
-						(escape-string value :html t)))
+                                                (escape-string value :html t)))
                             (when class
                               (format nil " class='~A'"
                                       (escape-string class :html t)))
-			    (when (or hidden style)
-			      (format nil " style='~@[~a~]~@[~a~]'"
-				      (when hidden "visibility:hidden;")
-				      style))
+                            (when (or hidden style)
+                              (format nil " style='~@[~a~]~@[~a~]'"
+                                      (when hidden "visibility:hidden;")
+                                      style))
                             content)
                 :clog-type  'clog-option
-		:html-id    html-id
-		:auto-place auto-place))
+                :html-id    html-id
+                :auto-place auto-place))
 
 ;;;;;;;;;;;;;;;
 ;; selectedp ;;
@@ -1168,7 +1168,7 @@ or CLOG Data-List objects."));
 ;;;;;;;;;;;;;;;;;;;;;
 
 (defgeneric create-optgroup (clog-obj &key content disabled
-					style hidden class html-id auto-place)
+                                        style hidden class html-id auto-place)
   (:documentation "Create a new clog-optgroup as child of CLOG-OBJ."))
 
 (defmethod create-optgroup ((obj clog-obj) &key (content "")
@@ -1177,17 +1177,17 @@ or CLOG Data-List objects."));
                                              (hidden nil)
                                              (class nil)
                                              (html-id nil)
-					     (auto-place t))
+                                             (auto-place t))
   (create-child obj (format nil "<optgroup label='~A'~@[~A~]~@[~A~]~@[~A~]/>"
                             content
                             (when class
                               (format nil " class='~A'"
                                       (escape-string class :html t)))
-			    (when (or hidden style)
-			      (format nil " style='~@[~a~]~@[~a~]'"
-				      (when hidden "visibility:hidden;")
-				      style))
+                            (when (or hidden style)
+                              (format nil " style='~@[~a~]~@[~a~]'"
+                                      (when hidden "visibility:hidden;")
+                                      style))
                             (when disabled " disabled"))
                 :clog-type  'clog-optgroup
-		:html-id    html-id
-		:auto-place auto-place))
+                :html-id    html-id
+                :auto-place auto-place))

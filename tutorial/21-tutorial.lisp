@@ -5,8 +5,8 @@
 (defpackage #:clog-drop-list
   (:use #:cl #:clog)
   (:export clog-drop-list
-	   create-drop-list
-	   drop-root))
+           create-drop-list
+           drop-root))
 
 (in-package :clog-drop-list)
 
@@ -25,22 +25,22 @@ on the drop-root."))
   (:documentation "Create a drop-list with CONTENT as the top of tree."))
 
 (defmethod create-drop-list ((obj clog-obj) &key (content "")
-					      (class nil)
-			                      (html-id nil)
-					      (auto-place t))
+                                              (class nil)
+                                              (html-id nil)
+                                              (auto-place t))
   (let* ((new-obj (create-unordered-list obj :class class
-					     :html-id html-id
-					     :auto-place auto-place))
-	 (header  (create-list-item new-obj :content content)))    
+                                             :html-id html-id
+                                             :auto-place auto-place))
+         (header  (create-list-item new-obj :content content)))
     (change-class new-obj 'clog-drop-list)
     (setf (drop-root new-obj) (create-unordered-list header))
     (set-on-mouse-down header
-		       (lambda (obj data)
-			 (declare (ignore obj data))
-			 (if (hiddenp (drop-root new-obj))
-			     (setf (hiddenp (drop-root new-obj)) nil)
-			     (setf (hiddenp (drop-root new-obj)) t)))
-		       :cancel-event t) ; prevent event bubble up tree
+                       (lambda (obj data)
+                         (declare (ignore obj data))
+                         (if (hiddenp (drop-root new-obj))
+                             (setf (hiddenp (drop-root new-obj)) nil)
+                             (setf (hiddenp (drop-root new-obj)) t)))
+                       :cancel-event t) ; prevent event bubble up tree
     new-obj))
 
 (defpackage #:clog-tut-21
@@ -51,19 +51,19 @@ on the drop-root."))
 
 (defun on-new-window (body)
   (let* ((drop-list  (clog-drop-list:create-drop-list body :content "Top of tree"))
-	 (item (create-list-item (clog-drop-list:drop-root drop-list) :content "Item 1"))
-	 (item (create-list-item (clog-drop-list:drop-root drop-list) :content "Item 2"))
-	 (item (create-list-item (clog-drop-list:drop-root drop-list) :content "Item 3"))
-	 (item (create-list-item (clog-drop-list:drop-root drop-list) :content "Item 4"))
-	 (drop-list2 (clog-drop-list:create-drop-list item :content "Another Drop"))
-	 (item (create-list-item (clog-drop-list:drop-root drop-list2) :content "Item 1"))
-	 (item (create-list-item (clog-drop-list:drop-root drop-list2) :content "Item 2"))
-	 (drop-list3 (clog-drop-list:create-drop-list item :content "Hidden Drop"))
-	 (item (create-list-item (clog-drop-list:drop-root drop-list3) :content "Item 1"))
-	 (item (create-list-item (clog-drop-list:drop-root drop-list3) :content "Item 2"))
-	 (drop-list4 (clog-drop-list:create-drop-list drop-list :content "One more Drop"))
-	 (item (create-list-item (clog-drop-list:drop-root drop-list4) :content "Item 1"))
-	 (item (create-list-item (clog-drop-list:drop-root drop-list4) :content "Item 2")))
+         (item (create-list-item (clog-drop-list:drop-root drop-list) :content "Item 1"))
+         (item (create-list-item (clog-drop-list:drop-root drop-list) :content "Item 2"))
+         (item (create-list-item (clog-drop-list:drop-root drop-list) :content "Item 3"))
+         (item (create-list-item (clog-drop-list:drop-root drop-list) :content "Item 4"))
+         (drop-list2 (clog-drop-list:create-drop-list item :content "Another Drop"))
+         (item (create-list-item (clog-drop-list:drop-root drop-list2) :content "Item 1"))
+         (item (create-list-item (clog-drop-list:drop-root drop-list2) :content "Item 2"))
+         (drop-list3 (clog-drop-list:create-drop-list item :content "Hidden Drop"))
+         (item (create-list-item (clog-drop-list:drop-root drop-list3) :content "Item 1"))
+         (item (create-list-item (clog-drop-list:drop-root drop-list3) :content "Item 2"))
+         (drop-list4 (clog-drop-list:create-drop-list drop-list :content "One more Drop"))
+         (item (create-list-item (clog-drop-list:drop-root drop-list4) :content "Item 1"))
+         (item (create-list-item (clog-drop-list:drop-root drop-list4) :content "Item 2")))
     (declare (ignore item))
     (setf (hiddenp (clog-drop-list:drop-root drop-list3)) t)))
 

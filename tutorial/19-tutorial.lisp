@@ -12,19 +12,19 @@
 (defun on-new-window (body)
   ;; First we need to load jslists' JavaScript file and css
   (load-css (html-document body) "/tutorial/jslists/jsLists.css")
-  (load-script (html-document body) "/tutorial/jslists/jsLists.js")	    
+  (load-script (html-document body) "/tutorial/jslists/jsLists.js")
   ;; Second we need to build an example list. jsLists uses an ordered
   ;; or unordered list for its data.
   (let* ((list-top   (create-unordered-list body))
-	 (item       (create-list-item list-top :content "Top of tree"))
-	 (list-b     (create-unordered-list item))
-	 (item       (create-list-item list-b :content "Item 1"))
-	 (item       (create-list-item list-b :content "Item 2"))
-	 (item       (create-list-item list-b :content "Item 3"))
-	 (item       (create-list-item list-b :content "Item 4")))
+         (item       (create-list-item list-top :content "Top of tree"))
+         (list-b     (create-unordered-list item))
+         (item       (create-list-item list-b :content "Item 1"))
+         (item       (create-list-item list-b :content "Item 2"))
+         (item       (create-list-item list-b :content "Item 3"))
+         (item       (create-list-item list-b :content "Item 4")))
     (declare (ignore item))
     (js-execute body (format nil "JSLists.applyToList('~A', 'ALL');"
-			     (html-id list-top)))))
+                             (html-id list-top)))))
 
 (defun start-tutorial ()
   "Start tutorial."

@@ -26,7 +26,7 @@
 (defun on-main (body)
   (let ((sb (create-style-block body)))
     (add-style sb :element "a"       '(("color"           :orange)
-				       ("text-decoration" :none)))
+                                       ("text-decoration" :none)))
     (add-style sb :element "a:hover" '(("background-color" :gray))))
   (create-div body :content
      "We are in on-main<br><br>
@@ -44,8 +44,8 @@
 
 (defun on-page1 (body)
   (create-div body :content
-	      (format nil "You are in on-page1 and got here using ~A"
-		      (path-name (location body)))))
+              (format nil "You are in on-page1 and got here using ~A"
+                      (path-name (location body)))))
 
 (defun on-page2 (body)
   (create-div body :content "You are in on-page2")
@@ -53,24 +53,24 @@
 
 (defun on-tutorial11 (body)
   (let* ((form         (attach-as-child body "form1" :clog-type 'clog-form))
-	 (good-button  (attach-as-child body "button1id"))
-	 (scary-button (attach-as-child body "button2id")))
+         (good-button  (attach-as-child body "button1id"))
+         (scary-button (attach-as-child body "button2id")))
     (flet ((on-click-good (obj)
-	     (declare (ignore obj))
-	     (let ((alert-div (create-div body)))
-	       (place-before form alert-div)
-	       (setf (hiddenp form) t)
-	       ;; Bootstrap specific markup
-	       (setf (css-class-name alert-div) "alert alert-success")
-	       (setf (attribute alert-div "role") "alert")
-	       (setf (inner-html alert-div)
-		     (format nil "<pre>radios value : ~A</pre><br>
+             (declare (ignore obj))
+             (let ((alert-div (create-div body)))
+               (place-before form alert-div)
+               (setf (hiddenp form) t)
+               ;; Bootstrap specific markup
+               (setf (css-class-name alert-div) "alert alert-success")
+               (setf (attribute alert-div "role") "alert")
+               (setf (inner-html alert-div)
+                     (format nil "<pre>radios value : ~A</pre><br>
                            <pre>textinput value : ~A</pre><br>"
-			     (radio-value form "radios")
-			     (name-value form "textinput")))))
-	   (on-click-scary (obj)
-	     (declare (ignore obj))
-	     (reset form)))
+                             (radio-value form "radios")
+                             (name-value form "textinput")))))
+           (on-click-scary (obj)
+             (declare (ignore obj))
+             (reset form)))
     ;; We need to override the boostrap default to submit the form html style
     (set-on-submit form (lambda (obj)(declare (ignore obj))()))
     (set-on-click good-button #'on-click-good)
@@ -78,10 +78,10 @@
 
 (defun on-default (body)
   (cond ((equalp (path-name (location body))
-		 "/tutorial/tut-11.html")
-	 (on-tutorial11 body))
-	(t
-	 (create-div body :content "No dice! What do I do with you?"))))
+                 "/tutorial/tut-11.html")
+         (on-tutorial11 body))
+        (t
+         (create-div body :content "No dice! What do I do with you?"))))
 
 (defun add-search-optimizations (path content)
   ;; The default boot.html that comes with CLOG has template
@@ -92,8 +92,8 @@
   ;; aware of these type of dynamic sites.
   (if (equal path "/")
     (funcall (cl-template:compile-template content)
-	     (list :meta "<meta name='description' content='CLOG Tutorial 12'>"
-		   :body "Tutorial 12 for CLOG"))
+             (list :meta "<meta name='description' content='CLOG Tutorial 12'>"
+                   :body "Tutorial 12 for CLOG"))
     content))
 
 (defun start-tutorial ()
@@ -103,9 +103,9 @@
   ;; for search engine optimization. We choose long-polling-first so
   ;; our website can be crawled for content by google
   (initialize 'on-main
-	      :long-poll-first t
-	      :boot-function 'add-search-optimizations
-	      :extended-routing t)
+              :long-poll-first t
+              :boot-function 'add-search-optimizations
+              :extended-routing t)
   ;; Navigating to http://127.0.0.1:8080/page1 executes on-page1
   ;; Since extended-routing is t /page1/any/thing/else also routes to /page1
   (set-on-new-window 'on-page1 :path "/page1")
@@ -124,7 +124,7 @@
   ;; from tutorial 11 and make it the boot-file and execute the same code
   ;; in (on-tutorial11) as in tutorial 11.
   (set-on-new-window 'on-tutorial11 :path "/page3"
-				     :boot-file "/tutorial/tut-11.html")
+                                     :boot-file "/tutorial/tut-11.html")
   ;; Setting a "default" path says that any use of an included boot.js
   ;; file by static html file will route to this function, in this case on-default
   ;; which will determine if this is coming from the path used in tutorial

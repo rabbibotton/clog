@@ -25,7 +25,7 @@
                                           (declare (ignore obj))
                                           ;; return empty string to prevent nav off page
                                           ""))))
-    
+
 (defun clog-new-app (&key (port 8080) static-root)
   "Start clog-new-app."
   (if static-root

@@ -42,10 +42,10 @@
                                                       bottom:0px;right:0px'><div>"))
                      (setf (inner-html (indicator app))
                            (cadr (assoc :db-name results)))
-                     (setf (title (html-document (body app))) 
+                     (setf (title (html-document (body app)))
                            (format nil "CLOG DB Admin - ~A" (cadr (assoc :db-name results))))))
                  :title "Open Database" :height 250)))
-                   
+
 (defun on-db-close (obj)
   (let ((app (connection-data-item obj "app-data")))
     (when (db-connection app)
@@ -53,7 +53,7 @@
       (add-class (body app) "w3-blue-grey")
       (destroy (indicator app))
       (setf (indicator app) nil)
-      (sqlite:disconnect (db-connection app))      
+      (sqlite:disconnect (db-connection app))
       (setf (db-connection app) nil))
     (setf (title (html-document (body app))) "CLOG DB Admin")))
 
@@ -149,7 +149,7 @@
                                                       :on-click-row
                                                       (lambda (obj names row)
                                                         (edit-record obj app (car data) names row))))))))
-                                      
+
 (defun on-help-about (obj)
   (let ((about (create-gui-window obj
                                   :title   "About"
@@ -163,7 +163,7 @@
                                   :height  215
                                   :hidden  t)))
     (window-center about)
-    (setf (visiblep about) t)    
+    (setf (visiblep about) t)
     (set-on-window-can-size about (lambda (obj)
                                     (declare (ignore obj))()))))
 
@@ -173,7 +173,7 @@
     (setf (body app) body)
     (setf (title (html-document body)) "CLOG DB Admin")
     (clog-gui-initialize body)
-    (add-class body "w3-blue-grey")  
+    (add-class body "w3-blue-grey")
     (let* ((menu  (create-gui-menu-bar body))
            (icon  (create-gui-menu-icon menu :on-click #'on-help-about))
            (file  (create-gui-menu-drop-down menu :content "Database"))
