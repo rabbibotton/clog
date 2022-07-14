@@ -11,5 +11,5 @@
 (defun start-app ()
   (initialize 'create-hello-page
               :static-root (merge-pathnames "./www/"
-                             (asdf:system-source-directory :hello-builder)))
+                                            (asdf:system-source-directory :hello-builder)))
   (open-browser))

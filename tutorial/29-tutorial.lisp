@@ -54,11 +54,11 @@
     ;; This updates an element on the page by just changing the value of the linked
     ;; slot and my-count can be adjusted mid loop from web page
     (loop
-       (cond ((> (my-count lisp-obj) 0)
-              (decf (my-count lisp-obj))
-              (sleep .2))
-             (t
-              (return))))))
+      (cond ((> (my-count lisp-obj) 0)
+             (decf (my-count lisp-obj))
+             (sleep .2))
+            (t
+             (return))))))
 
 (defun start-tutorial ()
   (initialize 'on-new-window)

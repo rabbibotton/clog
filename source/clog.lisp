@@ -15,7 +15,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (mgl-pax:define-package :clog
-  (:documentation "The Common List Omnificent GUI - CLOG")
+    (:documentation "The Common List Omnificent GUI - CLOG")
   (:use #:cl #:parse-float #:mgl-pax))
 
 (cl:in-package :clog)

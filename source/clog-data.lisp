@@ -60,7 +60,7 @@ must be bound."
   (let ((result))
     (dolist (slot (reverse slot-name-list))
       (when (consp slot)
-          (setf slot (second slot)))
+        (setf slot (second slot)))
       (when (keywordp slot)
         (setf slot (format nil "~A" slot)))
       (unless (symbolp slot)
@@ -107,8 +107,8 @@ keyword package."
           (setf pname (string-upcase pname))
           (setf slot (string-upcase slot))))
       (setf slot (find slot (closer-mop:compute-slots (class-of obj))
-                        :key #'closer-mop:slot-definition-name
-                        :test #'string=))
+                       :key #'closer-mop:slot-definition-name
+                       :test #'string=))
       (when slot
         (setf slot (closer-mop:slot-definition-name slot))
         (if (and (slot-boundp obj slot)
@@ -189,8 +189,8 @@ use in a SQL insert value list."
       (setf value (format nil "~A~A"
                           (sql-quote value)
                           (if result ", " "")))
-    (push value result))
-  (format nil "~{~A~}" result)))
+      (push value result))
+    (format nil "~{~A~}" result)))
 
 ;;;;;;;;;;;;;;;;;;;;;
 ;; sql-update-list ;;

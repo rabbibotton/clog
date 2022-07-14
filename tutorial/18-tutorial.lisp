@@ -10,7 +10,7 @@
          (target2 (create-div body))
          (object  (create-div target1))
          (msg     (create-div body
-                    :content "Drag green box to other yellow box")))
+                              :content "Drag green box to other yellow box")))
     ;; Instructions
     (setf (positioning msg) :fixed)
     (setf (top msg) "125px")

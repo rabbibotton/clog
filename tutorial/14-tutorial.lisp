@@ -24,12 +24,12 @@
                   (lambda (obj data)
                     (declare (ignore obj))
                     (create-div body :content
-                            (format nil "<br>~A : ~A => ~A<br>"
-                                    (getf data ':key)
-                                    (getf data ':old-value)
-                                    (getf data ':value)))))
+                                (format nil "<br>~A : ~A => ~A<br>"
+                                        (getf data ':key)
+                                        (getf data ':old-value)
+                                        (getf data ':value)))))
   (create-div body :content (format nil
-       "<H1>Local Storage vs Session Storage</H1>
+                                    "<H1>Local Storage vs Session Storage</H1>
 <p width=500>
 The value of local storage persists in the browser cache even after the browser
 is closed. If you reset this page the session storage key will remain the same,
@@ -46,10 +46,10 @@ Local Storage key: ~A := ~A<br>
 Session Storage key: ~A := ~A<br>
 <br>
 Changes made to a local key will fire an event and print below:<br>"
-       "my-local-key"
-       (storage-element (window body) :local "my-local-key")
-       "my-session-key"
-       (storage-element (window body) :session "my-session-key"))))
+                                    "my-local-key"
+                                    (storage-element (window body) :local "my-local-key")
+                                    "my-session-key"
+                                    (storage-element (window body) :session "my-session-key"))))
 
 (defun start-tutorial ()
   "Start turtorial."

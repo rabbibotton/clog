@@ -230,7 +230,7 @@ result or if time out DEFAULT-ANSWER. see JQUERY-QUERY (Internal)"))
      e.metaKey + ':' +
      e.touches[0].clientX + ':' + e.touches[0].clientY + ':' +
      e..touches[0].pageX + ':' + e.touches[0].pageY"
-    "JavaScript to collect touch event data from browser.")
+  "JavaScript to collect touch event data from browser.")
 
 (defun parse-touch-event (data)
   (let ((f (ppcre:split ":" data)))
@@ -631,7 +631,7 @@ If ON-DRAG-START-HANDLER is nil unbind the event."))
                  (declare (ignore data))
                  (funcall handler obj)))
              :eval-script (format nil
-                 "e.originalEvent.dataTransfer.setData('~A','~A'); "
+                                  "e.originalEvent.dataTransfer.setData('~A','~A'); "
                                   drag-type
                                   drag-data)))
 
@@ -888,7 +888,7 @@ replace on an on-double-click event."))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defgeneric set-on-mouse-right-click (clog-obj on-mouse-right-click-handler
-                                       &key one-time)
+                                      &key one-time)
   (:documentation "Set the ON-MOUSE-RIGHT-CLICK-HANDLER for CLOG-OBJ. If
 ON-MOUSE-RIGHT-CLICK-HANDLER is nil unbind the event. Setting this event will
 replace on an on-context-menu event."))
@@ -1176,8 +1176,8 @@ nil will unbind on-key-press also."))
   (set-event obj "keypress"
              (when handler
                (lambda (data)
-               (let ((f (parse-keyboard-event data)))
-                 (funcall handler obj (code-char (getf f :char-code))))))
+                 (let ((f (parse-keyboard-event data)))
+                   (funcall handler obj (code-char (getf f :char-code))))))
              :one-time one-time
              :cancel-event disable-default
              :call-back-script keyboard-event-script))

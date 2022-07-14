@@ -16,9 +16,9 @@
 (defpackage #:clog-tools
   (:use #:cl #:clog #:clog-gui #:clog-web)
   (:export :clog-builder
-           :add-supported-controls
+   :add-supported-controls
            :control-info
-           :clog-db-admin
+   :clog-db-admin
            :clog-new-app))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -43,7 +43,7 @@
   "Launches a browser with CLOG manual."
   (open-browser :url (format nil "~A"
                              (merge-pathnames "./doc/clog-manual.html"
-                                      (asdf:system-source-directory :clog)))))
+                                              (asdf:system-source-directory :clog)))))
 
 ;;;;;;;;;;;;;;;;;;
 ;; run-tutorial ;;

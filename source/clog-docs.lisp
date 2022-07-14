@@ -73,7 +73,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defsection @clog-getting-started (:title "CLOG Getting Started")
-"CLOG - The Common Lisp Omnificent GUI
+  "CLOG - The Common Lisp Omnificent GUI
 
 David Botton <david@botton.com>
 
@@ -293,7 +293,7 @@ change the even hander, set-on-* function will need to be called.")
 
 
 (defsection @clog-event-data (:title "CLOG Event Data")
-"
+  "
 Some events in CLOG return in addition to the target event, event data.
 The data is passed in the second argument to the event handler as a
 property list. To retrieve the data use (getf data :property) the available
@@ -354,7 +354,7 @@ Events in clog-window
 ")
 
 (defsection @clog-internals (:title "CLOG Framework internals and extensions")
-"
+  "
 ** Introduction to Internals **
 
 This section on internals is not intended for general use of CLOG. It is

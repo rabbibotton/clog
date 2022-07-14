@@ -73,8 +73,8 @@
                                                     ("Web"     "web")
                                                     ("Mobile"  "mobile")
                                                     ("iot"     "iot")))
-                      ("Name"   :name)
-                      ("E-mail" :email))
+                     ("Name"   :name)
+                     ("E-mail" :email))
                    (lambda (data)
                      (if (equal (cadr (assoc :email data)) "")
                          (clog-web-alert second-rung "Missing E-Mail"

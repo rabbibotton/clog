@@ -21,10 +21,10 @@
         string))))
 
 (defun write-file (string outfile &key (action-if-exists :rename))
-   (check-type action-if-exists (member nil :error :new-version :rename :rename-and-delete
-                                        :overwrite :append :supersede))
-   (with-open-file (outstream outfile :direction :output :if-exists action-if-exists)
-     (write-sequence string outstream)))
+  (check-type action-if-exists (member nil :error :new-version :rename :rename-and-delete
+                                           :overwrite :append :supersede))
+  (with-open-file (outstream outfile :direction :output :if-exists action-if-exists)
+    (write-sequence string outstream)))
 
 (defun capture-eval (form)
   (let ((result (make-array '(0) :element-type 'base-char
@@ -106,10 +106,10 @@
     (when cw
       (let ((app (connection-data-item obj "app-data")))
         (setf (copy-buf app) (js-query obj
-                    (format nil "editor_~A.execCommand('copy');~
+                                       (format nil "editor_~A.execCommand('copy');~
                                  navigator.clipboard.writeText(editor_~A.getCopyText());~
                                  editor_~A.getCopyText();"
-                            (html-id cw) (html-id cw) (html-id cw))))))))
+                                               (html-id cw) (html-id cw) (html-id cw))))))))
 
 (defun do-ide-edit-undo (obj)
   (let ((cw (current-window obj)))

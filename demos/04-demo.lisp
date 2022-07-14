@@ -49,8 +49,8 @@
 
 (defun insert-content (app new-page text-area)
   (dbi:do-sql
-   *sql-connection*
-   "insert into config (menu, main) values (?, ?)"
+    *sql-connection*
+    "insert into config (menu, main) values (?, ?)"
     (list (escape-string (value new-page)) (escape-string (value text-area))))
   (reset-menu app)
   (route-content app (escape-string (value new-page))))
@@ -69,14 +69,14 @@
 
 (defun update-content (app page text-area)
   (dbi:do-sql
-   *sql-connection*
+    *sql-connection*
     "update config set main= ? where menu= ?"
     (list (escape-string (value text-area)) page))
   (route-content app page))
 
 (defun delete-content (app page)
   (dbi:do-sql
-   *sql-connection*
+    *sql-connection*
     "delete from config where menu= ?" (list page))
   (reset-menu app)
   (route-content app "Home"))
@@ -184,14 +184,14 @@
     (error ()
       (print "First run creating config.")
       (dbi:do-sql
-       *sql-connection*
-       "create table config (menu varchar, main varchar)")
+        *sql-connection*
+        "create table config (menu varchar, main varchar)")
       (dbi:do-sql
-       *sql-connection*
-       "insert into config (menu, main) values ('Home', '<b>Hello welcome.</b>')")
+        *sql-connection*
+        "insert into config (menu, main) values ('Home', '<b>Hello welcome.</b>')")
       (dbi:do-sql
-       *sql-connection*
-       "insert into config (menu, main) values ('Page2', '<i>Customize Me.</i>')")))
+        *sql-connection*
+        "insert into config (menu, main) values ('Page2', '<i>Customize Me.</i>')")))
   (initialize 'on-new-window)
   (open-browser))
 

@@ -68,7 +68,7 @@
            (tmp (create-form-element f2 :reset :value "Start Again")))
       (declare (ignore tmp))
     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-    ;; Panel 1 contents
+      ;; Panel 1 contents
     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
       (setf (place-holder fe1) "type here..")
       (setf (requiredp fe1) t)
@@ -99,7 +99,7 @@
       (set-border p2 :thin :solid :black)
       (set-border p3 :thin :solid :black)
     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-    ;; Panel 2 contents
+      ;; Panel 2 contents
     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
       (setf (vertical-align ta1) :top)
       (disable-resize ta1)
@@ -133,11 +133,11 @@
                                             (value sl2)
                                             (selectedp o2)))))
     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-    ;; Panel 3 contents
+      ;; Panel 3 contents
     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
       (setf (editablep p3) t)
     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-    ;; Tab functionality
+      ;; Tab functionality
     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
       (flet ((select-tab (obj)
                (setf (hiddenp p1) t)

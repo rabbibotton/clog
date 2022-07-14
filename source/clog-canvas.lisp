@@ -58,9 +58,9 @@
 (defmethod create-context2d ((obj clog-canvas))
   (let ((web-id (clog-connection:generate-id)))
     (clog-connection:execute (connection-id obj)
-                (format nil "clog['~A']=clog['~A'].getContext('2d')"
-                        web-id
-                        (html-id obj)))
+                             (format nil "clog['~A']=clog['~A'].getContext('2d')"
+                                     web-id
+                                     (html-id obj)))
 
     (make-instance 'clog-context2d
                    :connection-id (connection-id obj)
@@ -137,8 +137,8 @@
 (defmethod measure-text ((obj clog-context2d) text)
   ;; (let ((text-metric (query obj
   ;;(format nil "measureText('~A')" (escape-string text)))))
-    ;; needs way to query like for events
-    )
+  ;; needs way to query like for events
+  )
 
 ;;;;;;;;;;;;;;;;
 ;; line-width ;;

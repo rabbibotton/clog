@@ -445,7 +445,7 @@ place-inside-bottom-of CLOG-OBJ."))
                                           (html-id nil)
                                           (auto-place t))
   (create-child obj (format nil
-            "<meter value=~A high=~A low=~A max=~A min=~A optimum=~A~@[~A~]~@[~A~]/>"
+                            "<meter value=~A high=~A low=~A max=~A min=~A optimum=~A~@[~A~]~@[~A~]/>"
                             value high low maximum minimum optimum
                             (when class
                               (format nil " class='~A'"

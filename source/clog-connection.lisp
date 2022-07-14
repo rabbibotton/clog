@@ -22,7 +22,7 @@
 
 
 (mgl-pax:define-package :clog-connection
-  (:documentation "The Common List Omnificent GUI - Connection")
+    (:documentation "The Common List Omnificent GUI - Connection")
   (:use #:cl #:mgl-pax))
 
 (in-package :clog-connection)
@@ -651,7 +651,7 @@ the browser contents in case of connection loss."
 (defun compiled-boot-html (path content)
   "Returns a compiled version version of boot.html. The compiled boot.html
 uses the jQuery CDN instead of the static js files."
-"<!doctype HTML>
+  "<!doctype HTML>
 <HTML>
    <HEAD>
       <meta http-equiv='Cache-Control' content='no-cache, no-store, must-revalidate' />
@@ -677,7 +677,7 @@ uses the jQuery CDN instead of the static js files."
 
 (defun compiled-boot-js ()
   "Returns a compiled version of current version of boot.js (private)"
-"
+  "
 /*compiled version*/
 var ws=null;
 var adr; var adrc;

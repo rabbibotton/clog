@@ -14,7 +14,7 @@
 ;;; to pass nil to the initilization function for both.
 
 (mgl-pax:define-package :clog-gui
-  (:documentation "CLOG-GUI a desktop GUI abstraction for CLOG")
+    (:documentation "CLOG-GUI a desktop GUI abstraction for CLOG")
   (:use #:cl #:parse-float #:clog #:mgl-pax))
 
 (cl:in-package :clog-gui)
@@ -310,9 +310,9 @@ clog-body."))
   (:documentation "Attached a menu bar drop-down to a CLOG-GUI-MENU-BAR"))
 
 (defmethod create-gui-menu-drop-down ((obj clog-gui-menu-bar)
-                  &key (content "")
-                    (class "w3-dropdown-content w3-bar-block w3-card-4")
-                    (html-id nil))
+                                      &key (content "")
+                                        (class "w3-dropdown-content w3-bar-block w3-card-4")
+                                        (html-id nil))
   (let* ((hover  (create-div obj :class "w3-dropdown-hover"))
          (button (create-button hover :class "w3-button" :content content))
          (div    (create-div hover :class class :html-id html-id)))
@@ -409,12 +409,12 @@ icon ⤢ and full screen mode."))
 (defmethod create-gui-menu-full-screen ((obj clog-gui-menu-bar)
                                         &key (html-id nil))
   (create-child obj
-          " <span class='w3-bar-item w3-right' style='user-select:none;'
+                " <span class='w3-bar-item w3-right' style='user-select:none;'
              onClick='if (document.fullscreenElement==null) {
                          documentElement.requestFullscreen()
                       } else {document.exitFullscreen();}'>⤢</span>"
-          :html-id html-id
-          :clog-type 'clog-gui-menu-item))
+                :html-id html-id
+                :clog-type 'clog-gui-menu-item))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; create-gui-menu-icon ;;
@@ -721,8 +721,8 @@ the window will be set to keep-on-top always."))
       (when (> top (- (inner-height (window (body app))) (last-y app)))
         (setf (last-y app) (menu-bar-height obj))))
     (let ((win (create-child (body app)
-                            (format nil
-            "<div style='position:fixed;top:~Apx;left:~Apx;width:~Apx;height:~Apx;
+                             (format nil
+                                     "<div style='position:fixed;top:~Apx;left:~Apx;width:~Apx;height:~Apx;
                   z-index:~A;visibility:hidden'
                   class='w3-card-4 w3-white w3-border'>
                   <div id='~A-title-bar' class='w3-container w3-black'
@@ -738,20 +738,20 @@ the window will be set to keep-on-top always."))
                        cursor:se-resize;opacity:0'
                        class='w3-right' data-drag-obj='~A' data-drag-type='s'>+</div>
              </div>"
-            top left width height (incf (last-z app))   ; outer div
-            html-id html-id html-id                     ; title bar
-            title                                       ; title
-            (if has-pinner                              ; pinner
-              (format nil "<span id='~A-pinner'
+                                     top left width height (incf (last-z app))   ; outer div
+                                     html-id html-id html-id                     ; title bar
+                                     title                                       ; title
+                                     (if has-pinner                              ; pinner
+                                         (format nil "<span id='~A-pinner'
                  style='position:absolute;top:0;right:20px;
                         cursor:pointer;user-select:none;'>
                  ☐</span><span>&nbsp;&nbsp;&nbsp;</span>" html-id)
-              "")
-            html-id                                     ; closer
-            html-id content                             ; body
-            html-id html-id)                            ; size
-                            :clog-type 'clog-gui-window
-                            :html-id html-id)))
+                                         "")
+                                     html-id                                     ; closer
+                                     html-id content                             ; body
+                                     html-id html-id)                            ; size
+                             :clog-type 'clog-gui-window
+                             :html-id html-id)))
       (setf (win-title win)
             (attach-as-child win (format nil "~A-title" html-id)))
       (setf (title-bar win)
@@ -786,7 +786,7 @@ the window will be set to keep-on-top always."))
                                      (window-close win))))
       (cond (client-movement
              (clog::jquery-execute win
-                             (format nil "draggable({handle:'#~A-title-bar'})" html-id))
+                                   (format nil "draggable({handle:'#~A-title-bar'})" html-id))
              (clog::jquery-execute win "resizable({handles:'se'})")
              (set-on-pointer-down (win-title win)
                                   (lambda (obj data)
@@ -1264,21 +1264,21 @@ interactions. Use window-end-modal to undo."))
   "Create an alert toast with option :TIME-OUT. If place-top is t then alert
 is placed in DOM at top of html body instead of bottom of html body."
   (unless html-id
-      (setf html-id (clog-connection:generate-id)))
+    (setf html-id (clog-connection:generate-id)))
   (let* ((body   (connection-data-item obj "clog-body"))
          (win    (create-child body
-                             (format nil
-"  <div class='w3-panel ~A w3-animate-right w3-display-container'>~
+                               (format nil
+                                       "  <div class='w3-panel ~A w3-animate-right w3-display-container'>~
    <span id=~A-close class='w3-button w3-large w3-display-topright'>&times;</span>~
    <h3>~A</h3>~
    <p>~A</p>~
 </div>"
-                              color-class
-                              html-id
-                              title
-                              content)
-                             :html-id html-id
-                             :auto-place nil)))
+                                       color-class
+                                       html-id
+                                       title
+                                       content)
+                               :html-id html-id
+                               :auto-place nil)))
     (if place-top
         (place-inside-top-of body win)
         (place-inside-bottom-of body win))
@@ -1303,12 +1303,12 @@ is placed in DOM at top of html body instead of bottom of html body."
                                    (html-id nil))
   "Create an alert dialog box with CONTENT centered."
   (unless html-id
-      (setf html-id (clog-connection:generate-id)))
+    (setf html-id (clog-connection:generate-id)))
   (let* ((body (connection-data-item obj "clog-body"))
          (win  (create-gui-window obj
                                   :title    title
                                   :content  (format nil
-"<div class='w3-panel'>
+                                                    "<div class='w3-panel'>
 <center>~A<br><br>
 <button class='w3-button w3-black' id='~A-btn'>OK</button>
 </center>
@@ -1356,7 +1356,7 @@ is placed in DOM at top of html body instead of bottom of html body."
   "Create an input dialog box with CONTENT centered and an input box.
 Calls on-input with input box contents or nil if canceled."
   (unless html-id
-      (setf html-id (clog-connection:generate-id)))
+    (setf html-id (clog-connection:generate-id)))
   (let* ((body (connection-data-item obj "clog-body"))
          (inp  (if (eql rows 1)
                    (format nil "<input type='text' id='~A-input' size='~A' value='~A'>"
@@ -1371,7 +1371,7 @@ Calls on-input with input box contents or nil if canceled."
          (win  (create-gui-window obj
                                   :title          title
                                   :content        (format nil
-"<div class='w3-panel'>
+                                                          "<div class='w3-panel'>
 <center>~A<br><br>
 <form class='w3-container' onSubmit='return false;'>
 ~A<br><br>
@@ -1380,10 +1380,10 @@ Calls on-input with input box contents or nil if canceled."
 </form>
 </center>
 </div>"
-      content
-      inp
-      html-id  ; ok
-      html-id) ; cancel
+                                                          content
+                                                          inp
+                                                          html-id  ; ok
+                                                          html-id) ; cancel
                                   :top             top
                                   :left            left
                                   :width           width
@@ -1438,12 +1438,12 @@ Calls on-input with input box contents or nil if canceled."
   "Create a confirmation dialog box with CONTENT centered.
 Calls on-input with t if confirmed or nil if canceled."
   (unless html-id
-      (setf html-id (clog-connection:generate-id)))
+    (setf html-id (clog-connection:generate-id)))
   (let* ((body (connection-data-item obj "clog-body"))
          (win  (create-gui-window obj
                                   :title          title
                                   :content        (format nil
-"<div class='w3-panel'>
+                                                          "<div class='w3-panel'>
 <center>~A<br><br>
 <form class='w3-container' onSubmit='return false;'>
 <button class='w3-button w3-black' style='width:7em' id='~A-ok'>~A</button>
@@ -1451,8 +1451,8 @@ Calls on-input with t if confirmed or nil if canceled."
 </form>
 </center>
 </div>" content
-        html-id ok-text      ; ok
-        html-id cancel-text) ; cancel
+                                                          html-id ok-text      ; ok
+                                                          html-id cancel-text) ; cancel
                                   :top             top
                                   :left            left
                                   :width           width
@@ -1552,17 +1552,17 @@ if confirmed or nil if canceled."
                                            (format nil "~{~A~}"
                                                    (mapcar (lambda (s)
                                                              (format nil
-                               "<div><input type=radio class='w3-radio' name='~A-~A'~
+                                                                     "<div><input type=radio class='w3-radio' name='~A-~A'~
                                       id='~A-~A-~A' value='~A' ~A> ~
                                      <label for='~A-~A-~A'>~A</label></div>"
-                                                              html-id (second l)
-                                                              html-id (second l) (second s)
-                                                              (second s)
-                                                              (if (third s)
-                                                                  (third s)
-                                                                  "")
-                                                              html-id (second l) (second s)
-                                                              (first s)))
+                                                                     html-id (second l)
+                                                                     html-id (second l) (second s)
+                                                                     (second s)
+                                                                     (if (third s)
+                                                                         (third s)
+                                                                         "")
+                                                                     html-id (second l) (second s)
+                                                                     (first s)))
                                                            (fourth l)))))
                                   ((eq (third l) :checkbox)
                                    (format nil
@@ -1582,21 +1582,21 @@ if confirmed or nil if canceled."
                                            "<div><label class='w3-text-black'><b>~A</b></label>~
                                                  <input class='w3-input w3-border' type='~A'~
                                                   name='~A-~A' id='~A-~A' value='~A'></div>"
-                                   (first l) (third l)
-                                   html-id (second l) html-id (second l)
-                                   (if (fourth l)
-                                       (fourth l)
-                                       "")))
+                                           (first l) (third l)
+                                           html-id (second l) html-id (second l)
+                                           (if (fourth l)
+                                               (fourth l)
+                                               "")))
                                   (t
                                    (format nil
-                                            "<div><label class='w3-text-black'><b>~A</b></label>~
+                                           "<div><label class='w3-text-black'><b>~A</b></label>~
                                <input class='w3-input w3-border' type='text' name='~A-~A' id='~A-~A'></div>"
-                                            (first l) html-id (second l) html-id (second l)))))
+                                           (first l) html-id (second l) html-id (second l)))))
                               fields)))
          (win  (create-gui-window obj
                                   :title          title
                                   :content        (format nil
-"<div class='w3-panel'>
+                                                          "<div class='w3-panel'>
 ~A
 <form class='w3-container' onSubmit='return false;'>
 ~A
@@ -1608,9 +1608,9 @@ if confirmed or nil if canceled."
 </div>" (if content
             (format nil "<center>~A</center><br>" content)
             "")
-        fls
-        html-id ok-text      ; ok
-        html-id cancel-text) ; cancel
+                                                          fls
+                                                          html-id ok-text      ; ok
+                                                          html-id cancel-text) ; cancel
                                   :top             top
                                   :left            left
                                   :width           width
@@ -1632,8 +1632,8 @@ if confirmed or nil if canceled."
     (mapcar (lambda (l)
               (when (eq (third l) :filename)
                 (let ((fld (attach-as-child body (format nil "~A-~A"
-                                                            html-id
-                                                            (second l))
+                                                         html-id
+                                                         (second l))
                                             :clog-type 'clog:clog-form-element)))
                   (set-on-click fld (lambda (obj)
                                       (declare (ignore obj))
@@ -1705,7 +1705,7 @@ machine, upon close ON-FILE-NAME called with filename or nil if failure."
          (dirs   (create-select form))
          (files  (create-select form))
          (input  (create-form-element form :input :label
-                                     (create-label form :content "File Name:")))
+                                      (create-label form :content "File Name:")))
          (ok     (create-button form :content "OK"
                                      :class "w3-button w3-black w3-margin"))
          (cancel (create-button form :content "Cancel"

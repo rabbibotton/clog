@@ -143,10 +143,10 @@
 
 (defun write-file (string outfile &key (action-if-exists :rename))
   "Write local file named OUTFILE"
-   (check-type action-if-exists (member nil :error :new-version :rename :rename-and-delete
-                                            :overwrite :append :supersede))
-   (with-open-file (outstream outfile :direction :output :if-exists action-if-exists)
-     (write-sequence string outstream)))
+  (check-type action-if-exists (member nil :error :new-version :rename :rename-and-delete
+                                           :overwrite :append :supersede))
+  (with-open-file (outstream outfile :direction :output :if-exists action-if-exists)
+    (write-sequence string outstream)))
 
 (defun panel-snap-shot (content panel-id hide-loc)
   "Take a snap shot of panel"
@@ -197,12 +197,12 @@
 
 (defun walk-files-and-directories (path process)
   "Walk PATH and apply PROCESS on each (path and file)"
-    (let* ((flist (uiop:directory-files path))
-           (dlist (uiop:subdirectories path)))
-      (dolist (f flist)
-        (funcall process path (file-namestring f)))
-      (dolist (d dlist)
-        (walk-files-and-directories d process))))
+  (let* ((flist (uiop:directory-files path))
+         (dlist (uiop:subdirectories path)))
+    (dolist (f flist)
+      (funcall process path (file-namestring f)))
+    (dolist (d dlist)
+      (walk-files-and-directories d process))))
 
 (defun template-copy (sys-name start-dir filename &key panel)
   "Copy START-DIR to FILENAME processing .lt files as cl-template files,
@@ -226,11 +226,11 @@ create-div's"
        (cond ((equalp (pathname-type file) tmpl-ext)
               (let* ((nfile (pathname-name file))
                      (afile (cond ((equalp (pathname-name nfile) "tmpl")
-                                    (format nil "~A~A.~A" out-dir sys-name (pathname-type nfile)))
-                                   ((equalp (pathname-name nfile) "tmpl-tools")
-                                    (format nil "~A~A-tools.~A" out-dir sys-name (pathname-type nfile)))
-                                   (t
-                                    (format nil "~A~A" out-dir nfile)))))
+                                   (format nil "~A~A.~A" out-dir sys-name (pathname-type nfile)))
+                                  ((equalp (pathname-name nfile) "tmpl-tools")
+                                   (format nil "~A~A-tools.~A" out-dir sys-name (pathname-type nfile)))
+                                  (t
+                                   (format nil "~A~A" out-dir nfile)))))
                 (write-file (funcall (cl-template:compile-template (read-file src-file))
                                      (list :sys-name sys-name))
                             afile)
@@ -250,19 +250,19 @@ create-div's"
 (defun control-info (control-type-name)
   "Return the control-record for CONTROL-TYPE-NAME from supported controls."
   (if (equal control-type-name "clog-data")
-       `(:name           "clog-data"
-         :description    "Panel Properties"
-         :events         nil
-         :properties     ((:name "in-package"
-                           :attr "data-in-package")
-                          (:name "custom slots"
-                           :attr "data-custom-slots")
-                          (:name "width"
-                           :get  ,(lambda (control) (width control))
-                           :setup :read-only)
-                          (:name "height"
-                           :setup :read-only
-                           :get  ,(lambda (control) (height control)))))
+      `(:name           "clog-data"
+        :description    "Panel Properties"
+        :events         nil
+        :properties     ((:name "in-package"
+                          :attr "data-in-package")
+                         (:name "custom slots"
+                          :attr "data-custom-slots")
+                         (:name "width"
+                          :get  ,(lambda (control) (width control))
+                          :setup :read-only)
+                         (:name "height"
+                          :setup :read-only
+                          :get  ,(lambda (control) (height control)))))
       (find-if (lambda (x) (equal (getf x :name) control-type-name)) *supported-controls*)))
 
 (defun add-supported-controls (control-records)
@@ -482,15 +482,15 @@ replaced."
                                          (placer2  (get-placer control2)))
                                     (place-inside-bottom-of control1 control2)
                                     (place-after control2 placer2)
-                                              (place-after control2 placer2)
-                                              (set-geometry placer1 :top (position-top control1)
-                                                                    :left (position-left control1)
-                                                                    :width (client-width control1)
-                                                                    :height (client-height control1))
-                                              (set-geometry placer2 :top (position-top control2)
-                                                                    :left (position-left control2)
-                                                                    :width (client-width control2)
-                                                                    :height (client-height control2)))
+                                    (place-after control2 placer2)
+                                    (set-geometry placer1 :top (position-top control1)
+                                                          :left (position-left control1)
+                                                          :width (client-width control1)
+                                                          :height (client-height control1))
+                                    (set-geometry placer2 :top (position-top control2)
+                                                          :left (position-left control2)
+                                                          :width (client-width control2)
+                                                          :height (client-height control2)))
                                   (on-populate-control-properties-win content :win win)
                                   (on-populate-control-list-win content :win win))
                                  (t
@@ -503,13 +503,13 @@ replaced."
                                  (setf (hiddenp placer) t)
                                  (on-populate-control-list-win content :win win)))
     (set-on-event placer "resize"
-        (lambda (obj)
-          (set-properties-after-geomentry-change obj)))
+                  (lambda (obj)
+                    (set-properties-after-geomentry-change obj)))
     (set-on-event placer "resizestop"
-        (lambda (obj)
-          (set-properties-after-geomentry-change obj)
-          (jquery-execute placer "trigger('clog-builder-snap-shot')"))
-        :cancel-event t)
+                  (lambda (obj)
+                    (set-properties-after-geomentry-change obj)
+                    (jquery-execute placer "trigger('clog-builder-snap-shot')"))
+                  :cancel-event t)
     (set-on-event placer "drag"
                   (lambda (obj)
                     (declare (ignore obj))
@@ -535,12 +535,12 @@ replaced."
 
 (defun set-properties-after-geomentry-change (control)
   "Set properties window geometry setting"
-    (set-property-display control "top" (top control))
-    (set-property-display control "left" (left control))
-    (set-property-display control "right" (right control))
-    (set-property-display control "bottom" (bottom control))
-    (set-property-display control "width" (client-width control))
-    (set-property-display control "height" (client-height control)))
+  (set-property-display control "top" (top control))
+  (set-property-display control "left" (left control))
+  (set-property-display control "right" (right control))
+  (set-property-display control "bottom" (bottom control))
+  (set-property-display control "width" (client-width control))
+  (set-property-display control "height" (client-height control)))
 
 
 ;; Control selection utilities
@@ -570,17 +570,17 @@ manipulation of the control's location and size."
   "Select CONTROL as the current control and highlight its placer.
 The actual original clog object used for creation must be used and
 not a temporary attached one when using select-control."
-    (let ((app    (connection-data-item control "builder-app-data"))
-          (placer (get-placer control)))
-      (unless (eq control (current-control app))
-        (deselect-current-control app)
-        (set-geometry placer :top (position-top control)
-                             :left (position-left control)
-                             :width (client-width control)
-                             :height (client-height control))
-        (setf (current-control app) control)
-        (set-border placer (unit "px" 2) :solid :blue)
-        (on-populate-control-properties-win control))))
+  (let ((app    (connection-data-item control "builder-app-data"))
+        (placer (get-placer control)))
+    (unless (eq control (current-control app))
+      (deselect-current-control app)
+      (set-geometry placer :top (position-top control)
+                           :left (position-left control)
+                           :width (client-width control)
+                           :height (client-height control))
+      (setf (current-control app) control)
+      (set-border placer (unit "px" 2) :solid :blue)
+      (on-populate-control-properties-win control))))
 
 (defun add-sub-controls (parent content &key win paste)
   "Setup html imported in to CONTENT starting with PARENT for use with Builder"
@@ -735,9 +735,9 @@ not a temporary attached one when using select-control."
                           cmembers
                           cname     ;;defun
                           (ppcre:regex-replace-all "\""
-                                                    (js-query content
-                                                              (format nil
-                                                                      "var z=~a.clone();~
+                                                   (js-query content
+                                                             (format nil
+                                                                     "var z=~a.clone();~
     z.find('*').each(function(){~
       var m=$(this).attr('data-clog-name');
       if($(this).attr('data-clog-composite-control') == 't'){$(this).text('')}~
@@ -745,8 +745,8 @@ not a temporary attached one when using select-control."
       if(m){$(this).attr('data-clog-name', m);}~
     });~
     z.html()"
-                                                                      (jquery content)))
-                                                    "\\\"")
+                                                                     (jquery content)))
+                                                   "\\\"")
                           cname
                           vars
                           (reverse events)))) ; Insure that on-setup/on-create follow order in tree
@@ -1132,10 +1132,10 @@ of controls and double click to select control."
   (let* ((app          (connection-data-item obj "builder-app-data"))
          (is-hidden    nil)
          (content      (create-panel (connection-body obj) :positioning :fixed
-                                                       :width 220
-                                                       :top 40
-                                                       :left 0 :bottom 0
-                                                       :class "w3-border-right"))
+                                                           :width 220
+                                                           :top 40
+                                                           :left 0 :bottom 0
+                                                           :class "w3-border-right"))
          (side-panel   (create-panel content :top 0 :right 0 :bottom 0 :width 10))
          (sheight      (floor (/ (height content) 2)))
          (divider      (create-panel content :top sheight :height 10 :left 0 :right 10))
@@ -1407,17 +1407,17 @@ of controls and double click to select control."
                                                    :initial-filename file-name))))
     (set-on-click btn-test
                   (lambda (obj)
-                      (do-eval obj (render-clog-code content (bottom-panel box))
-                        (attribute content "data-clog-name")
-                        :package (attribute content "data-in-package"))))
+                    (do-eval obj (render-clog-code content (bottom-panel box))
+                      (attribute content "data-clog-name")
+                      :package (attribute content "data-in-package"))))
     (set-on-click btn-rndr
                   (lambda (obj)
                     (when (equal render-file-name "")
                       (if (equal file-name "")
                           (setf render-file-name (format nil "~A.lisp" (attribute content "data-clog-name")))
                           (setf render-file-name (format nil "~A~A.lisp"
-                                (directory-namestring file-name)
-                                (pathname-name file-name)))))
+                                                         (directory-namestring file-name)
+                                                         (pathname-name file-name)))))
                     (server-file-dialog obj "Render As.." render-file-name
                                         (lambda (fname)
                                           (window-focus win)
@@ -1508,8 +1508,8 @@ of controls and double click to select control."
     ;; init builder
     (init-control-list app panel-id)
     (let* ((pbox      (create-panel-box-layout (window-content win)
-                                         :left-width 0 :right-width 0
-                                         :top-height 33 :bottom-height 0))
+                                               :left-width 0 :right-width 0
+                                               :top-height 33 :bottom-height 0))
            (tool-bar  (create-div (top-panel pbox) :class "w3-center"))
            (btn-class "w3-button w3-white w3-border w3-border-black w3-ripple")
            (btn-copy  (create-img tool-bar :alt-text "copy"     :url-src img-btn-copy  :class btn-class))
@@ -1799,7 +1799,7 @@ of controls and double click to select control."
          (txt-link   (create-div txt-area
                                  :content (format nil "<br><center>~A</center>" link)))
          content)
-         (declare (ignore page-link txt-link))
+    (declare (ignore page-link txt-link))
     (setf (gethash panel-uid *app-sync-hash*) app)
     (setf (gethash (format nil "~A-win" panel-uid) *app-sync-hash*) win)
     (setf (gethash (format nil "~A-link" panel-uid) *app-sync-hash*)

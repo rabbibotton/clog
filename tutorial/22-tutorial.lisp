@@ -54,11 +54,11 @@
 
 (defun on-dlg-confirm (obj)
   (confirm-dialog obj "Shall we play a game?"
-                (lambda (input)
-                  (if input
-                      (alert-dialog obj "How about Global Thermonuclear War.")
-                      (alert-dialog obj "You are no fun!")))
-                :ok-text "Yes" :cancel-text "No"))
+                  (lambda (input)
+                    (if input
+                        (alert-dialog obj "How about Global Thermonuclear War.")
+                        (alert-dialog obj "You are no fun!")))
+                  :ok-text "Yes" :cancel-text "No"))
 
 (defun on-dlg-input (obj)
   (input-dialog obj "Would you like to play a game?"

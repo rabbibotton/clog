@@ -30,7 +30,7 @@
 ;; /content in this case on-main. So our about page has no handler set
 ;; but functions as we added to out database.
 
-                      ; Menu         Menu Item         URL        Handler     Actions Auth
+                                        ; Menu         Menu Item         URL        Handler     Actions Auth
 (defparameter *menu* `(("Features" (("Home"            "/")
                                     ("Login"           "/login"   on-login    :login)
                                     ("Signup"          "/signup"  on-signup   :signup)
@@ -172,7 +172,7 @@
                                                                             (getf user :|username|))
                                                             (setf (disabledp rbut) t)
                                                             (setf (text rbut) "Done"))))))))
-                        :authorize t))
+                   :authorize t))
 
 (defun on-new-pass (body)
   (init-site body)

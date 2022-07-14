@@ -9,7 +9,7 @@
 ;; CLOG-Auth an authorization abstraction for CLOG
 
 (mgl-pax:define-package :clog-auth
-  (:documentation "CLOG-AUTH an authenticationa and authorization abstraction
+    (:documentation "CLOG-AUTH an authenticationa and authorization abstraction
 for CLOG")
   (:use #:cl #:clog #:mgl-pax))
 
@@ -95,7 +95,7 @@ for CLOG")
   (dolist (role role-list)
     (dolist (action action-list)
       (setf (gethash role *authorization-hash*)
-       (adjoin action (gethash role *authorization-hash*))))))
+            (adjoin action (gethash role *authorization-hash*))))))
 
 ;;;;;;;;;;;;;;;;;;;;;
 ;; is-authorized-p ;;

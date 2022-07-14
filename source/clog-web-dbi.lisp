@@ -9,7 +9,7 @@
 ;; Database components for use with clog-web-website
 
 (mgl-pax:define-package :clog-web-dbi
-  (:documentation "CLOG-WEB-DBI - dbi based website helpers")
+    (:documentation "CLOG-WEB-DBI - dbi based website helpers")
   (:use #:cl #:parse-float #:clog #:clog-web #:clog-auth #:mgl-pax))
 
 (cl:in-package :clog-web-dbi)

@@ -31,12 +31,12 @@
   "Construct a new clog-document. (Private)"
   (make-instance
    'clog-document :connection-id connection-id :html-id "document"
-                  :document-element (make-instance 'clog-element
-                                                   :connection-id connection-id
-                                                   :html-id       "documentElement")
-                  :head-element (make-instance 'clog-element
-                                               :connection-id connection-id
-                                               :html-id "head")))
+   :document-element (make-instance 'clog-element
+                                    :connection-id connection-id
+                                    :html-id       "documentElement")
+   :head-element (make-instance 'clog-element
+                                :connection-id connection-id
+                                :html-id "head")))
 ;;;;;;;;;;;;;;;;;;;;;;
 ;; document-element ;;
 ;;;;;;;;;;;;;;;;;;;;;;
@@ -195,11 +195,11 @@ If LOAD-ONLY-ONCE is t first checks if previously loaded with load-script."))
                ;; script after the load as scripts are loaded
                ;; synchronously.
                (js-execute obj
-                (format nil "$.getScript('~A', function() {~
+                           (format nil "$.getScript('~A', function() {~
                             $(clog['document']).trigger('on-load-script',~
                                                             '~A')})"
-                        (escape-string script-url)
-                        (escape-string script-url)))
+                                   (escape-string script-url)
+                                   (escape-string script-url)))
                (cond (load-only-once
                       (when (bordeaux-threads:wait-on-semaphore
                              sem :timeout wait-timeout)
@@ -218,7 +218,7 @@ If LOAD-ONLY-ONCE is t first checks if previously loaded with load-script."))
 ;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defgeneric set-on-load-script (clog-document handler
-                                    &key cancel-event one-time)
+                                &key cancel-event one-time)
   (:documentation "Set a HANDLER for script load complete on CLOG-document.
 the handler (clog-obj data) data is the script-url used to load it.
 The handler should be installed on the document before calling load-script."))

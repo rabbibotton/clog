@@ -56,7 +56,7 @@ clog[] but is not in the DOM. If HTML-ID is nil one is generated.
   "Create a new clog-obj and attach an existing element with HTML-ID on
 CONNECTION-ID to it and then return it. The HTML-ID must be unique. (private)"
   (clog-connection:execute connection-id
-              (format nil "clog['~A']=$('#~A').get(0)" html-id html-id))
+                           (format nil "clog['~A']=$('#~A').get(0)" html-id html-id))
   (make-clog-element connection-id html-id))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -98,8 +98,8 @@ after attachment is changed to one unique to this session."))
   (if new-id
       (let ((id (format nil "CLOG~A" (clog-connection:generate-id))))
         (clog-connection:execute (connection-id obj)
-         (format nil "$('#~A').attr('id','~A');clog['~A']=$('#~A').get(0)"
-                 html-id id id id))
+                                 (format nil "$('#~A').attr('id','~A');clog['~A']=$('#~A').get(0)"
+                                         html-id id id id))
         (setf html-id id))
       (clog-connection:execute (connection-id obj)
                                (format nil "clog['~A']=$('#~A').get(0)"
@@ -118,7 +118,7 @@ after attachment is changed to one unique to this session."))
   (:documentation "Get/Setf css style."))
 
 (defmethod style ((obj clog-element) style-name
-                      &key (default-answer nil))
+                  &key (default-answer nil))
   (jquery-query obj (format nil "css('~A')" style-name)
                 :default-answer default-answer))
 
@@ -485,8 +485,8 @@ Additionally for forms get/setf the value."))
 
 (defmethod (setf text-value) (value (obj clog-element))
   (jquery-execute obj
-    (format nil "contents().not(~A.children()).get(0).nodeValue='~A'"
-            (jquery obj) (escape-string value))))
+                  (format nil "contents().not(~A.children()).get(0).nodeValue='~A'"
+                          (jquery obj) (escape-string value))))
 
 ;;;;;;;;;;;;;;;;;;;;
 ;; text-direction ;;
@@ -759,7 +759,7 @@ if the right or left side of block should be clear of any 'floated' Element."))
 ;;;;;;;;;;;;;;;;
 
 (deftype float-wrap-type ()
-    '(member :none :left :right :inline-start :inline-end))
+  '(member :none :left :right :inline-start :inline-end))
 
 (defgeneric float-wrap (clog-element)
   (:documentation "Get/Setf for element float left or right and other
@@ -1431,17 +1431,17 @@ parent in the DOM."))
                                               width height (units :px))
   (jquery-execute obj (format nil "css({~@[~a~]~@[~a~]~@[~a~]~@[~a~]~@[~a~]~@[~a~]})"
                               (when left
-                                  (format nil "'left':'~A~A'," left units))
+                                (format nil "'left':'~A~A'," left units))
                               (when top
-                                  (format nil "'top':'~A~A'," top units))
+                                (format nil "'top':'~A~A'," top units))
                               (when right
-                                  (format nil "'right':'~A~A'," right units))
+                                (format nil "'right':'~A~A'," right units))
                               (when bottom
-                                  (format nil "'bottom':'~A~A'," bottom units))
+                                (format nil "'bottom':'~A~A'," bottom units))
                               (when width
-                                  (format nil "'width':'~A~A'," width units))
+                                (format nil "'width':'~A~A'," width units))
                               (when height
-                                  (format nil "'height':'~A~A'," height units)))))
+                                (format nil "'height':'~A~A'," height units)))))
 
 ;;;;;;;;;;
 ;; left ;;
@@ -2082,7 +2082,7 @@ A list of standard cursor types can be found at:
 
 (defgeneric set-font
     (clog-element font-style font-variant font-weight font-height font-family)
-(:documentation "Set font."))
+  (:documentation "Set font."))
 
 (defmethod set-font
     ((obj clog-element)

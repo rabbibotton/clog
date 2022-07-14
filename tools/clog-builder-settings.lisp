@@ -194,33 +194,33 @@
      :get  ,(lambda (control)
               (property control "checked"))
      :set  ,(lambda (control obj)
-             (if (equalp (text obj) "true")
-                 (setf (checkedp control) t)
-                 (setf (checkedp control) nil))
+              (if (equalp (text obj) "true")
+                  (setf (checkedp control) t)
+                  (setf (checkedp control) nil))
               (property control "required")))
     (:name "read only"
      :get  ,(lambda (control)
               (property control "readonly"))
      :set  ,(lambda (control obj)
-             (if (equalp (text obj) "true")
-                 (setf (read-only-p control) t)
-                 (setf (read-only-p control) nil))
-             (property control "readonly")))
+              (if (equalp (text obj) "true")
+                  (setf (read-only-p control) t)
+                  (setf (read-only-p control) nil))
+              (property control "readonly")))
     (:name "disabled"
      :get  ,(lambda (control)
               (property control "disabled"))
      :set  ,(lambda (control obj)
-             (if (equalp (text obj) "true")
-                 (setf (disabledp control) t)
-                 (setf (disabledp control) nil))
-             (property control "disabled")))
+              (if (equalp (text obj) "true")
+                  (setf (disabledp control) t)
+                  (setf (disabledp control) nil))
+              (property control "disabled")))
     (:name "required"
      :get  ,(lambda (control)
               (property control "required"))
      :set  ,(lambda (control obj)
-             (if (equalp (text obj) "true")
-                 (setf (requiredp control) t)
-                 (setf (requiredp control) nil))
+              (if (equalp (text obj) "true")
+                  (setf (requiredp control) t)
+                  (setf (requiredp control) nil))
               (property control "required")))
     (:name "pattern"
      :prop "pattern")
@@ -239,8 +239,8 @@
               (property control "multiple"))
      :set  ,(lambda (control obj)
               (if (equalp (text obj) "true")
-                 (setf (multiplep control) t)
-                 (setf (multiplep control) nil))
+                  (setf (multiplep control) t)
+                  (setf (multiplep control) nil))
               (property control "multiple")))
     (:name "files accepted"
      :prop "accept")))
@@ -354,8 +354,8 @@
               (property control "hidden"))
      :set  ,(lambda (control obj)
               (if (equalp (text obj) "true")
-                 (setf (hiddenp control) t)
-                 (setf (hiddenp control) nil))
+                  (setf (hiddenp control) t)
+                  (setf (hiddenp control) nil))
               (property control "hidden")))
     (:name "visible"
      :get  ,(lambda (control)
@@ -363,8 +363,8 @@
      :set  ,(lambda (control obj)
               (if (or (equalp (text obj) "true")
                       (equalp (text obj) "visible"))
-                 (setf (visiblep control) t)
-                 (setf (visiblep control) nil))
+                  (setf (visiblep control) t)
+                  (setf (visiblep control) nil))
               (style control "visibility")))
     (:name "display"
      :style "display")
@@ -400,30 +400,30 @@
      :style "z-index")))
 
 (defparameter *props-flex*
-`((:name "flex-direction"
-   :style "flex-direction")
-  (:name "flex-wrap"
-   :style "flex-wrap")
-  (:name "flex-flow"
-   :style "flex-flow")
-  (:name "justify-content"
-   :style "justify-content")
-  (:name "align-items"
-   :style "align-items")
-  (:name "align-content"
-   :style "align-content")))
+  `((:name "flex-direction"
+     :style "flex-direction")
+    (:name "flex-wrap"
+     :style "flex-wrap")
+    (:name "flex-flow"
+     :style "flex-flow")
+    (:name "justify-content"
+     :style "justify-content")
+    (:name "align-items"
+     :style "align-items")
+    (:name "align-content"
+     :style "align-content")))
 
 (defparameter *props-flex-item*
-`((:name "flex-grow"
-   :style "flex-grow")
-  (:name "flex-shrink"
-   :style "flex-shrink")
-  (:name "flex-basis"
-   :style "flex-basis")
-  (:name "align-self"
-   :style "align-self")
-  (:name "order"
-   :style "order")))
+  `((:name "flex-grow"
+     :style "flex-grow")
+    (:name "flex-shrink"
+     :style "flex-shrink")
+    (:name "flex-basis"
+     :style "flex-basis")
+    (:name "align-self"
+     :style "align-self")
+    (:name "order"
+     :style "order")))
 
 (defparameter *props-base*
   `(,@*props-location*
@@ -461,22 +461,22 @@
                                           "range" "reset" "search" "submit"
                                           "tel" "text" "time" "url" "week"))
                  (set-on-change dd (lambda (obj)
-                                   (declare (ignore obj))
-                                   (setf (attribute control "type") (value dd))
-                                   (set-geometry (get-placer control)
-                                                 :top (position-top control)
-                                                 :left (position-left control)
-                                                 :width (client-width control)
-                                                 :height (client-height control))))
+                                     (declare (ignore obj))
+                                     (setf (attribute control "type") (value dd))
+                                     (set-geometry (get-placer control)
+                                                   :top (position-top control)
+                                                   :left (position-left control)
+                                                   :width (client-width control)
+                                                   :height (client-height control))))
                  nil)))
-     (:name "data list"
-                       :get ,(lambda (control)
-                               (clog::js-query control (format nil "$('#~A').attr('data-clog-name')"
-                                                               (attribute control "list"))))
-                       :set ,(lambda (control obj)
-                               (setf (attribute control "list")
-                                     (clog::js-query control (format nil "$(\"[data-clog-name='~A']\").attr('id')"
-                                                                     (text obj))))))
+    (:name "data list"
+     :get ,(lambda (control)
+             (clog::js-query control (format nil "$('#~A').attr('data-clog-name')"
+                                             (attribute control "list"))))
+     :set ,(lambda (control obj)
+             (setf (attribute control "list")
+                   (clog::js-query control (format nil "$(\"[data-clog-name='~A']\").attr('id')"
+                                                   (text obj))))))
     ,@*props-form-values*
     ,@*props-css*
     ,@*props-colors*
@@ -961,7 +961,7 @@
                         (declare (ignore control-record))
                         (unless (equal (attribute control "data-clog-for") "")
                           (format nil
-                            "(setf (attribute target \"for\") ~
+                                  "(setf (attribute target \"for\") ~
                                (clog:js-query target \"$('[data-clog-name=\\\\'~A\\\\']\').attr('id')\"))"
                                   (attribute control "data-clog-for"))))
      :properties     ((:name "for"
@@ -1972,7 +1972,7 @@
                                   (attribute control "data-clog-one-row-columns"))))
      :events         ((:name        "on-fetch"
                        :parameters  "target")
-                       ,@*events-element*)
+                      ,@*events-element*)
      :properties     ((:name "database control"
                        :attr "data-clog-one-row-db")
                       (:name "table name"
@@ -2045,7 +2045,7 @@
                        :parameters  "target table-row")
                       (:name        "on-column"
                        :parameters  "target column table-column")
-                       ,@*events-element*)
+                      ,@*events-element*)
      :properties     ((:name "database control"
                        :attr "data-clog-one-row-db")
                       (:name "table name"
@@ -2115,7 +2115,7 @@
                                   (attribute control "data-clog-one-row-columns"))))
      :events         ((:name        "on-fetch"
                        :parameters  "target")
-                       ,@*events-element*)
+                      ,@*events-element*)
      :properties     ((:name "multiple select"
                        :get  ,(lambda (control)
                                 (property control "multiple"))
@@ -2198,7 +2198,7 @@
                                   (attribute control "data-clog-one-row-columns"))))
      :events         ((:name        "on-fetch"
                        :parameters  "target")
-                       ,@*events-element*)
+                      ,@*events-element*)
      :properties     ((:name "multiple select"
                        :get  ,(lambda (control)
                                 (property control "multiple"))

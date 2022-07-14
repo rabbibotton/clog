@@ -69,16 +69,16 @@ on SET-EVENT with TRANSFORM"
   "Link changes to (text CLOG-OBJ) to (ACESSOR OBJECT)
 on SET-EVENT with TRANSFORM"
   `(link-element-to-place ,clog-obj text (,accessor ,object)
-                                   :set-event ,set-event
-                                   :transform ,transform))
+                          :set-event ,set-event
+                          :transform ,transform))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; link-element-to-place ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defmacro link-element-to-place (clog-obj property place
-                                  &key (set-event #'set-on-change)
-                                    transform)
+                                 &key (set-event #'set-on-change)
+                                   transform)
   "Link changes to (PROPERTY CLOG-OBJ) to any lisp PLACE
 on SET-EVENT with TRANSFORM"
   `(funcall ,set-event ,clog-obj

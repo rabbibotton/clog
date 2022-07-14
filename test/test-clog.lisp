@@ -25,9 +25,9 @@
     (setf (width tmp) 300)
     (setf (height tmp) 50)
     (set-border (create-child win
-                          (format nil "<H2>~A</H2>"
-                                  (gethash "connection-id" (connection-data win))))
-            "4px" :dotted "blue")
+                              (format nil "<H2>~A</H2>"
+                                      (gethash "connection-id" (connection-data win))))
+                "4px" :dotted "blue")
     (setf *last-obj* (create-child win "<button>********</button>"))
     (set-on-mouse-enter *last-obj*
                         (lambda (obj)
@@ -42,8 +42,8 @@
                        (lambda (obj data)
                          (format t "x=~A Y=~A~%" (getf data ':x) (getf data ':y))))
     (set-on-key-down win
-                      (lambda (obj data)
-                        (print data)) :disable-default t)
+                     (lambda (obj data)
+                       (print data)) :disable-default t)
     (create-div win :content "Hello World! p")
     (create-div win :content "Hello World! div")
     (create-br win)

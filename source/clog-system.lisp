@@ -42,14 +42,14 @@ the same as the clog directy this overides the relative paths used in them.")
            (on-new-window (gethash path *url-to-on-new-window*)))
       (unless on-new-window
         (when *extended-routing*
-            (maphash (lambda (k v)
-                       (unless (equal k "/")
-                         (when (ppcre:scan (format nil "^~A/" k) path)
-                           (setf on-new-window v))))
-                     *url-to-on-new-window*)))
+          (maphash (lambda (k v)
+                     (unless (equal k "/")
+                       (when (ppcre:scan (format nil "^~A/" k) path)
+                         (setf on-new-window v))))
+                   *url-to-on-new-window*)))
       (unless on-new-window
-          (setf on-new-window (or (gethash :default *url-to-on-new-window*)
-                                  (gethash "/" *url-to-on-new-window*))))
+        (setf on-new-window (or (gethash :default *url-to-on-new-window*)
+                                (gethash "/" *url-to-on-new-window*))))
       (if on-new-window
           (progn
             (setf (connection-data-item body "clog-path") path)
@@ -71,7 +71,7 @@ the same as the clog directy this overides the relative paths used in them.")
        (static-boot-html nil)
        (static-boot-js   nil)
        (static-root      (merge-pathnames "./static-files/"
-                            (asdf:system-source-directory :clog))))
+                                          (asdf:system-source-directory :clog))))
   "Inititalize CLOG on a socket using HOST and PORT to serve BOOT-FILE
 as the default route to establish web-socket connections and static
 files located at STATIC-ROOT. The webserver used with CLACK can be

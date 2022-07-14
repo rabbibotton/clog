@@ -171,21 +171,21 @@ be set using DATA-LOAD-PLIST."))
         (when (consp (slave-to-slot obj))
           (setf field (car field)))
         (setf where (format nil "~A='~A'~A"
-                                field
-                                data
-                                (if (equal where "")
-                                    ""
-                                    (format nil " and ~A" where))))))
+                            field
+                            data
+                            (if (equal where "")
+                                ""
+                                (format nil " and ~A" where))))))
     (setf (last-sql obj) (sql-select (table-name obj)
-                                      (table-columns obj)
-                                      :where where
-                                      :order-by (order-by obj)
-                                      :limit (limit obj)))
+                                     (table-columns obj)
+                                     :where where
+                                     :order-by (order-by obj)
+                                     :limit (limit obj)))
     (setf (queryid obj) (dbi:execute
                          (dbi:prepare
                           (database-connection (clog-database obj))
                           (last-sql obj)))))
-    (next-row obj panel))
+  (next-row obj panel))
 
 (defgeneric next-row (clog-one-row panel)
   (:documentation "Get next row from a database table based on query
@@ -311,7 +311,7 @@ new-row will block until on-fetch returns."))
                                   (format nil " class='~A'"
                                           (escape-string class :html t))
                                   ""))
-                 :clog-type 'clog-lookup :html-id html-id :auto-place t)))
+                  :clog-type 'clog-lookup :html-id html-id :auto-place t)))
     (when label
       (label-for label element))
     (if (and (typep obj 'clog-database) (not clog-database))
@@ -377,7 +377,7 @@ the displayed option."
     :accessor on-column
     :initform nil
     :documentation "on-column. (private)"))
-   (:documentation "CLOG Database Table View Object"))
+  (:documentation "CLOG Database Table View Object"))
 
 ;;;;;;;;;;;;;;;;;;;;;
 ;; create-db-table ;;
@@ -388,9 +388,9 @@ the displayed option."
   (:documentation "Create a new clog-db-table as child of CLOG-OBJ."))
 
 (defmethod create-db-table ((obj clog-obj)
-                         &key (clog-database nil)
-                           (hidden nil)
-                           (class nil) (html-id nil) (auto-place t))
+                            &key (clog-database nil)
+                              (hidden nil)
+                              (class nil) (html-id nil) (auto-place t))
   (let ((element (create-child obj (format nil "<table~A~A/>"
                                            (if hidden
                                                " style='visibility:hidden;'"

@@ -44,9 +44,9 @@
       ;; composite top-right button to open sidebar
       (composite-top-right btn)
       (set-on-click btn
-                  (lambda (obj)
-                    (declare (ignore obj))
-                    (setf (display side) :block)))
+                    (lambda (obj)
+                      (declare (ignore obj))
+                      (setf (display side) :block)))
       ;; composite middle text
       (composite-middle txt)
       ;; composite clog icon

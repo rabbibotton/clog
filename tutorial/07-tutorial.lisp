@@ -42,7 +42,7 @@
                    (unless (validp body)   ; CLOG.
                      (return))
                    (when (connection-data-item body "done")
-                    (return))
+                     (return))
 
                    (sleep .5)
                    (setf (text mover) ")-o-(")

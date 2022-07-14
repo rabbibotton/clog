@@ -31,27 +31,27 @@
     ;; Setup command section
     (let* ((form    (create-form command-section))
            (command (create-form-element form :text :class "w3-input w3-border"
-                                         :label (create-label form
-                                                   :content "Enter Command: ")))
+                                                    :label (create-label form
+                                                                         :content "Enter Command: ")))
            (button  (create-form-element form :submit)))
       (declare (ignore button))
       (set-on-submit form
-          (lambda (obj)
-            (declare (ignore obj))
-            (handler-case
-                (progn
-                  (setf (inner-html results-section)
-                        (format nil "~A<br><span style='color:blue'>~A</span><br>~A"
-                                (inner-html results-section)
-                                (value command)
-                                (lf-to-br (uiop/run-program:run-program
+                     (lambda (obj)
+                       (declare (ignore obj))
+                       (handler-case
+                           (progn
+                             (setf (inner-html results-section)
+                                   (format nil "~A<br><span style='color:blue'>~A</span><br>~A"
+                                           (inner-html results-section)
                                            (value command)
-                                           :force-shell t :output :string))))
-                  (setf (scroll-top results-section)
-                        (scroll-height results-section)))
-              (error (c)
-                (clog-web-alert command-section "Error" c :time-out 5)))
-            (setf (value command) ""))))
+                                           (lf-to-br (uiop/run-program:run-program
+                                                      (value command)
+                                                      :force-shell t :output :string))))
+                             (setf (scroll-top results-section)
+                                   (scroll-height results-section)))
+                         (error (c)
+                           (clog-web-alert command-section "Error" c :time-out 5)))
+                       (setf (value command) ""))))
     (setf (overflow results-section) :scroll)
     (set-border results-section :thin :solid :black)
     (flet ((set-height ()

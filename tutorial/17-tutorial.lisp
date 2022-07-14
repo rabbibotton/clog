@@ -69,14 +69,14 @@
     (declare (ignore tmp) (ignore finput) (ignore fsubmit))
 
     (set-on-click fsubmit3
-      (lambda (obj)
-        (declare (ignore obj))
-        (setf (hiddenp data-area) t)
-        (place-before footer
-                      (create-div body
-                         :content (format nil "yourname3 = using NAME-VALUE ~A or VALUE ~A"
-                                          (name-value form3 "yourname3")
-                                          (value finput3))))))))
+                  (lambda (obj)
+                    (declare (ignore obj))
+                    (setf (hiddenp data-area) t)
+                    (place-before footer
+                                  (create-div body
+                                              :content (format nil "yourname3 = using NAME-VALUE ~A or VALUE ~A"
+                                                               (name-value form3 "yourname3")
+                                                               (value finput3))))))))
 
 (defun on-page2 (body)
   (let ((params (form-post-data body)))

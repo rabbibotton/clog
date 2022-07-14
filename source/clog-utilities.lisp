@@ -25,7 +25,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defmacro with-clog-create (obj spec &body body)
-"To use the macro you remove the create- from the create
+  "To use the macro you remove the create- from the create
 functions. The clog-obj passed as the first parameter of the macro is
 passed as the parent obj to the declared object, after that nested
 levels of decleraton are used as the parent clog-obj. To bind a
@@ -34,26 +34,26 @@ and 22 for examples."
   (flet ((extract-bind (args)
            (when args
              (let ((fargs ())
-                    bind)
+                   bind)
                (do* ((i 0)
-                      (x (nth i args) (nth i args)))
-                 ((>= i (length args)))
+                     (x (nth i args) (nth i args)))
+                    ((>= i (length args)))
                  (if (eql x :bind)
-                   (progn
-                     (setf bind (nth (1+ i) args))
-                     (incf i 2))
-                   (progn
-                     (push x fargs)
-                     (incf i))))
+                     (progn
+                       (setf bind (nth (1+ i) args))
+                       (incf i 2))
+                     (progn
+                       (push x fargs)
+                       (incf i))))
                (values (reverse fargs) bind)))))
     (let ((let-bindings ())
-           (used-bindings ()))
+          (used-bindings ()))
       (labels ((create-from-spec (spec parent-binding)
                  (destructuring-bind (gui-func-name args &body children)
-                   spec
+                     spec
                    (multiple-value-bind (gui-func-args bind) (extract-bind args)
                      (let* ((binding (or bind (gensym)))
-                             (create-func-name (intern (concatenate 'string "CREATE-" (symbol-name gui-func-name)))))
+                            (create-func-name (intern (concatenate 'string "CREATE-" (symbol-name gui-func-name)))))
                        (push `(,binding (,create-func-name ,parent-binding ,@gui-func-args)) let-bindings)
                        (when (or bind children)
                          (push binding used-bindings))
@@ -70,8 +70,8 @@ and 22 for examples."
 
 (defclass clog-group ()
   ((controls
-   :accessor controls
-   :initform (make-hash-table* :test 'equalp))))
+    :accessor controls
+    :initform (make-hash-table* :test 'equalp))))
 
 (defun create-group ()
   "Return a new CLOG-GROUP object for storing CLOG-OBJs. They are indexed by
@@ -233,7 +233,7 @@ alpha 0.0 - 1.0"
 ;; * Viewport = the browser window size. If the viewport is 50cm wide, 1vw = 0.5cm.
 
 (deftype unit-type () '(member :cm :mm :in :px :pt :pc :em :ex :ch :rem :vw
-                         :vh :vmin :vmax :%))
+                        :vh :vmin :vmax :%))
 
 (defun unit (unit-type value)
   "produce a string from numeric value with UNIT-TYPE appended."

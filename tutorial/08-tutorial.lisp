@@ -14,7 +14,7 @@
     :documentation "The location of the left side of the box relative to mouse during drag.")
    (drag-y
     :accessor drag-y
-   :documentation "The location of the top of the box relative to mouse during drag."))
+    :documentation "The location of the top of the box relative to mouse during drag."))
   (:documentation "App data specific to each instance of our tutorial 8 app"))
 
 (defun on-mouse-down (obj data)

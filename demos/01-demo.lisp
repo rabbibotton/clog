@@ -35,7 +35,7 @@
 (defun display-splash (body)
   (let* ((splash
            (create-div body :content
-"<H1>(Sparky The Snake)</H1>
+                       "<H1>(Sparky The Snake)</H1>
  <br />
  <p>Use your keyboard to move Sparky to pick up batteries.</p>
  <i>Be careful...</i><br />
@@ -64,22 +64,22 @@
                (when (equal cell head-cell)
                  (return t)))))
       (cond ((eq :right (snake-direction app))
-              (setf head-cell (list (1+ (car head-cell))
-                                    (cadr head-cell))))
+             (setf head-cell (list (1+ (car head-cell))
+                                   (cadr head-cell))))
             ((eq :left (snake-direction app))
-              (setf head-cell (list (1- (car head-cell))
-                                    (cadr head-cell))))
+             (setf head-cell (list (1- (car head-cell))
+                                   (cadr head-cell))))
             ((eq :up (snake-direction app))
-              (setf head-cell (list (car head-cell)
-                                    (1- (cadr head-cell)))))
+             (setf head-cell (list (car head-cell)
+                                   (1- (cadr head-cell)))))
             ((eq :down (snake-direction app))
-              (setf head-cell (list (car head-cell)
-                                    (1+ (cadr head-cell))))))
+             (setf head-cell (list (car head-cell)
+                                   (1+ (cadr head-cell))))))
       (cond ((or (< (car head-cell) 0)
-              (< (cadr head-cell) 0)
-              (>= (* (car head-cell) segment-size) display-width)
-              (>= (* (cadr head-cell) segment-size) display-height)
-              (self-collision))
+                 (< (cadr head-cell) 0)
+                 (>= (* (car head-cell) segment-size) display-width)
+                 (>= (* (cadr head-cell) segment-size) display-height)
+                 (self-collision))
              (fill-style cx :red)
              (font-style cx "bold 20px sans-serif")
              (fill-text cx "GAME OVER" 30 30)
@@ -105,7 +105,7 @@
                     (setf (snake app) (butlast (snake app)))))
              (fill-style cx :brown)
              (draw-segment (food app))))
-        game-over)))
+      game-over)))
 
 (defun on-key-down (obj event)
   (let ((app      (connection-data-item obj "app-data"))
@@ -122,10 +122,10 @@
 (defun on-click (obj)
   (let ((app     (connection-data-item obj "app-data"))
         (btn-txt (text obj)))
-  (cond ((equal btn-txt "<--") (setf (snake-direction app) :left))
-        ((equal btn-txt "-->") (setf (snake-direction app) :right))
-        ((equal btn-txt "-^-") (setf (snake-direction app) :up))
-        ((equal btn-txt "-v-") (setf (snake-direction app) :down)))))
+    (cond ((equal btn-txt "<--") (setf (snake-direction app) :left))
+          ((equal btn-txt "-->") (setf (snake-direction app) :right))
+          ((equal btn-txt "-^-") (setf (snake-direction app) :up))
+          ((equal btn-txt "-v-") (setf (snake-direction app) :down)))))
 
 (defun start-game (body)
   (let* ((app       (connection-data-item body "app-data"))

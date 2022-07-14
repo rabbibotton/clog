@@ -29,7 +29,7 @@
                                        ("text-decoration" :none)))
     (add-style sb :element "a:hover" '(("background-color" :gray))))
   (create-div body :content
-     "We are in on-main<br><br>
+              "We are in on-main<br><br>
       <h1>Pick a link</h1>
       <ul>
         <li><a href='/page1'>/page1</a> - a CLOG app
@@ -71,10 +71,10 @@
            (on-click-scary (obj)
              (declare (ignore obj))
              (reset form)))
-    ;; We need to override the boostrap default to submit the form html style
-    (set-on-submit form (lambda (obj)(declare (ignore obj))()))
-    (set-on-click good-button #'on-click-good)
-    (set-on-click scary-button #'on-click-scary))))
+      ;; We need to override the boostrap default to submit the form html style
+      (set-on-submit form (lambda (obj)(declare (ignore obj))()))
+      (set-on-click good-button #'on-click-good)
+      (set-on-click scary-button #'on-click-scary))))
 
 (defun on-default (body)
   (cond ((equalp (path-name (location body))
@@ -91,10 +91,10 @@
   ;; custom data for search engine optimizations which are
   ;; aware of these type of dynamic sites.
   (if (equal path "/")
-    (funcall (cl-template:compile-template content)
-             (list :meta "<meta name='description' content='CLOG Tutorial 12'>"
-                   :body "Tutorial 12 for CLOG"))
-    content))
+      (funcall (cl-template:compile-template content)
+               (list :meta "<meta name='description' content='CLOG Tutorial 12'>"
+                     :body "Tutorial 12 for CLOG"))
+      content))
 
 (defun start-tutorial ()
   "Start turtorial."
@@ -124,7 +124,7 @@
   ;; from tutorial 11 and make it the boot-file and execute the same code
   ;; in (on-tutorial11) as in tutorial 11.
   (set-on-new-window 'on-tutorial11 :path "/page3"
-                                     :boot-file "/tutorial/tut-11.html")
+                                    :boot-file "/tutorial/tut-11.html")
   ;; Setting a "default" path says that any use of an included boot.js
   ;; file by static html file will route to this function, in this case on-default
   ;; which will determine if this is coming from the path used in tutorial

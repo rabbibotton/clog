@@ -23,7 +23,7 @@
 ;; We use our menu with the convenient clog-web-routes-from-menu to
 ;; setup the routes from URLs to handlers:
 
-                      ; Menu         Menu Item   URL       Handler   Actions Auth
+                                        ; Menu         Menu Item   URL       Handler   Actions Auth
 (defparameter *menu* `(("Features" (("Login"     "/login"  on-login  :login)
                                     ("Signup"    "/signup" on-signup :signup)
                                     ("Main"      "/main"   on-main   :main)
@@ -145,4 +145,4 @@
                                    (dolist (user users)
                                      (create-div body :content (getf user :|username|))))))
                    ;; don't authorize use of page unless you are the admin
-                        :authorize t))
+                   :authorize t))

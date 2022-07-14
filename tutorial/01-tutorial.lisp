@@ -10,7 +10,7 @@
   "On-new-window handler."            ; Optional docstring to describe function
 
   (let ((hello-element                ; hello-element is a local variable that
-                                      ; will be bound to our new CLOG-Element
+                                        ; will be bound to our new CLOG-Element
 
           ;; This application simply creates a CLOG-Element as a child to the
           ;; CLOG-body object in the browser window.

@@ -438,8 +438,8 @@ group called NAME."))
 
 (defmethod radio-value ((obj clog-obj) name)
   (clog-connection:query (connection-id obj)
-            (format nil "$('input:radio[name=~A]:checked').val()"
-                    name)))
+                         (format nil "$('input:radio[name=~A]:checked').val()"
+                                 name)))
 
 ;;;;;;;;;;;;;;;;;;;;
 ;; checkbox-value ;;
@@ -450,8 +450,8 @@ group called NAME."))
 
 (defmethod checkbox-value ((obj clog-obj) name)
   (js-on-p (clog-connection:query (connection-id obj)
-                     (format nil "$('input:checkbox[name=~A]:checked').val()"
-                             name))))
+                                  (format nil "$('input:checkbox[name=~A]:checked').val()"
+                                          name))))
 
 ;;;;;;;;;;;;;;;;;;
 ;; select-value ;;
@@ -463,7 +463,7 @@ be unique name on entire document."))
 
 (defmethod select-value ((obj clog-obj) name)
   (clog-connection:query (connection-id obj)
-            (format nil "$('select[name=~A] option:selected').val()" name)))
+                         (format nil "$('select[name=~A] option:selected').val()" name)))
 
 ;;;;;;;;;;;;;;;;
 ;; name-value ;;
@@ -475,7 +475,7 @@ be unique name on entire document."))
 
 (defmethod name-value ((obj clog-obj) name)
   (clog-connection:query (connection-id obj)
-            (format nil "$('input[name=~A]').val()" name)))
+                         (format nil "$('input[name=~A]').val()" name)))
 
 ;;;;;;;;;;;;;
 ;; pattern ;;
@@ -783,15 +783,15 @@ virtual keyboards."))
                                              (html-id nil)
                                              (auto-place t))
   (create-child obj (format nil "<fieldset~@[~A~]~@[~A~]>~@[~A~]</fieldset>"
-                              (when class
-                                (format nil " class='~A'"
-                                        (escape-string class :html t)))
-                              (when (or hidden style)
-                                (format nil " style='~@[~a~]~@[~a~]'"
-                                        (when hidden "visibility:hidden;")
-                                        style))
-                              (when legend
-                                (format nil "<legend>~A</legend>" legend)))
+                            (when class
+                              (format nil " class='~A'"
+                                      (escape-string class :html t)))
+                            (when (or hidden style)
+                              (format nil " style='~@[~a~]~@[~a~]'"
+                                      (when hidden "visibility:hidden;")
+                                      style))
+                            (when legend
+                              (format nil "<legend>~A</legend>" legend)))
                 :clog-type  'clog-fieldset
                 :html-id    html-id
                 :auto-place auto-place))
@@ -825,19 +825,19 @@ virtual keyboards."))
                                (auto-place t))
   (let ((element
           (create-child obj
-            (format nil "<textarea name='~A' cols='~A' rows='~A'~@[~A~]~@[~A~]>~A</textarea>"
-                    name columns rows
-                    (when class
-                      (format nil " class='~A'"
-                              (escape-string class :html t)))
-                    (when (or hidden style)
-                      (format nil " style='~@[~a~]~@[~a~]'"
-                              (when hidden "visibility:hidden;")
-                              style))
-                    (escape-string value :html t))
-            :clog-type  'clog-text-area
-            :html-id    html-id
-            :auto-place auto-place)))
+                        (format nil "<textarea name='~A' cols='~A' rows='~A'~@[~A~]~@[~A~]>~A</textarea>"
+                                name columns rows
+                                (when class
+                                  (format nil " class='~A'"
+                                          (escape-string class :html t)))
+                                (when (or hidden style)
+                                  (format nil " style='~@[~a~]~@[~a~]'"
+                                          (when hidden "visibility:hidden;")
+                                          style))
+                                (escape-string value :html t))
+                        :clog-type  'clog-text-area
+                        :html-id    html-id
+                        :auto-place auto-place)))
 
     (when label
       (label-for label element))
@@ -940,8 +940,8 @@ virtual keyboards."))
                                            (auto-place t))
   (create-child obj (format nil "<legend~@[~A~]~@[~A~]>~A</legend>"
                             (when class
-                                (format nil " class='~A'"
-                                        (escape-string class :html t)))
+                              (format nil " class='~A'"
+                                      (escape-string class :html t)))
                             (when (or hidden style)
                               (format nil " style='~@[~a~]~@[~a~]'"
                                       (when hidden "visibility:hidden;")

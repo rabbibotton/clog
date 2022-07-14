@@ -638,18 +638,18 @@ HANDLER is nil unbind the event."))
                                      muted
                                      html-id
                                      auto-place)
-(:documentation "Create a CLOG video control"))
+  (:documentation "Create a CLOG video control"))
 
 (defmethod create-video ((obj clog-obj)
-                        &key (source "")
-                          (controls t)
-                          (preload  nil)
-                          (poster   "")
-                          (autoplay nil)
-                          (autoloop nil)
-                          (muted    nil)
-                          (html-id  nil)
-                          (auto-place t))
+                         &key (source "")
+                           (controls t)
+                           (preload  nil)
+                           (poster   "")
+                           (autoplay nil)
+                           (autoloop nil)
+                           (muted    nil)
+                           (html-id  nil)
+                           (auto-place t))
   (create-child obj (format nil "<video~A~A~A~A~A~A~A/>"
                             (if (equal source "")
                                 ""
