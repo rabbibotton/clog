@@ -1088,7 +1088,17 @@ of controls and double click to select control."
           (clog-ace:set-on-auto-complete (event-editor app)
                                          (lambda (obj prefix)
                                            (declare (ignore obj))
-                                           (car (swank:simple-completions prefix "CLOG-USER")))
+                                           (let ((l (car (swank:simple-completions prefix "CLOG-USER"))))
+					     (push '(:caption "target" :value "target"
+						     :score 200 :meta "builder")
+						   l)
+					     (push '(:caption "panel" :value "panel"
+						     :score 200 :meta "builder")
+						   l)
+					     (push '(:caption "panel control" :value "(control-name panel)"
+						     :score 200 :meta "builder")
+						   l)
+					     l))
 					 :meta "swank")
           (setf (positioning (event-editor app)) :absolute)
           (setf (width (event-editor app)) "")
