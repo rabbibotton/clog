@@ -408,6 +408,7 @@ replaced."
                                       :class "placer"
                                       :html-id (format nil "p-~A" (html-id control)))))
     (add-to-control-list app panel-id control)
+    (setf (attribute placer "data-panel-id") panel-id)
     ;; setup placer
     (set-geometry placer :top (position-top control)
                          :left (position-left control)
@@ -1088,15 +1089,21 @@ of controls and double click to select control."
           (clog-ace:set-on-auto-complete (event-editor app)
                                          (lambda (obj prefix)
                                            (declare (ignore obj))
-                                           (let ((l (car (swank:simple-completions prefix "CLOG-USER"))))
-					     (push '(:caption "target" :value "target"
-						     :meta "builder")
-						   l)
-					     (push '(:caption "panel" :value "panel"
-						     :meta "builder")
-						   l)
-					     (push '(:caption "panel control" :value "(control-name panel)"
-						     :meta "builder")
+                                           (let* ((p (attribute (get-placer (current-control app)) "data-panel-id"))
+                                                  (l (car (swank:simple-completions prefix "CLOG-USER")))
+                                                  (n (get-control-list app p)))
+                                             (maphash (lambda (k v)
+                                                        (declare (ignore k))
+                                                        (let ((name (attribute v "data-clog-name")))
+                                                          (push `(:caption ,name :value ,(format nil "(~A panel)" name)
+                                                                  :meta "control")
+                                                                l)))
+                                                      n)
+                                             (push '(:caption "target" :value "target"
+                                                     :meta "builder")
+                                                   l)
+                                             (push '(:caption "panel" :value "panel"
+                                                     :meta "builder")
                                                    l)
                                              l))
                                          :meta "swank")
@@ -1132,14 +1139,15 @@ of controls and double click to select control."
                            (clog-ace::js-ace obj)
                            (clog-ace::js-ace obj)))))
                              (unless (equal s "")
-                               (with-input-from-string (i s)
-                                 (let* ((m         (read i))
-                                        (*package* (find-package "CLOG-USER"))
-                                        (ms        (format nil "~A" m))
-                                        (r         (swank:operator-arglist ms "CLOG-USER")))
-                                   (setf (advisory-title status) (documentation (find-symbol ms) 'function))
-				   (when r
-				     (setf (text status) r))))))))
+                               (ignore-errors
+                                (with-input-from-string (i s)
+                                  (let* ((m         (read i))
+                                         (*package* (find-package "CLOG-USER"))
+                                         (ms        (format nil "~A" m))
+                                         (r         (swank:operator-arglist ms "CLOG-USER")))
+                                    (setf (advisory-title status) (documentation (find-symbol ms) 'function))
+                                    (when r
+                                      (setf (text status) r)))))))))
           (setf (clog-ace:theme (event-editor app)) "ace/theme/xcode")
           (setf (clog-ace:mode (event-editor app)) "ace/mode/lisp")
           (setf (clog-ace:tab-size (event-editor app)) 2)
