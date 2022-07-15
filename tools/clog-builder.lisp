@@ -1090,30 +1090,30 @@ of controls and double click to select control."
                                            (declare (ignore obj))
                                            (let ((l (car (swank:simple-completions prefix "CLOG-USER"))))
 					     (push '(:caption "target" :value "target"
-						     :score 200 :meta "builder")
+						     :meta "builder")
 						   l)
 					     (push '(:caption "panel" :value "panel"
-						     :score 200 :meta "builder")
+						     :meta "builder")
 						   l)
 					     (push '(:caption "panel control" :value "(control-name panel)"
-						     :score 200 :meta "builder")
-						   l)
-					     l))
-					 :meta "swank")
+						     :meta "builder")
+                                                   l)
+                                             l))
+                                         :meta "swank")
           (setf (positioning (event-editor app)) :absolute)
           (setf (width (event-editor app)) "")
           (setf (height (event-editor app)) "")
           (set-geometry (event-editor app) :top 35 :left 5 :right 5 :bottom 30)
           (clog-ace:resize (event-editor app))
-	  (setf status (create-div content :class "w3-tiny w3-border"))
+          (setf status (create-div content :class "w3-tiny w3-border"))
           (setf (positioning status) :absolute)
           (setf (width status) "")
           (setf (height status) "")
           (set-geometry status :height 20 :left 5 :right 5 :bottom 5)
-	  (set-on-change (event-editor app)
-			 (lambda (obj)
-			   (let ((s (js-query obj (format nil
-			   "var row = ~A.selection.getCursor().row; ~
+          (set-on-change (event-editor app)
+                         (lambda (obj)
+                           (let ((s (js-query obj (format nil
+                           "var row = ~A.selection.getCursor().row; ~
                             var column = ~A.selection.getCursor().column; ~
                             var o = column;
                             var c; var charRange; var b=0; ~
@@ -1127,15 +1127,15 @@ of controls and double click to select control."
                                 c = ~A.session.getTextRange(charRange);} ~
                               if (c=='(' && b > 0) { b-- } }~
                             c"
-			   (clog-ace::js-ace obj)
-			   (clog-ace::js-ace obj)
-			   (clog-ace::js-ace obj)
-			   (clog-ace::js-ace obj)))))
-			     (unless (equal s "")
-			       (with-input-from-string (i s)
-				 (let* ((m         (read i))
-					(*package* (find-package "CLOG-USER"))
-					(ms        (format nil "~A" m))
+                           (clog-ace::js-ace obj)
+                           (clog-ace::js-ace obj)
+                           (clog-ace::js-ace obj)
+                           (clog-ace::js-ace obj)))))
+                             (unless (equal s "")
+                               (with-input-from-string (i s)
+                                 (let* ((m         (read i))
+                                        (*package* (find-package "CLOG-USER"))
+                                        (ms        (format nil "~A" m))
                                         (r         (swank:operator-arglist ms "CLOG-USER")))
                                    (setf (advisory-title status) (documentation (find-symbol ms) 'function))
 				   (when r
