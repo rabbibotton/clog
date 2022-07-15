@@ -1076,7 +1076,8 @@ of controls and double click to select control."
                                                :top 480
                                                :height 200 :width 645
                                                :has-pinner t :client-movement t))
-               (content (window-content win)))
+               (content (window-content win))
+	       status)
           (setf (control-events-win app) win)
           (setf (events-list app) (create-select content :name "clog-events" :class "w3-gray w3-text-white"))
           (setf (positioning (events-list app)) :absolute)
@@ -1087,13 +1088,45 @@ of controls and double click to select control."
           (clog-ace:set-on-auto-complete (event-editor app)
                                          (lambda (obj prefix)
                                            (declare (ignore obj))
-                                           (car (swank:completions prefix "CLOG")))
+                                           (car (swank:completions prefix "CLOG-USER")))
 					 :meta "swank")
           (setf (positioning (event-editor app)) :absolute)
           (setf (width (event-editor app)) "")
           (setf (height (event-editor app)) "")
-          (set-geometry (event-editor app) :top 35 :left 5 :right 5 :bottom 5)
+          (set-geometry (event-editor app) :top 35 :left 5 :right 5 :bottom 30)
           (clog-ace:resize (event-editor app))
+	  (setf status (create-div content :class "w3-tiny w3-border"))
+          (setf (positioning status) :absolute)
+          (setf (width status) "")
+          (setf (height status) "")
+          (set-geometry status :height 20 :left 5 :right 5 :bottom 5)	  
+	  (set-on-change (event-editor app)
+			 (lambda (obj)
+			   (let ((s (js-query obj (format nil
+			   "var row = ~A.selection.getCursor().row; ~
+                            var column = ~A.selection.getCursor().column; ~
+                            var o = column;
+                            var c; var charRange; var b=0; ~
+                            while (column > 0) {
+                              column--;
+                              charRange = new ace.Range(row, column-1, row, column); ~
+                              c = ~A.session.getTextRange(charRange); ~
+                              if (c==')') { b++ } ~
+                              if (c=='(' && b==0) { ~
+                                charRange = new ace.Range(row, column, row, o); column=0;~
+                                c = ~A.session.getTextRange(charRange);} ~
+                              if (c=='(' && b > 0) { b-- } }~
+                            c"
+			   (clog-ace::js-ace obj)
+			   (clog-ace::js-ace obj)
+			   (clog-ace::js-ace obj)
+			   (clog-ace::js-ace obj)))))
+			     (unless (equal s "")
+			       (with-input-from-string (i s)
+				 (let* ((m (read i))
+					(r (swank:operator-arglist (format nil "~A" m) "CLOG-USER")))
+				   (when r
+				     (setf (text status) r))))))))
           (setf (clog-ace:theme (event-editor app)) "ace/theme/xcode")
           (setf (clog-ace:mode (event-editor app)) "ace/mode/lisp")
           (setf (clog-ace:tab-size (event-editor app)) 2)
