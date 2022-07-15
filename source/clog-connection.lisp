@@ -178,7 +178,7 @@ the default answer. (Private)"
              (setf (gethash id *connection-ids*) connection)
              (setf (gethash connection *connections*) id))
             (t
-             (setf id (generate-id))
+             (setf id (+ (get-universal-time) (generate-id)))
              (setf (gethash connection *connections*) id)
              (setf (gethash id *connection-ids*) connection)
              (setf (gethash id *connection-data*)
