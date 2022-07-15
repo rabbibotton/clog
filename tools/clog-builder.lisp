@@ -1118,6 +1118,43 @@ of controls and double click to select control."
           (setf (width status) "")
           (setf (height status) "")
           (set-geometry status :height 20 :left 5 :right 5 :bottom 5)
+	  (js-execute (event-editor app)
+		      (format nil
+"~A.commands.addCommand({
+    name: 'find-definition',
+    bindKey: {win: 'Alt-.',  mac: 'Command-.'},
+    exec: function(editor) {
+        var row = editor.selection.getCursor().row;
+        var column = editor.selection.getCursor().column;
+        var c;
+        while (column > 0) {
+          c=editor.session.getTextRange(new ace.Range(row, column-1, row, column));
+          if (c=='(' || c==' ') { break; }
+          column--;
+        }
+        var s=column;
+        while (column < 200) {
+          c=editor.session.getTextRange(new ace.Range(row, column, row, column+1));
+          if (c==')' || c==' ') { break; }
+          column++;
+        }
+        c = editor.session.getTextRange(new ace.Range(row, s, row, column));
+        ~A.trigger('clog-find', c);
+    },
+    readOnly: true,
+});"
+              (clog-ace::js-ace (event-editor app))
+              (jquery (event-editor app))))
+	  (set-on-event-with-data (event-editor app) "clog-find"
+				  (lambda (obj data)
+				    (ignore-errors
+                                     (let* ((*PACKAGE*                 (find-package "CLOG-USER"))
+                                            (SWANK::*buffer-package*   (find-package "CLOG-USER"))
+                                            (SWANK::*buffer-readtable* *readtable*)
+                                            (loc (swank:find-definitions-for-emacs data)))
+				       (when loc
+					 (swank:ed-in-emacs (list (second (second (second (car loc))))
+                                                                  :position (second (third (second (car loc)))))))))))
           (set-on-change (event-editor app)
                          (lambda (obj)
                            (let ((s (js-query obj (format nil
