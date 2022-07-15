@@ -501,6 +501,7 @@ replaced."
                        :cancel-event t)
     (set-on-mouse-double-click placer
                                (lambda (obj data)
+                                 (declare (ignore obj))
                                  (setf (hiddenp placer) t)
                                  (on-populate-control-list-win content :win win)))
     (set-on-event placer "resize"
@@ -1139,15 +1140,22 @@ of controls and double click to select control."
                            (clog-ace::js-ace obj)
                            (clog-ace::js-ace obj)))))
                              (unless (equal s "")
-                               (ignore-errors
-                                (with-input-from-string (i s)
-                                  (let* ((m         (read i))
-                                         (*package* (find-package "CLOG-USER"))
-                                         (ms        (format nil "~A" m))
-                                         (r         (swank:operator-arglist ms "CLOG-USER")))
+                               (with-input-from-string (i s)
+				 (ignore-errors
+                                  (let* ((m                         (read i))
+                                         (*PACKAGE*                 (find-package "CLOG-USER"))
+					 (SWANK::*buffer-package*   (find-package "CLOG-USER"))
+                                         (SWANK::*buffer-readtable* *readtable*)
+                                         (ms                        (format nil "~A" m))
+                                         r)
+                                    (ignore-errors
+                                     (setf r (swank::autodoc `(,ms swank::%CURSOR-MARKER%))))
+                                    (if r
+					(setf r (car r))
+					(setf r (swank:operator-arglist ms "CLOG-USER")))
                                     (setf (advisory-title status) (documentation (find-symbol ms) 'function))
                                     (when r
-                                      (setf (text status) r)))))))))
+                                      (setf (text status) (string-downcase r))))))))))
           (setf (clog-ace:theme (event-editor app)) "ace/theme/xcode")
           (setf (clog-ace:mode (event-editor app)) "ace/mode/lisp")
           (setf (clog-ace:tab-size (event-editor app)) 2)
