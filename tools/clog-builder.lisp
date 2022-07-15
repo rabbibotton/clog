@@ -1123,8 +1123,10 @@ of controls and double click to select control."
 			   (clog-ace::js-ace obj)))))
 			     (unless (equal s "")
 			       (with-input-from-string (i s)
-				 (let* ((m (read i))
+				 (let* ((*package* (find-package "CLOG-USER"))
+					(m (read i))
 					(r (swank:operator-arglist (format nil "~A" m) "CLOG-USER")))
+				   (setf (advisory-title status) (documentation m 'function))
 				   (when r
 				     (setf (text status) r))))))))
           (setf (clog-ace:theme (event-editor app)) "ace/theme/xcode")
