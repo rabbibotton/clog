@@ -1088,7 +1088,7 @@ of controls and double click to select control."
           (clog-ace:set-on-auto-complete (event-editor app)
                                          (lambda (obj prefix)
                                            (declare (ignore obj))
-                                           (car (swank:completions prefix "CLOG-USER")))
+                                           (car (swank:simple-completions prefix "CLOG-USER")))
 					 :meta "swank")
           (setf (positioning (event-editor app)) :absolute)
           (setf (width (event-editor app)) "")
