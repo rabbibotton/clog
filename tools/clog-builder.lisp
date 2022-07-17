@@ -651,7 +651,7 @@ not a temporary attached one when using select-control."
          (package  (attribute content "data-in-package"))
          (slots    (attribute content "data-custom-slots"))
          (cname    (attribute content "data-clog-name"))
-         cmembers vars events)
+         cmembers vars creates events)
     (unless (or (equal slots "")
                 (equal slots "undefined"))
       (push slots cmembers))
@@ -720,7 +720,7 @@ not a temporary attached one when using select-control."
                                               ~A\)~%"
                                            vname
                                            handler)
-                                   events)))))
+                                   creates)))))
                      (add-siblings (first-child control)))
                    (setf control (next-sibling control))))))
       (add-siblings (first-child content)))
@@ -731,7 +731,7 @@ not a temporary attached one when using select-control."
 \(defun create-~A \(clog-obj &key \(hidden nil\) \(class nil\) \(html-id nil\) \(auto-place t\)\)
   \(let \(\(panel \(change-class \(clog:create-div clog-obj :content \"~A\"
          :hidden hidden :class class :html-id html-id :auto-place auto-place\) \'~A\)\)\)
-~{~A~}~{~A~}    panel\)\)~%"
+~{~A~}~{~A~}~{~A~}    panel\)\)~%"
                           (string-upcase package)
                           cname     ;;defclass
                           cmembers
@@ -751,7 +751,8 @@ not a temporary attached one when using select-control."
                                                     "\\\"")
                           cname
                           vars
-                          (reverse events)))) ; Insure that on-setup/on-create follow order in tree
+			  (reverse creates)   ; Insure that on-setup/on-create follow order in tree
+                          (reverse events))))
       (maphash (lambda (html-id control)
                  (declare (ignore html-id))
                  (place-after control (get-placer control)))
@@ -2015,13 +2016,13 @@ of controls and double click to select control."
       (create-gui-menu-item file  :content "New CLOG-WEB Delay Launch" :on-click 'on-new-builder-launch-page)
       (create-gui-menu-item file  :content "New Custom Boot Page"      :on-click 'on-new-builder-custom)
       (create-gui-menu-item file  :content "New Application Template"  :on-click 'on-new-app-template)
-      (create-gui-menu-item file  :content "Launch DB Admin"           :on-click
-                            (lambda (obj)
-                              (declare (ignore obj))
-                              (open-window (window body) "/dbadmin")))
       (create-gui-menu-item tools :content "Control Events"     :on-click 'on-show-control-events-win)
       (create-gui-menu-item tools :content "Copy/Cut History"   :on-click 'on-show-copy-history-win)
       (create-gui-menu-item tools :content "Image to Data"      :on-click 'on-image-to-data)
+      (create-gui-menu-item tools :content "Launch DB Admin"           :on-click
+                            (lambda (obj)
+                              (declare (ignore obj))
+                              (open-window (window body) "/dbadmin")))
       (create-gui-menu-item win   :content "Maximize All"       :on-click #'maximize-all-windows)
       (create-gui-menu-item win   :content "Normalize All"      :on-click #'normalize-all-windows)
       (create-gui-menu-window-select win)

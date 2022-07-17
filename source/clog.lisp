@@ -137,6 +137,7 @@ embedded in a native template application.)"
   (set-on-focus              generic-function)
   (set-on-blur               generic-function)
   (set-on-change             generic-function)
+  (set-on-input              generic-function)
   (set-on-drag-start         generic-function)
   (set-on-drag               generic-function)
   (set-on-drag-end           generic-function)

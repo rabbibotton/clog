@@ -741,6 +741,8 @@
      :parameters  "target")
     (:name        "on-change"
      :parameters  "target")
+    (:name        "on-input"
+     :parameters  "target")
     (:name        "on-focus-in"
      :parameters  "target")
     (:name        "on-focus-out"

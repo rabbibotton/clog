@@ -614,6 +614,17 @@ is nil unbind the event."))
 (defmethod set-on-change ((obj clog-obj) handler)
   (set-on-event obj "change" handler))
 
+;;;;;;;;;;;;;;;;;;
+;; set-on-input ;;
+;;;;;;;;;;;;;;;;;;
+
+(defgeneric set-on-input (clog-obj on-input-handler)
+  (:documentation "Set the ON-INPUT-HANDLER for CLOG-OBJ. If ON-INPUT-HANDLER
+is nil unbind the event."))
+
+(defmethod set-on-input ((obj clog-obj) handler)
+  (set-on-event obj "input" handler))
+
 ;;;;;;;;;;;;;;;;;;;;;;;
 ;; set-on-drag-start ;;
 ;;;;;;;;;;;;;;;;;;;;;;;
