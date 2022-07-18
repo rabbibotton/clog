@@ -2,7 +2,6 @@
   (:use #:cl #:clog)
   (:export <%= (@ sys-name) %>-element
 	   create-<%= (@ sys-name) %>-element
-	   create-<%= (@ sys-name) %>-design
            init-<%= (@ sys-name) %>
 	   attach-<%= (@ sys-name) %>
            start-test))
