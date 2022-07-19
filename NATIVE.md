@@ -1,4 +1,3 @@
-
 # Creating Native Applications with CLOG
 
 1. Open app using chrome in app mode
@@ -57,15 +56,15 @@ In the REPL let's load the new project:
 (defun start-app (&key (port 8080))
   (ceramic:start)
   (initialize 'on-new-window
-	      :port port
-	      :static-root (ceramic:resource-directory 'www))
+              :port port
+              :static-root (ceramic:resource-directory 'www))
   (setf *window*
         (ceramic:make-window :url (format nil "http://127.0.0.1:~D/" port)))
   (ceramic:show *window*))
 
 (ceramic:define-resources :elect ()
   (www #p"www/"))
-  
+
 (ceramic:define-entry-point :elect ()
   (start-app))
 ```
@@ -87,4 +86,3 @@ That should start up a native application with your CLOG app
 To package you applicaton use:
 
 1. (ceramic:bundle :elect)
-

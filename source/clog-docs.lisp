@@ -389,10 +389,10 @@ sufficient in this example:
 ```lisp
 (defmethod set-on-click ((obj clog-obj) handler)
   (set-event obj \"click\"
-	     (when handler
-	       (lambda (data)
-		 (declare (ignore data))
-		 (funcall handler obj)))))
+             (when handler
+               (lambda (data)
+                 (declare (ignore data))
+                 (funcall handler obj)))))
 ```
 
 If there is data for the event an additional string containing the needed
@@ -407,10 +407,10 @@ keyboard-event-script:
 ```lisp
 (defmethod set-on-key-down ((obj clog-obj) handler)
   (set-event obj \"keydown\"
-	     (when handler
-	       (lambda (data)
-		 (funcall handler obj (parse-keyboard-event data))))
-	     :call-back-script keyboard-event-script))
+             (when handler
+               (lambda (data)
+                 (funcall handler obj (parse-keyboard-event data))))
+             :call-back-script keyboard-event-script))
 ```
 
 * The script

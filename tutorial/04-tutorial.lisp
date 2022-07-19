@@ -12,9 +12,9 @@
   (setf (title (html-document body)) "Tutorial 4")
   ;; The same handler #'my-on-click is set on both targets
   (set-on-click (create-section body :h1 :content "Hello World! (click me!)")
-		'my-on-click)
+                'my-on-click)
   (set-on-click (create-section body :h3 :content "Click me too!")
-		'my-on-click))
+                'my-on-click))
 
 (defun start-tutorial ()
   "Start turtorial."

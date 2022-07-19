@@ -13,12 +13,12 @@
     ;; valid to close down the event or thread.
     (loop
       (if (and (validp obj) (connection-data-item obj "isRunning"))
-	  (progn
-	    (setf (color obj) :green)
-	    (sleep 0.3)
-	    (setf (color obj) :red)
-	    (sleep 0.3))
-	  (return))))
+          (progn
+            (setf (color obj) :green)
+            (sleep 0.3)
+            (setf (color obj) :red)
+            (sleep 0.3))
+          (return))))
   (setf (connection-data-item obj "isRunning") nil)
   (setf (text obj) "(click me to start!)")
   (setf (color obj) "black")
@@ -28,7 +28,7 @@
   "On-new-window handler."
   (setf (title (html-document body)) "Tutorial 6")
   (set-on-click (create-section body :h1 :content "(click me to start!)")
-		'my-on-click))
+                'my-on-click))
 
 (defun start-tutorial ()
   "Start turtorial."

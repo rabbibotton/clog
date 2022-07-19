@@ -1,9 +1,9 @@
 (defpackage #:<%= (@ sys-name) %>
   (:use #:cl #:clog)
   (:export <%= (@ sys-name) %>-element
-	   create-<%= (@ sys-name) %>-element
+           create-<%= (@ sys-name) %>-element
            init-<%= (@ sys-name) %>
-	   attach-<%= (@ sys-name) %>
+           attach-<%= (@ sys-name) %>
            start-test))
 
 (in-package :<%= (@ sys-name) %>)
@@ -19,17 +19,17 @@
   (:documentation "Create a new <%= (@ sys-name) %>-element as child of CLOG-OBJ."))
 
 (defmethod create-<%= (@ sys-name) %>-element ((obj clog:clog-obj)
-					 &key
-					   (hidden nil)
-					   (class nil)
-					   (html-id nil)
-					       (auto-place t))
+                                         &key
+                                           (hidden nil)
+                                           (class nil)
+                                           (html-id nil)
+                                               (auto-place t))
   "Create control - used at design time and in code"
   (let ((new-obj (create-div obj
-			     :class class
-			     :hidden hidden
-			     :html-id html-id
-			     :auto-place auto-place)))
+                             :class class
+                             :hidden hidden
+                             :html-id html-id
+                             :auto-place auto-place)))
     (set-geometry new-obj :width 200 :height 100)
     (change-class new-obj '<%= (@ sys-name) %>-element)
     (attach-<%= (@ sys-name) %> new-obj)
@@ -75,11 +75,11 @@
   ;; Use the panel-box-layout to center horizontally
   ;; and vertically our div on the screen.
   (let* ((layout (create-panel-box-layout body))
-	 (test   (create-<%= (@ sys-name) %>-element (center-panel layout))))
+         (test   (create-<%= (@ sys-name) %>-element (center-panel layout))))
     (center-children (center-panel layout))))
 
 (defun start-test ()
   (initialize 'on-test-<%= (@ sys-name) %>
    :static-root (merge-pathnames "./www/"
-		  (asdf:system-source-directory :<%= (@ sys-name) %>)))
+                  (asdf:system-source-directory :<%= (@ sys-name) %>)))
   (open-browser))

@@ -158,82 +158,82 @@ returns css-url."))
 (defmethod load-css ((obj clog-document) css-url &key (load-only-once t))
   (let ((loaded (connection-data-item obj (format nil "clog-~A" css-url))))
     (cond ((not (and load-only-once loaded))
-	   (jquery-execute (head-element obj)
-			   (format nil "append('<link rel=\"stylesheet\" href=\"~A\" type=\"text/css\">')"
-				   (escape-string css-url)))
-	   (setf (connection-data-item obj (format nil "clog-~A" css-url)) t)
-	   css-url)
-	  (t
-	   t))))
+           (jquery-execute (head-element obj)
+                           (format nil "append('<link rel=\"stylesheet\" href=\"~A\" type=\"text/css\">')"
+                                   (escape-string css-url)))
+           (setf (connection-data-item obj (format nil "clog-~A" css-url)) t)
+           css-url)
+          (t
+           t))))
 
 ;;;;;;;;;;;;;;;;;
 ;; load-script ;;
 ;;;;;;;;;;;;;;;;;
 
 (defgeneric load-script (clog-document script-url &key wait-for-load
-						    wait-timeout
-						    load-only-once)
+                                                    wait-timeout
+                                                    load-only-once)
   (:documentation "Load script from SCRIPT-URL. If WAIT-FOR-LOAD
 is t, load-script will not return until script load is completed or
 WAIT-TIMEOUT passes and load-script returns nil otherwise script-url.
 If LOAD-ONLY-ONCE is t first checks if previously loaded with load-script."))
 
 (defmethod load-script ((obj clog-document) script-url &key (wait-for-load t)
-							 (wait-timeout 3)
-							 (load-only-once t))
+                                                         (wait-timeout 3)
+                                                         (load-only-once t))
   (let ((loaded (connection-data-item obj (format nil "clog-~A" script-url))))
     (cond ((not (and load-only-once loaded))
-	   (let ((sem (bordeaux-threads:make-semaphore)))
-	     (flet ((on-load (obj url)
-		      (declare (ignore obj))
-		      (when (equalp url script-url)
-			(bordeaux-threads:signal-semaphore sem))))
-	       (when wait-for-load
-		 (set-on-load-script obj #'on-load :one-time t))
-	       ;; After we load the script from src we then fire the
-	       ;; custom on-load-script event in the next line of
-	       ;; script after the load as scripts are loaded
-	       ;; synchronously.
-	       (js-execute obj
-		(format nil "$.getScript('~A', function() {~
+           (let ((sem (bordeaux-threads:make-semaphore)))
+             (flet ((on-load (obj url)
+                      (declare (ignore obj))
+                      (when (equalp url script-url)
+                        (bordeaux-threads:signal-semaphore sem))))
+               (when wait-for-load
+                 (set-on-load-script obj #'on-load :one-time t))
+               ;; After we load the script from src we then fire the
+               ;; custom on-load-script event in the next line of
+               ;; script after the load as scripts are loaded
+               ;; synchronously.
+               (js-execute obj
+                (format nil "$.getScript('~A', function() {~
                             $(clog['document']).trigger('on-load-script',~
                                                             '~A')})"
-			(escape-string script-url)
-			(escape-string script-url)))
-	       (cond (load-only-once
-		      (when (bordeaux-threads:wait-on-semaphore
-			     sem :timeout wait-timeout)
-			(setf (connection-data-item obj (format nil "clog-~A"
-								script-url)) t)
-			script-url))
-		     (t
-		      (setf (connection-data-item obj (format nil "clog-~A"
-							      script-url)) t)
-		      script-url)))))
-	  (t
-	   t))))
+                        (escape-string script-url)
+                        (escape-string script-url)))
+               (cond (load-only-once
+                      (when (bordeaux-threads:wait-on-semaphore
+                             sem :timeout wait-timeout)
+                        (setf (connection-data-item obj (format nil "clog-~A"
+                                                                script-url)) t)
+                        script-url))
+                     (t
+                      (setf (connection-data-item obj (format nil "clog-~A"
+                                                              script-url)) t)
+                      script-url)))))
+          (t
+           t))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;
 ;; set-on-load-script ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defgeneric set-on-load-script (clog-document handler
-				    &key cancel-event one-time)
+                                    &key cancel-event one-time)
   (:documentation "Set a HANDLER for script load complete on CLOG-document.
 the handler (clog-obj data) data is the script-url used to load it.
 The handler should be installed on the document before calling load-script."))
 
 (defmethod set-on-load-script ((obj clog-document) handler
-			       &key
-				 (cancel-event nil)
-				 (one-time     nil))
+                               &key
+                                 (cancel-event nil)
+                                 (one-time     nil))
   (set-event obj "on-load-script"
              (when handler
                (lambda (data)
                  (funcall handler obj data)))
-	     :call-back-script "+data"
-	     :cancel-event cancel-event
-	     :one-time     one-time))
+             :call-back-script "+data"
+             :cancel-event cancel-event
+             :one-time     one-time))
 
 ;;;;;;;;;
 ;; put ;;

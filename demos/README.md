@@ -1,5 +1,3 @@
-
-
 To run a demo, start emacs/slime or your CL Lisp in the common-lisp/clog directory:
 
 ```

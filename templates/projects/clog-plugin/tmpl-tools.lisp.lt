@@ -3,37 +3,37 @@
 (progn
   (clog-tools:add-supported-controls
    (list '(:name           "group"
-	   :description    "<%= (@ sys-name) %> Controls"
-	   :create         nil
-	   :create-type    nil
-	   :events         nil
-	   :properties     nil)
-	  `(;; unique name to control used to identify it the .clog xml
+           :description    "<%= (@ sys-name) %> Controls"
+           :create         nil
+           :create-type    nil
+           :events         nil
+           :properties     nil)
+          `(;; unique name to control used to identify it the .clog xml
            :name           "<%= (@ sys-name) %>"
-	   ;; how control appears in builder control list
-	   :description    "<%= (@ sys-name) %>"
-	   ;; the common lisp type of the control
-	   :clog-type      <%= (@ sys-name) %>:<%= (@ sys-name) %>-element
-	   ;; the create-function used to create the function
-	   ;; at _design time_ at run time only clog:attach-as-child is used
-	   ;; any initialization at _run time_ is done with :on-setup below.
-	   :create         <%= (@ sys-name) %>:create-<%= (@ sys-name) %>-element
-	   ;; clog has the following create-types
-	   ;;   :base         - create
-	   ;;   :element      - create create-content
-	   ;;   :form         - create create-param create-value
-	   ;;   :text-area    - create create-value
-	   ;;   :custom-query - create (ask user for string)
-	   ;;   :custom       - create create-content
-	   :create-type    :base
-	   ;; setup the control at _design time_ and custom attributes
-	   :setup          ,(lambda (control content control-record)
+           ;; how control appears in builder control list
+           :description    "<%= (@ sys-name) %>"
+           ;; the common lisp type of the control
+           :clog-type      <%= (@ sys-name) %>:<%= (@ sys-name) %>-element
+           ;; the create-function used to create the function
+           ;; at _design time_ at run time only clog:attach-as-child is used
+           ;; any initialization at _run time_ is done with :on-setup below.
+           :create         <%= (@ sys-name) %>:create-<%= (@ sys-name) %>-element
+           ;; clog has the following create-types
+           ;;   :base         - create
+           ;;   :element      - create create-content
+           ;;   :form         - create create-param create-value
+           ;;   :text-area    - create create-value
+           ;;   :custom-query - create (ask user for string)
+           ;;   :custom       - create create-content
+           :create-type    :base
+           ;; setup the control at _design time_ and custom attributes
+           :setup          ,(lambda (control content control-record)
                               (declare (ignore content) (ignore control-record))
-			      ;; default custom attribute values and events at design time
+                              ;; default custom attribute values and events at design time
 
-			      ;; tell the builder this is a composite control, ie made of multiple
-			      ;; controls
-			      (setf (attribute control "data-clog-composite-control") "t"))
+                              ;; tell the builder this is a composite control, ie made of multiple
+                              ;; controls
+                              (setf (attribute control "data-clog-composite-control") "t"))
            ;; code to run at _run time_ after all controls attached to panel
            :on-setup       ,(lambda (control control-record)
                               (declare (ignore control control-record))
@@ -43,17 +43,17 @@
            ;; :on-load        ,(lambda (control control-record)
            ;;                 (declare (ignore control-record))
            ;;                 ;; code to attach functionality if your create for design time
-           ;;		      )
-	   ;; events handled
+           ;;                 )
+           ;; events handled
            :events         (,@clog-tools::*events-element*)
-	   ;; properties handled
-	   :properties     (,@clog-tools::*props-location*
-			    ,@clog-tools::*props-with-height*
-			    ,@clog-tools::*props-text*
-			    ,@clog-tools::*props-css*
-			    ,@clog-tools::*props-colors*
-			    ,@clog-tools::*props-display*
-			    ,@clog-tools::*props-flex-item*
-			    ,@clog-tools::*props-nav*
-			    ,@clog-tools::*props-contents*))))
+           ;; properties handled
+           :properties     (,@clog-tools::*props-location*
+                            ,@clog-tools::*props-with-height*
+                            ,@clog-tools::*props-text*
+                            ,@clog-tools::*props-css*
+                            ,@clog-tools::*props-colors*
+                            ,@clog-tools::*props-display*
+                            ,@clog-tools::*props-flex-item*
+                            ,@clog-tools::*props-nav*
+                            ,@clog-tools::*props-contents*))))
   (format t "~%<%= (@ SYS-NAME) %> installed in CLOG Builder"))

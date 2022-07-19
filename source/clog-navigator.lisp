@@ -72,7 +72,7 @@
 
 (defmethod system-clipboard-write ((obj clog-obj) text)
   (js-execute obj (format nil "navigator.clipboard.writeText('~A')"
-			  (escape-string text))))
+                          (escape-string text))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; system-clipboard-read ;;
@@ -83,12 +83,12 @@
 
 (defmethod system-clipboard-read ((obj clog-obj) &key (wait-timeout 1))
   (let ((doc (html-document (connection-body obj)))
-	(sem (bordeaux-threads:make-semaphore))
-	ret)
+        (sem (bordeaux-threads:make-semaphore))
+        ret)
     (flet ((on-data (obj data)
-	     (declare (ignore obj))
-	     (bordeaux-threads:signal-semaphore sem)
-	     (setf ret data)))
+             (declare (ignore obj))
+             (bordeaux-threads:signal-semaphore sem)
+             (setf ret data)))
       (set-on-event-with-data doc "on-clip-data" #'on-data :one-time t)
       (js-execute obj "navigator.clipboard.readText().then(function(text) {~
                         $(clog['document']).trigger('on-clip-data', text)})")

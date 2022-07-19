@@ -108,4 +108,3 @@ and were it is deficient to your needs please contact me to see if it
 makes sense to meet your needs and so for CLOG to reach a broader set
 of use cases within it's conceptual purpose, UIs for lisp applications
 from single user utilities to massive concurrent multiuser systems.
-

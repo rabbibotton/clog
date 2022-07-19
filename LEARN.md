@@ -1,4 +1,3 @@
-
 ```
 L    EEEE   A   RRR  NN   N     CCCC L    OOOOO GGGGG
 L    E     A A  R  R N N  N     C    L    O   O G
@@ -105,7 +104,7 @@ CLOG Demos - Learn through Projects
   (see source if editor dosen't load)
 - [04-demo.lisp](demos/04-demo.lisp) - CMS Website - A very simple database driven website
 - [clos-encounters](https://github.com/rabbibotton/clos-encounters) - Full Project - Game
-- [clos-contact](https://github.com/rabbibotton/clos-contact) - Full Project - Business App 
+- [clos-contact](https://github.com/rabbibotton/clos-contact) - Full Project - Business App
 
 Misc CLOG Tutorials
 

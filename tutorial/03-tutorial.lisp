@@ -6,20 +6,20 @@
 
 (defun on-new-window (body)
   "On-new-window handler."
-  (setf (title (html-document body)) "Tutorial 3")  
+  (setf (title (html-document body)) "Tutorial 3")
   (let ((hello-element
-	  (create-section body :h1 :content "Hello World! (click me!)")))
+          (create-section body :h1 :content "Hello World! (click me!)")))
     (let ((x 0))
       (set-on-click hello-element
-		    (lambda (obj)
-		      (declare (ignorable obj))
-		      ;; Add to try non-parallel events:
-		      ;; (with-sync-event (obj)
-		      (let ((y (incf x)))
-			(dotimes (n y)
-			  (create-p body
-				    :content (format nil "Clicked ~A times." y))
-			  (sleep y)))))))) ;)
+                    (lambda (obj)
+                      (declare (ignorable obj))
+                      ;; Add to try non-parallel events:
+                      ;; (with-sync-event (obj)
+                      (let ((y (incf x)))
+                        (dotimes (n y)
+                          (create-p body
+                                    :content (format nil "Clicked ~A times." y))
+                          (sleep y)))))))) ;)
 
 ;;; Running this version of the last tutorial and clicking quickly on the (click me!)
 ;;; will demonstrate an important aspect of CLOG, events can happen in _parallel_.

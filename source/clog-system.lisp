@@ -99,8 +99,8 @@ optimization, see tutorial 12 for an example."
   (unless *clog-running*
     (setf *clog-running* t)
     (setf *static-root* (truename (if *overide-static-root*
-				      *overide-static-root*
-				      static-root)))
+                                      *overide-static-root*
+                                      static-root)))
     (clog-connection:initialize #'on-connect
                                 :host             host
                                 :port             port

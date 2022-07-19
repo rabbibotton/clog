@@ -23,43 +23,43 @@
     (set-on-click tmp (lambda (obj) (alert (window win) "clicked")))
     (setf (box-sizing tmp) :border-box)
     (setf (width tmp) 300)
-    (setf (height tmp) 50)    
+    (setf (height tmp) 50)
     (set-border (create-child win
-			  (format nil "<H2>~A</H2>"
-				  (gethash "connection-id" (connection-data win))))
-	    "4px" :dotted "blue")
+                          (format nil "<H2>~A</H2>"
+                                  (gethash "connection-id" (connection-data win))))
+            "4px" :dotted "blue")
     (setf *last-obj* (create-child win "<button>********</button>"))
     (set-on-mouse-enter *last-obj*
-			(lambda (obj)
-			  (setf (property *last-obj* "innerHTML") "Inside")))
+                        (lambda (obj)
+                          (setf (property *last-obj* "innerHTML") "Inside")))
     (set-on-mouse-leave *last-obj*
-			(lambda (obj)
-			  (setf (property *last-obj* "innerHTML") "Outside")))
+                        (lambda (obj)
+                          (setf (property *last-obj* "innerHTML") "Outside")))
     (set-on-mouse-click *last-obj*
-			(lambda (obj data)
-			  (print data)))
+                        (lambda (obj data)
+                          (print data)))
     (set-on-mouse-move *last-obj*
-		       (lambda (obj data)
-			 (format t "x=~A Y=~A~%" (getf data ':x) (getf data ':y))))
+                       (lambda (obj data)
+                         (format t "x=~A Y=~A~%" (getf data ':x) (getf data ':y))))
     (set-on-key-down win
-		      (lambda (obj data)
-			(print data)) :disable-default t)
+                      (lambda (obj data)
+                        (print data)) :disable-default t)
     (create-div win :content "Hello World! p")
     (create-div win :content "Hello World! div")
-    (create-br win) 
+    (create-br win)
     (create-span win :content "Hello World! span")
-    (create-hr win) 
+    (create-hr win)
     (create-a win :link "http://www.google.com" :content "Link" :target "new")
     (setf (title (html-document win)) "CLOG Test App")
     (print (title (html-document win)))
     (create-img win :url-src "https://common-lisp.net/static/imgs/lisplogo_flag2_128.png"
-		    :alt-text "Lisp Flag")
+                    :alt-text "Lisp Flag")
     (setf (value (create-meter win)) 20)
     (setf (value (create-progress-bar win)) 10)
 
     (create-section win :h3 :content "a header")
     (create-phrase win :i :content "I am italic")
-    
+
     (setf tmp (create-ordered-list win))
     (setf (list-kind tmp) :hebrew)
     (create-list-item tmp :content "list item 1")
@@ -68,17 +68,17 @@
     (setf (list-location tmp) :inside)
 
     (create-hr win)
-    
+
     (let* ((tbl (create-table win))
-	   (cap (create-table-caption tbl :content "My Table"))
-	   (rw))
+           (cap (create-table-caption tbl :content "My Table"))
+           (rw))
 
       (set-border tbl :thin :solid :black)
 
       (dotimes (y 10)
-	(setf rw (create-table-row tbl))	
-	(dotimes (x 6)
-	  (create-table-column rw :content (format nil "~A X ~A" x y)))))
+        (setf rw (create-table-row tbl))
+        (dotimes (x 6)
+          (create-table-column rw :content (format nil "~A X ~A" x y)))))
     ))
 
 (defun test ()

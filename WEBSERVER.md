@@ -2,7 +2,7 @@ CLOG is configured to handle both standard http and https connections.
 
 The following is the configuration I used for Apache on the clogpower.com
 site using the rewrite engine to expose my site externally as clogpower.com
-but interanlly as localhost on port 8081 (or other port) and is typically 
+but interanlly as localhost on port 8081 (or other port) and is typically
 how I configure my CLOG based servers:
 (Note use of *.443 also and use of SSLEngine, if not using SSL remove both)
 

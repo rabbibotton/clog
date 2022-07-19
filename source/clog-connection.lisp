@@ -182,7 +182,7 @@ the default answer. (Private)"
              (setf (gethash connection *connections*) id)
              (setf (gethash id *connection-ids*) connection)
              (setf (gethash id *connection-data*)
-		   (make-hash-table* :test #'equal))
+                   (make-hash-table* :test #'equal))
              (setf (gethash "connection-id" (get-connection-data id)) id)
              (format t "New connection id - ~A - ~A~%" id connection)
              (websocket-driver:send connection
@@ -233,7 +233,7 @@ the default answer. (Private)"
                             (let* ((event-hash (get-connection-data id))
                                    (event      (when event-hash
                                                  (gethash event-id
-							  event-hash))))
+                                                          event-hash))))
                               (when event
                                 (funcall event data)))
                           (t (c)

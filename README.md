@@ -248,7 +248,7 @@ CLOG Builder Tutorials
     https://www.reddit.com/r/lisp/comments/t61sib/clog_builder_tutorial_4_a_complete_database_app/
 5. Using and Creating Custom Controls
     https://www.reddit.com/r/lisp/comments/w2d6dr/builder_tutorial_5_using_and_creating_lisp_custom/
-    
+
 CLOG Tutorials
 
 - [01-tutorial.lisp](tutorial/01-tutorial.lisp) - Hello World

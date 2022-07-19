@@ -10,4 +10,3 @@
 (asdf:defsystem #:<%= (@ sys-name) %>/tools
   :depends-on (#:<%= (@ sys-name) %> #:clog/tools) ; add clog plugins here as #:plugin/tools for design time
   :components ())
-

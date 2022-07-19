@@ -9,4 +9,3 @@
   :serial t
   :depends-on (#:clog)
   :components ((:file "hello-clog")))
-

@@ -554,7 +554,7 @@ their <a href="#CLOG:HTML-ID%20GENERIC-FUNCTION" title="CLOG:HTML-ID GENERIC-FUN
 <p>Escape <code>STR</code> for sending to browser script. If no-nil is t (default is nil)
 if str is <code>NIL</code> returns empty string otherwise returns nil. If html is t the
 quotes are changed to html entities and n and r are eliminated. Escape
-string is ues for wire readiness i.e. ability to be evaluated client side
+string is used for wire readiness i.e. ability to be evaluated client side
 and not for security purposes or html escapes.</p></li>
 </ul>
 
@@ -707,7 +707,7 @@ clog-body of this connection and accessible with <a href="#CLOG:CONNECTION-BODY%
 <ul>
 <li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:CONNECTION-DATA-ITEM%20GENERIC-FUNCTION" >CONNECTION-DATA-ITEM</a></span></span> <span class="locative-args">CLOG-OBJ ITEM-NAME</span></span></p>
 
-<p>Get/Setf from connection-data the item-name in hash.</p></li>
+<p>Get/Setf item-name from connection-data.</p></li>
 </ul>
 
 <p><a id="x-28CLOG-3ACONNECTION-BODY-20GENERIC-FUNCTION-29"></a>
@@ -744,7 +744,7 @@ an application share per connection the same queue of serialized events.</p></li
 <ul>
 <li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:REMOVE-CONNECTION-DATA-ITEM%20GENERIC-FUNCTION" >REMOVE-CONNECTION-DATA-ITEM</a></span></span> <span class="locative-args">CLOG-OBJ ITEM-NAME</span></span></p>
 
-<p>Remove from connection-data the item-name in hash.</p></li>
+<p>Remove item-name from connection-data.</p></li>
 </ul>
 
 <p><a id="x-28CLOG-3AVALIDP-20GENERIC-FUNCTION-29"></a>
@@ -886,6 +886,16 @@ is nil unbind the event.</p></li>
 <li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:SET-ON-CHANGE%20GENERIC-FUNCTION" >SET-ON-CHANGE</a></span></span> <span class="locative-args">CLOG-OBJ ON-CHANGE-HANDLER</span></span></p>
 
 <p>Set the <code>ON-CHANGE-HANDLER</code> for <code>CLOG-OBJ</code>. If <code>ON-CHANGE-HANDLER</code>
+is nil unbind the event.</p></li>
+</ul>
+
+<p><a id="x-28CLOG-3ASET-ON-INPUT-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG:SET-ON-INPUT%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:SET-ON-INPUT%20GENERIC-FUNCTION" >SET-ON-INPUT</a></span></span> <span class="locative-args">CLOG-OBJ ON-INPUT-HANDLER</span></span></p>
+
+<p>Set the <code>ON-INPUT-HANDLER</code> for <code>CLOG-OBJ</code>. If <code>ON-INPUT-HANDLER</code>
 is nil unbind the event.</p></li>
 </ul>
 
@@ -1472,6 +1482,15 @@ after attachment is changed to one unique to this session.</p></li>
 <li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:REMOVE-ATTRIBUTE%20GENERIC-FUNCTION" >REMOVE-ATTRIBUTE</a></span></span> <span class="locative-args">CLOG-ELEMENT ATTRIBUTE-NAME</span></span></p>
 
 <p>Remove html tag attribute. (eg. src on img tag)</p></li>
+</ul>
+
+<p><a id="x-28CLOG-3AHAS-ATTRIBUTE-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG:HAS-ATTRIBUTE%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:HAS-ATTRIBUTE%20GENERIC-FUNCTION" >HAS-ATTRIBUTE</a></span></span> <span class="locative-args">CLOG-ELEMENT ATTRIBUTE-NAME</span></span></p>
+
+<p>Returns t if <code>ATTRIBUTE-NAME</code> exists on <code>CLOG-ELEMENT</code></p></li>
 </ul>
 
 <p>CLOG-Element - Properties</p>
@@ -5277,7 +5296,7 @@ or CLOG Data-List objects.</p></li>
 <ul>
 <li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:SELECT-TEXT%20GENERIC-FUNCTION" >SELECT-TEXT</a></span></span> <span class="locative-args">CLOG-OBJ</span></span></p>
 
-<p>Returns the text of selected item.</p></li>
+<p>Get/Setf the text of selected item.</p></li>
 </ul>
 
 <p>CLOG-Data-List - Class for CLOG Option Data Lists</p>
@@ -8783,10 +8802,10 @@ sufficient in this example:</p>
 
 <pre><code><span class="code"><span class="paren1">(<span class="code"><i><span class="symbol">defmethod</span></i> set-on-click <span class="paren2">(<span class="code"><span class="paren3">(<span class="code">obj clog-obj</span>)</span> handler</span>)</span>
   <span class="paren2">(<span class="code">set-event obj <span class="string">"click"</span>
-         <span class="paren3">(<span class="code">when handler
-           <span class="paren4">(<span class="code"><i><span class="symbol">lambda</span></i> <span class="paren5">(<span class="code">data</span>)</span>
-         <span class="paren5">(<span class="code">declare <span class="paren6">(<span class="code">ignore data</span>)</span></span>)</span>
-         <span class="paren5">(<span class="code">funcall handler obj</span>)</span></span>)</span></span>)</span></span>)</span></span>)</span></span></code></pre>
+             <span class="paren3">(<span class="code">when handler
+               <span class="paren4">(<span class="code"><i><span class="symbol">lambda</span></i> <span class="paren5">(<span class="code">data</span>)</span>
+                 <span class="paren5">(<span class="code">declare <span class="paren6">(<span class="code">ignore data</span>)</span></span>)</span>
+                 <span class="paren5">(<span class="code">funcall handler obj</span>)</span></span>)</span></span>)</span></span>)</span></span>)</span></span></code></pre>
 
 <p>If there is data for the event an additional string containing the needed
 JavaScript to return the even data and a function to parse out the data.</p>
@@ -8801,10 +8820,10 @@ keyboard-event-script:</p>
 
 <pre><code><span class="code"><span class="paren1">(<span class="code"><i><span class="symbol">defmethod</span></i> set-on-key-down <span class="paren2">(<span class="code"><span class="paren3">(<span class="code">obj clog-obj</span>)</span> handler</span>)</span>
   <span class="paren2">(<span class="code">set-event obj <span class="string">"keydown"</span>
-         <span class="paren3">(<span class="code">when handler
-           <span class="paren4">(<span class="code"><i><span class="symbol">lambda</span></i> <span class="paren5">(<span class="code">data</span>)</span>
-         <span class="paren5">(<span class="code">funcall handler obj <span class="paren6">(<span class="code">parse-keyboard-event data</span>)</span></span>)</span></span>)</span></span>)</span>
-         <span class="keyword">:call-back-script</span> keyboard-event-script</span>)</span></span>)</span></span></code></pre>
+             <span class="paren3">(<span class="code">when handler
+               <span class="paren4">(<span class="code"><i><span class="symbol">lambda</span></i> <span class="paren5">(<span class="code">data</span>)</span>
+                 <span class="paren5">(<span class="code">funcall handler obj <span class="paren6">(<span class="code">parse-keyboard-event data</span>)</span></span>)</span></span>)</span></span>)</span>
+             <span class="keyword">:call-back-script</span> keyboard-event-script</span>)</span></span>)</span></span></code></pre>
 
 <ul>
 <li>The script</li>

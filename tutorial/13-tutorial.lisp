@@ -11,5 +11,5 @@
              to your ~~/common-lisp directory or other asdf / quicklisp~%~
              directory. Then follow the directions in the 13-tutorial/README.md ~%~
             directory."
-	  (merge-pathnames "./tutorial/13-tutorial/hello-clog/"
-			   (asdf:system-source-directory :clog))))
+          (merge-pathnames "./tutorial/13-tutorial/hello-clog/"
+                           (asdf:system-source-directory :clog))))

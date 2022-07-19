@@ -10,9 +10,9 @@
   (let* ((layout (create-panel-box-layout body)))
     (center-children (center-panel layout))
     (create-div (center-panel layout) :content "Hello")))
-  
+
 (defun start-app ()
   (initialize 'on-new-window
    :static-root (merge-pathnames "./www/"
-		  (asdf:system-source-directory :<%= (@ sys-name) %>)))
+                  (asdf:system-source-directory :<%= (@ sys-name) %>)))
   (open-browser))

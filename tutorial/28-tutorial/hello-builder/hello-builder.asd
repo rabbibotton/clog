@@ -9,5 +9,4 @@
   :serial t
   :depends-on (#:clog)
   :components ((:file "hello-builder")
-	       (:file "hello")))
-
+               (:file "hello")))

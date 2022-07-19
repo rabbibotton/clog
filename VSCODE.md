@@ -8,7 +8,7 @@ Using VSCODE instead of emacs:
 
 - Update asdf by git cloning the latest version in to ~/common-lisp or another asdf reachable location
 
-git clone https://github.com/fare/asdf.git  
+git clone https://github.com/fare/asdf.git
 
 - Download and install vscode
 

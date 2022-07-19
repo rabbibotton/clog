@@ -1,4 +1,3 @@
-
 ## Installing Common Lisp on Windows 64bit from Scratch
 
 1. Download and install rho-emacs:
