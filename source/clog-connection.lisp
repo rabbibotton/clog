@@ -649,6 +649,7 @@ the browser contents in case of connection loss."
 ;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defun compiled-boot-html (path content)
+  (declare (ignore path content))
   "Returns a compiled version version of boot.html. The compiled boot.html
 uses the jQuery CDN instead of the static js files."
 "<!doctype HTML>

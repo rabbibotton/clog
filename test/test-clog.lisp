@@ -20,7 +20,7 @@
     (when (draggablep tmp)
       (setf (property tmp "innerHTML") "<h2>I am draggable</h2>"))
     (setf tmp (create-child win "<button>test</botton>"))
-    (set-on-click tmp (lambda (obj) (alert (window win) "clicked")))
+    (set-on-click tmp (lambda (obj) (declare (ignore obj)) (alert (window win) "clicked")))
     (setf (box-sizing tmp) :border-box)
     (setf (width tmp) 300)
     (setf (height tmp) 50)
@@ -31,18 +31,23 @@
     (setf *last-obj* (create-child win "<button>********</button>"))
     (set-on-mouse-enter *last-obj*
                         (lambda (obj)
+                          (declare (ignore obj))
                           (setf (property *last-obj* "innerHTML") "Inside")))
     (set-on-mouse-leave *last-obj*
                         (lambda (obj)
+                          (declare (ignore obj))
                           (setf (property *last-obj* "innerHTML") "Outside")))
     (set-on-mouse-click *last-obj*
                         (lambda (obj data)
+                          (declare (ignore obj))
                           (print data)))
     (set-on-mouse-move *last-obj*
                        (lambda (obj data)
+                         (declare (ignore obj))
                          (format t "x=~A Y=~A~%" (getf data ':x) (getf data ':y))))
     (set-on-key-down win
                       (lambda (obj data)
+                        (declare (ignore obj))
                         (print data)) :disable-default t)
     (create-div win :content "Hello World! p")
     (create-div win :content "Hello World! div")
@@ -72,6 +77,7 @@
     (let* ((tbl (create-table win))
            (cap (create-table-caption tbl :content "My Table"))
            (rw))
+      (declare (ignore cap))
 
       (set-border tbl :thin :solid :black)
 

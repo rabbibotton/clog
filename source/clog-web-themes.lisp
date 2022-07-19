@@ -113,6 +113,7 @@ Page properties:
                  (new-comment (get-property properties :new-comment nil))
                  (save-edit   (get-property properties :save-edit nil))
                  (do-delete   (get-property properties :do-delete nil)))
+                 (declare (ignore anchor))
              (when new-comment
                (labels ((start-add (obj)
                           (create-br obj)

@@ -501,7 +501,7 @@ replaced."
                        :cancel-event t)
     (set-on-mouse-double-click placer
                                (lambda (obj data)
-                                 (declare (ignore obj))
+                                 (declare (ignore obj data))
                                  (setf (hiddenp placer) t)
                                  (on-populate-control-list-win content :win win)))
     (set-on-event placer "resize"
@@ -940,6 +940,7 @@ of controls and double click to select control."
             (setf (inner-html lwin) "")
             (set-on-mouse-click (create-div lwin :content (attribute content "data-clog-name"))
                                 (lambda (obj data)
+                                  (declare (ignore obj data))
                                   (deselect-current-control app)
                                   (on-populate-control-properties-win content :win win)
                                   (on-populate-control-list-win content :win win)))
@@ -1059,6 +1060,7 @@ of controls and double click to select control."
     (setf (control-properties-win app) content)
     (setf (properties-list app) control-list)
     (set-on-click side-panel (lambda (obj)
+                               (declare (ignore obj))
                                (cond (is-hidden
                                       (setf (width panel) "400px")
                                       (setf is-hidden nil))
@@ -1148,6 +1150,7 @@ of controls and double click to select control."
               (jquery (event-editor app))))
           (set-on-event-with-data (event-editor app) "clog-find"
                                   (lambda (obj data)
+                                    (declare (ignore obj))
                                     (ignore-errors
                                      (let* ((*PACKAGE*                 (find-package "CLOG-USER"))
                                             (SWANK::*buffer-package*   (find-package "CLOG-USER"))
@@ -1982,8 +1985,7 @@ of controls and double click to select control."
 
 (defun on-quick-start (obj)
   "Open quick start"
-  (let* ((app (connection-data-item obj "builder-app-data"))
-         (win (create-gui-window obj :title "Quick Start"
+  (let* ((win (create-gui-window obj :title "Quick Start"
                                      :top 40 :left 225
                                      :width 600 :height 400
                                      :client-movement t)))
@@ -2072,8 +2074,7 @@ of controls and double click to select control."
     (destructuring-bind (stream fname content-type)
         (form-data-item params "filename")
       (create-div body :content (format nil "filename = ~A - (contents printed in REPL)" fname))
-      (let ((s (flexi-streams:make-flexi-stream stream))
-            (b (make-string 1000))
+      (let ((s        (flexi-streams:make-flexi-stream stream))
             (pic-data ""))
         (setf pic-data (format nil "data:~A;base64,~A" content-type
                                (with-output-to-string (out)

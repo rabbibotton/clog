@@ -141,6 +141,7 @@
       (results-window app "select tbl_name as 'Table', sql as SQL from sqlite_master where type='table'"
                       :title "Click for Table"
                       :on-click-row (lambda (obj names data)
+                                      (declare (ignore obj names))
                                       (results-window app
                                                       (format nil "select rowid,* from ~A"
                                                               (car data))
