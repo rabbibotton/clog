@@ -52,7 +52,7 @@
                             var editor_~A = ace.edit('~A-body');
                             editor_~A.setTheme('ace/theme/xcode');
                             editor_~A.session.setMode('ace/mode/lisp');
-                            editor_~A.session.setTabSize(3);
+                            editor_~A.session.setTabSize(2);
                             editor_~A.focus();
                            </script>"
                           (html-id win) (html-id win)
