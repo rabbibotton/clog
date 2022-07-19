@@ -2031,6 +2031,7 @@ of controls and double click to select control."
     (setf (height btn-test) "12px")
     (setf (height btn-save) "12px")
     (setf (height btn-load) "12px")
+    (setf (clog-ace:theme ace) "ace/theme/xcode")
     (set-geometry ace :units "" :width "100%" :height "100%" :top 0 :bottom 0)
     (clog-ace:resize ace)
     (set-on-window-size-done win
@@ -2042,6 +2043,9 @@ of controls and double click to select control."
                                                  (lambda (fname)
                                                    (window-focus win)
                                                    (when fname
+                                                     (when (or (equalp (pathname-type fname) "lisp")
+                                                               (equalp (pathname-type fname) "asd"))
+                                                       (setf (clog-ace:mode ace) "ace/mode/lisp"))
                                                      (setf file-name fname)
                                                      (setf (window-title win) fname)
                                                      (setf (clog-ace:text-value ace)
