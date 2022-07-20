@@ -46,6 +46,10 @@
     :accessor event-editor
     :initform nil
     :documentation "Editor in events window")
+   (current-editor-is-lisp
+    :accessor current-editor-is-lisp
+    :initform nil
+    :documentation "Turn or off swank autocomplete")
    (control-events-win
     :accessor control-events-win
     :initform nil
@@ -1083,6 +1087,11 @@ of controls and double click to select control."
                                                :has-pinner t :client-movement t))
                (content (window-content win))
                status)
+          (setf (current-editor-is-lisp app) t)
+          (set-on-window-focus win
+                               (lambda (obj)
+                                 (declare (ignore obj))
+                                 (setf (current-editor-is-lisp app) t)))
           (setf (control-events-win app) win)
           (setf (events-list app) (create-select content :name "clog-events" :class "w3-gray w3-text-white"))
           (setf (positioning (events-list app)) :absolute)
@@ -1093,23 +1102,25 @@ of controls and double click to select control."
           (clog-ace:set-on-auto-complete (event-editor app)
                                          (lambda (obj prefix)
                                            (declare (ignore obj))
-                                           (let* ((p (attribute (get-placer (current-control app)) "data-panel-id"))
-                                                  (l (car (swank:simple-completions prefix "CLOG-USER")))
-                                                  (n (get-control-list app p)))
-                                             (maphash (lambda (k v)
-                                                        (declare (ignore k))
-                                                        (let ((name (attribute v "data-clog-name")))
-                                                          (push `(:caption ,name :value ,(format nil "(~A panel)" name)
-                                                                  :meta "control")
-                                                                l)))
-                                                      n)
-                                             (push '(:caption "target" :value "target"
-                                                     :meta "builder")
-                                                   l)
-                                             (push '(:caption "panel" :value "panel"
-                                                     :meta "builder")
-                                                   l)
-                                             l))
+                                           (when (current-editor-is-lisp app)
+                                             (let ((l (car (swank:simple-completions prefix "CLOG-USER"))))
+                                               (when (current-control app)
+                                                 (let* ((p (attribute (get-placer (current-control app)) "data-panel-id"))
+                                                        (n (get-control-list app p)))
+                                                   (maphash (lambda (k v)
+                                                              (declare (ignore k))
+                                                              (let ((name (attribute v "data-clog-name")))
+                                                                (push `(:caption ,name :value ,(format nil "(~A panel)" name)
+                                                                        :meta "control")
+                                                                      l)))
+                                                            n)
+                                                   (push '(:caption "target" :value "target"
+                                                           :meta "builder")
+                                                         l)
+                                                   (push '(:caption "panel" :value "panel"
+                                                           :meta "builder")
+                                                         l)))
+                                               l)))
                                          :meta "swank")
           (setf (positioning (event-editor app)) :absolute)
           (setf (width (event-editor app)) "")
@@ -1992,7 +2003,8 @@ of controls and double click to select control."
     (create-quick-start (window-content win))))
 
 (defun on-open-file (obj)
-  (let* ((win (create-gui-window obj :title "New Source Editor"
+  (let* ((app (connection-data-item obj "builder-app-data"))
+         (win (create-gui-window obj :title "New Source Editor"
                                      :top 40 :left 225
                                      :width 645 :height 430
                                      :client-movement t))
@@ -2012,7 +2024,13 @@ of controls and double click to select control."
          (btn-load  (create-img tool-bar :alt-text "load"     :url-src img-btn-load  :class btn-class))
          (content   (center-panel box))
          (ace       (clog-ace:create-clog-ace-element content))
+         (lisp-file t)
          (file-name ""))
+    (setf (current-editor-is-lisp app) lisp-file)
+    (set-on-window-focus win
+                         (lambda (obj)
+                           (declare (ignore obj))
+                           (setf (current-editor-is-lisp app) lisp-file)))
     (setf (background-color tool-bar) :black)
     (setf (advisory-title btn-paste) "paste")
     (setf (advisory-title btn-cut) "cut")
@@ -2034,24 +2052,29 @@ of controls and double click to select control."
     (setf (clog-ace:theme ace) "ace/theme/xcode")
     (set-geometry ace :units "" :width "100%" :height "100%" :top 0 :bottom 0)
     (clog-ace:resize ace)
+    (clog-ace:set-auto-completion ace t)
     (set-on-window-size-done win
                              (lambda (obj)
                                (declare (ignore obj))
                                (clog-ace:resize ace)))
     (set-on-click btn-load (lambda (obj)
-                             (server-file-dialog obj "Load Source" (directory-namestring file-name)
-                                                 (lambda (fname)
-                                                   (window-focus win)
-                                                   (when fname
-                                                     (if (or (equalp (pathname-type fname) "lisp")
-                                                             (equalp (pathname-type fname) "asd"))
-                                                         (setf (clog-ace:mode ace) "ace/mode/lisp")
-                                                         (setf (clog-ace:mode ace)
-                                                               (clog-ace:get-mode-from-extension ace fname)))
-                                                     (setf file-name fname)
-                                                     (setf (window-title win) fname)
-                                                     (setf (clog-ace:text-value ace)
-                                                           (read-file fname)))))))
+      (server-file-dialog obj "Load Source" (directory-namestring file-name)
+        (lambda (fname)
+          (window-focus win)
+          (when fname
+            (cond ((or (equalp (pathname-type fname) "lisp")
+                       (equalp (pathname-type fname) "asd"))
+                   (setf (clog-ace:mode ace) "ace/mode/lisp")
+                   (setf lisp-file t)
+                   (setf (current-editor-is-lisp app) t))
+                  (t
+                   (setf lisp-file nil)
+                   (setf (current-editor-is-lisp app) nil)
+                   (setf (clog-ace:mode ace) (clog-ace:get-mode-from-extension ace fname))))
+                  (setf file-name fname)
+                  (setf (window-title win) fname)
+                  (setf (clog-ace:text-value ace)
+                        (read-file fname)))))))
     (set-on-click btn-save (lambda (obj)
                              (server-file-dialog obj "Save Source As.." file-name
                                                  (lambda (fname)
