@@ -331,6 +331,17 @@
                                      (setf (inner-html control) (value d1)))))
                nil))))
 
+(defparameter *props-raw-contents*
+  `((:name "html contents"
+     :setup ,(lambda (control td1 td2)
+               (declare (ignore td1))
+               (let ((d1 (create-text-area td2 :value (attribute control "data-original-html"))))
+                 (set-on-change d1 (lambda (obj)
+                                     (declare (ignore obj))
+                                     (setf (attribute control "data-original-html") (escape-string (value d1) :html t))
+                                     (setf (inner-html control) (escape-string (value d1) :html t)))))
+                 nil))))
+
 (defparameter *props-text*
   `((:name "text"
      :get  ,(lambda (control)
@@ -442,8 +453,7 @@
     ,@*props-colors*
     ,@*props-display*
     ,@*props-flex-item*
-    ,@*props-nav*
-    ,@*props-contents*))
+    ,@*props-nav*))
 
 (defparameter *props-form-element*
   `(,@*props-location*
@@ -853,7 +863,8 @@
      :create-type    :custom-query
      :create-content "<div></div>"
      :events         (,@*events-element*)
-     :properties     (,@*props-element*))
+     :properties     (,@*props-element*
+                      ,@*props-raw-contents*))
    `(:name           "block"
      :description    "Custom HTML Block"
      :clog-type      clog:clog-element
@@ -864,7 +875,8 @@
      :create-type    :custom-query
      :create-content "<div></div>"
      :events         (,@*events-element*)
-     :properties     (,@*props-element*))
+     :properties     (,@*props-element*
+                      ,@*props-raw-contents*))
    `(:name           "style-block"
      :description    "Style Block"
      :clog-type      clog:clog-style-block

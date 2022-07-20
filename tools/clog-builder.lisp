@@ -301,9 +301,11 @@ replaced."
                                             (getf control-record :create-content)
                                             :html-id uid))
                                   ((eq create-type :custom-query)
-                                   (funcall (getf control-record :create) parent
-                                            custom-query
-                                            :html-id uid))
+                                   (let ((c (funcall (getf control-record :create) parent
+                                                     custom-query
+                                                     :html-id uid)))
+                                     (setf (attribute c "data-original-html") custom-query)
+                                     c))
                                   ((eq create-type :paste)
                                    (let ((c (create-child parent custom-query
                                                           :html-id uid)))
