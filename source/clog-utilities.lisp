@@ -150,8 +150,8 @@ and not for security purposes or html escapes."
         (setf res (format nil "~@[~A~]" str))
         (setf res (ppcre:regex-replace-all "\\x5C" res "\\x5C")) ; \
         (cond (html
-               (setf res (ppcre:regex-replace-all "\\x22" res "&#x22")) ; "
-               (setf res (ppcre:regex-replace-all "\\x27" res "&#x27")) ; '
+               (setf res (ppcre:regex-replace-all "\\x22" res "&#x22;")) ; "
+               (setf res (ppcre:regex-replace-all "\\x27" res "&#x27;")) ; '
                (setf res (ppcre:regex-replace-all "\\x0A" res "")) ; \n
                (setf res (ppcre:regex-replace-all "\\x0D" res ""))) ; \r
               (t

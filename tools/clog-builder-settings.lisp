@@ -325,6 +325,7 @@
   `((:name "contents"
      :setup ,(lambda (control td1 td2)
                (declare (ignore td1))
+               (princ (inner-html control))
                (let ((d1 (create-text-area td2 :value (inner-html control))))
                  (set-on-change d1 (lambda (obj)
                                      (declare (ignore obj))
