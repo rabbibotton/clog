@@ -854,6 +854,17 @@
      :create-content "<div></div>"
      :events         (,@*events-element*)
      :properties     (,@*props-element*))
+   `(:name           "block"
+     :description    "Custom HTML Block"
+     :clog-type      clog:clog-element
+     :create         clog:create-child
+     :setup          ,(lambda (control content control-record)
+                        (declare (ignore content control-record))
+			(setf (attribute control "data-clog-composite-control") "t"))
+     :create-type    :custom-query
+     :create-content "<div></div>"
+     :events         (,@*events-element*)
+     :properties     (,@*props-element*))
    `(:name           "style-block"
      :description    "Style Block"
      :clog-type      clog:clog-style-block

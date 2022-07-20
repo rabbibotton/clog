@@ -28,7 +28,7 @@
            :create-type    :base
            ;; setup the control at _design time_ and custom attributes
            :setup          ,(lambda (control content control-record)
-                              (declare (ignore content) (ignore control-record))
+                              (declare (ignore content control-record))
                               ;; default custom attribute values and events at design time
 
                               ;; tell the builder this is a composite control, ie made of multiple
