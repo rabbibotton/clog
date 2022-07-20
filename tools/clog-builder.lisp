@@ -123,17 +123,26 @@
 
 ;; Lisp code evaluation utilities
 
-(defun capture-eval (form &key (eval-in-package "clog-user"))
+(defun capture-eval (form &key (clog-obj nil) (eval-in-package "clog-user"))
   "Capture lisp evaluaton of FORM"
   (let ((result (make-array '(0) :element-type 'base-char
                                  :fill-pointer 0 :adjustable t))
         (eval-result))
     (with-output-to-string (stream result)
-      (let* ((*standard-output* stream)
-             (*error-output* stream)
-             (*package* (find-package (string-upcase eval-in-package))))
-        (setf eval-result (eval (read-from-string (format nil "(progn ~A)" form))))))
-    (format nil "~A~%=>~A~%" result eval-result)))
+      (labels ((my-debugger (condition me-or-my-encapsulation)
+                 (if clog-obj
+                     (clog-web-alert (connection-body clog-obj) "Error"
+                                     (format nil "~&Error: ~A" condition)
+                                     :time-out 3))
+                 (format t "~&Error: ~A" condition)))
+        (let* ((*standard-output* stream)
+               (*terminal-io* stream)
+               (*error-output* stream)
+               (*debug-io* stream)
+               (*debugger-hook* #'my-debugger)
+               (*package* (find-package (string-upcase eval-in-package))))
+          (setf eval-result (eval (read-from-string (format nil "(progn ~A)" form))))))
+      (format nil "~A~%=>~A~%" result eval-result))))
 
 ;; Local file utilities
 
@@ -2116,6 +2125,15 @@ of controls and double click to select control."
                                            (capture-eval (text-value ace))
                                            :title "Eval Result")))))
 
+(defun on-repl (obj)
+  "Open quick start"
+  (let* ((win (create-gui-window obj :title "CLOG Builder REPL"
+                                     :top 40 :left 225
+                                     :width 600 :height 400
+                                     :client-movement t)))
+    (set-geometry (create-clog-builder-repl (window-content win))
+                  :units "%" :width 100 :height 100)))
+
 (defun on-new-builder (body)
   "Launch instance of the CLOG Builder"
   (set-html-on-close body "Connection Lost")
@@ -2145,9 +2163,10 @@ of controls and double click to select control."
       (create-gui-menu-item file  :content "New Custom Boot Page"      :on-click 'on-new-builder-custom)
       (create-gui-menu-item file  :content "New Application Template"  :on-click 'on-new-app-template)
       (create-gui-menu-item src   :content "New Source Editor"         :on-click 'on-open-file)
-      (create-gui-menu-item tools :content "Control Events"     :on-click 'on-show-control-events-win)
-      (create-gui-menu-item tools :content "Copy/Cut History"   :on-click 'on-show-copy-history-win)
-      (create-gui-menu-item tools :content "Image to Data"      :on-click 'on-image-to-data)
+      (create-gui-menu-item tools :content "Control Events"            :on-click 'on-show-control-events-win)
+      (create-gui-menu-item tools :content "CLOG Builder REPL"         :on-click 'on-repl)
+      (create-gui-menu-item tools :content "Copy/Cut History"          :on-click 'on-show-copy-history-win)
+      (create-gui-menu-item tools :content "Image to HTML Data"        :on-click 'on-image-to-data)
       (create-gui-menu-item tools :content "Launch DB Admin"           :on-click
                             (lambda (obj)
                               (declare (ignore obj))

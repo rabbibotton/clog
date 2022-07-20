@@ -48,13 +48,14 @@
   :components ((:file "clog-docs")))
 
 (asdf:defsystem #:clog/tools
-  :depends-on (#:clog #:clog-ace #:s-base64 #:swank)
+  :depends-on (#:clog #:clog-ace #:clog-terminal #:s-base64 #:swank)
   :pathname "tools/"
   :components ((:file "clog-db-admin")
 	       (:file "clog-builder-settings")
 	       (:file "clog-templates")
 	       (:file "clog-new-app")
 	       (:file "clog-builder")
+               (:file "clog-builder-repl")
 	       (:file "image-to-data")
 	       (:file "quick-start")
 	       (:file "clog-builder-images")))
