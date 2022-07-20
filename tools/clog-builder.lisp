@@ -1075,6 +1075,89 @@ of controls and double click to select control."
     (setf (positioning control-list) :absolute)
     (set-geometry control-list :left 0 :top 0 :right 0)))
 
+(defun setup-ada-ace (app editor status)
+  (js-execute editor
+              (format nil
+                      "~A.commands.addCommand({
+    name: 'find-definition',
+    bindKey: {win: 'Alt-.',  mac: 'Command-.'},
+    exec: function(editor) {
+        var row = editor.selection.getCursor().row;
+        var column = editor.selection.getCursor().column;
+        var c;
+        while (column > 0) {
+          c=editor.session.getTextRange(new ace.Range(row, column-1, row, column));
+          if (c=='(' || c==' ') { break; }
+          column--;
+        }
+        var s=column;
+        while (column < 200) {
+          c=editor.session.getTextRange(new ace.Range(row, column, row, column+1));
+          if (c==')' || c==' ') { break; }
+          column++;
+        }
+        c = editor.session.getTextRange(new ace.Range(row, s, row, column));
+        ~A.trigger('clog-find', c);
+    },
+    readOnly: true,
+});"
+                      (clog-ace::js-ace editor)
+                      (jquery editor)))
+  (set-on-event-with-data editor "clog-find"
+                          (lambda (obj data)
+                            (declare (ignore obj))
+                            (when (current-editor-is-lisp app)
+                              (ignore-errors
+                               (let* ((*PACKAGE*                 (find-package "CLOG-USER"))
+                                      (SWANK::*buffer-package*   (find-package "CLOG-USER"))
+                                      (SWANK::*buffer-readtable* *readtable*)
+                                      (loc (swank:find-definitions-for-emacs data)))
+                                 (when loc
+                                   (swank:ed-in-emacs (list (second (second (second (car loc))))
+                                                            :position (second (third (second (car loc))))))))))))
+  (set-on-change editor
+                 (lambda (obj)
+                   (let ((s (js-query obj (format nil
+                           "var row = ~A.selection.getCursor().row; ~
+                            var column = ~A.selection.getCursor().column; ~
+                            var o = column;
+                            var c; var charRange; var b=0; ~
+                            while (column > 0) {
+                              column--;
+                              charRange = new ace.Range(row, column-1, row, column); ~
+                              c = ~A.session.getTextRange(charRange); ~
+                              if (c==')') { b++ } ~
+                              if (c=='(' && b==0) { ~
+                                charRange = new ace.Range(row, column, row, o); column=0;~
+                                c = ~A.session.getTextRange(charRange);} ~
+                              if (c=='(' && b > 0) { b-- } }~
+                            c"
+                                                  (clog-ace::js-ace obj)
+                                                  (clog-ace::js-ace obj)
+                                                  (clog-ace::js-ace obj)
+                                                  (clog-ace::js-ace obj)))))
+                     (unless (equal s "")
+                       (with-input-from-string (i s)
+                         (ignore-errors
+                          (let* ((m                         (read i))
+                                 (*PACKAGE*                 (find-package "CLOG-USER"))
+                                 (SWANK::*buffer-package*   (find-package "CLOG-USER"))
+                                 (SWANK::*buffer-readtable* *readtable*)
+                                 (ms                        (format nil "~A" m))
+                                 r)
+                            (ignore-errors
+                             (setf r (swank::autodoc `(,ms swank::%CURSOR-MARKER%))))
+                            (if r
+                                (setf r (car r))
+                                (setf r (swank:operator-arglist ms "CLOG-USER")))
+                            (setf (advisory-title status) (documentation (find-symbol ms) 'function))
+                            (when r
+                              (setf (text status) (string-downcase r))))))))))
+  (clog-ace:set-auto-completion editor t)
+  (setf (clog-ace:theme editor) "ace/theme/xcode")
+  (setf (clog-ace:mode editor) "ace/mode/lisp")
+  (setf (clog-ace:tab-size editor) 2))
+
 (defun on-show-control-events-win (obj)
   "Show control events window"
   (let ((app (connection-data-item obj "builder-app-data")))
@@ -1098,7 +1181,7 @@ of controls and double click to select control."
           (set-geometry (events-list app) :top 5 :left 5 :right 5)
           (setf (event-editor app) (clog-ace:create-clog-ace-element content))
           (setf (clog-ace:read-only-p (event-editor app)) t)
-          (clog-ace:set-auto-completion (event-editor app) t)
+          ;; currently there is only one auto complete for page
           (clog-ace:set-on-auto-complete (event-editor app)
                                          (lambda (obj prefix)
                                            (declare (ignore obj))
@@ -1130,87 +1213,8 @@ of controls and double click to select control."
           (setf status (create-div content :class "w3-tiny w3-border"))
           (setf (positioning status) :absolute)
           (setf (width status) "")
-          (setf (height status) "")
           (set-geometry status :height 20 :left 5 :right 5 :bottom 5)
-          (js-execute (event-editor app)
-                      (format nil
-"~A.commands.addCommand({
-    name: 'find-definition',
-    bindKey: {win: 'Alt-.',  mac: 'Command-.'},
-    exec: function(editor) {
-        var row = editor.selection.getCursor().row;
-        var column = editor.selection.getCursor().column;
-        var c;
-        while (column > 0) {
-          c=editor.session.getTextRange(new ace.Range(row, column-1, row, column));
-          if (c=='(' || c==' ') { break; }
-          column--;
-        }
-        var s=column;
-        while (column < 200) {
-          c=editor.session.getTextRange(new ace.Range(row, column, row, column+1));
-          if (c==')' || c==' ') { break; }
-          column++;
-        }
-        c = editor.session.getTextRange(new ace.Range(row, s, row, column));
-        ~A.trigger('clog-find', c);
-    },
-    readOnly: true,
-});"
-              (clog-ace::js-ace (event-editor app))
-              (jquery (event-editor app))))
-          (set-on-event-with-data (event-editor app) "clog-find"
-                                  (lambda (obj data)
-                                    (declare (ignore obj))
-                                    (ignore-errors
-                                     (let* ((*PACKAGE*                 (find-package "CLOG-USER"))
-                                            (SWANK::*buffer-package*   (find-package "CLOG-USER"))
-                                            (SWANK::*buffer-readtable* *readtable*)
-                                            (loc (swank:find-definitions-for-emacs data)))
-                                       (when loc
-                                         (swank:ed-in-emacs (list (second (second (second (car loc))))
-                                                                  :position (second (third (second (car loc)))))))))))
-          (set-on-change (event-editor app)
-                         (lambda (obj)
-                           (let ((s (js-query obj (format nil
-                           "var row = ~A.selection.getCursor().row; ~
-                            var column = ~A.selection.getCursor().column; ~
-                            var o = column;
-                            var c; var charRange; var b=0; ~
-                            while (column > 0) {
-                              column--;
-                              charRange = new ace.Range(row, column-1, row, column); ~
-                              c = ~A.session.getTextRange(charRange); ~
-                              if (c==')') { b++ } ~
-                              if (c=='(' && b==0) { ~
-                                charRange = new ace.Range(row, column, row, o); column=0;~
-                                c = ~A.session.getTextRange(charRange);} ~
-                              if (c=='(' && b > 0) { b-- } }~
-                            c"
-                           (clog-ace::js-ace obj)
-                           (clog-ace::js-ace obj)
-                           (clog-ace::js-ace obj)
-                           (clog-ace::js-ace obj)))))
-                             (unless (equal s "")
-                               (with-input-from-string (i s)
-                                 (ignore-errors
-                                  (let* ((m                         (read i))
-                                         (*PACKAGE*                 (find-package "CLOG-USER"))
-                                         (SWANK::*buffer-package*   (find-package "CLOG-USER"))
-                                         (SWANK::*buffer-readtable* *readtable*)
-                                         (ms                        (format nil "~A" m))
-                                         r)
-                                    (ignore-errors
-                                     (setf r (swank::autodoc `(,ms swank::%CURSOR-MARKER%))))
-                                    (if r
-                                        (setf r (car r))
-                                        (setf r (swank:operator-arglist ms "CLOG-USER")))
-                                    (setf (advisory-title status) (documentation (find-symbol ms) 'function))
-                                    (when r
-                                      (setf (text status) (string-downcase r))))))))))
-          (setf (clog-ace:theme (event-editor app)) "ace/theme/xcode")
-          (setf (clog-ace:mode (event-editor app)) "ace/mode/lisp")
-          (setf (clog-ace:tab-size (event-editor app)) 2)
+          (setup-ada-ace app (event-editor app) status)
           (set-on-window-size-done win (lambda (obj)
                                          (declare (ignore obj))
                                          (clog-ace:resize (event-editor app))))
@@ -1220,7 +1224,7 @@ of controls and double click to select control."
                                      (setf (events-list app) nil)
                                      (setf (control-events-win app) nil)))))))
 
-(Defun on-show-copy-history-win (obj)
+(defun on-show-copy-history-win (obj)
   "Create and show copy/but history"
   (let ((app (connection-data-item obj "builder-app-data")))
     (if (copy-history-win app)
@@ -2024,6 +2028,7 @@ of controls and double click to select control."
          (btn-load  (create-img tool-bar :alt-text "load"     :url-src img-btn-load  :class btn-class))
          (content   (center-panel box))
          (ace       (clog-ace:create-clog-ace-element content))
+         (status    (create-div content :class "w3-tiny w3-border"))
          (lisp-file t)
          (file-name ""))
     (setf (current-editor-is-lisp app) lisp-file)
@@ -2049,10 +2054,14 @@ of controls and double click to select control."
     (setf (height btn-test) "12px")
     (setf (height btn-save) "12px")
     (setf (height btn-load) "12px")
-    (setf (clog-ace:theme ace) "ace/theme/xcode")
-    (set-geometry ace :units "" :width "100%" :height "100%" :top 0 :bottom 0)
+    (setf (positioning ace) :absolute)
+    (setf (positioning status) :absolute)
+    (set-geometry ace :units "" :width "" :height ""
+                      :top "0px" :bottom "20px" :left "0px" :right "0px")
     (clog-ace:resize ace)
-    (clog-ace:set-auto-completion ace t)
+    (set-geometry status :units "" :width "" :height "20px"
+                         :bottom "0px" :left "0px" :right "0px")
+    (setup-ada-ace app ace status)
     (set-on-window-size-done win
                              (lambda (obj)
                                (declare (ignore obj))
