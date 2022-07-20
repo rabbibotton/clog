@@ -860,7 +860,7 @@
      :create         clog:create-child
      :setup          ,(lambda (control content control-record)
                         (declare (ignore content control-record))
-			(setf (attribute control "data-clog-composite-control") "t"))
+			(setf (attribute control "data-clog-composite-control") "b"))
      :create-type    :custom-query
      :create-content "<div></div>"
      :events         (,@*events-element*)
