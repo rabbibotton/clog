@@ -124,25 +124,26 @@
 ;; Lisp code evaluation utilities
 
 (defun capture-eval (form &key (clog-obj nil) (eval-in-package "clog-user"))
-  "Capture lisp evaluaton of FORM"
+  "Capture lisp evaluaton of FORM."
   (let ((result (make-array '(0) :element-type 'base-char
                                  :fill-pointer 0 :adjustable t))
         (eval-result))
     (with-output-to-string (stream result)
-      (labels ((my-debugger (condition me-or-my-encapsulation)
+      (labels ((my-debugger (condition encapsulation)
+                 (declare (ignore encapsulation))
                  (if clog-obj
                      (clog-web-alert (connection-body clog-obj) "Error"
                                      (format nil "~&Error: ~A" condition)
                                      :time-out 3))
                  (format t "~&Error: ~A" condition)))
         (let* ((*standard-output* stream)
-               (*terminal-io* stream)
                (*error-output* stream)
-               (*debug-io* stream)
                (*debugger-hook* #'my-debugger)
                (*package* (find-package (string-upcase eval-in-package))))
-          (setf eval-result (eval (read-from-string (format nil "(progn ~A)" form))))))
-      (format nil "~A~%=>~A~%" result eval-result))))
+          (setf eval-result (eval (read-from-string (format nil "(progn ~A)" form))))
+          (values
+           (format nil "~A~%=>~A~%" result eval-result)
+           *package*))))))
 
 ;; Local file utilities
 
