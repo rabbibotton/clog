@@ -335,11 +335,11 @@
   `((:name "html contents"
      :setup ,(lambda (control td1 td2)
                (declare (ignore td1))
-               (let ((d1 (create-text-area td2 :value (attribute control "data-original-html"))))
+               (let ((d1 (create-text-area td2 :value (escape-string (attribute control "data-original-html") :html t))))
                  (set-on-change d1 (lambda (obj)
                                      (declare (ignore obj))
-                                     (setf (attribute control "data-original-html") (escape-string (value d1) :html t))
-                                     (setf (inner-html control) (escape-string (value d1) :html t)))))
+                                     (setf (attribute control "data-original-html") (value d1))
+                                     (setf (inner-html control) (value d1)))))
                nil))))
 
 (defparameter *props-text*

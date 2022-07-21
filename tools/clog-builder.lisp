@@ -701,64 +701,67 @@ not a temporary attached one when using select-control."
     (labels ((add-siblings (control)
                (let (dct)
                  (loop
+                   (unless control (return))
                    (when (equal (html-id control) "undefined") (return))
                    (setf dct (attribute control "data-clog-name"))
                    (unless (equal dct "undefined")
                      (setf control (get-from-control-list app panel-id (html-id control)))
-                     (let ((vname (attribute control "data-clog-name"))
-                           (control-record (control-info (attribute control "data-clog-type"))))
-                       (unless (and (>= (length vname) 5)
-                                    (equalp (subseq vname 0 5) "none-"))
-                         ;; Add to members of the panel's class for each control
-                         (push (format nil
-                                       "    \(~A :reader ~A\)~%"
-                                       vname
-                                       vname)
-                               cmembers)
-                         ;; On instance of class, set member value for each control
-                         (push (format nil
-                                       "    \(setf (slot-value panel '~A\) ~
+                     (when control
+                       (let ((vname (attribute control "data-clog-name"))
+                             (control-record (control-info (attribute control "data-clog-type"))))
+                         (unless (and (>= (length vname) 5)
+                                      (equalp (subseq vname 0 5) "none-"))
+                           ;; Add to members of the panel's class for each control
+                           (push (format nil
+                                         "    \(~A :reader ~A\)~%"
+                                         vname
+                                         vname)
+                                 cmembers)
+                           ;; On instance of class, set member value for each control
+                           (push (format nil
+                                         "    \(setf (slot-value panel '~A\) ~
                                             \(attach-as-child clog-obj \"~A\" :clog-type \'~A\ :new-id t)\)~%"
-                                       vname
-                                       (html-id control)
-                                       (format nil "~S" (getf control-record :clog-type)))
-                               vars)
-                         ;; On instance of class, set handers defined for each control
-                         (dolist (event (getf control-record :events))
-                           ;; Set regular handlers
-                           (let ((handler (attribute control (format nil "data-~A" (getf event :name)))))
-                             (unless (or (equalp handler "undefined")
-                                         (equal handler ""))
-                               (unless (equalp (getf event :name) "on-create")
-                                 (let ((event-package (or (getf event :package) "clog")))
-                                   (push (format nil
-                                                 "    \(~A:set-~A \(~A panel\) \(lambda \(~A\) \(declare \(ignorable ~A\)\) ~A\)\)~%"
-                                                 event-package
-                                                 (getf event :name)
-                                                 vname
-                                                 (getf event :parameters)
-                                                 (getf event :parameters)
-                                                 handler)
-                                         events))))))
-                         ;; Set on-create (from user in builder) and on-setup (from control-record)
-                         (let ((handler (attribute control "data-on-create")))
-                           (when (equalp handler "undefined")
-                             (setf handler ""))
-                           (when (getf control-record :on-setup)
-                             (setf handler (format nil "~A~A"
-                                                   (funcall (getf control-record :on-setup)
-                                                            control control-record)
-                                                   handler)))
-                           (unless (equal handler "")
-                             (push (format nil
-                                           "    \(let \(\(target \(~A panel\)\)\) ~
+                                         vname
+                                         (html-id control)
+                                         (format nil "~S" (getf control-record :clog-type)))
+                                 vars)
+                           ;; On instance of class, set handers defined for each control
+                           (dolist (event (getf control-record :events))
+                             ;; Set regular handlers
+                             (let ((handler (attribute control (format nil "data-~A" (getf event :name)))))
+                               (unless (or (equalp handler "undefined")
+                                           (equal handler ""))
+                                 (unless (equalp (getf event :name) "on-create")
+                                   (let ((event-package (or (getf event :package) "clog")))
+                                     (push (format nil
+                                                   "    \(~A:set-~A \(~A panel\) \(lambda \(~A\) \(declare \(ignorable ~A\)\) ~A\)\)~%"
+                                                   event-package
+                                                   (getf event :name)
+                                                   vname
+                                                   (getf event :parameters)
+                                                   (getf event :parameters)
+                                                   handler)
+                                           events))))))
+                           ;; Set on-create (from user in builder) and on-setup (from control-record)
+                           (let ((handler (attribute control "data-on-create")))
+                             (when (equalp handler "undefined")
+                               (setf handler ""))
+                             (when (getf control-record :on-setup)
+                               (setf handler (format nil "~A~A"
+                                                     (funcall (getf control-record :on-setup)
+                                                              control control-record)
+                                                     handler)))
+                             (unless (equal handler "")
+                               (push (format nil
+                                             "    \(let \(\(target \(~A panel\)\)\) ~
                                              \(declare \(ignorable target\)\) ~
                                               ~A\)~%"
-                                           vname
-                                           handler)
-                                   creates)))))
-                     (add-siblings (first-child control)))
-                   (setf control (next-sibling control))))))
+                                             vname
+                                             handler)
+                                     creates)))))
+                       (add-siblings (first-child control))))
+                   (when control
+                     (setf control (next-sibling control)))))))
       (add-siblings (first-child content)))
     (let ((result (format nil
                           "\(in-package \"~A\"\)
