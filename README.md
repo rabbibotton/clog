@@ -75,6 +75,7 @@ For git (you need the ace editor plug in for the builder too from git):
 cd ~/common-lisp
 git clone https://github.com/rabbibotton/clog.git
 git clone https://github.com/rabbibotton/clog-ace.git
+git clone https://github.com/rabbibotton/clog-terminal.git
 
 
 To add UltraLisp to QuickLisp (_RECOMMENDED_):
