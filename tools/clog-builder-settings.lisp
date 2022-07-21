@@ -340,7 +340,7 @@
                                      (declare (ignore obj))
                                      (setf (attribute control "data-original-html") (escape-string (value d1) :html t))
                                      (setf (inner-html control) (escape-string (value d1) :html t)))))
-                 nil))))
+               nil))))
 
 (defparameter *props-text*
   `((:name "text"
@@ -866,13 +866,13 @@
      :properties     (,@*props-element*))
    `(:name           "block"
      :description    "Custom HTML Block"
-     :clog-type      clog:clog-element
-     :create         clog:create-child
+     :clog-type      clog:clog-div
+     :create         clog:create-div
      :setup          ,(lambda (control content control-record)
                         (declare (ignore content control-record))
                         (setf (attribute control "data-clog-composite-control") "b"))
-     :create-type    :custom-query
-     :create-content "<div></div>"
+     :create-type    :custom-block
+     :create-content ""
      :events         (,@*events-element*)
      :properties     (,@*props-element*
                       ,@*props-raw-contents*))

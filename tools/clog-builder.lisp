@@ -301,12 +301,16 @@ replaced."
                                    (funcall (getf control-record :create) parent
                                             (getf control-record :create-content)
                                             :html-id uid))
-                                  ((eq create-type :custom-query)
+                                  ((eq create-type :custom-block)
                                    (let ((c (funcall (getf control-record :create) parent
-                                                     custom-query
+                                                     :content custom-query
                                                      :html-id uid)))
                                      (setf (attribute c "data-original-html") custom-query)
                                      c))
+                                  ((eq create-type :custom-query)
+                                   (funcall (getf control-record :create) parent
+                                            custom-query
+                                            :html-id uid))
                                   ((eq create-type :paste)
                                    (let ((c (create-child parent custom-query
                                                           :html-id uid)))
@@ -352,21 +356,36 @@ replaced."
     (window-focus win))
   (let* ((control-record    (control-info (value (select-tool app))))
          (control-type-name (getf control-record :create-type)))
-    (if (eq control-type-name :custom-query)
-        (input-dialog win "Enter html (must have an outer element):"
-                      (lambda (custom-query)
-                        (when custom-query
-                          (do-drop-new-control
-                            app content data
-                            :win win
-                            :custom-query custom-query)))
-                      :width 500
-                      :height 300
-                      :rows 5
-                      :size 40
-                      :title "Custom HTML Control"
-                      :default-value (getf control-record :create-content))
-        (do-drop-new-control app content data :win win))))
+    (cond ((eq control-type-name :custom-query)
+           (input-dialog win "Enter html (must have an outer element):"
+                         (lambda (custom-query)
+                           (when custom-query
+                             (do-drop-new-control
+                               app content data
+                               :win win
+                               :custom-query custom-query)))
+                         :width 500
+                         :height 300
+                         :rows 5
+                         :size 40
+                         :title "Custom HTML Control"
+                         :default-value (getf control-record :create-content)))
+          ((eq control-type-name :custom-block)
+           (input-dialog win "Enter html to create control:"
+                         (lambda (custom-query)
+                           (when custom-query
+                             (do-drop-new-control
+                               app content data
+                               :win win
+                               :custom-query custom-query)))
+                         :width 500
+                         :height 300
+                         :rows 5
+                         :size 40
+                         :title "Custom HTML Block"
+                         :default-value (getf control-record :create-content)))
+          (t
+           (do-drop-new-control app content data :win win)))))
 
 (defun do-drop-new-control (app content data &key win custom-query)
   "Create new control dropped at event DATA on CONTENT of WIN)"
@@ -402,7 +421,7 @@ replaced."
            (set-geometry control
                          :left (getf data :x)
                          :top (getf data :y))
-           (unless (equalp (attribute control "data-clog-composite-control") "t")
+           (when (equalp (attribute control "data-clog-composite-control") "undefined")
              (add-sub-controls control content :win win))
            (setup-control content control :win win)
            (select-control control)
@@ -654,7 +673,8 @@ not a temporary attached one when using select-control."
                      (when (getf (control-info dct) :on-load)
                        (funcall (getf (control-info dct) :on-load) control (control-info dct)))
                      (setup-control content control :win win)
-                       (add-siblings (first-child control)))
+                     (unless (equal dct "block")
+                       (add-siblings (first-child control))))
                    (setf control (next-sibling control))))))
       (add-siblings (first-child parent)))))
 
