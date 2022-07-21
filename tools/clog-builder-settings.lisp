@@ -332,10 +332,23 @@
                nil))))
 
 (defparameter *props-raw-contents*
-  `((:name "html contents"
+  `((:name "commands"
      :setup ,(lambda (control td1 td2)
                (declare (ignore td1))
-               (let ((d1 (create-text-area td2 :value (escape-string (attribute control "data-original-html") :html t))))
+               (let ((exp (create-button td2 :content "convert to div")))
+                 (set-on-click exp (lambda (obj)
+                                     (setf (attribute control "data-clog-type") "div")
+                                     (remove-attribute control "data-original-html")
+                                     (remove-attribute control "data-clog-composite-control")
+                                     (clog-web-alert obj
+                                                     "Convert to Div"
+                                                     "Save and reload panel to access child controls."
+                                                     :color-class "w3-yellow"))))))
+    (:name "html contents"
+     :setup ,(lambda (control td1 td2)
+               (declare (ignore td1))
+               (let ((app (connection-data-item td1 "builder-app-data"))
+                     (d1  (create-text-area td2 :value (escape-string (attribute control "data-original-html") :html t))))
                  (set-on-change d1 (lambda (obj)
                                      (declare (ignore obj))
                                      (setf (attribute control "data-original-html") (value d1))
