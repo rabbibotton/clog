@@ -654,7 +654,7 @@ not a temporary attached one when using select-control."
                      (when (getf (control-info dct) :on-load)
                        (funcall (getf (control-info dct) :on-load) control (control-info dct)))
                      (setup-control content control :win win)
-                     (add-siblings (first-child control)))
+                       (add-siblings (first-child control)))
                    (setf control (next-sibling control))))))
       (add-siblings (first-child parent)))))
 
@@ -759,6 +759,7 @@ not a temporary attached one when using select-control."
     z.find('*').each(function(){~
       var m=$(this).attr('data-clog-name');
       if($(this).attr('data-clog-composite-control') == 't'){$(this).text('')}~
+      if($(this).attr('data-clog-composite-control') == 'b'){$(this).html($(this).attr('data-original-html'))}~
       for(n in $(this).get(0).dataset){delete $(this).get(0).dataset[n]}~
       if(m){$(this).attr('data-clog-name', m);}~
     });~

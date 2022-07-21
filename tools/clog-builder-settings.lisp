@@ -863,8 +863,7 @@
      :create-type    :custom-query
      :create-content "<div></div>"
      :events         (,@*events-element*)
-     :properties     (,@*props-element*
-                      ,@*props-raw-contents*))
+     :properties     (,@*props-element*))
    `(:name           "block"
      :description    "Custom HTML Block"
      :clog-type      clog:clog-element
