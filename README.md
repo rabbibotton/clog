@@ -28,7 +28,7 @@ embedded in a native template application.)
 
 [CLOG - Technical Overview and Purpose](CONCEPT.md)
 
-STATUS: CLOG 1.4 and CLOG Builder 1.4 released.
+STATUS: CLOG 1.5 and CLOG Builder 1.5 released.
 
 CLOG is actually based on GNOGA, a framework I wrote for Ada in 2013
 and used in commercial production code for the last 9+ years. CLOG
