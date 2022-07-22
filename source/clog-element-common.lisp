@@ -84,7 +84,7 @@ place-inside-bottom-of CLOG-OBJ.
 (defgeneric (setf target) (value clog-a)
   (:documentation "Set target VALUE for CLOG-A"))
 
-(defmethod (setf targe)t (value (obj clog-a))
+(defmethod (setf target) (value (obj clog-a))
   (setf (property obj "target") value))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
