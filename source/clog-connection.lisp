@@ -338,17 +338,18 @@ the default answer. (Private)"
 default route for '/' to establish web-socket connections and static files
 located at STATIC-ROOT. The webserver used with CLACK can be chosed with
 :SERVER. If LONG-POLLING-FIRST is t, the output is sent as HTML instead of
-websocket commands until the first query. If LONG-POLLING-FIRST eq :extend the
-long polling continues until the end of the on-new-window-handler.
-LONG-POLLING-FIRST is esed in webserver applications to enable crawling of your
-website. If BOOT-FILE is nil no initial clog-path's will be setup, use clog-path
-to add. The on-connect-handler needs to indentify the path by querying the
-browser. See PATH-NAME (in CLOG-LOCATION). If EXTENDED-ROUTING is t routes will
-match even if extend with additional / and additional paths. If static-boot-js
-is nil then boot.js is served from the file /js/boot.js instead of the compiled
-version. If static-boot-html is t if boot.html is not present will use compiled
-version. boot-function if set is called with the url and the contents of
-boot-file and its return value replaces the contents sent to the brower."
+websocket commands until the end of the on-new-window-handler, if
+LONG-POLLING-FIRST is a number will keep long polling till that number of
+queries to browser.  LONG-POLLING-FIRST is used in webserver applications to
+enable crawling of your website. If BOOT-FILE is nil no initial clog-path's will
+be setup, use clog-path to add. The on-connect-handler needs to indentify the
+path by querying the browser. See PATH-NAME (in CLOG-LOCATION). If
+EXTENDED-ROUTING is t routes will match even if extend with additional / and
+additional paths. If static-boot-js is nil then boot.js is served from the file
+/js/boot.js instead of the compiled version. If static-boot-html is t if
+boot.html is not present will use compiled version. boot-function if set is
+called with the url and the contents of boot-file and its return value replaces
+the contents sent to the brower."
   (set-on-connect on-connect-handler)
   (when boot-file
     (set-clog-path "/" boot-file))
@@ -408,11 +409,13 @@ boot-file and its return value replaces the contents sent to the brower."
                                      (setf (gethash "connection-id" (get-connection-data id)) id)
                                      (format t "New html connection id - ~A~%" id)
                                      (lambda (responder)
-                                       (let* ((writer (funcall responder '(200 (:content-type "text/html"))))
-                                              (stream (lack.util.writer-stream:make-writer-stream writer))
-                                              (*long-poll-url* url-path)
-                                              (*long-poll-first* stream)
-                                              (*extended-long-poll* (eq long-poll-first :extend)))
+                                       (let* ((writer               (funcall responder '(200 (:content-type "text/html"))))
+                                              (stream               (lack.util.writer-stream:make-writer-stream writer))
+                                              (*long-poll-url*      url-path)
+                                              (*long-poll-first*    stream)
+                                              (*extended-long-poll* (if (eq long-poll-first t)
+                                                                        :extend
+                                                                        long-poll-first)))
                                          (write-sequence page-data stream)
                                          (write-sequence
                                           (format nil "<script>clog['connection_id']=~A;Open_ws();</script>" id)
@@ -556,7 +559,8 @@ DEFAULT-ANSWER."
       for n from 1 to 10 do
         (let ((con (get-connection connection-id)))
           (when con
-            (unless *extended-long-poll*
+            (unless (or (eq *extended-long-poll* :extend)
+                        (> (decf *extended-long-poll*) 0))
               (format t "Closing long-poll for ~A~%" connection-id)
               (setf *long-poll-first* nil))
             (return))
