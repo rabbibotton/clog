@@ -9,6 +9,9 @@
 (cl:in-package :clog)
 
 ;;; clog-presentations - link Lisp objects and CLOG objects
+;;;
+;;; set-event is the event to be fired, it must be a one parameter event time
+;;;           like on-focus, on-click, etc.
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Implementation - clog-presentations
