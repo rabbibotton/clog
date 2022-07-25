@@ -2215,6 +2215,17 @@ on browser."))
 (defmethod click ((obj clog-element))
   (jquery-execute obj "click()"))
 
+;;;;;;;;;;;;;;;;;;;;;
+;; replace-element ;;
+;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric replace-element (clog-element new-clog-element)
+  (:documentation "CLOG-ELEMENT and its children will we removed from DOM
+but not destroyed and NEW-CLOG-ELEMENT will replace it in same location.
+DETROY CLOG-ELEMENT if need to clear from browser memory."))
+
+(defmethod replace-element ((obj clog-element) (new clog-element))
+  (jquery-execute obj (format nil "replaceWith(~A)" (jquery new))))
 
 ;;;;;;;;;;;;;;;;;;;;
 ;; parent-element ;;
