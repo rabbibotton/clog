@@ -72,27 +72,26 @@ the same as the clog directy this overides the relative paths used in them.")
        (static-boot-js   nil)
        (static-root      (merge-pathnames "./static-files/"
                             (asdf:system-source-directory :clog))))
-  "Inititalize CLOG on a socket using HOST and PORT to serve BOOT-FILE
-as the default route to establish web-socket connections and static
-files located at STATIC-ROOT. The webserver used with CLACK can be
-chosed with :SERVER. If EXTENDED-ROUTING is t routes will match even
-if extend with additional / and additional paths. If
-LONG-POLLING-FIRST is t, the output is sent as HTML instead of
-websocket commands until on-new-window-handler ends, this should be
-used in webserver applications to enable crawling of your website. If
-CLOG was already initialized and not shut down, this function does the
-same as set-on-new-window (does not change the static-root). If
-ON-NEW-WINDOW-HANDLER is nil no handler is set and none is
-removed. STATIC-ROOT by default is the \"directory CLOG is installed
-in ./static-files\" If the variable clog:*overide-static-root* is set
-STATIC-ROOT will be ignored. If BOOT-FILE is nil no default boot-file
-will be set for root path, i.e. /. If static-boot-js is t then boot.js
-is served from the file /js/boot.js instead of the compiled
-version. If static-boot-html is nil if boot.html is not present will
-use compiled version. boot-function if set is called with the url and
-the contents of boot-file and its return value replaces the contents
-sent to the brower, this allows adding content for search engine
-optimization, see tutorial 12 for an example."
+  "Inititalize CLOG on a socket using HOST and PORT to serve BOOT-FILE as the
+default route to establish web-socket connections and static files located at
+STATIC-ROOT. The webserver used with CLACK can be chosed with :SERVER. If
+EXTENDED-ROUTING is t routes will match even if extend with additional / and
+additional paths. If LONG-POLLING-FIRST is t, the output is sent as HTML instead
+of websocket commands until the first query. If LONG-POLLING-FIRST eq :extend
+then long polling continues until the on-new-window-handler ends.
+ LONG-POLLING-FIRST is used in webserver applications to enable crawling of
+your website. If CLOG was already initialized and not shut down, this function
+does the same as set-on-new-window (does not change the static-root). If
+ON-NEW-WINDOW-HANDLER is nil no handler is set and none is removed. STATIC-ROOT
+by default is the \"directory CLOG is installed in ./static-files\" If the
+variable clog:*overide-static-root* is set STATIC-ROOT will be ignored. If
+BOOT-FILE is nil no default boot-file will be set for root path, i.e. /. If
+static-boot-js is t then boot.js is served from the file /js/boot.js instead of
+the compiled version. If static-boot-html is nil if boot.html is not present
+will use compiled version. boot-function if set is called with the url and the
+contents of boot-file and its return value replaces the contents sent to the
+brower, this allows adding content for search engine optimization, see tutorial
+12 for an example."
   (setf *extended-routing* extended-routing)
   (when on-new-window-handler
     (set-on-new-window on-new-window-handler :path "/" :boot-file boot-file))

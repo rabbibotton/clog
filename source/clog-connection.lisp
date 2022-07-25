@@ -100,7 +100,10 @@ script."
 
 (defvar *long-poll-first* nil
   "Dynamic variable indicating to use html output instead of
-   websocket for output")
+   websocket for output at start if connection.")
+(defvar *extended-long-poll* nil
+  "Dynamic variable indicating to extend long polling beyond
+   extablishing websocket for output.")
 (defvar *long-poll-url* nil
   "Dynamic variable indicating the url path used.")
 
@@ -331,22 +334,21 @@ the default answer. (Private)"
                      (static-boot-html nil)
                      (static-boot-js   nil)
                      (static-root      #P"./static-files/"))
-  "Initialize CLOG on a socket using HOST and PORT to serve BOOT-FILE
-as the default route for '/' to establish web-socket connections and
-static files located at STATIC-ROOT. The webserver used with CLACK can
-be chosed with :SERVER. If LONG-POLLING-FIRST is t, the output is sent
-as HTML instead of websocket commands until on-new-window-handler
-ends, this should be used in webserver applications to enable crawling
-of your website. If BOOT-FILE is nil no initial clog-path's will be
-setup, use clog-path to add. The on-connect-handler needs to indentify
-the path by querying the browser. See PATH-NAME (in CLOG-LOCATION). If
-EXTENDED-ROUTING is t routes will match even if extend with additional
-/ and additional paths. If static-boot-js is nil then boot.js is
-served from the file /js/boot.js instead of the compiled version. If
-static-boot-html is t if boot.html is not present will use compiled
-version. boot-function if set is called with the url and the contents
-of boot-file and its return value replaces the contents sent to the
-brower."
+  "Initialize CLOG on a socket using HOST and PORT to serve BOOT-FILE as the
+default route for '/' to establish web-socket connections and static files
+located at STATIC-ROOT. The webserver used with CLACK can be chosed with
+:SERVER. If LONG-POLLING-FIRST is t, the output is sent as HTML instead of
+websocket commands until the first query. If LONG-POLLING-FIRST eq :extend the
+long polling continues until the end of the on-new-window-handler.
+LONG-POLLING-FIRST is esed in webserver applications to enable crawling of your
+website. If BOOT-FILE is nil no initial clog-path's will be setup, use clog-path
+to add. The on-connect-handler needs to indentify the path by querying the
+browser. See PATH-NAME (in CLOG-LOCATION). If EXTENDED-ROUTING is t routes will
+match even if extend with additional / and additional paths. If static-boot-js
+is nil then boot.js is served from the file /js/boot.js instead of the compiled
+version. If static-boot-html is t if boot.html is not present will use compiled
+version. boot-function if set is called with the url and the contents of
+boot-file and its return value replaces the contents sent to the brower."
   (set-on-connect on-connect-handler)
   (when boot-file
     (set-clog-path "/" boot-file))
@@ -409,7 +411,8 @@ brower."
                                        (let* ((writer (funcall responder '(200 (:content-type "text/html"))))
                                               (stream (lack.util.writer-stream:make-writer-stream writer))
                                               (*long-poll-url* url-path)
-                                              (*long-poll-first* stream))
+                                              (*long-poll-first* stream)
+                                              (*extended-long-poll* (eq long-poll-first :extend)))
                                          (write-sequence page-data stream)
                                          (write-sequence
                                           (format nil "<script>clog['connection_id']=~A;Open_ws();</script>" id)
@@ -553,6 +556,9 @@ DEFAULT-ANSWER."
       for n from 1 to 10 do
         (let ((con (get-connection connection-id)))
           (when con
+            (unless *extended-long-poll*
+              (format t "Closing long-poll for ~A~%" connection-id)
+              (setf *long-poll-first* nil))
             (return))
           (format t "Awaiting websocket connection for ~A~%" connection-id)
           (sleep .1))))
