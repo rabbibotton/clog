@@ -1111,7 +1111,7 @@ of controls and double click to select control."
     (setf (positioning control-list) :absolute)
     (set-geometry control-list :left 0 :top 0 :right 0)))
 
-(defun setup-ada-ace (app editor status)
+(defun setup-ada-ace (app editor status &key (package "CLOG-USER"))
   (js-execute editor
               (format nil
                       "~A.commands.addCommand({
@@ -1144,8 +1144,8 @@ of controls and double click to select control."
                             (declare (ignore obj))
                             (when (current-editor-is-lisp app)
                               (ignore-errors
-                               (let* ((*PACKAGE*                 (find-package "CLOG-USER"))
-                                      (SWANK::*buffer-package*   (find-package "CLOG-USER"))
+                               (let* ((*PACKAGE*                 (find-package package))
+                                      (SWANK::*buffer-package*   (find-package package))
                                       (SWANK::*buffer-readtable* *readtable*)
                                       (loc (swank:find-definitions-for-emacs data)))
                                  (when loc
@@ -1176,8 +1176,8 @@ of controls and double click to select control."
                        (with-input-from-string (i s)
                          (ignore-errors
                           (let* ((m                         (read i))
-                                 (*PACKAGE*                 (find-package "CLOG-USER"))
-                                 (SWANK::*buffer-package*   (find-package "CLOG-USER"))
+                                 (*PACKAGE*                 (find-package package))
+                                 (SWANK::*buffer-package*   (find-package package))
                                  (SWANK::*buffer-readtable* *readtable*)
                                  (ms                        (format nil "~A" m))
                                  r)
@@ -1185,7 +1185,7 @@ of controls and double click to select control."
                              (setf r (swank::autodoc `(,ms swank::%CURSOR-MARKER%))))
                             (if r
                                 (setf r (car r))
-                                (setf r (swank:operator-arglist ms "CLOG-USER")))
+                                (setf r (swank:operator-arglist ms package)))
                             (setf (advisory-title status) (documentation (find-symbol ms) 'function))
                             (when r
                               (setf (text status) (string-downcase r))))))))))
@@ -1222,6 +1222,9 @@ of controls and double click to select control."
                                          (lambda (obj prefix)
                                            (declare (ignore obj))
                                            (when (current-editor-is-lisp app)
+                                             ;; we need to modify Ace's lisp mode to treat : as part of symbol
+                                             ;; otherwise lookups do not consider the symbols package. I did
+                                             ;; using code mathod but then the automatic replace is only on the symbol
                                              (let ((l (car (swank:simple-completions prefix "CLOG-USER"))))
                                                (when (current-control app)
                                                  (let* ((p (attribute (get-placer (current-control app)) "data-panel-id"))
@@ -1250,7 +1253,7 @@ of controls and double click to select control."
           (setf (positioning status) :absolute)
           (setf (width status) "")
           (set-geometry status :height 20 :left 5 :right 5 :bottom 5)
-          (setup-ada-ace app (event-editor app) status)
+          (setup-ada-ace app (event-editor app) status :package "CLOG-USER")
           (set-on-window-size-done win (lambda (obj)
                                          (declare (ignore obj))
                                          (clog-ace:resize (event-editor app))))

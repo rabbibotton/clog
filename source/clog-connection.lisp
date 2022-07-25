@@ -401,7 +401,7 @@ brower."
                               (setf post-data (make-string (getf env :content-length)))
                               (read-sequence post-data (getf env :raw-body)))
                             (cond (long-poll-first
-                                   (let ((id (generate-id)))
+                                   (let ((id (+ (floor (/ (get-universal-time) 2) (generate-id)))))
                                      (setf (gethash id *connection-data*) (make-hash-table* :test #'equal))
                                      (setf (gethash "connection-id" (get-connection-data id)) id)
                                      (format t "New html connection id - ~A~%" id)
@@ -554,6 +554,7 @@ DEFAULT-ANSWER."
         (let ((con (get-connection connection-id)))
           (when con
             (return))
+          (format t "Awaiting websocket connection for ~A~%" connection-id)
           (sleep .1))))
   (let ((uid (generate-id)))
     (prep-query uid (when default-answer (format nil "~A" default-answer)))
