@@ -2229,8 +2229,24 @@ Returns CLOG-ELEMENT"))
   (jquery-execute obj (format nil "replaceWith(~A)" (jquery new)))
   obj)
 
+;;;;;;;;;;;;;;;;;;;;;;;;
+;; swap-element-by-id ;;
+;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric swap-element-by-id (html-id clog-element)
+  (:documentation "Replace an existing element on page with HTML-ID with
+CLOG-ELEMENT and set CLOG-ELEMENT to html-id. Returns CLOG-ELEMENT"))
+
+(defmethod swap-element-by-id (html-id (new clog-element))
+  (let ((obj (attach-as-child new html-id :new-id t)))
+    (setf (property new "id") html-id)
+    (setf (slot-value new 'html-id) html-id)
+    (replace-element obj new)
+    (destroy obj)
+    new))
+
 ;;;;;;;;;;;;;;;;;;;;
-;; parent-element ;;
+;; Parent-element ;;
 ;;;;;;;;;;;;;;;;;;;;
 
 (defgeneric parent-element (clog-element)

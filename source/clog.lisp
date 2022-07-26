@@ -349,14 +349,15 @@ embedded in a native template application.)"
   (vertical-align             generic-function)
 
   "CLOG-Element - Methods"
-  (add-class        generic-function)
-  (remove-class     generic-function)
-  (toggle-class     generic-function)
-  (remove-from-dom  generic-function)
-  (remove-from-clog generic-function)
-  (destroy          generic-function)
-  (click            generic-function)
-  (replace-element  generic-function)
+  (add-class          generic-function)
+  (remove-class       generic-function)
+  (toggle-class       generic-function)
+  (remove-from-dom    generic-function)
+  (remove-from-clog   generic-function)
+  (destroy            generic-function)
+  (click              generic-function)
+  (replace-element    generic-function)
+  (swap-element-by-id generic-function)
 
   "CLOG-Element - DOM Traversal Methods"
   (parent-element   generic-function)
