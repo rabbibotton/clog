@@ -2045,6 +2045,15 @@ of controls and double click to select control."
                                      :client-movement t)))
     (create-quick-start (window-content win))))
 
+(defun on-show-thread-viewer (obj)
+  "Open quick start"
+  (let* ((win (create-gui-window obj :title "Thread Viewer"
+                                     :top 40 :left 225
+                                     :width 600 :height 400
+                                     :client-movement t)))
+    (create-thread-list (window-content win))))
+
+
 (defun on-open-file (obj)
   (let* ((app (connection-data-item obj "builder-app-data"))
          (win (create-gui-window obj :title "New Source Editor"
@@ -2194,6 +2203,7 @@ of controls and double click to select control."
       (create-gui-menu-item file  :content "New Application Template"  :on-click 'on-new-app-template)
       (create-gui-menu-item src   :content "New Source Editor"         :on-click 'on-open-file)
       (create-gui-menu-item tools :content "Control Events"            :on-click 'on-show-control-events-win)
+      (create-gui-menu-item tools :content "Thread Viewer"             :on-click 'on-show-thread-viewer)
       (create-gui-menu-item tools :content "CLOG Builder REPL"         :on-click 'on-repl)
       (create-gui-menu-item tools :content "Copy/Cut History"          :on-click 'on-show-copy-history-win)
       (create-gui-menu-item tools :content "Image to HTML Data"        :on-click 'on-image-to-data)

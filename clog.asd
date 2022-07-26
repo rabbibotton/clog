@@ -58,4 +58,5 @@
                (:file "clog-builder-repl")
 	       (:file "image-to-data")
 	       (:file "quick-start")
+	       (:file "threads")
 	       (:file "clog-builder-images")))
