@@ -77,7 +77,7 @@ for CLOG")
                                   (declare (ignore obj))
                                   (set-on-storage (window body) nil)
                                   (when (equalp (getf data :key)
-                                                "clog-auth-token")
+                                                *clog-auth-key*)
                                     (funcall handler body)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
