@@ -75,10 +75,10 @@ for CLOG")
   (check-type body clog-body)
   (set-on-storage (window body) (lambda (obj data)
                                   (declare (ignore obj))
-				  (set-on-storage (window body) nil)
-				  (when (equalp (getf data :key)
-						*clog-auth-key*)
-				    (funcall handler body)))))
+                                  (set-on-storage (window body) nil)
+                                  (when (equalp (getf data :key)
+                                                *clog-auth-key*)
+                                    (funcall handler body)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Implementation - clog-auth - Authorization
