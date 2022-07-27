@@ -212,28 +212,30 @@ the default answer. (Private)"
 (defun handle-message (connection message)
   "Handle incoming websocket MESSAGE on CONNECTION. (Private)"
   (handler-case
-      (let ((id (gethash connection *connections*))
+      (let ((connection-id (gethash connection *connections*))
             (ml (ppcre:split ":" message :limit 2)))
         (cond ((equal (first ml) "0")
+               ;; a ping
                (when *verbose-output*
-                 (format t "~A Ping~%" id)))
+                 (format t "Connection ~A    Ping~%" connection-id)))
               ((equal (first ml) "E")
+               ;; an event
                (let* ((em (ppcre:split " " (second ml) :limit 2))
                       (event-id (first em))
                       (data (second em)))
                  (when *verbose-output*
-                   (format t "Channel ~A Hook ~A Data ~A~%"
-                           id event-id data))
+                   (format t "Connection ~A    Hook = ~A    Data = ~A~%"
+                           connection-id event-id data))
                  (bordeaux-threads:make-thread
                   (lambda ()
                     (if *break-on-error*
-                        (let* ((event-hash (get-connection-data id))
+                        (let* ((event-hash (get-connection-data connection-id))
                                (event      (when event-hash
                                              (gethash event-id event-hash))))
                           (when event
                             (funcall event data)))
                         (handler-case
-                            (let* ((event-hash (get-connection-data id))
+                            (let* ((event-hash (get-connection-data connection-id))
                                    (event      (when event-hash
                                                  (gethash event-id
                                                           event-hash))))
@@ -245,11 +247,19 @@ the default answer. (Private)"
                   :name (format nil "CLOG event handler ~A"
                                 event-id))))
               (t
-               (when *verbose-output*
-                 (format t "~A ~A = ~A~%" id (first ml) (second ml)))
-               (setf (gethash (parse-integer (first ml)) *queries*) (second ml))
-               (bordeaux-threads:signal-semaphore
-                (gethash (parse-integer (first ml)) *queries-sems*)))))
+               ;; a JavaScript execution result
+               (let ((server-query-id (first ml))
+                     (browser-returned-answer (second ml)))
+                 (when *verbose-output*
+                   (format t "Connection ~A    ~A = ~A    ~A = ~A~%"
+                           connection-id
+                           'server-query-id
+                           server-query-id
+                           'browser-returned-answer
+                           browser-returned-answer))
+                 (setf (gethash (parse-integer server-query-id) *queries*) browser-returned-answer)
+                 (bordeaux-threads:signal-semaphore
+                  (gethash (parse-integer server-query-id) *queries-sems*))))))
     (t (c)
       (format t "Condition caught in handle-message - ~A.~&" c)
       (values 0 c))))
