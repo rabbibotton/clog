@@ -16,7 +16,7 @@
 
 (defclass clog-jquery (clog-element)()
   (:documentation "CLOG jQuery objects. A jQuery representa DOM queries that
-can represent one or even my CLOG objects as a single element."))
+can represent one or even many CLOG objects as a single element."))
 
 ;;;;;;;;;;;;;;;;;;;
 ;; create-jquery ;;
