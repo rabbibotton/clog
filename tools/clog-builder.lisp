@@ -1111,10 +1111,11 @@ of controls and double click to select control."
     (setf (positioning control-list) :absolute)
     (set-geometry control-list :left 0 :top 0 :right 0)))
 
-(defun setup-ada-ace (app editor status &key (package "CLOG-USER"))
-  (js-execute editor
-              (format nil
-                      "~A.commands.addCommand({
+(defun setup-lisp-ace (editor status &key (package "CLOG-USER"))
+  (let ((app (connection-data-item editor "builder-app-data")))
+    (js-execute editor
+                (format nil
+                        "~A.commands.addCommand({
     name: 'find-definition',
     bindKey: {win: 'Alt-.',  mac: 'Command-.'},
     exec: function(editor) {
@@ -1137,24 +1138,24 @@ of controls and double click to select control."
     },
     readOnly: true,
 });"
-                      (clog-ace::js-ace editor)
-                      (jquery editor)))
-  (set-on-event-with-data editor "clog-find"
-                          (lambda (obj data)
-                            (declare (ignore obj))
-                            (when (current-editor-is-lisp app)
-                              (ignore-errors
-                               (let* ((*PACKAGE*                 (find-package package))
-                                      (SWANK::*buffer-package*   (find-package package))
-                                      (SWANK::*buffer-readtable* *readtable*)
-                                      (loc (swank:find-definitions-for-emacs data)))
-                                 (when loc
-                                   (swank:ed-in-emacs (list (second (second (second (car loc))))
-                                                            :position (second (third (second (car loc))))))))))))
-  (set-on-change editor
-                 (lambda (obj)
-                   (let ((s (js-query obj (format nil
-                           "var row = ~A.selection.getCursor().row; ~
+                        (clog-ace::js-ace editor)
+                        (jquery editor)))
+    (set-on-event-with-data editor "clog-find"
+                            (lambda (obj data)
+                              (declare (ignore obj))
+                              (when (current-editor-is-lisp app)
+                                (ignore-errors
+                                 (let* ((*PACKAGE*                 (find-package package))
+                                        (SWANK::*buffer-package*   (find-package package))
+                                        (SWANK::*buffer-readtable* *readtable*)
+                                        (loc (swank:find-definitions-for-emacs data)))
+                                   (when loc
+                                     (swank:ed-in-emacs (list (second (second (second (car loc))))
+                                                              :position (second (third (second (car loc))))))))))))
+    (set-on-change editor
+                   (lambda (obj)
+                     (let ((s (js-query obj (format nil
+                                                    "var row = ~A.selection.getCursor().row; ~
                             var column = ~A.selection.getCursor().column; ~
                             var o = column;
                             var c; var charRange; var b=0; ~
@@ -1168,31 +1169,31 @@ of controls and double click to select control."
                                 c = ~A.session.getTextRange(charRange);} ~
                               if (c=='(' && b > 0) { b-- } }~
                             c"
-                                                  (clog-ace::js-ace obj)
-                                                  (clog-ace::js-ace obj)
-                                                  (clog-ace::js-ace obj)
-                                                  (clog-ace::js-ace obj)))))
-                     (unless (equal s "")
-                       (with-input-from-string (i s)
-                         (ignore-errors
-                          (let* ((m                         (read i))
-                                 (*PACKAGE*                 (find-package package))
-                                 (SWANK::*buffer-package*   (find-package package))
-                                 (SWANK::*buffer-readtable* *readtable*)
-                                 (ms                        (format nil "~A" m))
-                                 r)
-                            (ignore-errors
-                             (setf r (swank::autodoc `(,ms swank::%CURSOR-MARKER%))))
-                            (if r
-                                (setf r (car r))
-                                (setf r (swank:operator-arglist ms package)))
-                            (setf (advisory-title status) (documentation (find-symbol ms) 'function))
-                            (when r
-                              (setf (text status) (string-downcase r))))))))))
-  (clog-ace:set-auto-completion editor t)
-  (setf (clog-ace:theme editor) "ace/theme/xcode")
-  (setf (clog-ace:mode editor) "ace/mode/lisp")
-  (setf (clog-ace:tab-size editor) 2))
+                                                    (clog-ace::js-ace obj)
+                                                    (clog-ace::js-ace obj)
+                                                    (clog-ace::js-ace obj)
+                                                    (clog-ace::js-ace obj)))))
+                       (unless (equal s "")
+                         (with-input-from-string (i s)
+                           (ignore-errors
+                            (let* ((m                         (read i))
+                                   (*PACKAGE*                 (find-package package))
+                                   (SWANK::*buffer-package*   (find-package package))
+                                   (SWANK::*buffer-readtable* *readtable*)
+                                   (ms                        (format nil "~A" m))
+                                   r)
+                              (ignore-errors
+                               (setf r (swank::autodoc `(,ms swank::%CURSOR-MARKER%))))
+                              (if r
+                                  (setf r (car r))
+                                  (setf r (swank:operator-arglist ms package)))
+                              (setf (advisory-title status) (documentation (find-symbol ms) 'function))
+                              (when r
+                                (setf (text status) (string-downcase r))))))))))
+    (clog-ace:set-auto-completion editor t)
+    (setf (clog-ace:theme editor) "ace/theme/xcode")
+    (setf (clog-ace:mode editor) "ace/mode/lisp")
+    (setf (clog-ace:tab-size editor) 2)))
 
 (defun on-show-control-events-win (obj)
   "Show control events window"
@@ -1253,7 +1254,7 @@ of controls and double click to select control."
           (setf (positioning status) :absolute)
           (setf (width status) "")
           (set-geometry status :height 20 :left 5 :right 5 :bottom 5)
-          (setup-ada-ace app (event-editor app) status :package "CLOG-USER")
+          (setup-lisp-ace (event-editor app) status :package "CLOG-USER")
           (set-on-window-size-done win (lambda (obj)
                                          (declare (ignore obj))
                                          (clog-ace:resize (event-editor app))))
@@ -2109,7 +2110,7 @@ of controls and double click to select control."
     (clog-ace:resize ace)
     (set-geometry status :units "" :width "" :height "20px"
                          :bottom "0px" :left "0px" :right "0px")
-    (setup-ada-ace app ace status)
+    (setup-lisp-ace ace status)
     (set-on-window-size-done win
                              (lambda (obj)
                                (declare (ignore obj))
@@ -2173,6 +2174,31 @@ of controls and double click to select control."
     (set-geometry (create-clog-builder-repl (window-content win))
                   :units "%" :width 100 :height 100)))
 
+(defun on-new-sys-browser (obj)
+  (let* ((app (connection-data-item obj "builder-app-data"))
+         (win (create-gui-window obj :title "System Browser"
+                                     :top 40 :left 225
+                                     :width 665 :height 430
+                                     :client-movement t))
+         (panel (create-sys-browser (window-content win))))
+    (set-on-window-size-done win (lambda (obj)
+                                   (clog-ace:resize (src-box panel))))))
+
+(defun sys-browser-populate (panel)
+  (setf (inner-html (class-box panel)) "")
+  (setf (text-value (src-box panel)) "")
+  (setf (text-value (doc-box panel)) "")
+  (setf (classes panel) (definitions:find-definitions
+                         (text-value (package-box panel))
+                         :type (find-symbol
+                                (text-value (type-box panel))
+                                (find-package :definitions))))
+  (let ((i 0))
+    (dolist (c (classes panel))
+      (add-select-option (class-box panel) i
+                         (definitions:designator c))
+      (incf i))))
+
 (defun on-new-builder (body)
   "Launch instance of the CLOG Builder"
   (set-html-on-close body "Connection Lost")
@@ -2204,14 +2230,19 @@ of controls and double click to select control."
       (create-gui-menu-item src   :content "New Source Editor"         :on-click 'on-open-file)
       (create-gui-menu-item tools :content "Control Events"            :on-click 'on-show-control-events-win)
       (create-gui-menu-item tools :content "Thread Viewer"             :on-click 'on-show-thread-viewer)
+      (create-gui-menu-item tools :content "New System Browser"        :on-click 'on-new-sys-browser)
       (create-gui-menu-item tools :content "CLOG Builder REPL"         :on-click 'on-repl)
       (create-gui-menu-item tools :content "Copy/Cut History"          :on-click 'on-show-copy-history-win)
       (create-gui-menu-item tools :content "Image to HTML Data"        :on-click 'on-image-to-data)
+      (create-gui-menu-item tools :content "Launch System Browser"     :on-click
+                            (lambda (obj)
+                              (declare (ignore obj))
+                              (open-window (window body) "/sysbrowser")))
       (create-gui-menu-item tools :content "Launch DB Admin"           :on-click
                             (lambda (obj)
                               (declare (ignore obj))
                               (open-window (window body) "/dbadmin")))
-      (create-gui-menu-item win   :content "Maximize All"       :on-click #'maximize-all-windows)
+      (Create-gui-menu-item win   :content "Maximize All"       :on-click #'maximize-all-windows)
       (create-gui-menu-item win   :content "Normalize All"      :on-click #'normalize-all-windows)
       (create-gui-menu-window-select win)
       (create-gui-menu-item help  :content "CLOG Quick Start"     :on-click 'on-quick-start)
@@ -2282,6 +2313,7 @@ of controls and double click to select control."
       (initialize nil :port port))
   (set-on-new-window 'on-new-builder :path "/builder")
   (set-on-new-window 'on-new-db-admin :path "/dbadmin")
+  (set-on-new-window 'create-sys-browser :path "/sysbrowser")
   (set-on-new-window 'on-attach-builder-page :path "/builder-page")
   (set-on-new-window 'on-convert-image :path "/image-to-data")
   (open-browser :url (format nil "http://127.0.0.1:~A/builder" port)))
