@@ -13,7 +13,7 @@
 	       #:bordeaux-threads #:trivial-open-browser #:parse-float #:quri
 	       #:lack-middleware-static #:lack-request #:lack-util-writer-stream
 	       #:closer-mop #:mgl-pax #:cl-template
-	       #:sqlite #:cl-dbi #:cl-pass)
+	       #:sqlite #:cl-dbi #:cl-pass #:cl-isaac)
   :components ((:file "clog-connection")
 	       (:file "clog")
 	       (:file "clog-utilities")
