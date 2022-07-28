@@ -28,6 +28,10 @@ the same as the clog directy this overides the relative paths used in them.")
 (defvar *extended-routing* nil
   "If true extended routing is done.")
 
+(defvar *repl-bodies* (make-hash-table* :test 'equalp)
+  "Hash table to store an associated page's `CLOG-BODY` object. Useful
+  for debugging and testing purposes.")
+
 ;;;;;;;;;;;;;;;;
 ;; initialize ;;
 ;;;;;;;;;;;;;;;;
@@ -117,7 +121,7 @@ example."
 ;;;;;;;;;;;;;;;;;;;;;;;
 
 (defun set-on-new-window (on-new-window-handler
-                          &key (path "/") (boot-file "/boot.html"))
+                          &key (path "/") (boot-file "/boot.html") with-repl)
   "Set or change the ON-NEW-WINDOW-HANDLER for PATH using
 BOOT_FILE. Paths should always begin with a forward slash '/'. If PATH
 is set to :default any path without another route and there is no
@@ -125,7 +129,12 @@ static file matching the requested path ON-NEW-WINDOW-HANDLER and
 BOOT-FILE will be used. If BOOT-FILE is nil path is removed."
   (clog-connection:set-clog-path path boot-file)
   (if boot-file
-      (setf (gethash path *url-to-on-new-window*) on-new-window-handler)
+      (setf (gethash path *url-to-on-new-window*)
+            (if with-repl
+                (lambda (body)
+                  (setf (gethash path *repl-bodies*) body)
+                  (funcall on-new-window-handler body))
+                on-new-window-handler))
       (remhash path *url-to-on-new-window*)))
 
 ;;;;;;;;;;;;;;;;;;
@@ -143,6 +152,7 @@ BOOT-FILE will be used. If BOOT-FILE is nil path is removed."
   "Shutdown CLOG."
   (when *clog-running*
     (clrhash *url-to-on-new-window*)
+    (clrhash *repl-bodies*)
     (setf *clog-running* nil)
     (clog-connection:shutdown-clog)))
 

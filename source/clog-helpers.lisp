@@ -104,9 +104,9 @@ set (logging to browser console), "
                        (when clog-web-initialize
                          (clog-web:clog-web-initialize body))
                        (when clog-gui-initialize
-                         (clog-gui:clog-gui-initialize body))
-                       (setf clog-user::*body* body))
-                     :path "/repl")
+                         (clog-gui:clog-gui-initialize body)))
+                     :path "/repl"
+                     :with-repl t)
   (open-browser :url "http://127.0.0.1:8080/repl")
   (format t "Use clog-user:*body* to access the clog-repl window."))
 

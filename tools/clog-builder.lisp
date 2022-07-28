@@ -2322,7 +2322,7 @@ of controls and double click to select control."
         (create-br body)
         (create-div body :content (format nil "For example:<br>(create-img body :url-src \"~A\")" pic-data))))))
 
-(defun clog-builder (&key (port 8080) static-root system)
+(defun clog-builder (&key (port 8080) static-root system with-repl)
   "Start clog-builder."
   (if system
       (setf static-root (merge-pathnames "./www/"
@@ -2330,9 +2330,9 @@ of controls and double click to select control."
   (if static-root
       (initialize nil :port port :static-root static-root)
       (initialize nil :port port))
-  (set-on-new-window 'on-new-builder :path "/builder")
-  (set-on-new-window 'on-new-db-admin :path "/dbadmin")
-  (set-on-new-window 'create-sys-browser :path "/sysbrowser")
-  (set-on-new-window 'on-attach-builder-page :path "/builder-page")
-  (set-on-new-window 'on-convert-image :path "/image-to-data")
+  (set-on-new-window 'on-new-builder :path "/builder" :with-repl with-repl)
+  (set-on-new-window 'on-new-db-admin :path "/dbadmin" :with-repl with-repl)
+  (set-on-new-window 'create-sys-browser :path "/sysbrowser" :with-repl with-repl)
+  (set-on-new-window 'on-attach-builder-page :path "/builder-page" :with-repl with-repl)
+  (set-on-new-window 'on-convert-image :path "/image-to-data" :with-repl with-repl)
   (open-browser :url (format nil "http://127.0.0.1:~A/builder" port)))
