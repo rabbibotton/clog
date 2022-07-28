@@ -2178,7 +2178,7 @@ of controls and double click to select control."
   (let* ((app (connection-data-item obj "builder-app-data"))
          (win (create-gui-window obj :title "System Browser"
                                      :top 40 :left 225
-                                     :width 665 :height 430
+                                     :width 685 :height 430
                                      :client-movement t))
          (panel (create-sys-browser (window-content win))))
     (set-on-window-size-done win (lambda (obj)
@@ -2197,20 +2197,26 @@ of controls and double click to select control."
   (let ((i 0))
     (dolist (c (classes panel))
       (let ((pac        (text-value (package-box panel)))
+            (name       (format nil "~A" (definitions:designator c)))
+            (filter     (text-value (search-box panel)))
             (class-only (checkedp (class-only panel))))
-        (if class-only
-            (if (equalp (package-name (definitions:package c))
-                        pac)
+        (print name)
+        (print filter)
+        (if (or (equal filter "")
+                (search filter name :test #'char-equal))
+            (if class-only
+                (if (equalp (package-name (definitions:package c))
+                            pac)
+                    (add-select-option (class-box panel) i
+                                       (format nil "~A - ~A"
+                                               name
+                                               (definitions:type c))))
                 (add-select-option (class-box panel) i
-                                   (format nil "<b>~A</b> - ~A"
-                                           (definitions:designator c)
-                                           (definitions:type c))))
-            (add-select-option (class-box panel) i
-                               (format nil "~A:~A - ~A"
-                                       (package-name (definitions:package c))
-                                       (definitions:designator c)
-                                       (definitions:type c))))
-            (incf i)))))
+                                   (format nil "~A:~A - ~A"
+                                           (package-name (definitions:package c))
+                                           name
+                                           (definitions:type c)))))
+        (incf i)))))
 
 (defun on-new-builder (body)
   "Launch instance of the CLOG Builder"

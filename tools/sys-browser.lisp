@@ -1,6 +1,7 @@
 (in-package "CLOG-TOOLS")
 (defclass sys-browser (clog:clog-panel)
-  (    (class-only :reader class-only)
+  (    (search-box :reader search-box)
+    (class-only :reader class-only)
     (label-class-only :reader label-class-only)
     (status-box :reader status-box)
     (src-box :reader src-box)
@@ -10,16 +11,17 @@
     (type-box :reader type-box)
 (classes :accessor classes)))
 (defun create-sys-browser (clog-obj &key (hidden nil) (class nil) (html-id nil) (auto-place t))
-  (let ((panel (change-class (clog:create-div clog-obj :content "<select style=\"box-sizing: content-box; position: absolute; left: 5px; top: 10px; width: 190px; height: 20px;\" id=\"CLOGB3867963405\" data-clog-name=\"type-box\"></select><select style=\"box-sizing: content-box; position: absolute; left: 205px; top: 10px; width: 300px; height: 20px; bottom: 335.028px;\" id=\"CLOGB3867963406\" data-clog-name=\"package-box\"></select><select size=\"4\" style=\"box-sizing: content-box; position: absolute; left: 5px; top: 45px; width: 350px; height: 145px;\" class=\"w3-small\" id=\"CLOGB3867963407\" data-clog-name=\"class-box\"></select><textarea name=\"\" cols=\"20\" rows=\"2\" style=\"box-sizing: content-box; position: absolute; inset: 45px 5px 176.051px 365px; height: 139.989px; resize: none; min-width: 0px;\" class=\"&nbsp;w3-small\" id=\"CLOGB3867963408\" data-clog-name=\"doc-box\"></textarea><div class=\"ace_editor ace_hidpi ace-xcode ace-tm\" style=\"border: thin solid black; box-sizing: content-box; position: absolute; inset: 199.991px 5px 30px;\" id=\"CLOGB3867963409\" data-clog-name=\"src-box\"></div><div style=\"box-sizing: content-box; position: absolute; left: 5px; bottom: 5px; right: 5px;\" class=\"w3-tiny w3-border\" id=\"CLOGB3867963410\" data-clog-name=\"status-box\">status</div><label for=\"CLOGB386795982312\" style=\"box-sizing: content-box; position: absolute; left: 535px; top: 9px;\" class=\"\" id=\"CLOGB3867963411\" data-clog-name=\"label-class-only\">class only</label><input type=\"CHECKBOX\" value=\"\" style=\"box-sizing: content-box; position: absolute; left: 516px; top: 15px;\" checked=\"checked\" id=\"CLOGB3867963412\" data-clog-name=\"class-only\">"
+  (let ((panel (change-class (clog:create-div clog-obj :content "<select style=\"box-sizing: content-box; position: absolute; left: 5px; top: 10px; width: 190px; height: 20px;\" id=\"CLOGB3867964270\" data-clog-name=\"type-box\"></select><select style=\"box-sizing: content-box; position: absolute; left: 205px; top: 10px; width: 300px; height: 20px; bottom: 335.028px;\" id=\"CLOGB3867964271\" data-clog-name=\"package-box\"></select><select size=\"4\" style=\"box-sizing: content-box; position: absolute; left: 5px; top: 45px; width: 350px; height: 145px;\" class=\"w3-small\" id=\"CLOGB3867964272\" data-clog-name=\"class-box\"></select><textarea name=\"\" cols=\"20\" rows=\"2\" style=\"box-sizing: content-box; position: absolute; inset: 45px 5px 176.051px 365px; height: 139.989px; resize: none; min-width: 0px;\" class=\"&nbsp;w3-small\" id=\"CLOGB3867964273\" data-clog-name=\"doc-box\"></textarea><div class=\"ace_editor ace_hidpi ace-xcode ace-tm\" style=\"border: thin solid black; box-sizing: content-box; position: absolute; inset: 199.991px 5px 30px;\" id=\"CLOGB3867964274\" data-clog-name=\"src-box\"></div><div style=\"box-sizing: content-box; position: absolute; left: 5px; bottom: 5px; right: 5px;\" class=\"w3-tiny w3-border\" id=\"CLOGB3867964275\" data-clog-name=\"status-box\">status</div><label for=\"CLOGB386795982312\" style=\"box-sizing: content-box; position: absolute; left: 535px; top: 9px;\" class=\"\" id=\"CLOGB3867964276\" data-clog-name=\"label-class-only\">class only</label><input type=\"CHECKBOX\" value=\"\" style=\"box-sizing: content-box; position: absolute; left: 516px; top: 15px;\" checked=\"checked\" id=\"CLOGB3867964277\" data-clog-name=\"class-only\"><input type=\"TEXT\" value=\"\" id=\"CLOGB386796477715\" style=\"box-sizing: content-box; position: absolute; left: 620px; top: 7px; height: 22px; right: 5px;\" placeholder=\"search\" name=\"\" data-clog-name=\"search-box\">"
          :hidden hidden :class class :html-id html-id :auto-place auto-place) 'sys-browser)))
-    (setf (slot-value panel 'class-only) (attach-as-child clog-obj "CLOGB3867963412" :clog-type 'CLOG:CLOG-FORM-ELEMENT :new-id t))
-    (setf (slot-value panel 'label-class-only) (attach-as-child clog-obj "CLOGB3867963411" :clog-type 'CLOG:CLOG-LABEL :new-id t))
-    (setf (slot-value panel 'status-box) (attach-as-child clog-obj "CLOGB3867963410" :clog-type 'CLOG:CLOG-DIV :new-id t))
-    (setf (slot-value panel 'src-box) (attach-as-child clog-obj "CLOGB3867963409" :clog-type 'CLOG-ACE:CLOG-ACE-ELEMENT :new-id t))
-    (setf (slot-value panel 'doc-box) (attach-as-child clog-obj "CLOGB3867963408" :clog-type 'CLOG:CLOG-TEXT-AREA :new-id t))
-    (setf (slot-value panel 'class-box) (attach-as-child clog-obj "CLOGB3867963407" :clog-type 'CLOG:CLOG-SELECT :new-id t))
-    (setf (slot-value panel 'package-box) (attach-as-child clog-obj "CLOGB3867963406" :clog-type 'CLOG:CLOG-SELECT :new-id t))
-    (setf (slot-value panel 'type-box) (attach-as-child clog-obj "CLOGB3867963405" :clog-type 'CLOG:CLOG-SELECT :new-id t))
+    (setf (slot-value panel 'search-box) (attach-as-child clog-obj "CLOGB386796477715" :clog-type 'CLOG:CLOG-FORM-ELEMENT :new-id t))
+    (setf (slot-value panel 'class-only) (attach-as-child clog-obj "CLOGB3867964277" :clog-type 'CLOG:CLOG-FORM-ELEMENT :new-id t))
+    (setf (slot-value panel 'label-class-only) (attach-as-child clog-obj "CLOGB3867964276" :clog-type 'CLOG:CLOG-LABEL :new-id t))
+    (setf (slot-value panel 'status-box) (attach-as-child clog-obj "CLOGB3867964275" :clog-type 'CLOG:CLOG-DIV :new-id t))
+    (setf (slot-value panel 'src-box) (attach-as-child clog-obj "CLOGB3867964274" :clog-type 'CLOG-ACE:CLOG-ACE-ELEMENT :new-id t))
+    (setf (slot-value panel 'doc-box) (attach-as-child clog-obj "CLOGB3867964273" :clog-type 'CLOG:CLOG-TEXT-AREA :new-id t))
+    (setf (slot-value panel 'class-box) (attach-as-child clog-obj "CLOGB3867964272" :clog-type 'CLOG:CLOG-SELECT :new-id t))
+    (setf (slot-value panel 'package-box) (attach-as-child clog-obj "CLOGB3867964271" :clog-type 'CLOG:CLOG-SELECT :new-id t))
+    (setf (slot-value panel 'type-box) (attach-as-child clog-obj "CLOGB3867964270" :clog-type 'CLOG:CLOG-SELECT :new-id t))
     (let ((target (type-box panel))) (declare (ignorable target)) (add-select-options target '(ALIEN-TYPE
                              CALLABLE
                              CLASS
@@ -73,4 +75,5 @@
         (t
          (setf (text-value (src-box panel)) "No file information"))))))
     (clog:set-on-change (class-only panel) (lambda (target) (declare (ignorable target)) (sys-browser-populate panel)))
+    (clog:set-on-key-up (search-box panel) (lambda (target data) (declare (ignorable target data)) (sys-browser-populate panel)))
     panel))
