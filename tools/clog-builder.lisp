@@ -2190,14 +2190,27 @@ of controls and double click to select control."
   (setf (text-value (doc-box panel)) "")
   (setf (classes panel) (definitions:find-definitions
                          (text-value (package-box panel))
+                         :package (find-package :key)
                          :type (find-symbol
                                 (text-value (type-box panel))
                                 (find-package :definitions))))
   (let ((i 0))
     (dolist (c (classes panel))
-      (add-select-option (class-box panel) i
-                         (definitions:designator c))
-      (incf i))))
+      (let ((pac        (text-value (package-box panel)))
+            (class-only (checkedp (class-only panel))))
+        (if class-only
+            (if (equalp (package-name (definitions:package c))
+                        pac)
+                (add-select-option (class-box panel) i
+                                   (format nil "<b>~A</b> - ~A"
+                                           (definitions:designator c)
+                                           (definitions:type c))))
+            (add-select-option (class-box panel) i
+                               (format nil "~A:~A - ~A"
+                                       (package-name (definitions:package c))
+                                       (definitions:designator c)
+                                       (definitions:type c))))
+            (incf i)))))
 
 (defun on-new-builder (body)
   "Launch instance of the CLOG Builder"
