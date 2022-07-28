@@ -2200,8 +2200,6 @@ of controls and double click to select control."
             (name       (format nil "~A" (definitions:designator c)))
             (filter     (text-value (search-box panel)))
             (class-only (checkedp (class-only panel))))
-        (print name)
-        (print filter)
         (if (or (equal filter "")
                 (search filter name :test #'char-equal))
             (if class-only
