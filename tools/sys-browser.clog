@@ -1,4 +1,4 @@
-<data id="I3868021935" data-in-package="clog-tools" data-custom-slots="(classes :accessor classes) (fname :accessor fname) (state :accessor state :initform t)" data-clog-next-id="22" data-clog-title="sys-browser"></data><select data-clog-type="dropdown" data-clog-name="type-box" style="box-sizing: content-box; position: absolute; left: 5px; top: 10px; width: 190px; height: 20px;" data-on-create="(add-select-options target '(ALIEN-TYPE
+<data id="I3868026422" data-in-package="clog-tools" data-custom-slots="(classes :accessor classes) (fname :accessor fname) (state :accessor state :initform t)" data-clog-next-id="22" data-clog-title="sys-browser"></data><select data-clog-type="dropdown" data-clog-name="type-box" style="box-sizing: content-box; position: absolute; left: 5px; top: 10px; width: 190px; height: 20px;" data-on-create="(add-select-options target '(ALIEN-TYPE
                              CALLABLE
                              CLASS
                              COMPILER-MACRO
@@ -31,28 +31,10 @@
   (add-select-option target (package-name p)
                             (package-name p)))
 (setf (value target) &quot;CLOG-USER&quot;)
-(sys-browser-populate panel)" data-on-change="(sys-browser-populate panel)"></select><select data-clog-type="listbox" size="4" data-clog-name="class-box" style="box-sizing: content-box; position: absolute; left: 5px; top: 45px; width: 350px; height: 145px;" data-on-change="(let* ((item (nth (parse-integer (text-value (class-box panel))) (classes panel))))
-  (setf (fname panel) (getf (definitions:source-location item) :file))
-  (setf (text-value (doc-box panel))
-    (or (definitions:documentation item)
-        &quot;No documentation&quot;))
-  (cond ((fname panel)
-         (setf (text-value (src-box panel)) (read-file (fname panel)))
-         (setf (text-value (file-name panel)) (fname panel))
-         (setf (disabledp (eval-button panel)) nil)
-         (setf (disabledp (eval-sel-button panel)) nil)
-         (setf (state panel) nil)
-         (js-execute target (format nil &quot;~A.find('~A')&quot; (clog-ace::js-ace (src-box panel)) (definitions:name item))))
-        (t
-         (setf (text-value (file-name panel)) &quot;&quot;)
-         (setf (disabledp (eval-button panel)) t)
-         (setf (disabledp (eval-sel-button panel)) t)
-         (setf (disabledp (save-button panel)) t)
-         (setf (state panel) t)
-         (setf (text-value (src-box panel)) &quot;No file information&quot;))))" class="w3-small"></select><textarea name="" cols="20" rows="2" data-clog-type="textarea" data-clog-name="doc-box" style="box-sizing: content-box; position: absolute; inset: 45px 5px 176.051px 365px; height: 139.989px; resize: none; min-width: 0px;" class="&nbsp;w3-small"></textarea><div class="ace_editor ace_hidpi ace-xcode ace-tm" data-clog-type="clog-ace" data-clog-composite-control="t" data-clog-ace-theme="ace/theme/xcode" data-clog-ace-mode="ace/mode/lisp" data-clog-ace-tab-size="2" data-clog-name="src-box" style="border: thin solid black; box-sizing: content-box; position: absolute; inset: 198.991px 5px 50px;" data-on-create="(setup-lisp-ace target (status-box panel))" data-on-input="(unless (state panel)
+(sys-browser-populate panel)" data-on-change="(sys-browser-populate panel)"></select><select data-clog-type="listbox" size="4" data-clog-name="class-box" style="box-sizing: content-box; position: absolute; left: 5px; top: 45px; width: 350px; height: 145px;" data-on-change="(sys-browser-select panel target)" class="w3-small"></select><textarea name="" cols="20" rows="2" data-clog-type="textarea" data-clog-name="doc-box" style="box-sizing: content-box; position: absolute; inset: 45px 5px 176.051px 365px; height: 139.989px; resize: none; min-width: 0px;" class="&nbsp;w3-small"></textarea><div class="ace_editor ace_hidpi ace-xcode ace-tm" data-clog-type="clog-ace" data-clog-composite-control="t" data-clog-ace-theme="ace/theme/xcode" data-clog-ace-mode="ace/mode/lisp" data-clog-ace-tab-size="2" data-clog-name="src-box" style="border: thin solid black; box-sizing: content-box; position: absolute; inset: 198.991px 5px 50px;" data-on-create="(setup-lisp-ace target (status-box panel))" data-on-input="(unless (state panel)
   (when (fname panel)
     (setf (state panel) t)
-    (setf (disabledp (save-button panel)) nil)))"></div><div data-clog-type="div" data-clog-name="status-box" style="box-sizing: content-box; position: absolute; left: 5px; bottom: 5px; right: 5px;" class="w3-tiny w3-border">status</div><label for="CLOGB386795982312" data-clog-type="label" data-clog-for="class-only" data-clog-name="label-class-only" style="box-sizing: content-box; position: absolute; left: 535px; top: 9px;" class="">class only</label><input type="CHECKBOX" value="" data-clog-type="checkbox" data-clog-name="class-only" style="box-sizing: content-box; position: absolute; left: 516px; top: 15px;" checked="checked" data-on-change="(sys-browser-populate panel)"><input type="TEXT" value="" data-clog-type="input" data-clog-name="search-box" style="box-sizing: content-box; position: absolute; left: 620px; top: 7px; height: 22px; right: 5px;" data-on-key-up="(sys-browser-populate panel)" placeholder="search" name=""><input type="BUTTON" value="Save" data-clog-type="fbutton" data-clog-name="save-button" style="box-sizing: content-box; position: absolute; width: 50px; height: 15px; right: 5px; bottom: 25px;" class="w3-small" disabled="disabled" data-on-click="(when (fname panel)
+    (setf (disabledp (save-button panel)) nil)))"></div><div data-clog-type="div" data-clog-name="status-box" style="box-sizing: content-box; position: absolute; left: 5px; bottom: 5px; right: 5px;" class="w3-tiny w3-border">status</div><label for="CLOGB386795982312" data-clog-type="label" data-clog-for="class-only" data-clog-name="label-class-only" style="box-sizing: content-box; position: absolute; left: 535px; top: 9px;" class="">pkg only</label><input type="CHECKBOX" value="" data-clog-type="checkbox" data-clog-name="class-only" style="box-sizing: content-box; position: absolute; left: 516px; top: 15px;" checked="checked" data-on-change="(sys-browser-populate panel)"><input type="TEXT" value="" data-clog-type="input" data-clog-name="search-box" style="box-sizing: content-box; position: absolute; inset: 7px 5px 332.045px 605px; height: 22px;" data-on-key-up="(sys-browser-populate panel)" placeholder="search" name=""><input type="BUTTON" value="Save" data-clog-type="fbutton" data-clog-name="save-button" style="box-sizing: content-box; position: absolute; width: 50px; height: 15px; right: 5px; bottom: 25px;" class="w3-small" disabled="disabled" data-on-click="(when (fname panel)
   (write-file (text-value (src-box panel)) (fname panel))
   (setf (state panel) nil)
   (setf (disabledp (save-button panel)) t))"><input type="BUTTON" value="Eval File" data-clog-type="fbutton" data-clog-name="eval-button" style="box-sizing: content-box; position: absolute; width: 50px; height: 15px; right: 75px; bottom: 25px;" class="w3-small" data-on-click="(let ((val (text-value (src-box panel))))
