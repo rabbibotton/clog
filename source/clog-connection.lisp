@@ -84,12 +84,18 @@ script."
 (defvar *on-connect-handler* nil "New connection event handler.")
 
 (defvar *connections*     (make-hash-table*) "Connections to IDs")
-(defvar *connection-ids*  (make-hash-table*) "IDs to connections")
-(defvar *connection-data* (make-hash-table*) "Connection based data")
+(defvar *connection-ids*  (make-hash-table* :test #'equal) "IDs to connections")
+(defvar *connection-data* (make-hash-table* :test #'equal) "Connection based data")
 
 (defvar *new-id*   0 "Last issued connection or script IDs")
 (defvar *id-lock*  (bordeaux-threads:make-lock)
   "Protect new-id variable.")
+
+#-(or mswindows win32 cormanlisp) ; isaac hasn't supported these platforms
+(defparameter *isaac-ctx*
+  (isaac:init-self-seed :count 5
+                        :is64 #+:X86-64 t #-:X86-64 nil)
+  "A ISAAC::ISAAC-CTX. Or, a ISAAC::ISAAC64-CTX on X86-64. It will be used to generate random hex strings for connection IDs")
 
 (defvar *queries*        (make-hash-table*) "Query ID to Answers")
 (defvar *queries-sems*   (make-hash-table*) "Query ID to semiphores")
@@ -112,8 +118,22 @@ script."
 ;;;;;;;;;;;;;;;;;
 
 (defun generate-id ()
-  "Generate unique ids for use in connections and sripts."
+  "Generate unique ids for use in scripts."
   (bordeaux-threads:with-lock-held (*id-lock*) (incf *new-id*)))
+
+;;;;;;;;;;;;;;;;:;;;;;;
+;; random-hex-string ;;
+;;;;;;;;;;;;;;;;;:;;;;;
+
+(defun random-hex-string ()
+  "Generate cryptographic grade random ids for use in connections."
+  #+(or mswindows win32 cormanlisp) ; isaac hasn't supported these platforms. Use ironclad instead.
+  (ironclad:byte-array-to-hex-string
+    (ironclad:random-data 16))
+  #-(or mswindows win32 cormanlisp) ; isaac hasn't supported these platforms
+  (format nil "~(~32,'0x~)" (#+:X86-64 isaac:rand-bits-64
+                             #-:X86-64 isaac:rand-bits
+                             *isaac-ctx* 128)))
 
 ;;;;;;;;;;;;;;;;;;;;
 ;; get-connection ;;
@@ -181,7 +201,7 @@ the default answer. (Private)"
              (setf (gethash id *connection-ids*) connection)
              (setf (gethash connection *connections*) id))
             (t
-             (setf id (+ (floor (/ (get-universal-time) 2) (generate-id))))
+             (setf id (random-hex-string))
              (setf (gethash connection *connections*) id)
              (setf (gethash id *connection-ids*) connection)
              (setf (gethash id *connection-data*)
@@ -189,7 +209,7 @@ the default answer. (Private)"
              (setf (gethash "connection-id" (get-connection-data id)) id)
              (format t "New connection id - ~A - ~A~%" id connection)
              (websocket-driver:send connection
-                                    (format nil "clog['connection_id']=~A" id))
+                                    (format nil "clog['connection_id']='~A'" id))
              (bordeaux-threads:make-thread
               (lambda ()
                 (if *break-on-error*
@@ -299,8 +319,6 @@ the default answer. (Private)"
                                           (id    (when items
                                                    (cdr (assoc "r" items
                                                                :test #'equalp)))))
-                                     (when (typep id 'string)
-                                       (setf id (parse-integer id :junk-allowed t)))
                                      (handle-new-connection ws id))
                                  (t (c)
                                    (print env)
@@ -414,7 +432,7 @@ the contents sent to the brower."
                               (setf post-data (make-string (getf env :content-length)))
                               (read-sequence post-data (getf env :raw-body)))
                             (cond (long-poll-first
-                                   (let ((id (+ (floor (/ (get-universal-time) 2) (generate-id)))))
+                                   (let ((id (random-hex-string)))
                                      (setf (gethash id *connection-data*) (make-hash-table* :test #'equal))
                                      (setf (gethash "connection-id" (get-connection-data id)) id)
                                      (format t "New html connection id - ~A~%" id)
@@ -428,7 +446,7 @@ the contents sent to the brower."
                                                                         long-poll-first)))
                                          (write-sequence page-data stream)
                                          (write-sequence
-                                          (format nil "<script>clog['connection_id']=~A;Open_ws();</script>" id)
+                                          (format nil "<script>clog['connection_id']='~A';Open_ws();</script>" id)
                                           stream)
                                          (when post-data
                                            (write-sequence
