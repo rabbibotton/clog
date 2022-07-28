@@ -2188,6 +2188,8 @@ of controls and double click to select control."
   (setf (inner-html (class-box panel)) "")
   (setf (text-value (src-box panel)) "")
   (setf (text-value (doc-box panel)) "")
+  (setf (text-value (file-name panel)) "")
+  (setf (fname panel) nil)
   (setf (classes panel) (definitions:find-definitions
                          (text-value (package-box panel))
                          :package (find-package :key)
