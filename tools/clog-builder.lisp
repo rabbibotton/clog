@@ -471,8 +471,6 @@ replaced."
                              (ctrl  (getf data :ctrl-key))
                              (meta  (getf data :meta-key))
                              (shift (getf data :shift-key)))
-                         (print key)
-                         (print shift)
                          (cond ((equal key "ArrowUp")
                                 (if shift
                                     (set-geometry control :height (1- (height control)))
