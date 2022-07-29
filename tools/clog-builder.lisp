@@ -797,7 +797,18 @@ not a temporary attached one when using select-control."
                  (declare (ignore html-id))
                  (place-after control (get-placer control)))
                (get-control-list app panel-id))
-      result)))
+      ;; prety print the code
+      (let ((r (make-array '(0) :element-type 'base-char
+                                :fill-pointer 0 :adjustable t)))
+        (with-output-to-string (s r)
+          (with-input-from-string (n result)
+            (let ((*standard-output* s)
+                  (*print-case*      :downcase))
+              (loop
+                (let ((l (read n nil)))
+                  (unless l (return))
+                  (pprint l))))))
+        r))))
 
 ;; Population of utility windows
 
