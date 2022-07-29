@@ -2187,13 +2187,35 @@ of controls and double click to select control."
 
 (defun on-new-sys-browser (obj)
   (let* ((app (connection-data-item obj "builder-app-data"))
-         (win (create-gui-window obj :title "System Browser"
+         (win (create-gui-window obj :title "Package Browser"
                                      :top 40 :left 225
                                      :width 685 :height 430
                                      :client-movement t))
          (panel (create-sys-browser (window-content win))))
     (set-on-window-size-done win (lambda (obj)
                                    (clog-ace:resize (src-box panel))))))
+
+(defun on-new-asdf-browser (obj)
+  (let* ((app (connection-data-item obj "builder-app-data"))
+         (win (create-gui-window obj :title "ASDF System Browser"
+                                     :top 40 :left 225
+                                     :width 592 :height 390
+                                     :client-movement t)))
+    (create-asdf-systems (window-content win))))
+
+(defun asdf-browser-populate (panel)
+  (setf (text-value (source-file panel))
+        (asdf:component-pathname
+         (asdf:find-system (text-value (loaded-systems panel)))))
+  (setf (inner-html (deps panel)) "")
+  (dolist (n (asdf:system-depends-on
+              (asdf:find-system (text-value (loaded-systems panel)))))
+    (add-select-option (deps panel) n n))
+  (setf (inner-html (files panel)) "")
+  (dolist (n (asdf:module-components
+              (asdf:find-system (text-value (loaded-systems panel)))))
+    (let ((name (asdf:coerce-name n)))
+      (add-select-option (files panel) name name))))
 
 (defun sys-browser-populate (panel)
   (setf (inner-html (class-box panel)) "")
@@ -2228,6 +2250,7 @@ of controls and double click to select control."
                                            name
                                            (definitions:type c)))))
         (incf i)))))
+
 (defun sys-browser-select (panel target)
   (let* ((item (nth (parse-integer (text-value (class-box panel))) (classes panel))))
     (setf (fname panel) (getf (definitions:source-location item) :file))
@@ -2322,9 +2345,10 @@ of controls and double click to select control."
       (create-gui-menu-item file  :content "New Custom Boot Page"      :on-click 'on-new-builder-custom)
       (create-gui-menu-item file  :content "New Application Template"  :on-click 'on-new-app-template)
       (create-gui-menu-item src   :content "New Source Editor"         :on-click 'on-open-file)
+      (create-gui-menu-item src   :content "New Package Browser"       :on-click 'on-new-sys-browser)
+      (create-gui-menu-item src   :content "New ASDF System Browser"   :on-click 'on-new-asdf-browser)
       (create-gui-menu-item tools :content "Control Events"            :on-click 'on-show-control-events-win)
       (create-gui-menu-item tools :content "Thread Viewer"             :on-click 'on-show-thread-viewer)
-      (create-gui-menu-item tools :content "New System Browser"        :on-click 'on-new-sys-browser)
       (create-gui-menu-item tools :content "CLOG Builder REPL"         :on-click 'on-repl)
       (create-gui-menu-item tools :content "Copy/Cut History"          :on-click 'on-show-copy-history-win)
       (create-gui-menu-item tools :content "Image to HTML Data"        :on-click 'on-image-to-data)

@@ -60,5 +60,6 @@
 	       (:file "image-to-data")
 	       (:file "quick-start")
 	       (:file "threads")
+               (:file "systems")
                (:file "sys-browser")
-	       (:file "clog-builder-images")))
+	       (:File "clog-builder-images")))
