@@ -471,18 +471,20 @@ replaced."
                              (ctrl  (getf data :ctrl-key))
                              (meta  (getf data :meta-key))
                              (shift (getf data :shift-key)))
+                         (print key)
+                         (print shift)
                          (cond ((equal key "ArrowUp")
                                 (if shift
                                     (set-geometry control :height (1- (height control)))
                                     (set-geometry control :top (1- (position-top control)))))
                                ((equal key "ArrowDown")
                                 (if shift
-                                    (set-geometry control :height (1+ (height control)))
-                                    (set-geometry control :top (1+ (position-top control)))))
+                                    (set-geometry control :height (+ (height control) 2))
+                                    (set-geometry control :top (+ (position-top control) 2))))
                                ((equal key "ArrowRight")
                                 (if shift
-                                    (set-geometry control :width (1+ (width control)))
-                                    (set-geometry control :left (1+ (position-left control)))))
+                                    (set-geometry control :width (+ (width control) 2))
+                                    (set-geometry control :left (+ (position-left control) 2))))
                                ((equal key "ArrowLeft")
                                 (if shift
                                     (set-geometry control :width (1- (width control)))
