@@ -24,7 +24,7 @@ already being productive means having a bang up time doin' it all.
 -  [03 - Evolution             - Packages and Systems](https://docs.google.com/document/d/1Yv8PtBJDwg4fqZtIYNmYDw_8N3KwlCzcO_urI9-NwIk)
 -  [04 - Inconceivable         - Functions](https://docs.google.com/document/d/1j5sqsXFUj8pyZhttAywQnAyqz9t1RGGlVGqp9qKJDt0)
 -  [05 - Lisp Loves Donuts     - Control  ](https://docs.google.com/document/d/1rm6-s63PMzgyFX2BYLmX_nNqJ-uFiHxOuFm7ITqQPDI)
--  [06 - Wax on, Wax Off       - Gobals and Lists](https://docs.google.com/document/d/1PBES_SbntPf5mtdtc2_EZvdJf1SAnJ0JrHYfbL7sbE8)
+-  [06 - Wax on, Wax Off       - Globals and Lists](https://docs.google.com/document/d/1PBES_SbntPf5mtdtc2_EZvdJf1SAnJ0JrHYfbL7sbE8)
 -  [07 - Spin Me Right 'Round  - Closures, Loops and Strings](https://docs.google.com/document/d/1qK397lNNmKL5x_1usrwsZEIcZVBdYmAREajSDc7Dpu0)
 -  [08 - Only A Mom Could Love - Format and Loop](https://docs.google.com/document/d/1L9jdKE-XrCU0VhdsmO5w9-2ozNDrrW1-JOAi3kHrlu4)
 -  [09 - I Want a New Drug     - Hash and Arrays](https://docs.google.com/document/d/1H-wx50sr0Oseh3qAGrO8LbEfHS-KnbVSrNBWOAJhStI)
