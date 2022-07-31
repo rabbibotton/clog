@@ -1396,7 +1396,7 @@ of controls and double click to select control."
                                               (setf (width content) "10px")
                                               (setf is-hidden t))))))))
 
-(defun on-new-builder-panel (obj)
+(defun on-new-builder-panel (obj &key (open-file nil))
   "Open new panel"
   (let* ((app (connection-data-item obj "builder-app-data"))
          (win (create-gui-window obj :top 40 :left 225
@@ -1581,19 +1581,23 @@ of controls and double click to select control."
                                (setf (window-title win) (attribute content "data-clog-name"))
                                (on-populate-control-properties-win content :win win)
                                (on-populate-control-list-win content :win win))))
-    (set-on-click btn-load (lambda (obj)
-                             (server-file-dialog obj "Load Panel" (directory-namestring file-name)
-                                                 (lambda (fname)
-                                                   (window-focus win)
-                                                   (when fname
-                                                     (setf file-name fname)
-                                                     (setf render-file-name "")
-                                                     (setf (inner-html content)
-                                                           (read-file fname))
-                                                     (clrhash (get-control-list app panel-id))
-                                                     (on-populate-loaded-window content :win win)
-                                                     (setf (window-title win) (attribute content "data-clog-name"))
-                                                     (on-populate-control-list-win content :win win))))))
+    (flet ((open-file-name (fname)
+             (setf file-name fname)
+             (setf render-file-name "")
+             (setf (inner-html content)
+                   (read-file fname))
+             (clrhash (get-control-list app panel-id))
+             (on-populate-loaded-window content :win win)
+             (setf (window-title win) (attribute content "data-clog-name"))
+             (on-populate-control-list-win content :win win)))
+      (when open-file
+        (open-file-name open-file))
+      (set-on-click btn-load (lambda (obj)
+                               (server-file-dialog obj "Load Panel" (directory-namestring file-name)
+                                                   (lambda (fname)
+                                                     (window-focus win)
+                                                     (when fname
+                                                       (open-file-name fname)))))))
     (set-on-click btn-save (lambda (obj)
                              (when (equal file-name "")
                                (setf file-name (format nil "~A.clog" (attribute content "data-clog-name"))))
@@ -2233,7 +2237,7 @@ of controls and double click to select control."
   (let* ((app (connection-data-item obj "builder-app-data"))
          (win (create-gui-window obj :title "ASDF System Browser"
                                      :top 40 :left 225
-                                     :width 592 :height 412
+                                     :width 592 :height 430
                                      :client-movement t)))
     (create-asdf-systems (window-content win))))
 
@@ -2244,7 +2248,7 @@ of controls and double click to select control."
   (setf (text-value (loaded-systems panel)) "clog")
   (asdf-browser-populate panel))
 
-(defun asdf-browser-populate (panel)
+(Defun asdf-browser-populate (panel)
   (setf (text-value (source-file panel))
         (asdf:system-source-file
          (asdf:find-system (text-value (loaded-systems panel)))))

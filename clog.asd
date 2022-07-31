@@ -3,7 +3,6 @@
 
 (asdf:defsystem #:clog
   :description "The Common Lisp Omnificent GUI"
-
   :author "David Botton <david@botton.com>"
   :license  "BSD"
   :version "1.6.0"
@@ -14,7 +13,8 @@
 	       #:lack-middleware-static #:lack-request #:lack-util-writer-stream
 	       #:closer-mop #:mgl-pax #:cl-template
 	       #:sqlite #:cl-dbi #:cl-pass #:cl-isaac)
-  :components ((:file "clog-connection")
+  :components ((:file "asdf-ext")
+               (:file "clog-connection")
 	       (:file "clog")
 	       (:file "clog-utilities")
 	       (:file "clog-base")
@@ -62,4 +62,4 @@
 	       (:file "threads")
                (:file "systems")
                (:file "sys-browser")
-	       (:File "clog-builder-images")))
+	       (:file "clog-builder-images")))
