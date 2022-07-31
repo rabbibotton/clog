@@ -1,6 +1,18 @@
-<data id="I3868121043" data-in-package="clog-tools" data-custom-slots="" data-clog-next-id="10" data-clog-title="asdf-systems"></data><label for="CLOGB38680930412" data-clog-type="label" data-clog-for="loaded-systems" data-clog-name="sys-label" style="box-sizing: content-box; position: absolute; left: 10px; top: 7.99716px;">Loaded Systems:</label><select data-clog-type="listbox" size="4" data-clog-name="loaded-systems" style="box-sizing: content-box; position: absolute; left: 10px; top: 38px; width: 239.716px; height: 261.341px;" data-on-create="(dolist (n (asdf:already-loaded-systems))
+<data id="I3868233999" data-in-package="clog-tools" data-custom-slots="" data-clog-next-id="10" data-clog-title="asdf-systems"></data><label for="CLOGB38680930412" data-clog-type="label" data-clog-for="loaded-systems" data-clog-name="sys-label" style="box-sizing: content-box; position: absolute; left: 10px; top: 7.99716px;">Loaded Systems:</label><select data-clog-type="listbox" size="4" data-clog-name="loaded-systems" style="box-sizing: content-box; position: absolute; left: 10px; top: 38px; width: 239.716px; height: 261.341px;" data-on-create="(dolist (n (asdf:already-loaded-systems))
   (add-select-option target n n))
 (setf (text-value target) &quot;clog&quot;)
 (asdf-browser-populate panel)" data-on-change="(asdf-browser-populate panel)"></select><label for="CLOGB38680988074" data-clog-type="label" data-clog-for="deps" data-clog-name="deps-label" style="box-sizing: content-box; position: absolute; left: 265px; top: 8px;" class="">Depends On:</label><select data-clog-type="listbox" size="4" data-clog-name="deps" style="box-sizing: content-box; position: absolute; left: 265px; top: 39.9858px; width: 310.361px; height: 76.3494px;" data-on-double-click="(setf (text-value (loaded-systems panel))
       (text-value target))
-(asdf-browser-populate panel)"></select><label for="" data-clog-type="label" data-clog-for="" data-clog-name="files-label" style="box-sizing: content-box; position: absolute; left: 265px; top: 126px; width: 98.108px; height: 21.5px;">Files:</label><select data-clog-type="listbox" size="4" data-clog-name="files" style="box-sizing: content-box; position: absolute; left: 265px; top: 151.991px; width: 311.562px; height: 146.932px;"></select><input type="TEXT" value="" data-clog-type="input" data-clog-name="source-file" style="box-sizing: content-box; position: absolute; left: 10px; top: 309.996px; width: 560.727px; height: 22.5px;">
+(asdf-browser-populate panel)"></select><label for="" data-clog-type="label" data-clog-for="" data-clog-name="files-label" style="box-sizing: content-box; position: absolute; left: 265px; top: 126px; width: 98.108px; height: 21.5px;">Files:</label><select data-clog-type="listbox" size="4" data-clog-name="files" style="box-sizing: content-box; position: absolute; left: 265px; top: 151.991px; width: 311.562px; height: 146.932px;" data-on-double-click="(let ((disp (select-text target))
+      (item (text-value target)))
+  (cond ((equal (subseq item (1- (length item))) &quot;/&quot;)
+         (setf (inner-html (files panel)) &quot;&quot;)
+          (dolist (n (asdf:module-components
+                      (asdf:find-component
+                        (asdf:find-system (text-value (loaded-systems panel)))
+                        (subseq disp 0 (1- (length disp))))))
+            (let ((name (asdf:component-relative-pathname n))
+              (path (asdf:component-pathname n)))
+              (add-select-option (files panel) path name))))
+        (t
+         (on-open-file panel :open-file item))))"></select><input type="TEXT" value="" data-clog-type="input" data-clog-name="source-file" style="box-sizing: content-box; position: absolute; left: 10px; top: 309.996px; width: 560.727px; height: 22.5px;">

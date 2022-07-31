@@ -2066,7 +2066,7 @@ of controls and double click to select control."
     (create-thread-list (window-content win))))
 
 
-(defun on-open-file (obj)
+(defun on-open-file (obj &key open-file)
   (let* ((app (connection-data-item obj "builder-app-data"))
          (win (create-gui-window obj :title "New Source Editor"
                                      :top 40 :left 225
@@ -2126,24 +2126,28 @@ of controls and double click to select control."
                              (lambda (obj)
                                (declare (ignore obj))
                                (clog-ace:resize ace)))
-    (set-on-click btn-load (lambda (obj)
-      (server-file-dialog obj "Load Source" (directory-namestring file-name)
-        (lambda (fname)
-          (window-focus win)
-          (when fname
-            (cond ((or (equalp (pathname-type fname) "lisp")
-                       (equalp (pathname-type fname) "asd"))
-                   (setf (clog-ace:mode ace) "ace/mode/lisp")
-                   (setf lisp-file t)
-                   (setf (current-editor-is-lisp app) t))
-                  (t
-                   (setf lisp-file nil)
-                   (setf (current-editor-is-lisp app) nil)
-                   (setf (clog-ace:mode ace) (clog-ace:get-mode-from-extension ace fname))))
-                  (setf file-name fname)
-                  (setf (window-title win) fname)
-                  (setf (clog-ace:text-value ace)
-                        (read-file fname)))))))
+    (flet ((open-file-name (fname)
+             (window-focus win)
+             (when fname
+               (cond ((or (equalp (pathname-type fname) "lisp")
+                          (equalp (pathname-type fname) "asd"))
+                      (setf (clog-ace:mode ace) "ace/mode/lisp")
+                      (setf lisp-file t)
+                      (setf (current-editor-is-lisp app) t))
+                     (t
+                      (setf lisp-file nil)
+                      (setf (current-editor-is-lisp app) nil)
+                      (setf (clog-ace:mode ace) (clog-ace:get-mode-from-extension ace fname))))
+               (setf file-name fname)
+               (setf (window-title win) fname)
+               (setf (clog-ace:text-value ace)
+                     (read-file fname)))))
+      (when open-file
+        (open-file-name open-file))
+      (set-on-click btn-load (lambda (obj)
+                               (server-file-dialog obj "Load Source" (directory-namestring file-name)
+                                                   (lambda (fname)
+                                                     (open-file-name fname))))))
     (set-on-click btn-save (lambda (obj)
                              (server-file-dialog obj "Save Source As.." file-name
                                                  (lambda (fname)
@@ -2214,8 +2218,9 @@ of controls and double click to select control."
   (setf (inner-html (files panel)) "")
   (dolist (n (asdf:module-components
               (asdf:find-system (text-value (loaded-systems panel)))))
-    (let ((name (asdf:coerce-name n)))
-      (add-select-option (files panel) name name))))
+    (let ((name (asdf:component-relative-pathname n))
+          (path (asdf:component-pathname n)))
+      (add-select-option (files panel) path name))))
 
 (defun sys-browser-populate (panel)
   (setf (inner-html (class-box panel)) "")
@@ -2372,6 +2377,10 @@ of controls and double click to select control."
                             (lambda (obj)
                               (declare (ignore obj))
                               (open-window (window body) "https://github.com/rabbibotton/clog/blob/main/LEARN.md")))
+      (create-gui-menu-item help  :content "L1sp Search"       :on-click
+                            (lambda (obj)
+                              (declare (ignore obj))
+                              (open-window (window body) "http://l1sp.org/html/")))
       (create-gui-menu-item help  :content "Lisp in Y Minutes"    :on-click
                             (lambda (obj)
                               (declare (ignore obj))
