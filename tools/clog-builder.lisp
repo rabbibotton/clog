@@ -2209,7 +2209,7 @@ of controls and double click to select control."
 
 (defun asdf-browser-populate (panel)
   (setf (text-value (source-file panel))
-        (asdf:component-pathname
+        (asdf:system-source-file
          (asdf:find-system (text-value (loaded-systems panel)))))
   (setf (inner-html (deps panel)) "")
   (dolist (n (asdf:system-depends-on

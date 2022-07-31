@@ -10,30 +10,30 @@
   (let ((panel
          (change-class
           (clog:create-div clog-obj :content
-                           "<label for=\"CLOGB38680930412\" style=\"box-sizing: content-box; position: absolute; left: 10px; top: 7.99716px;\" id=\"CLOGB3868233956\" data-clog-name=\"sys-label\">Loaded Systems:</label><select size=\"4\" style=\"box-sizing: content-box; position: absolute; left: 10px; top: 38px; width: 239.716px; height: 261.341px;\" id=\"CLOGB3868233957\" data-clog-name=\"loaded-systems\"></select><label for=\"CLOGB38680988074\" style=\"box-sizing: content-box; position: absolute; left: 265px; top: 8px;\" class=\"\" id=\"CLOGB3868233958\" data-clog-name=\"deps-label\">Depends On:</label><select size=\"4\" style=\"box-sizing: content-box; position: absolute; left: 265px; top: 39.9858px; width: 310.361px; height: 76.3494px;\" id=\"CLOGB3868233959\" data-clog-name=\"deps\"></select><label for=\"\" style=\"box-sizing: content-box; position: absolute; left: 265px; top: 126px; width: 98.108px; height: 21.5px;\" id=\"CLOGB3868233960\" data-clog-name=\"files-label\">Files:</label><select size=\"4\" style=\"box-sizing: content-box; position: absolute; left: 265px; top: 151.991px; width: 311.562px; height: 146.932px;\" id=\"CLOGB3868233961\" data-clog-name=\"files\"></select><input type=\"TEXT\" value=\"\" style=\"box-sizing: content-box; position: absolute; left: 10px; top: 309.996px; width: 560.727px; height: 22.5px;\" id=\"CLOGB3868233962\" data-clog-name=\"source-file\">"
+                           "<label for=\"CLOGB38680930412\" style=\"box-sizing: content-box; position: absolute; left: 10px; top: 7.99716px;\" id=\"CLOGB3868264427\" data-clog-name=\"sys-label\">Loaded Systems:</label><select size=\"4\" style=\"box-sizing: content-box; position: absolute; left: 10px; top: 38px; width: 239.716px; height: 261.341px;\" id=\"CLOGB3868264428\" data-clog-name=\"loaded-systems\"></select><label for=\"CLOGB38680988074\" style=\"box-sizing: content-box; position: absolute; left: 265px; top: 8px;\" class=\"\" id=\"CLOGB3868264429\" data-clog-name=\"deps-label\">Depends On:</label><select size=\"4\" style=\"box-sizing: content-box; position: absolute; left: 265px; top: 39.9858px; width: 310.361px; height: 76.3494px;\" id=\"CLOGB3868264430\" data-clog-name=\"deps\"></select><label for=\"\" style=\"box-sizing: content-box; position: absolute; left: 265px; top: 126px; width: 98.108px; height: 21.5px;\" id=\"CLOGB3868264431\" data-clog-name=\"files-label\">Files:</label><select size=\"4\" style=\"box-sizing: content-box; position: absolute; left: 265px; top: 151.991px; width: 311.562px; height: 146.932px;\" id=\"CLOGB3868264432\" data-clog-name=\"files\"></select><input type=\"TEXT\" value=\"\" style=\"box-sizing: content-box; position: absolute; left: 10px; top: 309.996px; width: 560.727px; height: 22.5px;\" id=\"CLOGB3868264433\" data-clog-name=\"source-file\">"
                            :hidden hidden :class class :html-id html-id
                            :auto-place auto-place)
           'asdf-systems)))
     (setf (slot-value panel 'source-file)
-            (attach-as-child clog-obj "CLOGB3868233962" :clog-type
+            (attach-as-child clog-obj "CLOGB3868264433" :clog-type
              'clog:clog-form-element :new-id t))
     (setf (slot-value panel 'files)
-            (attach-as-child clog-obj "CLOGB3868233961" :clog-type
+            (attach-as-child clog-obj "CLOGB3868264432" :clog-type
              'clog:clog-select :new-id t))
     (setf (slot-value panel 'files-label)
-            (attach-as-child clog-obj "CLOGB3868233960" :clog-type
+            (attach-as-child clog-obj "CLOGB3868264431" :clog-type
              'clog:clog-label :new-id t))
     (setf (slot-value panel 'deps)
-            (attach-as-child clog-obj "CLOGB3868233959" :clog-type
+            (attach-as-child clog-obj "CLOGB3868264430" :clog-type
              'clog:clog-select :new-id t))
     (setf (slot-value panel 'deps-label)
-            (attach-as-child clog-obj "CLOGB3868233958" :clog-type
+            (attach-as-child clog-obj "CLOGB3868264429" :clog-type
              'clog:clog-label :new-id t))
     (setf (slot-value panel 'loaded-systems)
-            (attach-as-child clog-obj "CLOGB3868233957" :clog-type
+            (attach-as-child clog-obj "CLOGB3868264428" :clog-type
              'clog:clog-select :new-id t))
     (setf (slot-value panel 'sys-label)
-            (attach-as-child clog-obj "CLOGB3868233956" :clog-type
+            (attach-as-child clog-obj "CLOGB3868264427" :clog-type
              'clog:clog-label :new-id t))
     (let ((target (sys-label panel)))
       (declare (ignorable target))
@@ -91,4 +91,9 @@
                                         (add-select-option (files panel) path
                                          name))))
                                    (t (on-open-file panel :open-file item))))))
+    (clog:set-on-double-click (source-file panel)
+                              (lambda (target)
+                                (declare (ignorable target))
+                                (on-open-file panel :open-file
+                                 (text-value target))))
     panel))
