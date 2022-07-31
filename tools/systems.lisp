@@ -1,6 +1,9 @@
 (in-package "CLOG-TOOLS")
 (defclass asdf-systems (clog:clog-panel)
-          ((source-file :reader source-file) (files :reader files)
+          ((reload-button :reader reload-button)
+           (load-new-button :reader load-new-button)
+           (reset-list-button :reader reset-list-button)
+           (source-file :reader source-file) (files :reader files)
            (files-label :reader files-label) (deps :reader deps)
            (deps-label :reader deps-label)
            (loaded-systems :reader loaded-systems)
@@ -10,30 +13,39 @@
   (let ((panel
          (change-class
           (clog:create-div clog-obj :content
-                           "<label for=\"CLOGB38680930412\" style=\"box-sizing: content-box; position: absolute; left: 10px; top: 7.99716px;\" id=\"CLOGB3868264427\" data-clog-name=\"sys-label\">Loaded Systems:</label><select size=\"4\" style=\"box-sizing: content-box; position: absolute; left: 10px; top: 38px; width: 239.716px; height: 261.341px;\" id=\"CLOGB3868264428\" data-clog-name=\"loaded-systems\"></select><label for=\"CLOGB38680988074\" style=\"box-sizing: content-box; position: absolute; left: 265px; top: 8px;\" class=\"\" id=\"CLOGB3868264429\" data-clog-name=\"deps-label\">Depends On:</label><select size=\"4\" style=\"box-sizing: content-box; position: absolute; left: 265px; top: 39.9858px; width: 310.361px; height: 76.3494px;\" id=\"CLOGB3868264430\" data-clog-name=\"deps\"></select><label for=\"\" style=\"box-sizing: content-box; position: absolute; left: 265px; top: 126px; width: 98.108px; height: 21.5px;\" id=\"CLOGB3868264431\" data-clog-name=\"files-label\">Files:</label><select size=\"4\" style=\"box-sizing: content-box; position: absolute; left: 265px; top: 151.991px; width: 311.562px; height: 146.932px;\" id=\"CLOGB3868264432\" data-clog-name=\"files\"></select><input type=\"TEXT\" value=\"\" style=\"box-sizing: content-box; position: absolute; left: 10px; top: 309.996px; width: 560.727px; height: 22.5px;\" id=\"CLOGB3868264433\" data-clog-name=\"source-file\">"
+                           "<label for=\"CLOGB38680930412\" style=\"box-sizing: content-box; position: absolute; left: 10px; top: 7.99716px;\" id=\"CLOGB3868283391\" data-clog-name=\"sys-label\">Loaded Systems:</label><select size=\"4\" style=\"box-sizing: content-box; position: absolute; left: 10px; top: 38px; width: 239.716px; height: 261.341px;\" id=\"CLOGB3868283392\" data-clog-name=\"loaded-systems\"></select><label for=\"CLOGB38680988074\" style=\"box-sizing: content-box; position: absolute; left: 265px; top: 8px;\" class=\"\" id=\"CLOGB3868283393\" data-clog-name=\"deps-label\">Depends On:</label><select size=\"4\" style=\"box-sizing: content-box; position: absolute; left: 265px; top: 39.9858px; width: 310.361px; height: 76.3494px;\" id=\"CLOGB3868283394\" data-clog-name=\"deps\"></select><label for=\"\" style=\"box-sizing: content-box; position: absolute; left: 265px; top: 126px; width: 98.108px; height: 21.5px;\" id=\"CLOGB3868283395\" data-clog-name=\"files-label\">Files:</label><select size=\"4\" style=\"box-sizing: content-box; position: absolute; left: 265px; top: 151.991px; width: 311.562px; height: 146.932px;\" id=\"CLOGB3868283396\" data-clog-name=\"files\"></select><input type=\"TEXT\" value=\"\" style=\"box-sizing: content-box; position: absolute; left: 10px; top: 309.996px; width: 560.727px; height: 22.5px;\" id=\"CLOGB3868283397\" data-clog-name=\"source-file\"><button style=\"box-sizing: content-box; position: absolute; left: 10px; top: 345px; width: 85px; height: 22px;\" id=\"CLOGB3868283398\" data-clog-name=\"reset-list-button\">Reset List</button><button style=\"box-sizing: content-box; position: absolute; left: 119.991px; top: 345px; width: 85px; height: 22px;\" class=\"\" id=\"CLOGB3868283399\" data-clog-name=\"load-new-button\">Load New</button><button style=\"box-sizing: content-box; position: absolute; left: 230.996px; top: 345px; width: 85px; height: 22px;\" id=\"CLOGB3868283400\" data-clog-name=\"reload-button\">Reload</button>"
                            :hidden hidden :class class :html-id html-id
                            :auto-place auto-place)
           'asdf-systems)))
+    (setf (slot-value panel 'reload-button)
+            (attach-as-child clog-obj "CLOGB3868283400" :clog-type
+             'clog:clog-button :new-id t))
+    (setf (slot-value panel 'load-new-button)
+            (attach-as-child clog-obj "CLOGB3868283399" :clog-type
+             'clog:clog-button :new-id t))
+    (setf (slot-value panel 'reset-list-button)
+            (attach-as-child clog-obj "CLOGB3868283398" :clog-type
+             'clog:clog-button :new-id t))
     (setf (slot-value panel 'source-file)
-            (attach-as-child clog-obj "CLOGB3868264433" :clog-type
+            (attach-as-child clog-obj "CLOGB3868283397" :clog-type
              'clog:clog-form-element :new-id t))
     (setf (slot-value panel 'files)
-            (attach-as-child clog-obj "CLOGB3868264432" :clog-type
+            (attach-as-child clog-obj "CLOGB3868283396" :clog-type
              'clog:clog-select :new-id t))
     (setf (slot-value panel 'files-label)
-            (attach-as-child clog-obj "CLOGB3868264431" :clog-type
+            (attach-as-child clog-obj "CLOGB3868283395" :clog-type
              'clog:clog-label :new-id t))
     (setf (slot-value panel 'deps)
-            (attach-as-child clog-obj "CLOGB3868264430" :clog-type
+            (attach-as-child clog-obj "CLOGB3868283394" :clog-type
              'clog:clog-select :new-id t))
     (setf (slot-value panel 'deps-label)
-            (attach-as-child clog-obj "CLOGB3868264429" :clog-type
+            (attach-as-child clog-obj "CLOGB3868283393" :clog-type
              'clog:clog-label :new-id t))
     (setf (slot-value panel 'loaded-systems)
-            (attach-as-child clog-obj "CLOGB3868264428" :clog-type
+            (attach-as-child clog-obj "CLOGB3868283392" :clog-type
              'clog:clog-select :new-id t))
     (setf (slot-value panel 'sys-label)
-            (attach-as-child clog-obj "CLOGB3868264427" :clog-type
+            (attach-as-child clog-obj "CLOGB3868283391" :clog-type
              'clog:clog-label :new-id t))
     (let ((target (sys-label panel)))
       (declare (ignorable target))
@@ -42,10 +54,7 @@
                              "$('[data-clog-name=\\'loaded-systems\\']').attr('id')")))
     (let ((target (loaded-systems panel)))
       (declare (ignorable target))
-      (dolist (n (asdf/operate:already-loaded-systems))
-        (add-select-option target n n))
-      (setf (text-value target) "clog")
-      (asdf-browser-populate panel))
+      (asdf-browser-reset panel))
     (let ((target (deps-label panel)))
       (declare (ignorable target))
       (setf (attribute target "for")
@@ -96,4 +105,23 @@
                                 (declare (ignorable target))
                                 (on-open-file panel :open-file
                                  (text-value target))))
+    (clog:set-on-click (reset-list-button panel)
+                       (lambda (target)
+                         (declare (ignorable target))
+                         (asdf-browser-reset panel)))
+    (clog:set-on-click (load-new-button panel)
+                       (lambda (target)
+                         (declare (ignorable target))
+                         (clog-gui:input-dialog panel "Load New System:"
+                                                (lambda (fname)
+                                                  (quicklisp-client:quickload
+                                                   fname))
+                                                :title "Quickload")
+                         (click (reset-list-button panel))))
+    (clog:set-on-click (reload-button panel)
+                       (lambda (target)
+                         (declare (ignorable target))
+                         (quicklisp-client:quickload
+                          (text-value (loaded-systems panel)))
+                         (asdf-browser-reset panel)))
     panel))

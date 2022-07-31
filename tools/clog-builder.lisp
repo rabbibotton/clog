@@ -2233,9 +2233,16 @@ of controls and double click to select control."
   (let* ((app (connection-data-item obj "builder-app-data"))
          (win (create-gui-window obj :title "ASDF System Browser"
                                      :top 40 :left 225
-                                     :width 592 :height 390
+                                     :width 592 :height 412
                                      :client-movement t)))
     (create-asdf-systems (window-content win))))
+
+(defun asdf-browser-reset (panel)
+  (setf (inner-html (loaded-systems panel)) "")
+  (dolist (n (asdf:already-loaded-systems))
+    (add-select-option (loaded-systems panel) n n))
+  (setf (text-value (loaded-systems panel)) "clog")
+  (asdf-browser-populate panel))
 
 (defun asdf-browser-populate (panel)
   (setf (text-value (source-file panel))
