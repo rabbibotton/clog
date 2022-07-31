@@ -1098,6 +1098,7 @@ of controls and double click to select control."
   "Show control properties window"
   (let* ((app (connection-data-item obj "builder-app-data"))
          (is-hidden  nil)
+         (auto-mode  nil)
          (panel  (create-panel (connection-body obj) :positioning :fixed
                                                      :width 400
                                                      :top 40
@@ -1105,6 +1106,7 @@ of controls and double click to select control."
                                                      :class "w3-border-left"))
          (content (create-panel panel :width 390 :top 0 :right 0 :bottom 0))
          (side-panel (create-panel panel :top 0 :left 0 :bottom 0 :width 10))
+         (pin        (create-div side-panel :content "☑" :class "w3-small"))
          (control-list (create-table content)))
     (setf (background-color side-panel) :black)
     (setf (background-color content) :gray)
@@ -1112,12 +1114,25 @@ of controls and double click to select control."
     (setf (properties-list app) control-list)
     (set-on-click side-panel (lambda (obj)
                                (declare (ignore obj))
-                               (cond (is-hidden
+                               (cond (auto-mode
+                                      (setf auto-mode nil)
+                                      (setf (text-value pin) "☑")
                                       (setf (width panel) "400px")
                                       (setf is-hidden nil))
                                      (t
-                                      (setf (width panel) "10px")
-                                      (setf is-hidden t)))))
+                                      (setf auto-mode t)
+                                      (setf (text-value pin) "☐")
+                                      (setf (width panel) "400px")
+                                      (setf is-hidden nil)))))
+    (set-on-mouse-leave side-panel (lambda (obj)
+                                     (declare (ignore obj))
+                                     (when auto-mode
+                                       (cond (is-hidden
+                                              (setf (width panel) "400px")
+                                              (setf is-hidden nil))
+                                             (t
+                                              (setf (width panel) "10px")
+                                              (setf is-hidden t))))))
     (setf (overflow content) :auto)
     (setf (positioning control-list) :absolute)
     (set-geometry control-list :left 0 :top 0 :right 0)))
@@ -1300,12 +1315,14 @@ of controls and double click to select control."
   "Show control list for selecting and manipulating controls by name"
   (let* ((app          (connection-data-item obj "builder-app-data"))
          (is-hidden    nil)
+         (auto-mode    nil)
          (content      (create-panel (connection-body obj) :positioning :fixed
                                                        :width 220
                                                        :top 40
                                                        :left 0 :bottom 0
                                                        :class "w3-border-right"))
          (side-panel   (create-panel content :top 0 :right 0 :bottom 0 :width 10))
+         (pin          (create-div side-panel :content "☑" :class "w3-small"))
          (sheight      (floor (/ (height content) 2)))
          (divider      (create-panel content :top sheight :height 10 :left 0 :right 10))
          (control-list (create-panel content :height (- sheight 10) :left 0 :bottom 0 :right 10))
@@ -1359,12 +1376,25 @@ of controls and double click to select control."
                            :capture-pointer t))
     (set-on-click side-panel (lambda (obj)
                                (declare (ignore obj))
-                               (cond (is-hidden
+                               (cond (auto-mode
+                                      (setf auto-mode nil)
+                                      (setf (text-value pin) "☑")
                                       (setf (width content) "220px")
                                       (setf is-hidden nil))
                                      (t
+                                      (setf auto-mode t)
+                                      (setf (text-value pin) "☐")
                                       (setf (width content) "10px")
-                                      (setf is-hidden t)))))))
+                                      (setf is-hidden t)))))
+    (set-on-mouse-leave side-panel (lambda (obj)
+                                     (declare (ignore obj))
+                                     (when auto-mode
+                                       (cond (is-hidden
+                                              (setf (width content) "220px")
+                                              (setf is-hidden nil))
+                                             (t
+                                              (setf (width content) "10px")
+                                              (setf is-hidden t))))))))
 
 (defun on-new-builder-panel (obj)
   "Open new panel"
