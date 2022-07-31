@@ -8,5 +8,6 @@
   :components ((:file "<%= (@ sys-name) %>")))
 
 (asdf:defsystem #:<%= (@ sys-name) %>/tools
+  :defsystem-depends-on (:clog)
   :depends-on (#:<%= (@ sys-name) %> #:clog/tools)
   :components ((:file "<%= (@ sys-name) %>-tools")))
