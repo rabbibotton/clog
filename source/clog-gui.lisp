@@ -394,7 +394,8 @@ on-window-can-maximize returns nil. Only one instance allowed."))
                                    (let ((win (gethash (value obj) (windows app))))
                                      (when win
                                        (unless (keep-on-top win)
-                                         (window-maximize win))))))
+                                         (setf (hiddenp win) nil)
+                                         (window-focus win))))))
     (create-option window-select :content "Select Window")
     window-select))
 
@@ -762,6 +763,8 @@ the window will be set to keep-on-top always."))
       (setf (sizer win) (attach-as-child win (format nil "~A-sizer" html-id)))
       (setf (content win) (attach-as-child win (format nil "~A-body"  html-id)))
       (setf (gethash (format nil "~A" html-id) (windows app)) win)
+      (set-on-click win (lambda (obj)
+                          (window-focus win)))
       (if maximize
           (window-maximize win)
           (fire-on-window-change win app))
