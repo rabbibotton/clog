@@ -34,7 +34,7 @@ the same as the clog directy this overides the relative paths used in them.")
 
 (defun on-connect (connection-id)
   (when clog-connection:*verbose-output*
-    (format t "Start new window handler on connection-id - ~A" connection-id))
+    (format t "Start new window handler on connection-id - ~A~%" connection-id))
   (let ((body (make-clog-body connection-id)))
     (let* ((path          (if clog-connection::*long-poll-url*
                               clog-connection::*long-poll-url*

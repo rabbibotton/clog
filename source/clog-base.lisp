@@ -365,7 +365,7 @@ result or if time out DEFAULT-ANSWER. see JQUERY-QUERY (Internal)"))
               (t
                (unbind-event-script obj event)
                (remhash hook cd)))
-        (format t "Attempt to set event on non-existant connection."))))
+        (format t "Attempt to set event on non-existant connection.~%"))))
 
 ;;;;;;;;;;;;;;
 ;; property ;;
