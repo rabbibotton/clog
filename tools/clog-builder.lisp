@@ -1170,14 +1170,7 @@ of controls and double click to select control."
                             (lambda (obj data)
                               (declare (ignore obj))
                               (when (current-editor-is-lisp app)
-                                (ignore-errors
-                                 (let* ((*PACKAGE*                 (find-package package))
-                                        (SWANK::*buffer-package*   (find-package package))
-                                        (SWANK::*buffer-readtable* *readtable*)
-                                        (loc (swank:find-definitions-for-emacs data)))
-                                   (when loc
-                                     (swank:ed-in-emacs (list (second (second (second (car loc))))
-                                                              :position (second (third (second (car loc))))))))))))
+                                (on-new-sys-browser editor :search data))))
     (set-on-change editor
                    (lambda (obj)
                      (let ((s (js-query obj (format nil
@@ -2223,16 +2216,6 @@ of controls and double click to select control."
     (set-geometry (create-clog-builder-repl (window-content win))
                   :units "%" :width 100 :height 100)))
 
-(defun on-new-sys-browser (obj)
-  (let* ((app (connection-data-item obj "builder-app-data"))
-         (win (create-gui-window obj :title "Package Browser"
-                                     :top 40 :left 225
-                                     :width 685 :height 430
-                                     :client-movement t))
-         (panel (create-sys-browser (window-content win))))
-    (set-on-window-size-done win (lambda (obj)
-                                   (clog-ace:resize (src-box panel))))))
-
 (defun on-new-asdf-browser (obj)
   (let* ((app (connection-data-item obj "builder-app-data"))
          (win (create-gui-window obj :title "ASDF System Browser"
@@ -2263,39 +2246,62 @@ of controls and double click to select control."
           (path (asdf:component-pathname n)))
       (add-select-option (files panel) path name))))
 
+(defun on-new-sys-browser (obj &key (search nil))
+  (let* ((app (connection-data-item obj "builder-app-data"))
+         (win (create-gui-window obj :title "System Browser"
+                                     :top 40 :left 225
+                                     :width 685 :height 430
+                                     :client-movement t))
+         (panel (create-sys-browser (window-content win))))
+    (when search
+      (setf (text-value (search-box panel)) search)
+      (sys-browser-populate panel))
+    (set-on-window-size-done win (lambda (obj)
+                                   (clog-ace:resize (src-box panel))))))
+
 (defun sys-browser-populate (panel)
   (setf (inner-html (class-box panel)) "")
   (setf (text-value (src-box panel)) "")
   (setf (text-value (doc-box panel)) "")
   (setf (text-value (file-name panel)) "")
   (setf (fname panel) nil)
-  (setf (classes panel) (definitions:find-definitions
-                         (text-value (package-box panel))
-                         :package (find-package :key)
-                         :type (find-symbol
-                                (text-value (type-box panel))
-                                (find-package :definitions))))
-  (let ((i 0))
-    (dolist (c (classes panel))
-      (let ((pac        (text-value (package-box panel)))
-            (name       (format nil "~A" (definitions:designator c)))
-            (filter     (text-value (search-box panel)))
-            (class-only (checkedp (class-only panel))))
-        (if (or (equal filter "")
-                (search filter name :test #'char-equal))
-            (if class-only
-                (if (equalp (package-name (definitions:package c))
-                            pac)
-                    (add-select-option (class-box panel) i
-                                       (format nil "~A - ~A"
-                                               name
-                                               (definitions:type c))))
-                (add-select-option (class-box panel) i
-                                   (format nil "~A:~A - ~A"
-                                           (package-name (definitions:package c))
-                                           name
-                                           (definitions:type c)))))
-        (incf i)))))
+  (let ((filter     (text-value (search-box panel)))
+        (class-only (checkedp (class-only panel)))
+        (pac        (text-value (package-box panel))))
+    (cond ((equalp pac "All")
+           (setf class-only nil)
+           (setf (classes panel) nil)
+           (unless (equal filter "")
+             (setf (classes panel) (definitions:apropos-definitions
+                                    filter
+                                    :type (find-symbol
+                                           (text-value (type-box panel))
+                                           (find-package :definitions))))))
+          (t
+           (setf (classes panel) (definitions:find-definitions
+                                  (text-value (package-box panel))
+                                  :package (find-package :key)
+                                  :type (find-symbol
+                                         (text-value (type-box panel))
+                                         (find-package :definitions))))))
+    (let ((i 0))
+      (dolist (c (classes panel))
+        (let ((name (format nil "~A" (definitions:designator c))))
+          (if (or (equal filter "")
+                  (search filter name :test #'char-equal))
+              (if class-only
+                  (if (equalp (package-name (definitions:package c))
+                              pac)
+                      (add-select-option (class-box panel) i
+                                         (format nil "~A - ~A"
+                                                 name
+                                                 (definitions:type c))))
+                  (add-select-option (class-box panel) i
+                                     (format nil "~A:~A - ~A"
+                                             (package-name (definitions:package c))
+                                             name
+                                             (definitions:type c)))))
+          (incf i))))))
 
 (defun sys-browser-select (panel target)
   (let* ((item (nth (parse-integer (text-value (class-box panel))) (classes panel))))
@@ -2406,14 +2412,14 @@ of controls and double click to select control."
       (create-gui-menu-item file  :content "New Custom Boot Page"      :on-click 'on-new-builder-custom)
       (create-gui-menu-item file  :content "New Application Template"  :on-click 'on-new-app-template)
       (create-gui-menu-item src   :content "New Source Editor"         :on-click 'on-open-file)
-      (create-gui-menu-item src   :content "New Package Browser"       :on-click 'on-new-sys-browser)
+      (create-gui-menu-item src   :content "New System Browser"        :on-click 'on-new-sys-browser)
       (create-gui-menu-item src   :content "New ASDF System Browser"   :on-click 'on-new-asdf-browser)
       (create-gui-menu-item tools :content "Control Events"            :on-click 'on-show-control-events-win)
       (create-gui-menu-item tools :content "Thread Viewer"             :on-click 'on-show-thread-viewer)
       (create-gui-menu-item tools :content "CLOG Builder REPL"         :on-click 'on-repl)
       (create-gui-menu-item tools :content "Copy/Cut History"          :on-click 'on-show-copy-history-win)
       (create-gui-menu-item tools :content "Image to HTML Data"        :on-click 'on-image-to-data)
-      (create-gui-menu-item tools :content "Launch Package Browser"    :on-click
+      (create-gui-menu-item tools :content "Launch System Browser"     :on-click
                             (lambda (obj)
                               (declare (ignore obj))
                               (open-window (window body) "/sysbrowser")))
