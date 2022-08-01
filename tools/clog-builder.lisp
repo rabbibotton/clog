@@ -2226,7 +2226,7 @@ of controls and double click to select control."
 
 (defun asdf-browser-reset (panel)
   (setf (inner-html (loaded-systems panel)) "")
-  (dolist (n (asdf:already-loaded-systems))
+  (dolist (n (sort (asdf:already-loaded-systems) #'string-lessp))
     (add-select-option (loaded-systems panel) n n))
   (setf (text-value (loaded-systems panel)) "clog")
   (asdf-browser-populate panel))
