@@ -2419,10 +2419,6 @@ of controls and double click to select control."
       (create-gui-menu-item tools :content "CLOG Builder REPL"         :on-click 'on-repl)
       (create-gui-menu-item tools :content "Copy/Cut History"          :on-click 'on-show-copy-history-win)
       (create-gui-menu-item tools :content "Image to HTML Data"        :on-click 'on-image-to-data)
-      (create-gui-menu-item tools :content "Launch System Browser"     :on-click
-                            (lambda (obj)
-                              (declare (ignore obj))
-                              (open-window (window body) "/sysbrowser")))
       (create-gui-menu-item tools :content "Launch DB Admin"           :on-click
                             (lambda (obj)
                               (declare (ignore obj))
@@ -2485,7 +2481,6 @@ of controls and double click to select control."
       (initialize nil :port port))
   (set-on-new-window 'on-new-builder :path "/builder")
   (set-on-new-window 'on-new-db-admin :path "/dbadmin")
-  (set-on-new-window 'create-sys-browser :path "/sysbrowser")
   (set-on-new-window 'on-attach-builder-page :path "/builder-page")
   (set-on-new-window 'on-convert-image :path "/image-to-data")
   (open-browser :url (format nil "http://127.0.0.1:~A/builder" port)))
