@@ -2216,13 +2216,16 @@ of controls and double click to select control."
     (set-geometry (create-clog-builder-repl (window-content win))
                   :units "%" :width 100 :height 100)))
 
-(defun on-new-asdf-browser (obj)
+(defun on-new-asdf-browser (obj &key (project nil))
   (let* ((app (connection-data-item obj "builder-app-data"))
          (win (create-gui-window obj :title "ASDF System Browser"
                                      :top 40 :left 225
                                      :width 592 :height 430
-                                     :client-movement t)))
-    (create-asdf-systems (window-content win))))
+                                     :client-movement t))
+         (panel (create-asdf-systems (window-content win))))
+    (when project
+      (setf (text-value (loaded-systems panel)) (string-downcase project))
+      (asdf-browser-populate panel))))
 
 (defun asdf-browser-reset (panel)
   (setf (inner-html (loaded-systems panel)) "")
@@ -2383,6 +2386,8 @@ of controls and double click to select control."
         (create-br body)
         (create-div body :content (format nil "For example:<br>(create-img body :url-src \"~A\")" pic-data))))))
 
+(defparameter *start-project* nil)
+
 (defun on-new-builder (body)
   "Launch instance of the CLOG Builder"
   (set-html-on-close body "Connection Lost")
@@ -2466,16 +2471,21 @@ of controls and double click to select control."
     (on-show-control-events-win body)
     (on-show-copy-history-win body)
     (on-new-builder-panel body)
+    (when *start-project*
+      (on-new-asdf-browser body :project *start-project*))
     (set-on-before-unload (window body) (lambda(obj)
                                           (declare (ignore obj))
                                           ;; return empty string to prevent nav off page
                                           ""))))
 
-(defun clog-builder (&key (port 8080) static-root system)
+(defun clog-builder (&key (port 8080) project static-root system)
   "Start clog-builder."
-  (if system
-      (setf static-root (merge-pathnames "./www/"
-                                         (asdf:system-source-directory system))))
+  (if project
+      (setf *start-project* project)
+      (setf *start-project* nil))
+  (when system
+    (setf static-root (merge-pathnames "./www/"
+                                       (asdf:system-source-directory system))))
   (if static-root
       (initialize nil :port port :static-root static-root)
       (initialize nil :port port))
