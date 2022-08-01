@@ -2110,9 +2110,11 @@ of controls and double click to select control."
          (btn-del   (create-img tool-bar :alt-text "delete"   :url-src img-btn-del   :class btn-class))
          (btn-undo  (create-img tool-bar :alt-text "undo"     :url-src img-btn-undo  :class btn-class))
          (btn-redo  (create-img tool-bar :alt-text "redo"     :url-src img-btn-redo  :class btn-class))
-         (btn-test  (create-img tool-bar :alt-text "eval"     :url-src img-btn-test  :class btn-class))
          (btn-save  (create-img tool-bar :alt-text "save"     :url-src img-btn-save  :class btn-class))
          (btn-load  (create-img tool-bar :alt-text "load"     :url-src img-btn-load  :class btn-class))
+         (spacer    (create-span tool-bar :content "&nbsp"))
+         (btn-esel  (create-button tool-bar :content "Eval Sel" :class (format nil "w3-tiny ~A" btn-class)))
+         (btn-test  (create-button tool-bar :content "Eval"     :class (format nil "w3-tiny ~A" btn-class)))
          (content   (center-panel box))
          (ace       (clog-ace:create-clog-ace-element content))
          (status    (create-div content :class "w3-tiny w3-border"))
@@ -2129,18 +2131,22 @@ of controls and double click to select control."
     (setf (advisory-title btn-del) "delete")
     (setf (advisory-title btn-undo) "undo")
     (setf (advisory-title btn-redo) "redo")
-    (setf (advisory-title btn-test) "evaluate")
     (setf (advisory-title btn-save) "save")
     (setf (advisory-title btn-load) "load")
+    (setf (advisory-title btn-esel) "evaluate selection")
+    (setf (advisory-title btn-test) "evaluate")
     (setf (height btn-copy) "12px")
     (setf (height btn-paste) "12px")
     (setf (height btn-cut) "12px")
     (setf (height btn-del) "12px")
     (setf (height btn-undo) "12px")
     (setf (height btn-redo) "12px")
-    (setf (height btn-test) "12px")
     (setf (height btn-save) "12px")
     (setf (height btn-load) "12px")
+    (setf (height btn-esel) "12px")
+    (setf (height btn-test) "12px")
+    (setf (width btn-esel) "40px")
+    (setf (width btn-test) "40px")
     (setf (positioning ace) :absolute)
     (setf (positioning status) :absolute)
     (set-geometry ace :units "" :width "" :height ""
@@ -2202,11 +2208,24 @@ of controls and double click to select control."
     (set-on-click btn-redo (lambda (obj)
                              (declare (ignore obj))
                              (clog-ace:execute-command ace "redo")))
+    (set-on-click btn-esel (lambda (obj)
+                             (let ((val (clog-ace:selected-text ace)))
+                               (unless (equal val "")
+                                 (let ((result (capture-eval val :clog-obj obj
+                                                                 :eval-in-package "CLOG-USER")))
+                                   (clog-web-alert (connection-body obj) "Result"
+                                                   (format nil "~&result: ~A" result)
+                                                   :color-class "w3-green"
+                                                   :time-out 3))))))
     (set-on-click btn-test (lambda (obj)
-                             (alert-dialog obj
-                                           (capture-eval (text-value ace))
-                                           :title "Eval Result")))))
-
+                             (let ((val (text-value ace)))
+                               (unless (equal val "")
+                                 (let ((result (capture-eval val :clog-obj obj
+                                                                 :eval-in-package "CLOG-USER")))
+                                   (clog-web-alert (connection-body obj) "Result"
+                                                   (format nil "~&result: ~A" result)
+                                                   :color-class "w3-green"
+                                                   :time-out 3))))))))
 (defun on-repl (obj)
   "Open quick start"
   (let* ((win (create-gui-window obj :title "CLOG Builder REPL"
@@ -2220,7 +2239,7 @@ of controls and double click to select control."
   (let* ((app (connection-data-item obj "builder-app-data"))
          (win (create-gui-window obj :title "ASDF System Browser"
                                      :top 40 :left 225
-                                     :width 592 :height 430
+                                     :width 592 :height 435
                                      :client-movement t))
          (panel (create-asdf-systems (window-content win))))
     (when project

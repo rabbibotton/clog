@@ -844,8 +844,8 @@ propetery will be set to nil on creation."))
 is placed in DOM at top of OBJ instead of bottom of OBJ."
   (unless html-id
       (setf html-id (clog-connection:generate-id)))
-  (let* ((panel    (create-child obj
-                                 (format nil
+  (let* ((panel (create-child obj
+                              (format nil
 "  <div class='w3-panel ~A w3-animate-right w3-display-container'>~
    <span id='~A-closer' class='w3-button w3-large w3-display-topright'>&times;</span>~
    <h3>~A</h3>~

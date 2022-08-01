@@ -1,4 +1,4 @@
-<data id="I3868308897" data-in-package="clog-tools" data-custom-slots="(classes :accessor classes) (fname :accessor fname) (state :accessor state :initform t)" data-clog-next-id="22" data-clog-title="sys-browser"></data><select data-clog-type="dropdown" data-clog-name="type-box" style="box-sizing: content-box; position: absolute; left: 5px; top: 10px; width: 190px; height: 20px;" data-on-create="(add-select-options target '(ALIEN-TYPE
+<data id="I3868359720" data-in-package="clog-tools" data-custom-slots="(classes :accessor classes) (fname :accessor fname) (state :accessor state :initform t)" data-clog-next-id="22" data-clog-title="sys-browser"></data><select data-clog-type="dropdown" data-clog-name="type-box" style="box-sizing: content-box; position: absolute; left: 5px; top: 10px; width: 190px; height: 20px;" data-on-create="(add-select-options target '(ALIEN-TYPE
                              CALLABLE
                              CLASS
                              COMPILER-MACRO
@@ -43,18 +43,24 @@
        (sys-browser-populate panel)))" placeholder="search" name=""><input type="BUTTON" value="Save" data-clog-type="fbutton" data-clog-name="save-button" style="box-sizing: content-box; position: absolute; width: 50px; height: 15px; right: 5px; bottom: 25px;" class="w3-small" disabled="disabled" data-on-click="(when (fname panel)
   (write-file (text-value (src-box panel)) (fname panel))
   (setf (state panel) nil)
-  (setf (disabledp (save-button panel)) t))"><input type="BUTTON" value="Eval File" data-clog-type="fbutton" data-clog-name="eval-button" style="box-sizing: content-box; position: absolute; width: 50px; height: 15px; right: 75px; bottom: 25px;" class="w3-small" data-on-click="(let ((val (text-value (src-box panel))))
+  (setf (disabledp (save-button panel)) t))"><input type="BUTTON" value="Eval File" data-clog-type="fbutton" data-clog-name="eval-button" style="box-sizing: content-box; position: absolute; width: 50px; height: 15px; right: 75px; bottom: 25px;" class="w3-small" data-on-click="(let ((pac (text-value (package-box panel)))
+      (val (clog-ace:selected-text (src-box panel))))
+  (when (equalp &quot;All&quot; pac)
+    (setf pac &quot;CLOG-USER&quot;))
   (unless (equal val &quot;&quot;)
     (let ((result (capture-eval val :clog-obj panel
                                     :eval-in-package (text-value (package-box panel)))))
-      (clog-web-alert (connection-body clog-obj) &quot;Result&quot;
+      (clog-web-alert (connection-body panel) &quot;Result&quot;
                       (format nil &quot;~&amp;result: ~A&quot; result)
                       :color-class &quot;w3-green&quot;
-                      :time-out 3))))" disabled="disabled"><input type="BUTTON" value="Eval Sel" data-clog-type="fbutton" data-clog-name="eval-sel-button" style="box-sizing: content-box; position: absolute; width: 50px; height: 15px; right: 145px; bottom: 25px;" class="w3-small" data-on-click="(let ((val (clog-ace:selected-text (src-box panel))))
+                      :time-out 3))))" disabled="disabled"><input type="BUTTON" value="Eval Sel" data-clog-type="fbutton" data-clog-name="eval-sel-button" style="box-sizing: content-box; position: absolute; width: 50px; height: 15px; right: 145px; bottom: 25px;" class="w3-small" data-on-click="(let ((pac (text-value (package-box panel)))
+      (val (clog-ace:selected-text (src-box panel))))
+  (when (equalp &quot;All&quot; pac)
+    (setf pac &quot;CLOG-USER&quot;))
   (unless (equal val &quot;&quot;)
     (let ((result (capture-eval val :clog-obj panel
-                                    :eval-in-package (text-value (package-box panel)))))
-      (clog-web-alert (connection-body clog-obj) &quot;Result&quot;
+                                    :eval-in-package pac)))
+      (clog-web-alert (connection-body panel) &quot;Result&quot;
                       (format nil &quot;~&amp;result: ~A&quot; result)
                       :color-class &quot;w3-green&quot;
                       :time-out 3))))" placeholder="" disabled="disabled"><div data-clog-type="div" data-clog-name="file-name" style="box-sizing: content-box; position: absolute; left: 5px; bottom: 27px; right: 220px;" class="w3-small">&nbsp;</div>
