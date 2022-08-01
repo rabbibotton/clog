@@ -2231,7 +2231,9 @@ of controls and double click to select control."
   (setf (inner-html (loaded-systems panel)) "")
   (dolist (n (sort (asdf:already-loaded-systems) #'string-lessp))
     (add-select-option (loaded-systems panel) n n))
-  (setf (text-value (loaded-systems panel)) "clog")
+  (if *start-project*
+      (setf (text-value (loaded-systems panel)) *start-project*)
+      (setf (text-value (loaded-systems panel)) "clog"))
   (asdf-browser-populate panel))
 
 (Defun asdf-browser-populate (panel)
@@ -2480,9 +2482,13 @@ of controls and double click to select control."
 
 (defun clog-builder (&key (port 8080) project static-root system)
   "Start clog-builder."
-  (if project
-      (setf *start-project* project)
-      (setf *start-project* nil))
+  (cond (project
+         (setf *start-project* (string-downcase (format nil "~A" project)))
+         (ignore-errors
+          (ql:quickload project)
+          (ql:quickload (format nil "~A/tools" project))))
+        (t
+         (setf *start-project* nil)))
   (when system
     (setf static-root (merge-pathnames "./www/"
                                        (asdf:system-source-directory system))))
