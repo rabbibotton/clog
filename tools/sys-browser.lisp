@@ -1,4 +1,3 @@
-
 (in-package "CLOG-TOOLS")
 (defclass sys-browser (clog:clog-panel)
           ((file-name :reader file-name)

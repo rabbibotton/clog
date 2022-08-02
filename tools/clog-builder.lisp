@@ -34,6 +34,10 @@
     :accessor properties-list
     :initform nil
     :documentation "Property list in properties window")
+   (project-win
+    :accessor project-win
+    :initform nil
+    :documentation "Project window")
    (control-properties-win
     :accessor control-properties-win
     :initform nil
@@ -1213,6 +1217,18 @@ of controls and double click to select control."
     (setf (clog-ace:theme editor) "ace/theme/xcode")
     (setf (clog-ace:mode editor) "ace/mode/lisp")
     (setf (clog-ace:tab-size editor) 2)))
+
+(defun on-show-project (obj)
+  (let ((app (connection-data-item obj "builder-app-data")))
+    (if (project-win app)
+        (window-focus (project-win app))
+        (let* ((win (create-gui-window obj :title "Project Window"
+                                           :top 200 :left 230
+                                           :width 643 :height 375
+                                           :has-pinner t :client-movement t)))
+          (create-projects (window-content win))
+          (set-on-window-close win (lambda (obj)
+                                     (setf (project-win app) nil)))))))
 
 (defun on-show-control-events-win (obj)
   "Show control events window"
@@ -2409,6 +2425,70 @@ of controls and double click to select control."
 
 (defparameter *start-project* nil)
 
+(defun projects-setup (panel)
+  (pushnew #P"~/common-lisp/" ql:*local-project-directories*)
+  (add-select-option (project-list panel) "None" "None")
+  (dolist (n (sort (ql:list-local-systems) #'string-lessp))
+    (add-select-option (project-list panel) n n))
+  (if *start-project*
+      (setf (text-value (project-list panel)) *start-project*)
+      (setf (text-value (project-list panel)) "None")))
+
+(defun projects-populate (panel)
+  (let ((already (asdf/operate:already-loaded-systems))
+        (sel (text-value (project-list panel))))
+    (setf (inner-html (runtime-list panel)) "")
+    (setf (inner-html (designtime-list panel)) "")
+    (unless (equal sel "None")
+      (cond ((member sel already :test #'equal)
+             ;; fill runtime
+             (dolist (n (asdf:module-components
+                         (asdf:find-system sel)))
+               (let ((name (asdf:component-relative-pathname n))
+                     (path (asdf:component-pathname n)))
+                 (add-select-option (runtime-list panel) path name)))
+             ;; fill designtime)
+             (handler-case
+                 (dolist (n (asdf:module-components
+                             (asdf:find-system (format nil "~A/tools" sel))))
+                   (let ((name (asdf:component-relative-pathname n))
+                         (path (asdf:component-pathname n)))
+                     (add-select-option (designtime-list panel) path name)))
+               (t (c)
+                 (add-select-option (designtime-list panel) "" "Missing /tools"))))
+            (t
+             (confirm-dialog panel "Load project?"
+                             (lambda (answer)
+                               (cond (answer
+                                      (handler-case
+                                          (ql:quickload (format nil "~A/tools" sel))
+                                        (t (c)
+                                          (ql:quickload sel)))
+                                      (projects-populate panel))
+                                     (t
+                                      (setf (text-value (project-list panel)) "None"))))
+                             :title "System not loaded"))))))
+
+(defun open-projects-component (target system list)
+  (let ((disp (select-text target))
+        (item (text-value target)))
+    (cond ((equal item "")
+           (alert-toast target "Invalid action" "No /tools project" :time-out 1))
+          ((equal (subseq item (1- (length item))) "/")
+           (setf (inner-html list) "")
+           (dolist (n (asdf:module-components
+                       (asdf:find-component
+                        (asdf:find-system system)
+                        (subseq disp 0 (1- (length disp))))))
+             (let ((name (asdf:component-relative-pathname n))
+                   (path (asdf:component-pathname n)))
+               (add-select-option list path name))))
+          ((and (> (length item) 5)
+                (equal (subseq item (- (length item) 5)) ".clog"))
+           (on-new-builder-panel target :open-file item))
+          (t
+           (on-open-file target :open-file item)))))
+
 (defun on-new-builder (body)
   "Launch instance of the CLOG Builder"
   (set-html-on-close body "Connection Lost")
@@ -2437,8 +2517,9 @@ of controls and double click to select control."
       (create-gui-menu-item file  :content "New CLOG-WEB Delay Launch" :on-click 'on-new-builder-launch-page)
       (create-gui-menu-item file  :content "New Custom Boot Page"      :on-click 'on-new-builder-custom)
       (create-gui-menu-item file  :content "New Application Template"  :on-click 'on-new-app-template)
+      (create-gui-menu-item src   :content "Project Window"            :on-click 'on-show-project)
       (create-gui-menu-item src   :content "New Source Editor"         :on-click 'on-open-file)
-      (create-gui-menu-item src   :content "New System Browser"        :on-click 'on-new-sys-browser)
+      (Create-gui-menu-item src   :content "New System Browser"        :on-click 'on-new-sys-browser)
       (create-gui-menu-item src   :content "New ASDF System Browser"   :on-click 'on-new-asdf-browser)
       (create-gui-menu-item tools :content "Control Events"            :on-click 'on-show-control-events-win)
       (create-gui-menu-item tools :content "Thread Viewer"             :on-click 'on-show-thread-viewer)
@@ -2492,6 +2573,7 @@ of controls and double click to select control."
     (on-show-control-events-win body)
     (on-show-copy-history-win body)
     (on-new-builder-panel body)
+    (on-show-project body)
     (when *start-project*
       (on-new-asdf-browser body :project *start-project*))
     (set-on-before-unload (window body) (lambda(obj)
