@@ -241,7 +241,13 @@ the default answer. (Private)"
   (handler-case
       (let ((connection-id (gethash connection *connections*))
             (ml (ppcre:split ":" message :limit 2)))
-        (cond ((equal (first ml) "0")
+        (cond ((null connection-id)
+               ;; a zombie connection
+               (when *verbose-output*
+                 (format t "A zombie connection ~A. CLOG doesn't remember its connection-id. Closing it.~%"
+                         connection))
+               (websocket-driver:close-connection connection)) ; don't send the reason for better security
+              ((equal (first ml) "0")
                ;; a ping
                (when *verbose-output*
                  (format t "Connection ~A    Ping~%" connection-id)))
