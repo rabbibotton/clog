@@ -7,6 +7,8 @@
 
 (in-package :clog-tools)
 
+(defparameter *start-project* nil)
+
 ;; Per instance app data
 
 (defclass builder-app-data ()
@@ -34,6 +36,10 @@
     :accessor properties-list
     :initform nil
     :documentation "Property list in properties window")
+   (current-project
+    :accessor current-project
+    :initform *start-project*
+    :documentation "Current Project")
    (project-win
     :accessor project-win
     :initform nil
@@ -164,7 +170,8 @@
    (check-type action-if-exists (member nil :error :new-version :rename :rename-and-delete
                                             :overwrite :append :supersede))
    (with-open-file (outstream outfile :direction :output :if-exists action-if-exists)
-     (write-sequence string outstream)))
+     (when outstream
+       (write-sequence string outstream))))
 
 (defun panel-snap-shot (content panel-id hide-loc)
   "Take a snap shot of panel"
@@ -1218,15 +1225,18 @@ of controls and double click to select control."
     (setf (clog-ace:mode editor) "ace/mode/lisp")
     (setf (clog-ace:tab-size editor) 2)))
 
-(defun on-show-project (obj)
+(defun on-show-project (obj &key project)
   (let ((app (connection-data-item obj "builder-app-data")))
+    (when project
+      (setf (current-project app) project))
     (if (project-win app)
         (window-focus (project-win app))
         (let* ((win (create-gui-window obj :title "Project Window"
                                            :top 200 :left 230
-                                           :width 643 :height 375
+                                           :width 643 :height 400
                                            :has-pinner t :client-movement t)))
           (create-projects (window-content win))
+          (setf (project-win app) win)
           (set-on-window-close win (lambda (obj)
                                      (setf (project-win app) nil)))))))
 
@@ -1594,7 +1604,8 @@ of controls and double click to select control."
              (setf file-name fname)
              (setf render-file-name "")
              (setf (inner-html content)
-                   (read-file fname))
+                   (or (read-file fname)
+                       ""))
              (clrhash (get-control-list app panel-id))
              (on-populate-loaded-window content :win win)
              (setf (window-title win) (attribute content "data-clog-name"))
@@ -2056,7 +2067,8 @@ of controls and double click to select control."
 
 (defun fill-button-clicked (panel)
   "Template fill botton clicked"
-  (let* ((tmpl-rec  (find-if (lambda (x)
+  (let* ((app (connection-data-item panel "builder-app-data"))
+         (tmpl-rec  (find-if (lambda (x)
                                (equal (getf x :code)
                                       (value (template-box panel))))
                              *supported-templates*))
@@ -2079,6 +2091,9 @@ of controls and double click to select control."
                         (when (getf tmpl-rec :www)
                           (template-copy sys-name www-dir filename :panel (window-content (win panel))))
                         (asdf:clear-source-registry)
+                        (when (project-win app)
+                          (clog-gui:window-close (project-win app)))
+                        (on-show-project panel :project sys-name)
                         (create-div (window-content (win panel)) :content "<hr><b>done.</b>"))
                        (t
                         (window-close (win panel)))))))
@@ -2190,7 +2205,7 @@ of controls and double click to select control."
                (setf file-name fname)
                (setf (window-title win) fname)
                (setf (clog-ace:text-value ace)
-                     (read-file fname)))))
+                     (or (read-file fname) "")))))
       (when open-file
         (open-file-name open-file))
       (set-on-click btn-load (lambda (obj)
@@ -2263,13 +2278,14 @@ of controls and double click to select control."
       (asdf-browser-populate panel))))
 
 (defun asdf-browser-reset (panel)
-  (setf (inner-html (loaded-systems panel)) "")
-  (dolist (n (sort (asdf:already-loaded-systems) #'string-lessp))
-    (add-select-option (loaded-systems panel) n n))
-  (if *start-project*
-      (setf (text-value (loaded-systems panel)) *start-project*)
-      (setf (text-value (loaded-systems panel)) "clog"))
-  (asdf-browser-populate panel))
+  (let* ((app (connection-data-item panel "builder-app-data")))
+    (setf (inner-html (loaded-systems panel)) "")
+    (dolist (n (sort (asdf:already-loaded-systems) #'string-lessp))
+      (add-select-option (loaded-systems panel) n n))
+    (if (current-project app)
+        (setf (text-value (project-list panel)) (current-project app))
+        (setf (text-value (loaded-systems panel)) "clog"))
+    (asdf-browser-populate panel)))
 
 (Defun asdf-browser-populate (panel)
   (setf (text-value (source-file panel))
@@ -2423,23 +2439,33 @@ of controls and double click to select control."
         (create-br body)
         (create-div body :content (format nil "For example:<br>(create-img body :url-src \"~A\")" pic-data))))))
 
-(defparameter *start-project* nil)
-
 (defun projects-setup (panel)
-  (pushnew #P"~/common-lisp/" ql:*local-project-directories*)
-  (add-select-option (project-list panel) "None" "None")
-  (dolist (n (sort (ql:list-local-systems) #'string-lessp))
-    (add-select-option (project-list panel) n n))
-  (if *start-project*
-      (setf (text-value (project-list panel)) *start-project*)
-      (setf (text-value (project-list panel)) "None")))
+  (let* ((app (connection-data-item panel "builder-app-data")))
+    (pushnew #P"~/common-lisp/" ql:*local-project-directories*)
+    (add-select-option (project-list panel) "None" "None")
+    (dolist (n (sort (ql:list-local-systems) #'string-lessp))
+      (add-select-option (project-list panel) n n))
+    (cond((current-project app)
+          (setf (text-value (project-list panel)) (current-project app))
+          (projects-populate panel))
+         (t
+          (setf (text-value (project-list panel)) "None")))))
 
 (defun projects-populate (panel)
-  (let ((already (asdf/operate:already-loaded-systems))
+  (let ((app (connection-data-item panel "builder-app-data"))
+        (already (asdf/operate:already-loaded-systems))
         (sel (text-value (project-list panel))))
     (setf (inner-html (runtime-list panel)) "")
     (setf (inner-html (designtime-list panel)) "")
-    (unless (equal sel "None")
+    (setf (disabledp (runtime-add-lisp panel)) t)
+    (setf (disabledp (runtime-delete panel)) t)
+    (setf (disabledp (designtime-add-lisp panel)) t)
+    (setf (disabledp (designtime-add-clog panel)) t)
+    (setf (disabledp (designtime-delete panel)) t)
+    (setf (current-project app) (if (equal sel "None")
+                                    nil
+                                    sel))
+    (when (current-project app)
       (cond ((member sel already :test #'equal)
              ;; fill runtime
              (dolist (n (asdf:module-components
@@ -2449,12 +2475,22 @@ of controls and double click to select control."
                  (add-select-option (runtime-list panel) path name)))
              ;; fill designtime)
              (handler-case
-                 (dolist (n (asdf:module-components
-                             (asdf:find-system (format nil "~A/tools" sel))))
-                   (let ((name (asdf:component-relative-pathname n))
-                         (path (asdf:component-pathname n)))
-                     (add-select-option (designtime-list panel) path name)))
+                 (let ((sys (asdf:find-system (format nil "~A/tools" sel))))
+                   (dolist (n (asdf:module-components sys))
+                     (let ((name (asdf:component-relative-pathname n))
+                           (path (asdf:component-pathname n)))
+                       (add-select-option (designtime-list panel) path name)))
+                   (cond ((member "clog" (asdf:system-defsystem-depends-on sys) :test #'equal)
+                          (setf (disabledp (runtime-add-lisp panel)) nil)
+                          (setf (disabledp (runtime-delete panel)) nil)
+                          (setf (disabledp (designtime-add-lisp panel)) nil)
+                          (setf (disabledp (designtime-add-clog panel)) nil)
+                          (setf (disabledp (designtime-delete panel)) nil))
+                         (t
+                          (alert-toast panel "Warning" "Missing :defsystem-depends-on (:clog)"
+                                       :color-class "w3-yellow" :time-out 2))))
                (t (c)
+                 (declare (ignore c))
                  (add-select-option (designtime-list panel) "" "Missing /tools"))))
             (t
              (confirm-dialog panel "Load project?"
@@ -2463,11 +2499,87 @@ of controls and double click to select control."
                                       (handler-case
                                           (ql:quickload (format nil "~A/tools" sel))
                                         (t (c)
+                                          (declare (ignore c))
                                           (ql:quickload sel)))
                                       (projects-populate panel))
                                      (t
+                                      (setf (current-project app) nil)
                                       (setf (text-value (project-list panel)) "None"))))
                              :title "System not loaded"))))))
+
+(defun projects-add-lisp (panel sys)
+  (input-dialog panel "Enter lisp component name (with out .lisp):"
+                (lambda (result)
+                  (when result
+                    (let ((path (asdf:component-pathname
+                                 (asdf:find-system sys))))
+                      (write-file "" (format nil "~A~A.lisp"
+                                             path result)
+                                  :action-if-exists nil)
+                      (add-file-to-defsystem sys result :file)
+                      (ql:quickload sys)
+                      (projects-populate panel))))
+                :height 230)
+  (ql:quickload sys))
+
+(defun projects-add-clog (panel sys)
+  (input-dialog panel (format nil "Enter clog component name (with out .clog), ~
+                       a lisp component will also be created in the runtime system:")
+                (lambda (result)
+                  (when result
+                    (let* ((s (format nil "~A/tools" sys))
+                           (path (asdf:component-pathname
+                                  (asdf:find-system s))))
+                      (write-file "" (format nil "~A~A.clog"
+                                             path result)
+                                  :action-if-exists nil)
+                      (add-file-to-defsystem s result :clog-file)
+                      (ql:quickload s))
+                    (let ((path (asdf:component-pathname
+                                 (asdf:find-system sys))))
+                      (write-file "" (format nil "~A~A.lisp"
+                                             path result)
+                                  :action-if-exists nil)
+                      (add-file-to-defsystem sys result :file)
+                      (ql:quickload sys)
+                      (projects-populate panel))))
+                :height 250))
+
+(defun add-file-to-defsystem (system file ftype)
+  (let ((fname    (asdf:system-source-file (asdf:find-system system)))
+        (sys-list '()))
+    (with-open-file (s fname)
+      (loop
+        (let* ((line (read s nil)))
+          (unless line (return))
+          (when (equalp (format nil "~A" (second line)) system)
+            (push `(,ftype ,file) (getf line :components)))
+          (push line sys-list))))
+    (with-open-file (s fname :direction :output :if-exists :rename)
+      (let ((*print-case* :downcase))
+        (dolist (n (reverse sys-list))
+          (pprint n s))))))
+
+(defun remove-file-from-defsystem (system file ftype)
+  (let ((fname    (asdf:system-source-file (asdf:find-system system)))
+        (sys-list '()))
+    (with-open-file (s fname)
+      (loop
+        (let* ((line (read s nil)))
+          (unless line (return))
+          (when (equalp (format nil "~A" (second line)) system)
+            (let (new-comp)
+              (dolist (n (getf line :components))
+                (unless (and (equal (first n) ftype)
+                             (equalp (second n) file))
+                  (push n new-comp)))
+              (setf (getf line :components) (reverse new-comp))))
+          (push line sys-list))))
+    (with-open-file (s fname :direction :output :if-exists :rename)
+      (let ((*print-case* :downcase))
+        (dolist (n (reverse sys-list))
+          (pprint n s)))))
+  (ql:quickload system))
 
 (defun open-projects-component (target system list)
   (let ((disp (select-text target))
@@ -2573,9 +2685,7 @@ of controls and double click to select control."
     (on-show-control-events-win body)
     (on-show-copy-history-win body)
     (on-new-builder-panel body)
-    (on-show-project body)
-    (when *start-project*
-      (on-new-asdf-browser body :project *start-project*))
+    (on-show-project body :project *start-project*)
     (set-on-before-unload (window body) (lambda(obj)
                                           (declare (ignore obj))
                                           ;; return empty string to prevent nav off page
@@ -2583,13 +2693,9 @@ of controls and double click to select control."
 
 (defun clog-builder (&key (port 8080) project static-root system)
   "Start clog-builder."
-  (cond (project
-         (setf *start-project* (string-downcase (format nil "~A" project)))
-         (ignore-errors
-          (ql:quickload project)
-          (ql:quickload (format nil "~A/tools" project))))
-        (t
-         (setf *start-project* nil)))
+  (if project
+      (setf *start-project* (string-downcase (format nil "~A" project)))
+      (setf *start-project* nil))
   (when system
     (setf static-root (merge-pathnames "./www/"
                                        (asdf:system-source-directory system))))

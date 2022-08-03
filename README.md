@@ -125,20 +125,6 @@ CL-USER> (ql:quickload :clog)
 CL-USER> (clog:run-demo 1)
 ```
 
-The clog-new-app tool can be run with:
-
-```
-CL-USER> (ql:quickload :clog/tools)
-CL-USER> (clog-tools:clog-new-app)
-```
-
-The clog-db-admin tool can be run with:
-
-```
-CL-USER> (ql:quickload :clog/tools)
-CL-USER> (clog-tools:clog-db-admin)
-```
-
 The CLOG Builder tool can be run with:
 
 ```
@@ -297,7 +283,6 @@ Tool Summary
 
 - clog-builder  - Rapid visual interactive development for Web and GUIs
 - clog-db-admin - SQLite3 admin tool
-- clog-new-app  - New application template tool
 
 High Order Extensions to CLOG
 

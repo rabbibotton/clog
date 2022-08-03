@@ -18,8 +18,7 @@
   (:export :clog-builder
            :add-supported-controls
            :control-info
-           :clog-db-admin
-           :clog-new-app))
+           :clog-db-admin))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Implementation - CLOG Utilities
