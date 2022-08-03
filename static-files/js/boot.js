@@ -1,4 +1,3 @@
-/*static version*/
 var ws=null;
 var adr; var adrc;
 var clog={};
