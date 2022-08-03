@@ -205,6 +205,13 @@ the default answer. (Private)"
   (handler-case
       (cond ((and id (gethash id *connection-data*))
              (format t "Reconnection id - ~A to ~A~%" id connection)
+             (handler-case
+                 (websocket-driver:close-connection (gethash id *connection-ids*)
+                                                    "Aborting this old connection since receiving a reconnection request.")
+               (t (c)
+                 (when *verbose-output*
+                   (format t "Failed to close the old connection when establishing reconnection. This can be normal: The old connection could probably don't work for the client, so the client is requesting to reconnect.~%Condition - ~A.~&"
+                           c))))
              (setf (gethash id *connection-ids*) connection)
              (setf (gethash connection *connections*) id))
             (t
