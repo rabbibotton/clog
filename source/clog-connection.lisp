@@ -214,6 +214,9 @@ the default answer. (Private)"
                            c))))
              (setf (gethash id *connection-ids*) connection)
              (setf (gethash connection *connections*) id))
+            (id
+             (format t "Reconnection id ~A not found. Closing the connection.~%" id)
+             (websocket-driver:close-connection connection)) ; Don't send the reason for better security.
             (t
              (setf id (random-hex-string))
              (setf (gethash connection *connections*) id)
