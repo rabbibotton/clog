@@ -203,7 +203,7 @@ the default answer. (Private)"
 (defun handle-new-connection (connection id)
   "Handle new incoming websocket CONNECTIONS with ID from boot page. (Private)"
   (handler-case
-      (cond (id
+      (cond ((and id (gethash id *connection-data*))
              (format t "Reconnection id - ~A to ~A~%" id connection)
              (setf (gethash id *connection-ids*) connection)
              (setf (gethash connection *connections*) id))
