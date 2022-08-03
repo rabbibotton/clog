@@ -53,7 +53,6 @@
   :components ((:file "clog-db-admin")
                (:file "clog-builder-settings")
                (:file "clog-templates")
-               (:file "clog-new-app")
                (:file "clog-builder")
                (:file "clog-builder-repl")
                (:file "image-to-data")
