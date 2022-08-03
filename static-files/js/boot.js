@@ -64,16 +64,21 @@ function Setup_ws() {
     }
 
     ws.onclose = function (event) {
-        console.log ('onclose: reconnect');
-        ws = null;
-        ws = new WebSocket (adr + '?r=' + clog['connection_id']);
-        ws.onopen = function (event) {
-            console.log ('onclose: reconnect successful');
-            Setup_ws();
-        }
-        ws.onclose = function (event) {
-            console.log ('onclose: reconnect failure');
+        if (event.code && event.code === 1000) {
+            console.log("WebSocket connection got normal close from server. Don't reconnect.");
             Shutdown_ws(event);
+        } else {
+            console.log ('onclose: reconnect');
+            ws = null;
+            ws = new WebSocket (adr + '?r=' + clog['connection_id']);
+            ws.onopen = function (event) {
+                console.log ('onclose: reconnect successful');
+                Setup_ws();
+            }
+            ws.onclose = function (event) {
+                console.log ('onclose: reconnect failure');
+                Shutdown_ws(event);
+            }
         }
     }
 }
