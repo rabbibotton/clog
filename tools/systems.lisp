@@ -1,4 +1,3 @@
-
 (in-package "CLOG-TOOLS")
 (defclass asdf-systems (clog:clog-panel)
           ((asd-label :reader asd-label) (remove-button :reader remove-button)
