@@ -1232,8 +1232,8 @@ of controls and double click to select control."
     (if (project-win app)
         (window-focus (project-win app))
         (let* ((win (create-gui-window obj :title "Project Window"
-                                           :top 200 :left 230
-                                           :width 643 :height 400
+                                           :top 100 :left 232
+                                           :width 643 :height 560
                                            :has-pinner t :client-movement t)))
           (create-projects (window-content win))
           (setf (project-win app) win)
@@ -2490,6 +2490,8 @@ of controls and double click to select control."
         (sel (text-value (project-list panel))))
     (setf (inner-html (runtime-list panel)) "")
     (setf (inner-html (designtime-list panel)) "")
+    (setf (inner-html (runtime-deps panel)) "")
+    (setf (inner-html (design-deps panel)) "")
     (setf (disabledp (runtime-add-lisp panel)) t)
     (setf (disabledp (runtime-delete panel)) t)
     (setf (disabledp (designtime-add-lisp panel)) t)
@@ -2506,6 +2508,9 @@ of controls and double click to select control."
                (let ((name (asdf:component-relative-pathname n))
                      (path (asdf:component-pathname n)))
                  (add-select-option (runtime-list panel) path name)))
+             (dolist (n (asdf:system-depends-on
+                         (asdf:find-system sel)))
+               (add-select-option (runtime-deps panel) n n))
              ;; fill designtime)
              (handler-case
                  (let ((sys (asdf:find-system (format nil "~A/tools" sel))))
@@ -2513,6 +2518,9 @@ of controls and double click to select control."
                      (let ((name (asdf:component-relative-pathname n))
                            (path (asdf:component-pathname n)))
                        (add-select-option (designtime-list panel) path name)))
+                   (dolist (n (asdf:system-depends-on
+                               (asdf:find-system sys)))
+                     (add-select-option (design-deps panel) n n))
                    (cond ((member "clog" (asdf:system-defsystem-depends-on sys) :test #'equal)
                           (setf (disabledp (runtime-add-lisp panel)) nil)
                           (setf (disabledp (runtime-delete panel)) nil)
@@ -2524,7 +2532,8 @@ of controls and double click to select control."
                                        :color-class "w3-yellow" :time-out 2))))
                (t (c)
                  (declare (ignore c))
-                 (add-select-option (designtime-list panel) "" "Missing /tools"))))
+                 (add-select-option (designtime-list panel) "" "Missing /tools")
+                 (add-select-option (design-deps panel) "" "Missing /tools"))))
             (t
              (confirm-dialog panel "Load project?"
                              (lambda (answer)
@@ -2540,8 +2549,66 @@ of controls and double click to select control."
                                       (setf (text-value (project-list panel)) "None"))))
                              :title "System not loaded"))))))
 
+(defun projects-add-dep (panel sys)
+  (Input-dialog panel "Enter system name:"
+                (lambda (result)
+                  (when result
+                    (add-dep-to-defsystem sys result)
+                    (ql:quickload sys)
+                    (projects-populate panel)))
+                :height 230)
+  (ql:quickload sys))
+
+(defun projects-add-plugin (panel sys)
+  (input-dialog panel (format nil "Enter plugin name (without /tools), ~
+                       plugin will be added to the runtime and designtime:")
+                (lambda (result)
+                  (when result
+                    (let* ((s (format nil "~A/tools" sys)))
+                      (add-dep-to-defsystem s (format nil "~A/tools" result))
+                      (ql:quickload s))
+                    (add-dep-to-defsystem sys result)
+                    (ql:quickload sys)
+                    (projects-populate panel)))
+                :height 250))
+
+(defun add-dep-to-defsystem (sys file)
+  (let ((fname    (asdf:system-source-file (asdf:find-system sys)))
+        (sys-list '()))
+    (with-open-file (s fname)
+      (loop
+        (let* ((line (read s nil)))
+          (unless line (return))
+          (when (equalp (format nil "~A" (second line)) sys)
+            (setf (getf line :depends-on)
+                  (append (getf line :depends-on) `(,file))))
+          (push line sys-list))))
+    (with-open-file (s fname :direction :output :if-exists :rename)
+      (let ((*print-case* :downcase))
+        (dolist (n (reverse sys-list))
+          (pprint n s))))))
+
+(defun remove-dep-from-defsystem (sys file)
+  (let ((fname    (asdf:system-source-file (asdf:find-system sys)))
+        (sys-list '()))
+    (with-open-file (s fname)
+      (loop
+        (let* ((line (read s nil)))
+          (unless line (return))
+          (when (equalp (format nil "~A" (second line)) sys)
+            (let (new-comp)
+              (dolist (n (getf line :depends-on))
+                (unless (equalp (format nil "~A" n) file)
+                  (push n new-comp)))
+              (setf (getf line :depends-on) (reverse new-comp))))
+          (push line sys-list))))
+    (with-open-file (s fname :direction :output :if-exists :rename)
+      (let ((*print-case* :downcase))
+        (dolist (n (reverse sys-list))
+          (pprint n s))))))
+
 (defun projects-add-lisp (panel sys)
-  (input-dialog panel "Enter lisp component name (with out .lisp):"
+  (Input-dialog panel "Enter lisp component name (with out .lisp):"
                 (lambda (result)
                   (when result
                     (let ((path (asdf:component-pathname
