@@ -113,6 +113,13 @@ script."
 (defvar *long-poll-url* nil
   "Dynamic variable indicating the url path used.")
 
+(defparameter *compiled-boot-js*
+  (with-open-file (stream (merge-pathnames #P"static-files/js/boot.js" (asdf:system-source-directory :clog)))
+    (let ((content (make-string (file-length stream))))
+      (read-sequence content stream)
+      content))
+  "A compiled version of current version of boot.js (private)")
+
 ;;;;;;;;;;;;;;;;;
 ;; generate-id ;;
 ;;;;;;;;;;;;;;;;;
@@ -196,10 +203,20 @@ the default answer. (Private)"
 (defun handle-new-connection (connection id)
   "Handle new incoming websocket CONNECTIONS with ID from boot page. (Private)"
   (handler-case
-      (cond (id
+      (cond ((and id (gethash id *connection-data*))
              (format t "Reconnection id - ~A to ~A~%" id connection)
+             (handler-case
+                 (websocket-driver:close-connection (gethash id *connection-ids*)
+                                                    "Aborting this old connection since receiving a reconnection request.")
+               (t (c)
+                 (when *verbose-output*
+                   (format t "Failed to close the old connection when establishing reconnection. This can be normal: The old connection could probably don't work for the client, so the client is requesting to reconnect.~%Condition - ~A.~&"
+                           c))))
              (setf (gethash id *connection-ids*) connection)
              (setf (gethash connection *connections*) id))
+            (id
+             (format t "Reconnection id ~A not found. Closing the connection.~%" id)
+             (websocket-driver:close-connection connection)) ; Don't send the reason for better security.
             (t
              (setf id (random-hex-string))
              (setf (gethash connection *connections*) id)
@@ -234,7 +251,13 @@ the default answer. (Private)"
   (handler-case
       (let ((connection-id (gethash connection *connections*))
             (ml (ppcre:split ":" message :limit 2)))
-        (cond ((equal (first ml) "0")
+        (cond ((null connection-id)
+               ;; a zombie connection
+               (when *verbose-output*
+                 (format t "A zombie connection ~A. CLOG doesn't remember its connection-id. Closing it.~%"
+                         connection))
+               (websocket-driver:close-connection connection)) ; don't send the reason for better security
+              ((equal (first ml) "0")
                ;; a ping
                (when *verbose-output*
                  (format t "Connection ~A    Ping~%" connection-id)))
@@ -389,7 +412,7 @@ the contents sent to the brower."
              (if (and (eq static-boot-js nil)
                       (equalp (getf env :path-info) "/js/boot.js"))
                  `(200 (:content-type "text/javascript")
-                       (,(compiled-boot-js)))
+                       (,*compiled-boot-js*))
                  (funcall app env))))
          (lambda (app)
            (lambda (env)
@@ -710,130 +733,3 @@ uses the jQuery CDN instead of the static js files."
 </BODY>
 <noscript>Your browser must support JavaScript and be HTML 5 compilant to see this site.</noscript>
 </HTML>")
-
-;;;;;;;;;;;;;;;;;;;;;;
-;; compiled-boot-js ;;
-;;;;;;;;;;;;;;;;;;;;;;
-
-(defun compiled-boot-js ()
-  "Returns a compiled version of current version of boot.js (private)"
-"
-/*compiled version*/
-var ws=null;
-var adr; var adrc;
-var clog={};
-var pingerid;
-var s = document.location.search;
-var tokens;
-var r = /[?&]?([^=]+)=([^&]*)/g;
-
-clog['body']=document.body;
-clog['head']=document.head;
-clog['documentElement']=document.documentElement;
-clog['window']=window;
-clog['navigator']=navigator;
-clog['document']=window.document;
-clog['location']=window.location;
-
-if (typeof clog_debug == 'undefined') {
-    clog_debug = false;
-}
-
-function Ping_ws() {
-    if (ws.readyState == 1) {
-        ws.send ('0');
-    }
-}
-
-function Shutdown_ws(event) {
-    if (ws != null) {
-        ws.onerror = null;
-        ws.onclose = null;
-        ws.close ();
-        ws = null;
-    }
-    clearInterval (pingerid);
-    if (clog['html_on_close'] != '') {
-        $(document.body).html(clog['html_on_close']);
-    }
-}
-
-function Setup_ws() {
-    ws.onmessage = function (event) {
-        try {
-            if (clog_debug == true) {
-                console.log ('eval data = ' + event.data);
-            }
-            eval (event.data);
-        } catch (e) {
-            console.error (e.message);
-        }
-    }
-
-    ws.onerror = function (event) {
-        console.log ('onerror: reconnect');
-        ws = null;
-        ws = new WebSocket (adr  + '?r=' + clog['connection_id']);
-        ws.onopen = function (event) {
-            console.log ('onerror: reconnect successful');
-            Setup_ws();
-        }
-        ws.onclose = function (event) {
-            console.log ('onerror: reconnect failure');
-            Shutdown_ws(event);
-        }
-    }
-
-    ws.onclose = function (event) {
-        console.log ('onclose: reconnect');
-        ws = null;
-        ws = new WebSocket (adr + '?r=' + clog['connection_id']);
-        ws.onopen = function (event) {
-            console.log ('onclose: reconnect successful');
-            Setup_ws();
-        }
-        ws.onclose = function (event) {
-            console.log ('onclose: reconnect failure');
-            Shutdown_ws(event);
-        }
-    }
-}
-
-function Open_ws() {
-    if (location.protocol == 'https:') {
-        adr = 'wss://' + location.hostname;
-    } else {
-        adr = 'ws://' + location.hostname;
-    }
-
-    if (location.port != '') { adr = adr + ':' + location.port; }
-    adr = adr + '/clog';
-
-    if (clog['connection_id']) {
-      adrc = adr  + '?r=' + clog['connection_id'];
-    } else { adrc = adr }
-
-    try {
-        console.log ('connecting to ' + adrc);
-        ws = new WebSocket (adrc);
-    } catch (e) {
-        console.log ('trying again, connecting to ' + adrc);
-        ws = new WebSocket (adrc);
-    }
-
-    if (ws != null) {
-        ws.onopen = function (event) {
-            console.log ('connection successful');
-            Setup_ws();
-        }
-        pingerid = setInterval (function () {Ping_ws ();}, 10000);
-    } else {
-        document.writeln ('If you are seeing this your browser or your connection to the internet is blocking websockets.');
-    }
-}
-
-$( document ).ready(function() {
-    if (ws == null) { Open_ws(); }
-});
-
-")
