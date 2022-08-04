@@ -2472,6 +2472,15 @@ of controls and double click to select control."
         (create-br body)
         (create-div body :content (format nil "For example:<br>(create-img body :url-src \"~A\")" pic-data))))))
 
+(defun resect-control-pallete (panel)
+  (let* ((app (connection-data-item panel "builder-app-data"))
+         (pallete (select-tool app)))
+    (setf (inner-html pallete) "")
+    (dolist (control *supported-controls*)
+      (if (equal (getf control :name) "group")
+          (add-select-optgroup pallete (getf control :description))
+          (add-select-option pallete (getf control :name) (getf control :description))))))
+
 (defun projects-setup (panel)
   (let* ((app (connection-data-item panel "builder-app-data")))
     (pushnew #P"~/common-lisp/" ql:*local-project-directories*)
@@ -2488,6 +2497,7 @@ of controls and double click to select control."
   (let ((app (connection-data-item panel "builder-app-data"))
         (already (asdf/operate:already-loaded-systems))
         (sel (text-value (project-list panel))))
+    (resect-control-pallete panel)
     (setf (inner-html (runtime-list panel)) "")
     (setf (inner-html (designtime-list panel)) "")
     (setf (inner-html (runtime-deps panel)) "")
@@ -2497,6 +2507,12 @@ of controls and double click to select control."
     (setf (disabledp (designtime-add-lisp panel)) t)
     (setf (disabledp (designtime-add-clog panel)) t)
     (setf (disabledp (designtime-delete panel)) t)
+    (setf (disabledp (runtime-add-dep panel)) t)
+    (setf (disabledp (runtime-del-dep panel)) t)
+    (setf (disabledp (design-add-dep panel)) t)
+    (setf (disabledp (design-del-dep panel)) t)
+    (setf (disabledp (design-plugin panel)) t)
+
     (setf (current-project app) (if (equal sel "None")
                                     nil
                                     sel))
@@ -2526,7 +2542,12 @@ of controls and double click to select control."
                           (setf (disabledp (runtime-delete panel)) nil)
                           (setf (disabledp (designtime-add-lisp panel)) nil)
                           (setf (disabledp (designtime-add-clog panel)) nil)
-                          (setf (disabledp (designtime-delete panel)) nil))
+                          (setf (disabledp (designtime-delete panel)) nil)
+                          (setf (disabledp (runtime-add-dep panel)) nil)
+                          (setf (disabledp (runtime-del-dep panel)) nil)
+                          (setf (disabledp (design-add-dep panel)) nil)
+                          (setf (disabledp (design-del-dep panel)) nil)
+                          (setf (disabledp (design-plugin panel)) nil))
                          (t
                           (alert-toast panel "Warning" "Missing :defsystem-depends-on (:clog)"
                                        :color-class "w3-yellow" :time-out 2))))
