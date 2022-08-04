@@ -1271,10 +1271,17 @@ of controls and double click to select control."
                                              ;; we need to modify Ace's lisp mode to treat : as part of symbol
                                              ;; otherwise lookups do not consider the symbols package. I did
                                              ;; using code mathod but then the automatic replace is only on the symbol
-                                             (let ((l (car (swank:simple-completions prefix "CLOG-USER"))))
+                                             (let* ((p (when (current-control app)
+                                                         (attribute (get-placer (current-control app)) "data-panel-id")))
+                                                    (s (if (eq (current-editor-is-lisp app) t)
+                                                           (if (current-control app)
+                                                               (string-upcase (attribute (attach-as-child (current-control app) p)
+                                                                                         "data-in-package"))
+                                                               "CLOG-USER")
+                                                           (current-editor-is-lisp app)))
+                                                    (l (car (swank:simple-completions prefix s))))
                                                (when (current-control app)
-                                                 (let* ((p (attribute (get-placer (current-control app)) "data-panel-id"))
-                                                        (n (get-control-list app p)))
+                                                 (let ((n (get-control-list app p)))
                                                    (maphash (lambda (k v)
                                                               (declare (ignore k))
                                                               (let ((name (attribute v "data-clog-name")))
@@ -2152,11 +2159,12 @@ of controls and double click to select control."
          (status    (create-div content :class "w3-tiny w3-border"))
          (lisp-file t)
          (file-name ""))
-    (setf (current-editor-is-lisp app) lisp-file)
     (set-on-window-focus win
                          (lambda (obj)
                            (declare (ignore obj))
-                           (setf (current-editor-is-lisp app) lisp-file)))
+                           (if lisp-file
+                               (setf (current-editor-is-lisp app) (text-value pac-line))
+                               (setf (current-editor-is-lisp app) nil))))
     (setf (background-color tool-bar) :black)
     (setf (advisory-title btn-paste) "paste")
     (setf (advisory-title btn-cut) "cut")
@@ -2185,6 +2193,7 @@ of controls and double click to select control."
                            :right "0px" :height "22px" :width "100%")
     (setf (place-holder pac-line) "Current Package")
     (setf (text-value pac-line) "clog-user")
+    (setf (current-editor-is-lisp app) "clog-user")
     (set-geometry ace :units "" :width "" :height ""
                       :top "22px" :bottom "20px" :left "0px" :right "0px")
     (clog-ace:resize ace)
@@ -2205,8 +2214,6 @@ of controls and double click to select control."
                  (cond ((or (equalp (pathname-type fname) "lisp")
                             (equalp (pathname-type fname) "asd"))
                         (setf (clog-ace:mode ace) "ace/mode/lisp")
-                        (setf lisp-file t)
-                        (setf (current-editor-is-lisp app) t)
                         ;; set package
                         (with-input-from-string (ins c)
                           (loop
@@ -2215,7 +2222,9 @@ of controls and double click to select control."
                               (unless (consp form) (return))
                               (when (eq (car form) 'in-package)
                                 (setf (text-value pac-line) (string-downcase (second form)))
-                                (return))))))
+                                (return)))))
+                        (setf lisp-file t)
+                        (setf (current-editor-is-lisp app) (text-value pac-line)))
                        (t
                         (setf lisp-file nil)
                         (setf (current-editor-is-lisp app) nil)
