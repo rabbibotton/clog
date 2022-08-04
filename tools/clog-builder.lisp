@@ -2147,6 +2147,7 @@ of controls and double click to select control."
          (btn-esel  (create-button tool-bar :content "Eval Sel" :class (format nil "w3-tiny ~A" btn-class)))
          (btn-test  (create-button tool-bar :content "Eval"     :class (format nil "w3-tiny ~A" btn-class)))
          (content   (center-panel box))
+         (pac-line  (create-form-element content :text :class "w3-black"))
          (ace       (clog-ace:create-clog-ace-element content))
          (status    (create-div content :class "w3-tiny w3-border"))
          (lisp-file t)
@@ -2180,8 +2181,12 @@ of controls and double click to select control."
     (setf (width btn-test) "40px")
     (setf (positioning ace) :absolute)
     (setf (positioning status) :absolute)
+    (set-geometry pac-line :units "" :top "20px" :left "0px"
+                           :right "0px" :height "22px" :width "100%")
+    (setf (place-holder pac-line) "Current Package")
+    (setf (text-value pac-line) "clog-user")
     (set-geometry ace :units "" :width "" :height ""
-                      :top "0px" :bottom "20px" :left "0px" :right "0px")
+                      :top "22px" :bottom "20px" :left "0px" :right "0px")
     (clog-ace:resize ace)
     (set-geometry status :units "" :width "" :height "20px"
                          :bottom "0px" :left "0px" :right "0px")
@@ -2193,19 +2198,29 @@ of controls and double click to select control."
     (flet ((open-file-name (fname)
              (window-focus win)
              (when fname
-               (cond ((or (equalp (pathname-type fname) "lisp")
-                          (equalp (pathname-type fname) "asd"))
-                      (setf (clog-ace:mode ace) "ace/mode/lisp")
-                      (setf lisp-file t)
-                      (setf (current-editor-is-lisp app) t))
-                     (t
-                      (setf lisp-file nil)
-                      (setf (current-editor-is-lisp app) nil)
-                      (setf (clog-ace:mode ace) (clog-ace:get-mode-from-extension ace fname))))
                (setf file-name fname)
                (setf (window-title win) fname)
-               (setf (clog-ace:text-value ace)
-                     (or (read-file fname) "")))))
+               (let ((c (or (read-file fname) ""))
+                     loc)
+                 (cond ((or (equalp (pathname-type fname) "lisp")
+                            (equalp (pathname-type fname) "asd"))
+                        (setf (clog-ace:mode ace) "ace/mode/lisp")
+                        (setf lisp-file t)
+                        (setf (current-editor-is-lisp app) t)
+                        ;; set package
+                        (with-input-from-string (ins c)
+                          (loop
+                            (let ((form (read ins nil)))
+                              (unless form (return))
+                              (unless (consp form) (return))
+                              (when (eq (car form) 'in-package)
+                                (setf (text-value pac-line) (string-downcase (second form)))
+                                (return))))))
+                       (t
+                        (setf lisp-file nil)
+                        (setf (current-editor-is-lisp app) nil)
+                        (setf (clog-ace:mode ace) (clog-ace:get-mode-from-extension ace fname))))
+                 (setf (clog-ace:text-value ace) c)))))
       (when open-file
         (open-file-name open-file))
       (set-on-click btn-load (lambda (obj)
@@ -2243,7 +2258,7 @@ of controls and double click to select control."
                              (let ((val (clog-ace:selected-text ace)))
                                (unless (equal val "")
                                  (let ((result (capture-eval val :clog-obj obj
-                                                                 :eval-in-package "CLOG-USER")))
+                                                                 :eval-in-package (text-value pac-line))))
                                    (clog-web-alert (connection-body obj) "Result"
                                                    (format nil "~&result: ~A" result)
                                                    :color-class "w3-green"
@@ -2252,7 +2267,7 @@ of controls and double click to select control."
                              (let ((val (text-value ace)))
                                (unless (equal val "")
                                  (let ((result (capture-eval val :clog-obj obj
-                                                                 :eval-in-package "CLOG-USER")))
+                                                                 :eval-in-package (text-value pac-line))))
                                    (clog-web-alert (connection-body obj) "Result"
                                                    (format nil "~&result: ~A" result)
                                                    :color-class "w3-green"

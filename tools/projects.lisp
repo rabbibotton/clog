@@ -1,4 +1,3 @@
-
 (in-package "CLOG-TOOLS")
 (defclass projects (clog:clog-panel)
           ((reload-project-button :reader reload-project-button)

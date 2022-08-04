@@ -1,6 +1,6 @@
-<data id="I3867358318" data-in-package="clog-tools" data-custom-slots="" data-clog-next-id="4" data-clog-title="clog-builder-repl"></data><div style="--pixel-density:0.994318; --char-width:7.20312; box-sizing: content-box; position: absolute; inset: 30px 0px 0px;" class="terminal" data-clog-type="clog-terminal" data-clog-composite-control="t" data-clog-terminal-prompt="> " data-clog-terminal-greetings="CLOG Builder REPL" data-clog-name="terminal" data-on-command="(multiple-value-bind (result new-package)
+<data id="I3868568770" data-in-package="clog-tools" data-custom-slots="" data-clog-next-id="4" data-clog-title="clog-builder-repl"></data><div style="--pixel-density:0.994318; --char-width:7.24432; box-sizing: content-box; position: absolute; inset: 30px 0px 0px;" class="terminal" data-clog-type="clog-terminal" data-clog-composite-control="t" data-clog-terminal-prompt="> " data-clog-terminal-greetings="CLOG Builder REPL" data-clog-name="terminal" data-on-command="(multiple-value-bind (result new-package)
   (capture-eval data :clog-obj        panel
                      :eval-in-package (text-value (package-div panel)))
   (setf (text-value (package-div panel))
         (string-downcase (package-name new-package)))
-  (clog-terminal:echo target result))"></div><input type="TEXT" value="clog-user" data-clog-type="input" data-clog-name="package-div" style="box-sizing: content-box; position: absolute; inset: 0px 0px 338.5px; height: 25px;" placeholder="" class="w3-black">
+  (clog-terminal:echo target result))"></div><input type="TEXT" value="clog-user" data-clog-type="input" data-clog-name="package-div" style="box-sizing: content-box; position: absolute; inset: 0px 0px 338.5px; height: 25px;" placeholder="Current Package" class="w3-black">
