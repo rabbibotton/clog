@@ -146,6 +146,12 @@
                                      (format nil "~&Error: ~A" condition)
                                      :time-out 3))
                  (format t "~&Error: ~A" condition)))
+        (unless (stringp form)
+          (let ((r (make-array '(0) :element-type 'base-char
+                                    :fill-pointer 0 :adjustable t)))
+            (with-output-to-string (s r)
+              (print form s))
+            (setf form r)))
         (let* ((*standard-output* stream)
                (*error-output* stream)
                (*debugger-hook* #'my-debugger)
@@ -1212,7 +1218,7 @@ of controls and double click to select control."
                                     (setf pk (second lf)))
                                   (when (> cp p) (return lf)))
                                 (when lf
-                                  (let ((result (capture-eval (format nil "~A" lf)
+                                  (let ((result (capture-eval lf
                                                               :clog-obj (connection-body editor)
                                                               :eval-in-package (format nil "~A" pk))))
                                     (clog-web-alert (connection-body editor) "Result"
@@ -2211,6 +2217,7 @@ of controls and double click to select control."
          (status    (create-div content :class "w3-tiny w3-border"))
          (lisp-file t)
          (file-name ""))
+    (declare (ignore spacer))
     (set-on-window-focus win
                          (lambda (obj)
                            (declare (ignore obj))
@@ -2264,8 +2271,7 @@ of controls and double click to select control."
              (when fname
                (setf file-name fname)
                (setf (window-title win) fname)
-               (let ((c (or (read-file fname) ""))
-                     loc)
+               (let ((c (or (read-file fname) "")))
                  (cond ((or (equalp (pathname-type fname) "lisp")
                             (equalp (pathname-type fname) "asd"))
                         (setf (clog-ace:mode ace) "ace/mode/lisp")
@@ -2318,7 +2324,6 @@ of controls and double click to select control."
                                                           (clog-ace::js-ace ace)))
                                         :junk-allowed t))
                                    (tv (text-value ace))
-                                   (pk (text-value pac-line))
                                    (lf nil)
                                    (cp 0))
                                (loop
@@ -2326,9 +2331,9 @@ of controls and double click to select control."
                                  (unless lf (return nil))
                                  (when (> cp p) (return lf)))
                                (when lf
-                                 (let ((result (capture-eval (format nil "~A" lf)
+                                 (let ((result (capture-eval lf
                                                              :clog-obj (connection-body obj)
-                                                             :eval-in-package (format nil "~A" pk))))
+                                                             :eval-in-package (text-value pac-line))))
                                    (clog-web-alert (connection-body obj) "Result"
                                                    (format nil "~&result: ~A" result)
                                                    :color-class "w3-green"

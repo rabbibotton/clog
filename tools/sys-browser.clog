@@ -1,4 +1,4 @@
-<data id="I3868699706" data-in-package="clog-tools" data-custom-slots="(classes :accessor classes) (fname :accessor fname) (state :accessor state :initform t)" data-clog-next-id="24" data-clog-title="sys-browser"></data><select data-clog-type="dropdown" data-clog-name="type-box" style="box-sizing: content-box; position: absolute; left: 5px; top: 10px; width: 190px; height: 20px;" data-on-create="(add-select-options target '(ALIEN-TYPE
+<data id="I3868704998" data-in-package="clog-tools" data-custom-slots="(classes :accessor classes) (fname :accessor fname) (state :accessor state :initform t)" data-clog-next-id="24" data-clog-title="sys-browser"></data><select data-clog-type="dropdown" data-clog-name="type-box" style="box-sizing: content-box; position: absolute; left: 5px; top: 10px; width: 190px; height: 20px;" data-on-create="(add-select-options target '(ALIEN-TYPE
                              CALLABLE
                              CLASS
                              COMPILER-MACRO
@@ -55,7 +55,7 @@
     (unless lf (return nil))
     (when (> cp p) (return lf)))
   (when lf
-    (let ((result (capture-eval (format nil &quot;~A&quot; lf)
+    (let ((result (capture-eval lf
                                 :clog-obj (connection-body panel)
                                 :eval-in-package (format nil &quot;~A&quot; pk))))
       (clog-web-alert (connection-body panel) &quot;Result&quot;
