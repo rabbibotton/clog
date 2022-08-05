@@ -775,14 +775,14 @@ not a temporary attached one when using select-control."
                      (setf control (next-sibling control)))))))
       (add-siblings (first-child content)))
     (let ((result (format nil
-                          "\(in-package \"~A\"\)
+                          "\(in-package :~A)
 \(defclass ~A \(clog:clog-panel\)
   \(~{~A~}\)\)
 \(defun create-~A \(clog-obj &key \(hidden nil\) \(class nil\) \(html-id nil\) \(auto-place t\)\)
   \(let \(\(panel \(change-class \(clog:create-div clog-obj :content \"~A\"
          :hidden hidden :class class :html-id html-id :auto-place auto-place\) \'~A\)\)\)
 ~{~A~}~{~A~}~{~A~}    panel\)\)~%"
-                          (string-upcase package)
+                          (string-downcase package)
                           cname     ;;defclass
                           cmembers
                           cname     ;;defun
