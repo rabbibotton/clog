@@ -4,6 +4,7 @@
   :license  "BSD"
   :version "0.0.0"
   :serial t
+  :entry-point "<%= (@ sys-name) %>:start-app"  
   :depends-on (#:clog) ; add clog plugins here as #:plugin for run time
   :components ((:file "<%= (@ sys-name) %>")))
 

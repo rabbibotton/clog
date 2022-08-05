@@ -2573,6 +2573,25 @@ of controls and double click to select control."
                         :color-class "w3-green"
                         :time-out 3)))))
 
+(defun projects-entry-point-change (panel)
+  (let* ((sys         (text-value (project-list panel)))
+         (entry-point (text-value (entry-point panel)))
+         (fname       (asdf:system-source-file (asdf:find-system sys)))
+         (sys-list    '()))
+    (with-open-file (s fname)
+      (loop
+        (let* ((line (read s nil)))
+          (unless line (return))
+          (when (equalp (format nil "~A" (second line)) sys)
+            (if (getf line :entry-point)
+                (setf (getf line :entry-point) entry-point)
+                (setf line (append line `(:entry-point ,entry-point)))))
+          (push line sys-list))))
+    (with-open-file (s fname :direction :output :if-exists :rename)
+      (let ((*print-case* :downcase))
+        (dolist (n (reverse sys-list))
+          (pprint n s))))))
+
 (defun projects-populate (panel)
   (let ((app (connection-data-item panel "builder-app-data"))
         (already (asdf/operate:already-loaded-systems))
@@ -2582,6 +2601,7 @@ of controls and double click to select control."
     (setf (inner-html (designtime-list panel)) "")
     (setf (inner-html (runtime-deps panel)) "")
     (setf (inner-html (design-deps panel)) "")
+    (setf (text-value (entry-point panel)) "")
     (setf (disabledp (runtime-add-lisp panel)) t)
     (setf (disabledp (runtime-delete panel)) t)
     (setf (disabledp (designtime-add-lisp panel)) t)
@@ -2592,7 +2612,8 @@ of controls and double click to select control."
     (setf (disabledp (design-add-dep panel)) t)
     (setf (disabledp (design-del-dep panel)) t)
     (setf (disabledp (design-plugin panel)) t)
-
+    (setf (disabledp (entry-point panel)) t)
+    (setf (disabledp (run-button panel)) t)
     (setf (current-project app) (if (equal sel "None")
                                     nil
                                     sel))
@@ -2632,7 +2653,9 @@ of controls and double click to select control."
                           (setf (disabledp (runtime-del-dep panel)) nil)
                           (setf (disabledp (design-add-dep panel)) nil)
                           (setf (disabledp (design-del-dep panel)) nil)
-                          (setf (disabledp (design-plugin panel)) nil))
+                          (setf (disabledp (design-plugin panel)) nil)
+                          (setf (disabledp (entry-point panel)) nil)
+                          (setf (disabledp (run-button panel)) nil))
                          (t
                           (alert-toast panel "Warning" "Missing :defsystem-depends-on (:clog)"
                                        :color-class "w3-yellow" :time-out 2))))
