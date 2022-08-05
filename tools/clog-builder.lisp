@@ -1215,9 +1215,6 @@ of controls and double click to select control."
                                   (let ((result (capture-eval (format nil "~A" lf)
                                                               :clog-obj (connection-body editor)
                                                               :eval-in-package (format nil "~A" pk))))
-                                    (print pk)
-                                    (print lf)
-                                    (print result)
                                     (clog-web-alert (connection-body editor) "Result"
                                                     (format nil "~&result: ~A" result)
                                                     :color-class "w3-green"
@@ -2205,6 +2202,7 @@ of controls and double click to select control."
          (btn-save  (create-img tool-bar :alt-text "save"     :url-src img-btn-save  :class btn-class))
          (btn-load  (create-img tool-bar :alt-text "load"     :url-src img-btn-load  :class btn-class))
          (spacer    (create-span tool-bar :content "&nbsp"))
+         (btn-efrm  (create-button tool-bar :content "Eval Form" :class (format nil "w3-tiny ~A" btn-class)))
          (btn-esel  (create-button tool-bar :content "Eval Sel" :class (format nil "w3-tiny ~A" btn-class)))
          (btn-test  (create-button tool-bar :content "Eval"     :class (format nil "w3-tiny ~A" btn-class)))
          (content   (center-panel box))
@@ -2227,6 +2225,7 @@ of controls and double click to select control."
     (setf (advisory-title btn-redo) "redo")
     (setf (advisory-title btn-save) "save")
     (setf (advisory-title btn-load) "load")
+    (setf (advisory-title btn-efrm) "evaluate form")
     (setf (advisory-title btn-esel) "evaluate selection")
     (setf (advisory-title btn-test) "evaluate")
     (setf (height btn-copy) "12px")
@@ -2237,10 +2236,12 @@ of controls and double click to select control."
     (setf (height btn-redo) "12px")
     (setf (height btn-save) "12px")
     (setf (height btn-load) "12px")
+    (setf (height btn-efrm) "12px")
     (setf (height btn-esel) "12px")
     (setf (height btn-test) "12px")
-    (setf (width btn-esel) "40px")
-    (setf (width btn-test) "40px")
+    (setf (width btn-efrm) "43px")
+    (setf (width btn-esel) "43px")
+    (setf (width btn-test) "43px")
     (setf (positioning ace) :absolute)
     (setf (positioning status) :absolute)
     (set-geometry pac-line :units "" :top "20px" :left "0px"
@@ -2309,6 +2310,29 @@ of controls and double click to select control."
     (set-on-click btn-redo (lambda (obj)
                              (declare (ignore obj))
                              (clog-ace:execute-command ace "redo")))
+    (set-on-click btn-efrm (lambda (obj)
+                             (let ((p  (parse-integer
+                                        (js-query obj
+                                                  (format nil "~A.session.doc.positionToIndex (~A.selection.getCursor(), 0);"
+                                                          (clog-ace::js-ace ace)
+                                                          (clog-ace::js-ace ace)))
+                                        :junk-allowed t))
+                                   (tv (text-value ace))
+                                   (pk (text-value pac-line))
+                                   (lf nil)
+                                   (cp 0))
+                               (loop
+                                 (setf (values lf cp) (read-from-string tv nil nil :start cp))
+                                 (unless lf (return nil))
+                                 (when (> cp p) (return lf)))
+                               (when lf
+                                 (let ((result (capture-eval (format nil "~A" lf)
+                                                             :clog-obj (connection-body obj)
+                                                             :eval-in-package (format nil "~A" pk))))
+                                   (clog-web-alert (connection-body obj) "Result"
+                                                   (format nil "~&result: ~A" result)
+                                                   :color-class "w3-green"
+                                                   :time-out 3))))))
     (set-on-click btn-esel (lambda (obj)
                              (let ((val (clog-ace:selected-text ace)))
                                (unless (equal val "")
@@ -2451,6 +2475,7 @@ of controls and double click to select control."
            (setf (text-value (file-name panel)) (fname panel))
            (setf (disabledp (eval-button panel)) nil)
            (setf (disabledp (eval-sel-button panel)) nil)
+           (setf (disabledp (eval-form-button panel)) nil)
            (setf (state panel) nil)
            (let* ((type (type-of item))
                   (name (format nil "~A" (definitions:designator item))))
@@ -2498,6 +2523,7 @@ of controls and double click to select control."
            (setf (text-value (file-name panel)) "")
            (setf (disabledp (eval-button panel)) t)
            (setf (disabledp (eval-sel-button panel)) t)
+           (setf (disabledp (eval-form-button panel)) t)
            (setf (disabledp (save-button panel)) t)
            (setf (state panel) t)
            (setf (text-value (src-box panel)) "No file information")))))
