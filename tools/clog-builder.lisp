@@ -1150,6 +1150,7 @@ of controls and double click to select control."
 
 (defun setup-lisp-ace (editor status &key (package "CLOG-USER"))
   (let ((app (connection-data-item editor "builder-app-data")))
+    ;; run apropos on symbol
     (js-execute editor
                 (format nil
                         "~A.commands.addCommand({
@@ -1182,7 +1183,46 @@ of controls and double click to select control."
                               (declare (ignore obj))
                               (when (current-editor-is-lisp app)
                                 (on-new-sys-browser editor :search data))))
-    (set-on-change editor
+    ;; eval form
+    (js-execute editor
+                (format nil
+                        "~A.commands.addCommand({
+    name: 'eval-form',
+    bindKey: {win: 'Alt-[',  mac: 'Command-['},
+    exec: function(editor) {
+        var position = editor.session.doc.positionToIndex (editor.selection.getCursor(), 0);
+        ~A.trigger('clog-eval-form', position);
+    },
+    readOnly: true,
+});"
+                        (clog-ace::js-ace editor)
+                        (jquery editor)))
+    (set-on-event-with-data editor "clog-eval-form"
+                            (lambda (obj data)
+                              (declare (ignore obj))
+                              (let ((p  (parse-integer data :junk-allowed t))
+                                    (tv (text-value editor))
+                                    (pk "CLOG-USER")
+                                    (lf nil)
+                                    (cp 0))
+                                (loop
+                                  (setf (values lf cp) (read-from-string tv nil nil :start cp))
+                                  (unless lf (return nil))
+                                  (when (eq (car lf) 'in-package)
+                                    (setf pk (second lf)))
+                                  (when (> cp p) (return lf)))
+                                (when lf
+                                  (let ((result (capture-eval (format nil "~A" lf)
+                                                              :clog-obj (connection-body editor)
+                                                              :eval-in-package (format nil "~A" pk))))
+                                    (print pk)
+                                    (print lf)
+                                    (print result)
+                                    (clog-web-alert (connection-body editor) "Result"
+                                                    (format nil "~&result: ~A" result)
+                                                    :color-class "w3-green"
+                                                    :time-out 3))))))
+    (Set-on-change editor
                    (lambda (obj)
                      (let ((s (js-query obj (format nil
                                                     "var row = ~A.selection.getCursor().row; ~
