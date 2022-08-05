@@ -2496,7 +2496,7 @@ of controls and double click to select control."
   (let ((app (connection-data-item panel "builder-app-data"))
         (already (asdf/operate:already-loaded-systems))
         (sel (text-value (project-list panel))))
-    (resect-control-pallete panel)
+    (reset-control-pallete panel)
     (setf (inner-html (runtime-list panel)) "")
     (setf (inner-html (designtime-list panel)) "")
     (setf (inner-html (runtime-deps panel)) "")
