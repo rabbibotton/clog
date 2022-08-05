@@ -1275,8 +1275,8 @@ of controls and double click to select control."
     (if (project-win app)
         (window-focus (project-win app))
         (let* ((win (create-gui-window obj :title "Project Window"
-                                           :top 100 :left 232
-                                           :width 643 :height 560
+                                           :top 60 :left 232
+                                           :width 643 :height 625
                                            :has-pinner t :client-movement t)))
           (create-projects (window-content win))
           (setf (project-win app) win)
@@ -2563,6 +2563,16 @@ of controls and double click to select control."
          (t
           (setf (text-value (project-list panel)) "None")))))
 
+(defun projects-run (panel)
+  (let ((val (text-value (entry-point panel))))
+    (unless (equal val "")
+      (let ((result (capture-eval (format nil "(~A)" val) :clog-obj panel
+                                      :eval-in-package "clog-user")))
+        (clog-web-alert (connection-body panel) "Result"
+                        (format nil "~&result: ~A" result)
+                        :color-class "w3-green"
+                        :time-out 3)))))
+
 (defun projects-populate (panel)
   (let ((app (connection-data-item panel "builder-app-data"))
         (already (asdf/operate:already-loaded-systems))
@@ -2588,6 +2598,11 @@ of controls and double click to select control."
                                     sel))
     (when (current-project app)
       (cond ((member sel already :test #'equal)
+             ;; entry point
+             (setf (text-value (entry-point panel))
+                   (or (asdf/system:component-entry-point
+                        (asdf:find-system sel))
+                       ""))
              ;; fill runtime
              (dolist (n (asdf:module-components
                          (asdf:find-system sel)))
