@@ -1337,6 +1337,15 @@ of controls and double click to select control."
                                          (setf (hiddenp win) t)
                                          nil))))))
 
+(defun reset-control-pallete (panel)
+  (let* ((app (connection-data-item panel "builder-app-data"))
+         (pallete (select-tool app)))
+    (setf (inner-html pallete) "")
+    (dolist (control *supported-controls*)
+      (if (equal (getf control :name) "group")
+          (add-select-optgroup pallete (getf control :description))
+          (add-select-option pallete (getf control :name) (getf control :description))))))
+
 (defun on-show-control-list-win (obj)
   "Show control list for selecting and manipulating controls by name"
   (let* ((app          (connection-data-item obj "builder-app-data"))
@@ -1365,11 +1374,8 @@ of controls and double click to select control."
     (setf (size pallete) 2)
     (setf (advisory-title pallete) (format nil "<ctrl/cmd> place static~%<shift> child to current selection"))
     (setf (select-tool app) pallete)
-    (dolist (control *supported-controls*)
-      (if (equal (getf control :name) "group")
-          (add-select-optgroup pallete (getf control :description))
-          (add-select-option pallete (getf control :name) (getf control :description))))
     (setf (overflow control-list) :auto)
+    (reset-control-pallete obj)
     (setf (control-list-win app) control-list)
     (setf (advisory-title content)
           (format nil "Drag and drop order~%Double click non-focusable~%~
@@ -2130,6 +2136,14 @@ of controls and double click to select control."
                                      :client-movement t)))
     (create-thread-list (window-content win))))
 
+(defun get-package-from-string (c)
+  (with-input-from-string (ins c)
+    (loop
+      (let ((form (read ins nil)))
+        (unless form (return "clog-user"))
+        (unless (consp form) (return "clog-user"))
+        (when (eq (car form) 'in-package)
+          (return (string-downcase (second form))))))))
 
 (defun on-open-file (obj &key open-file)
   (let* ((app (connection-data-item obj "builder-app-data"))
@@ -2214,15 +2228,7 @@ of controls and double click to select control."
                  (cond ((or (equalp (pathname-type fname) "lisp")
                             (equalp (pathname-type fname) "asd"))
                         (setf (clog-ace:mode ace) "ace/mode/lisp")
-                        ;; set package
-                        (with-input-from-string (ins c)
-                          (loop
-                            (let ((form (read ins nil)))
-                              (unless form (return))
-                              (unless (consp form) (return))
-                              (when (eq (car form) 'in-package)
-                                (setf (text-value pac-line) (string-downcase (second form)))
-                                (return)))))
+                        (setf (text-value pac-line) (get-package-from-string c))
                         (setf lisp-file t)
                         (setf (current-editor-is-lisp app) (text-value pac-line)))
                        (t
@@ -2330,7 +2336,7 @@ of controls and double click to select control."
   (let* ((app (connection-data-item obj "builder-app-data"))
          (win (create-gui-window obj :title "System Browser"
                                      :top 40 :left 225
-                                     :width 685 :height 430
+                                     :width 685 :height 530
                                      :client-movement t))
          (panel (create-sys-browser (window-content win))))
     (when search
@@ -2399,7 +2405,9 @@ of controls and double click to select control."
           (or (definitions:documentation item)
               "No documentation"))
     (cond ((fname panel)
-           (setf (text-value (src-box panel)) (read-file (fname panel)))
+           (let ((c (read-file (fname panel))))
+             (setf (text-value (src-box panel)) c)
+             (setf (text-value (pac-box panel)) (get-package-from-string c)))
            (setf (text-value (file-name panel)) (fname panel))
            (setf (disabledp (eval-button panel)) nil)
            (setf (disabledp (eval-sel-button panel)) nil)
@@ -2471,15 +2479,6 @@ of controls and double click to select control."
         (set-geometry (create-text-area body :value pic-data) :width 500 :height 400)
         (create-br body)
         (create-div body :content (format nil "For example:<br>(create-img body :url-src \"~A\")" pic-data))))))
-
-(defun resect-control-pallete (panel)
-  (let* ((app (connection-data-item panel "builder-app-data"))
-         (pallete (select-tool app)))
-    (setf (inner-html pallete) "")
-    (dolist (control *supported-controls*)
-      (if (equal (getf control :name) "group")
-          (add-select-optgroup pallete (getf control :description))
-          (add-select-option pallete (getf control :name) (getf control :description))))))
 
 (defun projects-setup (panel)
   (let* ((app (connection-data-item panel "builder-app-data")))
