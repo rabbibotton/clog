@@ -1109,7 +1109,7 @@ of controls and double click to select control."
                                            ""))
                                :eval-in-package package)))
     (open-window (window (connection-body obj)) "http://127.0.0.1:8080/test")
-    (alert-dialog obj result :title "Eval Result")))
+    (on-open-file obj :title "test eval" :text result)))
 
 (defun on-show-control-properties-win (obj)
   "Show control properties window"
@@ -2188,9 +2188,9 @@ of controls and double click to select control."
         (when (eq (car form) 'in-package)
           (return (string-downcase (second form))))))))
 
-(defun on-open-file (obj &key open-file)
+(defun on-open-file (obj &key open-file (title "New Source Editor") text)
   (let* ((app (connection-data-item obj "builder-app-data"))
-         (win (create-gui-window obj :title "New Source Editor"
+         (win (create-gui-window obj :title title
                                      :top 40 :left 225
                                      :width 645 :height 430
                                      :client-movement t))
@@ -2218,6 +2218,8 @@ of controls and double click to select control."
          (lisp-file t)
          (file-name ""))
     (declare (ignore spacer))
+    (when text
+      (setf (text-value ace) text))
     (set-on-window-focus win
                          (lambda (obj)
                            (declare (ignore obj))
@@ -2334,28 +2336,20 @@ of controls and double click to select control."
                                  (let ((result (capture-eval lf
                                                              :clog-obj (connection-body obj)
                                                              :eval-in-package (text-value pac-line))))
-                                   (clog-web-alert (connection-body obj) "Result"
-                                                   (format nil "~&result: ~A" result)
-                                                   :color-class "w3-green"
-                                                   :time-out 3))))))
+                                   (on-open-file obj :title "form eval" :text result))))))
     (set-on-click btn-esel (lambda (obj)
                              (let ((val (clog-ace:selected-text ace)))
                                (unless (equal val "")
                                  (let ((result (capture-eval val :clog-obj obj
                                                                  :eval-in-package (text-value pac-line))))
-                                   (clog-web-alert (connection-body obj) "Result"
-                                                   (format nil "~&result: ~A" result)
-                                                   :color-class "w3-green"
-                                                   :time-out 3))))))
+                                   (on-open-file obj :title "selection eval" :text result))))))
+
     (set-on-click btn-test (lambda (obj)
                              (let ((val (text-value ace)))
                                (unless (equal val "")
                                  (let ((result (capture-eval val :clog-obj obj
                                                                  :eval-in-package (text-value pac-line))))
-                                   (clog-web-alert (connection-body obj) "Result"
-                                                   (format nil "~&result: ~A" result)
-                                                   :color-class "w3-green"
-                                                   :time-out 3))))))))
+                                   (on-open-file obj :title "file eval" :text result))))))))
 (defun on-repl (obj)
   "Open quick start"
   (let* ((win (create-gui-window obj :title "CLOG Builder REPL"
