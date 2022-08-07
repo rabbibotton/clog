@@ -1225,7 +1225,7 @@ of controls and double click to select control."
                                                     (format nil "~&result: ~A" result)
                                                     :color-class "w3-green"
                                                     :time-out 3))))))
-    (Set-on-change editor
+    (set-on-change editor
                    (lambda (obj)
                      (let ((s (js-query obj (format nil
                                                     "var row = ~A.selection.getCursor().row; ~
@@ -1249,9 +1249,13 @@ of controls and double click to select control."
                        (unless (equal s "")
                          (with-input-from-string (i s)
                            (ignore-errors
-                            (let* ((m                         (read i))
-                                   (*PACKAGE*                 (find-package package))
-                                   (SWANK::*buffer-package*   (find-package package))
+                            (let* ((pac                       (if (or (eq (current-editor-is-lisp app) t)
+                                                                      (eq (current-editor-is-lisp app) nil))
+                                                                  "CLOG-USER"
+                                                                  (string-upcase (current-editor-is-lisp app))))
+                                   (m                         (read i))
+                                   (*PACKAGE*                 (find-package pac))
+                                   (SWANK::*buffer-package*   (find-package pac))
                                    (SWANK::*buffer-readtable* *readtable*)
                                    (ms                        (format nil "~A" m))
                                    r)
