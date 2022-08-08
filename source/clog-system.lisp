@@ -60,6 +60,7 @@ the same as the clog directy this overides the relative paths used in them.")
 
 (defun initialize
     (on-new-window-handler
+     &rest rest
      &key
        (host             "0.0.0.0")
        (port             8080)
@@ -92,6 +93,16 @@ compiled version. boot-function if set is called with the url and the contents
 of boot-file and its return value replaces the contents sent to the brower, this
 allows adding content for search engine optimization, see tutorial 12 for an
 example."
+  (declare (ignorable host
+                      port
+                      server
+                      extended-routing
+                      long-poll-first
+                      boot-file
+                      boot-function
+                      static-boot-html
+                      static-boot-js
+                      static-root))
   (setf *extended-routing* extended-routing)
   (when on-new-window-handler
     (set-on-new-window on-new-window-handler :path "/" :boot-file boot-file))
@@ -99,17 +110,9 @@ example."
     (setf *clog-running* t)
     (setf *static-root* (truename (or *overide-static-root*
                                       static-root)))
-    (clog-connection:initialize #'on-connect
-                                :host             host
-                                :port             port
-                                :server           server
-                                :long-poll-first  long-poll-first
-                                :extended-routing extended-routing
-                                :boot-file        boot-file
-                                :boot-function    boot-function
-                                :static-boot-html static-boot-html
-                                :static-boot-js   static-boot-js
-                                :static-root      *static-root*)))
+    (apply #'clog-connection:initialize
+           (append (list #'on-connect :static-root *static-root*)
+                   rest))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;
 ;; set-on-new-window ;;
