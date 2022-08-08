@@ -97,8 +97,7 @@ example."
     (set-on-new-window on-new-window-handler :path "/" :boot-file boot-file))
   (unless *clog-running*
     (setf *clog-running* t)
-    (setf *static-root* (truename (if *overide-static-root*
-                                      *overide-static-root*
+    (setf *static-root* (truename (or *overide-static-root*
                                       static-root)))
     (clog-connection:initialize #'on-connect
                                 :host             host
