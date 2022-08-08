@@ -2829,6 +2829,28 @@ of controls and double click to select control."
           (t
            (on-open-file target :open-file item)))))
 
+(defun on-show-callers (body)
+  (input-dialog body "Enter package:function-name :"
+                (lambda (result)
+                  (when result
+                    (handler-case
+                        (on-open-file body :title (format nil "Callers of ~A" result)
+                                           :text (swank::list-callers (read-from-string result)))
+                      (t (c)
+                        (on-open-file body :title "Error - Calleers"
+                                           :text c)))))))
+
+(defun on-show-callees (body)
+  (input-dialog body "Enter package:function-name :"
+                (lambda (result)
+                  (when result
+                    (handler-case
+                        (on-open-file body :title (format nil "Callees of ~A" result)
+                                           :text (swank::list-callees (read-from-string result)))
+                      (t (c)
+                        (on-open-file body :title "Error - Callee"
+                                           :text c)))))))
+
 (defun on-new-builder (body)
   "Launch instance of the CLOG Builder"
   (set-html-on-close body "Connection Lost")
@@ -2862,6 +2884,8 @@ of controls and double click to select control."
       (Create-gui-menu-item src   :content "New System Browser"        :on-click 'on-new-sys-browser)
       (create-gui-menu-item src   :content "New ASDF System Browser"   :on-click 'on-new-asdf-browser)
       (create-gui-menu-item tools :content "Control Events"            :on-click 'on-show-control-events-win)
+      (create-gui-menu-item tools :content "List Callers"              :on-click 'on-show-callers)
+      (create-gui-menu-item tools :content "List Callees"              :on-click 'on-show-callees)
       (create-gui-menu-item tools :content "Thread Viewer"             :on-click 'on-show-thread-viewer)
       (create-gui-menu-item tools :content "CLOG Builder REPL"         :on-click 'on-repl)
       (create-gui-menu-item tools :content "Copy/Cut History"          :on-click 'on-show-copy-history-win)
