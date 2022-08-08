@@ -378,6 +378,7 @@ the default answer. (Private)"
                      (host             "0.0.0.0")
                      (port             8080)
                      (server           :hunchentoot)
+                     (lack-middleware-list nil)
                      (extended-routing nil)
                      (long-poll-first  nil)
                      (boot-file        "/boot.html")
@@ -513,6 +514,8 @@ the contents sent to the brower."
          ;; Handle Websocket connection
          (lambda (env)
            (clog-server env))))
+  (dolist (lack-middleware lack-middleware-list)
+    (setf *app* (funcall lack-middleware *app*)))
   (setf *client-handler* (clack:clackup *app* :server server :address host :port port))
   (format t "HTTP listening on    : ~A:~A~%" host port)
   (format t "HTML root            : ~A~%"    static-root)
