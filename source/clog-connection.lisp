@@ -453,8 +453,17 @@ the contents sent to the brower."
                                 (setf post-data id)))
                             (when (equal (getf env :content-type)
                                          "application/x-www-form-urlencoded")
-                              (setf post-data (make-string (getf env :content-length)))
-                              (read-sequence post-data (getf env :raw-body)))
+                              (setf post-data (cond ((eq (class-name (class-of (getf env :raw-body)))
+                                                         'circular-streams:circular-input-stream)
+                                                     (let ((array-buffer (make-array (getf env :content-length)
+                                                                                     :adjustable t
+                                                                                     :fill-pointer t)))
+                                                       (read-sequence array-buffer (getf env :raw-body))
+                                                       (flex:octets-to-string array-buffer)))
+                                                    (t
+                                                     (let ((string-buffer (make-string (getf env :content-length))))
+                                                       (read-sequence string-buffer (getf env :raw-body))
+                                                       string-buffer)))))
                             (cond (long-poll-first
                                    (let ((id (random-hex-string)))
                                      (setf (gethash id *connection-data*) (make-hash-table* :test #'equal))
