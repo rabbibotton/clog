@@ -514,8 +514,11 @@ the contents sent to the brower."
          ;; Handle Websocket connection
          (lambda (env)
            (clog-server env))))
-  (dolist (lack-middleware lack-middleware-list)
-    (setf *app* (funcall lack-middleware *app*)))
+  ;; Wrap lack middlewares
+  (setf *app* (reduce #'funcall
+                      lack-middleware-list
+                      :initial-value *app*
+                      :from-end t))
   (setf *client-handler* (clack:clackup *app* :server server :address host :port port))
   (format t "HTTP listening on    : ~A:~A~%" host port)
   (format t "HTML root            : ~A~%"    static-root)
