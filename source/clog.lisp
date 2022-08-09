@@ -44,6 +44,7 @@ embedded in a native template application.)"
   (@clog-style-block     section)
   (@clog-form            section)
   (@clog-canvas          section)
+  (@clog-webgl           section)
   (@clog-multimedia      section)
   (@clog-auth            section)
   (@clog-gui             section)
@@ -125,6 +126,7 @@ embedded in a native template application.)"
 
   "CLOG-Obj - Internals for Extensions and Plugins"
   (html-id                generic-function)
+  (script-id              generic-function)
   (execute                generic-function)
   (query                  generic-function)
   (js-execute             generic-function)
@@ -767,6 +769,11 @@ embedded in a native template application.)"
   (path-clip           generic-function)
   (canvas-save         generic-function)
   (canvas-restore      generic-function))
+
+(defsection @clog-webgl (:title "CLOG WebGL Objects")
+  "CLOG-WebGL - Class for CLOG WebGL objects"
+  (clog-webgl   class)
+  (create-webgl generic-function))
 
 (defsection @clog-multimedia (:title "CLOG Multimedia Objects")
   "CLOG-Multimedia - Base Class for CLOG multimedia objects"

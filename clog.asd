@@ -24,6 +24,7 @@
                              (:file "clog-element-common")
                              (:file "clog-style")
                              (:file "clog-canvas")
+                             (:file "clog-webgl")
                              (:file "clog-form")
                              (:file "clog-multimedia")
                              (:file "clog-window")

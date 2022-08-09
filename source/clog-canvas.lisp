@@ -61,7 +61,6 @@
                 (format nil "clog['~A']=clog['~A'].getContext('2d')"
                         web-id
                         (html-id obj)))
-
     (make-instance 'clog-context2d
                    :connection-id (connection-id obj)
                    :html-id web-id)))
