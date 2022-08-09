@@ -76,8 +76,9 @@ the same as the clog directy this overides the relative paths used in them.")
                                           (asdf:system-source-directory :clog))))
   "Inititalize CLOG on a socket using HOST and PORT to serve BOOT-FILE as the
 default route to establish web-socket connections and static files located at
-STATIC-ROOT. The webserver used with CLACK can be chosed with :SERVER. If
-EXTENDED-ROUTING is t routes will match even if extend with additional / and
+STATIC-ROOT. The webserver used with CLACK can be chosen with :SERVER and
+middlewares prepended with :LACK-MIDDLEWARE-LIST.
+If EXTENDED-ROUTING is t routes will match even if extend with additional / and
 additional paths. If LONG-POLLING-FIRST is t then long polling continues until
 the on-new-window-handler ends, if LONG-POLLING-FIRST is a number continues long
 polling until that number of queries to browser.  LONG-POLLING-FIRST is used in

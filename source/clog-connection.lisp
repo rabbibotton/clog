@@ -388,8 +388,9 @@ the default answer. (Private)"
                      (static-root      #P"./static-files/"))
   "Initialize CLOG on a socket using HOST and PORT to serve BOOT-FILE as the
 default route for '/' to establish web-socket connections and static files
-located at STATIC-ROOT. The webserver used with CLACK can be chosed with
-:SERVER. If LONG-POLLING-FIRST is t, the output is sent as HTML instead of
+located at STATIC-ROOT. The webserver used with CLACK can be chosen with
+:SERVER and middlewares prepended with :LACK-MIDDLEWARE-LIST.
+If LONG-POLLING-FIRST is t, the output is sent as HTML instead of
 websocket commands until the end of the on-new-window-handler, if
 LONG-POLLING-FIRST is a number will keep long polling till that number of
 queries to browser.  LONG-POLLING-FIRST is used in webserver applications to
