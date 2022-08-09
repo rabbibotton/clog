@@ -378,6 +378,7 @@ the default answer. (Private)"
                      (host             "0.0.0.0")
                      (port             8080)
                      (server           :hunchentoot)
+                     (lack-middleware-list nil)
                      (extended-routing nil)
                      (long-poll-first  nil)
                      (boot-file        "/boot.html")
@@ -387,8 +388,10 @@ the default answer. (Private)"
                      (static-root      #P"./static-files/"))
   "Initialize CLOG on a socket using HOST and PORT to serve BOOT-FILE as the
 default route for '/' to establish web-socket connections and static files
-located at STATIC-ROOT. The webserver used with CLACK can be chosed with
-:SERVER. If LONG-POLLING-FIRST is t, the output is sent as HTML instead of
+located at STATIC-ROOT. The webserver used with CLACK can be chosen with
+:SERVER and middlewares prepended with :LACK-MIDDLEWARE-LIST,
+NOT supporting LACK.BUILDER DSL.
+If LONG-POLLING-FIRST is t, the output is sent as HTML instead of
 websocket commands until the end of the on-new-window-handler, if
 LONG-POLLING-FIRST is a number will keep long polling till that number of
 queries to browser.  LONG-POLLING-FIRST is used in webserver applications to
@@ -452,8 +455,17 @@ the contents sent to the brower."
                                 (setf post-data id)))
                             (when (equal (getf env :content-type)
                                          "application/x-www-form-urlencoded")
-                              (setf post-data (make-string (getf env :content-length)))
-                              (read-sequence post-data (getf env :raw-body)))
+                              (setf post-data (cond ((eq (class-name (class-of (getf env :raw-body)))
+                                                         'circular-streams:circular-input-stream)
+                                                     (let ((array-buffer (make-array (getf env :content-length)
+                                                                                     :adjustable t
+                                                                                     :fill-pointer t)))
+                                                       (read-sequence array-buffer (getf env :raw-body))
+                                                       (flex:octets-to-string array-buffer)))
+                                                    (t
+                                                     (let ((string-buffer (make-string (getf env :content-length))))
+                                                       (read-sequence string-buffer (getf env :raw-body))
+                                                       string-buffer)))))
                             (cond (long-poll-first
                                    (let ((id (random-hex-string)))
                                      (setf (gethash id *connection-data*) (make-hash-table* :test #'equal))
@@ -513,6 +525,11 @@ the contents sent to the brower."
          ;; Handle Websocket connection
          (lambda (env)
            (clog-server env))))
+  ;; Wrap lack middlewares
+  (setf *app* (reduce #'funcall
+                      lack-middleware-list
+                      :initial-value *app*
+                      :from-end t))
   (setf *client-handler* (clack:clackup *app* :server server :address host :port port))
   (format t "HTTP listening on    : ~A:~A~%" host port)
   (format t "HTML root            : ~A~%"    static-root)
