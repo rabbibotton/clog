@@ -770,11 +770,6 @@ embedded in a native template application.)"
   (canvas-save         generic-function)
   (canvas-restore      generic-function))
 
-(defsection @clog-webgl (:title "CLOG WebGL Objects")
-  "CLOG-WebGL - Class for CLOG WebGL objects"
-  (clog-webgl   class)
-  (create-webgl generic-function))
-
 (defsection @clog-multimedia (:title "CLOG Multimedia Objects")
   "CLOG-Multimedia - Base Class for CLOG multimedia objects"
   (clog-multimedia class)
