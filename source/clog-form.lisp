@@ -34,7 +34,7 @@ never be GC'd. File upload items will be a four part list
 
 (defmethod form-multipart-data ((obj clog-obj))
   (clog-connection:get-connection-data
-   (parse-integer (caar (form-post-data obj)) :junk-allowed t)))
+   (caar (form-post-data obj))))
 
 (defgeneric delete-multipart-data (clog-obj)
   (:documentation "Delete the multipart data upload"))

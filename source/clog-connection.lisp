@@ -446,7 +446,7 @@ the contents sent to the brower."
                                                        page-data)))
                             (when (search "multipart/form-data;"
                                           (getf env :content-type))
-                              (let ((id  (get-universal-time))
+                              (let ((id  (random-hex-string))
                                     (req (lack.request:make-request env)))
                                 (setf (gethash id *connection-data*)
                                       (lack.request:request-body-parameters req))
