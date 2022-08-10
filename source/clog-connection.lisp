@@ -87,9 +87,7 @@ script."
 (defvar *connection-ids*  (make-hash-table* :test #'equal) "IDs to connections")
 (defvar *connection-data* (make-hash-table* :test #'equal) "Connection based data")
 
-(defvar *new-id*   0 "Last issued connection or script IDs")
-(defvar *id-lock*  (bordeaux-threads:make-lock)
-  "Protect new-id variable.")
+(defvar *new-id* '(0) "Last issued connection or script IDs")
 
 #-(or mswindows win32 cormanlisp) ; isaac hasn't supported these platforms
 (defparameter *isaac-ctx*
@@ -126,7 +124,7 @@ script."
 
 (defun generate-id ()
   "Generate unique ids for use in scripts."
-  (bordeaux-threads:with-lock-held (*id-lock*) (incf *new-id*)))
+  (atomics:atomic-incf (car *new-id*)))
 
 ;;;;;;;;;;;;;;;;:;;;;;;
 ;; random-hex-string ;;
