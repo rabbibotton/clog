@@ -47,6 +47,10 @@ void main() {
          (pos             (attribute-location program "a_position"))
          (pos-buffer      (create-webgl-buffer gl))
          (vao             (create-vertex-array gl)))
+    (dotimes (n (parse-integer (program-parameter program :ACTIVE_ATTRIBUTES)))
+      (let ((obj (active-attribute program n)))
+        (format t "~A : Active Attribute - ~A ~A ~A"
+                n (info-name obj) (info-size obj) (info-type obj))))
     (print (drawing-buffer-width gl))
     (print (drawing-buffer-height gl))
     (bind-buffer pos-buffer :ARRAY_BUFFER)

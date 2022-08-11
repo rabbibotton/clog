@@ -44,11 +44,20 @@
   (finish                         generic-function)
   (flush                          generic-function)
   (frame-buffer-render-buffer     generic-function)
+  (frame-buffer-texture-2d        generic-function)
+  (front-face                     generic-function)
+  (generate-mipmap                generic-function)
   (viewport                       generic-function)
   (vertex-attribute-pointer       generic-function)
 
   (compile-shader-source         generic-function)
   (compile-webgl-program         generic-function)
+
+  "CLOG-WebGL-Active-Info - Class for CLOG WebGL Active Info objects"
+  (clog-webgl-active-info class)
+  (info-name              generic-function)
+  (info-size              generic-function)
+  (info-type              generic-function)
 
   "CLOG-WebGL-Shader - Class for CLOG WebGL-Shader objects"
   (clog-webgl-shader class)
@@ -69,6 +78,7 @@
   (bind-attribute-location generic-function)
   (program-parameter       generic-function)
   (attribute-location      generic-function)
+  (active-attribute        generic-function)
   (program-info-log        generic-function)
   (link-program            generic-function)
   (use-program             generic-function)
@@ -421,6 +431,43 @@ be executed as quickly as possible"))
                        (script-id obj) renderbuffertarget
                        (script-id renderbuffer))))
 
+(defgeneric frame-buffer-texture-2d (clog-webgl target attachment
+                                     textarget clog-frame-buffer level)
+  (:documentation "attaches a texture to a clog-frame-buffer"))
+
+(defmethod frame-buffer-texture-2d ((obj clog-webgl) target attachment
+                                    textarget texture level)
+    (execute obj (format nil "framebufferTexture2D(~A.~A,~A.~A,~A.~A,~A~A)"
+                       (script-id obj) target
+                       (script-id obj) attachment
+                       (script-id obj) textarget
+                       (script-id texture)
+                       level)))
+
+(defgeneric front-face (clog-webgl glenum-mode)
+  (:documentation "Specifies whether polygons are front- or back-facing by
+setting a winding orientation. GLENUM-MODE can be:
+:CW Clock-wise winding.
+:CCW Counter-clock-wise winding."))
+
+(defmethod front-face ((obj clog-webgl) glenum-mode)
+  (execute obj (format nil "frontFace(~A.~A)"
+                       (script-id obj) glenum-mode)))
+
+(defgeneric generate-mipmap (clog-webgl glenum-target)
+  (:documentation "Generates a set of mipmaps for a WebGLTexture object.
+GLENUM-TARGET can be:
+:TEXTURE_2D A two-dimensional texture.
+:TEXTURE_CUBE_MAP A cube-mapped texture.
+When using a WebGL 2 context, the following values are available additionally:
+
+:TEXTURE_3D A three-dimensional texture.
+:TEXTURE_2D_ARRAY A two-dimensional array texture"))
+
+(defmethod generate-mipmap ((obj clog-webgl) glenum-target)
+  (execute obj (format nil "generateMipmap(~A.~A)"
+                       (script-id obj) glenum-target)))
+
 (defgeneric disable-vertex-attribute-array (clog-webgl attribute-location)
   (:documentation "Turns the generic vertex attribute array off at a given index
 position."))
@@ -462,6 +509,34 @@ position."))
              (setf result (program-info-log program))
              (delete-program program)
              (error result))))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Implementation - clog-webgl-active-info
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defclass clog-webgl-active-info (clog-obj)())
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Properties - clog-webgl-active-info
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric info-name (clog-webgl-active-info)
+  (:documentation "Active Info Name"))
+
+(defmethod info-name ((obj clog-webgl-active-info))
+  (query obj "name"))
+
+(defgeneric info-size (clog-webgl-active-info)
+  (:documentation "Active Info Size"))
+
+(defmethod info-size ((obj clog-webgl-active-info))
+  (query obj "size"))
+
+(defgeneric info-type (clog-webgl-active-info)
+  (:documentation "Active Info Type"))
+
+(defmethod info-type ((obj clog-webgl-active-info))
+  (query obj "type"))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Implementation - clog-webgl-shader
@@ -552,6 +627,18 @@ For :GLENUM values"))
 (defmethod program-info-log ((obj clog-webgl-program))
   (query (gl obj) (format nil "getProgramInfoLog(~A)"
                           (script-id obj))))
+
+(defgeneric active-attribute (clog-webgl-program index)
+  (:documentation "Query about unknown attributes"))
+
+(defmethod active-attribute ((obj clog-webgl-program) index)
+  (let ((web-id (clog-connection:generate-id)))
+    (js-execute obj (format nil "clog['~A']=~A.getActiveAttrib(~A,~A)"
+                            web-id
+                            (script-id (gl obj)) (script-id obj) index))
+    (make-instance 'clog-webgl-active-info
+                   :connection-id (clog::connection-id obj)
+                   :html-id web-id)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Methods - clog-webgl-program
