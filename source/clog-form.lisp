@@ -40,7 +40,7 @@ never be GC'd. File upload items will be a four part list
   (:documentation "Delete the multipart data upload"))
 
 (defmethod delete-multipart-data ((obj clog-obj))
-  (let ((id (parse-integer (caar (form-post-data obj)))))
+  (let ((id (caar (form-post-data obj))))
     (clog-connection:delete-connection-data id)))
 
 (defun form-data-item (form-data item)
