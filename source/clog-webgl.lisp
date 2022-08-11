@@ -217,7 +217,7 @@ See - https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/ble
 (defmethod blend-function-seperate
     ((obj clog-webgl)
      glenum-sfactor-rgb   glenum-dfactor-rgb
-     glenum-sfactor-alpha glenum-dfactor-alhpa)
+     glenum-sfactor-alpha glenum-dfactor-alpha)
   (execute obj (format nil "blendFunc(~A.~A,~A.~A,~A.~A,~A.~A)"
                        (script-id obj) glenum-sfactor-rgb
                        (script-id obj) glenum-dfactor-rgb
@@ -414,7 +414,7 @@ be executed as quickly as possible"))
   (:documentation "Attaches a clog-Render-buffer object to a clog-frame-buffer object"))
 
 (defmethod frame-buffer-render-buffer ((obj clog-webgl) target attachment renderbuffertarget
-                                       (renderbuffer clog-webgl-render-buffer))
+                                       renderbuffer)
   (execute obj (format nil "framebufferRenderbuffer(~A.~A,~A.~A,~A.~A,~A)"
                        (script-id obj) target
                        (script-id obj) attachment
