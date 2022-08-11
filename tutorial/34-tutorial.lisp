@@ -47,6 +47,8 @@ void main() {
          (pos             (attribute-location program "a_position"))
          (pos-buffer      (create-webgl-buffer gl))
          (vao             (create-vertex-array gl)))
+    (print (drawing-buffer-width gl))
+    (print (drawing-buffer-height gl))
     (bind-buffer pos-buffer :ARRAY_BUFFER)
     (buffer-data pos-buffer `(0   0
                               0   0.5
