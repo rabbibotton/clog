@@ -78,7 +78,9 @@
   (bind-attribute-location generic-function)
   (program-parameter       generic-function)
   (attribute-location      generic-function)
+  (uniform-location        generic-function)
   (active-attribute        generic-function)
+  (active-uniform          generic-function)
   (program-info-log        generic-function)
   (link-program            generic-function)
   (use-program             generic-function)
@@ -620,8 +622,18 @@ For :GLENUM values"))
                           (script-id obj)
                           (script-id (gl obj)) glenum-param)))
 
+(defgeneric attribute-location (clog-webgl-program name)
+  (:documentation "Returns the location of an attribute variable in clog-program"))
+
 (defmethod attribute-location ((obj clog-webgl-program) name)
   (query (gl obj) (format nil "getAttribLocation(~A, '~A')"
+                          (script-id obj) name)))
+
+(defgeneric uniform-location (clog-webgl-program name)
+  (:documentation "Returns the location of an uniform variable in clog-program"))
+
+(defmethod uniform-location ((obj clog-webgl-program) name)
+  (query (gl obj) (format nil "getUniformLocation(~A, '~A')"
                           (script-id obj) name)))
 
 (defmethod program-info-log ((obj clog-webgl-program))
@@ -639,6 +651,20 @@ For :GLENUM values"))
     (make-instance 'clog-webgl-active-info
                    :connection-id (clog::connection-id obj)
                    :html-id web-id)))
+
+(defgeneric active-uniform (clog-webgl-program index)
+  (:documentation "Query about unknown uniforms"))
+
+(defmethod active-uniform ((obj clog-webgl-program) index)
+  (let ((web-id (clog-connection:generate-id)))
+    (js-execute obj (format nil "clog['~A']=~A.getActiveUniform(~A,~A)"
+                            web-id
+                            (script-id (gl obj)) (script-id obj) index))
+    (make-instance 'clog-webgl-active-info
+                   :connection-id (clog::connection-id obj)
+                   :html-id web-id)))
+
+;; WebGLRenderingContext.getAttachedShaders()
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Methods - clog-webgl-program

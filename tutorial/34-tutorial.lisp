@@ -51,6 +51,10 @@ void main() {
       (let ((obj (active-attribute program n)))
         (format t "~A : Active Attribute - ~A ~A ~A"
                 n (info-name obj) (info-size obj) (info-type obj))))
+    (dotimes (n (parse-integer (program-parameter program :ACTIVE_UNIFORMS)))
+      (let ((obj (active-uniform program n)))
+        (format t "~A : Active Uniform - ~A ~A ~A"
+                n (info-name obj) (info-size obj) (info-type obj))))
     (print (drawing-buffer-width gl))
     (print (drawing-buffer-height gl))
     (bind-buffer pos-buffer :ARRAY_BUFFER)
