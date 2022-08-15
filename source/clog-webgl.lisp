@@ -75,11 +75,14 @@
   (stencil-operation-seperate        generic-function)
   (texture-parameter-float           generic-function)
   (texture-parameter-integer         generic-function)
+  (uniform-matrix                    generic-function)
   (viewport                          generic-function)
   (vertex-attribute-pointer          generic-function)
 
   (compile-shader-source             generic-function)
   (compile-webgl-program             generic-function)
+
+  (clog-webgl-uniform                class)
 
   "CLOG-WebGL-Active-Info - Class for CLOG WebGL Active Info objects"
   (clog-webgl-active-info class)
@@ -783,7 +786,12 @@ Sets the behavior. The default value is :DONT_CARE. The possible values are:
 
 ;; WebGLRenderingContext.texSubImage2D()
 ;; WebGL2RenderingContext.uniform[1234][uif][v]()
+
 ;; WebGLRenderingContext.uniformMatrix[234]fv()
+(defmethod uniform-matrix ((obj clog-webgl) size location normalize matrix)
+  (execute obj (format nil "uniformMatrix~Afv(~A,~A,[~{~A~^,~}])"
+                       size (script-id location) (p-true-js normalize) matrix)))
+
 ;; WebGLRenderingContext.vertexAttrib[1234]f[v]()
 
 (defmethod viewport ((obj clog-webgl) x y width height)
@@ -819,6 +827,12 @@ Sets the behavior. The default value is :DONT_CARE. The possible values are:
              (setf result (program-info-log program))
              (delete-program program)
              (error result))))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Implementation - clog-webgl-uniform
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defclass clog-webgl-uniform (clog-obj)())
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Implementation - clog-webgl-active-info
@@ -999,15 +1013,20 @@ Returns a GLint indicating the number of uniform blocks containing active unifor
   (:documentation "Returns the location of an uniform variable in clog-webgl-program"))
 
 (defmethod uniform-location ((obj clog-webgl-program) name)
-  (query (gl obj) (format nil "getUniformLocation(~A, '~A')"
-                          (script-id obj) name)))
+  (let ((web-id (clog-connection:generate-id)))
+    (js-execute obj (format nil "clog['~A']=~A.getUniformLocation(~A,'~A')"
+                            web-id
+                            (script-id (gl obj)) (script-id obj) name))
+    (make-instance 'clog-webgl-uniform
+                   :connection-id (clog::connection-id obj)
+                   :html-id web-id)))
 
 (defgeneric uniform (clog-webgl-program location)
   (:documentation "Returns the value of uniform at LOCATION in clog-webgl-program"))
 
 (defmethod uniform ((obj clog-webgl-program) location)
   (query (gl obj) (format nil "getUniform(~A, ~A)"
-                          (script-id obj) location)))
+                          (script-id obj) (script-id location))))
 
 (defgeneric program-info-log (clog-webgl-program)
     (:documentation "Contains errors that occurred during failed linking or
