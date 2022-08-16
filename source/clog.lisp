@@ -64,6 +64,7 @@ embedded in a native template application.)"
 (defsection @clog-system (:title "CLOG System")
   "CLOG Startup and Shutdown"
   (initialize        function)
+  (*static-root*     variable)
   (set-on-new-window function)
   (is-running-p      function)
   (shutdown          function)
