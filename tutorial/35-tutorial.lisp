@@ -168,20 +168,18 @@
                ;; Indices
                (bind-buffer index-buffer :ELEMENT_ARRAY_BUFFER)
                (use-program program)
-               (uniform-matrix gl 4 projection-matrix nil (list (random 1.0) (random 1.0) (random 1.0) (random 1.0)
-                                                                (random 1.0) (random 1.0) (random 1.0) (random 1.0)
-                                                                (random 1.0) (random 1.0) (random 1.0) (random 1.0)
-                                                                (random 1.0) (random 1.0) (random 1.0) (random 1.0)))
-               (uniform-matrix gl 4 model-view-matrix nil (list (random 1.0) (random 1.0) (random 1.0) (random 1.0)
-                                                                (random 1.0) (random 1.0) (random 1.0) (random 1.0)
-                                                                (random 1.0) (random 1.0) (random 1.0) (random 1.0)
-                                                                (random 1.0) (random 1.0) (random 1.0) (random 1.0)))
+               (uniform-matrix gl 4 projection-matrix nil
+                               (list 2.4142136573791504 0 0 0
+                                     0 2.4142136573791504 0 0
+                                     0 0 -1.0002000331878662 -1
+                                     0 0 -0.020002000033855438 0))
+               (uniform-matrix gl 4 model-view-matrix nil
+                               (list 0.24186034500598907 0.6221014261245728 -0.7446430921554565 0
+                                     -0.7772392630577087 0.5836206674575806 0.2351299524307251 0
+                                     0.5808637738227844 0.5218972563743591 0.6246763467788696 0
+                                     0 0 -6 1))
                (draw-elements gl :TRIANGLES 36 :UNSIGNED_SHORT 0)))
-      (loop
-        (unless (clog:validp body)
-          (return))
-        (draw-scene)
-        (sleep .1)))))
+      (draw-scene))))
 
 (defun start-tutorial ()
   "Start turtorial."

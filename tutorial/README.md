@@ -59,3 +59,5 @@ Tutorial Summary
 - 31-tutorial.lisp - Database and Authority based websites - clog-web-dbi and clog-auth
 - 32-tutorial.lisp - Database Managed Content websites - clog-web-content
 - 33-tutorial.lisp - with-clog-create - Using a declarative syntax for GUIs
+- 34-tutorial.lisp - 2D WebGL example
+- 35-tutorial.lisp - 3D WebGL example
