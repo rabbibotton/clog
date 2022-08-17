@@ -1314,6 +1314,7 @@ of controls and double click to select control."
           (clog-ace:set-on-auto-complete (event-editor app)
                                          (lambda (obj prefix)
                                            (declare (ignore obj))
+                                           (print prefix)
                                            (when (current-editor-is-lisp app)
                                              ;; we need to modify Ace's lisp mode to treat : as part of symbol
                                              ;; otherwise lookups do not consider the symbols package. I did
