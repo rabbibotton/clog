@@ -2123,7 +2123,9 @@ of controls and double click to select control."
     (window-center win)
     (setf (win ct) win)
     (dolist (tmpl *supported-templates*)
-      (add-select-option (template-box ct) (getf tmpl :code) (getf tmpl :name)))))
+      (if (eq (getf tmpl :code) :group)
+          (add-select-optgroup (template-box ct) (getf tmpl :name))
+          (add-select-option (template-box ct) (getf tmpl :code) (getf tmpl :name))))))
 
 (defun fill-button-clicked (panel)
   "Template fill botton clicked"
