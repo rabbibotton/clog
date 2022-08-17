@@ -2268,6 +2268,11 @@
 
 (defparameter *supported-templates*
   (list
+   '(:name    "New Builder Panel Project"
+     :code    "nbp"
+     :type    :system
+     :www     "templates/www/"
+     :loc     "templates/projects/clog-panel/")
    '(:name    "New CLOG Basic HTML Project"
      :code    "ncp"
      :type    :system

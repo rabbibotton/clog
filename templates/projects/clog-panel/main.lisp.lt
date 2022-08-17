@@ -1,0 +1,24 @@
+(in-package :<%= (@ sys-name) %>)
+(defclass main-panel (clog:clog-panel)
+          ((next-button :reader next-button)
+           (main-container :reader main-container)))
+(defun create-main-panel
+       (clog-obj &key (hidden nil) (class nil) (html-id nil) (auto-place t))
+  (let ((panel
+         (change-class
+          (clog:create-div clog-obj :content
+                           "<div class=\"w3-container w3-card-2\" style=\"width: 300px; height: 150px; box-sizing: content-box; position: relative;\" id=\"CLOGB3869692796\" data-clog-name=\"main-container\">Hello World<button style=\"box-sizing: content-box; position: absolute; left: 110px; top: 90px;\" id=\"CLOGB3869692797\" data-clog-name=\"next-button\">Next Panel</button></div>"
+                           :hidden hidden :class class :html-id html-id
+                           :auto-place auto-place)
+          'main-panel)))
+    (setf (slot-value panel 'next-button)
+            (attach-as-child clog-obj "CLOGB3869692797" :clog-type
+             'clog:clog-button :new-id t))
+    (setf (slot-value panel 'main-container)
+            (attach-as-child clog-obj "CLOGB3869692796" :clog-type
+             'clog:clog-div :new-id t))
+    (clog:set-on-click (next-button panel)
+                       (lambda (target)
+                         (declare (ignorable target))
+                         (replace-element panel (create-next-panel panel))))
+    panel))
