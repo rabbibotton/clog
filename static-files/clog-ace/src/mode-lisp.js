@@ -4,8 +4,8 @@ define("ace/mode/lisp_highlight_rules",["require","exports","module","ace/lib/oo
 var oop = require("../lib/oop");
 var TextHighlightRules = require("./text_highlight_rules").TextHighlightRules;
 var LispHighlightRules = function () {
-    var keywordControl = "case|do|let|loop|if|else|when";
-    var keywordOperator = "eq|neq|and|or";
+    var keywordControl = "cond|case|do|let|loop|if|else|when|unless";
+    var keywordOperator = "equal|equalp|eq|neq|and|or";
     var constantLanguage = "null|nil";
     var supportFunctions = "cons|car|cdr|cond|lambda|format|setq|setf|quote|eval|append|list|listp|memberp|t|load|progn";
     var keywordMapper = this.createKeywordMapper({
@@ -23,7 +23,7 @@ var LispHighlightRules = function () {
                 },
                 {
                     token: ["storage.type.function-type.lisp", "text", "entity.name.function.lisp"],
-                    regex: "(?:\\b(?:(defun|defmethod|defmacro))\\b)(\\s+)((?:\\w|\\-|\\!|\\?)*)"
+                    regex: "(?:\\b(?:(defun|defgeneric|defmethod|defmacro|defclass))\\b)(\\s+)((?:\\w|\\-|\\!|\\?)*)"
                 },
                 {
                     token: ["punctuation.definition.constant.character.lisp", "constant.character.lisp"],
@@ -43,7 +43,7 @@ var LispHighlightRules = function () {
                 },
                 {
                     token: keywordMapper,
-                    regex: "[a-zA-Z_$][a-zA-Z0-9_$]*\\b"
+                    regex: "[a-zA-Z_$][a-zA-Z0-9_\\-\\:\\*$]*\\b"
                 },
                 {
                     token: "string",
@@ -65,7 +65,7 @@ var LispHighlightRules = function () {
                     next: "qqstring"
                 }, {
                     token: "string",
-                    regex: '"|$',
+                    regex: '"',
                     next: "start"
                 }
             ]
@@ -101,4 +101,3 @@ exports.Mode = Mode;
                         }
                     });
                 })();
-            
