@@ -2266,6 +2266,9 @@ CLOG-ELEMENT and set CLOG-ELEMENT to html-id. Returns CLOG-ELEMENT"))
     (setf (property new "id") html-id)
     (setf (slot-value new 'html-id) html-id)
     (replace-element obj new)
+    (when (or *store-new-objects*
+              (connection-data-item new html-id))
+      (setf (connection-data-item new html-id) new))
     (destroy obj)
     new))
 
