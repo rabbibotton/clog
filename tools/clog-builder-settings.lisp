@@ -2270,36 +2270,41 @@
   (list
    '(:name    "CLOG Builder - Panel Projects"
      :code    :group)
-   '(:name    "New Builder Panel Project"
+   '(:name    "Center Panel Project"
      :code    "nbp"
      :type    :system
      :www     "templates/www/"
      :loc     "templates/projects/clog-panel/")
+   '(:name    "Full screen/browser Panel Project"
+     :code    "nfp"
+     :type    :system
+     :www     "templates/www/"
+     :loc     "templates/projects/full-screen/")
    '(:name    "CLOG - General Projects"
      :code    :group)
-   '(:name    "New CLOG Basic HTML Project"
+   '(:name    "Basic HTML Project"
      :code    "ncp"
      :type    :system
      :www     "templates/www/"
      :loc     "templates/projects/clog/")
-   '(:name    "New CLOG-GUI Project"
+   '(:name    "CLOG-GUI Project"
      :code    "ncgp"
      :type    :system
      :www     "templates/www/"
      :loc     "templates/projects/clog-gui/")
-   '(:name    "New CLOG-WEB Project"
+   '(:name    "CLOG-WEB Project"
      :code    "ncwp"
      :type    :system
      :www     "templates/www/"
      :loc     "templates/projects/clog-web/")
-   '(:name    "New CLOG-WEB-SITE Project"
+   '(:name    "CLOG-WEB-SITE Project"
      :code    "ncws"
      :type    :system
      :www     "templates/www/"
      :loc     "templates/projects/clog-web-site/")
    '(:name    "CLOG/CLOG Builder - Extension Projects"
      :code    :group)
-   '(:name    "New CLOG/CLOG-Builder Plugin Project"
+   '(:name    "CLOG/CLOG Builder Plugin Project"
      :code    "ncplug"
      :type    :system
      :www     "templates/www/"

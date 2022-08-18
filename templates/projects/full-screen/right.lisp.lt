@@ -1,0 +1,16 @@
+
+(in-package :<%= (@ sys-name) %>)
+(defclass right-panel (clog:clog-panel) ((div-1 :reader div-1)))
+(defun create-right-panel
+       (clog-obj &key (hidden nil) (class nil) (html-id nil) (auto-place t))
+  (let ((panel
+         (change-class
+          (clog:create-div clog-obj :content
+                           "<div id=\"CLOGB38698129071\" style=\"box-sizing: content-box; position: absolute; left: 0px; top: 0px; height: 100%;\" data-clog-name=\"div-1\"></div>"
+                           :hidden hidden :class class :html-id html-id
+                           :auto-place auto-place)
+          'right-panel)))
+    (setf (slot-value panel 'div-1)
+            (attach-as-child clog-obj "CLOGB38698129071" :clog-type
+             'clog:clog-div :new-id t))
+    panel))

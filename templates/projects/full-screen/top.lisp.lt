@@ -1,0 +1,27 @@
+
+(in-package :<%= (@ sys-name) %>)
+(defclass top-panel (clog:clog-panel)
+          ((app-title :reader app-title) (app-image :reader app-image)
+           (app-header :reader app-header) (top-bounds :reader top-bounds)))
+(defun create-top-panel
+       (clog-obj &key (hidden nil) (class nil) (html-id nil) (auto-place t))
+  (let ((panel
+         (change-class
+          (clog:create-div clog-obj :content
+                           "<div id=\"CLOGB38697849925\" style=\"box-sizing: content-box; position: absolute; width: 100%; height: 65.4943px;\" data-clog-name=\"top-bounds\"><div class=\"w3-container w3-card-2\" style=\"width: 100%; height: 50px; box-sizing: content-box; position: absolute;\" id=\"CLOGB3869784706\" data-clog-name=\"app-header\"><img src=\"/img/clogicon.png\" alt=\"Add image url\" style=\"box-sizing: content-box; position: absolute; left: 4.99715px; top: 10px;\" id=\"CLOGB3869784707\" data-clog-name=\"app-image\"><div style=\"box-sizing: content-box; position: absolute; left: 57.9986px; top: 5px;\" class=\"w3-xlarge\" id=\"CLOGB3869784708\" data-clog-name=\"app-title\">My App</div></div></div>"
+                           :hidden hidden :class class :html-id html-id
+                           :auto-place auto-place)
+          'top-panel)))
+    (setf (slot-value panel 'app-title)
+            (attach-as-child clog-obj "CLOGB3869784708" :clog-type
+             'clog:clog-div :new-id t))
+    (setf (slot-value panel 'app-image)
+            (attach-as-child clog-obj "CLOGB3869784707" :clog-type
+             'clog:clog-img :new-id t))
+    (setf (slot-value panel 'app-header)
+            (attach-as-child clog-obj "CLOGB3869784706" :clog-type
+             'clog:clog-div :new-id t))
+    (setf (slot-value panel 'top-bounds)
+            (attach-as-child clog-obj "CLOGB38697849925" :clog-type
+             'clog:clog-div :new-id t))
+    panel))

@@ -1,0 +1,31 @@
+(defpackage #:<%= (@ sys-name) %>
+  (:use #:cl #:clog #:clog-web)
+  (:export start-app))
+
+(in-package :<%= (@ sys-name) %>)
+
+(defun on-new-window (body)
+  (debug-mode body)
+  ;; Add the clog-web look and feel
+  (clog-web-initialize body)
+  (let ((layout (create-panel-box-layout body :top-height 0
+                                              :left-width 0
+                                              :bottom-height 0
+                                              :right-width 0)))
+    (setf (connection-data-item body "layout") layout)
+    (create-top-panel (top-panel layout))
+    (create-foot-panel (bottom-panel layout))
+    (create-left-panel (left-panel layout))
+    (create-right-panel (right-panel layout))
+    (create-main-panel (center-panel layout))
+    (fit-layout layout)))
+
+(defun replace-center (obj)
+  (let ((layout (connection-data-item obj "layout")))
+    (replace-children (center-panel layout) obj)))
+
+(defun start-app ()
+  (initialize 'on-new-window
+   :static-root (merge-pathnames "./www/"
+                  (asdf:system-source-directory :<%= (@ sys-name) %>)))
+  (open-browser))

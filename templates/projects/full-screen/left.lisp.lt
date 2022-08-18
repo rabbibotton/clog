@@ -1,0 +1,36 @@
+
+(in-package :<%= (@ sys-name) %>)
+(defclass left-panel (clog:clog-panel)
+          ((left-button-2 :reader left-button-2)
+           (left-button-1 :reader left-button-1) (app-menu :reader app-menu)
+           (left-bounds :reader left-bounds)))
+(defun create-left-panel
+       (clog-obj &key (hidden nil) (class nil) (html-id nil) (auto-place t))
+  (let ((panel
+         (change-class
+          (clog:create-div clog-obj :content
+                           "<div style=\"box-sizing: content-box; position: absolute; left: 0px; top: 0px; width: 194px; height: 367.017px;\" id=\"CLOGB3869833761\" data-clog-name=\"left-bounds\"><div style=\"width: 175px; height: 100%; display: flex; flex-direction: column; box-sizing: content-box; position: static;\" class=\"\" id=\"CLOGB3869833762\" data-clog-name=\"app-menu\"><button class=\"w3-button w3-ripple w3-border w3-black\" style=\"box-sizing: content-box; position: static;\" id=\"CLOGB3869833763\" data-clog-name=\"left-button-1\">Main Panel</button><button class=\"w3-button w3-ripple w3-border w3-black\" style=\"box-sizing: content-box; position: static;\" id=\"CLOGB3869833764\" data-clog-name=\"left-button-2\">Next Panel</button></div></div>"
+                           :hidden hidden :class class :html-id html-id
+                           :auto-place auto-place)
+          'left-panel)))
+    (setf (slot-value panel 'left-button-2)
+            (attach-as-child clog-obj "CLOGB3869833764" :clog-type
+             'clog:clog-button :new-id t))
+    (setf (slot-value panel 'left-button-1)
+            (attach-as-child clog-obj "CLOGB3869833763" :clog-type
+             'clog:clog-button :new-id t))
+    (setf (slot-value panel 'app-menu)
+            (attach-as-child clog-obj "CLOGB3869833762" :clog-type
+             'clog:clog-div :new-id t))
+    (setf (slot-value panel 'left-bounds)
+            (attach-as-child clog-obj "CLOGB3869833761" :clog-type
+             'clog:clog-div :new-id t))
+    (clog:set-on-click (left-button-1 panel)
+                       (lambda (target)
+                         (declare (ignorable target))
+                         (replace-center (create-main-panel panel))))
+    (clog:set-on-click (left-button-2 panel)
+                       (lambda (target)
+                         (declare (ignorable target))
+                         (replace-center (create-next-panel panel))))
+    panel))

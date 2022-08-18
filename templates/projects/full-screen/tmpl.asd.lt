@@ -1,0 +1,26 @@
+(asdf:defsystem #:<%= (@ sys-name) %>
+  :description "New CLOG System"
+  :author "some@one.com"
+  :license  "BSD"
+  :version "0.0.0"
+  :serial t
+  :entry-point "<%= (@ sys-name) %>:start-app"
+  :depends-on (#:clog) ; add clog plugins here as #:plugin for run time
+  :components ((:file "<%= (@ sys-name) %>")
+               (:file "main")
+               (:file "next")
+               (:file "top")
+               (:file "foot")
+               (:file "left")
+               (:file "right")))
+
+(asdf:defsystem #:<%= (@ sys-name) %>/tools
+  :defsystem-depends-on (:clog)
+  :depends-on (#:<%= (@ sys-name) %> #:clog/tools) ; add clog plugins here as #:plugin/tools for design time
+  :components ((:clog-file "main")
+               (:clog-file "next")
+               (:clog-file "top")
+               (:clog-file "foot")
+               (:clog-file "left")
+               (:clog-file "right")))
+

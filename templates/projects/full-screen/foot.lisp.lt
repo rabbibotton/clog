@@ -1,0 +1,16 @@
+
+(in-package :<%= (@ sys-name) %>)
+(defclass foot-panel (clog:clog-panel) ((foot-bounds :reader foot-bounds)))
+(defun create-foot-panel
+       (clog-obj &key (hidden nil) (class nil) (html-id nil) (auto-place t))
+  (let ((panel
+         (change-class
+          (clog:create-div clog-obj :content
+                           "<div id=\"CLOGB38697851771\" style=\"box-sizing: content-box; position: static; width: 100%;\" data-clog-name=\"foot-bounds\">(C) 2022</div>"
+                           :hidden hidden :class class :html-id html-id
+                           :auto-place auto-place)
+          'foot-panel)))
+    (setf (slot-value panel 'foot-bounds)
+            (attach-as-child clog-obj "CLOGB38697851771" :clog-type
+             'clog:clog-div :new-id t))
+    panel))
