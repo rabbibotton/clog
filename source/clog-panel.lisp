@@ -261,6 +261,34 @@ if :HTML-ID \"myid\" then the HTML-ID for center will be: myid-center"
                                  :html-id (format nil "~A-bottom" html-id)))
     panel-box))
 
+
+;;;;;;;;;;;;;;;;
+;; fit-layout ;;
+;;;;;;;;;;;;;;;;
+
+(defgeneric fit-layout (clog-panel-box-layout)
+  (:documentation "Recalculate layout based on size of outer panel content"))
+
+(defmethod fit-layout ((obj clog-panel-box-layout))
+  (let ((top-height (scroll-height (top-panel obj)))
+        (bottom-height (scroll-height (bottom-panel obj)))
+        (left-width (scroll-width (left-panel obj)))
+        (right-width (scroll-width (right-panel obj))))
+    (setf (height (top-panel obj)) top-height)
+    (setf (height (bottom-panel obj)) bottom-height)
+    (setf (width (left-panel obj)) left-width)
+    (setf (width (right-panel obj)) right-width)
+    (set-margin-side (left-panel obj) :top (unit :px top-height))
+    (set-margin-side (right-panel obj) :top (unit :px top-height))
+    (set-margin-side (left-panel obj) :bottom (unit :px bottom-height))
+    (set-margin-side (right-panel obj) :bottom (unit :px bottom-height))
+    (set-margin (center-panel obj)
+                (unit :px top-height)
+                (unit :px right-width)
+                (unit :px bottom-height)
+                (unit :px left-width))))
+
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Implementation - clog-panel-box
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

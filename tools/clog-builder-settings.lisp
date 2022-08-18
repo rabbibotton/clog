@@ -2268,14 +2268,14 @@
 
 (defparameter *supported-templates*
   (list
-   '(:name    "CLOG Builder - Panel Templates"
+   '(:name    "CLOG Builder - Panel Projects"
      :code    :group)
    '(:name    "New Builder Panel Project"
      :code    "nbp"
      :type    :system
      :www     "templates/www/"
      :loc     "templates/projects/clog-panel/")
-   '(:name    "CLOG Templates - General"
+   '(:name    "CLOG - General Projects"
      :code    :group)
    '(:name    "New CLOG Basic HTML Project"
      :code    "ncp"
@@ -2297,7 +2297,7 @@
      :type    :system
      :www     "templates/www/"
      :loc     "templates/projects/clog-web-site/")
-   '(:name    "CLOG/CLOG Builder - Extension Templates"
+   '(:name    "CLOG/CLOG Builder - Extension Projects"
      :code    :group)
    '(:name    "New CLOG/CLOG-Builder Plugin Project"
      :code    "ncplug"

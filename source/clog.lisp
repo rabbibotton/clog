@@ -619,7 +619,8 @@ embedded in a native template application.)"
   (top-panel               generic-function)
   (left-panel              generic-function)
   (right-panel             generic-function)
-  (bottom-panel            generic-function))
+  (bottom-panel            generic-function)
+  (fit-layout              generic-function))
 
 (defsection @clog-style-block (:title "CLOG Style Blocks")
   "CLOG-Style-Block - CLOG Style Blocks"
