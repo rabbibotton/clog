@@ -115,6 +115,7 @@ embedded in a native template application.)"
   (blur   generic-function)
 
   "CLOG-Obj - Low Level"
+  (*store-new-objects*         generic-function)
   (connection-data             generic-function)
   (connection-data-item        generic-function)
   (connection-body             generic-function)
@@ -360,6 +361,7 @@ embedded in a native template application.)"
   (destroy            generic-function)
   (click              generic-function)
   (replace-element    generic-function)
+  (replace-children   generic-function)
   (swap-element-by-id generic-function)
 
   "CLOG-Element - DOM Traversal Methods"

@@ -10,6 +10,10 @@
 
 ;;; clog-elements represent the base object for visual html elements.
 
+(defvar *store-new-objects* nil
+  "Dynamic variable that when true every create-* or attach-* will also
+create a connection-data-item keyed by the html-id")
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Implementation - clog-element
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -24,7 +28,11 @@ element objects."))
 
 (defun make-clog-element (connection-id html-id &key (clog-type 'clog-element))
   "Construct a new clog-element or sub-element of CLOG-TYPE. (Private)"
-  (make-instance clog-type :connection-id connection-id :html-id html-id))
+  (let ((obj (make-instance clog-type :connection-id connection-id
+                                      :html-id       html-id)))
+    (when *store-new-objects*
+      (setf (connection-data-item obj html-id) obj))
+    obj))
 
 ;;;;;;;;;;;;;;;;;;;;;;
 ;; create-with-html ;;
@@ -2191,6 +2199,7 @@ is set to :table-cell or for labels on form elements."))
   (:documentation "Remove CLOG-Element from the clog cache on browser."))
 
 (defmethod remove-from-clog ((obj clog-element))
+  (remove-connection-data-item obj (html-id obj))
   (js-execute obj (format nil "~A=null;" (script-id obj))))
 
 ;;;;;;;;;;;;;
@@ -2227,6 +2236,21 @@ Returns CLOG-ELEMENT"))
 
 (defmethod replace-element ((obj clog-element) (new clog-element))
   (jquery-execute obj (format nil "replaceWith(~A)" (jquery new)))
+  obj)
+
+;;;;;;;;;;;;;;;;;;;;;;
+;; replace-children ;;
+;;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric replace-children (clog-element new-clog-element)
+  (:documentation "All CLOG-ELEMENT's children will we removed from DOM
+but not destroyed and NEW-CLOG-ELEMENT will be placed in CLOG-ELEMENT.
+DESTROY CLOG-ELEMENT if need to clear from browser memory.
+Returns CLOG-ELEMENT"))
+
+(defmethod replace-children ((obj clog-element) (new clog-element))
+  (setf (inner-html obj) "")
+  (place-inside-top-of obj new)
   obj)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;
