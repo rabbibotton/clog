@@ -44,7 +44,7 @@ element objects."))
 CONNECTION-ID. There must be a single outer block that will be set to
 an internal id. The returned CLOG-Element requires placement or will
 not be visible, ie. place-after, etc. as it exists in the javascript
-clog[] but is not in the DOM. If HTML-ID is nil one is generated.
+clog array but is not in the DOM. If HTML-ID is nil one is generated.
 (private)"
   (let ((web-id (if html-id
                     html-id
@@ -245,17 +245,17 @@ after attachment is changed to one unique to this session."))
 
 (defgeneric access-key (clog-element)
   (:documentation "Get/Setf access-key. Used for hot key access to element.
-[special key] + Access_Key
+special key + Access_Key
 
-   The [special key] per browser and platform is:
+   The special key per browser and platform is:
 
-    Browser              Windows       Linux           Mac
-    -----------------    -------       -----           ---
-    Internet Explorer     [Alt]         N/A            N/A
-    Chrome                [Alt]        [Alt]     [Control][Alt]
-    Firefox           [Alt][Shift] [Alt][Shift]  [Control][Alt]
-    Safari                [Alt]         N/A      [Control][Alt]
-    Opera 15+             [Alt]        [Alt]          [Alt]"))
+    Browser              Windows     Linux          Mac
+    -----------------    -------     -----          ---
+    Internet Explorer     Alt         N/A           N/A
+    Chrome                Alt         Alt       Control|Alt
+    Firefox             Alt|Shift   Alt|Shift   Control|Alt
+    Safari                Alt         N/A       Control|Alt
+    Opera 15+             Alt         Alt           Alt"))
 
 (defmethod access-key ((obj clog-element))
   (property obj "accessKey"))
@@ -823,12 +823,12 @@ handles how elements are treated by the browser layout engine.
                       order - sets visual item order in flexbox
                       align-self - override flexbox's align-items for item
 
-                   :flex-start    [---  ]
-                   :flex-end      [   ---]
-                   :center        [ --- ]
-                   :space-between [-  -  -]
-                   :space-around  [ -   -   - ]
-                   :space-evenly  [ - - - ]
+                   :flex-start    (---  )
+                   :flex-end      (   ---)
+                   :center        ( --- )
+                   :space-between (-  -  -)
+                   :space-around  ( -   -   - )
+                   :space-evenly  ( - - - )
 
     grid         - Turn this item in to a grid container block level. The grid
                    properties to adjust for container are:
@@ -1843,7 +1843,7 @@ is relative to origin of: padding-box|border-box|content-box"))
 
 (defgeneric background-repeat (clog-element)
   (:documentation "Get/Setf background-repeat. repeat-x | repeat-y |
-[ repeat | space | round | no-repeat ]{1,2}"))
+( repeat | space | round | no-repeat ) {1,2}"))
 
 (defmethod background-repeat ((obj clog-element))
   (style obj "background-repeat"))

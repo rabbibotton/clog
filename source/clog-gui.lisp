@@ -764,6 +764,7 @@ the window will be set to keep-on-top always."))
       (setf (content win) (attach-as-child win (format nil "~A-body"  html-id)))
       (setf (gethash (format nil "~A" html-id) (windows app)) win)
       (set-on-click win (lambda (obj)
+                          (declare (ignore obj))
                           (unless (> (modal-count app) 0)
                             (window-focus win))))
       (if maximize

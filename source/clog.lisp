@@ -115,7 +115,7 @@ embedded in a native template application.)"
   (blur   generic-function)
 
   "CLOG-Obj - Low Level"
-  (*store-new-objects*         generic-function)
+  (*store-new-objects*         variable)
   (connection-data             generic-function)
   (connection-data-item        generic-function)
   (connection-body             generic-function)

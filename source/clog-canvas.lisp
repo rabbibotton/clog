@@ -187,7 +187,7 @@
 ;;;;;;;;;;;;;;;;;;;
 
 (Defgeneric get-line-dash (clog-context2d)
-  (:documentation "Set line style dash pattern, e.g. [10, 20]"))
+  (:documentation "Set line style dash pattern, e.g. 10, 20"))
 
 (defmethod get-line-dash ((obj clog-context2d))
   (query obj (format nil "getLineDash()")))
@@ -197,7 +197,7 @@
 ;;;;;;;;;;;;;;;;;;;
 
 (defgeneric set-line-dash (clog-context2d value)
-  (:documentation "Set line style dash pattern, e.g. [10, 20]"))
+  (:documentation "Set line style dash pattern, e.g. 10, 20"))
 
 (defmethod set-line-dash ((obj clog-context2d) value)
   (execute obj (format nil "setLineDash(~A)" value)))

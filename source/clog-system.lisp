@@ -98,6 +98,7 @@ example."
   (declare (ignorable host
                       port
                       server
+                      lack-middleware-list
                       extended-routing
                       long-poll-first
                       boot-file

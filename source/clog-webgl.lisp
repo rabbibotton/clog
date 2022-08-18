@@ -29,7 +29,7 @@
   (frame-buffer-attachment-parameter generic-function)
   (parameter                         generic-function)
   (render-buffer-parameter           generic-function)
-  (texture-paramenter                generic-function)
+  (texture-parameter                 generic-function)
   (vertex-attribute                  generic-function)
 
   (active-texture                    generic-function)
@@ -95,11 +95,11 @@
   (create-shader     generic-function)
   (is-shader         generic-function)
 
-  (shader-source     generic-function)
-  (shader-parameter  generic-function)
-  (shader-info-log   generic-function)
-  (compile-shader    generic-function)
-  (delete-shader     generic-function)
+  (shader-source        generic-function)
+  (shader-parameter     generic-function)
+  (shader-info-log      generic-function)
+  (compile-shader       generic-function)
+  (delete-shader        generic-function)
 
   "CLOG-WebGL-Program - Class for CLOG WebGL-Program objects"
   (clog-webgl-program class)
@@ -131,10 +131,10 @@
   (delete-buffer       generic-function)
 
   "CLOG-WebGL-Vertex-Array - Class for CLOG WebGL-Vertex-Array objects"
-  (clog-vertex-array   class)
-  (create-vertex-array generic-function)
-  (bind-vertex-array   generic-function)
-  (delete-vertex-array generic-function)
+  (clog-webgl-vertex-array class)
+  (create-vertex-array     generic-function)
+  (bind-vertex-array       generic-function)
+  (delete-vertex-array     generic-function)
 
   "CLOG-WebGL-Frame-Buffer - Class for CLOG WebGL-Frame-Buffer objects"
   (clog-webgl-frame-buffer   class)
@@ -377,7 +377,7 @@ When using a WebGL 2 context, the following values are available additionally:
 (defmethod blend-equation ((obj clog-webgl) glenum-mode)
   (execute obj (format nil "blendEquation(~A.~A)" (script-id obj) glenum-mode)))
 
-(defgeneric blend-equation-separate (clog-webgl glenum-mode-rgb glenum-mode-alpha)
+(defgeneric blend-equation-seperate (clog-webgl glenum-mode-rgb glenum-mode-alpha)
   (:documentation "Used to set both the RGB blend equation and alpha blend equation to a single equation.
 :FUNC_ADD : source + destination (default value)
 :FUNC_SUBTRACT : source - destination
@@ -388,7 +388,7 @@ When using a WebGL 2 context, the following values are available additionally:
 :MIN : Minimum of source and destination
 :MAX : Maximum of source and destination"))
 
-(defmethod blend-equation-separate ((obj clog-webgl) glenum-mode-rgb glenum-mode-alpha)
+(defmethod blend-equation-seperate ((obj clog-webgl) glenum-mode-rgb glenum-mode-alpha)
   (execute obj (format nil "blendEquationSeparate(~A.~A,~A.~A)"
                        (script-id obj) glenum-mode-rgb
                        (script-id obj) glenum-mode-alpha)))
@@ -607,8 +607,8 @@ position."))
 
 (defgeneric finish (clog-webgl)
   (:documentation "Blocks execution until all previously called commands are
-finished. [this needs to be written to fire an event when done to work fully
-with CLOG]"))
+finished. this needs to be written to fire an event when done to work fully
+with CLOG"))
 
 (defmethod finish ((obj clog-webgl))
   (execute obj "finish()"))
@@ -893,6 +893,9 @@ For :GLENUM values"))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Properties - clog-webgl-shader
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric shader-source (clog-webgl-shader source)
+  (:documentation "Sets shader source code"))
 
 (defmethod (setf shader-source) (source (obj clog-webgl-shader))
   (execute (gl obj) (format nil "shaderSource(~A, '~A')"
