@@ -64,89 +64,103 @@
                    :connection-id (connection-id obj)
                    :html-id web-id)))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Properties - clog-context2d
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 ;;;;;;;;;;;;;;;;
-;; clear-rect ;;
+;; fill-style ;;
 ;;;;;;;;;;;;;;;;
 
-(defgeneric clear-rect (clog-context2d x y width height)
-  (:documentation "Clear rectangle to transparent black"))
+(defgeneric fill-style (clog-context2d)
+  (:documentation "Setf/get property fill style"))
 
-(defmethod clear-rect ((obj clog-context2d) x y width height)
-  (execute obj (format nil "clearRect(~A,~A,~A,~A)"
-                       x y width height)))
+(defmethod fill-style ((obj clog-context2d))
+  (query obj "fillStyle"))
 
-;;;;;;;;;;;;;;;
-;; fill-rect ;;
-;;;;;;;;;;;;;;;
+(defmethod (setf fill-style) (value (obj clog-context2d))
+  (execute obj (format nil "fillStyle='~A'" value)))
 
-(defgeneric fill-rect (clog-context2d x y width height)
-  (:documentation "Fill rectangle with current fill-color"))
+;;;;;;;;;;;;;;;;;;;
+;; canvas-filter ;;
+;;;;;;;;;;;;;;;;;;;
 
-(defmethod fill-rect ((obj clog-context2d) x y width height)
-  (execute obj (format nil "fillRect(~A,~A,~A,~A)"
-                       x y width height)))
+(defgeneric canvas-filter (clog-context2d)
+  (:documentation "Setf/get filter dsl -
+See https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/filter"))
 
-;;;;;;;;;;;;;;;;;
-;; stroke-rect ;;
-;;;;;;;;;;;;;;;;;
+(defmethod canvas-filter ((obj clog-context2d))
+  (query obj "filter"))
 
-(defgeneric stroke-rect (clog-context2d x y width height)
-  (:documentation "Fill rectangle using current stroke-style"))
+(defmethod (setf canvas-filter) (value (obj clog-context2d))
+  (execute obj (format nil "filter='~A'" value)))
 
-(defmethod stroke-rect ((obj clog-context2d) x y width height)
-  (execute obj (format nil "strokeRect(~A,~A,~A,~A)"
-                       x y width height)))
+;;;;;;;;;;;;;;;;
+;; font-style ;;
+;;;;;;;;;;;;;;;;
 
-;;;;;;;;;;;;;;;
-;; fill-text ;;
-;;;;;;;;;;;;;;;
+(defgeneric font-style (clog-context2d)
+  (:documentation "Setf/get font using css font string
+     https://developer.mozilla.org/en-US/docs/Web/CSS/font"))
 
-(defgeneric fill-text (clog-context2d text x y &key max-width)
-  (:documentation "Fill text with current fill-color"))
+(defmethod font-style ((obj clog-context2d))
+  (query obj "font"))
 
-(defmethod fill-text ((obj clog-context2d) text x y &key (max-width nil))
-  (execute obj (format nil "fillText('~A',~A,~A~A)"
-                       (escape-string text)
-                       x y
-                       (if max-width
-                           (format nil ",~A" max-width)
-                           ""))))
-;;;;;;;;;;;;;;;;;
-;; stroke-text ;;
-;;;;;;;;;;;;;;;;;
+(defmethod (setf font-style) (value (obj clog-context2d))
+  (execute obj (format nil "font='~A'" value)))
 
-(defgeneric stroke-text (clog-context2d text x y &key max-width)
-  (:documentation "Stroke text with current stroke-style"))
-
-(defmethod stroke-text ((obj clog-context2d) text x y &key (max-width nil))
-  (execute obj (format nil "strokeText('~A',~A,~A~A)"
-                       (escape-string text)
-                       x y
-                       (if max-width
-                           (format nil ",~A" max-width)
-                           ""))))
 ;;;;;;;;;;;;;;;;;;
-;; measure-text ;;
+;; global-alpha ;;
 ;;;;;;;;;;;;;;;;;;
 
-(defgeneric measure-text (clog-context2d text)
-  (:documentation "Measure text"))
+(defgeneric global-alpha (clog-context2d)
+  (:documentation "Setf/get global alpha"))
 
-(defmethod measure-text ((obj clog-context2d) text)
-  ;; (let ((text-metric (query obj
-  ;;(format nil "measureText('~A')" (escape-string text)))))
-    ;; needs way to query like for events
-    )
+(defmethod global-alpha ((obj clog-context2d))
+  (parse-float (query obj "globalAlpha")))
 
-;;;;;;;;;;;;;;;;
-;; line-width ;;
-;;;;;;;;;;;;;;;;
+(defmethod (setf global-alpha) (value (obj clog-context2d))
+  (execute obj (format nil "globalAlpha=~A" value)))
 
-(defgeneric line-width (clog-context2d value)
-  (:documentation "Set line style width"))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; global-composite-operation ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defmethod line-width ((obj clog-context2d) value)
-  (execute obj (format nil "lineWidth=~A" value)))
+(defgeneric global-composite-operation (clog-context2d)
+  (:documentation "Setf/get composite blend mode -
+https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/globalCompositeOperation"))
+
+(defmethod global-composite-operation ((obj clog-context2d))
+  (query obj "globalCompositeOperation"))
+
+(defmethod (setf global-composite-operation) (value (obj clog-context2d))
+  (execute obj (format nil "globalCompositeOperation='~A'" value)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; image-smoothing-enabled ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric image-smoothing-enabled (clog-context2d)
+  (:documentation "Setf/get text shadow blur"))
+
+(defmethod image-smoothing-enabled ((obj clog-context2d))
+  (js-true-p (query obj "imageSmoothingEnabled")))
+
+(defmethod (setf image-smoothing-enabled) (value (obj clog-context2d))
+  (execute obj (format nil "imageSmoothingEnabled=~A" (p-true-js value))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; image-smoothing-quality ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric image-smoothing-quality (clog-context2d)
+  (:documentation "Setf/get text shadow blur"))
+
+(defmethod image-smoothing-quality ((obj clog-context2d))
+  (query obj "imageSmoothingQuality"))
+
+(defmethod (setf image-smoothing-quality) (value (obj clog-context2d))
+  (execute obj (format nil "imageSmoothingQuality='~A'" value)))
 
 ;;;;;;;;;;;;;;
 ;; line-cap ;;
@@ -154,11 +168,27 @@
 
 (deftype line-cap-type () '(member :butt :round :square))
 
-(defgeneric line-cap (clog-context2d value)
-  (:documentation "Set line cap style"))
+(defgeneric line-cap (clog-context2d)
+  (:documentation "Setf/get line cap style"))
 
-(defmethod line-cap ((obj clog-context2d) value)
+(defmethod line-cap ((obj clog-context2d))
+  (query obj "lineCap"))
+
+(defmethod (setf line-cap) (value (obj clog-context2d))
   (execute obj (format nil "lineCap='~A'" value)))
+
+;;;;;;;;;;;;;;;;;;;;;;
+;; line-dash-offset ;;
+;;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric line-dash-offset (clog-context2d)
+  (:documentation "Setf/get miter style limit"))
+
+(defmethod line-dash-offset ((obj clog-context2d))
+  (parse-float (query obj "lineDashOffset")))
+
+(defmethod (setf line-dash-offset) (value (obj clog-context2d))
+  (execute obj (format nil "lineDashOffset=~A" value)))
 
 ;;;;;;;;;;;;;;;
 ;; line-join ;;
@@ -166,62 +196,105 @@
 
 (deftype line-join-type () '(member :bevel :round :miter))
 
-(defgeneric line-join (clog-context2d value)
-  (:documentation "Set line join style"))
+(defgeneric line-join (clog-context2d)
+  (:documentation "Setf/get line join style"))
 
-(defmethod line-join ((obj clog-context2d) value)
+(defmethod line-join ((obj clog-context2d))
+  (query obj "lineJoin"))
+
+(defmethod (setf line-join) (value (obj clog-context2d))
   (execute obj (format nil "lineJoin='~A'" value)))
+
+;;;;;;;;;;;;;;;;
+;; line-width ;;
+;;;;;;;;;;;;;;;;
+
+(defgeneric line-width (clog-context2d)
+  (:documentation "Set line style width"))
+
+(defmethod line-width ((obj clog-context2d))
+  (query obj "lineWidth"))
+
+(defmethod (setf line-width) (value (obj clog-context2d))
+  (execute obj (format nil "lineWidth=~A" value)))
 
 ;;;;;;;;;;;;;;;;;
 ;; miter-limit ;;
 ;;;;;;;;;;;;;;;;;
 
-(Defgeneric miter-limit (clog-context2d value)
-  (:documentation "Set miter style limit"))
+(Defgeneric miter-limit (clog-context2d)
+  (:documentation "Setf/get miter style limit"))
 
-(defmethod miter-limit ((obj clog-context2d) value)
+(defmethod miter-limit ((obj clog-context2d))
+  (parse-float (query obj "miterLimit")))
+
+(defmethod (setf miter-limit) (value (obj clog-context2d))
   (execute obj (format nil "miterLimit=~A" value)))
 
-;;;;;;;;;;;;;;;;;;;
-;; get-line-dash ;;
-;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;
+;; shadow-blur ;;
+;;;;;;;;;;;;;;;;;
 
-(Defgeneric get-line-dash (clog-context2d)
-  (:documentation "Set line style dash pattern, e.g. 10, 20"))
+(defgeneric shadow-blur (clog-context2d)
+  (:documentation "Setf/get text shadow blur"))
 
-(defmethod get-line-dash ((obj clog-context2d))
-  (query obj (format nil "getLineDash()")))
+(defmethod shadow-blur ((obj clog-context2d))
+  (parse-float (query obj "shadowBlur")))
 
-;;;;;;;;;;;;;;;;;;;
-;; set-line-dash ;;
-;;;;;;;;;;;;;;;;;;;
+(defmethod (setf shadow-blur) (value (obj clog-context2d))
+  (execute obj (format nil "shadowBlur=~A" value)))
 
-(defgeneric set-line-dash (clog-context2d value)
-  (:documentation "Set line style dash pattern, e.g. 10, 20"))
+;;;;;;;;;;;;;;;;;;
+;; shadow-color ;;
+;;;;;;;;;;;;;;;;;;
 
-(defmethod set-line-dash ((obj clog-context2d) value)
-  (execute obj (format nil "setLineDash(~A)" value)))
+(defgeneric shadow-color (clog-context2d)
+  (:documentation "Setf/get text shadow color"))
 
-;;;;;;;;;;;;;;;;;;;;;;
-;; line-dash-offset ;;
-;;;;;;;;;;;;;;;;;;;;;;
+(defmethod shadow-color ((obj clog-context2d))
+  (query obj "shadowColor"))
 
-(defgeneric line-dash-offset (clog-context2d value)
-  (:documentation "Set miter style limit"))
+(defmethod (setf shadow-color) (value (obj clog-context2d))
+  (execute obj (format nil "shadowColor='~A'" value)))
 
-(defmethod line-dash-offset ((obj clog-context2d) value)
-  (execute obj (format nil "lineDashOffset=~A" value)))
+;;;;;;;;;;;;;;;;;;;;;
+;; shadow-offset-x ;;
+;;;;;;;;;;;;;;;;;;;;;
 
-;;;;;;;;;;;;;;;;
-;; font-style ;;
-;;;;;;;;;;;;;;;;
+(defgeneric shadow-offset-x (clog-context2d)
+  (:documentation "Setf/get text shadow offset x"))
 
-(defgeneric font-style (clog-context2d value)
-  (:documentation "Set font style using css font string
-     https://developer.mozilla.org/en-US/docs/Web/CSS/font"))
+(defmethod shadow-offset-x ((obj clog-context2d))
+  (parse-float (query obj "shadowOffsetX")))
 
-(defmethod font-style ((obj clog-context2d) value)
-  (execute obj (format nil "font='~A'" value)))
+(defmethod (setf shadow-offset-x) (value (obj clog-context2d))
+  (execute obj (format nil "shadowOffsetX=~A" value)))
+
+;;;;;;;;;;;;;;;;;;;;;
+;; shadow-offset-y ;;
+;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric shadow-offset-y (clog-context2d)
+  (:documentation "Setf/get text shadow offset y"))
+
+(defmethod shadow-offset-y ((obj clog-context2d))
+  (parse-float (query obj "shadowOffsetY=~A")))
+
+(defmethod (setf shadow-offset-y) (value (obj clog-context2d))
+  (execute obj (format nil "shadowOffsetY=~A" value)))
+
+;;;;;;;;;;;;;;;;;;
+;; stroke-style ;;
+;;;;;;;;;;;;;;;;;;
+
+(defgeneric stroke-style (clog-context2d)
+  (:documentation "Setf/get text stroke style"))
+
+(defmethod stroke-style ((obj clog-context2d))
+  (query obj "strokeStyle"))
+
+(defmethod (setf stroke-style) (value (obj clog-context2d))
+  (execute obj (format nil "strokeStyle='~A'" value)))
 
 ;;;;;;;;;;;;;;;;
 ;; text-align ;;
@@ -229,10 +302,13 @@
 
 (deftype text-align-type () '(member :left :right :center :start :end))
 
-(defgeneric text-align (clog-context2d value)
-  (:documentation "Set text alignment style"))
+(defgeneric text-align (clog-context2d)
+  (:documentation "Setf/get text alignment style"))
 
-(defmethod text-align ((obj clog-context2d) value)
+(defmethod text-align ((obj clog-context2d))
+  (query obj "textAlign"))
+
+(defmethod (setf text-align) (value (obj clog-context2d))
   (execute obj (format nil "textAlign='~A'" value)))
 
 ;;;;;;;;;;;;;;;;;;;;
@@ -242,146 +318,31 @@
 (deftype text-baseline-type ()
   '(member :top :hanging :middle :alphabetic :ideographic :bottom))
 
-(defgeneric text-baseline (clog-context2d value)
+(defgeneric text-baseline (clog-context2d)
   (:documentation "Set text baseline style"))
 
-(defmethod text-baseline ((obj clog-context2d) value)
+(defmethod text-baseline ((obj clog-context2d))
+  (query obj "textBaseline"))
+
+(defmethod (setf text-baseline) (value (obj clog-context2d))
   (execute obj (format nil "textBaseline='~A'" value)))
 
 ;;;;;;;;;;;;;;
 ;; text-dir ;;
 ;;;;;;;;;;;;;;
 
-(defgeneric text-dir (clog-context2d value)
-  (:documentation "Set text direction style"))
+(defgeneric text-dir (clog-context2d)
+  (:documentation "Setf/get text direction style"))
 
-(defmethod text-dir ((obj clog-context2d) value)
+(defmethod text-dir ((obj clog-context2d))
+  (query obj "direction"))
+
+(defmethod (setf text-dir) (value (obj clog-context2d))
   (execute obj (format nil "direction='~A'" value)))
 
-;;;;;;;;;;;;;;;;
-;; fill-style ;;
-;;;;;;;;;;;;;;;;
-
-(defgeneric fill-style (clog-context2d value)
-  (:documentation "Set text direction style"))
-
-(defmethod fill-style ((obj clog-context2d) value)
-  (execute obj (format nil "fillStyle='~A'" value)))
-
-;;;;;;;;;;;;;;;;;;
-;; stroke-style ;;
-;;;;;;;;;;;;;;;;;;
-
-(defgeneric stroke-style (clog-context2d value)
-  (:documentation "Set text stroke style"))
-
-(defmethod stroke-style ((obj clog-context2d) value)
-  (execute obj (format nil "strokeStyle='~A'" value)))
-
-;; need to add createLinearGradient
-;; need to add createRadialGradient
-;; need to add createPattern
-
-;;;;;;;;;;;;;;;;;
-;; shadow-blur ;;
-;;;;;;;;;;;;;;;;;
-
-(Defgeneric shadow-blur (clog-context2d value)
-  (:documentation "Set text shadow blur"))
-
-(defmethod shadow-blur ((obj clog-context2d) value)
-  (execute obj (format nil "shadowBlur='~A'" value)))
-
-;;;;;;;;;;;;;;;;;;
-;; shadow-color ;;
-;;;;;;;;;;;;;;;;;;
-
-(defgeneric shadow-color (clog-context2d value)
-  (:documentation "Set text shadow color"))
-
-(defmethod shadow-color ((obj clog-context2d) value)
-  (execute obj (format nil "shadowColor='~A'" value)))
-
-;;;;;;;;;;;;;;;;;;;;;
-;; shadow-offset-x ;;
-;;;;;;;;;;;;;;;;;;;;;
-
-(defgeneric shadow-offset-x (clog-context2d value)
-  (:documentation "Set text shadow offset x"))
-
-(defmethod shadow-offset-x ((obj clog-context2d) value)
-  (execute obj (format nil "shadowOffsetX='~A'" value)))
-
-;;;;;;;;;;;;;;;;;;;;;
-;; shadow-offset-y ;;
-;;;;;;;;;;;;;;;;;;;;;
-
-(defgeneric shadow-offset-y (clog-context2d value)
-  (:documentation "Set text shadow offset y"))
-
-(defmethod shadow-offset-y ((obj clog-context2d) value)
-  (execute obj (format nil "shadowOffsetY='~A'" value)))
-
-;;;;;;;;;;;;;;;;
-;; begin-path ;;
-;;;;;;;;;;;;;;;;
-
-(defgeneric begin-path (clog-context2d)
-  (:documentation "Starts a new path empting any previous points."))
-
-(defmethod begin-path ((obj clog-context2d))
-  (execute obj "beginPath()"))
-
-;;;;;;;;;;;;;;;;
-;; close-path ;;
-;;;;;;;;;;;;;;;;
-
-(defgeneric close-path (clog-context2d)
-  (:documentation "Adds a line to start point of path."))
-
-(defmethod close-path ((obj clog-context2d))
-  (execute obj "closePath()"))
-
-;;;;;;;;;;;;;
-;; move-to ;;
-;;;;;;;;;;;;;
-
-(defgeneric move-to (clog-context2d x y)
-  (:documentation "Moves start point of path."))
-
-(defmethod move-to ((obj clog-context2d) x y)
-  (execute obj (format nil "moveTo(~A,~A)" x y)))
-
-;;;;;;;;;;;;;
-;; line-to ;;
-;;;;;;;;;;;;;
-
-(defgeneric line-to (clog-context2d x y)
-  (:documentation "Adds a line to the current path."))
-
-(defmethod line-to ((obj clog-context2d) x y)
-  (execute obj (format nil "lineTo(~A,~A)" x y)))
-
-;;;;;;;;;;;;;;;;;;;;;
-;; bezier-curve-to ;;
-;;;;;;;;;;;;;;;;;;;;;
-
-(defgeneric bezier-curve-to (clog-context2d cp1x cp1y cp2x cp2y x y)
-  (:documentation "Adds a cubic Bezier curve to the current path."))
-
-(defmethod bezier-curve-to ((obj clog-context2d) cp1x cp1y cp2x cp2y x y)
-  (execute obj (format nil "bezierCurveTo(~A,~A,~A,~A,~A,~A)"
-                       cp1x cp1y cp2x cp2y x y)))
-
-;;;;;;;;;;;;;;;;;;;;;;;;
-;; quadratic-curve-to ;;
-;;;;;;;;;;;;;;;;;;;;;;;;
-
-(defgeneric quadratic-curve-to (clog-context2d cpx cpy x y)
-  (:documentation "Adds a quadratic Bezier curve to the current path."))
-
-(defmethod quadratic-curve-to ((obj clog-context2d) cpx cpy x y)
-  (execute obj (format nil "quadraticCurveTo(~A,~A,~A,~A)" cpx cpy x y)))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Methods - clog-context2d
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;;;;;;;;;
 ;; arc ;;
@@ -409,6 +370,84 @@
 (defmethod arc-to ((obj clog-context2d) x1 y1 x2 y2)
   (execute obj (format nil "arcTo(~A,~A,~A,~A)" x1 y1 x2 y2)))
 
+;;;;;;;;;;;;;;;;
+;; begin-path ;;
+;;;;;;;;;;;;;;;;
+
+(defgeneric begin-path (clog-context2d)
+  (:documentation "Starts a new path empting any previous points."))
+
+(defmethod begin-path ((obj clog-context2d))
+  (execute obj "beginPath()"))
+
+;;;;;;;;;;;;;;;;;;;;;
+;; bezier-curve-to ;;
+;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric bezier-curve-to (clog-context2d cp1x cp1y cp2x cp2y x y)
+  (:documentation "Adds a cubic Bezier curve to the current path."))
+
+(defmethod bezier-curve-to ((obj clog-context2d) cp1x cp1y cp2x cp2y x y)
+  (execute obj (format nil "bezierCurveTo(~A,~A,~A,~A,~A,~A)"
+                       cp1x cp1y cp2x cp2y x y)))
+
+;;;;;;;;;;;;;;;;
+;; clear-rect ;;
+;;;;;;;;;;;;;;;;
+
+(defgeneric clear-rect (clog-context2d x y width height)
+  (:documentation "Clear rectangle to transparent black"))
+
+(defmethod clear-rect ((obj clog-context2d) x y width height)
+  (execute obj (format nil "clearRect(~A,~A,~A,~A)"
+                       x y width height)))
+
+;;;;;;;;;;;;;;;
+;; path-clip ;;
+;;;;;;;;;;;;;;;
+
+(defgeneric path-clip (clog-context2d)
+  (:documentation "Clip a path."))
+
+(defmethod path-clip ((obj clog-context2d))
+  (execute obj "clip()"))
+
+;; to add
+;; clip(path)
+;; clip(fillRule)
+;; clip(path, fillRule)
+
+;;;;;;;;;;;;;;;;
+;; close-path ;;
+;;;;;;;;;;;;;;;;
+
+(defgeneric close-path (clog-context2d)
+  (:documentation "Adds a line to start point of path."))
+
+(defmethod close-path ((obj clog-context2d))
+  (execute obj "closePath()"))
+
+
+;; createConicGradient
+;; createImageData
+;; need to add createLinearGradient
+;; need to add createRadialGradient
+;; need to add createPattern
+;; drawFocusIfNeeded
+
+;;;;;;;;;;;;;;;;
+;; draw-image ;;
+;;;;;;;;;;;;;;;;
+
+(defgeneric draw-image (clog-context2d clog-obj x y)
+  (:documentation "Draw image at x y"))
+
+(defmethod draw-image ((obj clog-context2d) clog-obj x y)
+  (execute obj (format nil "drawImage(~A,~A,~A)"
+                       (script-id clog-obj) x y)))
+
+;; need other versions of draw-image
+
 ;;;;;;;;;;;;;
 ;; ellipse ;;
 ;;;;;;;;;;;;;
@@ -427,16 +466,6 @@
                            (format nil ",~A" anticlockwise)
                            ""))))
 
-;;;;;;;;;;
-;; rect ;;
-;;;;;;;;;;
-
-(defgeneric rect (clog-context2d x y width height)
-  (:documentation "Adds a rectangle to the current path."))
-
-(defmethod rect ((obj clog-context2d) x y width height)
-  (execute obj (format nil "rect(~A,~A,~A,~A)" x y width height)))
-
 ;;;;;;;;;;;;;;;
 ;; path-fill ;;
 ;;;;;;;;;;;;;;;
@@ -447,25 +476,128 @@
 (defmethod path-fill ((obj clog-context2d))
   (execute obj "fill()"))
 
-;;;;;;;;;;;;;;;;;
-;; path-stroke ;;
-;;;;;;;;;;;;;;;;;
-
-(defgeneric path-stroke (clog-context2d)
-  (:documentation "Stroke a path."))
-
-(defmethod path-stroke ((obj clog-context2d))
-  (execute obj "stroke()"))
 
 ;;;;;;;;;;;;;;;
-;; path-clip ;;
+;; fill-rect ;;
 ;;;;;;;;;;;;;;;
 
-(defgeneric path-clip (clog-context2d)
-  (:documentation "Clip a path."))
+(defgeneric fill-rect (clog-context2d x y width height)
+  (:documentation "Fill rectangle with current fill-color"))
 
-(defmethod path-clip ((obj clog-context2d))
-  (execute obj "clip()"))
+(defmethod fill-rect ((obj clog-context2d) x y width height)
+  (execute obj (format nil "fillRect(~A,~A,~A,~A)"
+                       x y width height)))
+
+;;;;;;;;;;;;;;;
+;; fill-text ;;
+;;;;;;;;;;;;;;;
+
+(defgeneric fill-text (clog-context2d text x y &key max-width)
+  (:documentation "Fill text with current fill-color"))
+
+(defmethod fill-text ((obj clog-context2d) text x y &key (max-width nil))
+  (execute obj (format nil "fillText('~A',~A,~A~A)"
+                       (escape-string text)
+                       x y
+                       (if max-width
+                           (format nil ",~A" max-width)
+                           ""))))
+
+;; getImageData()
+
+;;;;;;;;;;;;;;;;;;;
+;; get-line-dash ;;
+;;;;;;;;;;;;;;;;;;;
+
+(defgeneric get-line-dash (clog-context2d)
+  (:documentation "Set line style dash pattern, e.g. 10, 20"))
+
+(defmethod get-line-dash ((obj clog-context2d))
+  (query obj (format nil "getLineDash()")))
+
+;; getTransform
+;; isPointinPath
+;; isPointinStroke
+
+;;;;;;;;;;;;;
+;; line-to ;;
+;;;;;;;;;;;;;
+
+(defgeneric line-to (clog-context2d x y)
+  (:documentation "Adds a line to the current path."))
+
+(defmethod line-to ((obj clog-context2d) x y)
+  (execute obj (format nil "lineTo(~A,~A)" x y)))
+
+;;;;;;;;;;;;;;;;;;
+;; measure-text ;;
+;;;;;;;;;;;;;;;;;;
+
+(defgeneric measure-text (clog-context2d text)
+  (:documentation "Measure text returns a clog-text-metrics object"))
+
+(defmethod measure-text ((obj clog-context2d) text)
+  (let ((web-id (clog-connection:generate-id)))
+    (js-execute obj (format nil "clog['~A']=~A.measureText('~A')"
+                            web-id
+                            (script-id obj) text))
+    (make-instance 'clog-text-metrics
+                   :connection-id (clog::connection-id obj)
+                   :html-id web-id)))
+
+;;;;;;;;;;;;;
+;; move-to ;;
+;;;;;;;;;;;;;
+
+(defgeneric move-to (clog-context2d x y)
+  (:documentation "Moves start point of path."))
+
+(defmethod move-to ((obj clog-context2d) x y)
+  (execute obj (format nil "moveTo(~A,~A)" x y)))
+
+;; putImageData
+
+;;;;;;;;;;;;;;;;;;;;;;;;
+;; quadratic-curve-to ;;
+;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric quadratic-curve-to (clog-context2d cpx cpy x y)
+  (:documentation "Adds a quadratic Bezier curve to the current path."))
+
+(defmethod quadratic-curve-to ((obj clog-context2d) cpx cpy x y)
+  (execute obj (format nil "quadraticCurveTo(~A,~A,~A,~A)" cpx cpy x y)))
+
+;;;;;;;;;;
+;; rect ;;
+;;;;;;;;;;
+
+(defgeneric rect (clog-context2d x y width height)
+  (:documentation "Adds a rectangle to the current path."))
+
+(defmethod rect ((obj clog-context2d) x y width height)
+  (execute obj (format nil "rect(~A,~A,~A,~A)" x y width height)))
+
+;; resetTransform
+
+;;;;;;;;;;;;;;;;;;;;
+;; canvas-restore ;;
+;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric canvas-restore (clog-context2d)
+  (:documentation "Restore canvas from stack"))
+
+(defmethod canvas-restore ((obj clog-context2d))
+  (execute obj "restore()"))
+
+;;;;;;;;;;;;
+;; rotate ;;
+;;;;;;;;;;;;
+
+(defgeneric rotate (clog-context2d value)
+  (:documentation "Rotate"))
+
+(defmethod rotate ((obj clog-context2d) value)
+  (execute obj (format nil "rotate(~A)" value)))
 
 ;;;;;;;;;;;;;;;;;
 ;; canvas-save ;;
@@ -477,12 +609,159 @@
 (defmethod canvas-save ((obj clog-context2d))
   (execute obj "save()"))
 
-;;;;;;;;;;;;;;;;;;;;
-;; canvas-restore ;;
-;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;
+;; scale ;;
+;;;;;;;;;;;
 
-(defgeneric canvas-restore (clog-context2d)
-  (:documentation "Restore canvas from stack"))
+(defgeneric scale (clog-context2d x y)
+  (:documentation "Scale"))
 
-(defmethod canvas-restore ((obj clog-context2d))
-  (execute obj "restore()"))
+(defmethod scale ((obj clog-context2d) x y)
+  (execute obj (format nil "scale(~A,~A)" x y)))
+
+;;;;;;;;;;;;;;;;;;;
+;; set-line-dash ;;
+;;;;;;;;;;;;;;;;;;;
+
+(defgeneric set-line-dash (clog-context2d value)
+  (:documentation "Set line style dash pattern, e.g. 10, 20"))
+
+(defmethod set-line-dash ((obj clog-context2d) value)
+  (execute obj (format nil "setLineDash(~A)" value)))
+
+;; setTransform
+
+;;;;;;;;;;;;;;;;;
+;; path-stroke ;;
+;;;;;;;;;;;;;;;;;
+
+(defgeneric path-stroke (clog-context2d)
+  (:documentation "Stroke a path."))
+
+(defmethod path-stroke ((obj clog-context2d))
+  (execute obj "stroke()"))
+
+;;;;;;;;;;;;;;;;;
+;; stroke-rect ;;
+;;;;;;;;;;;;;;;;;
+
+(defgeneric stroke-rect (clog-context2d x y width height)
+  (:documentation "Fill rectangle using current stroke-style"))
+
+(defmethod stroke-rect ((obj clog-context2d) x y width height)
+  (execute obj (format nil "strokeRect(~A,~A,~A,~A)"
+                       x y width height)))
+
+;;;;;;;;;;;;;;;;;
+;; stroke-text ;;
+;;;;;;;;;;;;;;;;;
+
+(defgeneric stroke-text (clog-context2d text x y &key max-width)
+  (:documentation "Stroke text with current stroke-style"))
+
+(defmethod stroke-text ((obj clog-context2d) text x y &key (max-width nil))
+  (execute obj (format nil "strokeText('~A',~A,~A~A)"
+                       (escape-string text)
+                       x y
+                       (if max-width
+                           (format nil ",~A" max-width)
+                           ""))))
+;;;;;;;;;;;;;;;
+;; transform ;;
+;;;;;;;;;;;;;;;
+
+(defgeneric transform (clog-context2d a b c d e f)
+  (:documentation "Transform"))
+
+(defmethod transform ((obj clog-context2d) a b c d e f)
+  (execute obj (format nil "transform(~A,~A,~A,~A,~A,~A)" a b c d e f)))
+
+;;;;;;;;;;;;;;;
+;; translate ;;
+;;;;;;;;;;;;;;;
+
+(defgeneric translate (clog-context2d x y)
+  (:documentation "Translate"))
+
+(defmethod translate ((obj clog-context2d) x y)
+  (execute obj (format nil "translate(~A,~A)" x y)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Implementation - clog-text-metrics
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defclass clog-text-metrics (clog-obj)())
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Properties - clog-text-metrics
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defmethod width ((obj clog-text-metrics))
+  "Width of text"
+  (parse-float (query obj "width")))
+
+(defgeneric actual-bounding-box-left (clog-text-metrics)
+  (:documentation "Actual bounding box left"))
+
+(defmethod actual-bounding-box-left ((obj clog-text-metrics))
+  (parse-float (query obj "actualBoundingBoxLeft")))
+
+(defgeneric actual-bounding-box-right (clog-text-metrics)
+  (:documentation "Actual bounding box right"))
+
+(defmethod actual-bounding-box-right ((obj clog-text-metrics))
+  (parse-float (query obj "actualBoundingBoxRight")))
+
+(defgeneric actual-bounding-box-ascent (clog-text-metrics)
+  (:documentation "Actual bounding box ascent"))
+
+(defmethod actual-bounding-box-ascent ((obj clog-text-metrics))
+  (parse-float (query obj "actualBoundingBoxAscent")))
+
+(defgeneric actual-bounding-box-descent (clog-text-metrics)
+  (:documentation "Actual bounding box descent"))
+
+(defmethod actual-bounding-box-descent ((obj clog-text-metrics))
+  (parse-float (query obj "actualBoundingBoxDescent")))
+
+(defgeneric font-bounding-box-ascent (clog-text-metrics)
+  (:documentation "Font bounding box ascent"))
+
+(defmethod font-bounding-box-ascent ((obj clog-text-metrics))
+  (parse-float (query obj "fontBoundingBoxAscent")))
+
+(defgeneric font-bounding-box-descent (clog-text-metrics)
+  (:documentation "Font bounding box descent"))
+
+(defmethod font-bounding-box-descent ((obj clog-text-metrics))
+  (parse-float (query obj "fontBoundingBoxDescent")))
+
+(defgeneric em-height-ascent (clog-text-metrics)
+  (:documentation "'M' height ascent"))
+
+(defmethod em-height-ascent ((obj clog-text-metrics))
+  (parse-float (query obj "emHeightAscent")))
+
+(defgeneric em-height-descent (clog-text-metrics)
+  (:documentation "'M' height descent"))
+
+(defmethod em-height-descent ((obj clog-text-metrics))
+  (parse-float (query obj "emHeightDescent")))
+
+(defgeneric hanging-baseline (clog-text-metrics)
+  (:documentation "Hanging baseline"))
+  
+(defmethod hanging-baseline ((obj clog-text-metrics))
+  (parse-float (query obj "hangingBaseline")))
+
+(defgeneric alphabetic-baseline (clog-text-metrics)
+  (:documentation "Alphabetic baseline"))
+  
+(defmethod alphabetic-baseline ((obj clog-text-metrics))
+  (parse-float (query obj "alphabeticBaseline")))
+
+(defgeneric ideographic-baseline (clog-text-metrics)
+  (:documentation "Ideographic baseline"))
+
+(defmethod ideographic-baseline ((obj clog-text-metrics))
+  (parse-float (query obj "ideographicBaseline")))

@@ -547,7 +547,7 @@ nil unbind all event handlers. (Internal)"))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; set-on-event-with-date ;;
+;; set-on-event-with-data ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defgeneric set-on-event-with-data (clog-obj event-name handler

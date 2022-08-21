@@ -77,6 +77,10 @@ git clone https://github.com/rabbibotton/clog.git
 git clone https://github.com/rabbibotton/clog-ace.git
 git clone https://github.com/rabbibotton/clog-terminal.git
 
+To update in the future go to the created directories and type:
+
+git pull
+
 
 To add UltraLisp to QuickLisp (_RECOMMENDED_):
 
