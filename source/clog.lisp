@@ -767,6 +767,10 @@ embedded in a native template application.)"
   (path-clip                  generic-function)
   (close-path                 generic-function)
   (create-image-data          generic-function)
+  (create-conic-gradient      generic-function)
+  (create-linear-gradient     generic-function)
+  (create-radial-gradient     generic-function)
+  (create-pattern             generic-function)  
   (draw-image                 generic-function)
   (draw-image-from-to         generic-function)
   (ellipse                    generic-function)
@@ -795,6 +799,10 @@ embedded in a native template application.)"
   (stroke-text                generic-function)
   (transform                  generic-function)
   (translate                  generic-function)
+
+  "CLOG-Canvas-Gradient"
+  (clog-canvas-gradien class)
+  (add-color-stop      generic-function)
 
   "CLOG-Image-Data"
   (clog-image-data class)

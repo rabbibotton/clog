@@ -79,7 +79,10 @@
   (query obj "fillStyle"))
 
 (defmethod (setf fill-style) (value (obj clog-context2d))
-  (execute obj (format nil "fillStyle='~A'" value)))
+  (execute obj (format nil "fillStyle=~A"
+                       (if (typep value 'clog-obj)
+                           (script-id value)
+                           (format nil "'~A'" value)))))
 
 ;;;;;;;;;;;;;;;;;;;
 ;; canvas-filter ;;
@@ -448,12 +451,64 @@ https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/global
                    :connection-id (clog::connection-id obj)
                    :html-id web-id)))
 
-;; createConicGradient
-;; need to add createLinearGradient
-;; need to add createRadialGradient
-;; need to add createPattern
+;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; create-conic-gradient ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; drawFocusIfNeeded
+(defgeneric create-conic-gradient (clog-context2d start-angle x y)
+  (:documentation "Create conic gradient"))
+
+(defmethod create-conic-gradient ((obj clog-context2d) start-angle x y)
+  (let ((web-id (clog-connection:generate-id)))
+    (js-execute obj (format nil "clog['~A']=~A.createConicGradient(~A,~A,~A)"
+                            web-id (script-id obj)
+                            start-angle x y))
+    (make-instance 'clog-canvas-gradient
+                   :connection-id (clog::connection-id obj)
+                   :html-id web-id)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; create-linear-gradient ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric create-linear-gradient (clog-context2d x0 y0 x1 y1)
+  (:documentation "Create linear gradient"))
+
+(defmethod create-linear-gradient ((obj clog-context2d) x0 y0 x1 y1)
+  (let ((web-id (clog-connection:generate-id)))
+    (js-execute obj (format nil "clog['~A']=~A.createLinearGradient(~A,~A,~A,~A)"
+                            web-id (script-id obj)
+                             x0 y0 x1 y1))
+    (make-instance 'clog-canvas-gradient
+                   :connection-id (clog::connection-id obj)
+                   :html-id web-id)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; create-radial-gradient ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric create-radial-gradient (clog-context2d x0 y0 r0 x1 y1 r1)
+  (:documentation "Create radial gradient"))
+
+(defmethod create-radial-gradient ((obj clog-context2d) x0 y0 r0 x1 y1 r1)
+  (let ((web-id (clog-connection:generate-id)))
+    (js-execute obj (format nil "clog['~A']=~A.createRadialGradient(~A,~A,~A,~A,~A,~A)"
+                            web-id (script-id obj)
+                            x0 y0 r0 x1 y1 r1))
+    (make-instance 'clog-canvas-gradient
+                   :connection-id (clog::connection-id obj)
+                   :html-id web-id)))
+
+;;;;;;;;;;;;;;;;;;;;
+;; create-pattern ;;
+;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric create-pattern (clog-context2d clog-obj repetition)
+  (:Documentation "Create pattern"))
+
+(defmethod create-pattern ((obj clog-context2d) clog-obj repetition)
+  (execute obj (format nil "createPattern(~A,'~A')"
+                       (script-id clog-obj) repetition)))
 
 ;;;;;;;;;;;;;;;;
 ;; draw-image ;;
@@ -808,6 +863,22 @@ https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/global
   (execute obj (format nil "translate(~A,~A)" x y)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Implementation - clog-canvas-gradient
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defclass clog-canvas-gradient (clog-obj)())
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Methods - clog-canvas-gradient
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric add-color-stop (clog-canvas-gradient offset color)
+  (:documentation "Add a color stop"))
+
+(defmethod add-color-stop ((obj clog-canvas-gradient) offset color)
+  (execute obj (format nil "addColorStop(~A,'~A')" offset color)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Implementation - clog-image-data
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -919,9 +990,9 @@ https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/global
 
 (defclass clog-path2d (clog-obj)())
 
-;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;
 ;; create-path2d ;;
-;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;
 
 (defgeneric create-path2d (clog-canvas &key path2d)
   (:documentation "Create a new CLOG-Path2d. If CLOG-PATH2D creates a copy."))

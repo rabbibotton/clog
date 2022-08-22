@@ -6,7 +6,6 @@
 
 ;;; A very brief example of using the canvas control.
 (defun on-new-window (body)
-  (debug-mode body)
   (setf (title (html-document body)) "Tutorial 10")
   (let* ((canvas (create-canvas body :width 600 :height 400))
          (cx     (create-context2d canvas))
@@ -17,8 +16,12 @@
     (setf (fill-style cx) :blue
           (font-style cx) "bold 24px serif")
     (fill-text cx "Hello World" 10 150)
-    (setf (fill-style cx) :red)
     (begin-path cx)
+    (let ((gr (create-linear-gradient cx 20 0 220 0)))
+      (add-color-stop gr 0 :red)
+      (add-color-stop gr .5 :cyan)
+      (add-color-stop gr 1 :yellow)
+      (setf (fill-style cx) gr))
     (ellipse cx 200 200 50 7 0.78 0 6.29)
     (path-stroke cx)
     (path-fill cx)
