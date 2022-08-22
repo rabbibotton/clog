@@ -2690,6 +2690,7 @@ of controls and double click to select control."
                                       (ql:quickload sel)
                                       (ignore-errors
                                        (ql:quickload (format nil "~A/tools" sel)))
+                                      (ql:quickload sel)
                                       (projects-populate panel))
                                      (t
                                       (setf (current-project app) nil)
@@ -2955,9 +2956,9 @@ of controls and double click to select control."
       (create-gui-menu-full-screen menu))
     (on-show-control-properties-win body)
     (on-show-control-list-win body)
-    (on-show-control-events-win body)
+;;    (on-show-control-events-win body)
     (on-show-copy-history-win body)
-    (on-new-builder-panel body)
+;;    (on-new-builder-panel body)
     (on-show-project body :project *start-project*)
     (set-on-before-unload (window body) (lambda(obj)
                                           (declare (ignore obj))
