@@ -786,7 +786,7 @@ embedded in a native template application.)"
   (measure-text               generic-function)
   (move-to                    generic-function)
   (put-image-data             generic-function)
-  (put-image-dirty            generic-function)
+  (put-image-data-dirty       generic-function)
   (quadratic-curve-to         generic-function)
   (rect                       generic-function)
   (reset-transform            generic-function)
@@ -804,8 +804,8 @@ embedded in a native template application.)"
   (translate                  generic-function)
 
   "CLOG-Canvas-Gradient"
-  (clog-canvas-gradien class)
-  (add-color-stop      generic-function)
+  (clog-canvas-gradient class)
+  (add-color-stop       generic-function)
 
   "CLOG-Image-Data"
   (clog-image-data class)
@@ -817,7 +817,7 @@ embedded in a native template application.)"
   (flip-x           generic-function)
   (flip-y           generic-function)
   (inverse          generic-function)
-  (mutliply         generic-function)
+  (multiply         generic-function)
   (rotate           generic-function)
   (scale-matrix     generic-function)
   (scale3d          generic-function)

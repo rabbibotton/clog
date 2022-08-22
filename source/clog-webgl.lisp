@@ -202,8 +202,7 @@ can be webgl (version 1) or webgl2 (default)"))
 
 (defgeneric buffer-parameter (clog-webgl glenum-target glenum-pname)
   (:documentation "Returns information about the buffer.
-target
-------
+target:
 A GLenum specifying the target buffer object. Possible values:
 
 :ARRAY_BUFFER
@@ -232,8 +231,7 @@ Buffer used for pixel transfer operations.
 :PIXEL_UNPACK_BUFFER
 Buffer used for pixel transfer operations.
 
-pname
------
+pname:
 A GLenum specifying information to query. Possible values:
 
 :BUFFER_SIZE
@@ -298,8 +296,7 @@ When using a WebGL 2 context, the following values are available additionally:
 
 (defgeneric vertex-attribute (clog-webgl index glenum-pname)
   (:documentation "Information about a vertex attribute at a given position.
-pname
------
+pname:
 A GLenum specifying the information to query. Possible values:
 
 :VERTEX_ATTRIB_ARRAY_BUFFER_BINDING
@@ -673,8 +670,7 @@ When using a WebGL 2 context, the following values are available additionally:
   (:documentation "Hints for certain behaviors. The interpretation of these
 hints depend on the implementation.
 
-target
-------
+target:
 Sets which behavior to be controlled. Possible values:
 
 :GENERATE_MIPMAP_HINT
@@ -690,8 +686,7 @@ When using a WebGL 2 context, the following values are available additionally:
 :FRAGMENT_SHADER_DERIVATIVE_HINT
 Same as ext.FRAGMENT_SHADER_DERIVATIVE_HINT_OES
 
-mode
-----
+mode:
 Sets the behavior. The default value is :DONT_CARE. The possible values are:
 
 :FASTEST : The most efficient behavior should be used.

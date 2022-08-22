@@ -50,20 +50,21 @@
 <li><a href="#CLOG:@CLOG-STYLE-BLOCK%20MGL-PAX:SECTION" title="CLOG Style Blocks">13 CLOG Style Blocks</a></li>
 <li><a href="#CLOG:@CLOG-FORM%20MGL-PAX:SECTION" title="CLOG Form Objects">14 CLOG Form Objects</a></li>
 <li><a href="#CLOG:@CLOG-CANVAS%20MGL-PAX:SECTION" title="CLOG Canvas Objects">15 CLOG Canvas Objects</a></li>
-<li><a href="#CLOG:@CLOG-MULTIMEDIA%20MGL-PAX:SECTION" title="CLOG Multimedia Objects">16 CLOG Multimedia Objects</a></li>
-<li><a href="#CLOG:@CLOG-AUTH%20MGL-PAX:SECTION" title="CLOG Auth Objects">17 CLOG Auth Objects</a></li>
-<li><a href="#CLOG:@CLOG-GUI%20MGL-PAX:SECTION" title="CLOG GUI Objects">18 CLOG GUI Objects</a></li>
-<li><a href="#CLOG:@CLOG-WEB%20MGL-PAX:SECTION" title="CLOG Web Objects">19 CLOG Web Objects</a></li>
-<li><a href="#CLOG:@CLOG-WEB-DBI%20MGL-PAX:SECTION" title="CLOG Web DBI">20 CLOG Web DBI</a></li>
-<li><a href="#CLOG:@CLOG-WEB-THEMES%20MGL-PAX:SECTION" title="CLOG Web Site Themes">21 CLOG Web Site Themes</a></li>
-<li><a href="#CLOG:@CLOG-BODY%20MGL-PAX:SECTION" title="CLOG Body Objects">22 CLOG Body Objects</a></li>
-<li><a href="#CLOG:@CLOG-WINDOW%20MGL-PAX:SECTION" title="CLOG Window Objects">23 CLOG Window Objects</a></li>
-<li><a href="#CLOG:@CLOG-DOCUMENT%20MGL-PAX:SECTION" title="CLOG Document Objects">24 CLOG Document Objects</a></li>
-<li><a href="#CLOG:@CLOG-LOCATION%20MGL-PAX:SECTION" title="CLOG Location Objects">25 CLOG Location Objects</a></li>
-<li><a href="#CLOG:@CLOG-NAVIGATOR%20MGL-PAX:SECTION" title="CLOG Navigator Objects">26 CLOG Navigator Objects</a></li>
-<li><a href="#CLOG:@CLOG-JQUERY%20MGL-PAX:SECTION" title="CLOG jQuery Objects">27 CLOG jQuery Objects</a></li>
-<li><a href="#CLOG:@CLOG-HELPERS%20MGL-PAX:SECTION" title="CLOG Helper Functions">28 CLOG Helper Functions</a></li>
-<li><a href="#CLOG:@CLOG-INTERNALS%20MGL-PAX:SECTION" title="CLOG Framework internals and extensions">29 CLOG Framework internals and extensions</a></li>
+<li><a href="#CLOG:@CLOG-WEBGL%20MGL-PAX:SECTION" title="CLOG WebGL Objects">16 CLOG WebGL Objects</a></li>
+<li><a href="#CLOG:@CLOG-MULTIMEDIA%20MGL-PAX:SECTION" title="CLOG Multimedia Objects">17 CLOG Multimedia Objects</a></li>
+<li><a href="#CLOG:@CLOG-AUTH%20MGL-PAX:SECTION" title="CLOG Auth Objects">18 CLOG Auth Objects</a></li>
+<li><a href="#CLOG:@CLOG-GUI%20MGL-PAX:SECTION" title="CLOG GUI Objects">19 CLOG GUI Objects</a></li>
+<li><a href="#CLOG:@CLOG-WEB%20MGL-PAX:SECTION" title="CLOG Web Objects">20 CLOG Web Objects</a></li>
+<li><a href="#CLOG:@CLOG-WEB-DBI%20MGL-PAX:SECTION" title="CLOG Web DBI">21 CLOG Web DBI</a></li>
+<li><a href="#CLOG:@CLOG-WEB-THEMES%20MGL-PAX:SECTION" title="CLOG Web Site Themes">22 CLOG Web Site Themes</a></li>
+<li><a href="#CLOG:@CLOG-BODY%20MGL-PAX:SECTION" title="CLOG Body Objects">23 CLOG Body Objects</a></li>
+<li><a href="#CLOG:@CLOG-WINDOW%20MGL-PAX:SECTION" title="CLOG Window Objects">24 CLOG Window Objects</a></li>
+<li><a href="#CLOG:@CLOG-DOCUMENT%20MGL-PAX:SECTION" title="CLOG Document Objects">25 CLOG Document Objects</a></li>
+<li><a href="#CLOG:@CLOG-LOCATION%20MGL-PAX:SECTION" title="CLOG Location Objects">26 CLOG Location Objects</a></li>
+<li><a href="#CLOG:@CLOG-NAVIGATOR%20MGL-PAX:SECTION" title="CLOG Navigator Objects">27 CLOG Navigator Objects</a></li>
+<li><a href="#CLOG:@CLOG-JQUERY%20MGL-PAX:SECTION" title="CLOG jQuery Objects">28 CLOG jQuery Objects</a></li>
+<li><a href="#CLOG:@CLOG-HELPERS%20MGL-PAX:SECTION" title="CLOG Helper Functions">29 CLOG Helper Functions</a></li>
+<li><a href="#CLOG:@CLOG-INTERNALS%20MGL-PAX:SECTION" title="CLOG Framework internals and extensions">30 CLOG Framework internals and extensions</a></li>
 </ul>
 
 <h6>[in package CLOG]</h6>
@@ -95,15 +96,8 @@ frameworks and website frameworks. The CLOG package starts up the
 connectivity to the browser or other websocket client (often a browser
 embedded in a native template application.)</p>
 
-<p>STATUS: CLOG is complete and all work is on higher order additions,
-such as full desktop over the web, database tools,etc. See below for
-some enhacements being worked on. CLOG is actually based on GNOGA, a
-framework I wrote for Ada in 2013 and used in commercial production
-code for the last 8+ years, i.e. the techniques CLOG uses are solid
-and proven.</p>
-
-<p>CLOG is being actively extended daily. Check the github discussion
-boards for the latest.</p>
+<p>STATUS: CLOG's API is mature and stable. Tools and new plugins always in
+the works. Check the github discussion boards for the latest.</p>
 
 <p>Some potential applications for CLOG:</p>
 
@@ -362,29 +356,38 @@ properties (to use for :property) are based on the event type.</p>
 <a id="CLOG:INITIALIZE%20FUNCTION"></a></p>
 
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#CLOG:INITIALIZE%20FUNCTION" >INITIALIZE</a></span></span> <span class="locative-args">ON-NEW-WINDOW-HANDLER &amp;KEY (HOST &quot;0.0.0.0&quot;) (PORT 8080) (SERVER <code>:HUNCHENTOOT</code>) (EXTENDED-ROUTING <code>NIL</code>) (LONG-POLL-FIRST <code>NIL</code>) (BOOT-FILE &quot;/boot.html&quot;) (BOOT-FUNCTION <code>NIL</code>) (STATIC-BOOT-HTML <code>NIL</code>) (STATIC-BOOT-JS <code>NIL</code>) (STATIC-ROOT (<a href="http://www.lispworks.com/documentation/HyperSpec/Body/f_merge_.htm" title="MERGE-PATHNAMES FUNCTION"><code>MERGE-PATHNAMES</code></a> &quot;./static-files/&quot; (<code>ASDF/SYSTEM:SYSTEM-SOURCE-DIRECTORY</code> <code>:CLOG</code>)))</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#CLOG:INITIALIZE%20FUNCTION" >INITIALIZE</a></span></span> <span class="locative-args">ON-NEW-WINDOW-HANDLER &amp;REST REST &amp;KEY (HOST &quot;0.0.0.0&quot;) (PORT 8080) (SERVER <code>:HUNCHENTOOT</code>) (LACK-MIDDLEWARE-LIST <code>NIL</code>) (EXTENDED-ROUTING <code>NIL</code>) (LONG-POLL-FIRST <code>NIL</code>) (BOOT-FILE &quot;/boot.html&quot;) (BOOT-FUNCTION <code>NIL</code>) (STATIC-BOOT-HTML <code>NIL</code>) (STATIC-BOOT-JS <code>NIL</code>) (STATIC-ROOT (<a href="http://www.lispworks.com/documentation/HyperSpec/Body/f_merge_.htm" title="MERGE-PATHNAMES FUNCTION"><code>MERGE-PATHNAMES</code></a> &quot;./static-files/&quot; (<code>ASDF/SYSTEM:SYSTEM-SOURCE-DIRECTORY</code> <code>:CLOG</code>)))</span></span></p>
 
-<p>Inititalize CLOG on a socket using <code>HOST</code> and <code>PORT</code> to serve <code>BOOT-FILE</code>
-as the default route to establish web-socket connections and static
-files located at <code>STATIC-ROOT</code>. The webserver used with CLACK can be
-chosed with <code>:SERVER</code>. If <code>EXTENDED-ROUTING</code> is t routes will match even
-if extend with additional / and additional paths. If
-LONG-POLLING-FIRST is t, the output is sent as <code>HTML</code> instead of
-websocket commands until on-new-window-handler ends, this should be
-used in webserver applications to enable crawling of your website. If
-CLOG was already initialized and not shut down, this function does the
-same as set-on-new-window (does not change the static-root). If
-<code>ON-NEW-WINDOW-HANDLER</code> is nil no handler is set and none is
-removed. <code>STATIC-ROOT</code> by default is the &quot;directory CLOG is installed
-in ./static-files&quot; If the variable clog:<em>overide-static-root</em> is set
-<code>STATIC-ROOT</code> will be ignored. If <code>BOOT-FILE</code> is nil no default boot-file
-will be set for root path, i.e. /. If static-boot-js is t then boot.js
-is served from the file /js/boot.js instead of the compiled
-version. If static-boot-html is nil if boot.html is not present will
-use compiled version. boot-function if set is called with the url and
-the contents of boot-file and its return value replaces the contents
-sent to the brower, this allows adding content for search engine
-optimization, see tutorial 12 for an example.</p></li>
+<p>Inititalize CLOG on a socket using <code>HOST</code> and <code>PORT</code> to serve <code>BOOT-FILE</code> as the
+default route to establish web-socket connections and static files located at
+<code>STATIC-ROOT</code>. The webserver used with CLACK can be chosen with <code>:SERVER</code> and
+middlewares prepended with <code>:LACK-MIDDLEWARE-LIST</code>, <code>NOT</code>(<a href="http://www.lispworks.com/documentation/HyperSpec/Body/f_not.htm" title="NOT FUNCTION"><code>0</code></a> <a href="http://www.lispworks.com/documentation/HyperSpec/Body/t_not.htm" title="NOT TYPE"><code>1</code></a>) supporting LACK.BUILDER DSL.
+If <code>EXTENDED-ROUTING</code> is t routes will match even if extend with additional / and
+additional paths. If LONG-POLLING-FIRST is t then long polling continues until
+the on-new-window-handler ends, if LONG-POLLING-FIRST is a number continues long
+polling until that number of queries to browser.  LONG-POLLING-FIRST is used in
+webserver applications to enable crawling of your website. If CLOG was already
+initialized and not shut down, this function does the same as
+set-on-new-window (does not change the static-root). If <code>ON-NEW-WINDOW-HANDLER</code> is
+nil no handler is set and none is removed. <code>STATIC-ROOT</code> by default is the
+&quot;directory CLOG is installed in ./static-files&quot; If the variable
+clog:<em>overide-static-root</em> is set <code>STATIC-ROOT</code> will be ignored. If <code>BOOT-FILE</code> is
+nil no default boot-file will be set for root path, i.e. /. If static-boot-js is
+t then boot.js is served from the file /js/boot.js instead of the compiled
+version. If static-boot-html is nil if boot.html is not present will use
+compiled version. boot-function if set is called with the url and the contents
+of boot-file and its return value replaces the contents sent to the brower, this
+allows adding content for search engine optimization, see tutorial 12 for an
+example.</p></li>
+</ul>
+
+<p><a id="x-28CLOG-3A-2ASTATIC-ROOT-2A-20VARIABLE-29"></a>
+<a id="CLOG:*STATIC-ROOT*%20VARIABLE"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[variable]</span> <span class="reference-object"><a href="#CLOG:*STATIC-ROOT*%20VARIABLE" >*STATIC-ROOT*</a></span></span> <span class="locative-args">NIL</span></span></p>
+
+<p>Contains the static-root setting after initialization.</p></li>
 </ul>
 
 <p><a id="x-28CLOG-3ASET-ON-NEW-WINDOW-20FUNCTION-29"></a>
@@ -687,6 +690,16 @@ lisp and an <code>HTML</code> DOM element.</p></li>
 
 <p>CLOG-Obj - Low Level</p>
 
+<p><a id="x-28CLOG-3A-2ASTORE-NEW-OBJECTS-2A-20VARIABLE-29"></a>
+<a id="CLOG:*STORE-NEW-OBJECTS*%20VARIABLE"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[variable]</span> <span class="reference-object"><a href="#CLOG:*STORE-NEW-OBJECTS*%20VARIABLE" >*STORE-NEW-OBJECTS*</a></span></span> <span class="locative-args">NIL</span></span></p>
+
+<p>Dynamic variable that when true every create-* or attach-* will also
+create a connection-data-item keyed by the html-id</p></li>
+</ul>
+
 <p><a id="x-28CLOG-3ACONNECTION-DATA-20GENERIC-FUNCTION-29"></a>
 <a id="CLOG:CONNECTION-DATA%20GENERIC-FUNCTION"></a></p>
 
@@ -784,6 +797,16 @@ flushed with <a href="#CLOG:FLUSH-CONNECTION-CACHE%20FUNCTION" title="CLOG:FLUSH
 <li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:HTML-ID%20GENERIC-FUNCTION" >HTML-ID</a></span></span> <span class="locative-args">CLOG-OBJ</span></span></p>
 
 <p>Internal html-id of CLOG-Obj. (Internal)</p></li>
+</ul>
+
+<p><a id="x-28CLOG-3ASCRIPT-ID-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG:SCRIPT-ID%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:SCRIPT-ID%20GENERIC-FUNCTION" >SCRIPT-ID</a></span></span> <span class="locative-args">CLOG-OBJ</span></span></p>
+
+<p>Return the script id for <a href="#CLOG:OBJ%20GENERIC-FUNCTION" title="CLOG:OBJ GENERIC-FUNCTION"><code>OBJ</code></a> based on the html-id set
+during attachment. (Private)</p></li>
 </ul>
 
 <p><a id="x-28CLOG-3AEXECUTE-20GENERIC-FUNCTION-29"></a>
@@ -1506,13 +1529,13 @@ special key + Access_Key</p>
 
 <p>The special key per browser and platform is:</p>
 
-<pre><code>Browser              Windows       Linux           Mac
------------------    -------       -----           ---
-Internet Explorer     [Alt]         N/A            N/A
-Chrome                [Alt]        [Alt]     [Control][Alt]
-Firefox           [Alt][Shift] [Alt][Shift]  [Control][Alt]
-Safari                [Alt]         N/A      [Control][Alt]
-Opera 15+             [Alt]        [Alt]          [Alt]
+<pre><code>Browser              Windows     Linux          Mac
+-----------------    -------     -----          ---
+Internet Explorer     Alt         N/A           N/A
+Chrome                Alt         Alt       Control|Alt
+Firefox             Alt|Shift   Alt|Shift   Control|Alt
+Safari                Alt         N/A       Control|Alt
+Opera 15+             Alt         Alt           Alt
 </code></pre></li>
 </ul>
 
@@ -1932,12 +1955,12 @@ flex         - Turn this item in to a flexbox container. The flexbox
                   order - sets visual item order in flexbox
                   align-self - override flexbox's align-items for item
 
-               :flex-start    [---  ]
-               :flex-end      [   ---]
-               :center        [ --- ]
-               :space-between [-  -  -]
-               :space-around  [ -   -   - ]
-               :space-evenly  [ - - - ]
+               :flex-start    (---  )
+               :flex-end      (   ---)
+               :center        ( --- )
+               :space-between (-  -  -)
+               :space-around  ( -   -   - )
+               :space-evenly  ( - - - )
 
 grid         - Turn this item in to a grid container block level. The grid
                properties to adjust for container are:
@@ -2611,7 +2634,7 @@ is relative to origin of: padding-box|border-box|content-box</p></li>
 <li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:BACKGROUND-REPEAT%20GENERIC-FUNCTION" >BACKGROUND-REPEAT</a></span></span> <span class="locative-args">CLOG-ELEMENT</span></span></p>
 
 <p>Get/Setf background-repeat. repeat-x | repeat-y |
- repeat | space | round | no-repeat {1,2}</p></li>
+( repeat | space | round | no-repeat ) {1,2}</p></li>
 </ul>
 
 <p><a id="x-28CLOG-3ABACKGROUND-CLIP-TYPE-20TYPE-29"></a>
@@ -2925,6 +2948,40 @@ on browser.</p></li>
 <li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:CLICK%20GENERIC-FUNCTION" >CLICK</a></span></span> <span class="locative-args">CLOG-ELEMENT</span></span></p>
 
 <p>simulate click.</p></li>
+</ul>
+
+<p><a id="x-28CLOG-3AREPLACE-ELEMENT-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG:REPLACE-ELEMENT%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:REPLACE-ELEMENT%20GENERIC-FUNCTION" >REPLACE-ELEMENT</a></span></span> <span class="locative-args">CLOG-ELEMENT NEW-CLOG-ELEMENT</span></span></p>
+
+<p><code>CLOG-ELEMENT</code> and its children will we removed from DOM
+but not destroyed and <code>NEW-CLOG-ELEMENT</code> will replace it in same location.
+<a href="#CLOG:DESTROY%20GENERIC-FUNCTION" title="CLOG:DESTROY GENERIC-FUNCTION"><code>DESTROY</code></a> <code>CLOG-ELEMENT</code> if need to clear from browser memory.
+Returns <code>CLOG-ELEMENT</code></p></li>
+</ul>
+
+<p><a id="x-28CLOG-3AREPLACE-CHILDREN-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG:REPLACE-CHILDREN%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:REPLACE-CHILDREN%20GENERIC-FUNCTION" >REPLACE-CHILDREN</a></span></span> <span class="locative-args">CLOG-ELEMENT NEW-CLOG-ELEMENT</span></span></p>
+
+<p>All <code>CLOG-ELEMENT</code>'s children will we removed from DOM
+but not destroyed and <code>NEW-CLOG-ELEMENT</code> will be placed in <code>CLOG-ELEMENT</code>.
+<a href="#CLOG:DESTROY%20GENERIC-FUNCTION" title="CLOG:DESTROY GENERIC-FUNCTION"><code>DESTROY</code></a> <code>CLOG-ELEMENT</code> if need to clear from browser memory.
+Returns <code>CLOG-ELEMENT</code></p></li>
+</ul>
+
+<p><a id="x-28CLOG-3ASWAP-ELEMENT-BY-ID-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG:SWAP-ELEMENT-BY-ID%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:SWAP-ELEMENT-BY-ID%20GENERIC-FUNCTION" >SWAP-ELEMENT-BY-ID</a></span></span> <span class="locative-args">HTML-ID CLOG-ELEMENT</span></span></p>
+
+<p>Replace an existing element on page with <code>HTML-ID</code> with
+<code>CLOG-ELEMENT</code> and set <code>CLOG-ELEMENT</code> to html-id. Returns <code>CLOG-ELEMENT</code></p></li>
 </ul>
 
 <p>CLOG-Element - DOM Traversal Methods</p>
@@ -4617,6 +4674,15 @@ if <code>:HTML-ID</code> &quot;myid&quot; then the <code>HTML-ID</code> for cent
 <p>Returns the bottom panel of a clog-panel-box-layout object.</p></li>
 </ul>
 
+<p><a id="x-28CLOG-3AFIT-LAYOUT-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG:FIT-LAYOUT%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:FIT-LAYOUT%20GENERIC-FUNCTION" >FIT-LAYOUT</a></span></span> <span class="locative-args">CLOG-PANEL-BOX-LAYOUT</span></span></p>
+
+<p>Recalculate layout based on size of outer panel content</p></li>
+</ul>
+
 <p><a id="x-28CLOG-3A-40CLOG-STYLE-BLOCK-20MGL-PAX-3ASECTION-29"></a>
 <a id="CLOG:@CLOG-STYLE-BLOCK%20MGL-PAX:SECTION"></a></p>
 
@@ -5397,7 +5463,7 @@ optionally fill in with contents of data-list.</p></li>
 <p><a id="x-28CLOG-3A-40CLOG-CANVAS-20MGL-PAX-3ASECTION-29"></a>
 <a id="CLOG:@CLOG-CANVAS%20MGL-PAX:SECTION"></a></p>
 
-<p><span class="outer-navigation"><span class="navigation"> <a href="#CLOG:@CLOG-FORM%20MGL-PAX:SECTION" title="CLOG Form Objects">&#8592;</a> <a href="#CLOG:@CLOG-MANUAL%20MGL-PAX:SECTION" title="The CLOG manual">&#8593;</a> <a href="#CLOG:@CLOG-MULTIMEDIA%20MGL-PAX:SECTION" title="CLOG Multimedia Objects">&#8594;</a> <a href="#CLOG:@CLOG-CANVAS%20MGL-PAX:SECTION" title="CLOG Canvas Objects">&#8634;</a></span></span></p>
+<p><span class="outer-navigation"><span class="navigation"> <a href="#CLOG:@CLOG-FORM%20MGL-PAX:SECTION" title="CLOG Form Objects">&#8592;</a> <a href="#CLOG:@CLOG-MANUAL%20MGL-PAX:SECTION" title="The CLOG manual">&#8593;</a> <a href="#CLOG:@CLOG-WEBGL%20MGL-PAX:SECTION" title="CLOG WebGL Objects">&#8594;</a> <a href="#CLOG:@CLOG-CANVAS%20MGL-PAX:SECTION" title="CLOG Canvas Objects">&#8634;</a></span></span></p>
 
 <h2><a href="#CLOG:@CLOG-CANVAS%20MGL-PAX:SECTION">15 CLOG Canvas Objects</a></h2>
 
@@ -5438,122 +5504,162 @@ optionally fill in with contents of data-list.</p></li>
 <p>Create a new CLOG-Context2d from a CLOG-Canvas</p></li>
 </ul>
 
-<p><a id="x-28CLOG-3ACLEAR-RECT-20GENERIC-FUNCTION-29"></a>
-<a id="CLOG:CLEAR-RECT%20GENERIC-FUNCTION"></a></p>
+<p>CLOG-Canvas - Properties</p>
+
+<p><a id="x-28CLOG-3AFILL-STYLE-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG:FILL-STYLE%20GENERIC-FUNCTION"></a></p>
 
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:CLEAR-RECT%20GENERIC-FUNCTION" >CLEAR-RECT</a></span></span> <span class="locative-args">CLOG-CONTEXT2D X Y WIDTH HEIGHT</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:FILL-STYLE%20GENERIC-FUNCTION" >FILL-STYLE</a></span></span> <span class="locative-args">CLOG-CONTEXT2D</span></span></p>
 
-<p>Clear rectangle to transparent black</p></li>
+<p>Setf/get property fill style</p></li>
 </ul>
 
-<p><a id="x-28CLOG-3AFILL-RECT-20GENERIC-FUNCTION-29"></a>
-<a id="CLOG:FILL-RECT%20GENERIC-FUNCTION"></a></p>
+<p><a id="x-28CLOG-3ACANVAS-FILTER-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG:CANVAS-FILTER%20GENERIC-FUNCTION"></a></p>
 
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:FILL-RECT%20GENERIC-FUNCTION" >FILL-RECT</a></span></span> <span class="locative-args">CLOG-CONTEXT2D X Y WIDTH HEIGHT</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:CANVAS-FILTER%20GENERIC-FUNCTION" >CANVAS-FILTER</a></span></span> <span class="locative-args">CLOG-CONTEXT2D</span></span></p>
 
-<p>Fill rectangle with current fill-color</p></li>
-</ul>
-
-<p><a id="x-28CLOG-3ASTROKE-RECT-20GENERIC-FUNCTION-29"></a>
-<a id="CLOG:STROKE-RECT%20GENERIC-FUNCTION"></a></p>
-
-<ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:STROKE-RECT%20GENERIC-FUNCTION" >STROKE-RECT</a></span></span> <span class="locative-args">CLOG-CONTEXT2D X Y WIDTH HEIGHT</span></span></p>
-
-<p>Fill rectangle using current stroke-style</p></li>
-</ul>
-
-<p><a id="x-28CLOG-3AFILL-TEXT-20GENERIC-FUNCTION-29"></a>
-<a id="CLOG:FILL-TEXT%20GENERIC-FUNCTION"></a></p>
-
-<ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:FILL-TEXT%20GENERIC-FUNCTION" >FILL-TEXT</a></span></span> <span class="locative-args">CLOG-CONTEXT2D TEXT X Y &amp;KEY MAX-WIDTH</span></span></p>
-
-<p>Fill text with current fill-color</p></li>
-</ul>
-
-<p><a id="x-28CLOG-3ASTROKE-TEXT-20GENERIC-FUNCTION-29"></a>
-<a id="CLOG:STROKE-TEXT%20GENERIC-FUNCTION"></a></p>
-
-<ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:STROKE-TEXT%20GENERIC-FUNCTION" >STROKE-TEXT</a></span></span> <span class="locative-args">CLOG-CONTEXT2D TEXT X Y &amp;KEY MAX-WIDTH</span></span></p>
-
-<p>Stroke text with current stroke-style</p></li>
-</ul>
-
-<p><a id="x-28CLOG-3ALINE-WIDTH-20GENERIC-FUNCTION-29"></a>
-<a id="CLOG:LINE-WIDTH%20GENERIC-FUNCTION"></a></p>
-
-<ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:LINE-WIDTH%20GENERIC-FUNCTION" >LINE-WIDTH</a></span></span> <span class="locative-args">CLOG-CONTEXT2D VALUE</span></span></p>
-
-<p>Set line style width</p></li>
-</ul>
-
-<p><a id="x-28CLOG-3ALINE-CAP-20GENERIC-FUNCTION-29"></a>
-<a id="CLOG:LINE-CAP%20GENERIC-FUNCTION"></a></p>
-
-<ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:LINE-CAP%20GENERIC-FUNCTION" >LINE-CAP</a></span></span> <span class="locative-args">CLOG-CONTEXT2D VALUE</span></span></p>
-
-<p>Set line cap style</p></li>
-</ul>
-
-<p><a id="x-28CLOG-3ALINE-JOIN-20GENERIC-FUNCTION-29"></a>
-<a id="CLOG:LINE-JOIN%20GENERIC-FUNCTION"></a></p>
-
-<ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:LINE-JOIN%20GENERIC-FUNCTION" >LINE-JOIN</a></span></span> <span class="locative-args">CLOG-CONTEXT2D VALUE</span></span></p>
-
-<p>Set line join style</p></li>
-</ul>
-
-<p><a id="x-28CLOG-3AMITER-LIMIT-20GENERIC-FUNCTION-29"></a>
-<a id="CLOG:MITER-LIMIT%20GENERIC-FUNCTION"></a></p>
-
-<ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:MITER-LIMIT%20GENERIC-FUNCTION" >MITER-LIMIT</a></span></span> <span class="locative-args">CLOG-CONTEXT2D VALUE</span></span></p>
-
-<p>Set miter style limit</p></li>
-</ul>
-
-<p><a id="x-28CLOG-3AGET-LINE-DASH-20GENERIC-FUNCTION-29"></a>
-<a id="CLOG:GET-LINE-DASH%20GENERIC-FUNCTION"></a></p>
-
-<ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:GET-LINE-DASH%20GENERIC-FUNCTION" >GET-LINE-DASH</a></span></span> <span class="locative-args">CLOG-CONTEXT2D</span></span></p>
-
-<p>Set line style dash pattern, e.g. 10, 20</p></li>
-</ul>
-
-<p><a id="x-28CLOG-3ASET-LINE-DASH-20GENERIC-FUNCTION-29"></a>
-<a id="CLOG:SET-LINE-DASH%20GENERIC-FUNCTION"></a></p>
-
-<ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:SET-LINE-DASH%20GENERIC-FUNCTION" >SET-LINE-DASH</a></span></span> <span class="locative-args">CLOG-CONTEXT2D VALUE</span></span></p>
-
-<p>Set line style dash pattern, e.g. 10, 20</p></li>
-</ul>
-
-<p><a id="x-28CLOG-3ALINE-DASH-OFFSET-20GENERIC-FUNCTION-29"></a>
-<a id="CLOG:LINE-DASH-OFFSET%20GENERIC-FUNCTION"></a></p>
-
-<ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:LINE-DASH-OFFSET%20GENERIC-FUNCTION" >LINE-DASH-OFFSET</a></span></span> <span class="locative-args">CLOG-CONTEXT2D VALUE</span></span></p>
-
-<p>Set miter style limit</p></li>
+<p>Setf/get filter dsl -
+See https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/filter</p></li>
 </ul>
 
 <p><a id="x-28CLOG-3AFONT-STYLE-20GENERIC-FUNCTION-29"></a>
 <a id="CLOG:FONT-STYLE%20GENERIC-FUNCTION"></a></p>
 
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:FONT-STYLE%20GENERIC-FUNCTION" >FONT-STYLE</a></span></span> <span class="locative-args">CLOG-CONTEXT2D VALUE</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:FONT-STYLE%20GENERIC-FUNCTION" >FONT-STYLE</a></span></span> <span class="locative-args">CLOG-CONTEXT2D</span></span></p>
 
-<p>Set font style using css font string
+<p>Setf/get font using css font string
 https://developer.mozilla.org/en-US/docs/Web/CSS/font</p></li>
+</ul>
+
+<p><a id="x-28CLOG-3AGLOBAL-ALPHA-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG:GLOBAL-ALPHA%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:GLOBAL-ALPHA%20GENERIC-FUNCTION" >GLOBAL-ALPHA</a></span></span> <span class="locative-args">CLOG-CONTEXT2D</span></span></p>
+
+<p>Setf/get global alpha</p></li>
+</ul>
+
+<p><a id="x-28CLOG-3AGLOBAL-COMPOSITE-OPERATION-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG:GLOBAL-COMPOSITE-OPERATION%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:GLOBAL-COMPOSITE-OPERATION%20GENERIC-FUNCTION" >GLOBAL-COMPOSITE-OPERATION</a></span></span> <span class="locative-args">CLOG-CONTEXT2D</span></span></p>
+
+<p>Setf/get composite blend mode -
+https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/globalCompositeOperation</p></li>
+</ul>
+
+<p><a id="x-28CLOG-3AIMAGE-SMOOTHING-ENABLED-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG:IMAGE-SMOOTHING-ENABLED%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:IMAGE-SMOOTHING-ENABLED%20GENERIC-FUNCTION" >IMAGE-SMOOTHING-ENABLED</a></span></span> <span class="locative-args">CLOG-CONTEXT2D</span></span></p>
+
+<p>Setf/get text shadow blur</p></li>
+</ul>
+
+<p><a id="x-28CLOG-3AIMAGE-SMOOTHING-QUALITY-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG:IMAGE-SMOOTHING-QUALITY%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:IMAGE-SMOOTHING-QUALITY%20GENERIC-FUNCTION" >IMAGE-SMOOTHING-QUALITY</a></span></span> <span class="locative-args">CLOG-CONTEXT2D</span></span></p>
+
+<p>Setf/get text shadow blur</p></li>
+</ul>
+
+<p><a id="x-28CLOG-3ALINE-CAP-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG:LINE-CAP%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:LINE-CAP%20GENERIC-FUNCTION" >LINE-CAP</a></span></span> <span class="locative-args">CLOG-CONTEXT2D</span></span></p>
+
+<p>Setf/get line cap style</p></li>
+</ul>
+
+<p><a id="x-28CLOG-3ALINE-DASH-OFFSET-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG:LINE-DASH-OFFSET%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:LINE-DASH-OFFSET%20GENERIC-FUNCTION" >LINE-DASH-OFFSET</a></span></span> <span class="locative-args">CLOG-CONTEXT2D</span></span></p>
+
+<p>Setf/get miter style limit</p></li>
+</ul>
+
+<p><a id="x-28CLOG-3ALINE-JOIN-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG:LINE-JOIN%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:LINE-JOIN%20GENERIC-FUNCTION" >LINE-JOIN</a></span></span> <span class="locative-args">CLOG-CONTEXT2D</span></span></p>
+
+<p>Setf/get line join style</p></li>
+</ul>
+
+<p><a id="x-28CLOG-3ALINE-WIDTH-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG:LINE-WIDTH%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:LINE-WIDTH%20GENERIC-FUNCTION" >LINE-WIDTH</a></span></span> <span class="locative-args">CLOG-CONTEXT2D</span></span></p>
+
+<p>Set line style width</p></li>
+</ul>
+
+<p><a id="x-28CLOG-3AMITER-LIMIT-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG:MITER-LIMIT%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:MITER-LIMIT%20GENERIC-FUNCTION" >MITER-LIMIT</a></span></span> <span class="locative-args">CLOG-CONTEXT2D</span></span></p>
+
+<p>Setf/get miter style limit</p></li>
+</ul>
+
+<p><a id="x-28CLOG-3ASHADOW-BLUR-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG:SHADOW-BLUR%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:SHADOW-BLUR%20GENERIC-FUNCTION" >SHADOW-BLUR</a></span></span> <span class="locative-args">CLOG-CONTEXT2D</span></span></p>
+
+<p>Setf/get text shadow blur</p></li>
+</ul>
+
+<p><a id="x-28CLOG-3ASHADOW-COLOR-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG:SHADOW-COLOR%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:SHADOW-COLOR%20GENERIC-FUNCTION" >SHADOW-COLOR</a></span></span> <span class="locative-args">CLOG-CONTEXT2D</span></span></p>
+
+<p>Setf/get text shadow color</p></li>
+</ul>
+
+<p><a id="x-28CLOG-3ASHADOW-OFFSET-X-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG:SHADOW-OFFSET-X%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:SHADOW-OFFSET-X%20GENERIC-FUNCTION" >SHADOW-OFFSET-X</a></span></span> <span class="locative-args">CLOG-CONTEXT2D</span></span></p>
+
+<p>Setf/get text shadow offset x</p></li>
+</ul>
+
+<p><a id="x-28CLOG-3ASHADOW-OFFSET-Y-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG:SHADOW-OFFSET-Y%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:SHADOW-OFFSET-Y%20GENERIC-FUNCTION" >SHADOW-OFFSET-Y</a></span></span> <span class="locative-args">CLOG-CONTEXT2D</span></span></p>
+
+<p>Setf/get text shadow offset y</p></li>
+</ul>
+
+<p><a id="x-28CLOG-3ASTROKE-STYLE-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG:STROKE-STYLE%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:STROKE-STYLE%20GENERIC-FUNCTION" >STROKE-STYLE</a></span></span> <span class="locative-args">CLOG-CONTEXT2D</span></span></p>
+
+<p>Setf/get text stroke style</p></li>
 </ul>
 
 <p><a id="x-28CLOG-3ATEXT-ALIGN-TYPE-20TYPE-29"></a>
@@ -5567,9 +5673,9 @@ https://developer.mozilla.org/en-US/docs/Web/CSS/font</p></li>
 <a id="CLOG:TEXT-ALIGN%20GENERIC-FUNCTION"></a></p>
 
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:TEXT-ALIGN%20GENERIC-FUNCTION" >TEXT-ALIGN</a></span></span> <span class="locative-args">CLOG-CONTEXT2D VALUE</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:TEXT-ALIGN%20GENERIC-FUNCTION" >TEXT-ALIGN</a></span></span> <span class="locative-args">CLOG-CONTEXT2D</span></span></p>
 
-<p>Set text alignment style</p></li>
+<p>Setf/get text alignment style</p></li>
 </ul>
 
 <p><a id="x-28CLOG-3ATEXT-BASELINE-TYPE-20TYPE-29"></a>
@@ -5583,7 +5689,7 @@ https://developer.mozilla.org/en-US/docs/Web/CSS/font</p></li>
 <a id="CLOG:TEXT-BASELINE%20GENERIC-FUNCTION"></a></p>
 
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:TEXT-BASELINE%20GENERIC-FUNCTION" >TEXT-BASELINE</a></span></span> <span class="locative-args">CLOG-CONTEXT2D VALUE</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:TEXT-BASELINE%20GENERIC-FUNCTION" >TEXT-BASELINE</a></span></span> <span class="locative-args">CLOG-CONTEXT2D</span></span></p>
 
 <p>Set text baseline style</p></li>
 </ul>
@@ -5592,118 +5698,12 @@ https://developer.mozilla.org/en-US/docs/Web/CSS/font</p></li>
 <a id="CLOG:TEXT-DIR%20GENERIC-FUNCTION"></a></p>
 
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:TEXT-DIR%20GENERIC-FUNCTION" >TEXT-DIR</a></span></span> <span class="locative-args">CLOG-CONTEXT2D VALUE</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:TEXT-DIR%20GENERIC-FUNCTION" >TEXT-DIR</a></span></span> <span class="locative-args">CLOG-CONTEXT2D</span></span></p>
 
-<p>Set text direction style</p></li>
+<p>Setf/get text direction style</p></li>
 </ul>
 
-<p><a id="x-28CLOG-3AFILL-STYLE-20GENERIC-FUNCTION-29"></a>
-<a id="CLOG:FILL-STYLE%20GENERIC-FUNCTION"></a></p>
-
-<ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:FILL-STYLE%20GENERIC-FUNCTION" >FILL-STYLE</a></span></span> <span class="locative-args">CLOG-CONTEXT2D VALUE</span></span></p>
-
-<p>Set text direction style</p></li>
-</ul>
-
-<p><a id="x-28CLOG-3ASTROKE-STYLE-20GENERIC-FUNCTION-29"></a>
-<a id="CLOG:STROKE-STYLE%20GENERIC-FUNCTION"></a></p>
-
-<ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:STROKE-STYLE%20GENERIC-FUNCTION" >STROKE-STYLE</a></span></span> <span class="locative-args">CLOG-CONTEXT2D VALUE</span></span></p>
-
-<p>Set text stroke style</p></li>
-</ul>
-
-<p><a id="x-28CLOG-3ASHADOW-BLUR-20GENERIC-FUNCTION-29"></a>
-<a id="CLOG:SHADOW-BLUR%20GENERIC-FUNCTION"></a></p>
-
-<ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:SHADOW-BLUR%20GENERIC-FUNCTION" >SHADOW-BLUR</a></span></span> <span class="locative-args">CLOG-CONTEXT2D VALUE</span></span></p>
-
-<p>Set text shadow blur</p></li>
-</ul>
-
-<p><a id="x-28CLOG-3ASHADOW-COLOR-20GENERIC-FUNCTION-29"></a>
-<a id="CLOG:SHADOW-COLOR%20GENERIC-FUNCTION"></a></p>
-
-<ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:SHADOW-COLOR%20GENERIC-FUNCTION" >SHADOW-COLOR</a></span></span> <span class="locative-args">CLOG-CONTEXT2D VALUE</span></span></p>
-
-<p>Set text shadow color</p></li>
-</ul>
-
-<p><a id="x-28CLOG-3ASHADOW-OFFSET-X-20GENERIC-FUNCTION-29"></a>
-<a id="CLOG:SHADOW-OFFSET-X%20GENERIC-FUNCTION"></a></p>
-
-<ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:SHADOW-OFFSET-X%20GENERIC-FUNCTION" >SHADOW-OFFSET-X</a></span></span> <span class="locative-args">CLOG-CONTEXT2D VALUE</span></span></p>
-
-<p>Set text shadow offset x</p></li>
-</ul>
-
-<p><a id="x-28CLOG-3ASHADOW-OFFSET-Y-20GENERIC-FUNCTION-29"></a>
-<a id="CLOG:SHADOW-OFFSET-Y%20GENERIC-FUNCTION"></a></p>
-
-<ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:SHADOW-OFFSET-Y%20GENERIC-FUNCTION" >SHADOW-OFFSET-Y</a></span></span> <span class="locative-args">CLOG-CONTEXT2D VALUE</span></span></p>
-
-<p>Set text shadow offset y</p></li>
-</ul>
-
-<p><a id="x-28CLOG-3ABEGIN-PATH-20GENERIC-FUNCTION-29"></a>
-<a id="CLOG:BEGIN-PATH%20GENERIC-FUNCTION"></a></p>
-
-<ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:BEGIN-PATH%20GENERIC-FUNCTION" >BEGIN-PATH</a></span></span> <span class="locative-args">CLOG-CONTEXT2D</span></span></p>
-
-<p>Starts a new path empting any previous points.</p></li>
-</ul>
-
-<p><a id="x-28CLOG-3ACLOSE-PATH-20GENERIC-FUNCTION-29"></a>
-<a id="CLOG:CLOSE-PATH%20GENERIC-FUNCTION"></a></p>
-
-<ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:CLOSE-PATH%20GENERIC-FUNCTION" >CLOSE-PATH</a></span></span> <span class="locative-args">CLOG-CONTEXT2D</span></span></p>
-
-<p>Adds a line to start point of path.</p></li>
-</ul>
-
-<p><a id="x-28CLOG-3AMOVE-TO-20GENERIC-FUNCTION-29"></a>
-<a id="CLOG:MOVE-TO%20GENERIC-FUNCTION"></a></p>
-
-<ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:MOVE-TO%20GENERIC-FUNCTION" >MOVE-TO</a></span></span> <span class="locative-args">CLOG-CONTEXT2D X Y</span></span></p>
-
-<p>Moves start point of path.</p></li>
-</ul>
-
-<p><a id="x-28CLOG-3ALINE-TO-20GENERIC-FUNCTION-29"></a>
-<a id="CLOG:LINE-TO%20GENERIC-FUNCTION"></a></p>
-
-<ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:LINE-TO%20GENERIC-FUNCTION" >LINE-TO</a></span></span> <span class="locative-args">CLOG-CONTEXT2D X Y</span></span></p>
-
-<p>Adds a line to the current path.</p></li>
-</ul>
-
-<p><a id="x-28CLOG-3ABEZIER-CURVE-TO-20GENERIC-FUNCTION-29"></a>
-<a id="CLOG:BEZIER-CURVE-TO%20GENERIC-FUNCTION"></a></p>
-
-<ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:BEZIER-CURVE-TO%20GENERIC-FUNCTION" >BEZIER-CURVE-TO</a></span></span> <span class="locative-args">CLOG-CONTEXT2D CP1X CP1Y CP2X CP2Y X Y</span></span></p>
-
-<p>Adds a cubic Bezier curve to the current path.</p></li>
-</ul>
-
-<p><a id="x-28CLOG-3AQUADRATIC-CURVE-TO-20GENERIC-FUNCTION-29"></a>
-<a id="CLOG:QUADRATIC-CURVE-TO%20GENERIC-FUNCTION"></a></p>
-
-<ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:QUADRATIC-CURVE-TO%20GENERIC-FUNCTION" >QUADRATIC-CURVE-TO</a></span></span> <span class="locative-args">CLOG-CONTEXT2D CPX CPY X Y</span></span></p>
-
-<p>Adds a quadratic Bezier curve to the current path.</p></li>
-</ul>
+<p>CLOG-Canvas - Methods</p>
 
 <p><a id="x-28CLOG-3AARC-20GENERIC-FUNCTION-29"></a>
 <a id="CLOG:ARC%20GENERIC-FUNCTION"></a></p>
@@ -5723,6 +5723,114 @@ https://developer.mozilla.org/en-US/docs/Web/CSS/font</p></li>
 <p>Adds an arc to the current path.</p></li>
 </ul>
 
+<p><a id="x-28CLOG-3ABEGIN-PATH-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG:BEGIN-PATH%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:BEGIN-PATH%20GENERIC-FUNCTION" >BEGIN-PATH</a></span></span> <span class="locative-args">CLOG-CONTEXT2D</span></span></p>
+
+<p>Starts a new path empting any previous points.</p></li>
+</ul>
+
+<p><a id="x-28CLOG-3ABEZIER-CURVE-TO-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG:BEZIER-CURVE-TO%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:BEZIER-CURVE-TO%20GENERIC-FUNCTION" >BEZIER-CURVE-TO</a></span></span> <span class="locative-args">CLOG-CONTEXT2D CP1X CP1Y CP2X CP2Y X Y</span></span></p>
+
+<p>Adds a cubic Bezier curve to the current path.</p></li>
+</ul>
+
+<p><a id="x-28CLOG-3ACLEAR-RECT-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG:CLEAR-RECT%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:CLEAR-RECT%20GENERIC-FUNCTION" >CLEAR-RECT</a></span></span> <span class="locative-args">CLOG-CONTEXT2D X Y WIDTH HEIGHT</span></span></p>
+
+<p>Clear rectangle to transparent black</p></li>
+</ul>
+
+<p><a id="x-28CLOG-3APATH-CLIP-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG:PATH-CLIP%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:PATH-CLIP%20GENERIC-FUNCTION" >PATH-CLIP</a></span></span> <span class="locative-args">CLOG-CONTEXT2D &amp;KEY PATH2D FILL-RULE</span></span></p>
+
+<p>Clip a path.</p></li>
+</ul>
+
+<p><a id="x-28CLOG-3ACLOSE-PATH-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG:CLOSE-PATH%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:CLOSE-PATH%20GENERIC-FUNCTION" >CLOSE-PATH</a></span></span> <span class="locative-args">CLOG-CONTEXT2D</span></span></p>
+
+<p>Adds a line to start point of path.</p></li>
+</ul>
+
+<p><a id="x-28CLOG-3ACREATE-IMAGE-DATA-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG:CREATE-IMAGE-DATA%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:CREATE-IMAGE-DATA%20GENERIC-FUNCTION" >CREATE-IMAGE-DATA</a></span></span> <span class="locative-args">CLOG-CONTEXT2D WIDTH HEIGHT</span></span></p>
+
+<p>Create black image data</p></li>
+</ul>
+
+<p><a id="x-28CLOG-3ACREATE-CONIC-GRADIENT-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG:CREATE-CONIC-GRADIENT%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:CREATE-CONIC-GRADIENT%20GENERIC-FUNCTION" >CREATE-CONIC-GRADIENT</a></span></span> <span class="locative-args">CLOG-CONTEXT2D START-ANGLE X Y</span></span></p>
+
+<p>Create conic gradient</p></li>
+</ul>
+
+<p><a id="x-28CLOG-3ACREATE-LINEAR-GRADIENT-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG:CREATE-LINEAR-GRADIENT%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:CREATE-LINEAR-GRADIENT%20GENERIC-FUNCTION" >CREATE-LINEAR-GRADIENT</a></span></span> <span class="locative-args">CLOG-CONTEXT2D X0 Y0 X1 Y1</span></span></p>
+
+<p>Create linear gradient</p></li>
+</ul>
+
+<p><a id="x-28CLOG-3ACREATE-RADIAL-GRADIENT-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG:CREATE-RADIAL-GRADIENT%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:CREATE-RADIAL-GRADIENT%20GENERIC-FUNCTION" >CREATE-RADIAL-GRADIENT</a></span></span> <span class="locative-args">CLOG-CONTEXT2D X0 Y0 R0 X1 Y1 R1</span></span></p>
+
+<p>Create radial gradient</p></li>
+</ul>
+
+<p><a id="x-28CLOG-3ACREATE-PATTERN-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG:CREATE-PATTERN%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:CREATE-PATTERN%20GENERIC-FUNCTION" >CREATE-PATTERN</a></span></span> <span class="locative-args">CLOG-CONTEXT2D CLOG-OBJ REPETITION</span></span></p>
+
+<p>Create pattern</p></li>
+</ul>
+
+<p><a id="x-28CLOG-3ADRAW-IMAGE-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG:DRAW-IMAGE%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:DRAW-IMAGE%20GENERIC-FUNCTION" >DRAW-IMAGE</a></span></span> <span class="locative-args">CLOG-CONTEXT2D CLOG-OBJ DX DY &amp;KEY DWIDTH DHEIGHT</span></span></p>
+
+<p>Draw image at dx dy optionally dwidth and dheight</p></li>
+</ul>
+
+<p><a id="x-28CLOG-3ADRAW-IMAGE-FROM-TO-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG:DRAW-IMAGE-FROM-TO%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:DRAW-IMAGE-FROM-TO%20GENERIC-FUNCTION" >DRAW-IMAGE-FROM-TO</a></span></span> <span class="locative-args">CLOG-CONTEXT2D CLOG-OBJ SX SY SWIDTH SHEIGHT DX DY DWIDTH DHEIGHT</span></span></p>
+
+<p>Draw image at sx sy swidth sheight to dx dy dwidth dheight</p></li>
+</ul>
+
 <p><a id="x-28CLOG-3AELLIPSE-20GENERIC-FUNCTION-29"></a>
 <a id="CLOG:ELLIPSE%20GENERIC-FUNCTION"></a></p>
 
@@ -5730,6 +5838,132 @@ https://developer.mozilla.org/en-US/docs/Web/CSS/font</p></li>
 <li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:ELLIPSE%20GENERIC-FUNCTION" >ELLIPSE</a></span></span> <span class="locative-args">CLOG-CONTEXT2D X Y RADIUS-X RADIUS-Y ROTATION START-ANGLE END-ANGLE &amp;KEY ANTICLOCKWISE</span></span></p>
 
 <p>Adds an elliptical arc to the current path.</p></li>
+</ul>
+
+<p><a id="x-28CLOG-3APATH-FILL-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG:PATH-FILL%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:PATH-FILL%20GENERIC-FUNCTION" >PATH-FILL</a></span></span> <span class="locative-args">CLOG-CONTEXT2D &amp;KEY PATH2D FILL-RULE</span></span></p>
+
+<p>Fill a path.</p></li>
+</ul>
+
+<p><a id="x-28CLOG-3AFILL-RECT-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG:FILL-RECT%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:FILL-RECT%20GENERIC-FUNCTION" >FILL-RECT</a></span></span> <span class="locative-args">CLOG-CONTEXT2D X Y WIDTH HEIGHT</span></span></p>
+
+<p>Fill rectangle with current fill-color</p></li>
+</ul>
+
+<p><a id="x-28CLOG-3AFILL-TEXT-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG:FILL-TEXT%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:FILL-TEXT%20GENERIC-FUNCTION" >FILL-TEXT</a></span></span> <span class="locative-args">CLOG-CONTEXT2D TEXT X Y &amp;KEY MAX-WIDTH</span></span></p>
+
+<p>Fill text with current fill-color</p></li>
+</ul>
+
+<p><a id="x-28CLOG-3AGET-IMAGE-DATA-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG:GET-IMAGE-DATA%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:GET-IMAGE-DATA%20GENERIC-FUNCTION" >GET-IMAGE-DATA</a></span></span> <span class="locative-args">CLOG-CONTEXT2D SX SY SW SH</span></span></p>
+
+<p>Get image data from clog-context2d. Returns a <a href="#CLOG:CLOG-IMAGE-DATA%20CLASS" title="CLOG:CLOG-IMAGE-DATA CLASS"><code>CLOG-IMAGE-DATA</code></a></p></li>
+</ul>
+
+<p><a id="x-28CLOG-3AGET-LINE-DASH-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG:GET-LINE-DASH%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:GET-LINE-DASH%20GENERIC-FUNCTION" >GET-LINE-DASH</a></span></span> <span class="locative-args">CLOG-CONTEXT2D</span></span></p>
+
+<p>Set line style dash pattern, e.g. 10, 20</p></li>
+</ul>
+
+<p><a id="x-28CLOG-3AGET-TRANSFORM-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG:GET-TRANSFORM%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:GET-TRANSFORM%20GENERIC-FUNCTION" >GET-TRANSFORM</a></span></span> <span class="locative-args">CLOG-CONTEXT2D</span></span></p>
+
+<p>Get current transform matrix as clog-matrix</p></li>
+</ul>
+
+<p><a id="x-28CLOG-3AIS-POINT-IN-PATH-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG:IS-POINT-IN-PATH%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:IS-POINT-IN-PATH%20GENERIC-FUNCTION" >IS-POINT-IN-PATH</a></span></span> <span class="locative-args">CLOG-CONTEXT2D X Y &amp;KEY PATH2D FILL-RULE</span></span></p>
+
+<p>Returns t if point is in path or <code>PATH2D</code> if specfified</p></li>
+</ul>
+
+<p><a id="x-28CLOG-3AIS-POINT-IN-STROKE-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG:IS-POINT-IN-STROKE%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:IS-POINT-IN-STROKE%20GENERIC-FUNCTION" >IS-POINT-IN-STROKE</a></span></span> <span class="locative-args">CLOG-CONTEXT2D X Y &amp;KEY PATH2D</span></span></p>
+
+<p>Returns t if point is in stroke or <code>PATH2D</code> if specfified</p></li>
+</ul>
+
+<p><a id="x-28CLOG-3ALINE-TO-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG:LINE-TO%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:LINE-TO%20GENERIC-FUNCTION" >LINE-TO</a></span></span> <span class="locative-args">CLOG-CONTEXT2D X Y</span></span></p>
+
+<p>Adds a line to the current path.</p></li>
+</ul>
+
+<p><a id="x-28CLOG-3AMEASURE-TEXT-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG:MEASURE-TEXT%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:MEASURE-TEXT%20GENERIC-FUNCTION" >MEASURE-TEXT</a></span></span> <span class="locative-args">CLOG-CONTEXT2D TEXT</span></span></p>
+
+<p>Measure text returns a clog-text-metrics object</p></li>
+</ul>
+
+<p><a id="x-28CLOG-3AMOVE-TO-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG:MOVE-TO%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:MOVE-TO%20GENERIC-FUNCTION" >MOVE-TO</a></span></span> <span class="locative-args">CLOG-CONTEXT2D X Y</span></span></p>
+
+<p>Moves start point of path.</p></li>
+</ul>
+
+<p><a id="x-28CLOG-3APUT-IMAGE-DATA-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG:PUT-IMAGE-DATA%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:PUT-IMAGE-DATA%20GENERIC-FUNCTION" >PUT-IMAGE-DATA</a></span></span> <span class="locative-args">CLOG-CONTEXT2D IMAGE-DATA X Y</span></span></p>
+
+<p>Put image-data at x y</p></li>
+</ul>
+
+<p><a id="x-28CLOG-3APUT-IMAGE-DATA-DIRTY-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG:PUT-IMAGE-DATA-DIRTY%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:PUT-IMAGE-DATA-DIRTY%20GENERIC-FUNCTION" >PUT-IMAGE-DATA-DIRTY</a></span></span> <span class="locative-args">CLOG-CONTEXT2D IMAGE-DATA X Y DX DY DWIDTH DHEIGHT</span></span></p>
+
+<p>Put portion of image-data at x y</p></li>
+</ul>
+
+<p><a id="x-28CLOG-3AQUADRATIC-CURVE-TO-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG:QUADRATIC-CURVE-TO%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:QUADRATIC-CURVE-TO%20GENERIC-FUNCTION" >QUADRATIC-CURVE-TO</a></span></span> <span class="locative-args">CLOG-CONTEXT2D CPX CPY X Y</span></span></p>
+
+<p>Adds a quadratic Bezier curve to the current path.</p></li>
 </ul>
 
 <p><a id="x-28CLOG-3ARECT-20GENERIC-FUNCTION-29"></a>
@@ -5741,40 +5975,13 @@ https://developer.mozilla.org/en-US/docs/Web/CSS/font</p></li>
 <p>Adds a rectangle to the current path.</p></li>
 </ul>
 
-<p><a id="x-28CLOG-3APATH-FILL-20GENERIC-FUNCTION-29"></a>
-<a id="CLOG:PATH-FILL%20GENERIC-FUNCTION"></a></p>
+<p><a id="x-28CLOG-3ARESET-TRANSFORM-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG:RESET-TRANSFORM%20GENERIC-FUNCTION"></a></p>
 
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:PATH-FILL%20GENERIC-FUNCTION" >PATH-FILL</a></span></span> <span class="locative-args">CLOG-CONTEXT2D</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:RESET-TRANSFORM%20GENERIC-FUNCTION" >RESET-TRANSFORM</a></span></span> <span class="locative-args">CLOG-CONTEXT2D</span></span></p>
 
-<p>Fill a path.</p></li>
-</ul>
-
-<p><a id="x-28CLOG-3APATH-STROKE-20GENERIC-FUNCTION-29"></a>
-<a id="CLOG:PATH-STROKE%20GENERIC-FUNCTION"></a></p>
-
-<ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:PATH-STROKE%20GENERIC-FUNCTION" >PATH-STROKE</a></span></span> <span class="locative-args">CLOG-CONTEXT2D</span></span></p>
-
-<p>Stroke a path.</p></li>
-</ul>
-
-<p><a id="x-28CLOG-3APATH-CLIP-20GENERIC-FUNCTION-29"></a>
-<a id="CLOG:PATH-CLIP%20GENERIC-FUNCTION"></a></p>
-
-<ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:PATH-CLIP%20GENERIC-FUNCTION" >PATH-CLIP</a></span></span> <span class="locative-args">CLOG-CONTEXT2D</span></span></p>
-
-<p>Clip a path.</p></li>
-</ul>
-
-<p><a id="x-28CLOG-3ACANVAS-SAVE-20GENERIC-FUNCTION-29"></a>
-<a id="CLOG:CANVAS-SAVE%20GENERIC-FUNCTION"></a></p>
-
-<ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:CANVAS-SAVE%20GENERIC-FUNCTION" >CANVAS-SAVE</a></span></span> <span class="locative-args">CLOG-CONTEXT2D</span></span></p>
-
-<p>Save canvas to stack</p></li>
+<p>Restore canvas from stack</p></li>
 </ul>
 
 <p><a id="x-28CLOG-3ACANVAS-RESTORE-20GENERIC-FUNCTION-29"></a>
@@ -5786,12 +5993,1617 @@ https://developer.mozilla.org/en-US/docs/Web/CSS/font</p></li>
 <p>Restore canvas from stack</p></li>
 </ul>
 
+<p><a id="x-28CLOG-3AROTATE-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG:ROTATE%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:ROTATE%20GENERIC-FUNCTION" >ROTATE</a></span></span> <span class="locative-args">CLOG-MATRIX ANGLE</span></span></p>
+
+<p>Return rotate a clog-matrix</p></li>
+</ul>
+
+<p><a id="x-28CLOG-3ACANVAS-SAVE-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG:CANVAS-SAVE%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:CANVAS-SAVE%20GENERIC-FUNCTION" >CANVAS-SAVE</a></span></span> <span class="locative-args">CLOG-CONTEXT2D</span></span></p>
+
+<p>Save canvas to stack</p></li>
+</ul>
+
+<p><a id="x-28CLOG-3ASCALE-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG:SCALE%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:SCALE%20GENERIC-FUNCTION" >SCALE</a></span></span> <span class="locative-args">CLOG-CONTEXT2D X Y</span></span></p>
+
+<p>Scale</p></li>
+</ul>
+
+<p><a id="x-28CLOG-3ASET-LINE-DASH-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG:SET-LINE-DASH%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:SET-LINE-DASH%20GENERIC-FUNCTION" >SET-LINE-DASH</a></span></span> <span class="locative-args">CLOG-CONTEXT2D VALUE</span></span></p>
+
+<p>Set line style dash pattern, e.g. 10, 20</p></li>
+</ul>
+
+<p><a id="x-28CLOG-3ASET-TRANSFORM-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG:SET-TRANSFORM%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:SET-TRANSFORM%20GENERIC-FUNCTION" >SET-TRANSFORM</a></span></span> <span class="locative-args">CLOG-CONTEXT2D A B C D E F G</span></span></p>
+
+<p>Set-Transform</p></li>
+</ul>
+
+<p><a id="x-28CLOG-3ASET-TRANSFORM-WITH-MATRIX-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG:SET-TRANSFORM-WITH-MATRIX%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:SET-TRANSFORM-WITH-MATRIX%20GENERIC-FUNCTION" >SET-TRANSFORM-WITH-MATRIX</a></span></span> <span class="locative-args">CLOG-CONTEXT2D CLOG-MATRIX</span></span></p>
+
+<p>Set-Transform-With-Matrix</p></li>
+</ul>
+
+<p><a id="x-28CLOG-3APATH-STROKE-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG:PATH-STROKE%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:PATH-STROKE%20GENERIC-FUNCTION" >PATH-STROKE</a></span></span> <span class="locative-args">CLOG-CONTEXT2D &amp;KEY PATH2D</span></span></p>
+
+<p>Stroke a path.</p></li>
+</ul>
+
+<p><a id="x-28CLOG-3ASTROKE-RECT-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG:STROKE-RECT%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:STROKE-RECT%20GENERIC-FUNCTION" >STROKE-RECT</a></span></span> <span class="locative-args">CLOG-CONTEXT2D X Y WIDTH HEIGHT</span></span></p>
+
+<p>Fill rectangle using current stroke-style</p></li>
+</ul>
+
+<p><a id="x-28CLOG-3ASTROKE-TEXT-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG:STROKE-TEXT%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:STROKE-TEXT%20GENERIC-FUNCTION" >STROKE-TEXT</a></span></span> <span class="locative-args">CLOG-CONTEXT2D TEXT X Y &amp;KEY MAX-WIDTH</span></span></p>
+
+<p>Stroke text with current stroke-style</p></li>
+</ul>
+
+<p><a id="x-28CLOG-3ATRANSFORM-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG:TRANSFORM%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:TRANSFORM%20GENERIC-FUNCTION" >TRANSFORM</a></span></span> <span class="locative-args">CLOG-CONTEXT2D A B C D E F</span></span></p>
+
+<p>Transform</p></li>
+</ul>
+
+<p><a id="x-28CLOG-3ATRANSLATE-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG:TRANSLATE%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:TRANSLATE%20GENERIC-FUNCTION" >TRANSLATE</a></span></span> <span class="locative-args">CLOG-CONTEXT2D X Y</span></span></p>
+
+<p>Translate</p></li>
+</ul>
+
+<p>CLOG-Canvas-Gradient</p>
+
+<p><a id="x-28CLOG-3ACLOG-CANVAS-GRADIENT-20CLASS-29"></a>
+<a id="CLOG:CLOG-CANVAS-GRADIENT%20CLASS"></a></p>
+
+<ul>
+<li><span class=reference-bullet><span class=reference><span class="locative-type">[class]</span> <span class="reference-object"><a href="#CLOG:CLOG-CANVAS-GRADIENT%20CLASS" >CLOG-CANVAS-GRADIENT</a></span></span> <span class="locative-args"><a href="#CLOG:CLOG-OBJ%20CLASS" title="CLOG:CLOG-OBJ CLASS">CLOG-OBJ</a></span></span></li>
+</ul>
+
+<p><a id="x-28CLOG-3AADD-COLOR-STOP-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG:ADD-COLOR-STOP%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:ADD-COLOR-STOP%20GENERIC-FUNCTION" >ADD-COLOR-STOP</a></span></span> <span class="locative-args">CLOG-CANVAS-GRADIENT OFFSET COLOR</span></span></p>
+
+<p>Add a color stop</p></li>
+</ul>
+
+<p>CLOG-Image-Data</p>
+
+<p><a id="x-28CLOG-3ACLOG-IMAGE-DATA-20CLASS-29"></a>
+<a id="CLOG:CLOG-IMAGE-DATA%20CLASS"></a></p>
+
+<ul>
+<li><span class=reference-bullet><span class=reference><span class="locative-type">[class]</span> <span class="reference-object"><a href="#CLOG:CLOG-IMAGE-DATA%20CLASS" >CLOG-IMAGE-DATA</a></span></span> <span class="locative-args"><a href="#CLOG:CLOG-OBJ%20CLASS" title="CLOG:CLOG-OBJ CLASS">CLOG-OBJ</a></span></span></li>
+</ul>
+
+<p><a id="x-28CLOG-3AJSON-IMAGE-DATA-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG:JSON-IMAGE-DATA%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:JSON-IMAGE-DATA%20GENERIC-FUNCTION" >JSON-IMAGE-DATA</a></span></span> <span class="locative-args">CLOG-IMAGE-DATA</span></span></p>
+
+<p>Setf/get json image data</p></li>
+</ul>
+
+<p>CLOG-Matrix</p>
+
+<p><a id="x-28CLOG-3ACLOG-MATRIX-20CLASS-29"></a>
+<a id="CLOG:CLOG-MATRIX%20CLASS"></a></p>
+
+<ul>
+<li><span class=reference-bullet><span class=reference><span class="locative-type">[class]</span> <span class="reference-object"><a href="#CLOG:CLOG-MATRIX%20CLASS" >CLOG-MATRIX</a></span></span> <span class="locative-args"><a href="#CLOG:CLOG-OBJ%20CLASS" title="CLOG:CLOG-OBJ CLASS">CLOG-OBJ</a></span></span></li>
+</ul>
+
+<p><a id="x-28CLOG-3ACREATE-MATRIX-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG:CREATE-MATRIX%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:CREATE-MATRIX%20GENERIC-FUNCTION" >CREATE-MATRIX</a></span></span> <span class="locative-args">CLOG-CANVAS &amp;KEY MATRIX</span></span></p>
+
+<p>Create a new CLOG-Matrix. <code>MATRIX</code> can be
+json array 6 element for 2d or 16 for 3d.</p></li>
+</ul>
+
+<p><a id="x-28CLOG-3AFLIP-X-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG:FLIP-X%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:FLIP-X%20GENERIC-FUNCTION" >FLIP-X</a></span></span> <span class="locative-args">CLOG-MATRIX</span></span></p>
+
+<p>Return flip-x a clog-matrix</p></li>
+</ul>
+
+<p><a id="x-28CLOG-3AFLIP-Y-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG:FLIP-Y%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:FLIP-Y%20GENERIC-FUNCTION" >FLIP-Y</a></span></span> <span class="locative-args">CLOG-MATRIX</span></span></p>
+
+<p>Return flip-y a clog-matrix</p></li>
+</ul>
+
+<p><a id="x-28CLOG-3AINVERSE-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG:INVERSE%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:INVERSE%20GENERIC-FUNCTION" >INVERSE</a></span></span> <span class="locative-args">CLOG-MATRIX</span></span></p>
+
+<p>Return inverse a clog-matrix</p></li>
+</ul>
+
+<p><a id="x-28CLOG-3AMULTIPLY-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG:MULTIPLY%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:MULTIPLY%20GENERIC-FUNCTION" >MULTIPLY</a></span></span> <span class="locative-args">CLOG-MATRIX BY-MATRIX</span></span></p>
+
+<p>Return multiply a clog-matrix</p></li>
+</ul>
+
+<p><a id="x-28CLOG-3AROTATE-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG:ROTATE%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:ROTATE%20GENERIC-FUNCTION" >ROTATE</a></span></span> <span class="locative-args">CLOG-MATRIX ANGLE</span></span></p>
+
+<p>Return rotate a clog-matrix</p></li>
+</ul>
+
+<p><a id="x-28CLOG-3ASCALE-MATRIX-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG:SCALE-MATRIX%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:SCALE-MATRIX%20GENERIC-FUNCTION" >SCALE-MATRIX</a></span></span> <span class="locative-args">CLOG-MATRIX SX &amp;OPTIONAL SY SZ OX OY OZ</span></span></p>
+
+<p>Return scale a clog-matrix by sx and optionally to
+sy sz ox oy oz</p></li>
+</ul>
+
+<p><a id="x-28CLOG-3ASCALE3D-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG:SCALE3D%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:SCALE3D%20GENERIC-FUNCTION" >SCALE3D</a></span></span> <span class="locative-args">CLOG-MATRIX SX &amp;OPTIONAL SY SZ OX OY OZ</span></span></p>
+
+<p>Return scale3d a clog-matrix by sx and optionally to
+sy sz ox oy oz</p></li>
+</ul>
+
+<p><a id="x-28CLOG-3ATRANSLATE-MATRIX-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG:TRANSLATE-MATRIX%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:TRANSLATE-MATRIX%20GENERIC-FUNCTION" >TRANSLATE-MATRIX</a></span></span> <span class="locative-args">CLOG-MATRIX X Y &amp;OPTIONAL Z</span></span></p>
+
+<p>Return translate-matrix a clog-matrix by x y and optionally z</p></li>
+</ul>
+
+<p>CLOG-Path2d</p>
+
+<p><a id="x-28CLOG-3ACLOG-PATH2D-20CLASS-29"></a>
+<a id="CLOG:CLOG-PATH2D%20CLASS"></a></p>
+
+<ul>
+<li><span class=reference-bullet><span class=reference><span class="locative-type">[class]</span> <span class="reference-object"><a href="#CLOG:CLOG-PATH2D%20CLASS" >CLOG-PATH2D</a></span></span> <span class="locative-args"><a href="#CLOG:CLOG-OBJ%20CLASS" title="CLOG:CLOG-OBJ CLASS">CLOG-OBJ</a></span></span></li>
+</ul>
+
+<p><a id="x-28CLOG-3ACREATE-PATH2D-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG:CREATE-PATH2D%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:CREATE-PATH2D%20GENERIC-FUNCTION" >CREATE-PATH2D</a></span></span> <span class="locative-args">CLOG-CANVAS &amp;KEY PATH2D</span></span></p>
+
+<p>Create a new CLOG-Path2d. If <a href="#CLOG:CLOG-PATH2D%20CLASS" title="CLOG:CLOG-PATH2D CLASS"><code>CLOG-PATH2D</code></a> creates a copy.</p></li>
+</ul>
+
+<p>CLOG-Text-Metrics</p>
+
+<p><a id="x-28CLOG-3ACLOG-TEXT-METRICS-20CLASS-29"></a>
+<a id="CLOG:CLOG-TEXT-METRICS%20CLASS"></a></p>
+
+<ul>
+<li><span class=reference-bullet><span class=reference><span class="locative-type">[class]</span> <span class="reference-object"><a href="#CLOG:CLOG-TEXT-METRICS%20CLASS" >CLOG-TEXT-METRICS</a></span></span> <span class="locative-args"><a href="#CLOG:CLOG-OBJ%20CLASS" title="CLOG:CLOG-OBJ CLASS">CLOG-OBJ</a></span></span></li>
+</ul>
+
+<p><a id="x-28CLOG-3AACTUAL-BOUNDING-BOX-LEFT-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG:ACTUAL-BOUNDING-BOX-LEFT%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:ACTUAL-BOUNDING-BOX-LEFT%20GENERIC-FUNCTION" >ACTUAL-BOUNDING-BOX-LEFT</a></span></span> <span class="locative-args">CLOG-TEXT-METRICS</span></span></p>
+
+<p>Actual bounding box left</p></li>
+</ul>
+
+<p><a id="x-28CLOG-3AACTUAL-BOUNDING-BOX-RIGHT-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG:ACTUAL-BOUNDING-BOX-RIGHT%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:ACTUAL-BOUNDING-BOX-RIGHT%20GENERIC-FUNCTION" >ACTUAL-BOUNDING-BOX-RIGHT</a></span></span> <span class="locative-args">CLOG-TEXT-METRICS</span></span></p>
+
+<p>Actual bounding box right</p></li>
+</ul>
+
+<p><a id="x-28CLOG-3AACTUAL-BOUNDING-BOX-ASCENT-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG:ACTUAL-BOUNDING-BOX-ASCENT%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:ACTUAL-BOUNDING-BOX-ASCENT%20GENERIC-FUNCTION" >ACTUAL-BOUNDING-BOX-ASCENT</a></span></span> <span class="locative-args">CLOG-TEXT-METRICS</span></span></p>
+
+<p>Actual bounding box ascent</p></li>
+</ul>
+
+<p><a id="x-28CLOG-3AACTUAL-BOUNDING-BOX-DESCENT-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG:ACTUAL-BOUNDING-BOX-DESCENT%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:ACTUAL-BOUNDING-BOX-DESCENT%20GENERIC-FUNCTION" >ACTUAL-BOUNDING-BOX-DESCENT</a></span></span> <span class="locative-args">CLOG-TEXT-METRICS</span></span></p>
+
+<p>Actual bounding box descent</p></li>
+</ul>
+
+<p><a id="x-28CLOG-3AFONT-BOUNDING-BOX-ASCENT-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG:FONT-BOUNDING-BOX-ASCENT%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:FONT-BOUNDING-BOX-ASCENT%20GENERIC-FUNCTION" >FONT-BOUNDING-BOX-ASCENT</a></span></span> <span class="locative-args">CLOG-TEXT-METRICS</span></span></p>
+
+<p>Font bounding box ascent</p></li>
+</ul>
+
+<p><a id="x-28CLOG-3AFONT-BOUNDING-BOX-DESCENT-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG:FONT-BOUNDING-BOX-DESCENT%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:FONT-BOUNDING-BOX-DESCENT%20GENERIC-FUNCTION" >FONT-BOUNDING-BOX-DESCENT</a></span></span> <span class="locative-args">CLOG-TEXT-METRICS</span></span></p>
+
+<p>Font bounding box descent</p></li>
+</ul>
+
+<p><a id="x-28CLOG-3AEM-HEIGHT-ASCENT-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG:EM-HEIGHT-ASCENT%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:EM-HEIGHT-ASCENT%20GENERIC-FUNCTION" >EM-HEIGHT-ASCENT</a></span></span> <span class="locative-args">CLOG-TEXT-METRICS</span></span></p>
+
+<p>'M' height ascent</p></li>
+</ul>
+
+<p><a id="x-28CLOG-3AEM-HEIGHT-DESCENT-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG:EM-HEIGHT-DESCENT%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:EM-HEIGHT-DESCENT%20GENERIC-FUNCTION" >EM-HEIGHT-DESCENT</a></span></span> <span class="locative-args">CLOG-TEXT-METRICS</span></span></p>
+
+<p>'M' height descent</p></li>
+</ul>
+
+<p><a id="x-28CLOG-3AHANGING-BASELINE-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG:HANGING-BASELINE%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:HANGING-BASELINE%20GENERIC-FUNCTION" >HANGING-BASELINE</a></span></span> <span class="locative-args">CLOG-TEXT-METRICS</span></span></p>
+
+<p>Hanging baseline</p></li>
+</ul>
+
+<p><a id="x-28CLOG-3AALPHABETIC-BASELINE-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG:ALPHABETIC-BASELINE%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:ALPHABETIC-BASELINE%20GENERIC-FUNCTION" >ALPHABETIC-BASELINE</a></span></span> <span class="locative-args">CLOG-TEXT-METRICS</span></span></p>
+
+<p>Alphabetic baseline</p></li>
+</ul>
+
+<p><a id="x-28CLOG-3AIDEOGRAPHIC-BASELINE-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG:IDEOGRAPHIC-BASELINE%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:IDEOGRAPHIC-BASELINE%20GENERIC-FUNCTION" >IDEOGRAPHIC-BASELINE</a></span></span> <span class="locative-args">CLOG-TEXT-METRICS</span></span></p>
+
+<p>Ideographic baseline</p></li>
+</ul>
+
+<p><a id="x-28CLOG-3A-40CLOG-WEBGL-20MGL-PAX-3ASECTION-29"></a>
+<a id="CLOG:@CLOG-WEBGL%20MGL-PAX:SECTION"></a></p>
+
+<p><span class="outer-navigation"><span class="navigation"> <a href="#CLOG:@CLOG-CANVAS%20MGL-PAX:SECTION" title="CLOG Canvas Objects">&#8592;</a> <a href="#CLOG:@CLOG-MANUAL%20MGL-PAX:SECTION" title="The CLOG manual">&#8593;</a> <a href="#CLOG:@CLOG-MULTIMEDIA%20MGL-PAX:SECTION" title="CLOG Multimedia Objects">&#8594;</a> <a href="#CLOG:@CLOG-WEBGL%20MGL-PAX:SECTION" title="CLOG WebGL Objects">&#8634;</a></span></span></p>
+
+<h2><a href="#CLOG:@CLOG-WEBGL%20MGL-PAX:SECTION">16 CLOG WebGL Objects</a></h2>
+
+<h6>[in package CLOG-WEBGL]</h6>
+
+<p>CLOG-WebGL - Class for CLOG WebGL objects</p>
+
+<p><a id="x-28CLOG-WEBGL-3ACLOG-WEBGL-20CLASS-29"></a>
+<a id="CLOG-WEBGL:CLOG-WEBGL%20CLASS"></a></p>
+
+<ul>
+<li><span class=reference-bullet><span class=reference><span class="locative-type">[class]</span> <span class="reference-object"><a href="#CLOG-WEBGL:CLOG-WEBGL%20CLASS" >CLOG-WEBGL</a></span></span> <span class="locative-args"><a href="#CLOG:CLOG-OBJ%20CLASS" title="CLOG:CLOG-OBJ CLASS">CLOG-OBJ</a></span></span></li>
+</ul>
+
+<p><a id="x-28CLOG-WEBGL-3ACREATE-WEBGL-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG-WEBGL:CREATE-WEBGL%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-WEBGL:CREATE-WEBGL%20GENERIC-FUNCTION" >CREATE-WEBGL</a></span></span> <span class="locative-args">CLOG-CANVAS &amp;KEY CONTEXT</span></span></p>
+
+<p>Create a new CLOG-WebGL from a CLOG-Canvas. Context
+can be webgl (version 1) or webgl2 (default)</p></li>
+</ul>
+
+<p><a id="x-28CLOG-WEBGL-3ADRAWING-BUFFER-WIDTH-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG-WEBGL:DRAWING-BUFFER-WIDTH%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-WEBGL:DRAWING-BUFFER-WIDTH%20GENERIC-FUNCTION" >DRAWING-BUFFER-WIDTH</a></span></span> <span class="locative-args">CLOG-WEBGL</span></span></p>
+
+<p>Drawing are of buffer width. returns float</p></li>
+</ul>
+
+<p><a id="x-28CLOG-WEBGL-3ADRAWING-BUFFER-HEIGHT-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG-WEBGL:DRAWING-BUFFER-HEIGHT%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-WEBGL:DRAWING-BUFFER-HEIGHT%20GENERIC-FUNCTION" >DRAWING-BUFFER-HEIGHT</a></span></span> <span class="locative-args">CLOG-WEBGL</span></span></p>
+
+<p>Drawing are of buffer height. returns float</p></li>
+</ul>
+
+<p><a id="x-28CLOG-WEBGL-3ABUFFER-PARAMETER-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG-WEBGL:BUFFER-PARAMETER%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-WEBGL:BUFFER-PARAMETER%20GENERIC-FUNCTION" >BUFFER-PARAMETER</a></span></span> <span class="locative-args">CLOG-WEBGL GLENUM-TARGET GLENUM-PNAME</span></span></p>
+
+<p>Returns information about the buffer.
+target:
+A GLenum specifying the target buffer object. Possible values:</p>
+
+<p>:ARRAY_BUFFER
+Buffer containing vertex attributes, such as vertex coordinates, texture coordinate data, or vertex color data.</p>
+
+<p>:ELEMENT_ARRAY_BUFFER
+Buffer used for element indices.</p>
+
+<p>When using a WebGL 2 context, the following values are available additionally:</p>
+
+<p>:COPY_READ_BUFFER
+Buffer for copying from one buffer object to another.</p>
+
+<p>:COPY_WRITE_BUFFER
+Buffer for copying from one buffer object to another.</p>
+
+<p>:TRANSFORM_FEEDBACK_BUFFER
+Buffer for transform feedback operations.</p>
+
+<p>:UNIFORM_BUFFER
+Buffer used for storing uniform blocks.</p>
+
+<p>:PIXEL_PACK_BUFFER
+Buffer used for pixel transfer operations.</p>
+
+<p>:PIXEL_UNPACK_BUFFER
+Buffer used for pixel transfer operations.</p>
+
+<p>pname:
+A GLenum specifying information to query. Possible values:</p>
+
+<p>:BUFFER_SIZE
+Returns a GLint indicating the size of the buffer in bytes.</p>
+
+<p>:BUFFER_USAGE
+Returns a GLenum indicating the usage pattern of the buffer. One of the followings:</p>
+
+<p>:STATIC_DRAW
+:DYNAMIC_DRAW
+:STREAM_DRAW</p>
+
+<p>When using a WebGL 2 context, the following values are available additionally:</p>
+
+<p>:STATIC_READ
+:DYNAMIC_READ
+:STREAM_READ
+:STATIC_COPY
+:DYNAMIC_COPY
+:STREAM_COPY</p></li>
+</ul>
+
+<p><a id="x-28CLOG-WEBGL-3ACONTEXT-ATTRIBUTES-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG-WEBGL:CONTEXT-ATTRIBUTES%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-WEBGL:CONTEXT-ATTRIBUTES%20GENERIC-FUNCTION" >CONTEXT-ATTRIBUTES</a></span></span> <span class="locative-args">OBJ</span></span></li>
+</ul>
+
+<p><a id="x-28CLOG-WEBGL-3AWEBGL-ERROR-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG-WEBGL:WEBGL-ERROR%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-WEBGL:WEBGL-ERROR%20GENERIC-FUNCTION" >WEBGL-ERROR</a></span></span> <span class="locative-args">OBJ</span></span></li>
+</ul>
+
+<p><a id="x-28CLOG-WEBGL-3AFRAME-BUFFER-ATTACHMENT-PARAMETER-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG-WEBGL:FRAME-BUFFER-ATTACHMENT-PARAMETER%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-WEBGL:FRAME-BUFFER-ATTACHMENT-PARAMETER%20GENERIC-FUNCTION" >FRAME-BUFFER-ATTACHMENT-PARAMETER</a></span></span> <span class="locative-args">OBJ GLENUM-TARGET GLENUM-ATTACHMENT GLENUM-PNAME</span></span></li>
+</ul>
+
+<p><a id="x-28CLOG-WEBGL-3APARAMETER-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG-WEBGL:PARAMETER%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-WEBGL:PARAMETER%20GENERIC-FUNCTION" >PARAMETER</a></span></span> <span class="locative-args">OBJ GLENUM-PNAME</span></span></li>
+</ul>
+
+<p><a id="x-28CLOG-WEBGL-3ARENDER-BUFFER-PARAMETER-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG-WEBGL:RENDER-BUFFER-PARAMETER%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-WEBGL:RENDER-BUFFER-PARAMETER%20GENERIC-FUNCTION" >RENDER-BUFFER-PARAMETER</a></span></span> <span class="locative-args">OBJ GLENUM-TARGET GLENUM-PNAME</span></span></li>
+</ul>
+
+<p><a id="x-28CLOG-WEBGL-3ATEXTURE-PARAMETER-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG-WEBGL:TEXTURE-PARAMETER%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-WEBGL:TEXTURE-PARAMETER%20GENERIC-FUNCTION" >TEXTURE-PARAMETER</a></span></span> <span class="locative-args">OBJ GLENUM-TARGET GLENUM-PNAME</span></span></li>
+</ul>
+
+<p><a id="x-28CLOG-WEBGL-3AVERTEX-ATTRIBUTE-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG-WEBGL:VERTEX-ATTRIBUTE%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-WEBGL:VERTEX-ATTRIBUTE%20GENERIC-FUNCTION" >VERTEX-ATTRIBUTE</a></span></span> <span class="locative-args">CLOG-WEBGL INDEX GLENUM-PNAME</span></span></p>
+
+<p>Information about a vertex attribute at a given position.
+pname:
+A GLenum specifying the information to query. Possible values:</p>
+
+<p>:VERTEX_ATTRIB_ARRAY_BUFFER_BINDING
+Returns the currently bound WebGLBuffer.</p>
+
+<p>:VERTEX_ATTRIB_ARRAY_ENABLED
+Returns a GLboolean that is true if the vertex attribute is enabled at this index. Otherwise false.</p>
+
+<p>:VERTEX_ATTRIB_ARRAY_SIZE
+Returns a GLint indicating the size of an element of the vertex array.</p>
+
+<p>:VERTEX_ATTRIB_ARRAY_STRIDE
+Returns a GLint indicating the number of bytes between successive elements in the array. 0 means that the elements are sequential.</p>
+
+<p>:VERTEX_ATTRIB_ARRAY_TYPE
+Returns a GLenum representing the array type. One of</p>
+
+<p><code>:BYTE</code>
+:UNSIGNED_BYTE
+<code>:SHORT</code>,
+:UNSIGNED_SHORT
+<code>:FLOAT</code>
+:VERTEX_ATTRIB_ARRAY_NORMALIZED
+Returns a GLboolean that is true if fixed-point data types are normalized for the vertex attribute array at the given index.</p>
+
+<p>:CURRENT_VERTEX_ATTRIB
+Returns a Float32Array (with 4 elements) representing the current value of the vertex attribute at the given index.</p>
+
+<p>When using a WebGL 2 context, the following values are available additionally:</p>
+
+<p>:VERTEX_ATTRIB_ARRAY_INTEGER
+Returns a GLboolean indicating whether an integer data type is in the vertex attribute array at the given index.</p>
+
+<p>:VERTEX_ATTRIB_ARRAY_DIVISOR
+Returns a GLint describing the frequency divisor used for instanced rendering.</p></li>
+</ul>
+
+<p><a id="x-28CLOG-WEBGL-3AACTIVE-TEXTURE-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG-WEBGL:ACTIVE-TEXTURE%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-WEBGL:ACTIVE-TEXTURE%20GENERIC-FUNCTION" >ACTIVE-TEXTURE</a></span></span> <span class="locative-args">CLOG-WEBGL GLENUM-TEXTURE</span></span></p>
+
+<p>Sets the active textcture in gl context based on :TEXTUREI
+where I is the texture number.</p></li>
+</ul>
+
+<p><a id="x-28CLOG-WEBGL-3ABLEND-COLOR-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG-WEBGL:BLEND-COLOR%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-WEBGL:BLEND-COLOR%20GENERIC-FUNCTION" >BLEND-COLOR</a></span></span> <span class="locative-args">CLOG-WEBGL RED GREEN BLUE ALPHA</span></span></p>
+
+<p>Used to set the source and destination blending factors.</p></li>
+</ul>
+
+<p><a id="x-28CLOG-WEBGL-3ABLEND-EQUATION-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG-WEBGL:BLEND-EQUATION%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-WEBGL:BLEND-EQUATION%20GENERIC-FUNCTION" >BLEND-EQUATION</a></span></span> <span class="locative-args">CLOG-WEBGL GLENUM-MODE</span></span></p>
+
+<p>Used to set both the <a href="#CLOG:RGB%20FUNCTION" title="CLOG:RGB FUNCTION"><code>RGB</code></a> blend equation and alpha blend equation to a single equation.
+:FUNC_ADD : source + destination (default value)
+:FUNC_SUBTRACT : source - destination
+:FUNC_REVERSE_SUBTRACT : destination - source</p>
+
+<p>When using a WebGL 2 context, the following values are available additionally:</p>
+
+<p><code>:MIN</code> : Minimum of source and destination
+<code>:MAX</code> : Maximum of source and destination</p></li>
+</ul>
+
+<p><a id="x-28CLOG-WEBGL-3ABLEND-EQUATION-SEPERATE-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG-WEBGL:BLEND-EQUATION-SEPERATE%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-WEBGL:BLEND-EQUATION-SEPERATE%20GENERIC-FUNCTION" >BLEND-EQUATION-SEPERATE</a></span></span> <span class="locative-args">CLOG-WEBGL GLENUM-MODE-RGB GLENUM-MODE-ALPHA</span></span></p>
+
+<p>Used to set both the <a href="#CLOG:RGB%20FUNCTION" title="CLOG:RGB FUNCTION"><code>RGB</code></a> blend equation and alpha blend equation to a single equation.
+:FUNC_ADD : source + destination (default value)
+:FUNC_SUBTRACT : source - destination
+:FUNC_REVERSE_SUBTRACT : destination - source</p>
+
+<p>When using a WebGL 2 context, the following values are available additionally:</p>
+
+<p><code>:MIN</code> : Minimum of source and destination
+<code>:MAX</code> : Maximum of source and destination</p></li>
+</ul>
+
+<p><a id="x-28CLOG-WEBGL-3ABLEND-FUNCTION-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG-WEBGL:BLEND-FUNCTION%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-WEBGL:BLEND-FUNCTION%20GENERIC-FUNCTION" >BLEND-FUNCTION</a></span></span> <span class="locative-args">CLOG-WEBGL GLENUM-SOURCE-FACTOR GLENUM-DESTINATION-FACTOR</span></span></p>
+
+<p>Defines which function is used for blending pixel arithmetic.
+See - https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/blendFunc</p></li>
+</ul>
+
+<p><a id="x-28CLOG-WEBGL-3ABLEND-FUNCTION-SEPERATE-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG-WEBGL:BLEND-FUNCTION-SEPERATE%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-WEBGL:BLEND-FUNCTION-SEPERATE%20GENERIC-FUNCTION" >BLEND-FUNCTION-SEPERATE</a></span></span> <span class="locative-args">CLOG-WEBGL GLENUM-SOURCE-FACTOR-RGB GLENUM-DESTINATION-FACTOR-RGB GLENUM-SOURCE-FACTOR-ALPHA GLENUM-DESTINATION-FACTOR-ALPHA</span></span></p>
+
+<p>Defines which function is used for blending pixel arithmetic.
+See - https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/blendFunc</p></li>
+</ul>
+
+<p><a id="x-28CLOG-WEBGL-3ACHECK-FRAME-BUFFER-STATUS-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG-WEBGL:CHECK-FRAME-BUFFER-STATUS%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-WEBGL:CHECK-FRAME-BUFFER-STATUS%20GENERIC-FUNCTION" >CHECK-FRAME-BUFFER-STATUS</a></span></span> <span class="locative-args">CLOG-WEBGL TARGET</span></span></p>
+
+<p>Completeness status of frame buffer. Target can be:
+:FRAMEBUFFER
+Collection buffer data storage of color, alpha, depth and stencil buffers used to render an image.</p>
+
+<p>When using a WebGL 2 context, the following values are available additionally:</p>
+
+<p>:DRAW_FRAMEBUFFER
+Equivalent to :FRAMEBUFFER. Used as a destination for drawing, rendering, clearing, and writing operations.</p>
+
+<p>:READ_FRAMEBUFFER
+Used as a source for reading operations.</p></li>
+</ul>
+
+<p><a id="x-28CLOG-WEBGL-3ACLEAR-COLOR-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG-WEBGL:CLEAR-COLOR%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-WEBGL:CLEAR-COLOR%20GENERIC-FUNCTION" >CLEAR-COLOR</a></span></span> <span class="locative-args">CLOG-WEBGL RED GREEN BLUE ALPHA</span></span></p>
+
+<p>Specifies the color values used when clearing color buffers
+with <a href="#CLOG-WEBGL:CLEAR-WEBGL%20GENERIC-FUNCTION" title="CLOG-WEBGL:CLEAR-WEBGL GENERIC-FUNCTION"><code>CLEAR-WEBGL</code></a>.</p></li>
+</ul>
+
+<p><a id="x-28CLOG-WEBGL-3ACLEAR-DEPTH-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG-WEBGL:CLEAR-DEPTH%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-WEBGL:CLEAR-DEPTH%20GENERIC-FUNCTION" >CLEAR-DEPTH</a></span></span> <span class="locative-args">CLOG-WEBGL DEPTH</span></span></p>
+
+<p>Specifying the depth value used when the depth buffer is cleared.</p></li>
+</ul>
+
+<p><a id="x-28CLOG-WEBGL-3ACLEAR-WEBGL-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG-WEBGL:CLEAR-WEBGL%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-WEBGL:CLEAR-WEBGL%20GENERIC-FUNCTION" >CLEAR-WEBGL</a></span></span> <span class="locative-args">CLOG-WEBGL GLENUM-MASK</span></span></p>
+
+<p>Clears buffers to preset values. <code>GLENUM-MASK</code> can be:
+:COLOR_BUFFER_BIT
+:DEPTH_BUFFER_BIT
+:STENCIL_BUFFER_BIT</p></li>
+</ul>
+
+<p><a id="x-28CLOG-WEBGL-3ACLEAR-STENCIL-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG-WEBGL:CLEAR-STENCIL%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-WEBGL:CLEAR-STENCIL%20GENERIC-FUNCTION" >CLEAR-STENCIL</a></span></span> <span class="locative-args">CLOG-WEBGL STENCIL</span></span></p>
+
+<p>Specifying the stencil index used when the stencil buffer is cleared.</p></li>
+</ul>
+
+<p><a id="x-28CLOG-WEBGL-3ACOLOR-MASK-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG-WEBGL:COLOR-MASK%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-WEBGL:COLOR-MASK%20GENERIC-FUNCTION" >COLOR-MASK</a></span></span> <span class="locative-args">CLOG-WEBGL RED GREEN BLUE ALPHA</span></span></p>
+
+<p>Sets which color components to enable or to disable when drawing or rendering
+red green blue alpha are nil or true</p></li>
+</ul>
+
+<p><a id="x-28CLOG-WEBGL-3ADEPTH-FUNCTION-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG-WEBGL:DEPTH-FUNCTION%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-WEBGL:DEPTH-FUNCTION%20GENERIC-FUNCTION" >DEPTH-FUNCTION</a></span></span> <span class="locative-args">CLOG-WEBGL GLENUM-FUNC</span></span></p>
+
+<p>Specifies a function that compares incoming pixel depth to
+the current depth buffer value. <code>GLENUM-FUNC</code> can be:
+<code>:NEVER</code> (never pass)
+:LESS (pass if the incoming value is less than the depth buffer value)
+:EQUAL (pass if the incoming value equals the depth buffer value)
+:LEQUAL (pass if the incoming value is less than or equal to the depth buffer value)
+:GREATER (pass if the incoming value is greater than the depth buffer value)
+:NOTEQUAL (pass if the incoming value is not equal to the depth buffer value)
+:GEQUAL (pass if the incoming value is greater than or equal to the depth buffer value)
+<code>:ALWAYS</code> (always pass)</p></li>
+</ul>
+
+<p><a id="x-28CLOG-WEBGL-3ADEPTH-MASK-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG-WEBGL:DEPTH-MASK%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-WEBGL:DEPTH-MASK%20GENERIC-FUNCTION" >DEPTH-MASK</a></span></span> <span class="locative-args">CLOG-WEBGL ENABLEP</span></span></p>
+
+<p>Specifying whether or not writing into the depth buffer is
+enabled</p></li>
+</ul>
+
+<p><a id="x-28CLOG-WEBGL-3ADEPTH-RANGE-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG-WEBGL:DEPTH-RANGE%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-WEBGL:DEPTH-RANGE%20GENERIC-FUNCTION" >DEPTH-RANGE</a></span></span> <span class="locative-args">CLOG-WEBGL ZNEAR ZFAR</span></span></p>
+
+<p>Specifies the depth range mapping from normalized device
+coordinates to window or viewport coordinates.</p></li>
+</ul>
+
+<p><a id="x-28CLOG-WEBGL-3ADISABLE-CAPABILITY-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG-WEBGL:DISABLE-CAPABILITY%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-WEBGL:DISABLE-CAPABILITY%20GENERIC-FUNCTION" >DISABLE-CAPABILITY</a></span></span> <span class="locative-args">CLOG-WEBGL GLENUM-CAPABILITY</span></span></p>
+
+<p>Disables specific WebGL capabilities for this context.
+For <code>GLENUM-CAPABILITY</code> see:
+https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/disable</p></li>
+</ul>
+
+<p><a id="x-28CLOG-WEBGL-3ADISABLE-VERTEX-ATTRIBUTE-ARRAY-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG-WEBGL:DISABLE-VERTEX-ATTRIBUTE-ARRAY%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-WEBGL:DISABLE-VERTEX-ATTRIBUTE-ARRAY%20GENERIC-FUNCTION" >DISABLE-VERTEX-ATTRIBUTE-ARRAY</a></span></span> <span class="locative-args">CLOG-WEBGL ATTRIBUTE-LOCATION</span></span></p>
+
+<p>Turns the generic vertex attribute array off at a given index
+position.</p></li>
+</ul>
+
+<p><a id="x-28CLOG-WEBGL-3ADRAW-ARRAYS-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG-WEBGL:DRAW-ARRAYS%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-WEBGL:DRAW-ARRAYS%20GENERIC-FUNCTION" >DRAW-ARRAYS</a></span></span> <span class="locative-args">CLOG-WEBGL MODE OFFSET COUNT</span></span></p>
+
+<p>Renders primitives from array data. <code>MODE</code> can be:
+:POINTS Draws a single dot.
+:LINE_STRIP Draws a straight line to the next vertex.
+:LINE_LOOP Draws a straight line to the next vertex, and connects the last vertex back to the first.
+<code>:LINES</code> Draws a line between a pair of vertices.
+:TRIANGLE_STRIP
+:TRIANGLE_FAN
+:TRIANGLES Draws a triangle for a group of three vertices.</p></li>
+</ul>
+
+<p><a id="x-28CLOG-WEBGL-3ADRAW-ELEMENTS-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG-WEBGL:DRAW-ELEMENTS%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-WEBGL:DRAW-ELEMENTS%20GENERIC-FUNCTION" >DRAW-ELEMENTS</a></span></span> <span class="locative-args">CLOG-WEBGL MODE COUNT TYPE OFFSET</span></span></p>
+
+<p>Renders primitives from array data.
+<code>MODE</code> can be:
+:POINTS Draws a single dot.
+:LINE_STRIP Draws a straight line to the next vertex.
+:LINE_LOOP Draws a straight line to the next vertex, and connects the last vertex back to the first.
+<code>:LINES</code> Draws a line between a pair of vertices.
+:TRIANGLE_STRIP
+:TRIANGLE_FAN
+:TRIANGLES Draws a triangle for a group of three vertices.</p>
+
+<p><code>TYPE</code> can be:
+:UNSIGNED_BYTE
+:UNSIGNED_SHORT</p></li>
+</ul>
+
+<p><a id="x-28CLOG-WEBGL-3AENABLE-CAPABILITY-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG-WEBGL:ENABLE-CAPABILITY%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-WEBGL:ENABLE-CAPABILITY%20GENERIC-FUNCTION" >ENABLE-CAPABILITY</a></span></span> <span class="locative-args">CLOG-WEBGL GLENUM-CAPABILITY</span></span></p>
+
+<p>Enables specific WebGL capabilities for this context.
+For <code>GLENUM-CAPABILITY</code> see:
+https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/enable</p></li>
+</ul>
+
+<p><a id="x-28CLOG-WEBGL-3AENABLE-VERTEX-ATTRIBUTE-ARRAY-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG-WEBGL:ENABLE-VERTEX-ATTRIBUTE-ARRAY%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-WEBGL:ENABLE-VERTEX-ATTRIBUTE-ARRAY%20GENERIC-FUNCTION" >ENABLE-VERTEX-ATTRIBUTE-ARRAY</a></span></span> <span class="locative-args">CLOG-WEBGL ATTRIBUTE-LOCATION</span></span></p>
+
+<p>Turns the generic vertex attribute array on at a given index
+position.</p></li>
+</ul>
+
+<p><a id="x-28CLOG-WEBGL-3AFINISH-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG-WEBGL:FINISH%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-WEBGL:FINISH%20GENERIC-FUNCTION" >FINISH</a></span></span> <span class="locative-args">CLOG-WEBGL</span></span></p>
+
+<p>Blocks execution until all previously called commands are
+finished. this needs to be written to fire an event when done to work fully
+with CLOG</p></li>
+</ul>
+
+<p><a id="x-28CLOG-WEBGL-3AFLUSH-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG-WEBGL:FLUSH%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-WEBGL:FLUSH%20GENERIC-FUNCTION" >FLUSH</a></span></span> <span class="locative-args">CLOG-WEBGL</span></span></p>
+
+<p>Empties different buffer commands, causing all commands to
+be executed as quickly as possible</p></li>
+</ul>
+
+<p><a id="x-28CLOG-WEBGL-3AFRAME-BUFFER-RENDER-BUFFER-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG-WEBGL:FRAME-BUFFER-RENDER-BUFFER%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-WEBGL:FRAME-BUFFER-RENDER-BUFFER%20GENERIC-FUNCTION" >FRAME-BUFFER-RENDER-BUFFER</a></span></span> <span class="locative-args">CLOG-WEBGL TARGET ATTACHMENT RENDERBUFFERTARGET CLOG-WEBGL-RENDER-BUFFER</span></span></p>
+
+<p>Attaches a clog-Render-buffer object to a clog-frame-buffer object</p></li>
+</ul>
+
+<p><a id="x-28CLOG-WEBGL-3AFRAME-BUFFER-TEXTURE-2D-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG-WEBGL:FRAME-BUFFER-TEXTURE-2D%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-WEBGL:FRAME-BUFFER-TEXTURE-2D%20GENERIC-FUNCTION" >FRAME-BUFFER-TEXTURE-2D</a></span></span> <span class="locative-args">CLOG-WEBGL TARGET ATTACHMENT TEXTARGET CLOG-FRAME-BUFFER LEVEL</span></span></p>
+
+<p>attaches a texture to a clog-frame-buffer</p></li>
+</ul>
+
+<p><a id="x-28CLOG-WEBGL-3AFRONT-FACE-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG-WEBGL:FRONT-FACE%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-WEBGL:FRONT-FACE%20GENERIC-FUNCTION" >FRONT-FACE</a></span></span> <span class="locative-args">CLOG-WEBGL GLENUM-MODE</span></span></p>
+
+<p>Specifies whether polygons are front- or back-facing by
+setting a winding orientation. <code>GLENUM-MODE</code> can be:
+:CW Clock-wise winding.
+:CCW Counter-clock-wise winding.</p></li>
+</ul>
+
+<p><a id="x-28CLOG-WEBGL-3AGENERATE-MIPMAP-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG-WEBGL:GENERATE-MIPMAP%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-WEBGL:GENERATE-MIPMAP%20GENERIC-FUNCTION" >GENERATE-MIPMAP</a></span></span> <span class="locative-args">CLOG-WEBGL GLENUM-TARGET</span></span></p>
+
+<p>Generates a set of mipmaps for a WebGLTexture object.
+<code>GLENUM-TARGET</code> can be:
+:TEXTURE_2D A two-dimensional texture.
+:TEXTURE_CUBE_MAP A cube-mapped texture.
+When using a WebGL 2 context, the following values are available additionally:</p>
+
+<p>:TEXTURE_3D A three-dimensional texture.
+:TEXTURE_2D_ARRAY A two-dimensional array texture</p></li>
+</ul>
+
+<p><a id="x-28CLOG-WEBGL-3AHINT-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG-WEBGL:HINT%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-WEBGL:HINT%20GENERIC-FUNCTION" >HINT</a></span></span> <span class="locative-args">CLOG-WEBGL GLENUM-TARGET GLENUM-MODE</span></span></p>
+
+<p>Hints for certain behaviors. The interpretation of these
+hints depend on the implementation.</p>
+
+<p>target:
+Sets which behavior to be controlled. Possible values:</p>
+
+<p>:GENERATE_MIPMAP_HINT
+Quality of filtering when generating mipmap images with WebGLRenderingContext.generateMipmap().</p>
+
+<p>When using the OES_standard_derivatives extension:</p>
+
+<p>ext.FRAGMENT_SHADER_DERIVATIVE_HINT_OES
+Accuracy of the derivative calculation for the GLSL built-in functions: dFdx, dFdy, and fwidth.</p>
+
+<p>When using a WebGL 2 context, the following values are available additionally:</p>
+
+<p>:FRAGMENT_SHADER_DERIVATIVE_HINT
+Same as ext.FRAGMENT_SHADER_DERIVATIVE_HINT_OES</p>
+
+<p>mode:
+Sets the behavior. The default value is :DONT_CARE. The possible values are:</p>
+
+<p>:FASTEST : The most efficient behavior should be used.
+:NICEST : The most correct or the highest quality option should be used.
+:DONT_CARE : There is no preference for this behavior.</p></li>
+</ul>
+
+<p><a id="x-28CLOG-WEBGL-3AIS-CAPABILITY-ENABLED-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG-WEBGL:IS-CAPABILITY-ENABLED%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-WEBGL:IS-CAPABILITY-ENABLED%20GENERIC-FUNCTION" >IS-CAPABILITY-ENABLED</a></span></span> <span class="locative-args">CLOG-WEBGL GLENUM-CAPABILITY</span></span></p>
+
+<p>Return true if glenum-capability is enabled.
+https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/isEnabled</p></li>
+</ul>
+
+<p><a id="x-28CLOG-WEBGL-3AIS-CONTEXT-LOST-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG-WEBGL:IS-CONTEXT-LOST%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-WEBGL:IS-CONTEXT-LOST%20GENERIC-FUNCTION" >IS-CONTEXT-LOST</a></span></span> <span class="locative-args">CLOG-WEBGL</span></span></p>
+
+<p>Return true if context was lost and needs to be re-established</p></li>
+</ul>
+
+<p><a id="x-28CLOG-WEBGL-3APIXEL-STORE-INTEGER-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG-WEBGL:PIXEL-STORE-INTEGER%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-WEBGL:PIXEL-STORE-INTEGER%20GENERIC-FUNCTION" >PIXEL-STORE-INTEGER</a></span></span> <span class="locative-args">OBJ GLENUM-PNAME VALUE</span></span></li>
+</ul>
+
+<p><a id="x-28CLOG-WEBGL-3APOLYGON-OFFSET-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG-WEBGL:POLYGON-OFFSET%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-WEBGL:POLYGON-OFFSET%20GENERIC-FUNCTION" >POLYGON-OFFSET</a></span></span> <span class="locative-args">OBJ FACTOR UNITS</span></span></li>
+</ul>
+
+<p><a id="x-28CLOG-WEBGL-3ARENDER-BUFFER-STORAGE-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG-WEBGL:RENDER-BUFFER-STORAGE%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-WEBGL:RENDER-BUFFER-STORAGE%20GENERIC-FUNCTION" >RENDER-BUFFER-STORAGE</a></span></span> <span class="locative-args">OBJ GLENUM-TARGET GLENUM-INTERNAL-FORMAT WIDTH HEIGHT</span></span></li>
+</ul>
+
+<p><a id="x-28CLOG-WEBGL-3ASAMPLE-COVERAGE-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG-WEBGL:SAMPLE-COVERAGE%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-WEBGL:SAMPLE-COVERAGE%20GENERIC-FUNCTION" >SAMPLE-COVERAGE</a></span></span> <span class="locative-args">OBJ VALUE INVERTP</span></span></li>
+</ul>
+
+<p><a id="x-28CLOG-WEBGL-3ASCISSOR-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG-WEBGL:SCISSOR%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-WEBGL:SCISSOR%20GENERIC-FUNCTION" >SCISSOR</a></span></span> <span class="locative-args">OBJ X Y WIDTH HEIGHT</span></span></li>
+</ul>
+
+<p><a id="x-28CLOG-WEBGL-3ASTENCIL-FUNCTION-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG-WEBGL:STENCIL-FUNCTION%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-WEBGL:STENCIL-FUNCTION%20GENERIC-FUNCTION" >STENCIL-FUNCTION</a></span></span> <span class="locative-args">OBJ GLENUM-FUNC REF MASK</span></span></li>
+</ul>
+
+<p><a id="x-28CLOG-WEBGL-3ASTENCIL-FUNCTION-SEPERATE-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG-WEBGL:STENCIL-FUNCTION-SEPERATE%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-WEBGL:STENCIL-FUNCTION-SEPERATE%20GENERIC-FUNCTION" >STENCIL-FUNCTION-SEPERATE</a></span></span> <span class="locative-args">OBJ GLENUM-FACE GLENUM-FUNC REF MASK</span></span></li>
+</ul>
+
+<p><a id="x-28CLOG-WEBGL-3ASTENCIL-MASK-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG-WEBGL:STENCIL-MASK%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-WEBGL:STENCIL-MASK%20GENERIC-FUNCTION" >STENCIL-MASK</a></span></span> <span class="locative-args">OBJ MASK</span></span></li>
+</ul>
+
+<p><a id="x-28CLOG-WEBGL-3ASTENCIL-MASK-SEPERATE-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG-WEBGL:STENCIL-MASK-SEPERATE%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-WEBGL:STENCIL-MASK-SEPERATE%20GENERIC-FUNCTION" >STENCIL-MASK-SEPERATE</a></span></span> <span class="locative-args">OBJ GLENUM-FACE MASK</span></span></li>
+</ul>
+
+<p><a id="x-28CLOG-WEBGL-3ASTENCIL-OPERATION-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG-WEBGL:STENCIL-OPERATION%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-WEBGL:STENCIL-OPERATION%20GENERIC-FUNCTION" >STENCIL-OPERATION</a></span></span> <span class="locative-args">OBJ FAIL ZFAIL ZPASS</span></span></li>
+</ul>
+
+<p><a id="x-28CLOG-WEBGL-3ASTENCIL-OPERATION-SEPERATE-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG-WEBGL:STENCIL-OPERATION-SEPERATE%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-WEBGL:STENCIL-OPERATION-SEPERATE%20GENERIC-FUNCTION" >STENCIL-OPERATION-SEPERATE</a></span></span> <span class="locative-args">OBJ GLENUM-FACE FAIL ZFAIL ZPASS</span></span></li>
+</ul>
+
+<p><a id="x-28CLOG-WEBGL-3ATEXTURE-PARAMETER-FLOAT-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG-WEBGL:TEXTURE-PARAMETER-FLOAT%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-WEBGL:TEXTURE-PARAMETER-FLOAT%20GENERIC-FUNCTION" >TEXTURE-PARAMETER-FLOAT</a></span></span> <span class="locative-args">OBJ GLENUM-TARGET GLENUM-PNAME VALUE</span></span></li>
+</ul>
+
+<p><a id="x-28CLOG-WEBGL-3ATEXTURE-PARAMETER-INTEGER-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG-WEBGL:TEXTURE-PARAMETER-INTEGER%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-WEBGL:TEXTURE-PARAMETER-INTEGER%20GENERIC-FUNCTION" >TEXTURE-PARAMETER-INTEGER</a></span></span> <span class="locative-args">OBJ GLENUM-TARGET GLENUM-PNAME VALUE</span></span></li>
+</ul>
+
+<p><a id="x-28CLOG-WEBGL-3AUNIFORM-MATRIX-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG-WEBGL:UNIFORM-MATRIX%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-WEBGL:UNIFORM-MATRIX%20GENERIC-FUNCTION" >UNIFORM-MATRIX</a></span></span> <span class="locative-args">OBJ SIZE LOCATION NORMALIZE MATRIX</span></span></li>
+</ul>
+
+<p><a id="x-28CLOG-WEBGL-3AVIEWPORT-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG-WEBGL:VIEWPORT%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-WEBGL:VIEWPORT%20GENERIC-FUNCTION" >VIEWPORT</a></span></span> <span class="locative-args">OBJ X Y WIDTH HEIGHT</span></span></li>
+</ul>
+
+<p><a id="x-28CLOG-WEBGL-3AVERTEX-ATTRIBUTE-POINTER-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG-WEBGL:VERTEX-ATTRIBUTE-POINTER%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-WEBGL:VERTEX-ATTRIBUTE-POINTER%20GENERIC-FUNCTION" >VERTEX-ATTRIBUTE-POINTER</a></span></span> <span class="locative-args">OBJ ATTRIBUTE-LOCATION SIZE TYPE NORMALIZE STRIDE OFFSET</span></span></li>
+</ul>
+
+<p><a id="x-28CLOG-WEBGL-3ACOMPILE-SHADER-SOURCE-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG-WEBGL:COMPILE-SHADER-SOURCE%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-WEBGL:COMPILE-SHADER-SOURCE%20GENERIC-FUNCTION" >COMPILE-SHADER-SOURCE</a></span></span> <span class="locative-args">OBJ GLENUM-TYPE SOURCE</span></span></li>
+</ul>
+
+<p><a id="x-28CLOG-WEBGL-3ACOMPILE-WEBGL-PROGRAM-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG-WEBGL:COMPILE-WEBGL-PROGRAM%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-WEBGL:COMPILE-WEBGL-PROGRAM%20GENERIC-FUNCTION" >COMPILE-WEBGL-PROGRAM</a></span></span> <span class="locative-args">OBJ VERTEX-SHADER FRAGMENT-SHADER</span></span></li>
+</ul>
+
+<p><a id="x-28CLOG-WEBGL-3ACLOG-WEBGL-UNIFORM-20CLASS-29"></a>
+<a id="CLOG-WEBGL:CLOG-WEBGL-UNIFORM%20CLASS"></a></p>
+
+<ul>
+<li><span class=reference-bullet><span class=reference><span class="locative-type">[class]</span> <span class="reference-object"><a href="#CLOG-WEBGL:CLOG-WEBGL-UNIFORM%20CLASS" >CLOG-WEBGL-UNIFORM</a></span></span> <span class="locative-args"><a href="#CLOG:CLOG-OBJ%20CLASS" title="CLOG:CLOG-OBJ CLASS">CLOG-OBJ</a></span></span></li>
+</ul>
+
+<p>CLOG-WebGL-Active-Info - Class for CLOG WebGL Active Info objects</p>
+
+<p><a id="x-28CLOG-WEBGL-3ACLOG-WEBGL-ACTIVE-INFO-20CLASS-29"></a>
+<a id="CLOG-WEBGL:CLOG-WEBGL-ACTIVE-INFO%20CLASS"></a></p>
+
+<ul>
+<li><span class=reference-bullet><span class=reference><span class="locative-type">[class]</span> <span class="reference-object"><a href="#CLOG-WEBGL:CLOG-WEBGL-ACTIVE-INFO%20CLASS" >CLOG-WEBGL-ACTIVE-INFO</a></span></span> <span class="locative-args"><a href="#CLOG:CLOG-OBJ%20CLASS" title="CLOG:CLOG-OBJ CLASS">CLOG-OBJ</a></span></span></li>
+</ul>
+
+<p><a id="x-28CLOG-WEBGL-3AINFO-NAME-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG-WEBGL:INFO-NAME%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-WEBGL:INFO-NAME%20GENERIC-FUNCTION" >INFO-NAME</a></span></span> <span class="locative-args">CLOG-WEBGL-ACTIVE-INFO</span></span></p>
+
+<p>Active Info Name</p></li>
+</ul>
+
+<p><a id="x-28CLOG-WEBGL-3AINFO-SIZE-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG-WEBGL:INFO-SIZE%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-WEBGL:INFO-SIZE%20GENERIC-FUNCTION" >INFO-SIZE</a></span></span> <span class="locative-args">CLOG-WEBGL-ACTIVE-INFO</span></span></p>
+
+<p>Active Info Size</p></li>
+</ul>
+
+<p><a id="x-28CLOG-WEBGL-3AINFO-TYPE-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG-WEBGL:INFO-TYPE%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-WEBGL:INFO-TYPE%20GENERIC-FUNCTION" >INFO-TYPE</a></span></span> <span class="locative-args">CLOG-WEBGL-ACTIVE-INFO</span></span></p>
+
+<p>Active Info Type</p></li>
+</ul>
+
+<p>CLOG-WebGL-Shader - Class for CLOG WebGL-Shader objects</p>
+
+<p><a id="x-28CLOG-WEBGL-3ACLOG-WEBGL-SHADER-20CLASS-29"></a>
+<a id="CLOG-WEBGL:CLOG-WEBGL-SHADER%20CLASS"></a></p>
+
+<ul>
+<li><span class=reference-bullet><span class=reference><span class="locative-type">[class]</span> <span class="reference-object"><a href="#CLOG-WEBGL:CLOG-WEBGL-SHADER%20CLASS" >CLOG-WEBGL-SHADER</a></span></span> <span class="locative-args"><a href="#CLOG:CLOG-OBJ%20CLASS" title="CLOG:CLOG-OBJ CLASS">CLOG-OBJ</a></span></span></li>
+</ul>
+
+<p><a id="x-28CLOG-WEBGL-3ACREATE-SHADER-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG-WEBGL:CREATE-SHADER%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-WEBGL:CREATE-SHADER%20GENERIC-FUNCTION" >CREATE-SHADER</a></span></span> <span class="locative-args">CLOG-WEBGL GLENUM-TYPE</span></span></p>
+
+<p>Create a clog-webgl-shader for type :GLENUM.
+See https://github.com/KhronosGroup/WebGL/blob/main/specs/latest/2.0/webgl2.idl
+For :GLENUM values</p></li>
+</ul>
+
+<p><a id="x-28CLOG-WEBGL-3AIS-SHADER-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG-WEBGL:IS-SHADER%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-WEBGL:IS-SHADER%20GENERIC-FUNCTION" >IS-SHADER</a></span></span> <span class="locative-args">CLOG-WEBGL-SHADER</span></span></p>
+
+<p>Return true if is valid</p></li>
+</ul>
+
+<p><a id="x-28CLOG-WEBGL-3ASHADER-SOURCE-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG-WEBGL:SHADER-SOURCE%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-WEBGL:SHADER-SOURCE%20GENERIC-FUNCTION" >SHADER-SOURCE</a></span></span> <span class="locative-args">CLOG-WEBGL-SHADER SOURCE</span></span></p>
+
+<p>Sets shader source code</p></li>
+</ul>
+
+<p><a id="x-28CLOG-WEBGL-3ASHADER-PARAMETER-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG-WEBGL:SHADER-PARAMETER%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-WEBGL:SHADER-PARAMETER%20GENERIC-FUNCTION" >SHADER-PARAMETER</a></span></span> <span class="locative-args">CLOG-WEBGL-SHADER GLENUM-PARAM</span></span></p>
+
+<p>Returns information about the given shader.
+:DELETE_STATUS
+Returns a GLboolean indicating whether or not the shader is flagged for deletion.</p>
+
+<p><code>:COMPILE_STATUS</code>
+Returns a GLboolean indicating whether or not the last shader compilation was successful.</p>
+
+<p>:SHADER_TYPE
+Returns a GLenum indicating whether the shader is a vertex shader (gl.VERTEX_SHADER) or fragment shader (gl.FRAGMENT_SHADER) object.</p></li>
+</ul>
+
+<p><a id="x-28CLOG-WEBGL-3ASHADER-INFO-LOG-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG-WEBGL:SHADER-INFO-LOG%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-WEBGL:SHADER-INFO-LOG%20GENERIC-FUNCTION" >SHADER-INFO-LOG</a></span></span> <span class="locative-args">CLOG-WEBGL-SHADER</span></span></p>
+
+<p>It contains warnings, debugging and compile information.</p></li>
+</ul>
+
+<p><a id="x-28CLOG-WEBGL-3ACOMPILE-SHADER-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG-WEBGL:COMPILE-SHADER%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-WEBGL:COMPILE-SHADER%20GENERIC-FUNCTION" >COMPILE-SHADER</a></span></span> <span class="locative-args">OBJ</span></span></li>
+</ul>
+
+<p><a id="x-28CLOG-WEBGL-3ADELETE-SHADER-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG-WEBGL:DELETE-SHADER%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-WEBGL:DELETE-SHADER%20GENERIC-FUNCTION" >DELETE-SHADER</a></span></span> <span class="locative-args">OBJ</span></span></li>
+</ul>
+
+<p>CLOG-WebGL-Program - Class for CLOG WebGL-Program objects</p>
+
+<p><a id="x-28CLOG-WEBGL-3ACLOG-WEBGL-PROGRAM-20CLASS-29"></a>
+<a id="CLOG-WEBGL:CLOG-WEBGL-PROGRAM%20CLASS"></a></p>
+
+<ul>
+<li><span class=reference-bullet><span class=reference><span class="locative-type">[class]</span> <span class="reference-object"><a href="#CLOG-WEBGL:CLOG-WEBGL-PROGRAM%20CLASS" >CLOG-WEBGL-PROGRAM</a></span></span> <span class="locative-args"><a href="#CLOG:CLOG-OBJ%20CLASS" title="CLOG:CLOG-OBJ CLASS">CLOG-OBJ</a></span></span></li>
+</ul>
+
+<p><a id="x-28CLOG-WEBGL-3ACREATE-PROGRAM-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG-WEBGL:CREATE-PROGRAM%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-WEBGL:CREATE-PROGRAM%20GENERIC-FUNCTION" >CREATE-PROGRAM</a></span></span> <span class="locative-args">CLOG-WEBGL</span></span></p>
+
+<p>Create a clog-webgl-program</p></li>
+</ul>
+
+<p><a id="x-28CLOG-WEBGL-3AIS-PROGRAM-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG-WEBGL:IS-PROGRAM%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-WEBGL:IS-PROGRAM%20GENERIC-FUNCTION" >IS-PROGRAM</a></span></span> <span class="locative-args">CLOG-WEBGL-PROGRAM</span></span></p>
+
+<p>Return true if is valid</p></li>
+</ul>
+
+<p><a id="x-28CLOG-WEBGL-3AATTACH-SHADER-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG-WEBGL:ATTACH-SHADER%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-WEBGL:ATTACH-SHADER%20GENERIC-FUNCTION" >ATTACH-SHADER</a></span></span> <span class="locative-args">CLOG-WEBGL-PROGRAM CLOG-WEBGL-SHADER</span></span></p>
+
+<p>Attaches either a fragment or vertex <code>CLOG-WEBGL-SHADER</code></p></li>
+</ul>
+
+<p><a id="x-28CLOG-WEBGL-3ADETACH-SHADER-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG-WEBGL:DETACH-SHADER%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-WEBGL:DETACH-SHADER%20GENERIC-FUNCTION" >DETACH-SHADER</a></span></span> <span class="locative-args">CLOG-WEBGL-PROGRAM CLOG-WEBGL-SHADER</span></span></p>
+
+<p>Detaches a <code>CLOG-WEBGL-SHADER</code></p></li>
+</ul>
+
+<p><a id="x-28CLOG-WEBGL-3ABIND-ATTRIBUTE-LOCATION-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG-WEBGL:BIND-ATTRIBUTE-LOCATION%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-WEBGL:BIND-ATTRIBUTE-LOCATION%20GENERIC-FUNCTION" >BIND-ATTRIBUTE-LOCATION</a></span></span> <span class="locative-args">CLOG-WEBGL-PROGRAM INDEX NAME</span></span></p>
+
+<p>Binds a generic vertex <code>INDEX</code> to an attribute variable
+called <code>NAME</code>.</p></li>
+</ul>
+
+<p><a id="x-28CLOG-WEBGL-3APROGRAM-PARAMETER-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG-WEBGL:PROGRAM-PARAMETER%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-WEBGL:PROGRAM-PARAMETER%20GENERIC-FUNCTION" >PROGRAM-PARAMETER</a></span></span> <span class="locative-args">CLOG-WEBGL-PROGRAM GLENUM-PARAM</span></span></p>
+
+<p>Information about the given program.
+:DELETE_STATUS
+Returns a GLboolean indicating whether or not the program is flagged for deletion.</p>
+
+<p><code>:LINK_STATUS</code>
+Returns a GLboolean indicating whether or not the last link operation was successful.</p>
+
+<p>:VALIDATE_STATUS
+Returns a GLboolean indicating whether or not the last validation operation was successful.</p>
+
+<p>:ATTACHED_SHADERS
+Returns a GLint indicating the number of attached shaders to a program.</p>
+
+<p>:ACTIVE_ATTRIBUTES
+Returns a GLint indicating the number of active attribute variables to a program.</p>
+
+<p>:ACTIVE_UNIFORMS
+Returns a GLint indicating the number of active uniform variables to a program.</p>
+
+<p>When using a WebGL 2 context, the following values are available additionally:</p>
+
+<p>:TRANSFORM_FEEDBACK_BUFFER_MODE
+Returns a GLenum indicating the buffer mode when transform feedback is active. May be :SEPARATE_ATTRIBS or :INTERLEAVED_ATTRIBS.</p>
+
+<p>:TRANSFORM_FEEDBACK_VARYINGS
+Returns a GLint indicating the number of varying variables to capture in transform feedback mode.</p>
+
+<p>:ACTIVE_UNIFORM_BLOCKS
+Returns a GLint indicating the number of uniform blocks containing active uniforms.</p></li>
+</ul>
+
+<p><a id="x-28CLOG-WEBGL-3AATTRIBUTE-LOCATION-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG-WEBGL:ATTRIBUTE-LOCATION%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-WEBGL:ATTRIBUTE-LOCATION%20GENERIC-FUNCTION" >ATTRIBUTE-LOCATION</a></span></span> <span class="locative-args">CLOG-WEBGL-PROGRAM NAME</span></span></p>
+
+<p>Returns the location of an attribute variable in clog-webgl-program</p></li>
+</ul>
+
+<p><a id="x-28CLOG-WEBGL-3AUNIFORM-LOCATION-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG-WEBGL:UNIFORM-LOCATION%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-WEBGL:UNIFORM-LOCATION%20GENERIC-FUNCTION" >UNIFORM-LOCATION</a></span></span> <span class="locative-args">CLOG-WEBGL-PROGRAM NAME</span></span></p>
+
+<p>Returns the location of an uniform variable in clog-webgl-program</p></li>
+</ul>
+
+<p><a id="x-28CLOG-WEBGL-3AACTIVE-ATTRIBUTE-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG-WEBGL:ACTIVE-ATTRIBUTE%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-WEBGL:ACTIVE-ATTRIBUTE%20GENERIC-FUNCTION" >ACTIVE-ATTRIBUTE</a></span></span> <span class="locative-args">CLOG-WEBGL-PROGRAM INDEX</span></span></p>
+
+<p>Query about unknown attributes</p></li>
+</ul>
+
+<p><a id="x-28CLOG-WEBGL-3AACTIVE-UNIFORM-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG-WEBGL:ACTIVE-UNIFORM%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-WEBGL:ACTIVE-UNIFORM%20GENERIC-FUNCTION" >ACTIVE-UNIFORM</a></span></span> <span class="locative-args">CLOG-WEBGL-PROGRAM INDEX</span></span></p>
+
+<p>Query about unknown uniforms</p></li>
+</ul>
+
+<p><a id="x-28CLOG-WEBGL-3AUNIFORM-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG-WEBGL:UNIFORM%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-WEBGL:UNIFORM%20GENERIC-FUNCTION" >UNIFORM</a></span></span> <span class="locative-args">CLOG-WEBGL-PROGRAM LOCATION</span></span></p>
+
+<p>Returns the value of uniform at <code>LOCATION</code> in clog-webgl-program</p></li>
+</ul>
+
+<p><a id="x-28CLOG-WEBGL-3APROGRAM-INFO-LOG-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG-WEBGL:PROGRAM-INFO-LOG%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-WEBGL:PROGRAM-INFO-LOG%20GENERIC-FUNCTION" >PROGRAM-INFO-LOG</a></span></span> <span class="locative-args">CLOG-WEBGL-PROGRAM</span></span></p>
+
+<p>Contains errors that occurred during failed linking or
+validation of WebGLProgram objects.</p></li>
+</ul>
+
+<p><a id="x-28CLOG-WEBGL-3ALINK-PROGRAM-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG-WEBGL:LINK-PROGRAM%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-WEBGL:LINK-PROGRAM%20GENERIC-FUNCTION" >LINK-PROGRAM</a></span></span> <span class="locative-args">OBJ</span></span></li>
+</ul>
+
+<p><a id="x-28CLOG-WEBGL-3AUSE-PROGRAM-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG-WEBGL:USE-PROGRAM%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-WEBGL:USE-PROGRAM%20GENERIC-FUNCTION" >USE-PROGRAM</a></span></span> <span class="locative-args">OBJ</span></span></li>
+</ul>
+
+<p><a id="x-28CLOG-WEBGL-3ADELETE-PROGRAM-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG-WEBGL:DELETE-PROGRAM%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-WEBGL:DELETE-PROGRAM%20GENERIC-FUNCTION" >DELETE-PROGRAM</a></span></span> <span class="locative-args">OBJ</span></span></li>
+</ul>
+
+<p>CLOG-WebGL-Buffer - Class for CLOG WebGL-Buffer objects</p>
+
+<p><a id="x-28CLOG-WEBGL-3ACLOG-WEBGL-BUFFER-20CLASS-29"></a>
+<a id="CLOG-WEBGL:CLOG-WEBGL-BUFFER%20CLASS"></a></p>
+
+<ul>
+<li><span class=reference-bullet><span class=reference><span class="locative-type">[class]</span> <span class="reference-object"><a href="#CLOG-WEBGL:CLOG-WEBGL-BUFFER%20CLASS" >CLOG-WEBGL-BUFFER</a></span></span> <span class="locative-args"><a href="#CLOG:CLOG-OBJ%20CLASS" title="CLOG:CLOG-OBJ CLASS">CLOG-OBJ</a></span></span></li>
+</ul>
+
+<p><a id="x-28CLOG-WEBGL-3ACREATE-WEBGL-BUFFER-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG-WEBGL:CREATE-WEBGL-BUFFER%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-WEBGL:CREATE-WEBGL-BUFFER%20GENERIC-FUNCTION" >CREATE-WEBGL-BUFFER</a></span></span> <span class="locative-args">CLOG-WEBGL &amp;KEY BIND-TYPE</span></span></p>
+
+<p>Create a clog-webgl-buffer. If <code>BIND-TYPE</code>
+is set binds the buffer to either :ARRAY_BUFFER or :ELEMENT_ARRAY_BUFFER
+in WebGL2 the following added:
+:COPY_READ_BUFFER : Buffer for copying from one buffer object to another.
+:COPY_WRITE_BUFFER : Buffer for copying from one buffer object to another.
+:TRANSFORM_FEEDBACK_BUFFER : Buffer for transform feedback operations.
+:UNIFORM_BUFFER : Buffer used for storing uniform blocks.
+:PIXEL_PACK_BUFFER : Buffer used for pixel transfer operations.
+:PIXEL_UNPACK_BUFFER : Buffer used for pixel transfer operations.</p></li>
+</ul>
+
+<p><a id="x-28CLOG-WEBGL-3AIS-BUFFER-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG-WEBGL:IS-BUFFER%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-WEBGL:IS-BUFFER%20GENERIC-FUNCTION" >IS-BUFFER</a></span></span> <span class="locative-args">CLOG-WEBGL-BUFFER</span></span></p>
+
+<p>Return true if is valid</p></li>
+</ul>
+
+<p><a id="x-28CLOG-WEBGL-3ABIND-BUFFER-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG-WEBGL:BIND-BUFFER%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-WEBGL:BIND-BUFFER%20GENERIC-FUNCTION" >BIND-BUFFER</a></span></span> <span class="locative-args">CLOG-WEBGL-BUFFER GLENUM-TARGET</span></span></p>
+
+<p>Set <code>BIND-TYPE</code> of buffer to either :ARRAY_BUFFER or
+:ELEMENT_ARRAY_BUFFER. WebGL2 adds:
+:COPY_READ_BUFFER : Buffer for copying from one buffer object to another.
+:COPY_WRITE_BUFFER : Buffer for copying from one buffer object to another.
+:TRANSFORM_FEEDBACK_BUFFER : Buffer for transform feedback operations.
+:UNIFORM_BUFFER : Buffer used for storing uniform blocks.
+:PIXEL_PACK_BUFFER : Buffer used for pixel transfer operations.
+:PIXEL_UNPACK_BUFFER : Buffer used for pixel transfer operations.</p></li>
+</ul>
+
+<p><a id="x-28CLOG-WEBGL-3ABUFFER-DATA-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG-WEBGL:BUFFER-DATA%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-WEBGL:BUFFER-DATA%20GENERIC-FUNCTION" >BUFFER-DATA</a></span></span> <span class="locative-args">CLOG-WEBGL-BUFFER DATA-LIST DATA-TYPE GLENUM-USAGE</span></span></p>
+
+<p>Initializes and creates the buffer object's data store.
+<code>DATA-LIST</code> is a Lisp list of data elements.
+<code>DATA-TYPE</code> is the WebGL data type as a string &quot;Float32Array&quot;
+<code>GLENUM-USAGE</code> us a usage hint like :STATIC_DRAW</p></li>
+</ul>
+
+<p><a id="x-28CLOG-WEBGL-3ABUFFER-SUB-DATA-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG-WEBGL:BUFFER-SUB-DATA%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-WEBGL:BUFFER-SUB-DATA%20GENERIC-FUNCTION" >BUFFER-SUB-DATA</a></span></span> <span class="locative-args">CLOG-WEBGL-BUFFER OFFSET DATA-LIST DATA-TYPE</span></span></p>
+
+<p>Initializes and creates the buffer object's data store.
+<code>OFFSET</code> element index offset where to start reading the buffer.
+<code>DATA-LIST</code> is a Lisp list of data elements.
+<code>DATA-TYPE</code> is the WebGL data type as a string &quot;Float32Array&quot;</p></li>
+</ul>
+
+<p><a id="x-28CLOG-WEBGL-3ADELETE-BUFFER-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG-WEBGL:DELETE-BUFFER%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-WEBGL:DELETE-BUFFER%20GENERIC-FUNCTION" >DELETE-BUFFER</a></span></span> <span class="locative-args">OBJ</span></span></li>
+</ul>
+
+<p>CLOG-WebGL-Vertex-Array - Class for CLOG WebGL-Vertex-Array objects</p>
+
+<p><a id="x-28CLOG-WEBGL-3ACLOG-WEBGL-VERTEX-ARRAY-20CLASS-29"></a>
+<a id="CLOG-WEBGL:CLOG-WEBGL-VERTEX-ARRAY%20CLASS"></a></p>
+
+<ul>
+<li><span class=reference-bullet><span class=reference><span class="locative-type">[class]</span> <span class="reference-object"><a href="#CLOG-WEBGL:CLOG-WEBGL-VERTEX-ARRAY%20CLASS" >CLOG-WEBGL-VERTEX-ARRAY</a></span></span> <span class="locative-args"><a href="#CLOG:CLOG-OBJ%20CLASS" title="CLOG:CLOG-OBJ CLASS">CLOG-OBJ</a></span></span></li>
+</ul>
+
+<p><a id="x-28CLOG-WEBGL-3ACREATE-VERTEX-ARRAY-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG-WEBGL:CREATE-VERTEX-ARRAY%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-WEBGL:CREATE-VERTEX-ARRAY%20GENERIC-FUNCTION" >CREATE-VERTEX-ARRAY</a></span></span> <span class="locative-args">CLOG-WEBGL</span></span></p>
+
+<p>Create a clog-webgl-vertex-array</p></li>
+</ul>
+
+<p><a id="x-28CLOG-WEBGL-3ABIND-VERTEX-ARRAY-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG-WEBGL:BIND-VERTEX-ARRAY%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-WEBGL:BIND-VERTEX-ARRAY%20GENERIC-FUNCTION" >BIND-VERTEX-ARRAY</a></span></span> <span class="locative-args">OBJ</span></span></li>
+</ul>
+
+<p><a id="x-28CLOG-WEBGL-3ADELETE-VERTEX-ARRAY-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG-WEBGL:DELETE-VERTEX-ARRAY%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-WEBGL:DELETE-VERTEX-ARRAY%20GENERIC-FUNCTION" >DELETE-VERTEX-ARRAY</a></span></span> <span class="locative-args">OBJ</span></span></li>
+</ul>
+
+<p>CLOG-WebGL-Frame-Buffer - Class for CLOG WebGL-Frame-Buffer objects</p>
+
+<p><a id="x-28CLOG-WEBGL-3ACLOG-WEBGL-FRAME-BUFFER-20CLASS-29"></a>
+<a id="CLOG-WEBGL:CLOG-WEBGL-FRAME-BUFFER%20CLASS"></a></p>
+
+<ul>
+<li><span class=reference-bullet><span class=reference><span class="locative-type">[class]</span> <span class="reference-object"><a href="#CLOG-WEBGL:CLOG-WEBGL-FRAME-BUFFER%20CLASS" >CLOG-WEBGL-FRAME-BUFFER</a></span></span> <span class="locative-args"><a href="#CLOG:CLOG-OBJ%20CLASS" title="CLOG:CLOG-OBJ CLASS">CLOG-OBJ</a></span></span></li>
+</ul>
+
+<p><a id="x-28CLOG-WEBGL-3ACREATE-WEBGL-FRAME-BUFFER-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG-WEBGL:CREATE-WEBGL-FRAME-BUFFER%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-WEBGL:CREATE-WEBGL-FRAME-BUFFER%20GENERIC-FUNCTION" >CREATE-WEBGL-FRAME-BUFFER</a></span></span> <span class="locative-args">CLOG-WEBGL &amp;KEY BIND-TYPE</span></span></p>
+
+<p>Create a clog-webgl-frame-buffer. If <code>BIND-TYPE</code>
+is set binds the frame-buffer to :FRAMEBUFFER in WebGL2 the following are
+added:
+:DRAW_FRAMEBUFFER : Used as a destination for drawing operations such as draw<em>,
+clear</em> and blit-frame-buffer.
+:READ_FRAMEBUFFER : Used as a source for reading operations such as readPixels
+and blit-frame-buffer.</p></li>
+</ul>
+
+<p><a id="x-28CLOG-WEBGL-3AIS-FRAME-BUFFER-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG-WEBGL:IS-FRAME-BUFFER%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-WEBGL:IS-FRAME-BUFFER%20GENERIC-FUNCTION" >IS-FRAME-BUFFER</a></span></span> <span class="locative-args">CLOG-WEBGL-FRAME-BUFFER</span></span></p>
+
+<p>Return true if is valid</p></li>
+</ul>
+
+<p><a id="x-28CLOG-WEBGL-3ABIND-FRAME-BUFFER-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG-WEBGL:BIND-FRAME-BUFFER%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-WEBGL:BIND-FRAME-BUFFER%20GENERIC-FUNCTION" >BIND-FRAME-BUFFER</a></span></span> <span class="locative-args">CLOG-WEBGL-FRAME-BUFFER GLENUM-TARGET</span></span></p>
+
+<p>Set <code>BIND-TYPE</code> of frame-buffer to :FRAMEBUFFER
+in WebGL2 the following are added:
+:DRAW_FRAMEBUFFER : Used as a destination for drawing operations such as draw<em>,
+clear</em> and blit-frame-buffer.
+:READ_FRAMEBUFFER : Used as a source for reading operations such as readPixels
+and blit-frame-buffer</p></li>
+</ul>
+
+<p><a id="x-28CLOG-WEBGL-3ADELETE-FRAME-BUFFER-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG-WEBGL:DELETE-FRAME-BUFFER%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-WEBGL:DELETE-FRAME-BUFFER%20GENERIC-FUNCTION" >DELETE-FRAME-BUFFER</a></span></span> <span class="locative-args">OBJ</span></span></li>
+</ul>
+
+<p>CLOG-WebGL-Render-Buffer - Class for CLOG WebGL-Render-Buffer objects</p>
+
+<p><a id="x-28CLOG-WEBGL-3ACLOG-WEBGL-RENDER-BUFFER-20CLASS-29"></a>
+<a id="CLOG-WEBGL:CLOG-WEBGL-RENDER-BUFFER%20CLASS"></a></p>
+
+<ul>
+<li><span class=reference-bullet><span class=reference><span class="locative-type">[class]</span> <span class="reference-object"><a href="#CLOG-WEBGL:CLOG-WEBGL-RENDER-BUFFER%20CLASS" >CLOG-WEBGL-RENDER-BUFFER</a></span></span> <span class="locative-args"><a href="#CLOG:CLOG-OBJ%20CLASS" title="CLOG:CLOG-OBJ CLASS">CLOG-OBJ</a></span></span></li>
+</ul>
+
+<p><a id="x-28CLOG-WEBGL-3ACREATE-WEBGL-RENDER-BUFFER-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG-WEBGL:CREATE-WEBGL-RENDER-BUFFER%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-WEBGL:CREATE-WEBGL-RENDER-BUFFER%20GENERIC-FUNCTION" >CREATE-WEBGL-RENDER-BUFFER</a></span></span> <span class="locative-args">CLOG-WEBGL &amp;KEY BIND-TYPE</span></span></p>
+
+<p>Create a clog-webgl-render-buffer. If <code>BIND-TYPE</code>
+is set binds the render-buffer to :RENDERBUFFER</p></li>
+</ul>
+
+<p><a id="x-28CLOG-WEBGL-3AIS-RENDER-BUFFER-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG-WEBGL:IS-RENDER-BUFFER%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-WEBGL:IS-RENDER-BUFFER%20GENERIC-FUNCTION" >IS-RENDER-BUFFER</a></span></span> <span class="locative-args">CLOG-WEBGL-RENDER-BUFFER</span></span></p>
+
+<p>Return true if is valid</p></li>
+</ul>
+
+<p><a id="x-28CLOG-WEBGL-3ABIND-RENDER-BUFFER-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG-WEBGL:BIND-RENDER-BUFFER%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-WEBGL:BIND-RENDER-BUFFER%20GENERIC-FUNCTION" >BIND-RENDER-BUFFER</a></span></span> <span class="locative-args">CLOG-WEBGL-RENDER-BUFFER GLENUM-TARGET</span></span></p>
+
+<p>Set <code>BIND-TYPE</code> of render-buffer to :RENDERBUFFER</p></li>
+</ul>
+
+<p><a id="x-28CLOG-WEBGL-3ADELETE-RENDER-BUFFER-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG-WEBGL:DELETE-RENDER-BUFFER%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-WEBGL:DELETE-RENDER-BUFFER%20GENERIC-FUNCTION" >DELETE-RENDER-BUFFER</a></span></span> <span class="locative-args">OBJ</span></span></li>
+</ul>
+
+<p>CLOG-WebGL-Texture - Class for CLOG WebGL-Texture objects</p>
+
+<p><a id="x-28CLOG-WEBGL-3ACLOG-WEBGL-TEXTURE-20CLASS-29"></a>
+<a id="CLOG-WEBGL:CLOG-WEBGL-TEXTURE%20CLASS"></a></p>
+
+<ul>
+<li><span class=reference-bullet><span class=reference><span class="locative-type">[class]</span> <span class="reference-object"><a href="#CLOG-WEBGL:CLOG-WEBGL-TEXTURE%20CLASS" >CLOG-WEBGL-TEXTURE</a></span></span> <span class="locative-args"><a href="#CLOG:CLOG-OBJ%20CLASS" title="CLOG:CLOG-OBJ CLASS">CLOG-OBJ</a></span></span></li>
+</ul>
+
+<p><a id="x-28CLOG-WEBGL-3ACREATE-WEBGL-TEXTURE-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG-WEBGL:CREATE-WEBGL-TEXTURE%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-WEBGL:CREATE-WEBGL-TEXTURE%20GENERIC-FUNCTION" >CREATE-WEBGL-TEXTURE</a></span></span> <span class="locative-args">CLOG-WEBGL &amp;KEY BIND-TYPE</span></span></p>
+
+<p>Create a clog-webgl-texture. If <code>BIND-TYPE</code>
+is set binds the texture to:
+:TEXTURE_2D : A two-dimensional texture.
+:TEXTURE_CUBE_MAP : A cube-mapped texture.
+in WebGL 2 also:
+:TEXTURE_3D : A three-dimensional texture.
+:TEXTURE_2D_ARRAY : A two-dimensional array texture.</p></li>
+</ul>
+
+<p><a id="x-28CLOG-WEBGL-3AIS-TEXTURE-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG-WEBGL:IS-TEXTURE%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-WEBGL:IS-TEXTURE%20GENERIC-FUNCTION" >IS-TEXTURE</a></span></span> <span class="locative-args">CLOG-WEBGL-TEXTURE</span></span></p>
+
+<p>Return true if is valid</p></li>
+</ul>
+
+<p><a id="x-28CLOG-WEBGL-3ABIND-TEXTURE-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG-WEBGL:BIND-TEXTURE%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-WEBGL:BIND-TEXTURE%20GENERIC-FUNCTION" >BIND-TEXTURE</a></span></span> <span class="locative-args">CLOG-WEBGL-TEXTURE GLENUM-TARGET</span></span></p>
+
+<p>Set <code>BIND-TYPE</code> of texture to:
+:TEXTURE_2D : A two-dimensional texture.
+:TEXTURE_CUBE_MAP : A cube-mapped texture.
+in WebGL 2 also:
+:TEXTURE_3D : A three-dimensional texture.
+:TEXTURE_2D_ARRAY : A two-dimensional array texture.</p></li>
+</ul>
+
+<p><a id="x-28CLOG-WEBGL-3ADELETE-TEXTURE-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG-WEBGL:DELETE-TEXTURE%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-WEBGL:DELETE-TEXTURE%20GENERIC-FUNCTION" >DELETE-TEXTURE</a></span></span> <span class="locative-args">OBJ</span></span></li>
+</ul>
+
 <p><a id="x-28CLOG-3A-40CLOG-MULTIMEDIA-20MGL-PAX-3ASECTION-29"></a>
 <a id="CLOG:@CLOG-MULTIMEDIA%20MGL-PAX:SECTION"></a></p>
 
-<p><span class="outer-navigation"><span class="navigation"> <a href="#CLOG:@CLOG-CANVAS%20MGL-PAX:SECTION" title="CLOG Canvas Objects">&#8592;</a> <a href="#CLOG:@CLOG-MANUAL%20MGL-PAX:SECTION" title="The CLOG manual">&#8593;</a> <a href="#CLOG:@CLOG-AUTH%20MGL-PAX:SECTION" title="CLOG Auth Objects">&#8594;</a> <a href="#CLOG:@CLOG-MULTIMEDIA%20MGL-PAX:SECTION" title="CLOG Multimedia Objects">&#8634;</a></span></span></p>
+<p><span class="outer-navigation"><span class="navigation"> <a href="#CLOG:@CLOG-WEBGL%20MGL-PAX:SECTION" title="CLOG WebGL Objects">&#8592;</a> <a href="#CLOG:@CLOG-MANUAL%20MGL-PAX:SECTION" title="The CLOG manual">&#8593;</a> <a href="#CLOG:@CLOG-AUTH%20MGL-PAX:SECTION" title="CLOG Auth Objects">&#8594;</a> <a href="#CLOG:@CLOG-MULTIMEDIA%20MGL-PAX:SECTION" title="CLOG Multimedia Objects">&#8634;</a></span></span></p>
 
-<h2><a href="#CLOG:@CLOG-MULTIMEDIA%20MGL-PAX:SECTION">16 CLOG Multimedia Objects</a></h2>
+<h2><a href="#CLOG:@CLOG-MULTIMEDIA%20MGL-PAX:SECTION">17 CLOG Multimedia Objects</a></h2>
 
 <p>CLOG-Multimedia - Base Class for CLOG multimedia objects</p>
 
@@ -6237,7 +8049,7 @@ is nil unbind the event.</p></li>
 
 <p><span class="outer-navigation"><span class="navigation"> <a href="#CLOG:@CLOG-MULTIMEDIA%20MGL-PAX:SECTION" title="CLOG Multimedia Objects">&#8592;</a> <a href="#CLOG:@CLOG-MANUAL%20MGL-PAX:SECTION" title="The CLOG manual">&#8593;</a> <a href="#CLOG:@CLOG-GUI%20MGL-PAX:SECTION" title="CLOG GUI Objects">&#8594;</a> <a href="#CLOG:@CLOG-AUTH%20MGL-PAX:SECTION" title="CLOG Auth Objects">&#8634;</a></span></span></p>
 
-<h2><a href="#CLOG:@CLOG-AUTH%20MGL-PAX:SECTION">17 CLOG Auth Objects</a></h2>
+<h2><a href="#CLOG:@CLOG-AUTH%20MGL-PAX:SECTION">18 CLOG Auth Objects</a></h2>
 
 <h6>[in package CLOG-AUTH]</h6>
 
@@ -6298,7 +8110,7 @@ is nil unbind the event.</p></li>
 
 <p><span class="outer-navigation"><span class="navigation"> <a href="#CLOG:@CLOG-AUTH%20MGL-PAX:SECTION" title="CLOG Auth Objects">&#8592;</a> <a href="#CLOG:@CLOG-MANUAL%20MGL-PAX:SECTION" title="The CLOG manual">&#8593;</a> <a href="#CLOG:@CLOG-WEB%20MGL-PAX:SECTION" title="CLOG Web Objects">&#8594;</a> <a href="#CLOG:@CLOG-GUI%20MGL-PAX:SECTION" title="CLOG GUI Objects">&#8634;</a></span></span></p>
 
-<h2><a href="#CLOG:@CLOG-GUI%20MGL-PAX:SECTION">18 CLOG GUI Objects</a></h2>
+<h2><a href="#CLOG:@CLOG-GUI%20MGL-PAX:SECTION">19 CLOG GUI Objects</a></h2>
 
 <h6>[in package CLOG-GUI]</h6>
 
@@ -6802,7 +8614,7 @@ machine, upon close <code>ON-FILE-NAME</code> called with filename or nil if fai
 
 <p><span class="outer-navigation"><span class="navigation"> <a href="#CLOG:@CLOG-GUI%20MGL-PAX:SECTION" title="CLOG GUI Objects">&#8592;</a> <a href="#CLOG:@CLOG-MANUAL%20MGL-PAX:SECTION" title="The CLOG manual">&#8593;</a> <a href="#CLOG:@CLOG-WEB-DBI%20MGL-PAX:SECTION" title="CLOG Web DBI">&#8594;</a> <a href="#CLOG:@CLOG-WEB%20MGL-PAX:SECTION" title="CLOG Web Objects">&#8634;</a></span></span></p>
 
-<h2><a href="#CLOG:@CLOG-WEB%20MGL-PAX:SECTION">19 CLOG Web Objects</a></h2>
+<h2><a href="#CLOG:@CLOG-WEB%20MGL-PAX:SECTION">20 CLOG Web Objects</a></h2>
 
 <h6>[in package CLOG-WEB]</h6>
 
@@ -7559,7 +9371,7 @@ and no-script body information for search engines with <code>DESCRIPTION</code>.
 
 <p><span class="outer-navigation"><span class="navigation"> <a href="#CLOG:@CLOG-WEB%20MGL-PAX:SECTION" title="CLOG Web Objects">&#8592;</a> <a href="#CLOG:@CLOG-MANUAL%20MGL-PAX:SECTION" title="The CLOG manual">&#8593;</a> <a href="#CLOG:@CLOG-WEB-THEMES%20MGL-PAX:SECTION" title="CLOG Web Site Themes">&#8594;</a> <a href="#CLOG:@CLOG-WEB-DBI%20MGL-PAX:SECTION" title="CLOG Web DBI">&#8634;</a></span></span></p>
 
-<h2><a href="#CLOG:@CLOG-WEB-DBI%20MGL-PAX:SECTION">20 CLOG Web DBI</a></h2>
+<h2><a href="#CLOG:@CLOG-WEB-DBI%20MGL-PAX:SECTION">21 CLOG Web DBI</a></h2>
 
 <h6>[in package CLOG-WEB-DBI]</h6>
 
@@ -7654,7 +9466,7 @@ optional <code>WHERE</code> and <code>ORDER-BY</code> sql.</p></li>
 
 <p><span class="outer-navigation"><span class="navigation"> <a href="#CLOG:@CLOG-WEB-DBI%20MGL-PAX:SECTION" title="CLOG Web DBI">&#8592;</a> <a href="#CLOG:@CLOG-MANUAL%20MGL-PAX:SECTION" title="The CLOG manual">&#8593;</a> <a href="#CLOG:@CLOG-BODY%20MGL-PAX:SECTION" title="CLOG Body Objects">&#8594;</a> <a href="#CLOG:@CLOG-WEB-THEMES%20MGL-PAX:SECTION" title="CLOG Web Site Themes">&#8634;</a></span></span></p>
 
-<h2><a href="#CLOG:@CLOG-WEB-THEMES%20MGL-PAX:SECTION">21 CLOG Web Site Themes</a></h2>
+<h2><a href="#CLOG:@CLOG-WEB-THEMES%20MGL-PAX:SECTION">22 CLOG Web Site Themes</a></h2>
 
 <h6>[in package CLOG-WEB]</h6>
 
@@ -7704,7 +9516,7 @@ Page properties:
 
 <p><span class="outer-navigation"><span class="navigation"> <a href="#CLOG:@CLOG-WEB-THEMES%20MGL-PAX:SECTION" title="CLOG Web Site Themes">&#8592;</a> <a href="#CLOG:@CLOG-MANUAL%20MGL-PAX:SECTION" title="The CLOG manual">&#8593;</a> <a href="#CLOG:@CLOG-WINDOW%20MGL-PAX:SECTION" title="CLOG Window Objects">&#8594;</a> <a href="#CLOG:@CLOG-BODY%20MGL-PAX:SECTION" title="CLOG Body Objects">&#8634;</a></span></span></p>
 
-<h2><a href="#CLOG:@CLOG-BODY%20MGL-PAX:SECTION">22 CLOG Body Objects</a></h2>
+<h2><a href="#CLOG:@CLOG-BODY%20MGL-PAX:SECTION">23 CLOG Body Objects</a></h2>
 
 <p>CLOG-Body - CLOG Body Objects</p>
 
@@ -7780,7 +9592,7 @@ replace the browser contents with <code>HTML</code>.</p></li>
 
 <p><span class="outer-navigation"><span class="navigation"> <a href="#CLOG:@CLOG-BODY%20MGL-PAX:SECTION" title="CLOG Body Objects">&#8592;</a> <a href="#CLOG:@CLOG-MANUAL%20MGL-PAX:SECTION" title="The CLOG manual">&#8593;</a> <a href="#CLOG:@CLOG-DOCUMENT%20MGL-PAX:SECTION" title="CLOG Document Objects">&#8594;</a> <a href="#CLOG:@CLOG-WINDOW%20MGL-PAX:SECTION" title="CLOG Window Objects">&#8634;</a></span></span></p>
 
-<h2><a href="#CLOG:@CLOG-WINDOW%20MGL-PAX:SECTION">23 CLOG Window Objects</a></h2>
+<h2><a href="#CLOG:@CLOG-WINDOW%20MGL-PAX:SECTION">24 CLOG Window Objects</a></h2>
 
 <p>CLOG-Window - CLOG Window Objects</p>
 
@@ -8185,7 +9997,7 @@ on-storage event is fired for changes to :local storage keys.</p></li>
 
 <p><span class="outer-navigation"><span class="navigation"> <a href="#CLOG:@CLOG-WINDOW%20MGL-PAX:SECTION" title="CLOG Window Objects">&#8592;</a> <a href="#CLOG:@CLOG-MANUAL%20MGL-PAX:SECTION" title="The CLOG manual">&#8593;</a> <a href="#CLOG:@CLOG-LOCATION%20MGL-PAX:SECTION" title="CLOG Location Objects">&#8594;</a> <a href="#CLOG:@CLOG-DOCUMENT%20MGL-PAX:SECTION" title="CLOG Document Objects">&#8634;</a></span></span></p>
 
-<h2><a href="#CLOG:@CLOG-DOCUMENT%20MGL-PAX:SECTION">24 CLOG Document Objects</a></h2>
+<h2><a href="#CLOG:@CLOG-DOCUMENT%20MGL-PAX:SECTION">25 CLOG Document Objects</a></h2>
 
 <p>CLOG-Document - CLOG Document Objects</p>
 
@@ -8373,7 +10185,7 @@ The handler should be installed on the document before calling load-script.</p><
 
 <p><span class="outer-navigation"><span class="navigation"> <a href="#CLOG:@CLOG-DOCUMENT%20MGL-PAX:SECTION" title="CLOG Document Objects">&#8592;</a> <a href="#CLOG:@CLOG-MANUAL%20MGL-PAX:SECTION" title="The CLOG manual">&#8593;</a> <a href="#CLOG:@CLOG-NAVIGATOR%20MGL-PAX:SECTION" title="CLOG Navigator Objects">&#8594;</a> <a href="#CLOG:@CLOG-LOCATION%20MGL-PAX:SECTION" title="CLOG Location Objects">&#8634;</a></span></span></p>
 
-<h2><a href="#CLOG:@CLOG-LOCATION%20MGL-PAX:SECTION">25 CLOG Location Objects</a></h2>
+<h2><a href="#CLOG:@CLOG-LOCATION%20MGL-PAX:SECTION">26 CLOG Location Objects</a></h2>
 
 <p>Clog-Location - CLOG Location Objects</p>
 
@@ -8504,7 +10316,7 @@ saved in session history and back button will not return to it.</p></li>
 
 <p><span class="outer-navigation"><span class="navigation"> <a href="#CLOG:@CLOG-LOCATION%20MGL-PAX:SECTION" title="CLOG Location Objects">&#8592;</a> <a href="#CLOG:@CLOG-MANUAL%20MGL-PAX:SECTION" title="The CLOG manual">&#8593;</a> <a href="#CLOG:@CLOG-JQUERY%20MGL-PAX:SECTION" title="CLOG jQuery Objects">&#8594;</a> <a href="#CLOG:@CLOG-NAVIGATOR%20MGL-PAX:SECTION" title="CLOG Navigator Objects">&#8634;</a></span></span></p>
 
-<h2><a href="#CLOG:@CLOG-NAVIGATOR%20MGL-PAX:SECTION">26 CLOG Navigator Objects</a></h2>
+<h2><a href="#CLOG:@CLOG-NAVIGATOR%20MGL-PAX:SECTION">27 CLOG Navigator Objects</a></h2>
 
 <p>CLOG-Navigator - CLOG Navigator Objects</p>
 
@@ -8580,7 +10392,7 @@ saved in session history and back button will not return to it.</p></li>
 
 <p><span class="outer-navigation"><span class="navigation"> <a href="#CLOG:@CLOG-NAVIGATOR%20MGL-PAX:SECTION" title="CLOG Navigator Objects">&#8592;</a> <a href="#CLOG:@CLOG-MANUAL%20MGL-PAX:SECTION" title="The CLOG manual">&#8593;</a> <a href="#CLOG:@CLOG-HELPERS%20MGL-PAX:SECTION" title="CLOG Helper Functions">&#8594;</a> <a href="#CLOG:@CLOG-JQUERY%20MGL-PAX:SECTION" title="CLOG jQuery Objects">&#8634;</a></span></span></p>
 
-<h2><a href="#CLOG:@CLOG-JQUERY%20MGL-PAX:SECTION">27 CLOG jQuery Objects</a></h2>
+<h2><a href="#CLOG:@CLOG-JQUERY%20MGL-PAX:SECTION">28 CLOG jQuery Objects</a></h2>
 
 <p>CLOG-jQuery - Base class for CLOG jQuery Objects</p>
 
@@ -8591,7 +10403,7 @@ saved in session history and back button will not return to it.</p></li>
 <li><p><span class=reference-bullet><span class=reference><span class="locative-type">[class]</span> <span class="reference-object"><a href="#CLOG:CLOG-JQUERY%20CLASS" >CLOG-JQUERY</a></span></span> <span class="locative-args"><a href="#CLOG:CLOG-ELEMENT%20CLASS" title="CLOG:CLOG-ELEMENT CLASS">CLOG-ELEMENT</a></span></span></p>
 
 <p>CLOG jQuery objects. A jQuery representa DOM queries that
-can represent one or even my CLOG objects as a single element.</p></li>
+can represent one or even many CLOG objects as a single element.</p></li>
 </ul>
 
 <p>CLOG-jQuery creation</p>
@@ -8647,7 +10459,7 @@ result or <code>DEFAULT-ANSWER</code> on time out.</p></li>
 
 <p><span class="outer-navigation"><span class="navigation"> <a href="#CLOG:@CLOG-JQUERY%20MGL-PAX:SECTION" title="CLOG jQuery Objects">&#8592;</a> <a href="#CLOG:@CLOG-MANUAL%20MGL-PAX:SECTION" title="The CLOG manual">&#8593;</a> <a href="#CLOG:@CLOG-INTERNALS%20MGL-PAX:SECTION" title="CLOG Framework internals and extensions">&#8594;</a> <a href="#CLOG:@CLOG-HELPERS%20MGL-PAX:SECTION" title="CLOG Helper Functions">&#8634;</a></span></span></p>
 
-<h2><a href="#CLOG:@CLOG-HELPERS%20MGL-PAX:SECTION">28 CLOG Helper Functions</a></h2>
+<h2><a href="#CLOG:@CLOG-HELPERS%20MGL-PAX:SECTION">29 CLOG Helper Functions</a></h2>
 
 <p>Tutorial and demo helpers</p>
 
@@ -8766,7 +10578,7 @@ set (logging to browser console), </p></li>
 
 <p><span class="outer-navigation"><span class="navigation"> <a href="#CLOG:@CLOG-HELPERS%20MGL-PAX:SECTION" title="CLOG Helper Functions">&#8592;</a> <a href="#CLOG:@CLOG-MANUAL%20MGL-PAX:SECTION" title="The CLOG manual">&#8593;</a> <a href="#CLOG:@CLOG-INTERNALS%20MGL-PAX:SECTION" title="CLOG Framework internals and extensions">&#8634;</a></span></span></p>
 
-<h2><a href="#CLOG:@CLOG-INTERNALS%20MGL-PAX:SECTION">29 CLOG Framework internals and extensions</a></h2>
+<h2><a href="#CLOG:@CLOG-INTERNALS%20MGL-PAX:SECTION">30 CLOG Framework internals and extensions</a></h2>
 
 <p><em>* Introduction to Internals *</em></p>
 
