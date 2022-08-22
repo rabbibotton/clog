@@ -2569,7 +2569,8 @@ of controls and double click to select control."
 
 (defun projects-setup (panel)
   (let* ((app (connection-data-item panel "builder-app-data")))
-    (pushnew #P"~/common-lisp/" ql:*local-project-directories*)
+    (when (uiop:directory-exists-p #P"~/common-lisp/")
+      (pushnew #P"~/common-lisp/" ql:*local-project-directories*))
     (add-select-option (project-list panel) "None" "None")
     (dolist (n (sort (ql:list-local-systems) #'string-lessp))
       (add-select-option (project-list panel) n n))
@@ -2686,11 +2687,9 @@ of controls and double click to select control."
              (confirm-dialog panel "Load project?"
                              (lambda (answer)
                                (cond (answer
-                                      (handler-case
-                                          (ql:quickload (format nil "~A/tools" sel))
-                                        (t (c)
-                                          (declare (ignore c))
-                                          (ql:quickload sel)))
+                                      (ql:quickload sel)
+                                      (ignore-errors
+                                       (ql:quickload (format nil "~A/tools" sel)))
                                       (projects-populate panel))
                                      (t
                                       (setf (current-project app) nil)
