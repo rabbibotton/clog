@@ -406,16 +406,20 @@ https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/global
 ;; path-clip ;;
 ;;;;;;;;;;;;;;;
 
-(defgeneric path-clip (clog-context2d)
+(defgeneric path-clip (clog-context2d &key path2d fill-rule)
   (:documentation "Clip a path."))
 
-(defmethod path-clip ((obj clog-context2d))
-  (execute obj "clip()"))
-
-;; to add
-;; clip(path)
-;; clip(fillRule)
-;; clip(path, fillRule)
+(defmethod path-clip ((obj clog-context2d) &key path2d fill-rule)
+  (execute obj (format nil "clip(~A~A~A)"
+                       (if path2d
+                           (script-id path2d)
+                           "")
+                       (if (and path2d fill-rule)
+                           ","
+                           "")
+                       (if fill-rule
+                           (format nil "'~A'" fill-rule)
+                           ""))))
 
 ;;;;;;;;;;;;;;;;
 ;; close-path ;;
@@ -428,25 +432,59 @@ https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/global
   (execute obj "closePath()"))
 
 
+;;;;;;;;;;;;;;;;;;;;;;;
+;; create-image-data ;;
+;;;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric create-image-data (clog-context2d width height)
+  (:documentation "Create black image data"))
+
+(defmethod create-image-data ((obj clog-context2d) width height)
+  (let ((web-id (clog-connection:generate-id)))
+    (js-execute obj (format nil "clog['~A']=~A.createImageData(~A,~A)"
+                            web-id (script-id obj)
+                            width height))
+    (make-instance 'clog-image-data
+                   :connection-id (clog::connection-id obj)
+                   :html-id web-id)))
+
 ;; createConicGradient
-;; createImageData
 ;; need to add createLinearGradient
 ;; need to add createRadialGradient
 ;; need to add createPattern
+
 ;; drawFocusIfNeeded
 
 ;;;;;;;;;;;;;;;;
 ;; draw-image ;;
 ;;;;;;;;;;;;;;;;
 
-(defgeneric draw-image (clog-context2d clog-obj x y)
-  (:documentation "Draw image at x y"))
+(defgeneric draw-image (clog-context2d clog-obj dx dy &key dwidth dheight)
+  (:documentation "Draw image at dx dy optionally dwidth and dheight"))
 
-(defmethod draw-image ((obj clog-context2d) clog-obj x y)
-  (execute obj (format nil "drawImage(~A,~A,~A)"
-                       (script-id clog-obj) x y)))
+(defmethod draw-image ((obj clog-context2d) clog-obj dx dy &key dwidth dheight)
+  (execute obj (format nil "drawImage(~A,~A,~A~A)"
+                       (script-id clog-obj) dx dy
+                       (if dwidth
+                           (format nil "~A,~A" dwidth dheight)
+                           ""))))
 
-;; need other versions of draw-image
+;;;;;;;;;;;;;;;;;;;;;;;;
+;; draw-image-from-to ;;
+;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric draw-image-from-to (clog-context2d clog-obj
+                                sx sy swidth sheight
+                                dx dy dwidth dheight)
+  (:documentation "Draw image at sx sy swidth sheight to dx dy dwidth dheight"))
+
+(defmethod draw-image-from-to ((obj clog-context2d) clog-obj
+                               sx sy swidth sheight
+                               dx dy dwidth dheight)
+  (execute obj (format nil "drawImage(~A,~A,~A,~A,~A,~A,~A,~A,~A)"
+                       (script-id clog-obj)
+                       sx sy swidth sheight
+                       dx dy dwidth dheight)))
 
 ;;;;;;;;;;;;;
 ;; ellipse ;;
@@ -470,12 +508,20 @@ https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/global
 ;; path-fill ;;
 ;;;;;;;;;;;;;;;
 
-(defgeneric path-fill (clog-context2d)
+(defgeneric path-fill (clog-context2d &key path2d fill-rule)
   (:documentation "Fill a path."))
 
-(defmethod path-fill ((obj clog-context2d))
-  (execute obj "fill()"))
-
+(defmethod path-fill ((obj clog-context2d) &key path2d fill-rule)
+  (execute obj (format nil "fill(~A~A~A)"
+                       (if path2d
+                           (script-id path2d)
+                           "")
+                       (if (and path2d fill-rule)
+                           ","
+                           "")
+                       (if fill-rule
+                           (format nil "'~A'" fill-rule)
+                           ""))))
 
 ;;;;;;;;;;;;;;;
 ;; fill-rect ;;
@@ -503,7 +549,21 @@ https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/global
                            (format nil ",~A" max-width)
                            ""))))
 
-;; getImageData()
+;;;;;;;;;;;;;;;;;;;;
+;; get-image-data ;;
+;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric get-image-data (clog-context2d sx sy sw sh)
+  (:documentation "Get image data from clog-context2d. Returns a CLOG-IMAGE-DATA"))
+
+(defmethod get-image-data ((obj clog-context2d) sx sy sw sh)
+  (let ((web-id (clog-connection:generate-id)))
+    (js-execute obj (format nil "clog['~A']=~A.getImageData(~A,~A,~A,~A)"
+                            web-id (script-id obj)
+                            sx sy sw sh))
+    (make-instance 'clog-image-data
+                   :connection-id (clog::connection-id obj)
+                   :html-id web-id)))
 
 ;;;;;;;;;;;;;;;;;;;
 ;; get-line-dash ;;
@@ -513,11 +573,40 @@ https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/global
   (:documentation "Set line style dash pattern, e.g. 10, 20"))
 
 (defmethod get-line-dash ((obj clog-context2d))
-  (query obj (format nil "getLineDash()")))
+  (query obj "getLineDash()"))
 
 ;; getTransform
-;; isPointinPath
-;; isPointinStroke
+
+;;;;;;;;;;;;;;;;;;;;;;
+;; is-point-in;path ;;
+;;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric is-point-in-path (clog-context2d x y &key path2d fill-rule)
+  (:documentation "Returns t if point is in path or PATH2D if specfified"))
+
+(defmethod is-point-in-path ((obj clog-context2d) x y &key path2d fill-rule)
+  (js-true-p (query obj (format nil "isPointInPath(~A~A,~A~A)"
+                                (if path2d
+                                    (format nil "~A," (script-id path2d))
+                                    "")
+                                x y
+                                (if fill-rule
+                                    (format nil ",'~A'" fill-rule)
+                                    "")))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;
+;; is-point-in-stroke ;;
+;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric is-point-in-stroke (clog-context2d x y &key path2d)
+  (:documentation "Returns t if point is in stroke or PATH2D if specfified"))
+
+(defmethod is-point-in-stroke ((obj clog-context2d) x y &key path2d)
+  (js-true-p (query obj (format nil "isPointInStroke(~A~A,~A)"
+                                (if path2d
+                                    (format nil "~A," (script-id path2d))
+                                    "")
+                                x y))))
 
 ;;;;;;;;;;;;;
 ;; line-to ;;
@@ -555,7 +644,28 @@ https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/global
 (defmethod move-to ((obj clog-context2d) x y)
   (execute obj (format nil "moveTo(~A,~A)" x y)))
 
-;; putImageData
+;;;;;;;;;;;;;;;;;;;;
+;; put-image-data ;;
+;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric put-image-data (clog-context2d image-data x y)
+  (:documentation "Put image-data at x y"))
+
+(defmethod put-image-data ((obj clog-context2d) image-data x y)
+  (execute obj (format nil "putImageData(~A,~A,~A)" (script-id image-data) x y)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; put-image-data-dirty ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric put-image-data-dirty (clog-context2d image-data x y
+                                  dx dy dwidth dheight)
+  (:documentation "Put portion of image-data at x y"))
+
+(defmethod put-image-data-dirty ((obj clog-context2d) image-data x y
+                                 dx dy dwidth dheight)
+  (execute obj (format nil "putImageData(~A,~A,~A,~A,~A,~A,~A)" (script-id image-data) x y
+                       dx dy dwidth dheight)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;
 ;; quadratic-curve-to ;;
@@ -577,7 +687,15 @@ https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/global
 (defmethod rect ((obj clog-context2d) x y width height)
   (execute obj (format nil "rect(~A,~A,~A,~A)" x y width height)))
 
-;; resetTransform
+;;;;;;;;;;;;;;;;;;;;;
+;; reset-transform ;;
+;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric reset-transform (clog-context2d)
+  (:documentation "Restore canvas from stack"))
+
+(defmethod reset-transform ((obj clog-context2d))
+  (execute obj "resetTransform()"))
 
 ;;;;;;;;;;;;;;;;;;;;
 ;; canvas-restore ;;
@@ -635,11 +753,14 @@ https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/global
 ;; path-stroke ;;
 ;;;;;;;;;;;;;;;;;
 
-(defgeneric path-stroke (clog-context2d)
+(defgeneric path-stroke (clog-context2d &key path2d)
   (:documentation "Stroke a path."))
 
-(defmethod path-stroke ((obj clog-context2d))
-  (execute obj "stroke()"))
+(defmethod path-stroke ((obj clog-context2d) &key path2d)
+  (execute obj (format nil "stroke(~A)"
+                       (if path2d
+                           (script-id path2d)
+                           ""))))
 
 ;;;;;;;;;;;;;;;;;
 ;; stroke-rect ;;
@@ -685,6 +806,32 @@ https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/global
 
 (defmethod translate ((obj clog-context2d) x y)
   (execute obj (format nil "translate(~A,~A)" x y)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Implementation - clog-image-data
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defclass clog-image-data (clog-obj)())
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Properties - clog-image-data
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defmethod width ((obj clog-image-data))
+  (parse-integer (query obj "width")))
+
+(defmethod height ((obj clog-image-data))
+  (parse-integer (query obj "height")))
+
+(defgeneric json-image-data (clog-image-data)
+  (:documentation "Setf/get json image data"))
+
+(defmethod json-image-data ((obj clog-image-data))
+  (js-query obj (format nil "JSON.stringify(~A.data)" (script-id obj))))
+
+(defmethod (setf json-image-data) (value (obj clog-image-data))
+  (js-execute obj (format nil "~A=new ImageData(new Uint8ClampedArray(Object.values(~A)), ~A.width)"
+                          (script-id obj) value (script-id obj))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Implementation - clog-text-metrics
@@ -750,13 +897,13 @@ https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/global
 
 (defgeneric hanging-baseline (clog-text-metrics)
   (:documentation "Hanging baseline"))
-  
+
 (defmethod hanging-baseline ((obj clog-text-metrics))
   (parse-float (query obj "hangingBaseline")))
 
 (defgeneric alphabetic-baseline (clog-text-metrics)
   (:documentation "Alphabetic baseline"))
-  
+
 (defmethod alphabetic-baseline ((obj clog-text-metrics))
   (parse-float (query obj "alphabeticBaseline")))
 
@@ -765,3 +912,119 @@ https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/global
 
 (defmethod ideographic-baseline ((obj clog-text-metrics))
   (parse-float (query obj "ideographicBaseline")))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Implementation - clog-path2d
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defclass clog-path2d (clog-obj)())
+
+;;;;;;;;;;;;;;;;;;;;;;
+;; create-path2d ;;
+;;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric create-path2d (clog-canvas &key path2d)
+  (:documentation "Create a new CLOG-Path2d. If CLOG-PATH2D creates a copy."))
+
+
+(defmethod create-path2d ((obj clog-canvas) &key path2d)
+  (let ((web-id (clog-connection:generate-id)))
+    (js-execute obj (format nil "clog['~A']=Path2D(~A)"
+                            web-id
+                            (if path2d
+                                (if (typep path2d 'clog-path2d)
+                                    (script-id path2d)
+                                    path2d)
+                                "")))
+    (make-instance 'clog-path2d
+                   :connection-id (connection-id obj)
+                   :html-id web-id)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Properties - clog-text-metrics
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;;;;;;;;;;;;;;
+;; add-path ;;
+;;;;;;;;;;;;;;
+
+(defgeneric add-path (clog-path2d path2d)
+  (:documentation "Add Path to this Path"))
+
+(defmethod add-path ((obj clog-path2d) path2d)
+  (execute obj (format nil "addPath(~A)" (script-id path2d))))
+
+;;;;;;;;;;;;;;;;
+;; close-path ;;
+;;;;;;;;;;;;;;;;
+
+(defmethod close-path ((obj clog-path2d))
+  (execute obj "closePath()"))
+
+;;;;;;;;;;;;;
+;; move-to ;;
+;;;;;;;;;;;;;
+
+(defmethod move-to ((obj clog-path2d) x y)
+  (execute obj (format nil "moveTo(~A,~A)" x y)))
+
+;;;;;;;;;;;;;
+;; line-to ;;
+;;;;;;;;;;;;;
+
+(defmethod line-to ((obj clog-path2d) x y)
+  (execute obj (format nil "lineTo(~A,~A)" x y)))
+
+;;;;;;;;;;;;;;;;;;;;;
+;; bezier-curve-to ;;
+;;;;;;;;;;;;;;;;;;;;;
+
+(defmethod bezier-curve-to ((obj clog-path2d) cp1x cp1y cp2x cp2y x y)
+  (execute obj (format nil "bezierCurveTo(~A,~A,~A,~A,~A,~A)"
+                       cp1x cp1y cp2x cp2y x y)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;
+;; quadratic-curve-to ;;
+;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defmethod quadratic-curve-to ((obj clog-path2d) cpx cpy x y)
+  (execute obj (format nil "quadraticCurveTo(~A,~A,~A,~A)" cpx cpy x y)))
+
+;;;;;;;;;
+;; arc ;;
+;;;;;;;;;
+
+(defmethod arc ((obj clog-path2d) x y radius start-angle end-angle
+                &key (anticlockwise nil))
+  (execute obj (format nil "arc(~A,~A,~A,~A,~A~A)"
+                       x y radius start-angle end-angle
+                       (if anticlockwise
+                           (format nil ",~A" anticlockwise)
+                           ""))))
+
+;;;;;;;;;;;;
+;; arc-to ;;
+;;;;;;;;;;;;
+
+(defmethod arc-to ((obj clog-path2d) x1 y1 x2 y2)
+  (execute obj (format nil "arcTo(~A,~A,~A,~A)" x1 y1 x2 y2)))
+
+
+;;;;;;;;;;;;;
+;; ellipse ;;
+;;;;;;;;;;;;;
+
+(defmethod ellipse ((obj clog-path2d) x y radius-x radius-y rotation
+                    start-angle end-angle
+                    &key (anticlockwise nil))
+  (execute obj (format nil "ellipse(~A,~A,~A,~A,~A,~A,~A~A)"
+                       x y radius-x radius-y rotation start-angle end-angle
+                       (if anticlockwise
+                           (format nil ",~A" anticlockwise)
+                           ""))))
+;;;;;;;;;;
+;; rect ;;
+;;;;;;;;;;
+
+(defmethod rect ((obj clog-path2d) x y width height)
+  (execute obj (format nil "rect(~A,~A,~A,~A)" x y width height)))

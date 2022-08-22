@@ -757,7 +757,7 @@ embedded in a native template application.)"
   (text-baseline-type         type)
   (text-baseline              generic-function)
   (text-dir                   generic-function)
-  
+
   "CLOG-Canvas - Methods"
   (arc                        generic-function)
   (arc-to                     generic-function)
@@ -766,17 +766,25 @@ embedded in a native template application.)"
   (clear-rect                 generic-function)
   (path-clip                  generic-function)
   (close-path                 generic-function)
+  (create-image-data          generic-function)
   (draw-image                 generic-function)
+  (draw-image-from-to         generic-function)
   (ellipse                    generic-function)
-  (path-fill                  generic-function)  
+  (path-fill                  generic-function)
   (fill-rect                  generic-function)
   (fill-text                  generic-function)
+  (get-image-data             generic-function)
   (get-line-dash              generic-function)
+  (is-point-in-path           generic-function)
+  (is-point-in-stroke         generic-function)
   (line-to                    generic-function)
   (measure-text               generic-function)
   (move-to                    generic-function)
+  (put-image-data             generic-function)
+  (put-image-dirty            generic-function)
   (quadratic-curve-to         generic-function)
   (rect                       generic-function)
+  (reset-transform            generic-function)
   (canvas-restore             generic-function)
   (rotate                     generic-function)
   (canvas-save                generic-function)
@@ -788,9 +796,17 @@ embedded in a native template application.)"
   (transform                  generic-function)
   (translate                  generic-function)
 
+  "CLOG-Image-Data"
+  (clog-image-data class)
+  (json-image-data generic-function)
+ 
+  "CLOG-Path2d"
+  (clog-path2d    class)
+  (create-path2d  generic-function)
+  
   "CLOG-Text-Metrics"
   (clog-text-metrics           class)
-  
+
   (actual-bounding-box-left    generic-function)
   (actual-bounding-box-right   generic-function)
   (actual-bounding-box-ascent  generic-function)
