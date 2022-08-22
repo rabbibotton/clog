@@ -2398,7 +2398,7 @@ of controls and double click to select control."
     (dolist (n (sort (asdf:already-loaded-systems) #'string-lessp))
       (add-select-option (loaded-systems panel) n n))
     (if (current-project app)
-        (setf (text-value (project-list panel)) (current-project app))
+        (setf (text-value (loaded-systems panel)) (current-project app))
         (setf (text-value (loaded-systems panel)) "clog"))
     (asdf-browser-populate panel)))
 
