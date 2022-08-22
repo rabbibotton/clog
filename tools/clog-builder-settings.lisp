@@ -2308,4 +2308,10 @@
      :code    "ncplug"
      :type    :system
      :www     "templates/www/"
-     :loc     "templates/projects/clog-plugin/")))
+     :loc     "templates/projects/clog-plugin/")
+   '(:name    "General Common Lisp Applications"
+     :code    :group)
+   '(:name    "Console Application"
+     :code    "nca"
+     :type    :system
+     :loc     "templates/projects/console/")))

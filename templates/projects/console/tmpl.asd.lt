@@ -1,0 +1,9 @@
+(asdf:defsystem #:<%= (@ sys-name) %>
+  :description "New System"
+  :author "some@one.com"
+  :license  "BSD"
+  :version "0.0.0"
+  :serial t
+  :entry-point "<%= (@ sys-name) %>:start-app"
+  :depends-on ()
+  :components ((:file "<%= (@ sys-name) %>")))
