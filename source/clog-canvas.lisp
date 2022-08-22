@@ -630,7 +630,21 @@ https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/global
 (defmethod get-line-dash ((obj clog-context2d))
   (query obj "getLineDash()"))
 
-;; getTransform
+
+;;;;;;;;;;;;;;;;;;;
+;; get-transform ;;
+;;;;;;;;;;;;;;;;;;;
+
+(defgeneric get-transform (clog-context2d)
+  (:documentation "Get current transform matrix as clog-matrix"))
+
+(defmethod get-transform ((obj clog-context2d))
+  (let ((web-id (clog-connection:generate-id)))
+    (js-execute obj (format nil "clog['~A']=~A.getTransform()"
+                            web-id (script-id obj)))
+    (make-instance 'clog-matrix
+                   :connection-id (clog::connection-id obj)
+                   :html-id web-id)))
 
 ;;;;;;;;;;;;;;;;;;;;;;
 ;; is-point-in;path ;;
@@ -802,7 +816,25 @@ https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/global
 (defmethod set-line-dash ((obj clog-context2d) value)
   (execute obj (format nil "setLineDash(~A)" value)))
 
-;; setTransform
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; set-transform-with-matrix ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric set-transform-with-matrix (clog-context2d clog-matrix)
+  (:documentation "Set-Transform-With-Matrix"))
+
+(defmethod set-transform-with-matrix ((obj clog-context2d) clog-matrix)
+  (execute obj (format nil "set-transform(~A)" (script-id clog-matrix))))
+
+;;;;;;;;;;;;;;;;;;;
+;; set-transform ;;
+;;;;;;;;;;;;;;;;;;;
+
+(defgeneric set-transform (clog-context2d a b c d e f g)
+  (:documentation "Set-Transform"))
+
+(defmethod set-transform ((obj clog-context2d) a b c d e f g)
+  (execute obj (format nil "setYransform(~A,~A,~A,~A,~A,~A,~A)" a b c d e f g)))
 
 ;;;;;;;;;;;;;;;;;
 ;; path-stroke ;;
@@ -984,6 +1016,203 @@ https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/global
 (defmethod ideographic-baseline ((obj clog-text-metrics))
   (parse-float (query obj "ideographicBaseline")))
 
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Implementation - clog-matrix
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defclass clog-matrix (clog-obj)())
+
+;;;;;;;;;;;;;;;;;;;
+;; create-matrix ;;
+;;;;;;;;;;;;;;;;;;;
+
+(defgeneric create-matrix (clog-canvas &key matrix)
+  (:documentation "Create a new CLOG-Matrix. MATRIX can be
+json array 6 element for 2d or 16 for 3d."))
+
+
+(defmethod create-matrix ((obj clog-canvas) &key matrix)
+  (let ((web-id (clog-connection:generate-id)))
+    (js-execute obj (format nil "clog['~A']=DOMMatrix(~A)"
+                            web-id
+                            (if matrix
+                                (if (typep matrix 'clog-matrix)
+                                    (script-id matrix)
+                                    matrix)
+                                "")))
+    (make-instance 'clog-matrix
+                   :connection-id (connection-id obj)
+                   :html-id web-id)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Properties - clog-matrix
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;;;;;;;;;;;
+;; is-2d ;;
+;;;;;;;;;;;
+
+(Defgeneric is-2d (clog-matrix)
+  (:documentation "Setf/get miter style limit"))
+
+(defmethod is-2d ((obj clog-matrix))
+  (js-true-p (query obj "is2d")))
+
+;;;;;;;;;;;;;;;;;
+;; is-identity ;;
+;;;;;;;;;;llllll;
+
+(Defgeneric is-identity (clog-matrix)
+  (:documentation "Setf/get miter style limit"))
+
+(defmethod is-identity ((obj clog-matrix))
+  (js-true-p (query obj "isIdentity")))
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Methods - clog-matrix
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;;;;;;;;;;;;
+;; flip-x ;;
+;;;;;;;;;;;;
+
+(defgeneric flip-x (clog-matrix)
+  (:documentation "Return flip-x a clog-matrix"))
+
+(defmethod flip-x ((obj clog-matrix))
+  (let ((web-id (clog-connection:generate-id)))
+    (js-execute obj (format nil "clog['~A']=~A.flipX()"
+                            web-id (script-id obj)))
+    (make-instance 'clog-matrix
+                   :connection-id (clog::connection-id obj)
+                   :html-id web-id)))
+
+;;;;;;;;;;;;
+;; flip-y ;;
+;;;;;;;;;;;;
+
+(defgeneric flip-y (clog-matrix)
+  (:documentation "Return flip-y a clog-matrix"))
+
+(defmethod flip-y ((obj clog-matrix))
+  (let ((web-id (clog-connection:generate-id)))
+    (js-execute obj (format nil "clog['~A']=~A.flipY()"
+                            web-id (script-id obj)))
+    (make-instance 'clog-matrix
+                   :connection-id (clog::connection-id obj)
+                   :html-id web-id)))
+
+;;;;;;;;;;;;;
+;; inverse ;;
+;;;;;;;;;;;;;
+
+(defgeneric inverse (clog-matrix)
+  (:documentation "Return inverse a clog-matrix"))
+
+(defmethod inverse ((obj clog-matrix))
+  (let ((web-id (clog-connection:generate-id)))
+    (js-execute obj (format nil "clog['~A']=~A.inverse()"
+                            web-id (script-id obj)))
+    (make-instance 'clog-matrix
+                   :connection-id (clog::connection-id obj)
+                   :html-id web-id)))
+
+;;;;;;;;;;;;;;
+;; multiply ;;
+;;;;;;;;;;;;;;
+
+(defgeneric multiply (clog-matrix by-matrix)
+  (:documentation "Return multiply a clog-matrix"))
+
+(defmethod multiply ((obj clog-matrix) by-matrix)
+  (let ((web-id (clog-connection:generate-id)))
+    (js-execute obj (format nil "clog['~A']=~A.multiply(~A)"
+                            web-id (script-id obj) (script-id by-matrix)))
+    (make-instance 'clog-matrix
+                   :connection-id (clog::connection-id obj)
+                   :html-id web-id)))
+  
+;;; DOMMatrixReadOnly.rotateAxisAngle()
+  
+;;;;;;;;;;;;
+;; rotate ;;
+;;;;;;;;;;;;
+
+(defgeneric rotate (clog-matrix angle)
+  (:documentation "Return rotate a clog-matrix"))
+
+(defmethod rotate ((obj clog-matrix) angle)
+  (let ((web-id (clog-connection:generate-id)))
+    (js-execute obj (format nil "clog['~A']=~A.rotate(~A)"
+                            web-id (script-id obj) angle))
+    (make-instance 'clog-matrix
+                   :connection-id (clog::connection-id obj)
+                   :html-id web-id)))
+
+;;; DOMMatrixReadOnly.rotateFromVector()
+
+;;;;;;;;;;;;;;;;;;
+;; scale-matrix ;;
+;;;;;;;;;;;;;;;;;;
+
+(defgeneric scale-matrix (clog-matrix sx &optional sy sz ox oy oz)
+  (:documentation "Return scale a clog-matrix by sx and optionally to
+sy sz ox oy oz"))
+
+(defmethod scale-matrix ((obj clog-matrix) sx &optional sy sz ox oy oz)
+  (let ((web-id (clog-connection:generate-id)))
+    (js-execute obj (format nil "clog['~A']=~A.scale(~A~A~A~A~A~A)"
+                            web-id (script-id obj) sx
+                            (if sy (format nil ",~A" sy) "")
+                            (if sz (format nil ",~A" sz) "")
+                            (if ox (format nil ",~A" ox) "")
+                            (if oy (format nil ",~A" oy) "")
+                            (if oz (format nil ",~A" oz) "")))
+    (make-instance 'clog-matrix
+                   :connection-id (clog::connection-id obj)
+                   :html-id web-id)))
+
+;;;;;;;;;;;;;
+;; scale3d ;;
+;;;;;;;;;;;;;
+
+(defgeneric scale3d (clog-matrix sx &optional sy sz ox oy oz)
+  (:documentation "Return scale3d a clog-matrix by sx and optionally to
+sy sz ox oy oz"))
+
+(defmethod scale3d ((obj clog-matrix) sx &optional sy sz ox oy oz)
+  (let ((web-id (clog-connection:generate-id)))
+    (js-execute obj (format nil "clog['~A']=~A.scale3d(~A~A~A~A~A~A)"
+                            web-id (script-id obj) sx
+                            (if sy (format nil ",~A" sy) "")
+                            (if sz (format nil ",~A" sz) "")
+                            (if ox (format nil ",~A" ox) "")
+                            (if oy (format nil ",~A" oy) "")
+                            (if oz (format nil ",~A" oz) "")))
+    (make-instance 'clog-matrix
+                   :connection-id (clog::connection-id obj)
+                   :html-id web-id)))
+
+;; skewX skewY 
+
+;;;;;;;;;;;;;;;;;;;;;;
+;; translate-matrix ;;
+;;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric translate-matrix (clog-matrix x y &optional z)
+  (:documentation "Return translate-matrix a clog-matrix by x y and optionally z"))
+
+(defmethod translate-matrix ((obj clog-matrix) x y &optional z)
+  (let ((web-id (clog-connection:generate-id)))
+    (js-execute obj (format nil "clog['~A']=~A.translate(~A,~A~A)"
+                            web-id (script-id obj) x y
+                            (if z (format nil ",~A" z) "")))
+    (make-instance 'clog-matrix
+                   :connection-id (clog::connection-id obj)
+                   :html-id web-id)))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Implementation - clog-path2d
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -1012,7 +1241,7 @@ https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/global
                    :html-id web-id)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Properties - clog-text-metrics
+;; Methods - clog-path2d
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;;;;;;;;;;;;;;

@@ -779,6 +779,7 @@ embedded in a native template application.)"
   (fill-text                  generic-function)
   (get-image-data             generic-function)
   (get-line-dash              generic-function)
+  (get-transform              generic-function)
   (is-point-in-path           generic-function)
   (is-point-in-stroke         generic-function)
   (line-to                    generic-function)
@@ -794,6 +795,8 @@ embedded in a native template application.)"
   (canvas-save                generic-function)
   (scale                      generic-function)
   (set-line-dash              generic-function)
+  (set-transform              generic-function)
+  (set-transform-with-matrix  generic-function)
   (path-stroke                generic-function)
   (stroke-rect                generic-function)
   (stroke-text                generic-function)
@@ -807,7 +810,19 @@ embedded in a native template application.)"
   "CLOG-Image-Data"
   (clog-image-data class)
   (json-image-data generic-function)
- 
+
+  "CLOG-Matrix"
+  (clog-matrix      class)
+  (create-matrix    generic-function)
+  (flip-x           generic-function)
+  (flip-y           generic-function)
+  (inverse          generic-function)
+  (mutliply         generic-function)
+  (rotate           generic-function)
+  (scale-matrix     generic-function)
+  (scale3d          generic-function)
+  (translate-matrix generic-function)
+  
   "CLOG-Path2d"
   (clog-path2d    class)
   (create-path2d  generic-function)
