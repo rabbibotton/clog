@@ -40,6 +40,10 @@
     :accessor current-project
     :initform *start-project*
     :documentation "Current Project")
+   (current-project-dir
+    :accessor current-project-dir
+    :initform ""
+    :documentation "Current Project")
    (project-win
     :accessor project-win
     :initform nil
@@ -1673,14 +1677,18 @@ of controls and double click to select control."
       (when open-file
         (open-file-name open-file))
       (set-on-click btn-load (lambda (obj)
-                               (server-file-dialog obj "Load Panel" (directory-namestring file-name)
+                               (server-file-dialog obj "Load Panel" (directory-namestring (if (equal file-name "")
+                                                                                              (current-project-dir app)
+                                                                                              file-name))
                                                    (lambda (fname)
                                                      (window-focus win)
                                                      (when fname
                                                        (open-file-name fname)))))))
     (set-on-click btn-save (lambda (obj)
                              (when (equal file-name "")
-                               (setf file-name (format nil "~A.clog" (attribute content "data-clog-name"))))
+                               (setf file-name (format nil "~A~A.clog"
+                                                       (current-project-dir app)
+                                                       (attribute content "data-clog-name"))))
                              (server-file-dialog obj "Save Panel As.." file-name
                                                  (lambda (fname)
                                                    (window-focus win)
@@ -1979,7 +1987,9 @@ of controls and double click to select control."
                                  (on-populate-control-list-win content :win win))))
       (set-on-click btn-load (lambda (obj)
                                (declare (ignore obj))
-                               (server-file-dialog win "Load Panel" (directory-namestring file-name)
+                               (server-file-dialog win "Load Panel" (directory-namestring (if (equal file-name "")
+                                                                                              (current-project-dir app)
+                                                                                              file-name))
                                                    (lambda (fname)
                                                      (window-focus win)
                                                      (when fname
@@ -1994,7 +2004,9 @@ of controls and double click to select control."
                                                        (on-populate-control-list-win content :win win))))))
       (set-on-click btn-save (lambda (obj)
                                (when (equal file-name "")
-                                 (setf file-name (format nil "~A.clog" (attribute content "data-clog-name"))))
+                                 (setf file-name (format nil "~A~A.clog"
+                                                         (current-project-dir app)
+                                                         (attribute content "data-clog-name"))))
                                (server-file-dialog obj "Save Page As.." file-name
                                                    (lambda (fname)
                                                      (window-focus win)
@@ -2294,11 +2306,15 @@ of controls and double click to select control."
       (when open-file
         (open-file-name open-file))
       (set-on-click btn-load (lambda (obj)
-                               (server-file-dialog obj "Load Source" (directory-namestring file-name)
+                               (server-file-dialog obj "Load Source" (directory-namestring (if (equal file-name "")
+                                                                                              (current-project-dir app)
+                                                                                              file-name))
                                                    (lambda (fname)
                                                      (open-file-name fname))))))
     (set-on-click btn-save (lambda (obj)
-                             (server-file-dialog obj "Save Source As.." file-name
+                             (server-file-dialog obj "Save Source As.." (if (equal file-name "")
+                                                                            (current-project-dir app)
+                                                                            file-name)
                                                  (lambda (fname)
                                                    (window-focus win)
                                                    (when fname
@@ -2624,6 +2640,9 @@ of controls and double click to select control."
                    (or (asdf/system:component-entry-point
                         (asdf:find-system sel))
                        ""))
+             (setf (current-project-dir app)
+                   (asdf:component-pathname
+                    (asdf:find-system sel)))
              ;; fill runtime
              (dolist (n (asdf:module-components
                          (asdf:find-system sel)))
