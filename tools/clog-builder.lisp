@@ -2157,20 +2157,23 @@ of controls and double click to select control."
      (win panel) "Enter new system name:"
      (lambda (sys-name)
        (cond (sys-name
-              (server-file-dialog
-               (win panel) "Output Directory" "~/common-lisp/"
-               (lambda (filename)
-                 (cond (filename
-                        (template-copy sys-name start-dir filename :panel (window-content (win panel)))
-                        (when (getf tmpl-rec :www)
-                          (template-copy sys-name www-dir filename :panel (window-content (win panel))))
-                        (asdf:clear-source-registry)
-                        (when (project-win app)
-                          (clog-gui:window-close (project-win app)))
-                        (on-show-project panel :project sys-name)
-                        (create-div (window-content (win panel)) :content "<hr><b>done.</b>"))
-                       (t
-                        (window-close (win panel)))))))
+              (let ((fname  (if (uiop:directory-exists-p #P"~/common-lisp/")
+                                #P"~/common-lisp/"
+                                (car ql:*local-project-directories*))))
+                (server-file-dialog
+                 (win panel) "Output Directory" fname
+                 (lambda (filename)
+                   (cond (filename
+                          (template-copy sys-name start-dir filename :panel (window-content (win panel)))
+                          (when (getf tmpl-rec :www)
+                            (template-copy sys-name www-dir filename :panel (window-content (win panel))))
+                          (asdf:clear-source-registry)
+                          (when (project-win app)
+                            (clog-gui:window-close (project-win app)))
+                          (on-show-project panel :project sys-name)
+                          (create-div (window-content (win panel)) :content "<hr><b>done.</b>"))
+                         (t
+                          (window-close (win panel))))))))
              (t
               (window-close (win panel))))))))
 
