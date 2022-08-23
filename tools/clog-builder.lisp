@@ -2174,14 +2174,18 @@ of controls and double click to select control."
                  (win panel) "Output Directory" fname
                  (lambda (filename)
                    (cond (filename
-                          (template-copy sys-name start-dir filename :panel (window-content (win panel)))
-                          (when (getf tmpl-rec :www)
-                            (template-copy sys-name www-dir filename :panel (window-content (win panel))))
-                          (asdf:clear-source-registry)
-                          (when (project-win app)
-                            (clog-gui:window-close (project-win app)))
-                          (on-show-project panel :project sys-name)
-                          (create-div (window-content (win panel)) :content "<hr><b>done.</b>"))
+                          (cond ((uiop:directory-exists-p (format nil "~A~A" filename sys-name))
+                                 (clog-gui:alert-toast (win panel) "Cancel" "Canceled - Project directory exists")
+                                 (window-close (win panel)))
+                                (t
+                                 (template-copy sys-name start-dir filename :panel (window-content (win panel)))
+                                 (when (getf tmpl-rec :www)
+                                   (template-copy sys-name www-dir filename :panel (window-content (win panel))))
+                                 (asdf:clear-source-registry)
+                                 (when (project-win app)
+                                   (clog-gui:window-close (project-win app)))
+                                 (on-show-project panel :project sys-name)
+                                 (create-div (window-content (win panel)) :content "<hr><b>done.</b>"))))
                          (t
                           (window-close (win panel))))))))
              (t

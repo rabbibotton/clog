@@ -64,4 +64,5 @@
                (:file "systems")
                (:file "sys-browser")
                (:file "projects")
+               (:file "project-directory")
                (:file "clog-builder-images")))
