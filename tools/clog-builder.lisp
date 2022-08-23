@@ -1289,6 +1289,7 @@ of controls and double click to select control."
           (create-projects (window-content win))
           (setf (project-win app) win)
           (set-on-window-close win (lambda (obj)
+                                     (declare (ignore obj))
                                      (setf (project-win app) nil)))))))
 
 (defun on-show-control-events-win (obj)
@@ -1515,7 +1516,7 @@ of controls and double click to select control."
     (setf (advisory-title btn-undo) "undo")
     (setf (advisory-title btn-redo) "redo")
     (setf (advisory-title btn-test) "test")
-    (setf (advisory-title btn-rndr) "render to lisp")
+    (setf (advisory-title btn-rndr) "render to lisp - shift-click render as...")
     (setf (advisory-title btn-save) "save - shift-click save as...")
     (setf (advisory-title btn-load) "load")
     (setf (height btn-copy) "12px")
@@ -1697,31 +1698,48 @@ of controls and double click to select control."
                                                        (window-focus win)
                                                        (when fname
                                                          (setf file-name fname)
-                                                         (save-panel fname content panel-id (bottom-panel box)))
+                                                         (add-class btn-save "w3-animate-top")
+                                                         (save-panel fname content panel-id (bottom-panel box))
+                                                         (sleep .5)
+                                                         (remove-class btn-save "w3-animate-top"))
                                                        :initial-filename file-name)))
                                 (t
-                                 (save-panel file-name content panel-id (bottom-panel box))))))
+                                 (add-class btn-save "w3-animate-top")
+                                 (save-panel file-name content panel-id (bottom-panel box))
+                                 (sleep .5)
+                                 (remove-class btn-save "w3-animate-top")))))
     (set-on-click btn-test
                   (lambda (obj)
                       (do-eval obj (render-clog-code content (bottom-panel box))
                         (attribute content "data-clog-name")
                         :package (attribute content "data-in-package"))))
-    (set-on-click btn-rndr
-                  (lambda (obj)
-                    (when (equal render-file-name "")
-                      (if (equal file-name "")
-                          (setf render-file-name (format nil "~A.lisp" (attribute content "data-clog-name")))
-                          (setf render-file-name (format nil "~A~A.lisp"
-                                (directory-namestring file-name)
-                                (pathname-name file-name)))))
-                    (server-file-dialog obj "Render As.." render-file-name
-                                        (lambda (fname)
-                                          (window-focus win)
-                                          (when fname
-                                            (setf render-file-name fname)
-                                            (write-file (render-clog-code content (bottom-panel box))
-                                                        fname)))
-                                        :initial-filename render-file-name)))
+    (set-on-mouse-click btn-rndr
+                        (lambda (obj data)
+                          (cond ((or (equal render-file-name "")
+                                     (getf data :shift-key))
+                                 (when (equal render-file-name "")
+                                   (if (equal file-name "")
+                                       (setf render-file-name (format nil "~A.lisp" (attribute content "data-clog-name")))
+                                       (setf render-file-name (format nil "~A~A.lisp"
+                                                                      (directory-namestring file-name)
+                                                                      (pathname-name file-name)))))
+                                 (server-file-dialog obj "Render As.." render-file-name
+                                                     (lambda (fname)
+                                                       (window-focus win)
+                                                       (when fname
+                                                         (setf render-file-name fname)
+                                                         (add-class btn-rndr "w3-animate-top")
+                                                         (write-file (render-clog-code content (bottom-panel box))
+                                                                     fname)
+                                                         (sleep .5)
+                                                         (remove-class btn-rndr "w3-animate-top")))
+                                                     :initial-filename render-file-name))
+                                (t
+                                 (add-class btn-rndr "w3-animate-top")
+                                 (write-file (render-clog-code content (bottom-panel box))
+                                             render-file-name)
+                                 (sleep .5)
+                                 (remove-class btn-rndr "w3-animate-top")))))
     (set-on-mouse-down content
                        (lambda (obj data)
                          (declare (ignore obj))
@@ -1829,7 +1847,7 @@ of controls and double click to select control."
       (setf (advisory-title btn-undo) "undo")
       (setf (advisory-title btn-redo) "redo")
       (setf (advisory-title btn-test) "test")
-      (setf (advisory-title btn-rndr) "render to lisp")
+      (setf (advisory-title btn-rndr) "render to lisp - shift-click render as...")
       (setf (advisory-title btn-save) "save - shift-click save as...")
       (setf (advisory-title btn-load) "load")
       (setf (advisory-title btn-sim) "start simulation")
@@ -2020,32 +2038,49 @@ of controls and double click to select control."
                                                          (window-focus win)
                                                          (when fname
                                                            (setf file-name fname)
-                                                           (save-panel fname content panel-id (bottom-panel box)))
+                                                           (add-class btn-save "w3-animate-top")
+                                                           (save-panel fname content panel-id (bottom-panel box))
+                                                           (sleep .5)
+                                                           (remove-class btn-save "w3-animate-top"))
                                                          :initial-filename file-name)))
                                   (t
-                                   (save-panel file-name content panel-id (bottom-panel box))))))
+                                   (add-class btn-save "w3-animate-top")
+                                   (save-panel file-name content panel-id (bottom-panel box))
+                                   (sleep .5)
+                                   (remove-class btn-save "w3-animate-top")))))
       (set-on-click btn-test
                     (lambda (obj)
                       (do-eval obj (render-clog-code content (bottom-panel box))
                         (attribute content "data-clog-name")
                         :package (attribute content "data-in-package")
                         :custom-boot custom-boot)))
-      (set-on-click btn-rndr
-                    (lambda (obj)
-                      (when (equal render-file-name "")
-                        (if (equal file-name "")
-                            (setf render-file-name (format nil "~A.lisp" (attribute content "data-clog-name")))
-                            (setf render-file-name (format nil "~A~A.lisp"
-                                                           (directory-namestring file-name)
-                                                           (pathname-name file-name)))))
-                      (server-file-dialog obj "Render As.." render-file-name
-                                          (lambda (fname)
-                                            (window-focus win)
-                                            (when fname
-                                              (setf render-file-name fname)
-                                              (write-file (render-clog-code content (bottom-panel box))
-                                                          fname)))
-                                          :initial-filename render-file-name))))
+      (set-on-mouse-click btn-rndr
+                          (lambda (obj data)
+                            (cond ((or (equal render-file-name "")
+                                       (getf data :shift-key))
+                                   (when (equal render-file-name "")
+                                     (if (equal file-name "")
+                                         (setf render-file-name (format nil "~A.lisp" (attribute content "data-clog-name")))
+                                         (setf render-file-name (format nil "~A~A.lisp"
+                                                                        (directory-namestring file-name)
+                                                                        (pathname-name file-name)))))
+                                   (server-file-dialog obj "Render As.." render-file-name
+                                                       (lambda (fname)
+                                                         (window-focus win)
+                                                         (when fname
+                                                           (setf render-file-name fname)
+                                                           (add-class btn-rndr "w3-animate-top")
+                                                           (write-file (render-clog-code content (bottom-panel box))
+                                                                       fname)
+                                                           (sleep .5)
+                                                           (remove-class btn-rndr "w3-animate-top")))
+                                                       :initial-filename render-file-name))
+                                  (t
+                                   (add-class btn-rndr "w3-animate-top")
+                                   (write-file (render-clog-code content (bottom-panel box))
+                                               render-file-name)
+                                   (sleep .5)
+                                   (remove-class btn-rndr "w3-animate-top"))))))
     (set-on-mouse-down content
                        (lambda (obj data)
                          (declare (ignore obj))
@@ -2340,10 +2375,16 @@ of controls and double click to select control."
                                                        (window-focus win)
                                                        (when fname
                                                          (setf file-name fname)
-                                                         (write-file (text-value ace) fname)))
-                                                     :initial-filename file-name))
+                                                         (add-class btn-save "w3-animate-top")
+                                                         (write-file (text-value ace) fname)
+                                                         (sleep .5)
+                                                         (remove-class btn-save "w3-animate-top"))
+                                                     :initial-filename file-name)))
                                 (t
-                                 (write-file (text-value ace) file-name)))))
+                                 (add-class btn-save "w3-animate-top")
+                                 (write-file (text-value ace) file-name)
+                                 (sleep .5)
+                                 (remove-class btn-save "w3-animate-top")))))
     (set-on-click btn-copy (lambda (obj)
                              (declare (ignore obj))
                              (clog-ace:clipboard-copy ace)))
@@ -2404,8 +2445,7 @@ of controls and double click to select control."
                   :units "%" :width 100 :height 100)))
 
 (defun on-new-asdf-browser (obj &key (project nil))
-  (let* ((app (connection-data-item obj "builder-app-data"))
-         (win (create-gui-window obj :title "ASDF System Browser"
+  (let* ((win (create-gui-window obj :title "ASDF System Browser"
                                      :top 40 :left 225
                                      :width 592 :height 435
                                      :client-movement t))
@@ -2440,8 +2480,7 @@ of controls and double click to select control."
       (add-select-option (files panel) path name))))
 
 (defun on-new-sys-browser (obj &key (search nil))
-  (let* ((app (connection-data-item obj "builder-app-data"))
-         (win (create-gui-window obj :title "System Browser"
+  (let* ((win (create-gui-window obj :title "System Browser"
                                      :top 40 :left 225
                                      :width 685 :height 530
                                      :client-movement t))
@@ -2450,6 +2489,7 @@ of controls and double click to select control."
       (setf (text-value (search-box panel)) search)
       (sys-browser-populate panel))
     (set-on-window-size-done win (lambda (obj)
+                                   (declare (ignore obj))
                                    (clog-ace:resize (src-box panel))))))
 
 (defun sys-browser-populate (panel)
