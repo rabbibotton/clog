@@ -1667,7 +1667,9 @@ of controls and double click to select control."
                                (on-populate-control-list-win content :win win))))
     (flet ((open-file-name (fname)
              (setf file-name fname)
-             (setf render-file-name "")
+             (setf render-file-name (format nil "~A~A.lisp"
+                                            (directory-namestring file-name)
+                                            (pathname-name file-name)))
              (setf (inner-html content)
                    (or (read-file fname)
                        ""))
@@ -1698,6 +1700,9 @@ of controls and double click to select control."
                                                        (window-focus win)
                                                        (when fname
                                                          (setf file-name fname)
+                                                         (setf render-file-name (format nil "~A~A.lisp"
+                                                                                        (directory-namestring file-name)
+                                                                                        (pathname-name file-name)))
                                                          (add-class btn-save "w3-animate-top")
                                                          (save-panel fname content panel-id (bottom-panel box))
                                                          (sleep .5)
@@ -2017,7 +2022,9 @@ of controls and double click to select control."
                                                      (window-focus win)
                                                      (when fname
                                                        (setf file-name fname)
-                                                       (setf render-file-name "")
+                                                       (setf render-file-name (format nil "~A~A.lisp"
+                                                                                      (directory-namestring file-name)
+                                                                                      (pathname-name file-name)))
                                                        (setf (inner-html content)
                                                              (read-file fname))
                                                        (clrhash (get-control-list app panel-id))
@@ -2038,6 +2045,9 @@ of controls and double click to select control."
                                                          (window-focus win)
                                                          (when fname
                                                            (setf file-name fname)
+                                                           (setf render-file-name (format nil "~A~A.lisp"
+                                                                                          (directory-namestring file-name)
+                                                                                          (pathname-name file-name)))
                                                            (add-class btn-save "w3-animate-top")
                                                            (save-panel fname content panel-id (bottom-panel box))
                                                            (sleep .5)
