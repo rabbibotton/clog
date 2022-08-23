@@ -30,7 +30,8 @@ functions. The clog-obj passed as the first parameter of the macro is
 passed as the parent obj to the declared object, after that nested
 levels of decleraton are used as the parent clog-obj. To bind a
 variable to any created clog object using :bind var. See tutorial 33
-and 22 for examples."
+and 22 for examples. All create- symbols must be in or used by
+package."
   (flet ((extract-bind (args)
            (when args
              (let ((fargs ())
