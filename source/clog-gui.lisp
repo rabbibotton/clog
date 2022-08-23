@@ -680,6 +680,8 @@ The on-window-change clog-obj received is the new window"))
                                           keep-on-top
                                           hidden
                                           client-movement
+                                          border-class
+                                          title-class
                                           html-id)
   (:documentation "Create a clog-gui-window. If client-movement is t then
 use jquery-ui to move/resize and will not work on mobile. When client-movement
@@ -701,6 +703,8 @@ the window will be set to keep-on-top always."))
                                                (keep-on-top nil)
                                                (hidden nil)
                                                (client-movement nil)
+                                               (border-class "w3-card-4 w3-white w3-border")
+                                               (title-class "w3-black")
                                                (html-id nil))
   (let ((app (connection-data-item obj "clog-gui")))
     (unless html-id
@@ -725,8 +729,8 @@ the window will be set to keep-on-top always."))
                             (format nil
             "<div style='position:fixed;top:~Apx;left:~Apx;width:~Apx;height:~Apx;
                   z-index:~A;visibility:hidden'
-                  class='w3-card-4 w3-white w3-border'>
-                  <div id='~A-title-bar' class='w3-container w3-black'
+                  class='~A'>
+                  <div id='~A-title-bar' class='w3-container ~A'
                        style='position:absolute;top:0;right:0;left:0;height:25px'>
                     <span data-drag-obj='~A' data-drag-type='m' id='~A-title'
                       style='position:absolute;top:0;right:20px;left:5px;
@@ -740,7 +744,8 @@ the window will be set to keep-on-top always."))
                        class='w3-right' data-drag-obj='~A' data-drag-type='s'>+</div>
              </div>"
             top left width height (incf (last-z app))   ; outer div
-            html-id html-id html-id                     ; title bar
+            border-class
+            html-id title-class html-id html-id         ; title bar
             title                                       ; title
             (if has-pinner                              ; pinner
               (format nil "<span id='~A-pinner'

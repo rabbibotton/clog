@@ -1113,7 +1113,7 @@ of controls and double click to select control."
                                            ""))
                                :eval-in-package package)))
     (open-window (window (connection-body obj)) "http://127.0.0.1:8080/test")
-    (on-open-file obj :title "test eval" :text result)))
+    (on-open-file obj :title-class "w3-yellow" :title "test eval" :text result)))
 
 (defun on-show-control-properties-win (obj)
   "Show control properties window"
@@ -2219,9 +2219,10 @@ of controls and double click to select control."
         (when (eq (car form) 'in-package)
           (return (string-downcase (second form))))))))
 
-(defun on-open-file (obj &key open-file (title "New Source Editor") text)
+(defun on-open-file (obj &key open-file (title "New Source Editor") text (title-class "w3-black"))
   (let* ((app (connection-data-item obj "builder-app-data"))
          (win (create-gui-window obj :title title
+                                     :title-class title-class
                                      :top 40 :left 225
                                      :width 645 :height 430
                                      :client-movement t))
@@ -2257,7 +2258,7 @@ of controls and double click to select control."
                            (if lisp-file
                                (setf (current-editor-is-lisp app) (text-value pac-line))
                                (setf (current-editor-is-lisp app) nil))))
-    (setf (background-color tool-bar) :black)
+    (add-class tool-bar title-class)
     (setf (advisory-title btn-paste) "paste")
     (setf (advisory-title btn-cut) "cut")
     (setf (advisory-title btn-del) "delete")
@@ -2375,20 +2376,20 @@ of controls and double click to select control."
                                  (let ((result (capture-eval lf
                                                              :clog-obj (connection-body obj)
                                                              :eval-in-package (text-value pac-line))))
-                                   (on-open-file obj :title "form eval" :text result))))))
+                                   (on-open-file obj :title-class "w3-blue" :title "form eval" :text result))))))
     (set-on-click btn-esel (lambda (obj)
                              (let ((val (clog-ace:selected-text ace)))
                                (unless (equal val "")
                                  (let ((result (capture-eval val :clog-obj obj
                                                                  :eval-in-package (text-value pac-line))))
-                                   (on-open-file obj :title "selection eval" :text result))))))
+                                   (on-open-file obj :title-class "w3-blue" :title "selection eval" :text result))))))
 
     (set-on-click btn-test (lambda (obj)
                              (let ((val (text-value ace)))
                                (unless (equal val "")
                                  (let ((result (capture-eval val :clog-obj obj
                                                                  :eval-in-package (text-value pac-line))))
-                                   (on-open-file obj :title "file eval" :text result))))))))
+                                   (on-open-file obj :title-class "w3-blue" :title "file eval" :text result))))))))
 (defun on-repl (obj)
   "Open quick start"
   (let* ((win (create-gui-window obj :title "CLOG Builder REPL"
@@ -2874,9 +2875,11 @@ of controls and double click to select control."
                   (when result
                     (handler-case
                         (on-open-file body :title (format nil "Callers of ~A" result)
+                                           :title-class "w3-orange"
                                            :text (swank::list-callers (read-from-string result)))
                       (t (c)
-                        (on-open-file body :title "Error - Calleers"
+                        (on-open-file body :title "Error - Callers"
+                                           :title-class "w3-red"
                                            :text c)))))))
 
 (defun on-show-callees (body)
@@ -2885,9 +2888,11 @@ of controls and double click to select control."
                   (when result
                     (handler-case
                         (on-open-file body :title (format nil "Callees of ~A" result)
+                                           :title-class "w3-orange"
                                            :text (swank::list-callees (read-from-string result)))
                       (t (c)
-                        (on-open-file body :title "Error - Callee"
+                        (on-open-file body :title "Error - Callees"
+                                           :title-class "w3-red"
                                            :text c)))))))
 
 (defun on-new-builder (body)
