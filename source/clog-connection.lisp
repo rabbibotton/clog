@@ -37,6 +37,7 @@ script."
   (*break-on-error* variable)
 
   (initialize             function)
+  (random-port            function)
   (shutdown-clog          function)
   (set-on-connect         function)
   (set-clog-path          function)
@@ -366,6 +367,17 @@ the default answer. (Private)"
     (t (c)
       (format t "Condition caught in clog-server start-up - ~A.~&" c)
       (values 0 c))))
+
+;;;;;;;;;;;;;;;;;
+;; random-port ;;
+;;;;;;;;;;;;;;;;;
+
+(defun random-port (&key (host "0.0.0.0"))
+  "Return a random open port on host"
+  (let* ((l (usocket:socket-listen host 0))
+         (p (usocket:get-local-port l)))
+    (usocket:socket-close l)
+    p))
 
 ;;;;;;;;;;;;;;;;
 ;; initialize ;;

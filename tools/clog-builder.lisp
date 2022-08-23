@@ -2973,16 +2973,20 @@ of controls and double click to select control."
       (create-gui-menu-full-screen menu))
     (on-show-control-properties-win body)
     (on-show-control-list-win body)
-;;    (on-show-control-events-win body)
     (on-show-copy-history-win body)
-;;    (on-new-builder-panel body)
     (on-show-project body :project *start-project*)
     (set-on-before-unload (window body) (lambda(obj)
                                           (declare (ignore obj))
                                           ;; return empty string to prevent nav off page
-                                          ""))))
+                                          "")))
+  (run body)
+  (when *app-mode*
+    (clog:shutdown)
+    (uiop:quit)))
 
-(defun clog-builder (&key (port 8080) project static-root system)
+(defparameter *app-mode* nil)
+
+(defun clog-builder (&key (port 8080) app project static-root system)
   "Start clog-builder."
   (if project
       (setf *start-project* (string-downcase (format nil "~A" project)))
@@ -2990,6 +2994,9 @@ of controls and double click to select control."
   (when system
     (setf static-root (merge-pathnames "./www/"
                                        (asdf:system-source-directory system))))
+  (when app
+    (setf *app-mode* t)
+    (setf port (clog-connection:random-port)))
   (if static-root
       (initialize nil :port port :static-root static-root)
       (initialize nil :port port))
