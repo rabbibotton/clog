@@ -1516,7 +1516,7 @@ of controls and double click to select control."
     (setf (advisory-title btn-redo) "redo")
     (setf (advisory-title btn-test) "test")
     (setf (advisory-title btn-rndr) "render to lisp")
-    (setf (advisory-title btn-save) "save")
+    (setf (advisory-title btn-save) "save - shift-click save as...")
     (setf (advisory-title btn-load) "load")
     (setf (height btn-copy) "12px")
     (setf (height btn-paste) "12px")
@@ -1684,18 +1684,23 @@ of controls and double click to select control."
                                                      (window-focus win)
                                                      (when fname
                                                        (open-file-name fname)))))))
-    (set-on-click btn-save (lambda (obj)
-                             (when (equal file-name "")
-                               (setf file-name (format nil "~A~A.clog"
-                                                       (current-project-dir app)
-                                                       (attribute content "data-clog-name"))))
-                             (server-file-dialog obj "Save Panel As.." file-name
-                                                 (lambda (fname)
-                                                   (window-focus win)
-                                                   (when fname
-                                                     (setf file-name fname)
-                                                     (save-panel fname content panel-id (bottom-panel box)))
-                                                   :initial-filename file-name))))
+    (set-on-mouse-click btn-save
+                        (lambda (obj data)
+                          (cond ((or (equal file-name "")
+                                     (getf data :shift-key))
+                                 (when (equal file-name "")
+                                   (setf file-name (format nil "~A~A.clog"
+                                                           (current-project-dir app)
+                                                           (attribute content "data-clog-name"))))
+                                 (server-file-dialog obj "Save Panel As.." file-name
+                                                     (lambda (fname)
+                                                       (window-focus win)
+                                                       (when fname
+                                                         (setf file-name fname)
+                                                         (save-panel fname content panel-id (bottom-panel box)))
+                                                       :initial-filename file-name)))
+                                (t
+                                 (save-panel file-name content panel-id (bottom-panel box))))))
     (set-on-click btn-test
                   (lambda (obj)
                       (do-eval obj (render-clog-code content (bottom-panel box))
@@ -1825,7 +1830,7 @@ of controls and double click to select control."
       (setf (advisory-title btn-redo) "redo")
       (setf (advisory-title btn-test) "test")
       (setf (advisory-title btn-rndr) "render to lisp")
-      (setf (advisory-title btn-save) "save")
+      (setf (advisory-title btn-save) "save - shift-click save as...")
       (setf (advisory-title btn-load) "load")
       (setf (advisory-title btn-sim) "start simulation")
       (setf (advisory-title btn-exp) "export as boot page")
@@ -2002,18 +2007,23 @@ of controls and double click to select control."
                                                        (setf (title (html-document body)) (attribute content "data-clog-name"))
                                                        (setf (window-title win) (attribute content "data-clog-name"))
                                                        (on-populate-control-list-win content :win win))))))
-      (set-on-click btn-save (lambda (obj)
-                               (when (equal file-name "")
-                                 (setf file-name (format nil "~A~A.clog"
-                                                         (current-project-dir app)
-                                                         (attribute content "data-clog-name"))))
-                               (server-file-dialog obj "Save Page As.." file-name
-                                                   (lambda (fname)
-                                                     (window-focus win)
-                                                     (when fname
-                                                       (setf file-name fname)
-                                                       (save-panel fname content panel-id (bottom-panel box)))
-                                                     :initial-filename file-name))))
+      (set-on-mouse-click btn-save
+                          (lambda (obj data)
+                            (cond ((or (equal file-name "")
+                                       (getf data :shift-key))
+                                   (when (equal file-name "")
+                                     (setf file-name (format nil "~A~A.clog"
+                                                             (current-project-dir app)
+                                                             (attribute content "data-clog-name"))))
+                                   (server-file-dialog obj "Save Panel As.." file-name
+                                                       (lambda (fname)
+                                                         (window-focus win)
+                                                         (when fname
+                                                           (setf file-name fname)
+                                                           (save-panel fname content panel-id (bottom-panel box)))
+                                                         :initial-filename file-name)))
+                                  (t
+                                   (save-panel file-name content panel-id (bottom-panel box))))))
       (set-on-click btn-test
                     (lambda (obj)
                       (do-eval obj (render-clog-code content (bottom-panel box))
@@ -2253,7 +2263,7 @@ of controls and double click to select control."
     (setf (advisory-title btn-del) "delete")
     (setf (advisory-title btn-undo) "undo")
     (setf (advisory-title btn-redo) "redo")
-    (setf (advisory-title btn-save) "save")
+    (setf (advisory-title btn-save) "save  - shift-click save as...")
     (setf (advisory-title btn-load) "load")
     (setf (advisory-title btn-efrm) "evaluate form")
     (setf (advisory-title btn-esel) "evaluate selection")
@@ -2314,17 +2324,21 @@ of controls and double click to select control."
                                                                                               file-name))
                                                    (lambda (fname)
                                                      (open-file-name fname))))))
-    (set-on-click btn-save (lambda (obj)
-                             (server-file-dialog obj "Save Source As.." (if (equal file-name "")
-                                                                            (current-project-dir app)
-                                                                            file-name)
-                                                 (lambda (fname)
-                                                   (window-focus win)
-                                                   (when fname
-                                                     (setf file-name fname)
-                                                     (setf (window-title win) fname)
-                                                     (write-file (text-value ace) fname)))
-                                                 :initial-filename file-name)))
+    (set-on-mouse-click btn-save
+                        (lambda (obj data)
+                          (cond ((or (equal file-name "")
+                                     (getf data :shift-key))
+                                 (server-file-dialog obj "Save Source As.." (if (equal file-name "")
+                                                                                (current-project-dir app)
+                                                                                file-name)
+                                                     (lambda (fname)
+                                                       (window-focus win)
+                                                       (when fname
+                                                         (setf file-name fname)
+                                                         (write-file (text-value ace) fname)))
+                                                     :initial-filename file-name))
+                                (t
+                                 (write-file (text-value ace) file-name)))))
     (set-on-click btn-copy (lambda (obj)
                              (declare (ignore obj))
                              (clog-ace:clipboard-copy ace)))
