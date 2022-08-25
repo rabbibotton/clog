@@ -1193,6 +1193,19 @@ of controls and double click to select control."
                               (declare (ignore obj))
                               (when (current-editor-is-lisp app)
                                 (on-new-sys-browser editor :search data))))
+    ;; setup save key
+    (js-execute editor
+                (format nil
+                        "~A.commands.addCommand({
+    name: 'save-ace',
+    bindKey: {win: 'Ctl-s',  mac: 'Command-s'},
+    exec: function(editor) {
+        ~A.trigger('clog-save-ace');
+    },
+    readOnly: true,
+});"
+                        (clog-ace::js-ace editor)
+                        (jquery editor)))
     ;; eval form
     (js-execute editor
                 (format nil
@@ -1315,6 +1328,11 @@ of controls and double click to select control."
           (set-geometry (events-list app) :top 5 :left 5 :right 5)
           (setf (event-editor app) (clog-ace:create-clog-ace-element content))
           (setf (clog-ace:read-only-p (event-editor app)) t)
+          (set-on-event (event-editor app) "clog-save-ace"
+                        (lambda (obj)
+                          ;; toggle focus to force a save of event
+                          (focus (events-list app))
+                          (focus (event-editor app))))
           ;; currently there is only one auto complete for page
           (clog-ace:set-on-auto-complete (event-editor app)
                                          (lambda (obj prefix)
@@ -2374,6 +2392,14 @@ of controls and double click to select control."
                                                                                               file-name))
                                                    (lambda (fname)
                                                      (open-file-name fname))))))
+    (set-on-event ace "clog-save-ace"
+                  (lambda (obj)
+                    (declare (ignore obj))
+                    (unless (equal file-name "")
+                      (add-class btn-save "w3-animate-top")
+                      (write-file (text-value ace) file-name)
+                      (sleep .5)
+                      (remove-class btn-save "w3-animate-top"))))
     (set-on-mouse-click btn-save
                         (lambda (obj data)
                           (cond ((or (equal file-name "")
