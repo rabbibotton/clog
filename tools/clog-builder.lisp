@@ -792,7 +792,7 @@ not a temporary attached one when using select-control."
   \(let \(\(panel \(change-class \(clog:create-div clog-obj :content \"~A\"
          :hidden hidden :class class :html-id html-id :auto-place auto-place\) \'~A\)\)\)
 ~{~A~}~{~A~}~{~A~}    panel\)\)~%"
-                          (string-downcase package)
+                           (string-downcase package)
                           cname     ;;defclass
                           cmembers
                           cname     ;;defun
@@ -825,6 +825,7 @@ not a temporary attached one when using select-control."
           (with-input-from-string (n result)
             (let ((*standard-output* s)
                   (*print-case*      :downcase))
+              (format t ";;;; CLOG Builder generated code - modify original clog file")
               (loop
                 (let ((l (read n nil)))
                   (unless l (return))
