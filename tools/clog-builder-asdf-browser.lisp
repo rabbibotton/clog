@@ -34,5 +34,3 @@
     (let ((name (asdf:component-relative-pathname n))
           (path (asdf:component-pathname n)))
       (add-select-option (files panel) path name))))
-
-
