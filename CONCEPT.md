@@ -5,7 +5,7 @@
 Provide a framework, CLOG, and visual tools, CLOG Builder, for
 graphical user interfaces using web technologes and so allow
 leveraging of new UI technologies as they surface in a completely
-cross platform manor for applications ranging from small single user
+cross platform manner for applications ranging from small single user
 utilities to massive concurrent multiuser applications of which
 websites or webapps are just a subcategory.
 
