@@ -53,15 +53,21 @@
   :depends-on (#:clog #:clog-ace #:clog-terminal #:s-base64 #:swank
                #:definitions)
   :pathname "tools/"
-  :components ((:file "clog-db-admin")
-               (:file "clog-builder-settings")
+  :components (;; clog-db-admin app
+               (:file "clog-db-admin")
+               ;; clog-builder generated clode
                (:file "clog-templates")
-               (:file "clog-builder")
-               (:file "clog-builder-repl")
                (:file "image-to-data")
                (:file "quick-start")
                (:file "threads")
                (:file "systems")
                (:file "sys-browser")
                (:file "projects")
+               (:file "clog-builder-repl")
+               ;; clog-builder code
+               (:file "clog-builder-settings")
+               (:file "clog-builder")
+               (:file "clog-builder-projects")
+               (:file "clog-builder-asdf-browser")               
+               (:file "clog-builder-sys-browser")
                (:file "clog-builder-images")))
