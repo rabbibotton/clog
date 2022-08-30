@@ -243,7 +243,7 @@ after attachment is changed to one unique to this session."))
   (:documentation "Places text inside top of CLOG-OBJ in DOM"))
 
 (defmethod place-text-inside-top-of ((obj clog-obj) text)
-  (jquery-execute obj (format nil "prepend(document.createTextNode('~A'))" text))
+  (jquery-execute obj (format nil "prepend(document.createTextNode('~A'))" (escape-string text)))
   text)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -254,7 +254,7 @@ after attachment is changed to one unique to this session."))
   (:documentation "Places text inside bottom of CLOG-OBJ in DOM"))
 
 (defmethod place-text-inside-bottom-of ((obj clog-obj) text)
-  (jquery-execute obj (format nil "append(document.createTextNode('~A'))" text))
+  (jquery-execute obj (format nil "append(document.createTextNode('~A'))" (escape-string text)))
   text)
 
 
