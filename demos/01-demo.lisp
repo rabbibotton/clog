@@ -175,7 +175,7 @@
   (display-splash body)
   (start-game body))
 
-(defun start-demo ()
+(defun start-demo (&key (host "0.0.0.0") (port 8080))
   "Start demo."
-  (initialize 'on-new-window)
-  (open-browser))
+  (initialize 'on-new-window :host host :port port)
+  (open-browser :url (format nil "http://127.0.0.1:~A" port)))

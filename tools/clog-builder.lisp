@@ -2637,8 +2637,10 @@ of controls and double click to select control."
 
 (defparameter *app-mode* nil)
 
-(defun clog-builder (&key (port 8080) app project static-root system)
-  "Start clog-builder."
+(defun clog-builder (&key (port 8080) (start-browser t)
+                       app project static-root system)
+  "Start clog-builder. When port is 0 choose a random port. When app is
+t, shutdown clog on termination of first window."
   (if project
       (setf *start-project* (string-downcase (format nil "~A" project)))
       (setf *start-project* nil))
@@ -2646,7 +2648,8 @@ of controls and double click to select control."
     (setf static-root (merge-pathnames "./www/"
                                        (asdf:system-source-directory system))))
   (when app
-    (setf *app-mode* t)
+    (setf *app-mode* t))
+  (when (eql port 0)
     (setf port (clog-connection:random-port)))
   (if static-root
       (initialize nil :port port :static-root static-root)
@@ -2655,4 +2658,5 @@ of controls and double click to select control."
   (set-on-new-window 'on-new-db-admin :path "/dbadmin")
   (set-on-new-window 'on-attach-builder-page :path "/builder-page")
   (set-on-new-window 'on-convert-image :path "/image-to-data")
-  (open-browser :url (format nil "http://127.0.0.1:~A/builder" port)))
+  (when start-browser
+    (open-browser :url (format nil "http://127.0.0.1:~A/builder" port))))
