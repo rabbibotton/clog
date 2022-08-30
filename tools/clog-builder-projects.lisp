@@ -317,7 +317,6 @@
                (add-select-option list path name))))
           ((and (> (length item) 5)
                 (equal (subseq item (- (length item) 5)) ".clog"))
-           (on-new-builder-panel target :open-file item)
-           (on-show-control-events-win target))
+           (on-new-builder-panel target :open-file item))
           (t
            (on-open-file target :open-file item)))))

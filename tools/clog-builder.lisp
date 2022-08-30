@@ -1564,6 +1564,7 @@ of controls and double click to select control."
     (setf (attribute content "data-in-package") "clog-user")
     (setf (attribute content "data-custom-slots") "")
     ;; activate associated windows on open
+    (on-show-control-events-win win)
     (on-populate-control-properties-win content :win win)
     (on-populate-control-list-win content :win win)
     ;; setup window events
@@ -2185,7 +2186,8 @@ of controls and double click to select control."
          (txt-link   (create-div txt-area
                                  :content (format nil "<br><center>~A</center>" link)))
          content)
-         (declare (ignore page-link txt-link))
+    (declare (ignore page-link txt-link))
+    (on-show-control-events-win win)
     (setf (gethash panel-uid *app-sync-hash*) app)
     (setf (gethash (format nil "~A-win" panel-uid) *app-sync-hash*) win)
     (setf (gethash (format nil "~A-link" panel-uid) *app-sync-hash*)
