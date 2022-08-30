@@ -235,6 +235,29 @@ after attachment is changed to one unique to this session."))
   (jquery-execute obj (format nil "append(~A)" (script-id next-obj)))
   next-obj)
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; place-text-inside-top-of ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric place-text-inside-top-of (clog-obj text)
+  (:documentation "Places text inside top of CLOG-OBJ in DOM"))
+
+(defmethod place-text-inside-top-of ((obj clog-obj) text)
+  (jquery-execute obj (format nil "prepend(document.createTextNode('~A'))" text))
+  text)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; place-text-inside-bottom-of ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric place-text-inside-bottom-of (clog-obj text)
+  (:documentation "Places text inside bottom of CLOG-OBJ in DOM"))
+
+(defmethod place-text-inside-bottom-of ((obj clog-obj) text)
+  (jquery-execute obj (format nil "append(document.createTextNode('~A'))" text))
+  text)
+
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Properties - clog-element
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

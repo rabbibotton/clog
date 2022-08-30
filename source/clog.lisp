@@ -197,10 +197,12 @@ embedded in a native template application.)"
   (attach-as-child generic-function)
 
   "CLOG-Element - DOM Placement"
-  (place-after            generic-function)
-  (place-before           generic-function)
-  (place-inside-top-of    generic-function)
-  (place-inside-bottom-of generic-function)
+  (place-after                 generic-function)
+  (place-before                generic-function)
+  (place-inside-top-of         generic-function)
+  (place-inside-bottom-of      generic-function)
+  (place-text-inside-top-of    generic-function)
+  (place-text-inside-bottom-of generic-function)
 
   "CLOG-Element - General Properties"
   (style            generic-function)
