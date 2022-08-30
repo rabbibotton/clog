@@ -48,6 +48,14 @@
     :accessor project-win
     :initform nil
     :documentation "Project window")
+   (right-panel
+    :accessor right-panel
+    :initform nil
+    :documentation "Right panel")
+   (left-panel
+    :accessor left-panel
+    :initform nil
+    :documentation "Left panel")
    (control-properties-win
     :accessor control-properties-win
     :initform nil
@@ -1132,6 +1140,8 @@ of controls and double click to select control."
          (control-list (create-table content)))
     (setf (background-color side-panel) :black)
     (setf (background-color content) :gray)
+    (setf (right-panel app) panel)
+    (setf (hiddenp (right-panel app)) t)
     (setf (control-properties-win app) content)
     (setf (properties-list app) control-list)
     (set-on-click side-panel (lambda (obj)
@@ -1381,6 +1391,15 @@ of controls and double click to select control."
           (set-on-window-size-done win (lambda (obj)
                                          (declare (ignore obj))
                                          (clog-ace:resize (event-editor app))))
+          (panel-mode win t)
+          (set-on-window-focus win
+                               (lambda (obj)
+                                 (declare (ignore obj))
+                                 (panel-mode win t)))
+          (set-on-window-blur win
+                              (lambda (obj)
+                                (declare (ignore obj))
+                                (panel-mode win nil)))
           (set-on-window-close win (lambda (obj)
                                      (declare (ignore obj))
                                      (setf (event-editor app) nil)
@@ -1435,6 +1454,8 @@ of controls and double click to select control."
          (pallete      (create-select content))
          (adj-size     0))
     (set-geometry pallete :left 0 :top 0 :height sheight :right 10)
+    (setf (left-panel app) content)
+    (setf (hiddenp (left-panel app)) t)
     (setf (background-color divider) :black)
     (setf (tab-index divider) "-1")
     (setf (cursor divider) :ns-resize)
@@ -1498,6 +1519,11 @@ of controls and double click to select control."
                                              (t
                                               (setf (width content) "10px")
                                               (setf is-hidden t))))))))
+
+(defun panel-mode (obj bool)
+  (let ((app (connection-data-item obj "builder-app-data")))
+    (setf (hiddenp (right-panel app)) (not bool))
+    (setf (hiddenp (left-panel app)) (not bool))))
 
 (defun on-new-builder-panel (obj &key (open-file nil))
   "Open new panel"
@@ -1565,14 +1591,20 @@ of controls and double click to select control."
     (setf (attribute content "data-custom-slots") "")
     ;; activate associated windows on open
     (on-show-control-events-win win)
+    (panel-mode win t)
     (on-populate-control-properties-win content :win win)
     (on-populate-control-list-win content :win win)
     ;; setup window events
     (set-on-window-focus win
                          (lambda (obj)
                            (declare (ignore obj))
+                           (panel-mode win t)
                            (on-populate-control-properties-win content :win win)
                            (on-populate-control-list-win content :win win)))
+    (set-on-window-blur win
+                        (lambda (obj)
+                          (declare (ignore obj))
+                          (panel-mode win nil)))
     (set-on-window-close win
                          (lambda (obj)
                            (declare (ignore obj))
@@ -1817,7 +1849,6 @@ of controls and double click to select control."
     (funcall (gethash (format nil "~A-link" panel-uid) *app-sync-hash*) content)
     (setf win (gethash (format nil "~A-win" panel-uid) *app-sync-hash*))
     (remhash (format nil "~A-win" panel-uid) *app-sync-hash*)
-
     ;; setup window and page
     (setf-next-id content 1)
     (let ((panel-name (format nil "page-~A" (incf (next-panel-id app)))))
@@ -1839,14 +1870,20 @@ of controls and double click to select control."
                             (window-close win)))
     ;; activate associated windows on open
     (deselect-current-control app)
+    (panel-mode win t)
     (on-populate-control-properties-win content :win win)
     (on-populate-control-list-win content :win win)
     ;; setup window events
     (set-on-window-focus win
                          (lambda (obj)
                            (declare (ignore obj))
+                           (panel-mode win t)
                            (on-populate-control-properties-win content :win win)
                            (on-populate-control-list-win content :win win)))
+    (set-on-window-blur win
+                        (lambda (obj)
+                          (declare (ignore obj))
+                          (panel-mode win nil)))
     (set-on-window-close win
                          (lambda (obj)
                            (declare (ignore obj))
