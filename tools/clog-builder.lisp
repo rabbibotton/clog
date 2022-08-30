@@ -1161,9 +1161,11 @@ of controls and double click to select control."
                                      (when auto-mode
                                        (cond (is-hidden
                                               (setf (width panel) "400px")
+                                              (setf (hiddenp content) nil)
                                               (setf is-hidden nil))
                                              (t
                                               (setf (width panel) "10px")
+                                              (setf (hiddenp content) t)
                                               (setf is-hidden t))))))
     (setf (overflow content) :auto)
     (setf (positioning control-list) :absolute)
@@ -1449,11 +1451,12 @@ of controls and double click to select control."
          (side-panel   (create-panel content :top 0 :right 0 :bottom 0 :width 10))
          (pin          (create-div side-panel :content "☑" :class "w3-small"))
          (sheight      (floor (/ (height content) 2)))
+         (swidth       (floor (width content)))
          (divider      (create-panel content :top sheight :height 10 :left 0 :right 10))
          (control-list (create-panel content :height (- sheight 10) :left 0 :bottom 0 :right 10))
          (pallete      (create-select content))
          (adj-size     0))
-    (set-geometry pallete :left 0 :top 0 :height sheight :right 10)
+    (set-geometry pallete :left 0 :top 0 :height sheight :width (- swidth 10))
     (setf (left-panel app) content)
     (setf (hiddenp (left-panel app)) t)
     (setf (background-color divider) :black)
@@ -1504,20 +1507,24 @@ of controls and double click to select control."
                                       (setf auto-mode nil)
                                       (setf (text-value pin) "☑")
                                       (setf (width content) "220px")
+                                      (setf (hiddenp pallete) nil)
                                       (setf is-hidden nil))
                                      (t
                                       (setf auto-mode t)
                                       (setf (text-value pin) "☐")
                                       (setf (width content) "10px")
+                                      (setf (hiddenp pallete) t)
                                       (setf is-hidden t)))))
     (set-on-mouse-leave side-panel (lambda (obj)
                                      (declare (ignore obj))
                                      (when auto-mode
                                        (cond (is-hidden
                                               (setf (width content) "220px")
+                                              (setf (hiddenp pallete) nil)
                                               (setf is-hidden nil))
                                              (t
                                               (setf (width content) "10px")
+                                              (setf (hiddenp pallete) t)
                                               (setf is-hidden t))))))))
 
 (defun panel-mode (obj bool)
