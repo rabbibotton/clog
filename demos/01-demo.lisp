@@ -173,9 +173,17 @@
   (let ((app (make-instance 'app-data)))
     (setf (connection-data-item body "app-data") app))
   (display-splash body)
-  (start-game body))
+  (start-game body)
+  ;; When *app-mode* set only run the game once and then shutdown the app
+  (when *app-mode*
+    (clog:shutdown)
+    (uiop:quit)))
 
-(defun start-demo (&key (host "0.0.0.0") (port 8080))
-  "Start demo."
+(defparameter *app-mode* nil)
+
+(defun start-demo (&key (host "0.0.0.0") (port 8080) app)
+  "Start demo. If app is t, runs one game and shutsdown."
   (initialize 'on-new-window :host host :port port)
-  (open-browser :url (format nil "http://127.0.0.1:~A" port)))
+  (if app
+      (setf *app-mode* app)
+      (open-browser :url (format nil "http://127.0.0.1:~A" port))))

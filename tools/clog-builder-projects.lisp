@@ -155,18 +155,26 @@
                  (add-select-option (designtime-list panel) "" "Missing /tools")
                  (add-select-option (design-deps panel) "" "Missing /tools"))))
             (t
-             (confirm-dialog panel "Load project?"
-                             (lambda (answer)
-                               (cond (answer
-                                      (ql:quickload sel)
-                                      (ignore-errors
-                                       (ql:quickload (format nil "~A/tools" sel)))
-                                      (ql:quickload sel)
-                                      (projects-populate panel))
-                                     (t
-                                      (setf (current-project app) nil)
-                                      (setf (text-value (project-list panel)) "None"))))
-                             :title "System not loaded"))))))
+             (flet ((load-proj (answer)
+                      (cond (answer
+                             (ql:quickload sel)
+                             (ignore-errors
+                              (ql:quickload (format nil "~A/tools" sel)))
+                             (ql:quickload sel)
+                             (projects-populate panel))
+                            (t
+                             (setf (current-project app) nil)
+                             (setf (text-value (project-list panel)) "None")))))
+               (cond ((eq *app-mode* :batch)
+                      (load-proj t)
+                      (projects-rerender panel)
+                      (clog:shutdown)
+                      (uiop:quit))
+                     (t
+                      (confirm-dialog panel "Load project?"
+                                      (lambda (answer)
+                                        (load-proj answer))
+                                      :title "System not loaded")))))))))
 
 (defun projects-add-dep (panel sys)
   (Input-dialog panel "Enter system name:"

@@ -2685,8 +2685,11 @@ of controls and double click to select control."
 
 (defun clog-builder (&key (port 8080) (start-browser t)
                        app project static-root system)
-  "Start clog-builder. When port is 0 choose a random port. When app is
-t, shutdown clog on termination of first window."
+  "Start clog-builder. When PORT is 0 choose a random port. When APP is
+t, shutdown applicatoin on termination of first window. If APP eq :BATCH then
+must specific default project :PROJECT and it will be batch rerendered
+and shutdown application. You can set the specific STATIC-ROOT or set SYSTEM
+to use that asdf system's static root."
   (if project
       (setf *start-project* (string-downcase (format nil "~A" project)))
       (setf *start-project* nil))
@@ -2694,7 +2697,7 @@ t, shutdown clog on termination of first window."
     (setf static-root (merge-pathnames "./www/"
                                        (asdf:system-source-directory system))))
   (when app
-    (setf *app-mode* t))
+    (setf *app-mode* app))
   (when (eql port 0)
     (setf port (clog-connection:random-port)))
   (if static-root
@@ -2705,4 +2708,5 @@ t, shutdown clog on termination of first window."
   (set-on-new-window 'on-attach-builder-page :path "/builder-page")
   (set-on-new-window 'on-convert-image :path "/image-to-data")
   (when start-browser
+    (format t "If browser does not start go to http://127.0.0.1:~A/builder" port)
     (open-browser :url (format nil "http://127.0.0.1:~A/builder" port))))
