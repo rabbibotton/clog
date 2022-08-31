@@ -32,7 +32,7 @@ There are three ways to establish the initial state of a user interface.
 1. Using an initial boot file served via http to establish the intial
 UI. This is near identical to traditional webservers/website solutions
 and every familiar technology offered for website development may be
-included in the booy file. Any html file with the boot.js script
+included in the boot file. Any html file with the boot.js script
 included or embedded may serve as a boot file to allow server side
 control with in the CLOG framework. The CLOG server and the server
 webpages must exist on the same domain do to security restrictions in
