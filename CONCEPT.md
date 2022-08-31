@@ -32,7 +32,7 @@ There are three ways to establish the initial state of a user interface.
 1. Using an initial boot file served via http to establish the intial
 UI. This is near identical to traditional webservers/website solutions
 and every familiar technology offered for website development may be
-included in the booy file. Any html file with the boot.js script
+included in the boot file. Any html file with the boot.js script
 included or embedded may serve as a boot file to allow server side
 control with in the CLOG framework. The CLOG server and the server
 webpages must exist on the same domain do to security restrictions in
@@ -54,7 +54,7 @@ advantages for a completely non-html non-js code based.
 
 CLOG offers an event based framework. As of CLOG 1.2, an additional
 "presentations" like system is included for bidirectionally binding
-Lisp Objects and CLOG Objects and contiued development in CLOG is to
+Lisp Objects and CLOG Objects and continued development in CLOG is to
 pursue natural use with no or minimal use of CLOG Apis for data models
 and business logic.
 
