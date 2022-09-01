@@ -11,7 +11,15 @@
           (setf (text-value (project-list panel)) (current-project app))
           (projects-populate panel))
          (t
-          (setf (text-value (project-list panel)) "None")))))
+          (setf (text-value (project-list panel)) "None")
+          (projects-populate panel)))))
+
+(defun projects-view-dir (panel)
+  (ignore-errors
+   (let* ((app (connection-data-item panel "builder-app-data"))
+          (sel (text-value (project-list panel)))
+          (sys (asdf:find-system (format nil "~A" sel))))
+     (on-dir-win panel :dir (asdf:system-source-directory sys)))))
 
 (defun projects-run (panel)
   (let ((val (text-value (entry-point panel))))

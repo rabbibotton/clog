@@ -2536,7 +2536,7 @@ of controls and double click to select control."
                                                                  :eval-in-package (text-value pac-line))))
                                    (on-open-file obj :title-class "w3-blue" :title "file eval" :text result))))))))
 (defun on-repl (obj)
-  "Open quick start"
+  "Open REPL"
   (let* ((win (create-gui-window obj :title "CLOG Builder REPL"
                                      :top 40 :left 225
                                      :width 600 :height 400
@@ -2588,6 +2588,17 @@ of controls and double click to select control."
                                            :title-class "w3-red"
                                            :text c)))))))
 
+(defun on-dir-win (obj &key dir)
+  "Open dir window"
+  (let* ((win (create-gui-window obj :title "Directory Window"
+                                     :top 40 :left 225
+                                     :width 600 :height 400
+                                     :client-movement t))
+         (d   (create-dir-view (window-content win))))
+    (set-geometry d :units "%" :width 100 :height 100)
+    (when dir
+      (populate-dir-win d dir))))
+
 (defun on-new-builder (body)
   "Launch instance of the CLOG Builder"
   (set-html-on-close body "Connection Lost")
@@ -2620,6 +2631,7 @@ of controls and double click to select control."
       (Create-gui-menu-item src   :content "New System Browser"        :on-click 'on-new-sys-browser)
       (create-gui-menu-item src   :content "New ASDF System Browser"   :on-click 'on-new-asdf-browser)
       (create-gui-menu-item tools :content "Control Events"            :on-click 'on-show-control-events-win)
+      (create-gui-menu-item tools :content "Directory Window"          :on-click 'on-dir-win)
       (create-gui-menu-item tools :content "List Callers"              :on-click 'on-show-callers)
       (create-gui-menu-item tools :content "List Callees"              :on-click 'on-show-callees)
       (create-gui-menu-item tools :content "Thread Viewer"             :on-click 'on-show-thread-viewer)

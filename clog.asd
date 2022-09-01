@@ -64,10 +64,12 @@
                (:file "sys-browser")
                (:file "projects")
                (:file "clog-builder-repl")
+               (:file "dir-view")
                ;; clog-builder code
                (:file "clog-builder-settings")
                (:file "clog-builder")
                (:file "clog-builder-projects")
                (:file "clog-builder-asdf-browser")               
                (:file "clog-builder-sys-browser")
+               (:file "clog-builder-dir-win")
                (:file "clog-builder-images")))
