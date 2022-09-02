@@ -1,9 +1,10 @@
 ## CLOGFrame
 
 CLOG Frame uses the native browser control on your platform to create
-a simple app the displays a 640x480 frame ready to recieve your app.
+a simple app the displays a frame ready to recieve your app.
 
-clogframe[.exe] "Window Title" port
+clogframe[.exe] "Window Title" 8080 640 480
+                               port  w x h
 
 in the clogframe directory run:
 

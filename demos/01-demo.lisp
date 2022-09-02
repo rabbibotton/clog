@@ -179,6 +179,7 @@
   (start-game body)
   ;; When *app-mode* set only run the game once and then shutdown the app
   (when *app-mode*
+    (sleep 2) ;; let end music play
     (clog:shutdown)
     (uiop:quit)))
 
@@ -190,7 +191,10 @@
   (when app
     (setf *app-mode* app))
   (when clogframe
-    (uiop:run-program (list "./clogframe" "CLOG Snake" (format nil "~A" port))))
+    (uiop:run-program (list "./clogframe"
+                            "CLOG Snake"
+                            (format nil "~A" port)
+                            (format nil "~A" 640) (format nil "~A" 420))))
   (when start-browser
     (format t "If browser does not start go to http://127.0.0.1:~A" port)
     (open-browser :url (format nil "http://127.0.0.1:~A" port))))
