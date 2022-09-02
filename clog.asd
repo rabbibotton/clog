@@ -68,6 +68,7 @@
                ;; clog-builder code
                (:file "clog-builder-settings")
                (:file "clog-builder")
+               (:file "clog-builder-templates")
                (:file "clog-builder-projects")
                (:file "clog-builder-asdf-browser")               
                (:file "clog-builder-sys-browser")

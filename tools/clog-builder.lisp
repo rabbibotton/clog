@@ -319,6 +319,15 @@ replaced."
                              *supported-controls*)
                   (list r)))))
 
+(defun reset-control-pallete (panel)
+  (let* ((app (connection-data-item panel "builder-app-data"))
+         (pallete (select-tool app)))
+    (setf (inner-html pallete) "")
+    (dolist (control *supported-controls*)
+      (if (equal (getf control :name) "group")
+          (add-select-optgroup pallete (getf control :description))
+          (add-select-option pallete (getf control :name) (getf control :description))))))
+
 (defun create-control (parent content control-record uid &key custom-query)
   "Return a new control based on CONTROL-RECORD as a child of PARENT"
   (let* ((create-type       (getf control-record :create-type))
@@ -1102,74 +1111,7 @@ of controls and double click to select control."
                            (setf control (next-sibling control))))))
               (add-siblings (first-child content) ""))))))))
 
-;; Menu handlers
-
-(defun do-eval (obj form-string cname &key (package "clog-user") custom-boot)
-  "Render, evalute and run code for panel"
-  (let* ((result (capture-eval (format nil "~A~% (clog:set-on-new-window~
-                                               (lambda (body)~
-                                                 (clog:debug-mode body)~
-                                                 ~A
-                                                 (create-~A body)) ~A:path \"/test\")"
-                                       form-string
-                                       (if custom-boot
-                                           ""
-                                           "(clog-gui:clog-gui-initialize body)
-                                            (clog-web:clog-web-initialize body :w3-css-url nil)")
-                                       cname
-                                       (if custom-boot
-                                           (format nil ":boot-file \"~A\" " custom-boot)
-                                           ""))
-                               :eval-in-package package)))
-    (open-window (window (connection-body obj)) "http://127.0.0.1:8080/test")
-    (on-open-file obj :title-class "w3-yellow" :title "test eval" :text result)))
-
-(defun on-show-control-properties-win (obj)
-  "Show control properties window"
-  (let* ((app (connection-data-item obj "builder-app-data"))
-         (is-hidden  nil)
-         (auto-mode  nil)
-         (panel  (create-panel (connection-body obj) :positioning :fixed
-                                                     :width 400
-                                                     :top 40
-                                                     :right 0 :bottom 0
-                                                     :class "w3-border-left"))
-         (content (create-panel panel :width 390 :top 0 :right 0 :bottom 0))
-         (side-panel (create-panel panel :top 0 :left 0 :bottom 0 :width 10))
-         (pin        (create-div side-panel :content "☑" :class "w3-small"))
-         (control-list (create-table content)))
-    (setf (background-color side-panel) :black)
-    (setf (background-color content) :gray)
-    (setf (right-panel app) panel)
-    (setf (hiddenp (right-panel app)) t)
-    (setf (control-properties-win app) content)
-    (setf (properties-list app) control-list)
-    (set-on-click side-panel (lambda (obj)
-                               (declare (ignore obj))
-                               (cond (auto-mode
-                                      (setf auto-mode nil)
-                                      (setf (text-value pin) "☑")
-                                      (setf (width panel) "400px")
-                                      (setf is-hidden nil))
-                                     (t
-                                      (setf auto-mode t)
-                                      (setf (text-value pin) "☐")
-                                      (setf (width panel) "400px")
-                                      (setf is-hidden nil)))))
-    (set-on-mouse-leave side-panel (lambda (obj)
-                                     (declare (ignore obj))
-                                     (when auto-mode
-                                       (cond (is-hidden
-                                              (setf (width panel) "400px")
-                                              (setf (hiddenp content) nil)
-                                              (setf is-hidden nil))
-                                             (t
-                                              (setf (width panel) "10px")
-                                              (setf (hiddenp content) t)
-                                              (setf is-hidden t))))))
-    (setf (overflow content) :auto)
-    (setf (positioning control-list) :absolute)
-    (set-geometry control-list :left 0 :top 0 :right 0)))
+;; Editor Utilities
 
 (defun setup-lisp-ace (editor status &key (package "CLOG-USER"))
   (let ((app (connection-data-item editor "builder-app-data")))
@@ -1302,6 +1244,85 @@ of controls and double click to select control."
     (setf (clog-ace:mode editor) "ace/mode/lisp")
     (setf (clog-ace:tab-size editor) 2)))
 
+(defun get-package-from-string (c)
+  "Determine the currect package based on src contained in string C"
+  (with-input-from-string (ins c)
+    (loop
+      (let ((form (read ins nil)))
+        (unless form (return "clog-user"))
+        (unless (consp form) (return "clog-user"))
+        (when (eq (car form) 'in-package)
+          (return (string-downcase (second form))))))))
+
+;; Menu handlers
+
+(defun do-eval (obj form-string cname &key (package "clog-user") custom-boot)
+  "Render, evalute and run code for panel"
+  (let* ((result (capture-eval (format nil "~A~% (clog:set-on-new-window~
+                                               (lambda (body)~
+                                                 (clog:debug-mode body)~
+                                                 ~A
+                                                 (create-~A body)) ~A:path \"/test\")"
+                                       form-string
+                                       (if custom-boot
+                                           ""
+                                           "(clog-gui:clog-gui-initialize body)
+                                            (clog-web:clog-web-initialize body :w3-css-url nil)")
+                                       cname
+                                       (if custom-boot
+                                           (format nil ":boot-file \"~A\" " custom-boot)
+                                           ""))
+                               :eval-in-package package)))
+    (open-window (window (connection-body obj)) "http://127.0.0.1:8080/test")
+    (on-open-file obj :title-class "w3-yellow" :title "test eval" :text result)))
+
+(defun on-show-control-properties-win (obj)
+  "Show control properties window"
+  (let* ((app (connection-data-item obj "builder-app-data"))
+         (is-hidden  nil)
+         (auto-mode  nil)
+         (panel  (create-panel (connection-body obj) :positioning :fixed
+                                                     :width 400
+                                                     :top 40
+                                                     :right 0 :bottom 0
+                                                     :class "w3-border-left"))
+         (content (create-panel panel :width 390 :top 0 :right 0 :bottom 0))
+         (side-panel (create-panel panel :top 0 :left 0 :bottom 0 :width 10))
+         (pin        (create-div side-panel :content "☑" :class "w3-small"))
+         (control-list (create-table content)))
+    (setf (background-color side-panel) :black)
+    (setf (background-color content) :gray)
+    (setf (right-panel app) panel)
+    (setf (hiddenp (right-panel app)) t)
+    (setf (control-properties-win app) content)
+    (setf (properties-list app) control-list)
+    (set-on-click side-panel (lambda (obj)
+                               (declare (ignore obj))
+                               (cond (auto-mode
+                                      (setf auto-mode nil)
+                                      (setf (text-value pin) "☑")
+                                      (setf (width panel) "400px")
+                                      (setf is-hidden nil))
+                                     (t
+                                      (setf auto-mode t)
+                                      (setf (text-value pin) "☐")
+                                      (setf (width panel) "400px")
+                                      (setf is-hidden nil)))))
+    (set-on-mouse-leave side-panel (lambda (obj)
+                                     (declare (ignore obj))
+                                     (when auto-mode
+                                       (cond (is-hidden
+                                              (setf (width panel) "400px")
+                                              (setf (hiddenp content) nil)
+                                              (setf is-hidden nil))
+                                             (t
+                                              (setf (width panel) "10px")
+                                              (setf (hiddenp content) t)
+                                              (setf is-hidden t))))))
+    (setf (overflow content) :auto)
+    (setf (positioning control-list) :absolute)
+    (set-geometry control-list :left 0 :top 0 :right 0)))
+
 (defun on-show-project (obj &key project)
   (let ((app (connection-data-item obj "builder-app-data")))
     (when project
@@ -1429,15 +1450,6 @@ of controls and double click to select control."
                                          (setf (hiddenp win) t)
                                          nil))))))
 
-(defun reset-control-pallete (panel)
-  (let* ((app (connection-data-item panel "builder-app-data"))
-         (pallete (select-tool app)))
-    (setf (inner-html pallete) "")
-    (dolist (control *supported-controls*)
-      (if (equal (getf control :name) "group")
-          (add-select-optgroup pallete (getf control :description))
-          (add-select-option pallete (getf control :name) (getf control :description))))))
-
 (defun on-show-control-list-win (obj)
   "Show control list for selecting and manipulating controls by name"
   (let* ((app          (connection-data-item obj "builder-app-data"))
@@ -1528,6 +1540,7 @@ of controls and double click to select control."
                                               (setf is-hidden t))))))))
 
 (defun panel-mode (obj bool)
+  "Set the status for display or hiding the side panels."
   (let ((app (connection-data-item obj "builder-app-data")))
     (setf (hiddenp (right-panel app)) (not bool))
     (setf (hiddenp (left-panel app)) (not bool))))
@@ -2184,11 +2197,6 @@ of controls and double click to select control."
   (set-on-new-window 'on-attach-builder-custom :boot-file "/boot.html" :path "/builder-custom")
   (on-new-builder-page obj :custom-boot "/boot.html" :url-launch nil))
 
-(defun on-new-builder-bst-page (obj)
-  "Menu item to open new boostrap 5 page"
-  (set-on-new-window 'on-attach-builder-custom :boot-file "/bootstrap.html" :path "/builder-custom")
-  (on-new-builder-page obj :custom-boot "/bootstrap.html" :url-launch nil))
-
 (defun on-new-builder-launch-page (obj)
   "Menu item to open new page"
   (on-new-builder-page obj :url-launch t))
@@ -2276,48 +2284,6 @@ of controls and double click to select control."
           (add-select-optgroup (template-box ct) (getf tmpl :name))
           (add-select-option (template-box ct) (getf tmpl :code) (getf tmpl :name))))))
 
-(defun fill-button-clicked (panel)
-  "Template fill botton clicked"
-  (let* ((app (connection-data-item panel "builder-app-data"))
-         (tmpl-rec  (find-if (lambda (x)
-                               (equal (getf x :code)
-                                      (value (template-box panel))))
-                             *supported-templates*))
-         (start-dir (format nil "~A~A"
-                            (asdf:system-source-directory :clog)
-                            (getf tmpl-rec :loc)))
-         (www-dir   (format nil "~A~A"
-                            (asdf:system-source-directory :clog)
-                            (getf tmpl-rec :www))))
-    (setf (hiddenp panel) t)
-    (input-dialog
-     (win panel) "Enter new system name:"
-     (lambda (sys-name)
-       (cond (sys-name
-              (let ((fname  (if (uiop:directory-exists-p #P"~/common-lisp/")
-                                #P"~/common-lisp/"
-                                (car ql:*local-project-directories*))))
-                (server-file-dialog
-                 (win panel) "Output Directory" fname
-                 (lambda (filename)
-                   (cond (filename
-                          (cond ((uiop:directory-exists-p (format nil "~A~A" filename sys-name))
-                                 (clog-gui:alert-toast (win panel) "Cancel" "Canceled - Project directory exists")
-                                 (window-close (win panel)))
-                                (t
-                                 (template-copy sys-name start-dir filename :panel (window-content (win panel)))
-                                 (when (getf tmpl-rec :www)
-                                   (template-copy sys-name www-dir filename :panel (window-content (win panel))))
-                                 (asdf:clear-source-registry)
-                                 (when (project-win app)
-                                   (clog-gui:window-close (project-win app)))
-                                 (on-show-project panel :project sys-name)
-                                 (create-div (window-content (win panel)) :content "<hr><b>done.</b>"))))
-                         (t
-                          (window-close (win panel))))))))
-             (t
-              (window-close (win panel))))))))
-
 (defun on-image-to-data (obj)
   "Menu option to create new project from template"
   (let* ((win (create-gui-window obj :title "Convert Images to Data"
@@ -2325,8 +2291,27 @@ of controls and double click to select control."
     (create-image-to-data (window-content win))
     (window-center win)))
 
+(defun on-convert-image (body)
+  "Convert image from form input from on-image-to-data"
+  (let ((params (form-multipart-data body)))
+    (create-div body :content params)
+    (destructuring-bind (stream fname content-type)
+        (form-data-item params "filename")
+      (create-div body :content (format nil "filename = ~A - (contents printed in REPL)" fname))
+      (let ((s        (flexi-streams:make-flexi-stream stream))
+            (pic-data ""))
+        (setf pic-data (format nil "data:~A;base64,~A" content-type
+                               (with-output-to-string (out)
+                                 (s-base64:encode-base64 s out))))
+        (create-img body :url-src pic-data)
+        (create-br body)
+        (create-div body :content "User the following as a url source:")
+        (set-geometry (create-text-area body :value pic-data) :width 500 :height 400)
+        (create-br body)
+        (create-div body :content (format nil "For example:<br>(create-img body :url-src \"~A\")" pic-data))))))
+
 (defun on-quick-start (obj)
-  "Open quick start"
+  "Open quick start help"
   (let* ((win (create-gui-window obj :title "Quick Start"
                                      :top 40 :left 225
                                      :width 600 :height 400
@@ -2334,23 +2319,15 @@ of controls and double click to select control."
     (create-quick-start (window-content win))))
 
 (defun on-show-thread-viewer (obj)
-  "Open quick start"
+  "Open thread views"
   (let* ((win (create-gui-window obj :title "Thread Viewer"
                                      :top 40 :left 225
                                      :width 600 :height 400
                                      :client-movement t)))
     (create-thread-list (window-content win))))
 
-(defun get-package-from-string (c)
-  (with-input-from-string (ins c)
-    (loop
-      (let ((form (read ins nil)))
-        (unless form (return "clog-user"))
-        (unless (consp form) (return "clog-user"))
-        (when (eq (car form) 'in-package)
-          (return (string-downcase (second form))))))))
-
 (defun on-open-file (obj &key open-file (title "New Source Editor") text (title-class "w3-black"))
+  "Open a new text editor"
   (let* ((app (connection-data-item obj "builder-app-data"))
          (win (create-gui-window obj :title title
                                      :title-class title-class
@@ -2535,8 +2512,9 @@ of controls and double click to select control."
                                  (let ((result (capture-eval val :clog-obj obj
                                                                  :eval-in-package (text-value pac-line))))
                                    (on-open-file obj :title-class "w3-blue" :title "file eval" :text result))))))))
+
 (defun on-repl (obj)
-  "Open REPL"
+  "Open a REPL"
   (let* ((win (create-gui-window obj :title "CLOG Builder REPL"
                                      :top 40 :left 225
                                      :width 600 :height 400
@@ -2544,25 +2522,8 @@ of controls and double click to select control."
     (set-geometry (create-clog-builder-repl (window-content win))
                   :units "%" :width 100 :height 100)))
 
-(defun on-convert-image (body)
-  (let ((params (form-multipart-data body)))
-    (create-div body :content params)
-    (destructuring-bind (stream fname content-type)
-        (form-data-item params "filename")
-      (create-div body :content (format nil "filename = ~A - (contents printed in REPL)" fname))
-      (let ((s        (flexi-streams:make-flexi-stream stream))
-            (pic-data ""))
-        (setf pic-data (format nil "data:~A;base64,~A" content-type
-                               (with-output-to-string (out)
-                                 (s-base64:encode-base64 s out))))
-        (create-img body :url-src pic-data)
-        (create-br body)
-        (create-div body :content "User the following as a url source:")
-        (set-geometry (create-text-area body :value pic-data) :width 500 :height 400)
-        (create-br body)
-        (create-div body :content (format nil "For example:<br>(create-img body :url-src \"~A\")" pic-data))))))
-
 (defun on-show-callers (body)
+  "Open callers window"
   (input-dialog body "Enter package:function-name :"
                 (lambda (result)
                   (when result
@@ -2576,6 +2537,7 @@ of controls and double click to select control."
                                            :text c)))))))
 
 (defun on-show-callees (body)
+  "Open callees window"
   (input-dialog body "Enter package:function-name :"
                 (lambda (result)
                   (when result
@@ -2674,10 +2636,6 @@ of controls and double click to select control."
                             (lambda (obj)
                               (declare (ignore obj))
                               (open-window (window body) "https://www.w3schools.com/w3css/")))
-      (create-gui-menu-item help  :content "Bootstrap 5.1 Manual" :on-click
-                            (lambda (obj)
-                              (declare (ignore obj))
-                              (open-window (window body) "https://getbootstrap.com/docs/5.1/getting-started/introduction/")))
       (create-gui-menu-item help  :content "About CLOG Builder"   :on-click #'on-help-about-builder)
       (create-gui-menu-full-screen menu))
     (on-show-control-properties-win body)
@@ -2693,7 +2651,9 @@ of controls and double click to select control."
     (clog:shutdown)
     (uiop:quit)))
 
-(defparameter *app-mode* nil)
+(defparameter *app-mode* nil
+  "If *app-mode* is t terminates the clog-builder process on exit of the first
+clog-builder window.")
 
 (defun clog-builder (&key (port 8080) (start-browser t)
                        app project static-root system)
