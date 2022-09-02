@@ -180,6 +180,7 @@
   ;; When *app-mode* set only run the game once and then shutdown the app
   (when *app-mode*
     (sleep 2) ;; let end music play
+    (js-execute body "clogframe_quit()") ;; does nothing if not in clogframe
     (clog:shutdown)
     (uiop:quit)))
 
