@@ -338,5 +338,3 @@ High Order Extensions to CLOG
 - clog-auth - Authentication and authorization framework
 
 - clog-plugin - Custom Control Plug-in template for Builder and CLOG
-
-(See [FUTURE.md](FUTURE.md) for future plans)

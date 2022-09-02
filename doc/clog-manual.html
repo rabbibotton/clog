@@ -469,7 +469,8 @@ functions. The clog-obj passed as the first parameter of the macro is
 passed as the parent obj to the declared object, after that nested
 levels of decleraton are used as the parent clog-obj. To bind a
 variable to any created clog object using :bind var. See tutorial 33
-and 22 for examples.</p></li>
+and 22 for examples. All create- symbols must be in or used by
+package.</p></li>
 </ul>
 
 <p>CLOG-Group - Utility Class for CLOG-Obj storage</p>
@@ -1467,6 +1468,24 @@ after attachment is changed to one unique to this session.</p></li>
 <li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:PLACE-INSIDE-BOTTOM-OF%20GENERIC-FUNCTION" >PLACE-INSIDE-BOTTOM-OF</a></span></span> <span class="locative-args">CLOG-OBJ NEXT-OBJ</span></span></p>
 
 <p>Places <code>NEXT-OBJ</code> inside bottom of <code>CLOG-OBJ</code> in DOM</p></li>
+</ul>
+
+<p><a id="x-28CLOG-3APLACE-TEXT-INSIDE-TOP-OF-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG:PLACE-TEXT-INSIDE-TOP-OF%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:PLACE-TEXT-INSIDE-TOP-OF%20GENERIC-FUNCTION" >PLACE-TEXT-INSIDE-TOP-OF</a></span></span> <span class="locative-args">CLOG-OBJ TEXT</span></span></p>
+
+<p>Places text inside top of <code>CLOG-OBJ</code> in DOM</p></li>
+</ul>
+
+<p><a id="x-28CLOG-3APLACE-TEXT-INSIDE-BOTTOM-OF-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG:PLACE-TEXT-INSIDE-BOTTOM-OF%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:PLACE-TEXT-INSIDE-BOTTOM-OF%20GENERIC-FUNCTION" >PLACE-TEXT-INSIDE-BOTTOM-OF</a></span></span> <span class="locative-args">CLOG-OBJ TEXT</span></span></p>
+
+<p>Places text inside bottom of <code>CLOG-OBJ</code> in DOM</p></li>
 </ul>
 
 <p>CLOG-Element - General Properties</p>
@@ -8294,7 +8313,7 @@ The on-window-change clog-obj received is the new window</p></li>
 <a id="CLOG-GUI:CREATE-GUI-WINDOW%20GENERIC-FUNCTION"></a></p>
 
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-GUI:CREATE-GUI-WINDOW%20GENERIC-FUNCTION" >CREATE-GUI-WINDOW</a></span></span> <span class="locative-args">CLOG-OBJ &amp;KEY TITLE CONTENT LEFT TOP WIDTH HEIGHT MAXIMIZE HAS-PINNER KEEP-ON-TOP HIDDEN CLIENT-MOVEMENT HTML-ID</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-GUI:CREATE-GUI-WINDOW%20GENERIC-FUNCTION" >CREATE-GUI-WINDOW</a></span></span> <span class="locative-args">CLOG-OBJ &amp;KEY TITLE CONTENT LEFT TOP WIDTH HEIGHT MAXIMIZE HAS-PINNER KEEP-ON-TOP HIDDEN CLIENT-MOVEMENT BORDER-CLASS TITLE-CLASS HTML-ID</span></span></p>
 
 <p>Create a clog-gui-window. If client-movement is t then
 use jquery-ui to move/resize and will not work on mobile. When client-movement
@@ -9847,50 +9866,16 @@ very limitted to just open a new tab with url unless is a localhost url.</p></li
 <p>Close connection to browser with out closing browser.</p></li>
 </ul>
 
-<p><a id="x-28CLOG-3ASTORAGE-TYPE-20TYPE-29"></a>
-<a id="CLOG:STORAGE-TYPE%20TYPE"></a></p>
+<p><a id="x-28CLOG-3AREQUEST-ANIMATION-FRAME-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG:REQUEST-ANIMATION-FRAME%20GENERIC-FUNCTION"></a></p>
 
 <ul>
-<li><span class=reference-bullet><span class=reference><span class="locative-type">[type]</span> <span class="reference-object"><a href="#CLOG:STORAGE-TYPE%20TYPE" >STORAGE-TYPE</a></span></span></span></li>
-</ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:REQUEST-ANIMATION-FRAME%20GENERIC-FUNCTION" >REQUEST-ANIMATION-FRAME</a></span></span> <span class="locative-args">CLOG-WINDOW</span></span></p>
 
-<p><a id="x-28CLOG-3ASTORAGE-LENGTH-20GENERIC-FUNCTION-29"></a>
-<a id="CLOG:STORAGE-LENGTH%20GENERIC-FUNCTION"></a></p>
-
-<ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:STORAGE-LENGTH%20GENERIC-FUNCTION" >STORAGE-LENGTH</a></span></span> <span class="locative-args">CLOG-WINDOW STORAGE-TYPE</span></span></p>
-
-<p>Number of entries in browser <code>STORAGE-TYPE</code>.
-(local = persistant or session)</p></li>
-</ul>
-
-<p><a id="x-28CLOG-3ASTORAGE-KEY-20GENERIC-FUNCTION-29"></a>
-<a id="CLOG:STORAGE-KEY%20GENERIC-FUNCTION"></a></p>
-
-<ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:STORAGE-KEY%20GENERIC-FUNCTION" >STORAGE-KEY</a></span></span> <span class="locative-args">CLOG-WINDOW STORAGE-TYPE KEY-NUM</span></span></p>
-
-<p>Return the key for entry number <code>KEY-NUM</code> in browser
-<code>STORAGE-TYPE</code>. (local = persistant or session)</p></li>
-</ul>
-
-<p><a id="x-28CLOG-3ASTORAGE-REMOVE-20GENERIC-FUNCTION-29"></a>
-<a id="CLOG:STORAGE-REMOVE%20GENERIC-FUNCTION"></a></p>
-
-<ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:STORAGE-REMOVE%20GENERIC-FUNCTION" >STORAGE-REMOVE</a></span></span> <span class="locative-args">CLOG-WINDOW STORAGE-TYPE KEY-NAME</span></span></p>
-
-<p>Remove the storage key and value in browser
-<code>STORAGE-TYPE</code>. (local = persistant or session)</p></li>
-</ul>
-
-<p><a id="x-28CLOG-3ASTORAGE-ELEMENT-20GENERIC-FUNCTION-29"></a>
-<a id="CLOG:STORAGE-ELEMENT%20GENERIC-FUNCTION"></a></p>
-
-<ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:STORAGE-ELEMENT%20GENERIC-FUNCTION" >STORAGE-ELEMENT</a></span></span> <span class="locative-args">CLOG-WINDOW STORAGE-TYPE KEY-NAME</span></span></p>
-
-<p>Get/Setf storage-element on browser client.</p></li>
+<p>Requests the browser to send an on-animation-frame
+on the next screen redraw. This event only fires one time per request.
+The data parementer of the event function contains the time stamp
+to the millisecond.</p></li>
 </ul>
 
 <p>CLOG-Window - Events</p>
@@ -9946,14 +9931,15 @@ If <code>ON-BEFORE-UNLOAD-HANDLER</code> is nil unbind the event.</p></li>
 If <code>ON-ORIENTATION-CHANGE-HANDLER</code> is nil unbind the event.</p></li>
 </ul>
 
-<p><a id="x-28CLOG-3ASET-ON-STORAGE-20GENERIC-FUNCTION-29"></a>
-<a id="CLOG:SET-ON-STORAGE%20GENERIC-FUNCTION"></a></p>
+<p><a id="x-28CLOG-3ASET-ON-ANIMATION-FRAME-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG:SET-ON-ANIMATION-FRAME%20GENERIC-FUNCTION"></a></p>
 
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:SET-ON-STORAGE%20GENERIC-FUNCTION" >SET-ON-STORAGE</a></span></span> <span class="locative-args">CLOG-WINDOW ON-STORAGE-HANDLER</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:SET-ON-ANIMATION-FRAME%20GENERIC-FUNCTION" >SET-ON-ANIMATION-FRAME</a></span></span> <span class="locative-args">CLOG-WINDOW ON-ANIMATION-FRAME-HANDLER</span></span></p>
 
-<p>Set the <code>ON-STORAGE-HANDLER</code> for <a href="#CLOG:CLOG-OBJ%20CLASS" title="CLOG:CLOG-OBJ CLASS"><code>CLOG-OBJ</code></a>. The
-on-storage event is fired for changes to :local storage keys.</p></li>
+<p>Set the <code>ON-ANIMATION-FRAME-HANDLER</code> for <a href="#CLOG:CLOG-OBJ%20CLASS" title="CLOG:CLOG-OBJ CLASS"><code>CLOG-OBJ</code></a> the data
+parameter of the function is the time stamp. If
+<code>ON-ANIMATION-FRAME-HANDLER</code> is nil unbind the event.</p></li>
 </ul>
 
 <p><a id="x-28CLOG-3AMOVE-WINDOW-BY-20GENERIC-FUNCTION-29"></a>
@@ -9990,6 +9976,66 @@ on-storage event is fired for changes to :local storage keys.</p></li>
 <li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:RESIZE-TO%20GENERIC-FUNCTION" >RESIZE-TO</a></span></span> <span class="locative-args">CLOG-WINDOW X Y</span></span></p>
 
 <p>Resize browser window to x y.</p></li>
+</ul>
+
+<p>CLOG-Window - Storage Methods</p>
+
+<p><a id="x-28CLOG-3ASTORAGE-TYPE-20TYPE-29"></a>
+<a id="CLOG:STORAGE-TYPE%20TYPE"></a></p>
+
+<ul>
+<li><span class=reference-bullet><span class=reference><span class="locative-type">[type]</span> <span class="reference-object"><a href="#CLOG:STORAGE-TYPE%20TYPE" >STORAGE-TYPE</a></span></span></span></li>
+</ul>
+
+<p><a id="x-28CLOG-3ASTORAGE-LENGTH-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG:STORAGE-LENGTH%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:STORAGE-LENGTH%20GENERIC-FUNCTION" >STORAGE-LENGTH</a></span></span> <span class="locative-args">CLOG-WINDOW STORAGE-TYPE</span></span></p>
+
+<p>Number of entries in browser <code>STORAGE-TYPE</code>.
+(local = persistant or session)</p></li>
+</ul>
+
+<p><a id="x-28CLOG-3ASTORAGE-KEY-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG:STORAGE-KEY%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:STORAGE-KEY%20GENERIC-FUNCTION" >STORAGE-KEY</a></span></span> <span class="locative-args">CLOG-WINDOW STORAGE-TYPE KEY-NUM</span></span></p>
+
+<p>Return the key for entry number <code>KEY-NUM</code> in browser
+<code>STORAGE-TYPE</code>. (local = persistant or session)</p></li>
+</ul>
+
+<p><a id="x-28CLOG-3ASTORAGE-REMOVE-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG:STORAGE-REMOVE%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:STORAGE-REMOVE%20GENERIC-FUNCTION" >STORAGE-REMOVE</a></span></span> <span class="locative-args">CLOG-WINDOW STORAGE-TYPE KEY-NAME</span></span></p>
+
+<p>Remove the storage key and value in browser
+<code>STORAGE-TYPE</code>. (local = persistant or session)</p></li>
+</ul>
+
+<p><a id="x-28CLOG-3ASTORAGE-ELEMENT-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG:STORAGE-ELEMENT%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:STORAGE-ELEMENT%20GENERIC-FUNCTION" >STORAGE-ELEMENT</a></span></span> <span class="locative-args">CLOG-WINDOW STORAGE-TYPE KEY-NAME</span></span></p>
+
+<p>Get/Setf storage-element on browser client.</p></li>
+</ul>
+
+<p>CLOG-Window - Storage Events</p>
+
+<p><a id="x-28CLOG-3ASET-ON-STORAGE-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG:SET-ON-STORAGE%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:SET-ON-STORAGE%20GENERIC-FUNCTION" >SET-ON-STORAGE</a></span></span> <span class="locative-args">CLOG-WINDOW ON-STORAGE-HANDLER</span></span></p>
+
+<p>Set the <code>ON-STORAGE-HANDLER</code> for <a href="#CLOG:CLOG-OBJ%20CLASS" title="CLOG:CLOG-OBJ CLASS"><code>CLOG-OBJ</code></a>. The
+on-storage event is fired for changes to :local storage keys.</p></li>
 </ul>
 
 <p><a id="x-28CLOG-3A-40CLOG-DOCUMENT-20MGL-PAX-3ASECTION-29"></a>
