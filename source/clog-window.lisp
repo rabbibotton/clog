@@ -459,6 +459,33 @@ If ON-ORIENTATION-CHANGE-HANDLER is nil unbind the event."))
 (defmethod set-on-orientation-change ((obj clog-window) handler)
   (set-on-event obj "orientationchange" handler))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; request-animation-frame ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric request-animation-frame (clog-window)
+  (:documentation "Requests the browser to send an on-animation-frame
+on the next screen redraw. This event only fires one time per request.
+The data parementer of the event function contains the time stamp
+to the millisecond."))
+
+(defmethod request-animation-frame ((obj clog-window))
+  (execute obj (format nil "requestAnimationFrame(function (s) ~
+                             {~A.trigger('clog-animate', s)})"
+                       (jquery obj))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; set-on-animation-frame ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric set-on-animation-frame (clog-window on-animation-frame-handler)
+  (:documentation "Set the ON-ANIMATION-FRAME-HANDLER for CLOG-OBJ the data
+parameter of the function is the time stamp. If
+ON-ANIMATION-FRAME-HANDLER is nil unbind the event."))
+
+(defmethod set-on-animation-frame ((obj clog-window) handler)
+  (set-on-event-with-data obj "clog-animate" handler))
+
 ;;;;;;;;;;;;;;;;;;;;
 ;; set-on-storage ;;
 ;;;;;;;;;;;;;;;;;;;;

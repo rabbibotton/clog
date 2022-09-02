@@ -772,7 +772,7 @@ embedded in a native template application.)"
   (create-conic-gradient      generic-function)
   (create-linear-gradient     generic-function)
   (create-radial-gradient     generic-function)
-  (create-pattern             generic-function)  
+  (create-pattern             generic-function)
   (draw-image                 generic-function)
   (draw-image-from-to         generic-function)
   (ellipse                    generic-function)
@@ -824,11 +824,11 @@ embedded in a native template application.)"
   (scale-matrix     generic-function)
   (scale3d          generic-function)
   (translate-matrix generic-function)
-  
+
   "CLOG-Path2d"
   (clog-path2d    class)
   (create-path2d  generic-function)
-  
+
   "CLOG-Text-Metrics"
   (clog-text-metrics           class)
 
@@ -942,20 +942,16 @@ embedded in a native template application.)"
   (screen-color-depth      generic-function)
 
   "CLOG-Window - Methods"
-  (alert            generic-function)
-  (log-console      generic-function)
-  (log-error        generic-function)
-  (print-window     generic-function)
-  (scroll-by        generic-function)
-  (scroll-to        generic-function)
-  (open-window      generic-function)
-  (close-window     generic-function)
-  (close-connection generic-function)
-  (storage-type     type)
-  (storage-length   generic-function)
-  (storage-key      generic-function)
-  (storage-remove   generic-function)
-  (storage-element  generic-function)
+  (alert                   generic-function)
+  (log-console             generic-function)
+  (log-error               generic-function)
+  (print-window            generic-function)
+  (scroll-by               generic-function)
+  (scroll-to               generic-function)
+  (open-window             generic-function)
+  (close-window            generic-function)
+  (close-connection        generic-function)
+  (request-animation-frame generic-function)
 
   "CLOG-Window - Events"
   (set-on-abort              generic-function)
@@ -963,11 +959,21 @@ embedded in a native template application.)"
   (set-on-before-unload      generic-function)
   (set-on-hash-change        generic-function)
   (set-on-orientation-change generic-function)
-  (set-on-storage            generic-function)
+  (set-on-animation-frame    generic-function)
   (move-window-by            generic-function)
   (move-window-to            generic-function)
   (resize-by                 generic-function)
-  (resize-to                 generic-function))
+  (resize-to                 generic-function)
+
+  "CLOG-Window - Storage Methods"
+  (storage-type     type)
+  (storage-length   generic-function)
+  (storage-key      generic-function)
+  (storage-remove   generic-function)
+  (storage-element  generic-function)
+
+  "CLOG-Window - Storage Events"
+  (set-on-storage   generic-function))
 
 (defsection @clog-document (:title "CLOG Document Objects")
   "CLOG-Document - CLOG Document Objects"

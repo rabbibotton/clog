@@ -1133,9 +1133,9 @@ json array 6 element for 2d or 16 for 3d."))
     (make-instance 'clog-matrix
                    :connection-id (clog::connection-id obj)
                    :html-id web-id)))
-  
+
 ;;; DOMMatrixReadOnly.rotateAxisAngle()
-  
+
 ;;;;;;;;;;;;
 ;; rotate ;;
 ;;;;;;;;;;;;
@@ -1195,7 +1195,7 @@ sy sz ox oy oz"))
                    :connection-id (clog::connection-id obj)
                    :html-id web-id)))
 
-;; skewX skewY 
+;; skewX skewY
 
 ;;;;;;;;;;;;;;;;;;;;;;
 ;; translate-matrix ;;
