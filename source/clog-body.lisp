@@ -52,7 +52,7 @@ user close of connection / browser."))
 (defmethod run ((obj clog-body))
   (loop
     (if (validp obj)
-        (sleep 10)
+        (sleep 1)
         (return))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;
