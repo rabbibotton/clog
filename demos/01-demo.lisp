@@ -4,6 +4,9 @@
 
 (in-package :clog-demo-1)
 
+(defparameter *app-mode* nil
+  "Run application once and shutdown")
+
 ;; Game Display
 (defconstant display-width 375)
 (defconstant display-height 375)
@@ -179,11 +182,14 @@
     (clog:shutdown)
     (uiop:quit)))
 
-(defparameter *app-mode* nil)
-
-(defun start-demo (&key (host "0.0.0.0") (port 8080) app)
+(defun start-demo (&key (host "0.0.0.0") (port 8080) (start-browser t) app)
   "Start demo. If app is t, runs one game and shutsdown."
+  (when (eql port 0)
+    (setf port (clog-connection:random-port)))
   (initialize 'on-new-window :host host :port port)
-  (if app
-      (setf *app-mode* app)
-      (open-browser :url (format nil "http://127.0.0.1:~A" port))))
+  (when app
+    (setf *app-mode* app))
+  (when start-browser
+    (format t "If browser does not start go to http://127.0.0.1:~A" port)
+    (open-browser :url (format nil "http://127.0.0.1:~A" port))))
+
