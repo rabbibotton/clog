@@ -1,0 +1,1 @@
+sbcl --eval "(ql:quickload :clog/tools)" --eval "(sb-ext:save-lisp-and-die #P\"builder\" :toplevel (lambda () (clog-tools:clog-builder :port 0 :app t :start-browser t)(loop (sleep 10))) :executable t :compression t)"

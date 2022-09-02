@@ -1,6 +1,6 @@
 # Creating Native Applications with CLOG
 
-Simple solution:
+## The Simple solution:
 
 Common to all solutions is compiling you CLOG application to an executable.
 See demos/make-snake and the source of the 01-demo.lisp file.
@@ -8,11 +8,15 @@ See demos/make-snake and the source of the 01-demo.lisp file.
 make-snake produces a native app that launches a browser. When snake game
 exist the executable quits.
 
-More advanced solutions:
+or better yet use CLOGFRAME - see clogframe/README.md and the built in
+browser control on your OS.
+
+
+## More advanced solutions:
 
 1. Open app using chrome in app mode (not exactly native but looks it)
 
-2. Use MacGap on Mac (best native option for Mac)
+2. Use MacGap on Mac
 
 3. Native app using (ql:quickload :ceramic) (works well for Windows and Linux)
 
@@ -123,3 +127,4 @@ https://cordova.apache.org/
 
 https://github.com/webview/webview
 
+See clogframe for working external example

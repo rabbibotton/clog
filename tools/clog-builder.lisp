@@ -1273,7 +1273,10 @@ of controls and double click to select control."
                                            (format nil ":boot-file \"~A\" " custom-boot)
                                            ""))
                                :eval-in-package package)))
-    (open-window (window (connection-body obj)) "http://127.0.0.1:8080/test")
+    (if *app-mode*
+        (open-browser :url (format nil "http://127.0.0.1:~A/test" *clog-port*))
+        (open-window (window (connection-body obj))
+                     (format nil "http://127.0.0.1:~A/test" *clog-port*)))
     (on-open-file obj :title-class "w3-yellow" :title "test eval" :text result)))
 
 (defun on-show-control-properties-win (obj)
@@ -2599,7 +2602,8 @@ of controls and double click to select control."
       (create-gui-menu-item tools :content "Thread Viewer"             :on-click 'on-show-thread-viewer)
       (create-gui-menu-item tools :content "CLOG Builder REPL"         :on-click 'on-repl)
       (create-gui-menu-item tools :content "Copy/Cut History"          :on-click 'on-show-copy-history-win)
-      (create-gui-menu-item tools :content "Image to HTML Data"        :on-click 'on-image-to-data)
+      (unless *app-mode*
+        (create-gui-menu-item tools :content "Image to HTML Data"        :on-click 'on-image-to-data))
       (create-gui-menu-item tools :content "Launch DB Admin"           :on-click
                             (lambda (obj)
                               (declare (ignore obj))
@@ -2656,7 +2660,7 @@ of controls and double click to select control."
 clog-builder window.")
 
 (defun clog-builder (&key (port 8080) (start-browser t)
-                       app project static-root system)
+                       app project static-root system clogframe)
   "Start clog-builder. When PORT is 0 choose a random port. When APP is
 t, shutdown applicatoin on termination of first window. If APP eq :BATCH then
 must specific default project :PROJECT and it will be batch rerendered
@@ -2679,6 +2683,11 @@ to use that asdf system's static root."
   (set-on-new-window 'on-new-db-admin :path "/dbadmin")
   (set-on-new-window 'on-attach-builder-page :path "/builder-page")
   (set-on-new-window 'on-convert-image :path "/image-to-data")
+  (when clogframe
+    (uiop:run-program (list "./clogframe"
+                            "CLOG Builder"
+                            (format nil "~A/builder" port)
+                            (format nil "~A" 1280) (format nil "~A" 840))))
   (when start-browser
     (format t "If browser does not start go to http://127.0.0.1:~A/builder" port)
     (open-browser :url (format nil "http://127.0.0.1:~A/builder" port))))

@@ -28,6 +28,9 @@ the same as the clog directy this overides the relative paths used in them.")
 (defvar *extended-routing* nil
   "If true extended routing is done.")
 
+(defparameter *clog-port* 8080
+  "Port this instance of clog was started on")
+
 ;;;;;;;;;;;;;;;;
 ;; initialize ;;
 ;;;;;;;;;;;;;;;;
@@ -111,6 +114,7 @@ example."
     (set-on-new-window on-new-window-handler :path "/" :boot-file boot-file))
   (unless *clog-running*
     (setf *clog-running* t)
+    (setf *clog-port* port)
     (setf *static-root* (truename (or *overide-static-root*
                                       static-root)))
     (apply #'clog-connection:initialize
@@ -163,7 +167,7 @@ BOOT-FILE will be used. If BOOT-FILE is nil path is removed."
 ;; open-browser ;;
 ;;;;;;;;;;;;;;;;;;
 
-(defun open-browser (&key (url "http://127.0.0.1:8080"))
+(defun open-browser (&key (url (format nil "http://127.0.0.1:~A" *clog-port*)))
   "Launch on os a web browser on local machine to URL. See OPEN-WINDOW
 for openning windows on remote machines."
   (handler-case

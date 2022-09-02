@@ -65,6 +65,7 @@ embedded in a native template application.)"
   "CLOG Startup and Shutdown"
   (initialize        function)
   (*static-root*     variable)
+  (*clog-port*       variable)
   (set-on-new-window function)
   (is-running-p      function)
   (shutdown          function)

@@ -41,4 +41,3 @@
                           (window-close (win panel))))))))
              (t
               (window-close (win panel))))))))
-

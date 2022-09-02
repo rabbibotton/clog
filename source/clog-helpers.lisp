@@ -106,7 +106,7 @@ set (logging to browser console), "
                          (clog-gui:clog-gui-initialize body))
                        (setf clog-user::*body* body))
                      :path "/repl")
-  (open-browser :url "http://127.0.0.1:8080/repl")
+  (open-browser :url (format nil "http://127.0.0.1:~A/repl" *clog-port*))
   (format t "Use clog-user:*body* to access the clog-repl window."))
 
 ;;;;;;;;;;;;;;;;;;;;;;;
