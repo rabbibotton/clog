@@ -182,13 +182,15 @@
     (clog:shutdown)
     (uiop:quit)))
 
-(defun start-demo (&key (host "0.0.0.0") (port 8080) (start-browser t) app)
+(defun start-demo (&key (host "0.0.0.0") (port 8080) (start-browser t) clogframe app)
   "Start demo. If app is t, runs one game and shutsdown."
   (when (eql port 0)
     (setf port (clog-connection:random-port)))
   (initialize 'on-new-window :host host :port port)
   (when app
     (setf *app-mode* app))
+  (when clogframe
+    (uiop:run-program (list "./clogframe" "CLOG Snake" (format nil "~A" port))))
   (when start-browser
     (format t "If browser does not start go to http://127.0.0.1:~A" port)
     (open-browser :url (format nil "http://127.0.0.1:~A" port))))
