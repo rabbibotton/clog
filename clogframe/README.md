@@ -1,7 +1,8 @@
 ## CLOGFrame
 
 CLOG Frame uses the native browser control on your platform to create
-a simple app the displays a frame ready to recieve your app.
+a simple app the displays a frame ready to recieve your app. (see
+the code used in demos/01-demo.lisp for some tips)
 
 ```
 clogframe[.exe] "Window Title" 8080 640 480
