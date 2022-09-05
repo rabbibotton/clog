@@ -2645,6 +2645,7 @@ of controls and double click to select control."
     (on-show-control-properties-win body)
     (on-show-control-list-win body)
     (on-show-copy-history-win body)
+    (on-show-control-events-win body)
     (on-show-project body :project *start-project*)
     (set-on-before-unload (window body) (lambda(obj)
                                           (declare (ignore obj))
