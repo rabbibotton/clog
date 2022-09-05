@@ -68,6 +68,10 @@
     :accessor event-editor
     :initform nil
     :documentation "Editor in events window")
+   (auto-complete-configured
+    :accessor auto-complete-configured
+    :initform nil
+    :documentation "Auto complete is setup once per instance")
    (current-editor-is-lisp
     :accessor current-editor-is-lisp
     :initform nil
@@ -1115,6 +1119,41 @@ of controls and double click to select control."
 
 (defun setup-lisp-ace (editor status &key (package "CLOG-USER"))
   (let ((app (connection-data-item editor "builder-app-data")))
+    ;; currently there is only one auto complete event for page
+    (unless (auto-complete-configured app)
+      (clog-ace:set-on-auto-complete editor
+                                     (lambda (obj prefix)
+                                       (declare (ignore obj))
+                                       (when (current-editor-is-lisp app)
+                                         ;; we need to modify Ace's lisp mode to treat : as part of symbol
+                                         ;; otherwise lookups do not consider the symbols package. I did
+                                         ;; using code mathod but then the automatic replace is only on the symbol
+                                         (let* ((p (when (current-control app)
+                                                     (attribute (get-placer (current-control app)) "data-panel-id")))
+                                                (s (if (eq (current-editor-is-lisp app) t)
+                                                       (if (current-control app)
+                                                           (string-upcase (attribute (attach-as-child (current-control app) p)
+                                                                                     "data-in-package"))
+                                                           "CLOG-USER")
+                                                       (current-editor-is-lisp app)))
+                                                (l (car (swank:simple-completions prefix s))))
+                                           (when (current-control app)
+                                             (let ((n (get-control-list app p)))
+                                               (maphash (lambda (k v)
+                                                          (declare (ignore k))
+                                                          (let ((name (attribute v "data-clog-name")))
+                                                            (push `(:caption ,name :value ,(format nil "(~A panel)" name)
+                                                                    :meta "control")
+                                                                  l)))
+                                                        n)
+                                               (push '(:caption "target" :value "target"
+                                                       :meta "builder")
+                                                     l)
+                                               (push '(:caption "panel" :value "panel"
+                                                       :meta "builder")
+                                                     l)))
+                                           l)))
+                                     :meta "swank"))
     ;; run apropos on symbol
     (js-execute editor
                 (format nil
@@ -1370,40 +1409,6 @@ of controls and double click to select control."
                           ;; toggle focus to force a save of event
                           (focus (events-list app))
                           (focus (event-editor app))))
-          ;; currently there is only one auto complete for page
-          (clog-ace:set-on-auto-complete (event-editor app)
-                                         (lambda (obj prefix)
-                                           (declare (ignore obj))
-                                           (when (current-editor-is-lisp app)
-                                             ;; we need to modify Ace's lisp mode to treat : as part of symbol
-                                             ;; otherwise lookups do not consider the symbols package. I did
-                                             ;; using code mathod but then the automatic replace is only on the symbol
-                                             (let* ((p (when (current-control app)
-                                                         (attribute (get-placer (current-control app)) "data-panel-id")))
-                                                    (s (if (eq (current-editor-is-lisp app) t)
-                                                           (if (current-control app)
-                                                               (string-upcase (attribute (attach-as-child (current-control app) p)
-                                                                                         "data-in-package"))
-                                                               "CLOG-USER")
-                                                           (current-editor-is-lisp app)))
-                                                    (l (car (swank:simple-completions prefix s))))
-                                               (when (current-control app)
-                                                 (let ((n (get-control-list app p)))
-                                                   (maphash (lambda (k v)
-                                                              (declare (ignore k))
-                                                              (let ((name (attribute v "data-clog-name")))
-                                                                (push `(:caption ,name :value ,(format nil "(~A panel)" name)
-                                                                        :meta "control")
-                                                                      l)))
-                                                            n)
-                                                   (push '(:caption "target" :value "target"
-                                                           :meta "builder")
-                                                         l)
-                                                   (push '(:caption "panel" :value "panel"
-                                                           :meta "builder")
-                                                         l)))
-                                               l)))
-                                         :meta "swank")
           (setf (positioning (event-editor app)) :absolute)
           (setf (width (event-editor app)) "")
           (setf (height (event-editor app)) "")
@@ -2645,7 +2650,6 @@ of controls and double click to select control."
     (on-show-control-properties-win body)
     (on-show-control-list-win body)
     (on-show-copy-history-win body)
-    (on-show-control-events-win body)
     (on-show-project body :project *start-project*)
     (set-on-before-unload (window body) (lambda(obj)
                                           (declare (ignore obj))
