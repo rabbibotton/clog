@@ -1,0 +1,1 @@
+<data id="I3871470108" data-in-package="<%= (@ sys-name) %>" data-custom-slots="" data-clog-next-id="2" data-clog-title="apanel"></data><div data-clog-type="div" data-clog-name="hello-div" style="box-sizing: content-box; position: absolute; left: 39px; top: 35px;">A Panel</div>
