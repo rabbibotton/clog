@@ -183,9 +183,10 @@
   "Read local file named INFILE"
   (with-open-file (instream infile :direction :input :if-does-not-exist nil)
     (when instream
-      (let ((string (make-string (file-length instream))))
-        (read-sequence string instream)
-        string))))
+      (let* ((len    (file-length instream))
+             (string (make-string len))
+             (pos    (read-sequence string instream)))
+        (subseq string 0 pos)))))
 
 (defun write-file (string outfile &key (action-if-exists :rename))
   "Write local file named OUTFILE"
