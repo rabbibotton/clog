@@ -2340,7 +2340,6 @@ of controls and double click to select control."
   (let* ((app (connection-data-item obj "builder-app-data"))
          (win (create-gui-window obj :title title
                                      :title-class title-class
-                                     :top 40 :left 225
                                      :width 645 :height 430
                                      :client-movement t))
          (box (create-panel-box-layout (window-content win)
