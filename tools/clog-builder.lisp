@@ -1583,6 +1583,7 @@ of controls and double click to select control."
          (in-simulation    nil)
          (undo-chain       nil)
          (redo-chain       nil)
+         (is-dirty         nil)
          (file-name        "")
          (render-file-name "")
          (panel-id  (html-id content)))
@@ -1739,6 +1740,7 @@ of controls and double click to select control."
     (set-on-event content "clog-builder-snap-shot"
                   (lambda (obj)
                     (declare (ignore obj))
+                    (setf is-dirty t)
                     (setf redo-chain nil)
                     (push (panel-snap-shot content panel-id (bottom-panel box)) undo-chain)
                     (when (current-control app)
@@ -1763,6 +1765,7 @@ of controls and double click to select control."
              (setf (inner-html content)
                    (or (read-file fname)
                        ""))
+             (setf is-dirty nil)
              (clrhash (get-control-list app panel-id))
              (on-populate-loaded-window content :win win)
              (setf (window-title win) (attribute content "data-clog-name"))
@@ -1777,44 +1780,71 @@ of controls and double click to select control."
                                                      (window-focus win)
                                                      (when fname
                                                        (open-file-name fname)))))))
-    (set-on-mouse-click btn-save
-                        (lambda (obj data)
-                          (cond ((or (equal file-name "")
-                                     (getf data :shift-key))
-                                 (when (equal file-name "")
-                                   (setf file-name (format nil "~A~A.clog"
-                                                           (current-project-dir app)
-                                                           (attribute content "data-clog-name"))))
-                                 (server-file-dialog obj "Save Panel As.." file-name
-                                                     (lambda (fname)
-                                                       (window-focus win)
-                                                       (when fname
-                                                         (setf file-name fname)
-                                                         (setf render-file-name (format nil "~A~A.lisp"
-                                                                                        (directory-namestring file-name)
-                                                                                        (pathname-name file-name)))
-                                                         (add-class btn-save "w3-animate-top")
-                                                         (save-panel fname content panel-id (bottom-panel box))
-                                                         (when (checkedp cbox)
-                                                           (add-class btn-rndr "w3-animate-top")
-                                                           (write-file (render-clog-code content (bottom-panel box))
-                                                                       render-file-name)
-                                                           (sleep .5)
-                                                           (remove-class btn-rndr "w3-animate-top"))
-                                                         (sleep .5)
-                                                         (remove-class btn-save "w3-animate-top"))
-                                                       :initial-filename file-name)))
-                                (t
-                                 (add-class btn-save "w3-animate-top")
-                                 (save-panel file-name content panel-id (bottom-panel box))
-                                 (when (checkedp cbox)
-                                   (add-class btn-rndr "w3-animate-top")
-                                   (write-file (render-clog-code content (bottom-panel box))
-                                               render-file-name)
-                                   (sleep .5)
-                                   (remove-class btn-rndr "w3-animate-top"))
-                                 (sleep .5)
-                                 (remove-class btn-save "w3-animate-top")))))
+    (flet ((save (obj data)
+             (cond ((or (equal file-name "")
+                        (getf data :shift-key))
+                    (when (equal file-name "")
+                      (setf file-name (format nil "~A~A.clog"
+                                              (current-project-dir app)
+                                              (attribute content "data-clog-name"))))
+                    (server-file-dialog obj "Save Panel As.." file-name
+                                        (lambda (fname)
+                                          (window-focus win)
+                                          (when fname
+                                            (setf file-name fname)
+                                            (setf render-file-name (format nil "~A~A.lisp"
+                                                                           (directory-namestring file-name)
+                                                                           (pathname-name file-name)))
+                                            (add-class btn-save "w3-animate-top")
+                                            (save-panel fname content panel-id (bottom-panel box))
+                                            (when (checkedp cbox)
+                                              (add-class btn-rndr "w3-animate-top")
+                                              (write-file (render-clog-code content (bottom-panel box))
+                                                          render-file-name)
+                                              (sleep .5)
+                                              (remove-class btn-rndr "w3-animate-top"))
+                                            (sleep .5)
+                                            (remove-class btn-save "w3-animate-top")
+                                            (cond ((eq is-dirty :close)
+                                                   (setf is-dirty nil)
+                                                   (window-close win))
+                                                  (t
+                                                   (setf is-dirty nil)))))
+                                          :initial-filename file-name))
+                   (t
+                    (add-class btn-save "w3-animate-top")
+                    (save-panel file-name content panel-id (bottom-panel box))
+                    (when (checkedp cbox)
+                      (add-class btn-rndr "w3-animate-top")
+                      (write-file (render-clog-code content (bottom-panel box))
+                                  render-file-name)
+                      (sleep .5)
+                      (remove-class btn-rndr "w3-animate-top"))
+                    (sleep .5)
+                    (remove-class btn-save "w3-animate-top")
+                    (cond ((eq is-dirty :close)
+                           (setf is-dirty nil)
+                           (window-close win))
+                          (t
+                           (setf is-dirty nil)))))))
+      (set-on-window-can-close win
+                               (lambda (obj)
+                                 (cond (is-dirty
+                                        (confirm-dialog win "Save panel?"
+                                                        (lambda (result)
+                                                          (cond (result
+                                                                 (setf is-dirty :close)
+                                                                 (save obj nil))
+                                                                (t
+                                                                 (setf is-dirty nil)
+                                                                 (window-close win)))))
+                                        nil)
+                                       (t
+                                        t))))
+      (set-on-mouse-click btn-save
+                          (lambda (obj data)
+                            (setf is-dirty nil)
+                            (save obj data))))
     (set-on-click btn-test
                   (lambda (obj)
                       (do-eval obj (render-clog-code content (bottom-panel box))
