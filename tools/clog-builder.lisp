@@ -1577,6 +1577,8 @@ of controls and double click to select control."
          (btn-load  (create-img tool-bar :alt-text "load"     :url-src img-btn-load  :class btn-class))
          (cbox      (create-form-element tool-bar :checkbox :class "w3-margin-left"))
          (cbox-lbl  (create-label tool-bar :content "&nbsp;auto render" :label-for cbox :class "w3-black"))
+         (spacer    (create-span tool-bar :content "&nbsp;&nbsp;&nbsp;"))
+         (btn-help  (create-span tool-bar :content "?" :class "w3-tiny w3-ripple w3-black"))
          (content   (center-panel box))
          (in-simulation    nil)
          (undo-chain       nil)
@@ -1608,6 +1610,7 @@ of controls and double click to select control."
     (setf (height btn-rndr) "12px")
     (setf (height btn-save) "12px")
     (setf (height btn-load) "12px")
+    (setf (height btn-help) "12px")
     (setf-next-id content 1)
     (setf (overflow content) :auto)
     (init-control-list app panel-id)
@@ -1647,6 +1650,7 @@ of controls and double click to select control."
                                (declare (ignore obj))
                                (on-populate-control-properties-win content :win win)))
     ;; setup tool bar events
+    (set-on-click btn-help 'on-quick-start)
     (flet (;; copy
            (copy (obj)
              (when (current-control app)
@@ -2355,10 +2359,12 @@ of controls and double click to select control."
          (btn-redo  (create-img tool-bar :alt-text "redo"     :url-src img-btn-redo  :class btn-class))
          (btn-save  (create-img tool-bar :alt-text "save"     :url-src img-btn-save  :class btn-class))
          (btn-load  (create-img tool-bar :alt-text "load"     :url-src img-btn-load  :class btn-class))
-         (spacer    (create-span tool-bar :content "&nbsp"))
+         (spacer    (create-span tool-bar :content "&nbsp;"))
          (btn-efrm  (create-button tool-bar :content "Eval Form" :class (format nil "w3-tiny ~A" btn-class)))
          (btn-esel  (create-button tool-bar :content "Eval Sel" :class (format nil "w3-tiny ~A" btn-class)))
          (btn-test  (create-button tool-bar :content "Eval"     :class (format nil "w3-tiny ~A" btn-class)))
+         (spacer    (create-span tool-bar :content "&nbsp;&nbsp;"))
+         (btn-help  (create-span tool-bar :content "?" :class "w3-tiny w3-ripple"))
          (content   (center-panel box))
          (pac-line  (create-form-element content :text :class "w3-black"))
          (ace       (clog-ace:create-clog-ace-element content))
@@ -2397,6 +2403,7 @@ of controls and double click to select control."
     (setf (height btn-efrm) "12px")
     (setf (height btn-esel) "12px")
     (setf (height btn-test) "12px")
+    (setf (height btn-help) "12px")
     (setf (width btn-efrm) "43px")
     (setf (width btn-esel) "43px")
     (setf (width btn-test) "43px")
@@ -2413,6 +2420,14 @@ of controls and double click to select control."
     (set-geometry status :units "" :width "" :height "20px"
                          :bottom "0px" :left "0px" :right "0px")
     (setup-lisp-ace ace status)
+    (set-on-click btn-help
+                  (lambda (obj)
+                    (alert-dialog win
+"cmd/alt-, Configure editor<br>
+ cmd/alt-. Launch system browser<br>
+ cmd/alt-[ Evaluate form<br>
+ cmd/ctl-s Save"
+  :title "Help")))
     (set-on-window-size-done win
                              (lambda (obj)
                                (declare (ignore obj))
