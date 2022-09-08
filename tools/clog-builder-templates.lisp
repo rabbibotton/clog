@@ -13,31 +13,34 @@
          (www-dir   (format nil "~A~A"
                             (asdf:system-source-directory :clog)
                             (getf tmpl-rec :www))))
-    (setf (hiddenp panel) t)
+    (setf (hiddenp (win panel)) t)
     (input-dialog
      (win panel) "Enter new system name:"
      (lambda (sys-name)
        (cond (sys-name
-              (let ((fname  (if (uiop:directory-exists-p #P"~/common-lisp/")
-                                #P"~/common-lisp/"
-                                (car ql:*local-project-directories*))))
-                (server-file-dialog
-                 (win panel) "Output Directory" fname
-                 (lambda (filename)
-                   (cond (filename
-                          (cond ((uiop:directory-exists-p (format nil "~A~A" filename sys-name))
-                                 (clog-gui:alert-toast (win panel) "Cancel" "Canceled - Project directory exists")
-                                 (window-close (win panel)))
+              (let* ((pwin (create-gui-window panel :title "Local Project Directory"
+                                              :width 500 :height 250))
+                     (prjs (create-project-dir (window-content pwin))))
+                (window-center pwin)
+                (setf (on-done prjs) 
+                      (lambda (obj)
+                        (declare (ignore obj))
+                        (let ((filename (value (project-list prjs))))
+                          (window-close pwin)
+                          (cond (filename
+                                 (cond ((uiop:directory-exists-p (format nil "~A~A" filename sys-name))
+                                        (clog-gui:alert-toast (win panel) "Cancel" "Canceled - Project directory exists")
+                                        (window-close (win panel)))
+                                       (t
+                                        (template-copy sys-name start-dir filename :panel (window-content (win panel)))
+                                        (when (getf tmpl-rec :www)
+                                          (template-copy sys-name www-dir filename :panel (window-content (win panel))))
+                                        (asdf:clear-source-registry)
+                                        (when (project-win app)
+                                          (clog-gui:window-close (project-win app)))
+                                        (on-show-project panel :project sys-name)
+                                        (create-div (window-content (win panel)) :content "<hr><b>done.</b>"))))
                                 (t
-                                 (template-copy sys-name start-dir filename :panel (window-content (win panel)))
-                                 (when (getf tmpl-rec :www)
-                                   (template-copy sys-name www-dir filename :panel (window-content (win panel))))
-                                 (asdf:clear-source-registry)
-                                 (when (project-win app)
-                                   (clog-gui:window-close (project-win app)))
-                                 (on-show-project panel :project sys-name)
-                                 (create-div (window-content (win panel)) :content "<hr><b>done.</b>"))))
-                         (t
-                          (window-close (win panel))))))))
+                                 (window-close (win panel)))))))))
              (t
               (window-close (win panel))))))))

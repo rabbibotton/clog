@@ -63,6 +63,7 @@
                (:file "systems")
                (:file "sys-browser")
                (:file "projects")
+               (:file "project-directory")
                (:file "clog-builder-repl")
                (:file "dir-view")
                ;; clog-builder code
