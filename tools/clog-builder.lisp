@@ -1837,7 +1837,8 @@ of controls and double click to select control."
                                                                  (save obj nil))
                                                                 (t
                                                                  (setf is-dirty nil)
-                                                                 (window-close win)))))
+                                                                 (window-close win))))
+                                                        :ok-text "Yes" :cancel-text "No")
                                         nil)
                                        (t
                                         t))))
@@ -2527,7 +2528,8 @@ of controls and double click to select control."
                                                           (setf is-dirty nil)
                                                           (when result
                                                             (save obj nil))
-                                                          (window-close win)))
+                                                          (window-close win))
+                                                        :ok-text "Yes" :cancel-text "No")
                                         nil)
                                        (t
                                         t))))
