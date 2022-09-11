@@ -1237,6 +1237,71 @@ of controls and double click to select control."
                                                     (format nil "~&result: ~A" result)
                                                     :color-class "w3-green"
                                                     :time-out 3))))))
+    ;; macroexpand
+    (js-execute editor
+                (format nil
+                        "~A.commands.addCommand({
+    name: 'macroexp',
+    bindKey: {win: 'Alt-m',  mac: 'Option-m'},
+    exec: function(editor) {
+        var position = editor.session.doc.positionToIndex (editor.selection.getCursor(), 0);
+        ~A.trigger('clog-macroexp', position);
+    },
+    readOnly: true,
+});"
+                        (clog-ace::js-ace editor)
+                        (jquery editor)))
+    (set-on-event-with-data editor "clog-macroexp"
+                            (lambda (obj data)
+			      (let ((p  (parse-integer data :junk-allowed t))
+				    (tv (text-value editor))
+				    (lf nil)
+				    (cp 0))
+				(loop
+				  (setf (values lf cp) (read-from-string tv nil nil :start cp))
+				  (unless lf (return nil))
+				  (when (> cp p) (return lf)))
+				(let ((result (handler-case
+						  (prin1-to-string (macroexpand lf))
+						(error (condition)
+						  (format nil "Error: ~A" condition)))))
+				  (on-open-file obj :title-class "w3-blue" :title "macroexpand result" :text result)))))
+    ;; expand-region
+    (js-execute editor
+                (format nil
+                        "~A.commands.addCommand({
+    name: 'expand-region',
+    bindKey: {win: 'Ctl-=',  mac: 'Control-='},
+    exec: function(editor) {
+        var currentRange = editor.selection.getAllRanges()[0];
+        var start = editor.session.doc.positionToIndex(currentRange.start);
+        var end = editor.session.doc.positionToIndex(currentRange.end);
+        var positions = '(' + start + ' ' + end + ')'
+        ~A.trigger('clog-expand-region', positions);
+    },
+    readOnly: true,
+});"
+                        (clog-ace::js-ace editor)
+                        (jquery editor)))
+    (set-on-event-with-data editor "clog-expand-region"
+                            (lambda (obj data)
+			      (declare (ignore obj))
+			      (let* ((positions (read-from-string data))
+				     (new-region
+				       (judge-expand-region (text-value editor)
+							    (car positions)
+							    (cadr positions))))
+				(js-execute editor
+					    (format nil
+						    "var startIndex = ~A;
+var endIndex = ~A;
+var startRange = ~A.session.doc.indexToPosition(startIndex);
+var endRange = ~:*~A.session.doc.indexToPosition(endIndex);
+~:*~A.selection.setRange(new ace.Range(startRange.row, startRange.column, endRange.row, endRange.column));"
+						    (car new-region)
+						    (cdr new-region)
+						    (clog-ace::js-ace editor))))))
+    
     (set-on-change editor
                    (lambda (obj)
                      (let ((s (js-query obj (format nil
@@ -1293,6 +1358,97 @@ of controls and double click to select control."
         (unless (consp form) (return "clog-user"))
         (when (eq (car form) 'in-package)
           (return (string-downcase (second form))))))))
+
+;; Expand region
+
+(defun scan-exps (text)
+  "Scan all expressions (and strings) in the text, return a list of start-end cons.
+
+It parse the string TEXT without using READ functions."
+  (let ((char-count 0)
+	(backslash 0)
+	exps in-dquotes-p left-dquote left-braces left-brackets)
+    (sequence:dosequence (c text)
+      (if (= backslash 0)		;current char isn't after a backslash
+	  (if (eql c #\\)
+	      (incf backslash)		;if it is a backslash, mark for the next word
+	      (if (eql c #\")		;if it is double quote,
+		  (if in-dquotes-p	;end the last string or start a new string
+		      (progn (setf in-dquotes-p nil)
+			     (push (cons left-dquote (1+ char-count))
+				   exps))
+		      (setf in-dquotes-p t
+			    left-dquote char-count))
+		  (if (not in-dquotes-p) ;if it isn't double quote,
+		      (case c		 ;check if it's braces
+			(#\( (push char-count left-braces)) ;mark a new pair
+			(#\) (if left-braces		    ;end a pair
+				 (push (cons (pop left-braces) (1+ char-count))
+				       exps)))
+			(#\[ (push char-count left-brackets))
+			(#\] (if left-brackets
+				 (push (cons (pop left-brackets) (1+ char-count))
+				       exps)))))))
+	  (decf backslash))
+      (incf char-count))
+    exps))
+
+(defun judge-expand-region (text start end)
+  "Judge the next wider region to expand to."
+  (declare (string text) (number start) (number end))
+  (let ((selected (subseq text start end)))
+    (or (let ((word-range		;expand to current word
+		(ignore-errors
+		 (let* ((edge-scanner (ppcre:create-scanner "[^\\w]")))
+		   (if (not (ppcre:scan edge-scanner selected)) ;there isn't word edge in selected
+		       (cons (- start	;search for previous word edge
+				(or (car (ppcre:all-matches
+					  edge-scanner
+					  (reverse (subseq text 0 start))))
+				    start)) ;if nothing, mark from beginning to end.
+			     (+ end	    ;search for next word edge
+				(or (car (ppcre:all-matches edge-scanner
+							    (subseq text end)))
+				    (- (length text) end)))))))))
+	  (if (not (equal word-range (cons start end)))
+	      word-range))		;return if it isn't same with selected
+	(let ((symbol-range		;expand to current symbol
+		;; just like expand to word, but search for blanks, braces and double quote.
+		(ignore-errors
+		 (let* ((edge-scanner (ppcre:create-scanner "[\\s\\(\\)\\[\\]\"]")))
+		   (if (not (ppcre:scan edge-scanner selected))
+		       (cons (- start
+				(or (car (ppcre:all-matches edge-scanner
+							    (reverse (subseq text 0 start))))
+				    start))
+			     (+ end
+				(or (car (ppcre:all-matches edge-scanner
+							    (subseq text end)))
+				    (- (length text) end)))))))))
+	  (if (not (equal symbol-range (cons start end)))
+	      symbol-range))
+	(alexandria:if-let		;expand to curren expression/string
+	    ((sexp (ignore-errors
+		    (car (sort (delete nil
+				       (mapcar ;find wider expressions contained selected
+					       #'(lambda (pair)
+						   (if (or (and (< (car pair) start)
+								(> (cdr pair) end))
+							   (and (= (car pair) start)
+								(> (cdr pair) end))
+							   (and (< (car pair) start)
+								(= (cdr pair) end)))
+						       pair))
+					       (scan-exps text)))
+			       #'(lambda (obj1 obj2) ;sort it to find the smallest
+				   (> (car obj1) (car obj2))))))))
+	  (if (or (= (car sexp) start)	;judge "inner" or "outer" to select
+		  (= (cdr sexp) end)
+		  (and (= (1+ (car sexp)) start)
+		       (= (1- (cdr sexp)) end)))
+	      sexp
+	      (cons (1+ (car sexp)) (1- (cdr sexp))))
+	  (cons start end)))))		;if no expressions, select all
 
 ;; Menu handlers
 
@@ -2393,6 +2549,7 @@ of controls and double click to select control."
          (btn-efrm  (create-button tool-bar :content "Eval Form" :class (format nil "w3-tiny ~A" btn-class)))
          (btn-esel  (create-button tool-bar :content "Eval Sel" :class (format nil "w3-tiny ~A" btn-class)))
          (btn-test  (create-button tool-bar :content "Eval"     :class (format nil "w3-tiny ~A" btn-class)))
+	 (btn-mexp  (create-button tool-bar :content "Macroexp"     :class (format nil "w3-tiny ~A" btn-class)))
          (spacer    (create-span tool-bar :content "&nbsp;&nbsp;"))
          (btn-help  (create-span tool-bar :content "?" :class "w3-tiny w3-ripple"))
          (content   (center-panel box))
@@ -2422,6 +2579,7 @@ of controls and double click to select control."
     (setf (advisory-title btn-efrm) "evaluate form")
     (setf (advisory-title btn-esel) "evaluate selection")
     (setf (advisory-title btn-test) "evaluate")
+    (setf (advisory-title btn-mexp) "macroexpand")
     (setf (height btn-copy) "12px")
     (setf (height btn-paste) "12px")
     (setf (height btn-cut) "12px")
@@ -2433,10 +2591,12 @@ of controls and double click to select control."
     (setf (height btn-efrm) "12px")
     (setf (height btn-esel) "12px")
     (setf (height btn-test) "12px")
+    (setf (height btn-mexp) "12px")
     (setf (height btn-help) "12px")
     (setf (width btn-efrm) "43px")
     (setf (width btn-esel) "43px")
     (setf (width btn-test) "43px")
+    (setf (width btn-mexp) "43px")
     (setf (positioning ace) :absolute)
     (setf (positioning status) :absolute)
     (set-geometry pac-line :units "" :top "20px" :left "0px"
@@ -2456,7 +2616,9 @@ of controls and double click to select control."
 "cmd/alt-, Configure editor<br>
  cmd/alt-. Launch system browser<br>
  cmd/alt-[ Evaluate form<br>
- cmd/ctl-s Save"
+ cmd/ctl-s Save<br>
+ opt/alt-m Macroexpand<br>
+ ctl-= Expand region"
   :title "Help")))
     (set-on-window-size-done win
                              (lambda (obj)
@@ -2584,7 +2746,26 @@ of controls and double click to select control."
                                (unless (equal val "")
                                  (let ((result (capture-eval val :clog-obj obj
                                                                  :eval-in-package (text-value pac-line))))
-                                   (on-open-file obj :title-class "w3-blue" :title "file eval" :text result))))))))
+                                   (on-open-file obj :title-class "w3-blue" :title "file eval" :text result))))))
+    (set-on-click btn-mexp (lambda (obj)
+                             (let ((p  (parse-integer
+                                        (js-query obj
+                                                  (format nil "~A.session.doc.positionToIndex (~A.selection.getCursor(), 0);"
+                                                          (clog-ace::js-ace ace)
+                                                          (clog-ace::js-ace ace)))
+                                        :junk-allowed t))
+                                   (tv (text-value ace))
+                                   (lf nil)
+                                   (cp 0))
+                               (loop
+                                 (setf (values lf cp) (read-from-string tv nil nil :start cp))
+                                 (unless lf (return nil))
+                                 (when (> cp p) (return lf)))
+			       (let ((result (handler-case
+						 (prin1-to-string (macroexpand lf))
+					       (error (condition)
+						 (format nil "Error: ~A" condition)))))
+				 (on-open-file obj :title-class "w3-blue" :title "macroexpand result" :text result)))))))
 
 (defun on-repl (obj)
   "Open a REPL"
