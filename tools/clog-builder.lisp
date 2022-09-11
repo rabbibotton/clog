@@ -2548,9 +2548,8 @@ It parse the string TEXT without using READ functions."
          (btn-load  (create-img tool-bar :alt-text "load"     :url-src img-btn-load  :class btn-class))
          (spacer    (create-span tool-bar :content "&nbsp;"))
          (btn-efrm  (create-button tool-bar :content "Eval Form" :class (format nil "w3-tiny ~A" btn-class)))
-         (btn-esel  (create-button tool-bar :content "Eval Sel" :class (format nil "w3-tiny ~A" btn-class)))
-         (btn-test  (create-button tool-bar :content "Eval"     :class (format nil "w3-tiny ~A" btn-class)))
-	 (btn-mexp  (create-button tool-bar :content "Macroexp"     :class (format nil "w3-tiny ~A" btn-class)))
+         (btn-esel  (create-button tool-bar :content "Eval Sel"  :class (format nil "w3-tiny ~A" btn-class)))
+         (btn-test  (create-button tool-bar :content "Eval All"  :class (format nil "w3-tiny ~A" btn-class)))
          (spacer    (create-span tool-bar :content "&nbsp;&nbsp;"))
          (btn-help  (create-span tool-bar :content "?" :class "w3-tiny w3-ripple"))
          (content   (center-panel box))
@@ -2580,7 +2579,6 @@ It parse the string TEXT without using READ functions."
     (setf (advisory-title btn-efrm) "evaluate form")
     (setf (advisory-title btn-esel) "evaluate selection")
     (setf (advisory-title btn-test) "evaluate")
-    (setf (advisory-title btn-mexp) "macroexpand")
     (setf (height btn-copy) "12px")
     (setf (height btn-paste) "12px")
     (setf (height btn-cut) "12px")
@@ -2592,12 +2590,10 @@ It parse the string TEXT without using READ functions."
     (setf (height btn-efrm) "12px")
     (setf (height btn-esel) "12px")
     (setf (height btn-test) "12px")
-    (setf (height btn-mexp) "12px")
     (setf (height btn-help) "12px")
     (setf (width btn-efrm) "43px")
     (setf (width btn-esel) "43px")
     (setf (width btn-test) "43px")
-    (setf (width btn-mexp) "43px")
     (setf (positioning ace) :absolute)
     (setf (positioning status) :absolute)
     (set-geometry pac-line :units "" :top "20px" :left "0px"
@@ -2614,13 +2610,16 @@ It parse the string TEXT without using READ functions."
     (set-on-click btn-help
                   (lambda (obj)
                     (alert-dialog win
-"cmd/alt-, Configure editor<br>
- cmd/alt-. Launch system browser<br>
- cmd/alt-[ Evaluate form<br>
- cmd/ctl-s Save<br>
- opt/alt-m Macroexpand<br>
- ctl-= Expand region"
-  :title "Help")))
+                                  "<table>
+<tr><td>cmd/alt-,</td><td>Configure editor</td></tr>
+<tr><td>cmd/alt-.</td><td> Launch system browser</td></tr>
+<tr><td>cmd/alt-[</td><td> Evaluate form</td></tr>
+<tr><td>cmd/ctl-s</td><td> Save</td></tr>
+<tr><td>ctl-=</td><td>Expand region</td></tr>
+<tr><td>opt/alt-m</td><td>Macroexpand</td></tr>
+</table>"
+                                  :width 400 :height 300
+                                  :title "Help")))
     (set-on-window-size-done win
                              (lambda (obj)
                                (declare (ignore obj))
@@ -2748,26 +2747,7 @@ It parse the string TEXT without using READ functions."
                                (unless (equal val "")
                                  (let ((result (capture-eval val :clog-obj obj
                                                                  :eval-in-package (text-value pac-line))))
-                                   (on-open-file obj :title-class "w3-blue" :title "file eval" :text result))))))
-    (set-on-click btn-mexp (lambda (obj)
-                             (let ((p  (parse-integer
-                                        (js-query obj
-                                                  (format nil "~A.session.doc.positionToIndex (~A.selection.getCursor(), 0);"
-                                                          (clog-ace::js-ace ace)
-                                                          (clog-ace::js-ace ace)))
-                                        :junk-allowed t))
-                                   (tv (text-value ace))
-                                   (lf nil)
-                                   (cp 0))
-                               (loop
-                                 (setf (values lf cp) (read-from-string tv nil nil :start cp))
-                                 (unless lf (return nil))
-                                 (when (> cp p) (return lf)))
-			       (let ((result (handler-case
-						 (prin1-to-string (macroexpand lf))
-					       (error (condition)
-						 (format nil "Error: ~A" condition)))))
-				 (on-open-file obj :title-class "w3-blue" :title "macroexpand result" :text result)))))))
+                                   (on-open-file obj :title-class "w3-blue" :title "file eval" :text result))))))))
 
 (defun on-repl (obj)
   "Open a REPL"
