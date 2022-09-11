@@ -1993,7 +1993,8 @@ It parse the string TEXT without using READ functions."
                                                                  (save obj nil))
                                                                 (t
                                                                  (setf is-dirty nil)
-                                                                 (window-close win)))))
+                                                                 (window-close win))))
+                                                        :ok-text "Yes" :cancel-text "No")
                                         nil)
                                        (t
                                         t))))
@@ -2689,7 +2690,8 @@ It parse the string TEXT without using READ functions."
                                                           (setf is-dirty nil)
                                                           (when result
                                                             (save obj nil))
-                                                          (window-close win)))
+                                                          (window-close win))
+                                                        :ok-text "Yes" :cancel-text "No")
                                         nil)
                                        (t
                                         t))))
