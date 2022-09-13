@@ -971,28 +971,51 @@ not a temporary attached one when using select-control."
                            props))
                     (t (print "Configuration error."))))
             (when (current-control app)
-              (push
-               `("parent"  ,(attribute (parent-element control) "data-clog-name")
-                           nil
-                           ,(lambda (obj)
-                              (place-inside-bottom-of
-                               (attach-as-child control
-                                                (js-query
-                                                 control
-                                                 (format nil "$(\"[data-clog-name='~A']\").attr('id')"
-                                                         (text obj))))
-                               control)
-                              (place-after control placer)))
-               props))
-            (push
-             `("name"    ,(attribute control "data-clog-name")
-                         nil
-                         ,(lambda (obj)
-                            (setf (attribute control "data-clog-name") (text obj))
-                            (when (equal (getf info :name) "clog-data")
-                              (when win
-                                (setf (window-title win) (text obj))))))
-             props)
+              (let* (panel-controls
+                     (cname    (attribute control "data-clog-name"))
+                     (panel-id (attribute placer "data-panel-id"))
+                     (panel    (attach-as-child obj panel-id)))
+                (maphash (lambda (k v)
+                           (let ((n (attribute v "data-clog-name"))
+                                 (p (attribute (parent-element v) "data-clog-name")))
+                             (unless (or (equal cname n)
+                                         (equal cname p))
+                               (push n panel-controls))))
+                         (get-control-list app panel-id))
+                (push (attribute panel "data-clog-name") panel-controls)
+                (push
+                 `("parent"  nil
+                             ,(lambda (control td1 td2)
+                                (let ((dd (create-select td2))
+                                      (v  (attribute (parent-element control) "data-clog-name")))
+                                  (add-select-options dd panel-controls)
+                                  (setf (value dd) v)
+                                  (set-on-change dd
+                                   (lambda (obj)
+                                     (place-inside-bottom-of
+                                      (attach-as-child control
+                                                       (js-query
+                                                        control
+                                                        (format nil "$(\"[data-clog-name='~A']\").attr('id')"
+                                                                (value obj))))
+                                      control)
+                                     (place-after control placer)
+                                     (on-populate-control-list-win panel :win win)))))
+                             nil)
+                 props)
+                (push
+                 `("name"    ,cname
+                             nil
+                             ,(lambda (obj)
+                                (let ((vname (text obj)))
+                                  (unless (equal vname "")
+                                    (when (equal (subseq vname 0 1) "(")
+                                      (setf vname (format nil "|~A|" vname)))
+                                    (setf (attribute control "data-clog-name") vname)
+                                    (when (equal (getf info :name) "clog-data")
+                                      (when win
+                                        (setf (window-title win) vname)))))))
+                 props)))
             (dolist (item props)
               (let* ((tr  (create-table-row table))
                      (td1 (create-table-column tr :content (first item)))
