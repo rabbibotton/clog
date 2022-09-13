@@ -95,12 +95,14 @@ embedded in a native template application.)"
 
   "CLOG Color utilities"
   (rgb           function)
+  (rgb-to-hex    function)
   (rgba          function)
   (hsl           function)
   (hsla          function)
 
   "CLOG Unit utilities"
-  (unit          function))
+  (unit          function)
+  (unit*         function))
 
 (defsection @clog-obj (:title "CLOG Objects")
   "CLOG-Obj - Base class for CLOG Objects"

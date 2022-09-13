@@ -137,12 +137,13 @@
                (declare (ignore td1))
                (let ((dd (create-select td2))
                      (v  (string-downcase (positioning control))))
-                 (add-select-options dd `(,v
-                                          "absolute"
+                 (add-select-options dd '("absolute"
                                           "static"
                                           "relative"
                                           "sticky"
                                           "fixed"))
+                 (set-geometry dd :width "100%")
+                 (setf (value dd) v)
                  (set-on-change dd (lambda (obj)
                                      (declare (ignore obj))
                                      (when (equalp (value dd) "static")
@@ -250,12 +251,14 @@
      :setup ,(lambda (control td1 td2)
                (declare (ignore td1))
                (let ((d1 (create-form-element td2 :text  :value (color control)))
-                     (dd (create-form-element td2 :color :value (color control))))
+                     (dd (create-form-element td2 :color :value (rgb-to-hex (color control)))))
+                 (set-geometry d1 :width "100%")
+                 (set-geometry dd :width "100%")
                  (make-data-list dd '("#ffffff"
+                                      "#000000"
                                       "#ff0000"
                                       "#00ff00"
-                                      "#0000ff"
-                                      "#ff00ff"))
+                                      "#0000ff"))
                  (set-on-change dd (lambda (obj)
                                      (declare (ignore obj))
                                      (setf (value d1) (value dd))
@@ -270,12 +273,14 @@
      :setup ,(lambda (control td1 td2)
                (declare (ignore td1))
                (let ((d1 (create-form-element td2 :text  :value (background-color control)))
-                     (dd (create-form-element td2 :color :value (background-color control))))
+                     (dd (create-form-element td2 :color :value (rgb-to-hex (background-color control)))))
+                 (set-geometry d1 :width "100%")
+                 (set-geometry dd :width "100%")
                  (make-data-list dd '("#ffffff"
+                                      "#000000"
                                       "#ff0000"
                                       "#00ff00"
-                                      "#0000ff"
-                                      "#ff00ff"))
+                                      "#0000ff"))
                  (set-on-change dd (lambda (obj)
                                      (declare (ignore obj))
                                      (setf (value d1) (value dd))

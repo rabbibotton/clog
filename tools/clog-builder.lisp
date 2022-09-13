@@ -990,7 +990,7 @@ not a temporary attached one when using select-control."
                                 (declare (ignore td1))
                                 (let ((dd (create-select td2))
                                       (v  (attribute (parent-element control) "data-clog-name")))
-                                  (setf (width dd) "100%")
+                                  (set-geometry dd :width "100%")
                                   (add-select-options dd panel-controls)
                                   (setf (value dd) v)
                                   (set-on-change dd

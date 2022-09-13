@@ -182,6 +182,20 @@ and not for security purposes or html escapes."
   "Return RGB string, red green and blue may be 0-255"
   (format nil "rgb(~A, ~A, ~A)" red green blue))
 
+;;;;;;;;;;;;;;;;
+;; rgb-to-hex ;;
+;;;;;;;;;;;;;;;;
+
+(defun rgb-to-hex (rgb)
+  "Return hex #rrggbb from rgb(red,green,blue)"
+  (multiple-value-bind (m l)
+      (ppcre:scan-to-strings "rgba?\\s?\\((\\d+),\\s?(\\d+),\\s?(\\d+),?\\s?(\\d*)\\)" rgb)
+    (declare (ignore m))
+    (format nil "#~2,'0x~2,'0x~2,'0x"
+            (parse-integer (aref l 0))
+            (parse-integer (aref l 1))
+            (parse-integer (aref l 2))))))
+
 ;;;;;;;;;;
 ;; rgba ;;
 ;;;;;;;;;;
@@ -239,6 +253,20 @@ alpha 0.0 - 1.0"
 (defun unit (unit-type value)
   "produce a string from numeric value with UNIT-TYPE appended."
   (format nil "~A~A" value unit-type))
+
+(defun unit* (unit-type value)
+  "Returns value and if no unit was specified on value
+unit added unless value is empty string or nil."
+  (cond ((or (equal value "")
+             (eq value nil))
+         value)
+        (t
+         (let* ((str (format nil "~A" value))
+                (l   (char-code (uiop:last-char str))))
+           (if (or (numberp value)
+                   (and (>= l 48) (<= l 57)))
+               (format nil "~A~A" str unit-type)
+               str)))))
 
 ;; https://www.w3schools.com/colors/colors_names.asp
 ;;

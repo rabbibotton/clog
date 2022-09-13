@@ -1456,30 +1456,31 @@ parent in the DOM."))
 (defgeneric set-geometry (clog-element &key left top right bottom
                                          width height units)
   (:documentation "Change the geometry :LEFT :TOP :RIGHT :BOTTOM
- :WIDTH :HEIGHT each optional in UNITS (default :px)"))
+:WIDTH :HEIGHT each optional. If any measure is missing a unit,
+UNITS (default :px) is used."))
 
 (defmethod set-geometry ((obj clog-element) &key left top right bottom
                                               width height (units :px))
   (jquery-execute obj (format nil "css({~@[~a~]~@[~a~]~@[~a~]~@[~a~]~@[~a~]~@[~a~]})"
                               (when left
-                                  (format nil "'left':'~A~A'," left units))
+                                  (format nil "'left':'~A'," (unit* units left)))
                               (when top
-                                  (format nil "'top':'~A~A'," top units))
+                                  (format nil "'top':'~A'," (unit* units top)))
                               (when right
-                                  (format nil "'right':'~A~A'," right units))
+                                  (format nil "'right':'~A'," (unit* units right)))
                               (when bottom
-                                  (format nil "'bottom':'~A~A'," bottom units))
+                                  (format nil "'bottom':'~A'," (unit* units bottom)))
                               (when width
-                                  (format nil "'width':'~A~A'," width units))
+                                  (format nil "'width':'~A'," (unit* units width)))
                               (when height
-                                  (format nil "'height':'~A~A'," height units)))))
+                                  (format nil "'height':'~A'," (unit* units height))))))
 
 ;;;;;;;;;;
 ;; left ;;
 ;;;;;;;;;;
 
 (defgeneric left (clog-element)
-  (:documentation "Get/Setf left."))
+  (:documentation "Get/Setf left (defaults to us :px units)."))
 
 (defmethod left ((obj clog-element))
   (style obj "left"))
@@ -1488,14 +1489,14 @@ parent in the DOM."))
   (:documentation "Set left VALUE for CLOG-ELEMENT"))
 
 (defmethod (setf left) (value (obj clog-element))
-  (setf (style obj "left") value))
+  (setf (style obj "left") (unit* :px value)))
 
 ;;;;;;;;;;;
 ;; right ;;
 ;;;;;;;;;;;
 
 (defgeneric right (clog-element)
-  (:documentation "Get/Setf right."))
+  (:documentation "Get/Setf right (defaults to us :px units)."))
 
 (defmethod right ((obj clog-element))
   (style obj "right"))
@@ -1504,14 +1505,14 @@ parent in the DOM."))
   (:documentation "Set right VALUE for CLOG-ELEMENT"))
 
 (defmethod (setf right) (value (obj clog-element))
-  (setf (style obj "right") value))
+  (setf (style obj "right") (unit* :px value)))
 
 ;;;;;;;;;
 ;; top ;;
 ;;;;;;;;;
 
 (defgeneric top (clog-element)
-  (:documentation "Get/Setf top."))
+  (:documentation "Get/Setf top (defaults to us :px units)."))
 
 (defmethod top ((obj clog-element))
   (style obj "top"))
@@ -1520,14 +1521,14 @@ parent in the DOM."))
   (:documentation "Set top VALUE for CLOG-ELEMENT"))
 
 (defmethod (setf top) (value (obj clog-element))
-  (setf (style obj "top") value))
+  (setf (style obj "top") (unit* :px value)))
 
 ;;;;;;;;;;;;
 ;; bottom ;;
 ;;;;;;;;;;;;
 
 (defgeneric bottom (clog-element)
-  (:documentation "Get/Setf bottom."))
+  (:documentation "Get/Setf bottom (defaults to us :px units)."))
 
 (defmethod bottom ((obj clog-element))
   (style obj "bottom"))
@@ -1536,7 +1537,7 @@ parent in the DOM."))
   (:documentation "Set bottom VALUE for CLOG-ELEMENT"))
 
 (defmethod (setf bottom) (value (obj clog-element))
-  (setf (style obj "bottom") value))
+  (setf (style obj "bottom") (unit* :px value)))
 
 ;;;;;;;;;;;;;;;;
 ;; box-height ;;
