@@ -976,6 +976,7 @@ not a temporary attached one when using select-control."
                      (panel-id (attribute placer "data-panel-id"))
                      (panel    (attach-as-child obj panel-id)))
                 (maphash (lambda (k v)
+                           (declare (ignore k))
                            (let ((n (attribute v "data-clog-name"))
                                  (p (attribute (parent-element v) "data-clog-name")))
                              (unless (or (equal cname n)
@@ -986,8 +987,10 @@ not a temporary attached one when using select-control."
                 (push
                  `("parent"  nil
                              ,(lambda (control td1 td2)
+                                (declare (ignore td1))
                                 (let ((dd (create-select td2))
                                       (v  (attribute (parent-element control) "data-clog-name")))
+                                  (setf (width dd) "100%")
                                   (add-select-options dd panel-controls)
                                   (setf (value dd) v)
                                   (set-on-change dd
@@ -1000,7 +1003,8 @@ not a temporary attached one when using select-control."
                                                                 (value obj))))
                                       control)
                                      (place-after control placer)
-                                     (on-populate-control-list-win panel :win win)))))
+                                     (on-populate-control-list-win panel :win win))))
+                                nil)
                              nil)
                  props)
                 (push
