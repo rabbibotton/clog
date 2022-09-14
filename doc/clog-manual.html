@@ -390,6 +390,15 @@ example.</p></li>
 <p>Contains the static-root setting after initialization.</p></li>
 </ul>
 
+<p><a id="x-28CLOG-3A-2ACLOG-PORT-2A-20VARIABLE-29"></a>
+<a id="CLOG:*CLOG-PORT*%20VARIABLE"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[variable]</span> <span class="reference-object"><a href="#CLOG:*CLOG-PORT*%20VARIABLE" >*CLOG-PORT*</a></span></span> <span class="locative-args">8080</span></span></p>
+
+<p>Port this instance of clog was started on</p></li>
+</ul>
+
 <p><a id="x-28CLOG-3ASET-ON-NEW-WINDOW-20FUNCTION-29"></a>
 <a id="CLOG:SET-ON-NEW-WINDOW%20FUNCTION"></a></p>
 
@@ -432,7 +441,7 @@ static file matching the requested path <code>ON-NEW-WINDOW-HANDLER</code> and
 <a id="CLOG:OPEN-BROWSER%20FUNCTION"></a></p>
 
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#CLOG:OPEN-BROWSER%20FUNCTION" >OPEN-BROWSER</a></span></span> <span class="locative-args">&amp;KEY (URL &quot;http://127.0.0.1:8080&quot;)</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#CLOG:OPEN-BROWSER%20FUNCTION" >OPEN-BROWSER</a></span></span> <span class="locative-args">&amp;KEY (URL (<a href="http://www.lispworks.com/documentation/HyperSpec/Body/f_format.htm" title="FORMAT FUNCTION"><code>FORMAT</code></a> <code>NIL</code> &quot;http://127.0.0.1:~A&quot; <a href="#CLOG:*CLOG-PORT*%20VARIABLE" title="CLOG:*CLOG-PORT* VARIABLE"><code>*CLOG-PORT*</code></a>))</span></span></p>
 
 <p>Launch on os a web browser on local machine to <code>URL</code>. See <a href="#CLOG:OPEN-WINDOW%20GENERIC-FUNCTION" title="CLOG:OPEN-WINDOW GENERIC-FUNCTION"><code>OPEN-WINDOW</code></a>
 for openning windows on remote machines.</p></li>
@@ -582,6 +591,15 @@ and not for security purposes or html escapes.</p></li>
 <p>Return <code>RGB</code> string, red green and blue may be 0-255</p></li>
 </ul>
 
+<p><a id="x-28CLOG-3ARGB-TO-HEX-20FUNCTION-29"></a>
+<a id="CLOG:RGB-TO-HEX%20FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#CLOG:RGB-TO-HEX%20FUNCTION" >RGB-TO-HEX</a></span></span> <span class="locative-args">RGB</span></span></p>
+
+<p>Return hex #rrggbb from rgb(red,green,blue)</p></li>
+</ul>
+
 <p><a id="x-28CLOG-3ARGBA-20FUNCTION-29"></a>
 <a id="CLOG:RGBA%20FUNCTION"></a></p>
 
@@ -619,6 +637,16 @@ alpha 0.0 - 1.0</p></li>
 <li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#CLOG:UNIT%20FUNCTION" >UNIT</a></span></span> <span class="locative-args">UNIT-TYPE VALUE</span></span></p>
 
 <p>produce a string from numeric value with <code>UNIT-TYPE</code> appended.</p></li>
+</ul>
+
+<p><a id="x-28CLOG-3AUNIT-2A-20FUNCTION-29"></a>
+<a id="CLOG:UNIT*%20FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#CLOG:UNIT*%20FUNCTION" >UNIT*</a></span></span> <span class="locative-args">UNIT-TYPE VALUE</span></span></p>
+
+<p>Returns value and if no unit was specified on value
+unit added unless value is empty string or nil.</p></li>
 </ul>
 
 <p><a id="x-28CLOG-3A-40CLOG-OBJ-20MGL-PAX-3ASECTION-29"></a>
@@ -2410,7 +2438,8 @@ parent in the DOM.</p></li>
 <li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:SET-GEOMETRY%20GENERIC-FUNCTION" >SET-GEOMETRY</a></span></span> <span class="locative-args">CLOG-ELEMENT &amp;KEY LEFT TOP RIGHT BOTTOM WIDTH HEIGHT UNITS</span></span></p>
 
 <p>Change the geometry <code>:LEFT</code> <code>:TOP</code> <code>:RIGHT</code> <code>:BOTTOM</code>
-<code>:WIDTH</code> <code>:HEIGHT</code> each optional in <code>UNITS</code> (default :px)</p></li>
+<code>:WIDTH</code> <code>:HEIGHT</code> each optional. If any measure is missing a unit,
+<code>UNITS</code> (default :px) is used.</p></li>
 </ul>
 
 <p><a id="x-28CLOG-3ALEFT-20GENERIC-FUNCTION-29"></a>
@@ -2437,7 +2466,7 @@ parent in the DOM.</p></li>
 <ul>
 <li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:RIGHT%20GENERIC-FUNCTION" >RIGHT</a></span></span> <span class="locative-args">CLOG-ELEMENT</span></span></p>
 
-<p>Get/Setf right.</p></li>
+<p>Get/Setf right (defaults to us :px units).</p></li>
 </ul>
 
 <p><a id="x-28CLOG-3ABOTTOM-20GENERIC-FUNCTION-29"></a>
@@ -2446,7 +2475,7 @@ parent in the DOM.</p></li>
 <ul>
 <li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:BOTTOM%20GENERIC-FUNCTION" >BOTTOM</a></span></span> <span class="locative-args">CLOG-ELEMENT</span></span></p>
 
-<p>Get/Setf bottom.</p></li>
+<p>Get/Setf bottom (defaults to us :px units).</p></li>
 </ul>
 
 <p><a id="x-28CLOG-3ABOX-HEIGHT-20GENERIC-FUNCTION-29"></a>
@@ -8272,6 +8301,46 @@ create-gui-menu-bar.</p></li>
 <p>Get hash table of open windows</p></li>
 </ul>
 
+<p><a id="x-28CLOG-GUI-3AWINDOW-TO-TOP-BY-TITLE-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG-GUI:WINDOW-TO-TOP-BY-TITLE%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-GUI:WINDOW-TO-TOP-BY-TITLE%20GENERIC-FUNCTION" >WINDOW-TO-TOP-BY-TITLE</a></span></span> <span class="locative-args">CLOG-OBJ TITLE</span></span></p>
+
+<p>Bring window with <code>TITLE</code> to top and return
+window or nil if not found</p></li>
+</ul>
+
+<p><a id="x-28CLOG-GUI-3AWINDOW-TO-TOP-BY-PARAM-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG-GUI:WINDOW-TO-TOP-BY-PARAM%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-GUI:WINDOW-TO-TOP-BY-PARAM%20GENERIC-FUNCTION" >WINDOW-TO-TOP-BY-PARAM</a></span></span> <span class="locative-args">CLOG-OBJ PARAM</span></span></p>
+
+<p>Bring window with <code>PARAM</code> to top and return
+window or nil if not found</p></li>
+</ul>
+
+<p><a id="x-28CLOG-GUI-3AWINDOW-BY-TITLE-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG-GUI:WINDOW-BY-TITLE%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-GUI:WINDOW-BY-TITLE%20GENERIC-FUNCTION" >WINDOW-BY-TITLE</a></span></span> <span class="locative-args">CLOG-OBJ TITLE</span></span></p>
+
+<p>Bring window with <code>TITLE</code> to top and return
+window or nil if not found</p></li>
+</ul>
+
+<p><a id="x-28CLOG-GUI-3AWINDOW-BY-PARAM-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG-GUI:WINDOW-BY-PARAM%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-GUI:WINDOW-BY-PARAM%20GENERIC-FUNCTION" >WINDOW-BY-PARAM</a></span></span> <span class="locative-args">CLOG-OBJ PARAM</span></span></p>
+
+<p>Bring window with <code>PARAM</code> to top and return
+window or nil if not found</p></li>
+</ul>
+
 <p><a id="x-28CLOG-GUI-3AMAXIMIZE-ALL-WINDOWS-20GENERIC-FUNCTION-29"></a>
 <a id="CLOG-GUI:MAXIMIZE-ALL-WINDOWS%20GENERIC-FUNCTION"></a></p>
 
@@ -8313,7 +8382,7 @@ The on-window-change clog-obj received is the new window</p></li>
 <a id="CLOG-GUI:CREATE-GUI-WINDOW%20GENERIC-FUNCTION"></a></p>
 
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-GUI:CREATE-GUI-WINDOW%20GENERIC-FUNCTION" >CREATE-GUI-WINDOW</a></span></span> <span class="locative-args">CLOG-OBJ &amp;KEY TITLE CONTENT LEFT TOP WIDTH HEIGHT MAXIMIZE HAS-PINNER KEEP-ON-TOP HIDDEN CLIENT-MOVEMENT BORDER-CLASS TITLE-CLASS HTML-ID</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-GUI:CREATE-GUI-WINDOW%20GENERIC-FUNCTION" >CREATE-GUI-WINDOW</a></span></span> <span class="locative-args">CLOG-OBJ &amp;KEY TITLE CONTENT LEFT TOP WIDTH HEIGHT MAXIMIZE HAS-PINNER KEEP-ON-TOP WINDOW-PARAM HIDDEN CLIENT-MOVEMENT BORDER-CLASS TITLE-CLASS HTML-ID</span></span></p>
 
 <p>Create a clog-gui-window. If client-movement is t then
 use jquery-ui to move/resize and will not work on mobile. When client-movement
@@ -8322,7 +8391,8 @@ at end of drag and on-window-resize at start of resize and
 on-window-resize-done at end of resize. If has-pinner a toggle wil appear on
 title bar to allow pinning the window in place, if keep-on-top t then when
 pinned also will keep-on-top. If had-pinned is nil and keep-on-top t then
-the window will be set to keep-on-top always.</p></li>
+the window will be set to keep-on-top always. window-param is a general parameter
+for identifiying the window to use with window-to-top-by-param or window-by-param.</p></li>
 </ul>
 
 <p><a id="x-28CLOG-GUI-3AWINDOW-TITLE-20GENERIC-FUNCTION-29"></a>
@@ -8332,6 +8402,15 @@ the window will be set to keep-on-top always.</p></li>
 <li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-GUI:WINDOW-TITLE%20GENERIC-FUNCTION" >WINDOW-TITLE</a></span></span> <span class="locative-args">CLOG-GUI-WINDOW</span></span></p>
 
 <p>Get/setf window title</p></li>
+</ul>
+
+<p><a id="x-28CLOG-GUI-3AWINDOW-PARAM-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG-GUI:WINDOW-PARAM%20GENERIC-FUNCTION"></a></p>
+
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-GUI:WINDOW-PARAM%20GENERIC-FUNCTION" >WINDOW-PARAM</a></span></span> <span class="locative-args">CLOG-GUI-WINDOW</span></span></p>
+
+<p>Get/setf window param</p></li>
 </ul>
 
 <p><a id="x-28CLOG-GUI-3AWINDOW-CONTENT-20GENERIC-FUNCTION-29"></a>
