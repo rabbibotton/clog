@@ -39,6 +39,10 @@
   (menu-bar                    generic-function)
   (menu-bar-height             generic-function)
   (window-collection           generic-function)
+  (window-to-top-by-title      generic-function)
+  (window-to-top-by-param      generic-function)
+  (window-by-title             generic-function)
+  (window-by-param             generic-function)
   (maximize-all-windows        generic-function)
   (normalize-all-windows       generic-function)
   (set-on-window-change        generic-function)
@@ -47,6 +51,7 @@
   (clog-gui-window             class)
   (create-gui-window           generic-function)
   (window-title                generic-function)
+  (window-param                generic-function)
   (window-content              generic-function)
   (window-focus                generic-function)
   (window-close                generic-function)
@@ -249,6 +254,80 @@ create-gui-menu-bar."))
 (defmethod window-collection ((obj clog-obj))
   (let ((app (connection-data-item obj "clog-gui")))
     (windows app)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; window-to-top-by-title ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric window-to-top-by-title (clog-obj title)
+  (:documentation "Bring window with TITLE to top and return
+window or nil if not found"))
+
+(defmethod window-to-top-by-title ((obj clog-obj) title)
+  (let ((app (connection-data-item obj "clog-gui"))
+        (r   nil))
+    (maphash (lambda (key value)
+               (declare (ignore key))
+               (when (equalp (window-title value) title)
+                 (window-focus value)
+                 (setf r key)))
+             (windows app))
+    r))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; window-to-top-by-param ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric window-to-top-by-param (clog-obj param)
+  (:documentation "Bring window with PARAM to top and return
+window or nil if not found"))
+
+(defmethod window-to-top-by-param ((obj clog-obj) param)
+  (let ((app (connection-data-item obj "clog-gui"))
+        (r   nil))
+    (maphash (lambda (key value)
+               (declare (ignore key))
+               (when (equalp (win-param value) param)
+                 (window-focus value)
+                 (setf r key)))
+             (windows app))
+    r))
+
+;;;;;;;;;;;;;;;;;;;;;
+;; window-by-title ;;
+;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric window-by-title (clog-obj title)
+  (:documentation "Bring window with TITLE to top and return
+window or nil if not found"))
+
+(defmethod window-by-title ((obj clog-obj) title)
+  (let ((app (connection-data-item obj "clog-gui"))
+        (r   nil))
+    (maphash (lambda (key value)
+               (declare (ignore key))
+               (when (equalp (window-title value) title)
+                 (setf r key)))
+             (windows app))
+    r))
+
+;;;;;;;;;;;;;;;;;;;;;
+;; window-by-param ;;
+;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric window-by-param (clog-obj param)
+  (:documentation "Bring window with PARAM to top and return
+window or nil if not found"))
+
+(defmethod window-by-param ((obj clog-obj) param)
+  (let ((app (connection-data-item obj "clog-gui"))
+        (r   nil))
+    (maphash (lambda (key value)
+               (declare (ignore key))
+               (when (equalp (win-param value) param)
+                 (setf r key)))
+             (windows app))
+    r))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; maximize-all-windows ;;
@@ -498,6 +577,10 @@ The on-window-change clog-obj received is the new window"))
   ((win-title
     :accessor win-title
     :documentation "Window title clog-element")
+   (win-param
+    :accessor win-param
+    :initform nil
+    :documentation "Window specific parameter")
    (title-bar
     :accessor title-bar
     :documentation "Window title-bar clog-element")
@@ -678,6 +761,7 @@ The on-window-change clog-obj received is the new window"))
                                           maximize
                                           has-pinner
                                           keep-on-top
+                                          window-param
                                           hidden
                                           client-movement
                                           border-class
@@ -690,7 +774,8 @@ at end of drag and on-window-resize at start of resize and
 on-window-resize-done at end of resize. If has-pinner a toggle wil appear on
 title bar to allow pinning the window in place, if keep-on-top t then when
 pinned also will keep-on-top. If had-pinned is nil and keep-on-top t then
-the window will be set to keep-on-top always."))
+the window will be set to keep-on-top always. window-param is a general parameter
+for identifiying the window to use with window-to-top-by-param or window-by-param."))
 
 (defmethod create-gui-window ((obj clog-obj) &key (title "New Window")
                                                (content "")
@@ -701,6 +786,7 @@ the window will be set to keep-on-top always."))
                                                (maximize nil)
                                                (has-pinner nil)
                                                (keep-on-top nil)
+                                               (window-param nil)
                                                (hidden nil)
                                                (client-movement nil)
                                                (border-class "w3-card-4 w3-white w3-border")
@@ -760,6 +846,7 @@ the window will be set to keep-on-top always."))
                             :html-id html-id)))
       (setf (win-title win)
             (attach-as-child win (format nil "~A-title" html-id)))
+      (setf (win-param win) window-param)
       (setf (title-bar win)
             (attach-as-child win (format nil "~A-title-bar" html-id)))
       (when has-pinner
@@ -843,6 +930,22 @@ the window will be set to keep-on-top always."))
   (when (window-select-item obj)
     (setf (inner-html (window-select-item obj)) value))
   (setf (inner-html (win-title obj)) value))
+
+;;;;;;;;;;;;;;;;;;
+;; window-param ;;
+;;;;;;;;;;;;;;;;;;
+
+(defgeneric window-param (clog-gui-window)
+  (:documentation "Get/setf window param"))
+
+(defmethod window-param ((obj clog-gui-window))
+  (win-param obj))
+
+(defgeneric (setf window-param) (value clog-gui-window)
+  (:documentation "Set window param"))
+
+(defmethod (setf window-param) (value (obj clog-gui-window))
+  (setf (win-param obj) value))
 
 ;;;;;;;;;;;;;;;;;;;;
 ;; window-content ;;
