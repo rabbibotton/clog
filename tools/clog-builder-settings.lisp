@@ -481,13 +481,14 @@
                (declare (ignore td1))
                (let ((dd (create-select td2))
                      (v  (string-downcase (attribute control "type"))))
-                 (add-select-options dd `(,v
-                                          "button" "checkbox" "color" "date"
+                 (add-select-options dd '("button" "checkbox" "color" "date"
                                           "datetime" "datetime-local" "email"
                                           "image" "file" "hidden"
                                           "month" "number" "password" "radio"
                                           "range" "reset" "search" "submit"
                                           "tel" "text" "time" "url" "week"))
+                 (set-geometry dd :width "100%")
+                 (setf (value dd) v)
                  (set-on-change dd (lambda (obj)
                                    (declare (ignore obj))
                                    (setf (attribute control "type") (value dd))
