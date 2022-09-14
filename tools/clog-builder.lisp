@@ -2816,7 +2816,6 @@ It parse the string TEXT without using READ functions."
 (defun on-dir-win (obj &key dir)
   "Open dir window"
   (let* ((win (create-gui-window obj :title "Directory Window"
-                                     :top 40 :left 225
                                      :width 600 :height 400
                                      :client-movement t))
          (d   (create-dir-view (window-content win))))

@@ -194,7 +194,7 @@ and not for security purposes or html escapes."
     (format nil "#~2,'0x~2,'0x~2,'0x"
             (parse-integer (aref l 0))
             (parse-integer (aref l 1))
-            (parse-integer (aref l 2))))))
+            (parse-integer (aref l 2)))))
 
 ;;;;;;;;;;
 ;; rgba ;;
