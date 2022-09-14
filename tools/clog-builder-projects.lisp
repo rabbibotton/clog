@@ -15,11 +15,12 @@
           (projects-populate panel)))))
 
 (defun projects-view-dir (panel)
-  (ignore-errors
-   (let* ((app (connection-data-item panel "builder-app-data"))
-          (sel (text-value (project-list panel)))
-          (sys (asdf:find-system (format nil "~A" sel))))
-     (on-dir-win panel :dir (asdf:system-source-directory sys)))))
+  (let* ((app (connection-data-item panel "builder-app-data"))
+         (sel (text-value (project-list panel))))
+    (if (equal sel "None")
+        (on-dir-win panel)
+        (let ((sys (asdf:find-system (format nil "~A" sel))))
+          (on-dir-win panel :dir (asdf:system-source-directory sys))))))
 
 (defun projects-run (panel)
   (let ((val (text-value (entry-point panel))))

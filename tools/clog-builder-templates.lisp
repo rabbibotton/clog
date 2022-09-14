@@ -22,7 +22,7 @@
                                               :width 500 :height 250))
                      (prjs (create-project-dir (window-content pwin))))
                 (window-center pwin)
-                (setf (on-done prjs) 
+                (setf (on-done prjs)
                       (lambda (obj)
                         (declare (ignore obj))
                         (let ((filename (value (project-list prjs))))
