@@ -1768,6 +1768,7 @@ It parse the string TEXT without using READ functions."
            (undo-chain       nil)
            (redo-chain       nil)
            (is-dirty         nil)
+           (last-date        nil)
            (file-name        "")
            (render-file-name "")
            (panel-id  (html-id content)))
@@ -1943,6 +1944,7 @@ It parse the string TEXT without using READ functions."
                                  (on-populate-control-list-win content :win win))))
       (flet ((open-file-name (fname)
                (setf file-name fname)
+               (setf last-date (file-write-date fname))
                (setf render-file-name (format nil "~A~A.lisp"
                                               (directory-namestring file-name)
                                               (pathname-name file-name)))
@@ -1965,53 +1967,47 @@ It parse the string TEXT without using READ functions."
                                                        (window-focus win)
                                                        (when fname
                                                          (open-file-name fname)))))))
-      (flet ((save (obj data)
-               (cond ((or (equal file-name "")
-                          (getf data :shift-key))
-                      (when (equal file-name "")
-                        (setf file-name (format nil "~A~A.clog"
-                                                (current-project-dir app)
-                                                (attribute content "data-clog-name"))))
-                      (server-file-dialog obj "Save Panel As.." file-name
-                                          (lambda (fname)
-                                            (window-focus win)
-                                            (when fname
-                                              (setf file-name fname)
-                                              (setf render-file-name (format nil "~A~A.lisp"
-                                                                             (directory-namestring file-name)
-                                                                             (pathname-name file-name)))
-                                              (add-class btn-save "w3-animate-top")
-                                              (save-panel fname content panel-id (bottom-panel box))
-                                              (when (checkedp cbox)
-                                                (add-class btn-rndr "w3-animate-top")
-                                                (write-file (render-clog-code content (bottom-panel box))
-                                                            render-file-name)
-                                                (sleep .5)
-                                                (remove-class btn-rndr "w3-animate-top"))
-                                              (sleep .5)
-                                              (remove-class btn-save "w3-animate-top")
-                                              (cond ((eq is-dirty :close)
-                                                     (setf is-dirty nil)
-                                                     (window-close win))
-                                                    (t
-                                                     (setf is-dirty nil)))))
-                                          :initial-filename file-name))
-                     (t
-                      (add-class btn-save "w3-animate-top")
-                      (save-panel file-name content panel-id (bottom-panel box))
-                      (when (checkedp cbox)
-                        (add-class btn-rndr "w3-animate-top")
-                        (write-file (render-clog-code content (bottom-panel box))
-                                    render-file-name)
-                        (sleep .5)
-                        (remove-class btn-rndr "w3-animate-top"))
-                      (sleep .5)
-                      (remove-class btn-save "w3-animate-top")
-                      (cond ((eq is-dirty :close)
-                             (setf is-dirty nil)
-                             (window-close win))
-                            (t
-                             (setf is-dirty nil)))))))
+      (labels ((do-save (obj fname data)
+                 (setf file-name fname)
+                 (setf render-file-name (format nil "~A~A.lisp"
+                                                (directory-namestring file-name)
+                                                (pathname-name file-name)))
+                 (add-class btn-save "w3-animate-top")
+                 (save-panel fname content panel-id (bottom-panel box))
+                 (setf last-date (file-write-date fname))
+                 (when (checkedp cbox)
+                   (add-class btn-rndr "w3-animate-top")
+                   (write-file (render-clog-code content (bottom-panel box))
+                               render-file-name)
+                   (sleep .5)
+                   (remove-class btn-rndr "w3-animate-top"))
+                 (sleep .5)
+                 (remove-class btn-save "w3-animate-top")
+                 (cond ((eq is-dirty :close)
+                        (setf is-dirty nil)
+                        (window-close win))
+                       (t
+                        (setf is-dirty nil))))
+               (save (obj data)
+                 (cond ((or (equal file-name "")
+                            (getf data :shift-key))
+                        (when (equal file-name "")
+                          (setf file-name (format nil "~A~A.clog"
+                                                  (current-project-dir app)
+                                                  (attribute content "data-clog-name"))))
+                        (server-file-dialog obj "Save Panel As.." file-name
+                                            (lambda (fname)
+                                              (window-focus win)
+                                              (when fname
+                                                (do-save obj fname data)))
+                                            :initial-filename file-name))
+                       (t
+                        (if (eql last-date (file-write-date file-name))
+                            (do-save obj file-name data)
+                            (confirm-dialog obj "Panel changed on file system. Save?"
+                                            (lambda (result)
+                                              (when result
+                                                (do-save obj file-name data)))))))))
         (set-on-window-can-close win
                                  (lambda (obj)
                                    (cond (is-dirty
@@ -2588,6 +2584,7 @@ It parse the string TEXT without using READ functions."
            (status    (create-div content :class "w3-tiny w3-border"))
            (lisp-file t)
            (is-dirty  nil)
+           (last-date nil)
            (file-name ""))
       (declare (ignore spacer))
       (when text
@@ -2657,6 +2654,7 @@ It parse the string TEXT without using READ functions."
       (flet ((open-file-name (fname)
                (window-focus win)
                (when fname
+                 (setf last-date (file-write-date fname))
                  (setf file-name fname)
                  (setf (window-title win) fname)
                  (let ((c (or (read-file fname) "")))
@@ -2703,14 +2701,26 @@ It parse the string TEXT without using READ functions."
                                               (setf file-name fname)
                                               (add-class btn-save "w3-animate-top")
                                               (write-file (text-value ace) fname)
+                                              (setf last-date (file-write-date fname))
                                               (sleep .5)
                                               (remove-class btn-save "w3-animate-top"))
                                             :initial-filename file-name)))
                      (t
-                      (add-class btn-save "w3-animate-top")
-                      (write-file (text-value ace) file-name)
-                      (sleep .5)
-                      (remove-class btn-save "w3-animate-top")))))
+                      (cond ((eql last-date (file-write-date file-name))
+                             (add-class btn-save "w3-animate-top")
+                             (write-file (text-value ace) file-name)
+                             (setf last-date (file-write-date file-name))
+                             (sleep .5)
+                             (remove-class btn-save "w3-animate-top"))
+                            (t
+                             (confirm-dialog obj "File changed on file system. Save?"
+                                             (lambda (result)
+                                               (when result
+                                                 (add-class btn-save "w3-animate-top")
+                                                 (write-file (text-value ace) file-name)
+                                                 (setf last-date (file-write-date file-name))
+                                                 (sleep .5)
+                                                 (remove-class btn-save "w3-animate-top"))))))))))
         (set-on-window-can-close win
                                  (lambda (obj)
                                    (cond (is-dirty
