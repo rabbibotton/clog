@@ -40,6 +40,17 @@ window."))
   (execute obj (format nil "name='~A'" (escape-string value)))
   value)
 
+;;;;;;;;;;;;;;;;;
+;; url-rewrite ;;
+;;;;;;;;;;;;;;;;;
+
+(defgeneric url-rewrite (clog-window rewrite-url)
+  (:documentation "Rewrite browser history and url with REWRITE-URL
+no redirection of browser takes place."))
+
+(defmethod url-rewrite ((obj clog-window) rewrite-url)
+  (execute obj (format nil "history.replaceState({},'','~A')" rewrite-url)))
+
 ;;;;;;;;;;;;;;;;
 ;; status-bar ;;
 ;;;;;;;;;;;;;;;;

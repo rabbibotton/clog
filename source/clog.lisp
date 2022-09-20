@@ -927,6 +927,7 @@ embedded in a native template application.)"
 
   "CLOG-Window - Properties"
   (window-name             generic-function)
+  (url-rewrite             generic-function)
   (inner-height            generic-function)
   (inner-width             generic-function)
   (outer-height            generic-function)
