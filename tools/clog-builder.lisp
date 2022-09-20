@@ -1739,7 +1739,8 @@ It parse the string TEXT without using READ functions."
 
 (defun on-new-builder-panel (obj &key (open-file nil))
   "Open new panel"
-  (unless (window-to-top-by-param obj open-file)
+  (unless (and open-file
+               (window-to-top-by-param obj open-file))
     (let* ((app (connection-data-item obj "builder-app-data"))
            (win (create-gui-window obj :top 40 :left 225
                                        :width 645 :height 430
