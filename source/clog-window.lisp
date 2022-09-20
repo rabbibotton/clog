@@ -46,7 +46,7 @@ window."))
 
 (defgeneric url-rewrite (clog-window rewrite-url)
   (:documentation "Rewrite browser history and url with REWRITE-URL
-no redirection of browser takes place."))
+no redirection of browser takes place. REWRITE-URL must be same domain."))
 
 (defmethod url-rewrite ((obj clog-window) rewrite-url)
   (execute obj (format nil "history.replaceState({},'','~A')" rewrite-url)))
