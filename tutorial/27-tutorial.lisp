@@ -29,10 +29,24 @@
                                "windmills.jpg"
                                "yellow-clogs.jpg"
                                "clogicon.png"))
-    (set-on-change lbox (lambda (obj)
-                          (declare (ignore obj))
-                          (setf (url-src viewer) (format nil "/img/~A"
-                                                         (value lbox)))))
+    (flet ((img-changed (obj)
+             (declare (ignore obj))
+             (let* ((new-img (value lbox))
+                    (new-src (format nil "/img/~A" new-img))
+                    (new-url (format nil "~A//~A/?img=~A"
+                                     (protocol (location body))
+                                     (host     (location body))
+                                     (quri:url-encode new-img))))
+               ;; rewrite the url with selected img
+               (url-rewrite (window body) new-url)
+               ;; select img
+               (setf (url-src viewer) new-src))))
+      (set-on-change lbox #'img-changed)
+      ;; On start up check if an image passed in url
+      (let ((url-img (form-data-item (form-get-data body) "img")))
+        (when url-img
+          (setf (value lbox) url-img)
+          (img-changed lbox))))
     ;; Setup Bottom
     (center-children (bottom-panel console) :horizontal nil)))
 
