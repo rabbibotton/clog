@@ -1,11 +1,20 @@
 (in-package :clog-tools)
 
+(defun projects-load (fname)
+  (funcall (read-from-string "ql:quickload") fname))
+
+(defun projects-list-local-systems ()
+  (funcall (read-from-string "ql:list-local-systems")))
+
+(defun projects-local-directories ()
+  (symbol-value (read-from-string "ql:*local-project-directories*")))
+
 (defun projects-setup (panel)
   (let* ((app (connection-data-item panel "builder-app-data")))
     (when (uiop:directory-exists-p #P"~/common-lisp/")
-      (pushnew #P"~/common-lisp/" ql:*local-project-directories*))
+      (pushnew #P"~/common-lisp/" (symbol-value (read-from-string "ql:*local-project-directories*"))))
     (add-select-option (project-list panel) "None" "None")
-    (dolist (n (sort (ql:list-local-systems) #'string-lessp))
+    (dolist (n (sort (projects-list-local-systems) #'string-lessp))
       (add-select-option (project-list panel) n n))
     (cond((current-project app)
           (setf (text-value (project-list panel)) (current-project app))
@@ -167,10 +176,10 @@
             (t
              (flet ((load-proj (answer)
                       (cond (answer
-                             (ql:quickload sel)
+                             (projects-load sel)
                              (ignore-errors
-                              (ql:quickload (format nil "~A/tools" sel)))
-                             (ql:quickload sel)
+                              (projects-load (format nil "~A/tools" sel)))
+                             (projects-load sel)
                              (projects-populate panel))
                             (t
                              (setf (current-project app) nil)
@@ -191,10 +200,10 @@
                 (lambda (result)
                   (when result
                     (add-dep-to-defsystem sys result)
-                    (ql:quickload sys)
+                    (projects-load sys)
                     (projects-populate panel)))
                 :height 230)
-  (ql:quickload sys))
+  (projects-load sys))
 
 (defun projects-add-plugin (panel sys)
   (input-dialog panel (format nil "Enter plugin name (without /tools), ~
@@ -203,9 +212,9 @@
                   (when result
                     (let* ((s (format nil "~A/tools" sys)))
                       (add-dep-to-defsystem s (format nil "~A/tools" result))
-                      (ql:quickload s))
+                      (projects-load s))
                     (add-dep-to-defsystem sys result)
-                    (ql:quickload sys)
+                    (projects-load sys)
                     (projects-populate panel)))
                 :height 250))
 
@@ -254,10 +263,10 @@
                                              path result)
                                   :action-if-exists nil)
                       (add-file-to-defsystem sys result :file)
-                      (ql:quickload sys)
+                      (projects-load sys)
                       (projects-populate panel))))
                 :height 230)
-  (ql:quickload sys))
+  (projects-load sys))
 
 (defun projects-add-clog (panel sys)
   (input-dialog panel (format nil "Enter clog component name (with out .clog), ~
@@ -271,14 +280,14 @@
                                              path result)
                                   :action-if-exists nil)
                       (add-file-to-defsystem s result :clog-file)
-                      (ql:quickload s))
+                      (projects-load s))
                     (let ((path (asdf:component-pathname
                                  (asdf:find-system sys))))
                       (write-file "" (format nil "~A~A.lisp"
                                              path result)
                                   :action-if-exists nil)
                       (add-file-to-defsystem sys result :file)
-                      (ql:quickload sys)
+                      (projects-load sys)
                       (projects-populate panel))))
                 :height 250))
 
@@ -317,7 +326,7 @@
       (let ((*print-case* :downcase))
         (dolist (n (reverse sys-list))
           (pprint n s)))))
-  (ql:quickload system))
+  (projects-load system))
 
 (defun open-projects-component (target system list)
   (let ((disp (select-text target))

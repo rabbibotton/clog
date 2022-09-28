@@ -139,7 +139,7 @@
                          (declare (ignorable target))
                          (clog-gui:input-dialog panel "Load New System:"
                                                 (lambda (fname)
-                                                  (quicklisp-client:quickload
+                                                  (projects-load
                                                    fname)
                                                   (asdf-browser-reset panel)
                                                   (setf (text-value
@@ -153,7 +153,7 @@
                        (lambda (target)
                          (declare (ignorable target))
                          (let ((fname (text-value (loaded-systems panel))))
-                           (quicklisp-client:quickload fname)
+                           (projects-load fname)
                            (setf (text-value (loaded-systems panel)) fname)
                            (asdf-browser-populate panel))))
     (clog:set-on-click (dir-button panel)
