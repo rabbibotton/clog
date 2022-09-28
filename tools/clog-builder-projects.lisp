@@ -12,7 +12,9 @@
 (defun projects-setup (panel)
   (let* ((app (connection-data-item panel "builder-app-data")))
     (when (uiop:directory-exists-p #P"~/common-lisp/")
-      (pushnew #P"~/common-lisp/" (symbol-value (read-from-string "ql:*local-project-directories*"))))
+      (pushnew #P"~/common-lisp/"
+               (symbol-value (read-from-string "ql:*local-project-directories*"))
+               :test #'equalp))
     (add-select-option (project-list panel) "None" "None")
     (dolist (n (sort (projects-list-local-systems) #'string-lessp))
       (add-select-option (project-list panel) n n))
