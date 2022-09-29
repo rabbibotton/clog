@@ -359,7 +359,7 @@ the default answer. (Private)"
                                (handler-case
                                    (handle-close-connection ws)
                                  (t (c)
-                                   (format t "Condition caught in clog-server :message - ~A.~&" c)
+                                   (format t "Condition caught in clog-server :close - ~A.~&" c)
                                    (values 0 c)))))
         (lambda (responder)
           (declare (ignore responder))
