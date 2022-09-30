@@ -411,7 +411,9 @@ path by querying the browser. See PATH-NAME (in CLOG-LOCATION). If
 EXTENDED-ROUTING is t routes will match even if extend with additional / and
 additional paths. If static-boot-js is nil then boot.js is served from the file
 /js/boot.js instead of the compiled version. If static-boot-html is t if
-boot.html is not present will use compiled version. boot-function if set is
+boot.html is not present will use compiled version otherwise if set to nil (default)
+if a boot file not found returns returns a blank page, if it is set to :error will
+signal an error and if set to a string will display the string. boot-function if set is
 called with the url and the contents of boot-file and its return value replaces
 the contents sent to the brower."
   (set-on-connect on-connect-handler)
@@ -447,7 +449,13 @@ the contents sent to the brower."
                           (let ((page-data (if stream
                                                (make-string (file-length stream))
                                                (if static-boot-html
-                                                   ""
+                                                   (cond ((eq static-boot-html t)
+                                                          "")
+                                                         ((eq static-boot-html :error)
+                                                          (error (format nil "Can not open boot file - ~A"
+                                                                         file)))
+                                                         (t
+                                                          static-boot-html))
                                                    (compiled-boot-html nil nil))))
                                 (post-data nil))
                             (when stream
