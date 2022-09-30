@@ -2291,6 +2291,11 @@
      :type    :system
      :www     "templates/www/"
      :loc     "templates/projects/clog-gui-panel/")
+   '(:name    "CLOG-GUI SDI Panel Project"
+     :code    "nsp"
+     :type    :system
+     :www     "templates/www/"
+     :loc     "templates/projects/clog-gui-sdi/")
    '(:name    "CLOG - General Projects"
      :code    :group)
    '(:name    "Basic HTML Project"

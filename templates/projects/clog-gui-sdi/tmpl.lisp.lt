@@ -1,0 +1,47 @@
+(defpackage #:<%= (@ sys-name) %>
+  (:use #:cl #:clog #:clog-gui)
+  (:export start-app))
+
+(in-package :<%= (@ sys-name) %>)
+
+(defun on-help-about (obj)
+  (let* ((about (create-gui-window obj
+                                   :title   "About"
+                                   :content "<div class='w3-black'>
+                                         <center><img src='/img/clogwicon.png'></center>
+                                         <center><%= (@ sys-name) %></center>
+                                         <center><%= (@ sys-name) %></center></div>
+                                         <div><p><center>A New App</center>
+                                         <center>(c) 2022 - Some One</center></p></div>"
+                                   :hidden  t
+                                   :width   200
+                                   :height  200)))
+    (window-center about)
+    (setf (visiblep about) t)
+    (set-on-window-can-size about (lambda (obj)
+                                    (declare (ignore obj))()))))
+
+(defclass app-data ()
+  ((data
+    :accessor data)))
+
+(defun on-new-window (body)
+  (let ((app (make-instance 'app-data)))
+    (setf (connection-data-item body "app-data") app)
+    (setf (title (html-document body)) "New App")
+    (clog-gui-initialize body)
+    (let* ((menu-bar    (create-gui-menu-bar body))
+           (icon-item   (create-gui-menu-icon menu-bar :on-click 'on-help-about))
+           (help-item   (create-gui-menu-drop-down menu-bar :content "Help"))
+           (help-about  (create-gui-menu-item help-item :content "About" :on-click 'on-help-about))
+           (full-screen (create-gui-menu-full-screen menu-bar))
+           (sdi-frame   (create-panel body :top (height menu-bar) :left 0 :bottom 0 :right 0)))
+      (declare (ignore icon-item help-about full-screen))
+      (setf (z-index sdi-frame) -99999)
+      (create-apanel sdi-frame))))      
+
+(defun start-app ()
+  (initialize 'on-new-window
+   :static-root (merge-pathnames "./www/"
+                  (asdf:system-source-directory :<%= (@ sys-name) %>)))
+  (open-browser))
