@@ -96,6 +96,9 @@ Then as always:
 
 ```
 
+List of plugins for CLOG on UltraLisp - https://ultralisp.org/tags/clog-plugin/
+
+
 To load this package and work through tutorials (assuming you
 have Quicklisp configured.)
 
