@@ -35,9 +35,9 @@ and used in commercial production code for the last 9+ years. CLOG
 itself is already used in commerical products, corporate websites,
 and other opensource projects.
 
-CLOG is being actively extended with tools and custom controls daily but the
-core API is stable and proven. Check the github discussion boards for the
-latest.
+CLOG is being actively extended with new tools and new custom controls but the
+core API is stable and proven, the Builder is rich in features. Check the github
+discussion boards for the latest.
 
 Some potential applications for CLOG:
 
