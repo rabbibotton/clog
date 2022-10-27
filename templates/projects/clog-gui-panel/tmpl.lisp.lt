@@ -8,7 +8,7 @@
   (let* ((app (connection-data-item obj "app-data"))
          (win (create-gui-window obj :title "New Window")))
     (declare (ignore app))
-    (create-apanel win)))
+    (create-apanel (window-content win))))
 
 (defun on-help-about (obj)
   (let* ((about (create-gui-window obj
