@@ -8,9 +8,10 @@ View the HTML Documentation:
 
 https://rabbibotton.github.io/clog/clog-manual.html
 
-View a short video on reddit about CLOG Builder
+View the CLOG "Plunger" Video series (more weekly) and learn by example
+how to use the CLOG Builder to create a pro-app:
 
-https://www.reddit.com/r/lisp/comments/sd9wf1/clog_builder_cl_web_3_awesome_lang_awesome_tool/
+https://www.youtube.com/playlist?list=PLSUeblYuDUiOucAaqkrVlmOG4p-q7lFU6
 
 
 [LEARN COMMON-LISP AND CLOG - LEARN.md](LEARN.md)
