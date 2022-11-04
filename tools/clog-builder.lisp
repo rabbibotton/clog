@@ -1397,7 +1397,7 @@ It parse the string TEXT without using READ functions."
   (let ((char-count 0)
         (backslash 0)
         exps in-dquotes-p left-dquote left-braces left-brackets)
-    (sequence:dosequence (c text)
+    (loop for c across text do
       (if (= backslash 0)               ;current char isn't after a backslash
           (if (eql c #\\)
               (incf backslash)          ;if it is a backslash, mark for the next word
