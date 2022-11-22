@@ -1930,6 +1930,12 @@
      :clog-type      clog:clog-canvas
      :create         clog:create-canvas
      :create-type    :base
+     :on-setup       ,(lambda (control control-record)
+                        (declare (ignore control-record))
+                        (format nil "(setf (attribute target \"width\") ~A)~
+                                     (setf (attribute target \"height\") ~A)"
+                                (width control)
+                                (height control)))
      :events         (,@*events-element*)
      :properties     (,@*props-base*))
    '(:name           "group"
