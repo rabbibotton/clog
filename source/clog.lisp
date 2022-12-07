@@ -351,6 +351,7 @@ embedded in a native template application.)"
   (font-variant-type          type)
   (system-font-type           type)
   (font                       generic-function)
+  (font-css                   generic-function)
   (set-font                   generic-function)
   (text-alignment-type        type)
   (text-alignment             generic-function)

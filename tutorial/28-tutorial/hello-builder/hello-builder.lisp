@@ -5,7 +5,7 @@
 (in-package :hello-builder)
 
 (defun my-click (panel)
-  (setf (font (hello-span panel)) (format nil "~Apx Times, serif" (random 36)))
+  (setf (font-css (hello-span panel)) (format nil "~Apx Times, serif" (random 36)))
   (setf (color (hello-span panel)) (rgb (random 255) (random 255) (random 255))))
 
 (defun start-app ()
