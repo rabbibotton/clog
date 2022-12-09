@@ -932,7 +932,7 @@ not a temporary attached one when using select-control."
   "Populate the control properties for the current control"
   ;; obj if current-control is nil must be content
   (with-sync-event (obj)
-    (on-populate-control-events-win obj)
+    (bordeaux-threads:make-thread (lambda () (on-populate-control-events-win obj)))
     (let ((app (connection-data-item obj "builder-app-data")))
       (let* ((prop-win (control-properties-win app))
              (control  (if (current-control app)
