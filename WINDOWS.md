@@ -3,6 +3,7 @@
 1. Download and install rho-emacs:
 
    https://gchristensen.github.io/rho-emacs/
+   https://github.com/GChristensen/rho-emacs/releases
 
    When installing choose C:\Users\yourname for the "home folder"
 
@@ -10,7 +11,7 @@
 
 2. Install sbcl:
 
-   http://prdownloads.sourceforge.net/sbcl/sbcl-2.2.2-x86-64-windows-binary.msi
+   https://www.sbcl.org/platform-table.html
 
 3. Get GIT 64 bit:
 
