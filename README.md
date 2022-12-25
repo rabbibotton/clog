@@ -304,7 +304,7 @@ CLOG Video Series - CLOG Plunger
 
 CLOG Extras - Supplementary Video Series
 - [CLOG Extra 1](https://www.youtube.com/watch?v=HbKWnAxrwRo) - What is Eval Form / Eval Sel / Eval All in the builder?
-- [CLOG Extra 2](https://www.youtube.com/@DavidBotton/videos) - The CLOG Plugin - CLOG-Plotly
+- [CLOG Extra 2](https://www.youtube.com/watch?v=ffoHO2d6WDE) - The CLOG Plugin - CLOG-Plotly
 - [CLOG Extra 3](https://www.youtube.com/watch?v=jEBDwjMnFXE) - The CLOG Project System
 - [CLOG Extra 4](https://www.youtube.com/watch?v=CgTJMxsz3EY) - All about panels
 
