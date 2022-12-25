@@ -302,6 +302,15 @@ CLOG Video Series - CLOG Plunger
 - [Plunger - Episode 10](https://www.youtube.com/watch?v=ew_I-Mf1W0I) - Moving the board to a component with save, load, delete of cards
 - [Plunger - Episode 11](https://www.youtube.com/watch?v=izgRAhcHCxA) - Debugging Race Conditions
 
+CLOG Extras - Supplementary Video Series
+- [CLOG Extra 1](https://www.youtube.com/watch?v=HbKWnAxrwRo) - What is Eval Form / Eval Sel / Eval All in the builder?
+- [CLOG Extra 2](https://www.youtube.com/@DavidBotton/videos) - The CLOG Plugin - CLOG-Plotly
+- [CLOG Extra 3](https://www.youtube.com/watch?v=jEBDwjMnFXE) - The CLOG Project System
+- [CLOG Extra 4](https://www.youtube.com/watch?v=CgTJMxsz3EY) - All about panels
+
+
+
+
 Tool Summary
 
 - clog-builder  - Rapid visual interactive development for Web and GUIs
