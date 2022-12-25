@@ -310,7 +310,7 @@ CLOG Extras - Supplementary Video Series
 
 Common LIps The Language - Supplementary programming tutorials
 
-A series covering Common Lisp, highlighting key points and discussions on using the key reference to Common Lisp. Quick paced and intended for review further work on mastering the power of Common using the book: Common Lisp The Language 2nd Edition by Guy L. Steele(https://www.cs.cmu.edu/Groups/AI/html/cltl/cltl2.html)
+A series covering Common Lisp, highlighting key points and discussions on using the key reference to Common Lisp. Quick paced and intended for review further work on mastering the power of Common using the book: [Common Lisp The Language 2nd Edition by Guy L. Steele](https://www.cs.cmu.edu/Groups/AI/html/cltl/cltl2.html)
 
 - [Common Lisp The Language 2ed #1 - Episode #3](https://www.youtube.com/watch?v=lxd_xcXmPPY) - Covers Preface, Chp 1 and 2
 - [Common Lisp The Language 2ed #2 - Episode #3](https://www.youtube.com/watch?v=9mvQzbr7fIQ) - Covers Chp 3 - Scope and Extent
