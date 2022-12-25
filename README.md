@@ -308,8 +308,15 @@ CLOG Extras - Supplementary Video Series
 - [CLOG Extra 3](https://www.youtube.com/watch?v=jEBDwjMnFXE) - The CLOG Project System
 - [CLOG Extra 4](https://www.youtube.com/watch?v=CgTJMxsz3EY) - All about panels
 
+Common LIps The Language - Supplementary programming tutorials
 
+A series covering Common Lisp, highlighting key points and discussions on using the key reference to Common Lisp. Quick paced and intended for review further work on mastering the power of Common using the book: Common Lisp The Language 2nd Edition by Guy L. Steele(https://www.cs.cmu.edu/Groups/AI/html/cltl/cltl2.html)
 
+- [Common Lisp The Language 2ed #1 - Episode #3](https://www.youtube.com/watch?v=lxd_xcXmPPY) - Covers Preface, Chp 1 and 2
+- [Common Lisp The Language 2ed #2 - Episode #3](https://www.youtube.com/watch?v=9mvQzbr7fIQ) - Covers Chp 3 - Scope and Extent
+- [Common Lisp The Language 2ed - Episode #3](https://www.youtube.com/watch?v=VABqkuIwiJY) - Covers Chp 4 - Type Specifiers
+- [Common Lisp The Language 2ed - Episode #4](https://www.youtube.com/watch?v=rS3TVHULeUc) - Covers Chp 5 - Program Structure
+- [Common Lisp The Language 2ed - Episode #5](https://www.youtube.com/watch?v=4GYwSxoMo2Q) - - Covers Chp 6 - Predicates
 
 Tool Summary
 
