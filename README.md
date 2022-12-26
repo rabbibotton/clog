@@ -290,17 +290,17 @@ CLOG Demos
 - [04-demo.lisp](demos/04-demo.lisp) - CMS Website - A very simple database driven website
 
 CLOG Video Series - CLOG Plunger
-- [Plunger - Episode 1](https://www.youtube.com/watch?v=srme8Sh4nI4) - Flow - The real secret to Common Lisp productivity.
-- [Plunger - Episode 2](https://www.youtube.com/watch?v=0i1GM8Pz-G4) - The prequel
-- [Plunger - Episode 3](https://www.youtube.com/watch?v=z0H8uVRoPOI) - A new menu item and a draggable Index Card
-- [Plunger - Episode 4](https://www.youtube.com/watch?v=Fzv0hZqYk5Q) - Panels are classes
-- [Plunger - Episode 5](https://www.youtube.com/watch?v=CjBDhp89BGE) - Selectedp and make-resizable
-- [Plunger - Episode 6](https://www.youtube.com/watch?v=wLEWNVq_zt8) - Adding a cork board and data URIs
-- [Plunger - Episode 7](https://www.youtube.com/watch?v=RLDhklvsj2Q) - Add card, Delete cards, Edit Cards
-- [Plunger - Episode 8](https://www.youtube.com/watch?v=pGVaXnY8Xh8) - Moving data in and out of cards
-- [Plunger - Episode 9](https://www.youtube.com/watch?v=oapC2921vpo) - File save and load
-- [Plunger - Episode 10](https://www.youtube.com/watch?v=ew_I-Mf1W0I) - Moving the board to a component with save, load, delete of cards
-- [Plunger - Episode 11](https://www.youtube.com/watch?v=izgRAhcHCxA) - Debugging Race Conditions
+- [CLOG Plunger - Episode 1](https://www.youtube.com/watch?v=srme8Sh4nI4) - Flow - The real secret to Common Lisp productivity.
+- [CLOG Plunger - Episode 2](https://www.youtube.com/watch?v=0i1GM8Pz-G4) - The prequel
+- [CLOG Plunger - Episode 3](https://www.youtube.com/watch?v=z0H8uVRoPOI) - A new menu item and a draggable Index Card
+- [CLOG Plunger - Episode 4](https://www.youtube.com/watch?v=Fzv0hZqYk5Q) - Panels are classes
+- [CLOG Plunger - Episode 5](https://www.youtube.com/watch?v=CjBDhp89BGE) - Selectedp and make-resizable
+- [CLOG Plunger - Episode 6](https://www.youtube.com/watch?v=wLEWNVq_zt8) - Adding a cork board and data URIs
+- [CLOG Plunger - Episode 7](https://www.youtube.com/watch?v=RLDhklvsj2Q) - Add card, Delete cards, Edit Cards
+- [CLOG Plunger - Episode 8](https://www.youtube.com/watch?v=pGVaXnY8Xh8) - Moving data in and out of cards
+- [CLOG Plunger - Episode 9](https://www.youtube.com/watch?v=oapC2921vpo) - File save and load
+- [CLOG Plunger - Episode 10](https://www.youtube.com/watch?v=ew_I-Mf1W0I) - Moving the board to a component with save, load, delete of cards
+- [CLOG Plunger - Episode 11](https://www.youtube.com/watch?v=izgRAhcHCxA) - Debugging Race Conditions
 
 CLOG Extras - Supplementary Video Series
 - [CLOG Extra 1](https://www.youtube.com/watch?v=HbKWnAxrwRo) - What is Eval Form / Eval Sel / Eval All in the builder?
