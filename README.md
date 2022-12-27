@@ -290,17 +290,17 @@ CLOG Demos
 - [04-demo.lisp](demos/04-demo.lisp) - CMS Website - A very simple database driven website
 
 CLOG Video Series - CLOG Plunger
-- [Plunger - Episode 1](https://www.youtube.com/watch?v=srme8Sh4nI4) - Flow - The real secret to Common Lisp productivity.
-- [Plunger - Episode 2](https://www.youtube.com/watch?v=0i1GM8Pz-G4) - The prequel
-- [Plunger - Episode 3](https://www.youtube.com/watch?v=z0H8uVRoPOI) - A new menu item and a draggable Index Card
-- [Plunger - Episode 4](https://www.youtube.com/watch?v=Fzv0hZqYk5Q) - Panels are classes
-- [Plunger - Episode 5](https://www.youtube.com/watch?v=CjBDhp89BGE) - Selectedp and make-resizable
-- [Plunger - Episode 6](https://www.youtube.com/watch?v=wLEWNVq_zt8) - Adding a cork board and data URIs
-- [Plunger - Episode 7](https://www.youtube.com/watch?v=RLDhklvsj2Q) - Add card, Delete cards, Edit Cards
-- [Plunger - Episode 8](https://www.youtube.com/watch?v=pGVaXnY8Xh8) - Moving data in and out of cards
-- [Plunger - Episode 9](https://www.youtube.com/watch?v=oapC2921vpo) - File save and load
-- [Plunger - Episode 10](https://www.youtube.com/watch?v=ew_I-Mf1W0I) - Moving the board to a component with save, load, delete of cards
-- [Plunger - Episode 11](https://www.youtube.com/watch?v=izgRAhcHCxA) - Debugging Race Conditions
+- [CLOG Plunger - Episode 1](https://www.youtube.com/watch?v=srme8Sh4nI4) - Flow - The real secret to Common Lisp productivity.
+- [CLOG Plunger - Episode 2](https://www.youtube.com/watch?v=0i1GM8Pz-G4) - The prequel
+- [CLOG Plunger - Episode 3](https://www.youtube.com/watch?v=z0H8uVRoPOI) - A new menu item and a draggable Index Card
+- [CLOG Plunger - Episode 4](https://www.youtube.com/watch?v=Fzv0hZqYk5Q) - Panels are classes
+- [CLOG Plunger - Episode 5](https://www.youtube.com/watch?v=CjBDhp89BGE) - Selectedp and make-resizable
+- [CLOG Plunger - Episode 6](https://www.youtube.com/watch?v=wLEWNVq_zt8) - Adding a cork board and data URIs
+- [CLOG Plunger - Episode 7](https://www.youtube.com/watch?v=RLDhklvsj2Q) - Add card, Delete cards, Edit Cards
+- [CLOG Plunger - Episode 8](https://www.youtube.com/watch?v=pGVaXnY8Xh8) - Moving data in and out of cards
+- [CLOG Plunger - Episode 9](https://www.youtube.com/watch?v=oapC2921vpo) - File save and load
+- [CLOG Plunger - Episode 10](https://www.youtube.com/watch?v=ew_I-Mf1W0I) - Moving the board to a component with save, load, delete of cards
+- [CLOG Plunger - Episode 11](https://www.youtube.com/watch?v=izgRAhcHCxA) - Debugging Race Conditions
 
 CLOG Extras - Supplementary Video Series
 - [CLOG Extra 1](https://www.youtube.com/watch?v=HbKWnAxrwRo) - What is Eval Form / Eval Sel / Eval All in the builder?
@@ -308,15 +308,15 @@ CLOG Extras - Supplementary Video Series
 - [CLOG Extra 3](https://www.youtube.com/watch?v=jEBDwjMnFXE) - The CLOG Project System
 - [CLOG Extra 4](https://www.youtube.com/watch?v=CgTJMxsz3EY) - All about panels
 
-Common LIps The Language - Supplementary programming tutorials
+Common Lisp The Language - Supplementary programming tutorials
 
 A series covering Common Lisp, highlighting key points and discussions on using the key reference to Common Lisp. Quick paced and intended for review further work on mastering the power of Common using the book: [Common Lisp The Language 2nd Edition by Guy L. Steele](https://www.cs.cmu.edu/Groups/AI/html/cltl/cltl2.html)
 
-- [Common Lisp The Language 2ed - Episode #1](https://www.youtube.com/watch?v=lxd_xcXmPPY) - Covers Preface, Chp 1 and 2
-- [Common Lisp The Language 2ed - Episode #2](https://www.youtube.com/watch?v=9mvQzbr7fIQ) - Covers Chp 3 - Scope and Extent
-- [Common Lisp The Language 2ed - Episode #3](https://www.youtube.com/watch?v=VABqkuIwiJY) - Covers Chp 4 - Type Specifiers
-- [Common Lisp The Language 2ed - Episode #4](https://www.youtube.com/watch?v=rS3TVHULeUc) - Covers Chp 5 - Program Structure
-- [Common Lisp The Language 2ed - Episode #5](https://www.youtube.com/watch?v=4GYwSxoMo2Q) - - Covers Chp 6 - Predicates
+- [Common Lisp The Language 2nd Edition - Episode #1](https://www.youtube.com/watch?v=lxd_xcXmPPY) - Covers Preface, Chp 1 and 2
+- [Common Lisp The Language 2nd Edition - Episode #2](https://www.youtube.com/watch?v=9mvQzbr7fIQ) - Covers Chp 3 - Scope and Extent
+- [Common Lisp The Language 2nd Edition - Episode #3](https://www.youtube.com/watch?v=VABqkuIwiJY) - Covers Chp 4 - Type Specifiers
+- [Common Lisp The Language 2nd Edition - Episode #4](https://www.youtube.com/watch?v=rS3TVHULeUc) - Covers Chp 5 - Program Structure
+- [Common Lisp The Language 2nd Edition - Episode #5](https://www.youtube.com/watch?v=4GYwSxoMo2Q) - - Covers Chp 6 - Predicates
 
 Tool Summary
 
