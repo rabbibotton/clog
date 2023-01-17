@@ -321,7 +321,7 @@ the default answer. (Private)"
           (remhash id *connection-ids*)
           (remhash connection *connections*)))
     (t (c)
-      (format t "Condition caught in handle-message - ~A.~&" c)
+      (format t "Condition caught in handle-close-connection - ~A.~&" c)
       (values 0 c))))
 
 ;;;;;;;;;;;;;;;;;
