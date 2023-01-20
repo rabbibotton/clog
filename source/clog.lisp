@@ -394,6 +394,7 @@ embedded in a native template application.)"
   (create-a generic-function)
   (link     generic-function)
   (target   generic-function)
+  (download generic-function)
 
   "CLOG-BR - Class for CLOG Line Breaks"
   (clog-br   class)
