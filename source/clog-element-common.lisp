@@ -36,11 +36,12 @@ place-inside-bottom-of CLOG-OBJ.
                      &key (link "#")
                        (content "")
                        (target "_self")
+                       (download nil)
                        (style nil)
                        (hidden nil)
                        (class nil)
                        (html-id nil) (auto-place t))
-  (create-child obj (format nil "<a~@[~a~]~@[~a~] target='~A' href='~A'>~A</a>"
+  (create-child obj (format nil "<a~@[~a~]~@[~a~]~@[~a~] target='~A' href='~A'>~A</a>"
                             (when class
                               (format nil " class='~A'"
                                       (escape-string class :html t)))
@@ -48,6 +49,9 @@ place-inside-bottom-of CLOG-OBJ.
                               (format nil " style='~@[~a~]~@[~a~]'"
                                       (when hidden "visibility:hidden;")
                                       style))
+                            (when download
+                              (format nil " download='~A'"
+                                      (escape-string download :html t)))
                             (escape-string target :html t)
                             (escape-string link :html t)
                             content)
@@ -86,6 +90,22 @@ place-inside-bottom-of CLOG-OBJ.
 
 (defmethod (setf target) (value (obj clog-a))
   (setf (property obj "target") value))
+
+;;;;;;;;;;;;;;
+;; download ;;
+;;;;;;;;;;;;;;
+
+(defgeneric download (clog-a)
+  (:documentation "Get/Setf the download name of the anchor."))
+
+(defmethod download ((obj clog-a))
+  (property obj "download"))
+
+(defgeneric (setf download) (value clog-a)
+  (:documentation "Set download VALUE for CLOG-A"))
+
+(defmethod (setf download) (value (obj clog-a))
+  (setf (property obj "download") value))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Implementation - clog-br
