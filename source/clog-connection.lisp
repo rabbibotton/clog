@@ -260,6 +260,27 @@ the default answer. (Private)"
                ;; a ping
                (when *verbose-output*
                  (format t "Connection ~A    Ping~%" connection-id)))
+	      ((equal (first ml) "C")
+	       ;; a callback
+	       ;; message format: 'C:name:args'
+	       ;; args are in json format
+	       (let ((ml (ppcre:split ":" message :limit 3)))
+		 (destructuring-bind (_ cb-name cb-args) ml
+		   (declare (ignore _))
+		   (when *verbose-output*
+                     (format t "Connection ~A    Callback = ~A    Args = ~A~%"
+                             connection-id cb-name cb-args))
+                   (bordeaux-threads:make-thread
+                    (lambda ()
+                      (if *break-on-error*
+                          (clog-callbacks:handle-callback cb-name (json:decode-json-from-string cb-args))
+			  (handler-case
+                            (clog-callbacks:handle-callback cb-name (json:decode-json-from-string cb-args))
+                          (t (c)
+                            (format t "Condition caught in handle-message for callback - ~A.~&" cb-name)
+                            (values 0 c)))))
+                  :name (format nil "CLOG callack handler ~A"
+                                cb-name)))))
               ((equal (first ml) "E")
                ;; an event
                (let* ((em (ppcre:split " " (second ml) :limit 2))
