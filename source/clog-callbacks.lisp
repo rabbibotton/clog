@@ -6,6 +6,7 @@
    :find-callback
    :defcallback
    :call-callback
+   :callback
    :handle-callback
    :*callbacks*))
 
@@ -44,6 +45,23 @@ ARGS is a javascript expression (string) that returns a JSON with the arguments 
      (let ((callback-name (gensym "CALLBACK-")))
        (register-callback (princ-to-string callback-name) name-or-lambda)
        (format nil "ws.send('C:~a:' + ~a)" callback-name args)))
+    (t (error "Invalid callback: ~s" name-or-lambda))))
+
+(defun callback (name-or-lambda)
+  "Create a callback. Returns a lambda expression that when applied to arguments return the javascript code that makes the call to the server callback.
+NAME-OR-LAMBDA can be either:
+- A symbol. Should name a callback defined via DEFCALLBACK.
+- A function. Probably a lambda. Gets registered as callback and called."
+  (cond
+    ((symbolp name-or-lambda)
+     (lambda (args)
+       (format nil "ws.send('C:~a:' + ~a)" name-or-lambda args)))
+    ((functionp name-or-lambda)
+     ;; assign a name and register the callback first
+     (let ((callback-name (gensym "CALLBACK-")))
+       (register-callback (princ-to-string callback-name) name-or-lambda)
+       (lambda (args)
+         (format nil "ws.send('C:~a:' + ~a)" callback-name args))))
     (t (error "Invalid callback: ~s" name-or-lambda))))
 
 (defun handle-callback (name args)
