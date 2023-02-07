@@ -833,13 +833,14 @@ event on right click."))
 is nil unbind the event. Setting this event will replace an on-mouse click if
 set. If :ONE-TIME unbind event on click."))
 
-(defmethod set-on-click ((obj clog-obj) handler &key (one-time nil))
+(defmethod set-on-click ((obj clog-obj) handler &key one-time cancel-event)
   (set-event obj "click"
              (when handler
                (lambda (data)
                  (declare (ignore data))
                  (funcall handler obj)))
-             :one-time one-time))
+             :one-time one-time
+	     :cancel-event cancel-event))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; set-on-double-click ;;
