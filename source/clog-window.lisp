@@ -481,7 +481,7 @@ The data parementer of the event function contains the time stamp
 to the millisecond."))
 
 (defmethod request-animation-frame ((obj clog-window))
-  (execute obj (format nil "requestAnimationFrame(function (s) ~
+  (execute obj (format nil "requestAnimationFrame(function (s)
                              {~A.trigger('clog-animate', s)})"
                        (jquery obj))))
 
