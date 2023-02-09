@@ -10,7 +10,7 @@
                        #:bordeaux-threads #:trivial-open-browser #:parse-float #:quri
                        #:lack-middleware-static #:lack-request #:lack-util-writer-stream
                        #:closer-mop #:mgl-pax #:cl-template #:atomics
-                       #:sqlite #:cl-dbi #:cl-pass #:cl-isaac)
+                       #:sqlite #:cl-dbi #:cl-pass #-(or mswindows win32 cormanlisp) #:cl-isaac)
   :components ((:module "static-files"
                 :components ((:static-file "js/boot.js")))
                (:module "source"
