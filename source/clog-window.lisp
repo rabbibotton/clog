@@ -497,6 +497,27 @@ ON-ANIMATION-FRAME-HANDLER is nil unbind the event."))
 (defmethod set-on-animation-frame ((obj clog-window) handler)
   (set-on-event-with-data obj "clog-animate" handler))
 
+;;;;;;;;;;;;;;;;;;;;;;
+;; set-on-pop-state ;;
+;;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric set-on-pop-state (clog-window on-pop-state-handler)
+  (:documentation "Set the ON-POP-STATE-HANDLER for CLOG-WINDOW. If ON-POP-STATE-HANDLER
+is nil unbind the event."))
+
+(defmethod set-on-pop-state ((obj clog-window) handler)
+  (set-on-event obj "popstate" handler))
+
+;;;;;;;;;;;;;;;;;;;;
+;; url-push-state ;;
+;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric url-push-state (clog-window rewrite-url)
+  (:documentation "Method adds an entry to the browser's session history stack."))
+
+(defmethod url-push-state ((obj clog-window) rewrite-url)
+  (execute obj (format nil "history.pushState({},'','~A')" rewrite-url)))
+
 ;;;;;;;;;;;;;;;;;;;;
 ;; set-on-storage ;;
 ;;;;;;;;;;;;;;;;;;;;

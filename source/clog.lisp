@@ -971,6 +971,10 @@ embedded in a native template application.)"
   (resize-by                 generic-function)
   (resize-to                 generic-function)
 
+  "CLOG-Window - History"
+  (set-on-pop-state          generic-function)
+  (url-push-state            generic-function)
+
   "CLOG-Window - Storage Methods"
   (storage-type     type)
   (storage-length   generic-function)
