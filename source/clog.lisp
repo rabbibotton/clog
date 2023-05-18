@@ -20,6 +20,11 @@
 
 (cl:in-package :clog)
 
+(defmethod exportable-reference-p ((package (eql (find-package :clog)))
+                                   symbol (locative-type (eql 'section))
+                                   locative-args)
+  t)
+
 (defsection @clog-manual (:title "The CLOG manual")
   "The Common Lisp Omnificient GUI, CLOG for short, uses web technology to
 produce graphical user interfaces for applications locally or remotely.
@@ -351,6 +356,8 @@ embedded in a native template application.)"
   (font-variant-type          type)
   (system-font-type           type)
   (font                       generic-function)
+  ;; This is not defined.
+  #+nil
   (font-css                   generic-function)
   (set-font                   generic-function)
   (text-alignment-type        type)
