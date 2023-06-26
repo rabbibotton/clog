@@ -201,6 +201,7 @@ embedded in a native template application.)"
   (clog-element class)
 
   "CLOG-Element - Low Level Creation"
+  (create-element  generic-function)
   (create-child    generic-function)
   (attach-as-child generic-function)
 
