@@ -60,7 +60,7 @@
 ;;;;;;;;;;;;;;;;;;;
 
 (defun load-tutorial (num)
-  "Load tutorial NUM - use (clog-user:start-tutorial)"
+  "Load tutorial NUM - use (clog:run-tutorial)"
   (let ((p (merge-pathnames (format nil "./tutorial/~2,'0d-tutorial.lisp" num)
                             (asdf:system-source-directory :clog))))
     (load p)
@@ -82,7 +82,7 @@
 ;;;;;;;;;;;;;;;
 
 (defun load-demo (num)
-  "Load demo NUM - use (clog-user:start-demo)"
+  "Load demo NUM - use (clog:run-demo)"
   (let ((p (merge-pathnames (format nil "./demos/~2,'0d-demo.lisp" num)
                             (asdf:system-source-directory :clog))))
     (load p)
