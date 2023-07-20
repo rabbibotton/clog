@@ -82,11 +82,11 @@ CONNECTION-ID to it and then return it. The HTML-ID must be unique. (private)"
                                                   (html-id (clog-connection:generate-id))
                                                   (auto-place t)
                               &allow-other-keys )
-    (let* ((extra-args (remove-from-plist all-args :content :clog-type :html-id :auto-place))
+    (let* ((extra-args (alexandria:remove-from-plist all-args :content :clog-type :html-id :auto-place))
            (html (with-output-to-string (*standard-output*)
                    (format t "<~(~a~) " html-tag)
-                   (iter (for (key value) on extra-args by #'cddr)
-                         (format t "~(~a~)=~s" key value))
+                   (loop for (key value) on extra-args by #'cddr
+                         do (format t "~(~a~)=~s" key value))
                    (format t " id=~s>~A</~(~a~)>" html-id content html-tag)))
            (clog-type (or clog-type
                           (let* ((class-name (intern (string-upcase (format nil "CLOG-~a" html-tag)) :clog)))
