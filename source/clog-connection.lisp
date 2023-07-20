@@ -299,7 +299,9 @@ the default answer. (Private)"
                            server-query-id
                            'browser-returned-answer
                            browser-returned-answer))
-                 (setf (gethash (parse-integer server-query-id) *queries*) browser-returned-answer)
+                 ;; Try to use the default answer instead of `undefined'.
+                 (unless (string= "undefined" browser-returned-answer)
+                   (setf (gethash (parse-integer server-query-id) *queries*) browser-returned-answer))
                  (bordeaux-threads:signal-semaphore
                   (gethash (parse-integer server-query-id) *queries-sems*))))))
     (t (c)
