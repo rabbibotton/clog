@@ -74,11 +74,12 @@ CONNECTION-ID to it and then return it. The HTML-ID must be unique. (private)"
 ;;;;;;;;;;;;;;;;;;
 ;; create-element ;;
 ;;;;;;;;;;;;;;;;;;
-(defgeneric create-element (clog-obj html-tag &rest all-args &key content clog-type html-id auto-place &allow-other-keys )
-  (:documentation "Construct a new CLOG-element as a child of CLOG-OBJ, incorporating all potential keywords.")
+(defgeneric create-element (clog-obj html-tag &rest all-args &key content clog-type html-id
+                                                                  auto-place &allow-other-keys )
+  (:documentation "Create a new CLOG-element as child of CLOG-OBJ with any possible keywords.")
   (:method (clog-obj html-tag &rest all-args &key (content "")
                                                   clog-type
-                                                  (html-id nil)
+                                                  (html-id (clog-connection:generate-id))
                                                   (auto-place t)
                               &allow-other-keys )
     (let* ((extra-args (remove-from-plist all-args :content :clog-type :html-id :auto-place))
@@ -86,12 +87,12 @@ CONNECTION-ID to it and then return it. The HTML-ID must be unique. (private)"
                    (format t "<~(~a~) " html-tag)
                    (iter (for (key value) on extra-args by #'cddr)
                          (format t "~(~a~)=~s" key value))
-                   (format t ">~A</~(~a~)>" content html-tag)))
+                   (format t " id=~s>~A</~(~a~)>" html-id content html-tag)))
            (clog-type (or clog-type
-                          (case html-tag
-                            (:div 'clog-div)
-                            (:button 'clog-button)
-                            (:span 'clog-span)))))
+                          (let* ((class-name (intern (string-upcase (format nil "CLOG-~a" html-tag)) :clog)))
+                            (when (find-class class-name nil)
+                              class-name))
+                          'clog-element)))
       (create-child clog-obj html
                     :clog-type  clog-type
                     :html-id    html-id
