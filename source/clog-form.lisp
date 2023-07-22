@@ -204,37 +204,41 @@ elements."))
     :file :hidden :image :month :number :password :radio :range
     :reset :search :submit :tel :text :time :url :week))
 
-(defgeneric create-form-element (clog-obj element-type
-                                 &key name value label class
-                                   style hidden html-id auto-place)
+(defgeneric create-form-element (clog-obj element-type &rest args
+                                 &key name class style hidden html-id auto-place label
+                                   &allow-other-keys)
   (:documentation "Create a new clog-form-element as child of CLOG-OBJ.
 It is importamt that clog-form-elements are a child or descendant of a
-clog-form in the DOM. The radio ELEMENT-TYPE groups by NAME."))
+clog-form in the DOM. The radio ELEMENT-TYPE groups by
+NAME. Additional keys will be added to the input tag as
+attribute/value pairs in the form attr= 'value'"))
 
-(defmethod create-form-element ((obj clog-obj) element-type
+(defmethod create-form-element ((obj clog-obj) element-type &rest args
                                 &key (name nil)
-                                  (value nil)
                                   (label nil)
                                   (class nil)
                                   (style nil)
                                   (hidden nil)
                                   (html-id nil)
                                   (auto-place t))
-  (let ((element (create-child
-                  obj (format nil "<input type='~A'~@[~A~]~@[~A~]~@[~A~]~@[~A~]/>"
-                              (escape-string element-type :html t)
-                              (when class
-                                (format nil " class='~A'"
-                                        (escape-string class :html t)))
-                              (when (or hidden style)
-                                (format nil " style='~@[~a~]~@[~a~]'"
-                                        (when hidden "visibility:hidden;")
-                                        style))
-                              (when value (format nil " value='~A'" (escape-string value :html t)))
-                              (when name  (format nil " name='~A'" (escape-string name :html t))))
-                  :clog-type  'clog-form-element
-                  :html-id    html-id
-                  :auto-place auto-place)))
+  (declare (ignorable name value min max))
+  (dolist (key '(name class style hidden html-id auto-place))
+    (remf args key))
+  (let* (
+         (element (create-child
+                   obj (format nil "<input type='~A'~@[~A~]~@[~A~]~{~(~A~)= '~A'~^ ~}/>"
+                               (escape-string element-type :html t)
+                               (when class
+                                 (format nil " class='~A'"
+                                         (escape-string class :html t)))
+                               (when (or hidden style)
+                                 (format nil " style='~@[~a~]~@[~a~]'"
+                                         (when hidden "visibility:hidden;")
+                                         style))
+                               args)
+                   :clog-type  'clog-form-element
+                   :html-id    html-id
+                   :auto-place auto-place)))
     (when label
       (label-for label element))
     element))
