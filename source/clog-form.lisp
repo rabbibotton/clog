@@ -205,7 +205,7 @@ elements."))
     :reset :search :submit :tel :text :time :url :week))
 
 (defgeneric create-form-element (clog-obj element-type &rest args
-                                 &key name class style hidden html-id auto-place label
+                                 &key name label class style hidden html-id auto-place
                                    &allow-other-keys)
   (:documentation "Create a new clog-form-element as child of CLOG-OBJ.
 It is importamt that clog-form-elements are a child or descendant of a
@@ -221,7 +221,7 @@ attribute/value pairs in the form attr= 'value'"))
                                   (hidden nil)
                                   (html-id nil)
                                   (auto-place t))
-  (declare (ignorable name value min max))
+  (declare (ignorable name))
   (dolist (key '(name class style hidden html-id auto-place))
     (remf args key))
   (let* (
