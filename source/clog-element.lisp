@@ -87,7 +87,10 @@ CLOG-OBJ. If HTML-ID is nil one will be generated."))
                                  :clog-type clog-type
                                  :html-id   html-id)))
     (if auto-place
-        (place-inside-bottom-of obj child)
+        (case auto-place
+	  (:bottom (place-inside-bottom-of obj child))
+	  (:top (place-inside-top-of obj child))
+	  (t (place-inside-bottom-of obj child)))
         child)))
 
 ;;;;;;;;;;;;;;;;;;;;;

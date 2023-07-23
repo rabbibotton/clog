@@ -481,7 +481,7 @@ The data parementer of the event function contains the time stamp
 to the millisecond."))
 
 (defmethod request-animation-frame ((obj clog-window))
-  (execute obj (format nil "requestAnimationFrame(function (s) ~
+  (execute obj (format nil "requestAnimationFrame(function (s)
                              {~A.trigger('clog-animate', s)})"
                        (jquery obj))))
 
@@ -496,6 +496,27 @@ ON-ANIMATION-FRAME-HANDLER is nil unbind the event."))
 
 (defmethod set-on-animation-frame ((obj clog-window) handler)
   (set-on-event-with-data obj "clog-animate" handler))
+
+;;;;;;;;;;;;;;;;;;;;;;
+;; set-on-pop-state ;;
+;;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric set-on-pop-state (clog-window on-pop-state-handler)
+  (:documentation "Set the ON-POP-STATE-HANDLER for CLOG-WINDOW. If ON-POP-STATE-HANDLER
+is nil unbind the event."))
+
+(defmethod set-on-pop-state ((obj clog-window) handler)
+  (set-on-event obj "popstate" handler))
+
+;;;;;;;;;;;;;;;;;;;;
+;; url-push-state ;;
+;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric url-push-state (clog-window rewrite-url)
+  (:documentation "Method adds an entry to the browser's session history stack."))
+
+(defmethod url-push-state ((obj clog-window) rewrite-url)
+  (execute obj (format nil "history.pushState({},'','~A')" rewrite-url)))
 
 ;;;;;;;;;;;;;;;;;;;;
 ;; set-on-storage ;;

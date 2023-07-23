@@ -20,6 +20,11 @@
 
 (cl:in-package :clog)
 
+(defmethod exportable-reference-p ((package (eql (find-package :clog)))
+                                   symbol (locative-type (eql 'section))
+                                   locative-args)
+  t)
+
 (defsection @clog-manual (:title "The CLOG manual")
   "The Common Lisp Omnificient GUI, CLOG for short, uses web technology to
 produce graphical user interfaces for applications locally or remotely.
@@ -351,6 +356,8 @@ embedded in a native template application.)"
   (font-variant-type          type)
   (system-font-type           type)
   (font                       generic-function)
+  ;; This is not defined.
+  #+nil
   (font-css                   generic-function)
   (set-font                   generic-function)
   (text-alignment-type        type)
@@ -394,6 +401,7 @@ embedded in a native template application.)"
   (create-a generic-function)
   (link     generic-function)
   (target   generic-function)
+  (download generic-function)
 
   "CLOG-BR - Class for CLOG Line Breaks"
   (clog-br   class)
@@ -969,6 +977,10 @@ embedded in a native template application.)"
   (move-window-to            generic-function)
   (resize-by                 generic-function)
   (resize-to                 generic-function)
+
+  "CLOG-Window - History"
+  (set-on-pop-state          generic-function)
+  (url-push-state            generic-function)
 
   "CLOG-Window - Storage Methods"
   (storage-type     type)

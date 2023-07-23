@@ -833,47 +833,50 @@ event on right click."))
 is nil unbind the event. Setting this event will replace an on-mouse click if
 set. If :ONE-TIME unbind event on click."))
 
-(defmethod set-on-click ((obj clog-obj) handler &key (one-time nil))
+(defmethod set-on-click ((obj clog-obj) handler &key one-time cancel-event)
   (set-event obj "click"
              (when handler
                (lambda (data)
                  (declare (ignore data))
                  (funcall handler obj)))
-             :one-time one-time))
+             :one-time one-time
+	     :cancel-event cancel-event))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; set-on-double-click ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defgeneric set-on-double-click (clog-obj on-double-click-handler
-                                 &key one-time)
+                                 &key one-time cancel-event)
   (:documentation "Set the ON-DOUBLE-CLICK-HANDLER for CLOG-OBJ. If
 ON-DOUBLE-CLICK-HANDLER is nil unbind the event. Setting the
 on-mouse-double-click event will replace this handler."))
 
-(defmethod set-on-double-click ((obj clog-obj) handler &key (one-time nil))
+(defmethod set-on-double-click ((obj clog-obj) handler &key one-time cancel-event)
   (set-event obj "dblclick"
              (when handler
                (lambda (data)
                  (declare (ignore data))
                  (funcall handler obj)))
-             :one-time one-time))
+             :one-time one-time
+	     :cancel-event cancel-event))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;
 ;; set-on-mouse-click ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defgeneric set-on-mouse-click (clog-obj on-mouse-click-handler &key one-time)
+(defgeneric set-on-mouse-click (clog-obj on-mouse-click-handler &key one-time cancel-event)
   (:documentation "Set the ON-MOUSE-CLICK-HANDLER for CLOG-OBJ. If
 ON-MOUSE-CLICK-HANDLER is nil unbind the event. Setting this event will replace
 on an on-click event."))
 
-(defmethod set-on-mouse-click ((obj clog-obj) handler &key (one-time nil))
+(defmethod set-on-mouse-click ((obj clog-obj) handler &key one-time cancel-event)
   (set-event obj "click"
              (when handler
                (lambda (data)
                  (funcall handler obj (parse-mouse-event data))))
              :one-time one-time
+	     :cancel-event cancel-event
              :call-back-script mouse-event-script))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
