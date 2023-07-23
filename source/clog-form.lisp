@@ -222,26 +222,23 @@ attribute/value pairs in the form attr= 'value'"))
                                   (html-id nil)
                                   (auto-place t))
   (declare (ignorable name))
-  (dolist (key '(name class style hidden html-id auto-place))
+  (when class (setf (getf args :class) (format nil "~(~A~)" (escape-string class :html t))))
+  (when (or hidden style)
+    (setf (getf args :style)
+          (format nil "~@[~a~]~@[~a~]" (when hidden "visibility:hidden;") style)))
+  (dolist (key '(:name :html-id :auto-place))
     (remf args key))
-  (let* (
-         (element (create-child
-                   obj (format nil "<input type='~A'~@[~A~]~@[~A~]~{~(~A~)= '~A'~^ ~}/>"
-                               (escape-string element-type :html t)
-                               (when class
-                                 (format nil " class='~A'"
-                                         (escape-string class :html t)))
-                               (when (or hidden style)
-                                 (format nil " style='~@[~a~]~@[~a~]'"
-                                         (when hidden "visibility:hidden;")
-                                         style))
-                               args)
+  (let* ((element (create-child
+                   obj (format nil "<input type='~A' ~{~(~A~)= '~A'~^ ~}/>"
+                               (escape-string element-type :html t) args)
                    :clog-type  'clog-form-element
                    :html-id    html-id
                    :auto-place auto-place)))
     (when label
       (label-for label element))
     element))
+
+(escape-string :vslider :html t)
 
 ;;;;;;;;;;;;;;;;;;
 ;; autocomplete ;;
