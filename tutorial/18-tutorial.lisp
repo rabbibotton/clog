@@ -6,6 +6,7 @@
 
 ;; Demonstrate drag and drop
 (defun on-new-window (body)
+  (setf (title (html-document body)) "Tutorial 18") ;; set the page title
   (let* ((target1 (create-div body))
          (target2 (create-div body))
          (object  (create-div target1))

@@ -62,7 +62,7 @@
 (defun on-new-window (body)
   (let ((app (make-instance 'app-data)))                 ; Create our "App-Data" for this instance
     (setf (connection-data-item body "app-data") app))   ; of our App.
-  (setf (title (html-document body)) "Tutorial 8")
+  (setf (title (html-document body)) "Tutorial 08")
   (let* ((div1 (create-div body))
          (div2 (create-div div1))
          (div3 (create-div div2))

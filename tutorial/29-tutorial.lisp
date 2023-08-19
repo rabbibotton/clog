@@ -12,6 +12,7 @@
    (my-count :accessor my-count :initform 500)))
 
 (defun on-new-window (body)
+  (setf (title (html-document body)) "Tutorial 29") ;; set the page title
   (let* ((lisp-obj (make-instance 'my-class))
          (i1 (create-form-element body :text
                                   :label (create-label body :content "Form value:")))

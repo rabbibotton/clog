@@ -14,7 +14,7 @@
   (load-script (html-document body) "https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js")
   (load-script (html-document body) "https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js")
   ;; Root page setup
-  (setf (title (html-document body)) "Hello Boostrap")
+  (setf (title (html-document body)) "Tutorial 16: Hello Boostrap")
   (let* ((nav   (create-section body :nav :class "nav"))
          ;; Nav Bar
          (l1    (create-a nav :content "link1" :class "nav-link"))

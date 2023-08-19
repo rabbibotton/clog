@@ -36,7 +36,7 @@
 (in-package :clog-tut-11)
 
 (defun on-new-window (body)
-  ;; This will turn on debug output in the browser console.
+    ;; This will turn on debug output in the browser console.
   (debug-mode body)
   ;; Setup form
   (let* ((form         (attach-as-child body "form1" :clog-type 'clog-form))
@@ -67,7 +67,12 @@
     ;; We need to override the boostrap default to submit the form html style
     (set-on-submit form (lambda (obj)(declare (ignore obj))()))
     (set-on-click good-button #'on-click-good)
-    (set-on-click scary-button #'on-click-scary))))
+    (set-on-click scary-button #'on-click-scary)))
+
+  (setf (title (html-document body)) "Tutorial 11") ;; set the page title
+
+  
+  )
 
 (defun start-tutorial ()
   "Start tutorial."

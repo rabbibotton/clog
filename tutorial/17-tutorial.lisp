@@ -13,7 +13,7 @@
   (load-css (html-document body) "https://www.w3schools.com/w3css/4/w3.css")
   (load-css (html-document body) "https://www.w3schools.com/lib/w3-theme-teal.css")
   ;; Setup page
-  (setf (title (html-document body)) "Hello W3.CSS")
+  (setf (title (html-document body)) "Tutorial 17: Hello W3.CSS")
   (let* ((header (create-section body :header :class "w3-container w3-card w3-theme"))
          (tmp    (create-section header :h1 :content "Explore Forms"))
          ;; Main area of page

@@ -88,6 +88,7 @@
   "Setup the website, called on each url switch"
   ;; Initialize the clog-web environment
   (clog-web-initialize body)
+  (setf (title (html-document body)) "Tutorial 32") ;; set the page title
   ;; Instantly reload other windows open on authentication change
   (set-on-authentication-change body (lambda (body)
                                        (url-replace (location body) "/")))
