@@ -4,9 +4,6 @@
 
 ### License BSD 3-Clause License
 
-zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz
-
-
 View the HTML Documentation:
 
 https://rabbibotton.github.io/clog/clog-manual.html
