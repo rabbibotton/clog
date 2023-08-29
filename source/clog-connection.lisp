@@ -77,7 +77,7 @@ script."
   #-(or sbcl ecl mezzano) (apply #'make-hash-table args))
 
 (defvar *verbose-output* nil "Verbose server output (default false)")
-(defvar *break-on-error* t   "Allow invoking debugger (default true)")
+(defvar *break-on-error* t   "Allow invoking debugger (default true). `t' or `nil' or a function.")
 
 (defvar *app*            nil "Clack 'app' middle-ware")
 (defvar *client-handler* nil "Clack 'handler' for socket traffic")
@@ -126,6 +126,24 @@ script."
 (defun generate-id ()
   "Generate unique ids for use in scripts."
   (atomics:atomic-incf (car *new-id*)))
+
+;;;;;;;;;;;;;;;;:;;;;;;
+;; with-break-on-error ;;
+;;;;;;;;;;;;;;;;;:;;;;;
+(defmacro with-break-on-error (form (c) &body error-body)
+  "Execute BODY with different behaviors for *break-on-error*"
+  `(cond ((eq t *break-on-error*)
+          ,form)
+         (t 
+          (handler-case
+              (handler-bind
+                  ((error #'(lambda (e)
+                              (when *break-on-error*
+                                (funcall *break-on-error* e)))))
+                ,form)
+            (t (,c)
+              ,@error-body)))))
+
 
 ;;;;;;;;;;;;;;;;:;;;;;;
 ;; random-hex-string ;;
@@ -228,13 +246,11 @@ the default answer. (Private)"
                                     (format nil "clog['connection_id']='~A'" id))
              (bordeaux-threads:make-thread
               (lambda ()
-                (if *break-on-error*
+                (with-break-on-error
                     (funcall *on-connect-handler* id)
-                    (handler-case
-                        (funcall *on-connect-handler* id)
-                      (t (c)
-                        (format t "Condition caught connection ~A - ~A.~&" id c)
-                        (values 0 c)))))
+                    (c)
+                  (format t "Condition caught connection ~A - ~A.~&" id c)
+                  (values 0 c)))
               :name (format nil "CLOG connection ~A"
                             id))))
     (t (c)
@@ -270,22 +286,15 @@ the default answer. (Private)"
                            connection-id event-id data))
                  (bordeaux-threads:make-thread
                   (lambda ()
-                    (if *break-on-error*
+                    (with-break-on-error
                         (let* ((event-hash (get-connection-data connection-id))
                                (event      (when event-hash
                                              (gethash event-id event-hash))))
                           (when event
                             (funcall event data)))
-                        (handler-case
-                            (let* ((event-hash (get-connection-data connection-id))
-                                   (event      (when event-hash
-                                                 (gethash event-id
-                                                          event-hash))))
-                              (when event
-                                (funcall event data)))
-                          (t (c)
-                            (format t "Condition caught in handle-message for event - ~A.~&" c)
-                            (values 0 c)))))
+                        (c)
+                      (format t "Condition caught in handle-message for event - ~A.~&" c)
+                      (values 0 c)))
                   :name (format nil "CLOG event handler ~A"
                                 event-id))))
               (t
@@ -508,13 +517,11 @@ the contents sent to the brower."
                                             (format nil "<script>clog['post-data']='~A'</script>"
                                                     post-data)
                                             stream))
-                                         (if *break-on-error*
+                                         (with-break-on-error
                                              (funcall *on-connect-handler* id)
-                                             (handler-case
-                                                 (funcall *on-connect-handler* id)
-                                               (t (c)
-                                                 (format t "Condition caught connection ~A - ~A.~&" id c)
-                                                 (values 0 c))))
+                                             (c)
+                                           (format t "Condition caught connection ~A - ~A.~&" id c)
+                                           (values 0 c))
                                          (when *long-poll-first*
                                            (setf *long-poll-first* nil)
                                            (handler-case
