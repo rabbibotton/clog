@@ -164,9 +164,12 @@ after attachment is changed to one unique to this session."))
   (:documentation "Set css style."))
 
 (defmethod (setf style) (value (obj clog-element) style-name)
-  (jquery-execute obj (format nil "css('~A','~A')"
-                              style-name (escape-string value)))
-  value)
+  ;; Make sure value is a string
+  (let ((value (escape-string (if (stringp value)
+                                  value
+                                  (princ-to-string value)))))
+    (jquery-execute obj (format nil "css('~A','~A')" style-name value))
+    value))
 
 (defgeneric set-styles (clog-element style-list)
   (:documentation "Set css styles using a list of lists of name value pairs."))
