@@ -466,6 +466,18 @@ be unique name on entire document."))
             (format nil "$('select[name=~A] option:selected').val()" name)))
 
 ;;;;;;;;;;;;;;;;
+;; textarea-value ;;
+;;;;;;;;;;;;;;;;
+
+(defgeneric textarea-value (clog-obj name)
+  (:documentation "Returns the value of textarea item called NAME and must
+be unique name on entire document."))
+
+(defmethod textarea-value ((obj clog-obj) name)
+  (clog-connection:query (clog::connection-id obj)
+            (format nil "$('textarea#~A').val()" name)))
+
+;;;;;;;;;;;;;;;;
 ;; name-value ;;
 ;;;;;;;;;;;;;;;;
 
