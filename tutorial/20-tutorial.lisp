@@ -54,6 +54,7 @@
 (in-package :clog-tut-20)
 
 (defun on-new-window (body)
+  (setf (title (html-document body)) "Tutorial 20") ;; set the page title
   (clog-toggler:init-toggler body)
   ;; Now we build our CLOG-Toggler
   ;; All create-functions also allow setting the :html-id instead of

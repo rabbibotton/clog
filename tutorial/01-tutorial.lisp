@@ -9,6 +9,8 @@
 (defun on-new-window (body)           ; Define the function called on-new-window
   "On-new-window handler."            ; Optional docstring to describe function
 
+  (setf (title (html-document body)) "Tutorial 01") ;; set the page title
+
   (let ((hello-element                ; hello-element is a local variable that
                                       ; will be bound to our new CLOG-Element
 

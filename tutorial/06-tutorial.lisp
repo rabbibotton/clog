@@ -26,7 +26,7 @@
 
 (defun on-new-window (body)
   "On-new-window handler."
-  (setf (title (html-document body)) "Tutorial 6")
+  (setf (title (html-document body)) "Tutorial 06")
   (set-on-click (create-section body :h1 :content "(click me to start!)")
                 'my-on-click))
 

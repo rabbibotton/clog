@@ -24,6 +24,7 @@
 (in-package :clog-tut-12)
 
 (defun on-main (body)
+  (setf (title (html-document body)) "Tutorial 12") ;; set the page title
   (let ((sb (create-style-block body)))
     (add-style sb :element "a"       '(("color"           :orange)
                                        ("text-decoration" :none)))

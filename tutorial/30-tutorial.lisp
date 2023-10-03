@@ -12,6 +12,7 @@
 
 (defun init-site (body)
   (clog-web-initialize body)
+  (setf (title (html-document body)) "Tutorial 30") ;; set the page title
   (create-web-site body
                    ;; use the default theme
                    :theme 'clog-web:default-theme

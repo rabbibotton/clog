@@ -7,6 +7,7 @@
 (in-package :clog-tut-27)
 
 (defun on-new-window (body)
+  (setf (title (html-document body)) "Tutorial 27") ;; set the page title
   (let* ((console (create-panel-box-layout body :left-width 200 :right-width 0))
          (head    (create-div (top-panel console) :content "Image Viewer"))
          (lbox    (create-select (left-panel console)))

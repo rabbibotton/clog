@@ -7,7 +7,7 @@
 (defun on-new-window (body)
   "On-new-window handler."
   ;; Give your app a name that appears in the browser tab/window
-  (setf (title (html-document body)) "Tutorial 2")
+  (setf (title (html-document body)) "Tutorial 02")
   ;; The CLOG-body object gives you access to a number of other CLOG-Objects
   ;;
   ;; (html-document body) is the CLOG-Document object ~ These are aproximately
