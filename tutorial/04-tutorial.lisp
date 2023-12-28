@@ -9,7 +9,7 @@
                                      ; RGB is a helper function for color
 (defun on-new-window (body)
   "On-new-window handler."
-  (setf (title (html-document body)) "Tutorial 4")
+  (setf (title (html-document body)) "Tutorial 04")
   ;; The same handler #'my-on-click is set on both targets
   (set-on-click (create-section body :h1 :content "Hello World! (click me!)")
                 'my-on-click)

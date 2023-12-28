@@ -6,6 +6,7 @@
 
 ;;; Brief demonstration of multimedia
 (defun on-new-window (body)
+  (setf (title (html-document body)) "Tutorial 15") ;; set the page title
   (let* ((vid (create-video body :source "https://www.w3schools.com/html/mov_bbb.mp4"))
          (tmp (create-br body))
          (vpl (create-button body :content ">"))

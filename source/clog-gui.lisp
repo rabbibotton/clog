@@ -1614,6 +1614,7 @@ Calls on-input with t if confirmed or nil if canceled."
                                                   (cancel-text "Cancel")
                                                   (left nil) (top nil)
                                                   (width 400) (height 500)
+                                                  (size 40) (rows 4)
                                                   (client-movement nil)
                                                   (html-id nil))
   "Create a form dialog box with CONTENT followed by FIELDS.
@@ -1632,9 +1633,12 @@ Special field types
    :checkbox      t if checked
    :radiobox      a-list ((label name)) a third value can be added \"checked\"
    :select        a-list ((label name)) a third value can be added \"selected\"
+   :textarea      value
    :text          value
      (any text input types also work :email, :tel, etc.
       see FORM-ELEMENT-TYPE)
+
+The size of any texarea field is controled by the size and rows parameters
 
 Calls on-input after OK or Cancel with an a-list of field name to value
 if confirmed or nil if canceled."
@@ -1666,17 +1670,17 @@ if confirmed or nil if canceled."
                                            (format nil "~{~A~}"
                                                    (mapcar (lambda (s)
                                                              (format nil
-                               "<div><input type=radio class='w3-radio' name='~A-~A'~
+                                                                     "<div><input type=radio class='w3-radio' name='~A-~A'~
                                       id='~A-~A-~A' value='~A' ~A> ~
                                      <label for='~A-~A-~A'>~A</label></div>"
-                                                              html-id (second l)
-                                                              html-id (second l) (second s)
-                                                              (second s)
-                                                              (if (third s)
-                                                                  (third s)
-                                                                  "")
-                                                              html-id (second l) (second s)
-                                                              (first s)))
+                                                                     html-id (second l)
+                                                                     html-id (second l) (second s)
+                                                                     (second s)
+                                                                     (if (third s)
+                                                                         (third s)
+                                                                         "")
+                                                                     html-id (second l) (second s)
+                                                                     (first s)))
                                                            (fourth l)))))
                                   ((eq (third l) :checkbox)
                                    (format nil
@@ -1691,26 +1695,41 @@ if confirmed or nil if canceled."
                                                "")
                                            html-id (second l)
                                            (first l)))
+                                  ((eq (third l) :textarea)
+                                   (format nil
+                                           "<div><label class='w3-text-black'><b>~A</b></label>
+                                                 <textarea
+                                                  name='~A-~A' id='~A-~A' cols='~A' rows='~A'>~A</textarea></div>"
+                                           (first l)
+                                           html-id
+                                           (second l)
+                                           html-id
+                                           (second l)
+                                           size
+                                           rows
+                                           (if (fourth l)
+                                               (fourth l)
+                                               "")))
                                   ((third l)
                                    (format nil
                                            "<div><label class='w3-text-black'><b>~A</b></label>~
                                                  <input class='w3-input w3-border' type='~A'~
                                                   name='~A-~A' id='~A-~A' value='~A'></div>"
-                                   (first l) (third l)
-                                   html-id (second l) html-id (second l)
-                                   (if (fourth l)
-                                       (fourth l)
-                                       "")))
+                                           (first l) (third l)
+                                           html-id (second l) html-id (second l)
+                                           (if (fourth l)
+                                               (fourth l)
+                                               "")))
                                   (t
                                    (format nil
-                                            "<div><label class='w3-text-black'><b>~A</b></label>~
+                                           "<div><label class='w3-text-black'><b>~A</b></label>~
                                <input class='w3-input w3-border' type='text' name='~A-~A' id='~A-~A'></div>"
-                                            (first l) html-id (second l) html-id (second l)))))
+                                           (first l) html-id (second l) html-id (second l)))))
                               fields)))
          (win  (create-gui-window obj
                                   :title          title
                                   :content        (format nil
-"<div class='w3-panel'>
+                                                          "<div class='w3-panel'>
 ~A
 <form class='w3-container' onSubmit='return false;'>
 ~A
@@ -1722,9 +1741,9 @@ if confirmed or nil if canceled."
 </div>" (if content
             (format nil "<center>~A</center><br>" content)
             "")
-        fls
-        html-id ok-text      ; ok
-        html-id cancel-text) ; cancel
+                                                          fls
+                                                          html-id ok-text ; ok
+                                                          html-id cancel-text) ; cancel
                                   :top             top
                                   :left            left
                                   :width           width
@@ -1746,8 +1765,8 @@ if confirmed or nil if canceled."
     (mapcar (lambda (l)
               (when (eq (third l) :filename)
                 (let ((fld (attach-as-child body (format nil "~A-~A"
-                                                            html-id
-                                                            (second l))
+                                                         html-id
+                                                         (second l))
                                             :clog-type 'clog:clog-form-element)))
                   (set-on-click fld (lambda (obj)
                                       (declare (ignore obj))
@@ -1777,6 +1796,8 @@ if confirmed or nil if canceled."
                                                     (radio-value win name))
                                                    ((eq (third l) :checkbox)
                                                     (checkbox-value win name))
+                                                   ((eq (third l) :textarea)
+                                                    (textarea-value win name))
                                                    (t
                                                     (name-value win name))))))
                                       fields)))

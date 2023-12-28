@@ -10,6 +10,7 @@
 ;;; collapsible trees that we will use for this tutorial.
 
 (defun on-new-window (body)
+  (setf (title (html-document body)) "Tutorial 19") ;; set the page title
   ;; First we need to load jslists' JavaScript file and css
   (load-css (html-document body) "/tutorial/jslists/jsLists.css")
   (load-script (html-document body) "/tutorial/jslists/jsLists.js")

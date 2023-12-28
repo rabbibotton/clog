@@ -691,6 +691,7 @@ embedded in a native template application.)"
   (radio-value         generic-function)
   (checkbox-value      generic-function)
   (select-value        generic-function)
+  (textarea-value      generic-function)
   (name-value          generic-function)
   (pattern             generic-function)
   (minimum             generic-function)

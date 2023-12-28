@@ -5,7 +5,7 @@
 (in-package :clog-tut-9)
 
 (defun on-new-window (body)
-  (setf (title (html-document body)) "Tutorial 9")
+  (setf (title (html-document body)) "Tutorial 09")
   ;; When doing extensive setup of a page using connection cache
   ;; reduces rountrip traffic and speeds setup.
   (with-connection-cache (body)

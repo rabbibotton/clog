@@ -50,6 +50,7 @@ on the drop-root."))
 (in-package :clog-tut-21)
 
 (defun on-new-window (body)
+  (setf (title (html-document body)) "Tutorial 21") ;; set the page title
   (let* ((drop-list  (clog-drop-list:create-drop-list body :content "Top of tree"))
          (item (create-list-item (clog-drop-list:drop-root drop-list) :content "Item 1"))
          (item (create-list-item (clog-drop-list:drop-root drop-list) :content "Item 2"))

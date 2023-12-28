@@ -48,7 +48,7 @@ for CLOG")
       (setf token nil))
     (unless token
       (when auth-path
-        (url-assign (window body) auth-path)))
+        (url-assign (location body) auth-path)))
     token))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
