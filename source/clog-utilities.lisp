@@ -135,6 +135,17 @@ CLOG-OBJ unless :NAME is set and is used instead."))
       "on"
       "off"))
 
+;;;;;;;;;;;;;;
+;; js-parse-integer ;;
+;;;;;;;;;;;;;;
+
+(defun js-parse-integer  (str &key default-value)
+  "Return integer from STR or DEFAULT-VALUE if not an integer"
+  (if (string= "undefined" str)
+      default-value
+      (parse-integer str :junk-allowed t)))
+
+
 ;;;;;;;;;;;;;;;;;;;
 ;; escape-string ;;
 ;;;;;;;;;;;;;;;;;;;
