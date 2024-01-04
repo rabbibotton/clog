@@ -11,6 +11,7 @@ COMMON-LISP "The Tutorial" Series (Google Doc Links)
 * [Install Common-Lisp for MacOS](MACOS.md)
 * [Install Common-Lisp for Win64](WINDOWS.md)
 * [Install Common-Lisp for Linux](https://lisp-lang.org/learn/getting-started/)
+* [Install Common-Lisp For Android (Termux)](ANDROID-TERMUX.md)
 
 The tutorial's goal is to get you writing real Lisp programs, quickly
 (like in a day not weeks or years) and to give you the all important
