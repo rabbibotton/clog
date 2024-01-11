@@ -3,6 +3,8 @@
   (:export start-tutorial))           ; Export as public the start-tutorial function
 
 (in-package :clog-tut-1)              ; Tell the "reader" we are in the clog-tut-1 package
+                                      ; The "reader" is the internal Common Lisp application
+                                      ; that reads the application as it is loaded
 
 
 ;; Define our CLOG application
