@@ -20,7 +20,7 @@ On Mac (all requirements for build part of OS):
 ```
 On Linux
 
-Development: apt install libgtk-3-dev libwebkit2gtk-4.0-dev
+Development: apt install g++ libgtk-3-dev libwebkit2gtk-4.0-dev
 Production: apt install libgtk-3-0 libwebkit2gtk-4.0-37
 ```
 ./make-linux
