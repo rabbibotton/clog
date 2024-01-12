@@ -19,44 +19,46 @@
 
    Even if you don't use GIT, it installs the needed ssl files and
    some basic unix tools like bash
+   
+   You should choose for line endings, checkout as-is, commit unix-style line endings
+   sbcl does not handle crlf well in certain situations
 
-4. Get the 64 bit SQLite DLL from:
+   You should also choose to use the MSYS bash shell
+
+5. Get the 64 bit SQLite DLL from:
 
    https://www.sqlite.org/download.html
 
-   Double clip the downloaded dll zip and copy the file to C:\Program Files\Git\mingw64\bin
+   Double clip the downloaded dll zip and copy the contents of the zip file
+   to C:\Program Files\Git\mingw64\bin
 
-5. Download QuickLisp:
+7. Download QuickLisp:
 
-   Download using http://beta.quicklisp.org/quicklisp.lisp
+   Open the Git Bash shell from your windows apps and run
 
-   (assuming for the tutorial it is downloaded to your Downloads
-   directory)
+   cd
+   curl -o /tmp/ql.lisp http://beta.quicklisp.org/quicklisp.lisp
 
-6. Install QuickLisp:
+8. Install QuickLisp:
 
-   Open Git Bash and run: sbcl
-
-   Use the mouse right click paste or type:
-
-   - At the * prompt from sbcl type: (load "~/Downloads/quicklisp.lisp")
-   - At the * prompt from sbcl type: (quicklisp-quickstart:install)
-   - At the * prompt from sbcl type: (ql:add-to-init-file)
-   - At the * prompt from sbcl type: (ql:quickload :quicklisp-slime-helper)
-   - At the * prompt from sbcl type: (quit)
-
+   Continue in the Git Bash shell and run
+   ```
+   sbcl --no-sysinit --no-userinit --load /tmp/ql.lisp \
+       --eval '(quicklisp-quickstart:install :path "~/.quicklisp")' \
+       --eval '(ql:add-to-init-file)' \
+       --quit
+   sbcl --eval '(ql:quickload :quicklisp-slime-helper)' --quit
+   ```
+   
    Run rho emacs with (I would add to path or make a script):
 
       /c/Program\ Files/rho-emacs/rho
 
-   Use C-x-f and create the file ~/.emacs.d/init.el and add the next three lines
-   (The first line is to include custom emacs themese and settings the next two
-    are to install slime for sbcl):
+   Use C-x-f and create the file ~/.emacs.d/init.el
 
 ```
-      (load "~/.emacs.d/.custom")
-      (load (expand-file-name "C:/Users/david/quicklisp/slime-helper.el"))
-      (setq inferior-lisp-program "sbcl")
+  (load (expand-file-name "~/.quicklisp/slime-helper.el"))
+  (setq inferior-lisp-program "sbcl")
 ```
 
 7. Restart Emacs
