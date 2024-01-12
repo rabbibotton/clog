@@ -395,7 +395,10 @@ the default answer. (Private)"
                      (boot-function    nil)
                      (static-boot-html nil)
                      (static-boot-js   nil)
-                     (static-root      #P"./static-files/"))
+                     (static-root      #P"./static-files/")
+                     (ssl              nil)
+                     (ssl-key-file     nil)
+                     (ssl-cert-file    nil))
   "Initialize CLOG on a socket using HOST and PORT to serve BOOT-FILE as the
 default route for '/' to establish web-socket connections and static files
 located at STATIC-ROOT. The webserver used with CLACK can be chosen with
@@ -548,9 +551,14 @@ the contents sent to the brower."
                       lack-middleware-list
                       :initial-value *app*
                       :from-end t))
-  (setf *client-handler* (clack:clackup *app* :server server :address host :port port))
+  (setf *client-handler* (clack:clackup *app* :server server :address host :port port :ssl ssl :ssl-key-file ssl-key-file :ssl-cert-file ssl-cert-file))
   (format t "HTTP listening on    : ~A:~A~%" host port)
   (format t "HTML root            : ~A~%"    static-root)
+  (format t "SSL                  : ~A~%"    (if ssl
+                                                 "yes"
+                                                 "no"))
+  (format t "SSL Key File         : ~A~%"    ssl-key-file)
+  (format t "SSL Cert File        : ~A~%"    ssl-cert-file)
   (format t "Long poll first      : ~A~%"    (if long-poll-first
                                                  "yes"
                                                  "no"))

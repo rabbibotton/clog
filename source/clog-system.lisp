@@ -76,7 +76,10 @@ the same as the clog directy this overides the relative paths used in them.")
        (static-boot-html nil)
        (static-boot-js   nil)
        (static-root      (merge-pathnames "./static-files/"
-                                          (asdf:system-source-directory :clog))))
+                                          (asdf:system-source-directory :clog)))
+       (ssl              nil)
+       (ssl-key-file     nil)
+       (ssl-cert-file    nil))
   "Inititalize CLOG on a socket using HOST and PORT to serve BOOT-FILE as the
 default route to establish web-socket connections and static files located at
 STATIC-ROOT. The webserver used with CLACK can be chosen with :SERVER and
@@ -110,7 +113,10 @@ see tutorial 12 for an example."
                       boot-function
                       static-boot-html
                       static-boot-js
-                      static-root))
+                      static-root
+                      ssl
+                      ssl-cert-file
+                      ssl-key-file))
   (setf *extended-routing* extended-routing)
   (when on-new-window-handler
     (set-on-new-window on-new-window-handler :path "/" :boot-file boot-file))
