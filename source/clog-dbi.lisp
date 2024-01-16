@@ -427,7 +427,7 @@ the displayed option."
           (funcall (on-row obj) obj tr))
         (loop for (key value) on row by #'cddr while value
               do
-                 (let ((td (create-table-column obj :content value)))
+                 (let ((td (create-table-column tr :content value)))
                    (when (on-column obj)
                      (funcall (on-column obj) obj key td)))))))
   (when (on-footer obj)
