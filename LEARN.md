@@ -19,6 +19,7 @@ high level summary of the entire language that will let you fill in
 the many blanks and shortcuts with the solid books available, but
 already being productive means having a bang up time doin' it all.
 
+[Common Lisp the Tutorial in single PDF](https://rabbibotton.github.io/clog/cltt.pdf)
 
 -  [01 - The Journey                      ](https://docs.google.com/document/d/1Mdp8IY7KzNxcThe9iZHXbyILKSYDWaNJX6k68aYpVR4)
 -  [02 - Not in Kansas Anymore - Symbols  ](https://docs.google.com/document/d/1eiaFmKfTTUxjhphgcOM9-5eioenaFR91rw4ME9jCL30)
