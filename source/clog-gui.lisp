@@ -1117,7 +1117,7 @@ interactions. Use window-end-modal to undo."))
 
 (defmethod window-make-modal ((obj clog-gui-window))
   (let ((app (connection-data-item obj "clog-gui")))
-    (when (= (modal-count app) 0)
+    (when (and app (= (modal-count app) 0))
       (setf (modal-background app) (create-div (body app) :class "w3-overlay"))
       (setf (display (modal-background app)) :block))
     (incf (modal-count app))
