@@ -9,6 +9,8 @@
 
 (defparameter *start-project* nil)
 
+(defparameter *client-side-movement* t)
+
 ;; Per instance app data
 
 (defclass builder-app-data ()
@@ -1560,7 +1562,7 @@ It parse the string TEXT without using READ functions."
         (let* ((win (create-gui-window obj :title "Project Window"
                                            :top 60 :left 232
                                            :width 643 :height 625
-                                           :has-pinner t :client-movement t)))
+                                           :has-pinner t :client-movement *client-side-movement*)))
           (create-projects (window-content win))
           (setf (project-win app) win)
           (set-on-window-close win (lambda (obj)
@@ -1576,7 +1578,7 @@ It parse the string TEXT without using READ functions."
                                                :left 225
                                                :top 480
                                                :height 200 :width 645
-                                               :has-pinner t :client-movement t))
+                                               :has-pinner t :client-movement *client-side-movement*))
                (content (window-content win))
                status)
           (setf (current-editor-is-lisp app) t)
@@ -1634,7 +1636,7 @@ It parse the string TEXT without using READ functions."
                                                     :left 225
                                                     :top 480
                                                     :height 400 :width 600
-                                                    :has-pinner t :client-movement t)))
+                                                    :has-pinner t :client-movement *client-side-movement*)))
           (window-center win)
           (setf (hiddenp win) t)
           (setf (overflow (window-content win)) :scroll)
@@ -1746,7 +1748,7 @@ It parse the string TEXT without using READ functions."
     (let* ((app (connection-data-item obj "builder-app-data"))
            (win (create-gui-window obj :top 40 :left 225
                                        :width 645 :height 430
-                                       :client-movement t))
+                                       :client-movement *client-side-movement*))
            (box (create-panel-box-layout (window-content win)
                                          :left-width 0 :right-width 0
                                          :top-height 33 :bottom-height 0))
@@ -2444,7 +2446,7 @@ It parse the string TEXT without using READ functions."
 (defun on-new-builder-page (obj &key custom-boot url-launch)
   "Open new page"
   (let* ((app (connection-data-item obj "builder-app-data"))
-         (win (create-gui-window obj :top 40 :left 225 :width 600 :client-movement t))
+         (win (create-gui-window obj :top 40 :left 225 :width 600 :client-movement *client-side-movement*))
          (panel-uid  (format nil "~A" (get-universal-time))) ;; unique id for panel
          (boot-loc   (if custom-boot
                          "builder-custom"
@@ -2543,7 +2545,7 @@ It parse the string TEXT without using READ functions."
   (let* ((win (create-gui-window obj :title "Quick Start"
                                      :top 40 :left 225
                                      :width 600 :height 400
-                                     :client-movement t)))
+                                     :client-movement *client-side-movement*)))
     (create-quick-start (window-content win))))
 
 (defun on-show-thread-viewer (obj)
@@ -2551,7 +2553,7 @@ It parse the string TEXT without using READ functions."
   (let* ((win (create-gui-window obj :title "Thread Viewer"
                                      :top 40 :left 225
                                      :width 600 :height 400
-                                     :client-movement t)))
+                                     :client-movement *client-side-movement*)))
     (create-thread-list (window-content win))))
 
 (defun on-open-file (obj &key open-file (title "New Source Editor") text (title-class "w3-black"))
@@ -2561,7 +2563,7 @@ It parse the string TEXT without using READ functions."
            (win (create-gui-window obj :title title
                                        :title-class title-class
                                        :width 645 :height 430
-                                       :client-movement t))
+                                       :client-movement *client-side-movement*))
            (box (create-panel-box-layout (window-content win)
                                          :left-width 0 :right-width 0
                                          :top-height 33 :bottom-height 0))
@@ -2797,7 +2799,7 @@ It parse the string TEXT without using READ functions."
   (let* ((win (create-gui-window obj :title "CLOG Builder REPL"
                                      :top 40 :left 225
                                      :width 600 :height 400
-                                     :client-movement t)))
+                                     :client-movement *client-side-movement*)))
     (set-geometry (create-clog-builder-repl (window-content win))
                   :units "%" :width 100 :height 100)))
 
@@ -2833,7 +2835,7 @@ It parse the string TEXT without using READ functions."
   "Open dir window"
   (let* ((win (create-gui-window obj :title "Directory Window"
                                      :width 600 :height 400
-                                     :client-movement t))
+                                     :client-movement *client-side-movement*))
          (d   (create-dir-view (window-content win))))
     (set-geometry d :units "%" :width 100 :height 100)
     (when dir
