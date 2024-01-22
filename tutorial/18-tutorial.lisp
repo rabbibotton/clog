@@ -4,6 +4,8 @@
 
 (in-package :clog-tut-18)
 
+;; NOTE: HTML 5 drag and drop not supported on mobile platforms.
+
 ;; Demonstrate drag and drop
 (defun on-new-window (body)
   (setf (title (html-document body)) "Tutorial 18") ;; set the page title
