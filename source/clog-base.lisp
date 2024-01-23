@@ -334,6 +334,7 @@ result or if time out DEFAULT-ANSWER. see JQUERY-QUERY (Internal)"))
 
 (defgeneric set-event (clog-obj event handler
 		       &key call-back-script
+			 pre-eval
 			 eval-script
 			 post-eval
 			 cancel-event
@@ -342,6 +343,7 @@ result or if time out DEFAULT-ANSWER. see JQUERY-QUERY (Internal)"))
 
 (defmethod set-event ((obj clog-obj) event handler
 		      &key (call-back-script "")
+		        (pre-eval "")
 			(eval-script "")
 			(post-eval "")
 			(cancel-event nil)
@@ -351,7 +353,8 @@ result or if time out DEFAULT-ANSWER. see JQUERY-QUERY (Internal)"))
     (if cd
 	(cond (handler
 	       (bind-event-script
-		obj event (format nil "~Aws.send('E:~A '~A)~A~@[~A~]~@[~A~]"
+		obj event (format nil "~A~Aws.send('E:~A '~A)~A~@[~A~]~@[~A~]"
+				  pre-eval
 				  eval-script
 				  hook
 				  call-back-script
