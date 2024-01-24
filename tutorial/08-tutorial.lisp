@@ -5,11 +5,7 @@
 (in-package :clog-tut-8)
 
 (defclass app-data ()
-  ((drag-type
-    :accessor drag-type
-    :initform nil
-    :documentation "Ensure only pointer or touch events.")
-    (drag-x
+  ((drag-x
     :accessor drag-x
     :documentation "The location of the left side of the box relative to mouse during drag.")
    (drag-y
@@ -19,31 +15,19 @@
 
 (defun stop-tracking (obj)
   (set-on-pointer-move obj nil)
-  (set-on-pointer-up obj nil)
-  (set-on-touch-move obj nil)
-  (set-on-touch-end obj nil)
-  (let ((app (connection-data-item obj "app-data")))
-    (setf (drag-type app) nil)))
+  (set-on-pointer-up obj nil))
 
 (defun on-mouse-down (obj data)
-  (let ((app (connection-data-item obj "app-data")))
-    (with-sync-event (obj)                     ; Process one event at a time
-      (when (eq (drag-type app) :pointer)      ; Prefer touch events to pointer events
-	(stop-tracking obj))                   ; to accomidate mobile devices emulating mice
-      (setf (drag-type app) (getf data :event-type))
-      (let* ((mouse-x  (getf data :screen-x))  ; Use the screen coordinates not
-	     (mouse-y  (getf data :screen-y))  ; the coordinates relative to the obj
-	     (obj-top  (parse-integer (top obj) :junk-allowed t))
-	     (obj-left (parse-integer (left obj) :junk-allowed t)))
-	(setf (drag-x app) (- mouse-x obj-left))
-	(setf (drag-y app) (- mouse-y obj-top))
-	(cond ((eq (getf data :event-type) :touch)
-	       (set-on-touch-move obj 'on-mouse-move)
-	       (set-on-touch-end obj 'on-touch-end))
-	      (t
-	       (set-on-pointer-move obj 'on-mouse-move)
-	       (set-on-pointer-up obj 'on-mouse-up)))))))
-
+  (let* ((app (connection-data-item obj "app-data"))
+	 (mouse-x  (getf data :screen-x))  ; Use the screen coordinates not
+	 (mouse-y  (getf data :screen-y))  ; the coordinates relative to the obj
+	 (obj-top  (parse-integer (top obj) :junk-allowed t))
+	 (obj-left (parse-integer (left obj) :junk-allowed t)))
+    (setf (drag-x app) (- mouse-x obj-left))
+    (setf (drag-y app) (- mouse-y obj-top))
+    (set-on-pointer-move obj 'on-mouse-move)
+    (set-on-pointer-up obj 'on-mouse-up)))
+  
 (defun on-mouse-move (obj data)
   (let* ((app (connection-data-item obj "app-data"))
 	 (x   (getf data :screen-x))
@@ -53,9 +37,6 @@
 
 (defun on-mouse-up (obj data)
   (declare (ignore data))
-  (stop-tracking obj))
-
-(defun on-touch-end (obj)
   (stop-tracking obj))
 
 (defun on-new-window (body)
@@ -88,11 +69,15 @@
     (setf (overflow div2) :hidden)
     (setf (positioning div3) :absolute)
     ;; Setup mouse/touch/pointer events
+    ;;
     ;; Since our divs are embedded on with in the other we use cancel-event so events do
     ;; not bubble up from one div to another
-    (set-on-touch-start div1 'on-mouse-down :cancel-event t)
-    (set-on-touch-start div2 'on-mouse-down :cancel-event t)
-    (set-on-touch-start div3 'on-mouse-down :cancel-event t)
+    ;;
+    ;; We need to catch the on-touch-start event or touches will not be tracked
+    ;; However once cought the pointer events will be same for mouse or touch
+    (set-on-touch-start div1 (lambda (obj data) (declare (ignore obj data)) nil) :cancel-event t)
+    (set-on-touch-start div2 (lambda (obj data) (declare (ignore obj data)) nil) :cancel-event t)
+    (set-on-touch-start div3 (lambda (obj data) (declare (ignore obj data)) nil) :cancel-event t)
     (set-on-pointer-down div1 'on-mouse-down :cancel-event t :capture-pointer t)
     (set-on-pointer-down div2 'on-mouse-down :cancel-event t :capture-pointer t)
     (set-on-pointer-down div3 'on-mouse-down :cancel-event t :capture-pointer t)))

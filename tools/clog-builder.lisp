@@ -9,7 +9,7 @@
 
 (defparameter *start-project* nil)
 
-(defparameter *client-side-movement* t)
+(defparameter *client-side-movement* nil)
 
 ;; Per instance app data
 

@@ -886,9 +886,10 @@ for identifiying the window to use with window-to-top-by-param or window-by-para
              (clog::jquery-execute win
                              (format nil "draggable({handle:'#~A-title-bar'})" html-id))
              (clog::jquery-execute win "resizable({handles:'se'})")
+	     (set-on-touch-start (win-title win) (lambda (obj data) (declare (ignore obj data)) nil) :cancel-event t)
              (set-on-pointer-down (win-title win)
                                   (lambda (obj data)
-                                    (declare (ignore obj) (ignore data))
+                                    (declare (ignore obj data))
                                     (setf (z-index win) (incf (last-z app)))
                                     (fire-on-window-change win app)))
              (clog::set-on-event win "dragstart"
@@ -908,8 +909,10 @@ for identifiying the window to use with window-to-top-by-param or window-by-para
                                    (declare (ignore obj))
                                    (fire-on-window-size-done win))))
             (t
+	     (set-on-touch-start (win-title win) (lambda (obj data) (declare (ignore obj data)) nil) :cancel-event t)
              (set-on-pointer-down
               (win-title win) 'on-gui-drag-down :capture-pointer t)
+	     (set-on-touch-start (sizer win) (lambda (obj data) (declare (ignore obj data)) nil) :cancel-event t)
              (set-on-pointer-down
               (sizer win) 'on-gui-drag-down :capture-pointer t)))
       win)))

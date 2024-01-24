@@ -1184,8 +1184,7 @@ ON-TOUCH-END-HANDLER is nil unbind the event."))
   (set-event obj "touchend"
 	     (when handler
 	       (lambda (data)
-		 (declare (ignore dara))
-		 (funcall handler obj)))
+		 (funcall handler obj '(:event-type :touch))))
 	     :one-time one-time
 	     :cancel-event cancel-event))
 
