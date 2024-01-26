@@ -1,3 +1,4 @@
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; CLOG Builder - UI Design tool for CLOG                                ;;;;
 ;;;; (c) 2020-2022 David Botton                                            ;;;;
@@ -112,7 +113,10 @@
 
 (defun get-control-list (app panel-id)
   "Rerieve the control-list hash table on PANEL-ID"
-  (gethash panel-id (control-lists app)))
+  (let ((h (gethash panel-id (control-lists app))))
+    (if h
+	h
+	(make-hash-table* :test #'equalp))))
 
 (defun add-to-control-list (app panel-id control)
   "Add a CONTROL on to control-list on PANEL-ID"
@@ -486,6 +490,8 @@ replaced."
   "Setup CONTROL by creating pacer and setting up events for manipulation"
   (let ((app      (connection-data-item content "builder-app-data"))
         (panel-id (html-id content))
+	(touch-x  0)
+	(touch-y  0)
         (placer   (create-div control :auto-place nil
                                       :class "placer"
                                       :html-id (format nil "p-~A" (html-id control)))))
@@ -502,12 +508,6 @@ replaced."
     (jquery-execute placer (format nil "draggable({snap:'.placer',snapMode:'inner',cursor:'crosshair'})~
                                         .resizable({alsoResize:'#~A',autoHide:true})"
                                    (html-id control)))
-    ;; setup control events
-    (set-on-focus control (lambda (obj)
-                            ;; set focus is bound in case control
-                            ;; is set to static or reached using
-                            ;; tab selection
-                            (select-control obj)))
     ;; setup placer events
     (setf (tab-index placer) "-1") ; must have a tab-index to accept keyboard input
     (focus placer)
@@ -549,6 +549,37 @@ replaced."
                                               :height (client-height control))
                          (jquery-execute placer "trigger('clog-builder-snap-shot')")
                          (set-properties-after-geomentry-change control))))
+    (set-on-touch-start placer (lambda (obj data)
+				 (declare (ignore obj))
+				 (setf touch-x (getf data :X))
+				 (setf touch-y (getf data :Y))))
+    (set-on-touch-move placer (lambda (obj data)
+				(declare (ignore obj))
+				(set-geometry control :top (+ (position-top control)
+							      (- (getf data :y) touch-y))
+						      :left (+ (position-left control)
+							       (- (getf data :x) touch-x)))
+				(setf touch-x (getf data :X))
+				(setf touch-y (getf data :Y))))
+    (set-on-touch-end placer (lambda (obj data)
+			       (declare (ignore obj data))
+			       (set-geometry placer :units ""
+						    :top (top control)
+						    :left (left control))
+			       (select-control control)
+			       (jquery-execute placer "trigger('clog-builder-snap-shot')")
+			       (set-properties-after-geomentry-change control)))
+    (set-on-mouse-up placer (lambda (obj data)
+			      (declare (ignore obj data))
+			      (set-geometry control :units ""
+						    :top (top placer)
+						    :left (left placer))
+			      (set-geometry placer :units ""
+						   :top (top control)
+						   :left (left control))
+			      (select-control control)
+			      (jquery-execute placer "trigger('clog-builder-snap-shot')")
+			      (set-properties-after-geomentry-change control)))
     (set-on-mouse-down placer
                        (lambda (obj data)
                          (declare (ignore obj))
@@ -565,22 +596,23 @@ replaced."
                                          (placer2  (get-placer control2)))
                                     (place-inside-bottom-of control1 control2)
                                     (place-after control2 placer2)
-                                              (place-after control2 placer2)
-                                              (set-geometry placer1 :top (position-top control1)
-                                                                    :left (position-left control1)
-                                                                    :width (client-width control1)
-                                                                    :height (client-height control1))
-                                              (set-geometry placer2 :top (position-top control2)
-                                                                    :left (position-left control2)
-                                                                    :width (client-width control2)
-                                                                    :height (client-height control2)))
-                                  (on-populate-control-properties-win content :win win)
-                                  (on-populate-control-list-win content :win win))
+                                    (place-after control2 placer2)
+                                    (set-geometry placer1 :top (position-top control1)
+                                                          :left (position-left control1)
+                                                          :width (client-width control1)
+                                                          :height (client-height control1))
+                                    (set-geometry placer2 :top (position-top control2)
+                                                          :left (position-left control2)
+                                                          :width (client-width control2)
+                                                          :height (client-height control2)))
+				  (select-control control)
+				  (on-populate-control-properties-win content :win win)
+				  (on-populate-control-list-win content :win win))
                                  (t
                                   (select-control control)))
                            (when win
                              (window-focus win))))
-                       :cancel-event t)
+		       :cancel-event t)
     (set-on-mouse-double-click placer
                                (lambda (obj data)
                                  (declare (ignore obj data))
@@ -600,17 +632,7 @@ replaced."
                     (set-geometry control :units ""
                                           :top (top placer)
                                           :left (left placer))
-                    (set-properties-after-geomentry-change control)))
-    (set-on-event placer "dragstop"
-                  (lambda (obj)
-                    (declare (ignore obj))
-                    (set-geometry control :units ""
-                                          :top (top placer)
-                                          :left (left placer))
-                    (set-geometry placer :top (top control)
-                                         :left (left control))
-                    (jquery-execute placer "trigger('clog-builder-snap-shot')")
-                    (set-properties-after-geomentry-change control)))))
+		    (set-properties-after-geomentry-change control)))))
 
 (defun set-property-display (control property value)
   "Set property in the currently displayed property panel"
@@ -653,7 +675,7 @@ manipulation of the control's location and size."
 (defun select-control (control)
   "Select CONTROL as the current control and highlight its placer.
 The actual original clog object used for creation must be used and
-not a temporary attached one when using select-control."
+not a temporarily attached one when using select-control."
     (let ((app    (connection-data-item control "builder-app-data"))
           (placer (get-placer control)))
       (unless (eq control (current-control app))
@@ -985,7 +1007,7 @@ not a temporary attached one when using select-control."
                                  (p (attribute (parent-element v) "data-clog-name")))
                              (unless (or (equal cname n)
                                          (equal cname p))
-                               (push n panel-controls))))
+			       (push n panel-controls))))
                          (get-control-list app panel-id))
                 (push (attribute panel "data-clog-name") panel-controls)
                 (push
@@ -1171,19 +1193,20 @@ of controls and double click to select control."
                                                 (l (car (swank:simple-completions prefix s))))
                                            (when (current-control app)
                                              (let ((n (get-control-list app p)))
-                                               (maphash (lambda (k v)
-                                                          (declare (ignore k))
-                                                          (let ((name (attribute v "data-clog-name")))
-                                                            (push `(:caption ,name :value ,(format nil "(~A panel)" name)
-                                                                    :meta "control")
-                                                                  l)))
-                                                        n)
-                                               (push '(:caption "target" :value "target"
-                                                       :meta "builder")
-                                                     l)
-                                               (push '(:caption "panel" :value "panel"
-                                                       :meta "builder")
-                                                     l)))
+					       (when n
+						 (maphash (lambda (k v)
+                                                            (declare (ignore k))
+                                                            (let ((name (attribute v "data-clog-name")))
+                                                              (push `(:caption ,name :value ,(format nil "(~A panel)" name)
+                                                                      :meta "control")
+                                                                    l)))
+                                                          n)
+						 (push '(:caption "target" :value "target"
+							 :meta "builder")
+                                                       l)
+						 (push '(:caption "panel" :value "panel"
+							 :meta "builder")
+                                                       l))))
                                            l)))
                                      :meta "swank"))
     ;; run apropos on symbol
