@@ -27,9 +27,11 @@ Production: apt install libgtk-3-0 libwebkit2gtk-4.0-37
 ./make-snake
 ./make-builder
 ```
-On Windows
-
-to do (see https://github.com/webview/webview)
+On Windows a precompiled clogframe.exe is included
+```
+make-snake.exe
+make-builder.exe
+```
 
 On All Platfroms:
 
