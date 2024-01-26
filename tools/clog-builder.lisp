@@ -1566,11 +1566,9 @@ It parse the string TEXT without using READ functions."
                                      (when auto-mode
                                        (cond (is-hidden
                                               (setf (width panel) "400px")
-                                              (setf (hiddenp content) nil)
                                               (setf is-hidden nil))
                                              (t
                                               (setf (width panel) "10px")
-                                              (setf (hiddenp content) t)
                                               (setf is-hidden t))))))
     (setf (overflow content) :auto)
     (setf (positioning control-list) :absolute)
