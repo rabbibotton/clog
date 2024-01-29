@@ -1113,6 +1113,27 @@ ON-POINTER-UP-HANDLER is nil unbind the event."))
 	     :cancel-event cancel-event
 	     :call-back-script pointer-event-script))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; set-on-pointer-cancel ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric set-on-pointer-cancel (clog-obj on-pointer-cancel-handler
+				   &key one-time cancel-event)
+  (:documentation "Set the ON-POINTER-CANCEL-HANDLER for CLOG-OBJ. If
+ON-POINTER-CANCEL-HANDLER is nil unbind the event."))
+
+(defmethod set-on-pointer-cancel ((obj clog-obj) handler
+			      &key (one-time nil) (cancel-event nil))
+  (set-event obj "pointercancel"
+	     (when handler
+	       (lambda (data)
+		 (funcall handler obj (parse-pointer-event data))))
+	     :post-eval (format nil "; ~A.releasePointerCapture(e.pointerId)"
+				(script-id obj))
+	     :one-time one-time
+	     :cancel-event cancel-event
+	     :call-back-script pointer-event-script))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; set-on-pointer-move ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;

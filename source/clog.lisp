@@ -183,6 +183,7 @@ embedded in a native template application.)"
   (set-on-pointer-out        generic-function)
   (set-on-pointer-down       generic-function)
   (set-on-pointer-up         generic-function)
+  (set-on-pointer-cancel     generic-function)
   (set-on-pointer-move       generic-function)
   (set-on-touch-start        generic-function)
   (set-on-touch-move         generic-function)
