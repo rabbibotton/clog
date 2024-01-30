@@ -2906,7 +2906,13 @@ It parse the string TEXT without using READ functions."
                             (lambda (obj)
                               (declare (ignore obj))
                               (open-window (window body) "/dbadmin")))
-      (Create-gui-menu-item win   :content "Maximize All"       :on-click #'maximize-all-windows)
+      (create-gui-menu-item win   :content "Maximize"           :on-click
+			    (lambda (obj)
+			        (window-maximize (current-window obj))))
+      (create-gui-menu-item win   :content "Normalize"          :on-click
+			    (lambda (obj)
+			        (window-normalize (current-window obj))))
+      (create-gui-menu-item win   :content "Maximize All"       :on-click #'maximize-all-windows)
       (create-gui-menu-item win   :content "Normalize All"      :on-click #'normalize-all-windows)
       (create-gui-menu-window-select win)
       (create-gui-menu-item help  :content "CLOG Quick Start"     :on-click 'on-quick-start)

@@ -43,6 +43,7 @@
   (window-to-top-by-param      generic-function)
   (window-by-title             generic-function)
   (window-by-param             generic-function)
+  (reorient-all-windows        generic-function)
   (maximize-all-windows        generic-function)
   (normalize-all-windows       generic-function)
   (set-on-window-change        generic-function)
@@ -187,18 +188,9 @@ BODY-LEFT-OFFSET and BODY-RIGHT-OFFSET limit width on maximize."
   (let ((app (create-clog-gui clog-body)))
     (setf (body-left-offset app) body-left-offset)
     (setf (body-right-offset app) body-right-offset))
-  (set-on-full-screen-change (html-document clog-body)
-                             (lambda (obj)
-                               (when (current-window obj)
-                                 (when (window-maximized-p (current-window obj))
-                                   (window-normalize (current-window obj))
-                                   (window-maximize (current-window obj))))))
-  (set-on-orientation-change (window clog-body)
-                             (lambda (obj)
-                               (when (current-window obj)
-                                 (when (window-maximized-p (current-window obj))
-                                   (window-normalize (current-window obj))
-                                   (window-maximize (current-window obj))))))
+  (set-on-full-screen-change (html-document clog-body) 'reorient-all-windows)
+  (set-on-orientation-change (window clog-body) 'reorient-all-windows)
+  (set-on-resize (window clog-body) 'reorient-all-windows)
   (unless (connection-data-item clog-body "w3-css")
     (when w3-css-url
       (setf (connection-data-item clog-body "w3-css") t)
@@ -356,6 +348,27 @@ window or nil if not found"))
                (declare (ignore key))
                (window-normalize value))
              (windows app))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; reorient-all-windows ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric reorient-all-windows (clog-obj)
+  (:documentation "Reorient all windows. Remaximized any maximize windows
+and leave any normalized windows as normalized. This is called by default
+in on-resize, on-full-screen-change and on-orientation-change events."))
+
+(defmethod reorient-all-windows ((obj clog-obj))
+  (let ((app (connection-data-item obj "clog-gui"))
+	(cur (current-window obj)))
+    (maphash (lambda (key value)
+               (declare (ignore key))
+               (when (window-maximized-p value)
+                 (window-normalize value :focus nil)
+                 (window-maximize value :focus nil)))
+             (windows app))
+    (when cur
+      (window-focus cur))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; create-gui-menu-bar ;;
@@ -1011,13 +1024,15 @@ the browser."))
 ;; window-maximize ;;
 ;;;;;;;;;;;;;;;;;;;;;
 
-(defgeneric window-maximize (clog-gui-window)
-  (:documentation "Set CLOG-GUI-WINDOW as maximized window."))
+(defgeneric window-maximize (clog-gui-window &key focus)
+  (:documentation "Set CLOG-GUI-WINDOW as maximized window and
+:focus (default t)."))
 
-(defmethod window-maximize ((obj clog-gui-window))
+(defmethod window-maximize ((obj clog-gui-window) &key (focus t))
   (let ((app (connection-data-item obj "clog-gui")))
-    (unless (keep-on-top obj)
-      (window-focus obj))
+    (when focus
+      (unless (keep-on-top obj)
+	(window-focus obj)))
     (when (fire-on-window-can-maximize obj)
       (unless (window-maximized-p obj)
         (setf (last-x obj) (left obj))
@@ -1039,12 +1054,14 @@ the browser."))
 ;; window-normalize ;;
 ;;;;;;;;;;;;;;;;;;;;;;
 
-(defgeneric window-normalize (clog-gui-window)
-  (:documentation "Set CLOG-GUI-WINDOW as normalized window."))
+(defgeneric window-normalize (clog-gui-window &key focus)
+  (:documentation "Set CLOG-GUI-WINDOW as normalized window an
+:focus (default t)."))
 
-(defmethod window-normalize ((obj clog-gui-window))
-  (unless (keep-on-top obj)
-    (window-focus obj))
+(defmethod window-normalize ((obj clog-gui-window) &key (focus t))
+  (when focus
+    (unless (keep-on-top obj)
+      (window-focus obj)))
   (when (fire-on-window-can-normalize obj)
     (when (window-maximized-p obj)
       (setf (width obj) (last-width obj))

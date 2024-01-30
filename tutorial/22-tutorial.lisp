@@ -118,6 +118,12 @@
     (set-on-window-can-size about (lambda (obj)
                                     (declare (ignore obj))()))))
 
+(defun on-maximize-window (obj)
+  (window-maximize (current-window obj)))
+
+(defun on-normalize-window (obj)
+  (window-normalize (current-window obj)))
+
 (defun on-new-window (body)
   (setf (title (html-document body)) "Tutorial 22")
   ;; For web oriented apps consider using the :client-movement option.
@@ -133,6 +139,8 @@
          (tmp   (create-gui-menu-item file :content "Movie" :on-click 'on-file-movies))
          (tmp   (create-gui-menu-item file :content "Pinned" :on-click 'on-file-pinned))
          (win   (create-gui-menu-drop-down menu :content "Window"))
+	 (tmp   (create-gui-menu-item win :content "Maximize" :on-click 'on-maximize-window))
+	 (tmp   (create-gui-menu-item win :content "Normalize" :on-click 'on-normalize-window))
          (tmp   (create-gui-menu-item win :content "Maximize All" :on-click 'maximize-all-windows))
          (tmp   (create-gui-menu-item win :content "Normalize All" :on-click 'normalize-all-windows))
          (tmp   (create-gui-menu-window-select win))
