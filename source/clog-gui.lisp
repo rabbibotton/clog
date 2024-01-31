@@ -936,8 +936,9 @@ for identifiying the window to use with window-to-top-by-param or window-by-para
              (set-on-pointer-down (win-title win)
                                   (lambda (obj data)
                                     (declare (ignore obj data))
-                                    (setf (z-index win) (incf (last-z app)))
-                                    (fire-on-window-change win app))
+				    (unless (keep-on-top win)
+                                      (setf (z-index win) (incf (last-z app)))
+                                      (fire-on-window-change win app)))
 				  :capture-pointer t)
              (clog::set-on-event win "dragstart"
                                  (lambda (obj)
@@ -1017,9 +1018,8 @@ for identifiying the window to use with window-to-top-by-param or window-by-para
 
 (defmethod window-focus ((obj clog-gui-window))
   (let ((app (connection-data-item obj "clog-gui")))
-    (when (keep-on-top obj)
-      (setf (keep-on-top obj) nil))
-    (setf (z-index obj) (incf (last-z app)))
+    (unless (keep-on-top obj)
+      (setf (z-index obj) (incf (last-z app))))
     (fire-on-window-change obj app)))
 
 ;;;;;;;;;;;;;;;;;;
