@@ -349,6 +349,24 @@ window or nil if not found"))
                (window-normalize value))
              (windows app))))
 
+;;;;;;;;;;;;;;;;;;;;
+;; make-in-bounds ;;
+;;;;;;;;;;;;;;;;;;;;
+
+(defun make-in-bounds (obj mbh bh bw)
+  "Insure obj in bounds of gui (private)"
+  (let* ((top-loc   (parse-integer (top obj) :junk-allowed t))
+	 (left-loc  (parse-integer (left obj) :junk-allowed t))
+	 (width-loc (width obj)))
+    (if (< (+ left-loc width-loc) 25)
+	(setf (left obj) (unit :px (- 25 width-loc))))
+    (if (> left-loc bw)
+	(setf (left obj) (unit :px (- bw 15))))
+    (if (< top-loc mbh)
+	(setf (top obj) (unit :px mbh)))
+    (if (>= top-loc bh)
+	(setf (top obj) (unit :px (- bh 15))))))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; reorient-all-windows ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -359,13 +377,19 @@ and leave any normalized windows as normalized. This is called by default
 in on-resize, on-full-screen-change and on-orientation-change events."))
 
 (defmethod reorient-all-windows ((obj clog-obj))
-  (let ((app (connection-data-item obj "clog-gui"))
-	(cur (current-window obj)))
+  (let* ((app  (connection-data-item obj "clog-gui"))
+	 (body (connection-data-item obj "clog-body"))
+	 (mbh  (menu-bar-height obj))
+	 (bh   (height (html-document body)))
+	 (bw   (width  (html-document body)))
+	 (cur  (current-window obj)))
     (maphash (lambda (key value)
                (declare (ignore key))
-               (when (window-maximized-p value)
-                 (window-normalize value :focus nil)
-                 (window-maximize value :focus nil)))
+               (cond ((window-maximized-p value)
+                      (window-normalize value :focus nil)
+                      (window-maximize value :focus nil))
+		     (t
+		      (make-in-bounds value mbh bh bw))))
              (windows app))
     (when cur
       (window-focus cur))))
@@ -1369,19 +1393,21 @@ interactions. Use window-end-modal to undo."))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defgeneric set-on-window-move-done (clog-gui-window handler)
-  (:documentation "Set the on-window-move-done HANDLER"))
+  (:documentation "Set the on-window-move-done HANDLER."))
 
 (defmethod set-on-window-move-done ((obj clog-gui-window) handler)
   (setf (on-window-move-done obj) handler))
 
 (defmethod fire-on-window-move-done ((obj clog-gui-window))
-  (let ((top-loc (parse-integer (top obj) :junk-allowed t)))
-    (if (< top-loc (menu-bar-height obj))
-        (setf (top obj) (unit :px (menu-bar-height obj)))
-        (let* ((body        (connection-data-item obj "clog-body"))
-               (body-height (height (html-document body))))
-          (if (>= top-loc body-height)
-              (setf (top obj) (unit :px (- body-height 15)))))))
+  (cond ((window-maximized-p obj)
+         (window-normalize obj :focus nil)
+         (window-maximize obj :focus nil))
+	(t
+	 (let* ((body      (connection-data-item obj "clog-body"))
+		(mbh       (menu-bar-height obj))
+		(bh        (height (html-document body)))
+		(bw        (width  (html-document body))))
+	   (make-in-bounds obj mbh bh bw))))
   (when (on-window-move-done obj)
     (funcall (on-window-move-done obj) obj)))
 
