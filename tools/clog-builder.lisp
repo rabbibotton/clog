@@ -2908,10 +2908,12 @@ It parse the string TEXT without using READ functions."
                               (open-window (window body) "/dbadmin")))
       (create-gui-menu-item win   :content "Maximize"           :on-click
 			    (lambda (obj)
-			        (window-maximize (current-window obj))))
+			      (when (current-window obj)
+			        (window-maximize (current-window obj)))))
       (create-gui-menu-item win   :content "Normalize"          :on-click
 			    (lambda (obj)
-			        (window-normalize (current-window obj))))
+			      (when (current-window obj)
+			        (window-normalize (current-window obj)))))
       (create-gui-menu-item win   :content "Maximize All"       :on-click #'maximize-all-windows)
       (create-gui-menu-item win   :content "Normalize All"      :on-click #'normalize-all-windows)
       (create-gui-menu-window-select win)

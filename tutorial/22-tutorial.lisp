@@ -119,10 +119,12 @@
                                     (declare (ignore obj))()))))
 
 (defun on-maximize-window (obj)
-  (window-maximize (current-window obj)))
+  (when (current-window obj)
+    (window-maximize (current-window obj))))
 
 (defun on-normalize-window (obj)
-  (window-normalize (current-window obj)))
+  (when (current-window obj)
+    (window-normalize (current-window obj))))
 
 (defun on-new-window (body)
   (setf (title (html-document body)) "Tutorial 22")
