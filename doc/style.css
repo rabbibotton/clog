@@ -1,63 +1,162 @@
+:root {
+  /* Use the default fonts with sans-serif as the main font. */
+  --font-family: sans-serif;
+  --font-family-heading: serif;
+  --font-family-monospace: monospace;
+  --code-color: #333;
+
+  --line-height: 1.35rem;
+  --parsep: 0.3375rem;
+}
+
+@media (min-width: 70rem) {
+  html {
+    text-align: justify;
+  }
+  #content {
+    margin-left: calc(min(40ex,33%));
+  }
+  #toc {
+    width: 40ex;
+    max-width: 33%;
+  }
+}
+
+@media (max-width: 70rem) {
+  html {
+    text-align: justify;
+  }
+  #toc {
+    width: 0ex;
+  }
+}
+
+@media (max-width: 40rem) {
+  html {
+    text-align: left;
+  }
+}
+
 body {
-  font-family: sans-serif;
+  font-family: var(--font-family);
+  font-feature-settings: var(--font-feature-settings);
   margin: auto;
-  background-color: #FFFEFB;
-  color: #000000;
+  background-color: #faf9f6;
+  color: #333;
+  /* max-width: calc(73ch + 8*var(--line-height)); */
+  hyphens: auto;
+  hyphenate-limit-chars: 4 2 2;
+  min-height: 100vh;
+  line-height: var(--line-height);
 }
 
-h1, h2, h3, h4, h5, h6 {
-  font-family: serif;
-  font-weight: bold;
-  text-shadow: 0.05em 0.05em 0.02em #DDDDDD;
+p {
+  margin: var(--parsep) 0;
 }
 
-h1 a {
-  border-bottom: none;
+li {
+  margin: calc(0.5*var(--parsep)) 0 0 0;
 }
 
-h2 a {
-  border-bottom: none;
+/* p + p { */
+/*   margin: 0; */
+/*   text-indent: var(--line-height); */
+/* } */
+
+ul + p, ol + p, dl + p {
+  margin: calc(2*var(--parsep)) 0 0 0;
+  text-indent: 0;
 }
 
-h3 a {
-  border-bottom: none;
-}
-
-h4 a {
-  border-bottom: none;
-}
-
-h5 a {
-  border-bottom: none;
-}
+/* li > p { */
+/*   margin: 0; */
+/* } */
 
 h1 {
-  font-size: 250%
+  font-family: var(--font-family-heading);
+  font-feature-settings: var(--font-feature-settings-heading);
+  font-weight: normal;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  /* text-shadow: 0.05em 0.05em 0.02em #DDD; */
+  line-height: calc(2*var(--line-height));
+  font-size: 2.0rem;
+  margin: calc(2*var(--line-height)) 0;
+  /* margin: calc(3*var(--line-height)) 0 calc(2*var(--line-height)) 0; */
+  text-align: center;
 }
 
 h2 {
-  border-bottom: 0.05em solid #CCCCCC;
-  font-size: 200%;
+  font-size: 1.3rem;
+  font-weight: bold;
+  line-height: var(--line-height);
+  margin: var(--line-height) 0;
 }
 
 h3 {
-  font-size: 150%;
+  font-size: 1.2rem;
+  font-weight: bold;
+  line-height: var(--line-height);
+  margin: var(--line-height) 0;
 }
 
 h4 {
-  font-size: 130%;
+  font-size: 1.1rem;
+  font-weight: bold;
+  line-height: var(--line-height);
+  margin: var(--line-height) 0;
 }
 
 h5 {
-  font-size: 110%;
-  margin-top: 0.75em;
-  margin-bottom: 0.5em;
+  font-size: 1rem;
+  font-weight: bold;
+  line-height: var(--line-height);
+  margin: var(--line-height) 0;
 }
 
 h6 {
-  color: #777777;
-  background-color: inherit;
-  font-size: 100%;
+  font-size: 1rem;
+  font-weight: normal;
+  line-height: var(--line-height);
+  margin: calc(0.75*var(--line-height)) 0;
+  color: #666;
+}
+
+h1 a {
+  text-decoration: none;
+  color: #333;
+}
+h2 a {
+  text-decoration: none;
+  color: #333;
+}
+h3 a {
+  text-decoration: none;
+  color: #333;
+}
+h4 a {
+  text-decoration: none;
+  color: #333;
+}
+h5 a {
+  text-decoration: none;
+  color: #333;
+}
+h6 a {
+  text-decoration: none;
+  color: #333;
+}
+
+pre {
+  font-family: var(--font-family-monospace);
+  font-size: var(--font-size-monospace-in-pre);
+}
+
+code {
+  font-family: var(--font-family-monospace);
+  font-size: var(--font-size-monospace-in-code);
+  color: var(--code-color);
+  hyphens: none;
 }
 
 hr {
@@ -67,55 +166,48 @@ hr {
   background-color: #CCCCCC;
 }
 
-p, blockquote, table, pre {
-  line-height: 1.5;
-  margin: 0.5em 0 0 0;
-}
-
-ul, ol, dl {
-  padding-left: 1.1em;
-  list-style-position: outside;
-  /* margin: 0; */
-}
-
-li {
-  line-height: 1.5;
-  margin: 0 0 0 0;
+blockquote, table, pre {
+  line-height: var(--line-height);
+  margin: var(--parsep) 0 0 0;
 }
 
 pre {
   background-color: #F5F3ED;
-  color: #000000;
+  color: #333;
   border: 0.1em solid #CCCCCC;
   line-height: 1.25em;
   overflow: auto;
-  margin: 0.5em 0 0 0;
-  padding: 0.2em;
+  padding: 0 0 calc(0.5*var(--parsep)) 0;
 }
 
-pre > code {
-  color: #222222;
-}
-
-code {
-  color: #222222;
+ul, ol, dl {
+  padding-left: var(--line-height);
+  margin: 0;
 }
 
 a {
-  color: #222222;
-  text-decoration: none;
-  border-bottom: 1px solid;
-}
-
-h6 a {
-  color: #777777;
+  /* text-decoration: none; */
+  /* color: #0233c8; */
+  color: #333;
+  text-decoration-thickness: 0.04em;
+  text-underline-offset: 0.1em;
 }
 
 a:hover {
-  /* text-decoration: none; */
+  text-decoration: underline;
+}
+
+img {
+  display: block;
+  max-width: 90%;
+  margin: auto;
 }
 
 .reference-bullet {
+  display: block;
+  text-align: left;
+  margin-top: calc(2*var(--parsep));
+  hyphens: none;
 }
 
 .reference {
@@ -127,16 +219,23 @@ a:hover {
   text-decoration: none;
   border-bottom: 0;
   font-weight: bold;
+  color: #444;
 }
 
 .reference-object {
   background-color: #EBE8E2;
-  padding: 0.1em;
-  border: solid 1px;
+  /* The live browser does not lowercase. Balance the space around
+   * uppercase characters manually. */
+  padding: 0.1em 0.22em 0.02em 0.22em;
+  border: solid 1px #777;
   font-weight: bold;
+  letter-spacing: 0.02em;
+  /* Counter the effect of boldness by slightly reducing the size. */
+  font-size: 98%;
 }
 
 .reference-object a {
+  text-decoration: none;
   border-bottom: none;
 }
 
@@ -236,34 +335,32 @@ a.symbol:hover { color : #229955; background-color : transparent; text-decoratio
 /* span.paren6 { background-color : inherit; -webkit-transition: background-color 0.2s linear; } */
 /* span.paren6:hover { color : inherit; background-color : #FFBAFF; } */
 
-#content-container
-{
+#content-container {
   margin: 0;
-  padding: 0;
+  padding: 0 0 var(--line-height) 0;
 }
 
-#content
-{
-  margin-left: 40ex;
-  padding-left: 2.5em;
+#content {
   max-width: 85ex;
+  padding-left: 4ch;
+  padding-right: 4ch;
 }
 
 #toc {
   top: 0px;
   left: 0px;
   height: 100%;
-  width: 40ex;
-  max-width: 33%;
   position: fixed;
-  overflow-y:auto;
-  overflow-x:hidden;
+  overflow-y: auto;
+  overflow-x: hidden;
   background: #333;
   box-shadow: inset -5px 0 5px 0px #000;
   color: #aaa;
+  text-align: left;
 }
 
 #toc ul {
+  font-family: sans-serif;
   font-size: 80%;
 }
 
@@ -272,6 +369,7 @@ a.symbol:hover { color : #229955; background-color : transparent; text-decoratio
 }
 
 #toc a {
+  text-decoration: none;
   border-bottom: none;
 }
 
