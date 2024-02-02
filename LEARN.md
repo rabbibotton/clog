@@ -55,6 +55,11 @@ Full Free Books:
 
 CLOG Builder Tutorials (Reddit links)
 
+View the CLOG "Plunger" Video series (more weekly) and learn by example
+how to use the CLOG Builder to create a pro-app:
+
+https://www.youtube.com/playlist?list=PLSUeblYuDUiOucAaqkrVlmOG4p-q7lFU6
+
 -  [01 - Chat App                        ](https://www.reddit.com/r/lisp/comments/sj1tv5/clog_builder_tutorial_1_a_chat_app_from_start_to/)
 -  [02 - Building a Web Page             ](https://www.reddit.com/r/lisp/comments/sn8j77/clog_builder_tutorial_2_building_a_web_page/)
 -  [03 - Importing HTML in to Builder    ](https://www.reddit.com/r/lisp/comments/snvv0w/clog_builder_tutorial_3_importing_html_adding/)

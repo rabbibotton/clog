@@ -4,17 +4,7 @@
 
 ### License BSD 3-Clause License
 
-View the HTML Documentation:
-
-https://rabbibotton.github.io/clog/clog-manual.html
-
-View the CLOG "Plunger" Video series (more weekly) and learn by example
-how to use the CLOG Builder to create a pro-app:
-
-https://www.youtube.com/playlist?list=PLSUeblYuDUiOucAaqkrVlmOG4p-q7lFU6
-
-
-[LEARN COMMON-LISP AND CLOG - LEARN.md](LEARN.md)
+[Learn to program Common Lisp and CLOG here - LEARN.md](LEARN.md)
 
 ---
 
@@ -28,11 +18,12 @@ connectivity to the browser or other websocket client (often a browser
 embedded in a native template application.)
 
 [CLOG - Technical Overview and Purpose](CONCEPT.md)
+[CLOG - Reference Manual](https://rabbibotton.github.io/clog/clog-manual.html)
 
 STATUS: CLOG and CLOG Builder 1.8 released.
 
 CLOG is actually based on GNOGA, a framework I wrote for Ada in 2013
-and used in commercial production code for the last 9+ years. CLOG
+and used in commercial production code for the last 10+ years. CLOG
 itself is already used in commerical products, corporate websites,
 and other opensource projects.
 
@@ -59,7 +50,7 @@ programming logic, events and decisions are done on the server
 which can be local, or remote over the web.
 
 CLOG is developed with ECL and SBCL, it is tested fairly regulary on
- Linux, Windows, Rasberry Pi (running Ubuntu), M1 and Intel Mac. It
+ Linux, Windows, Android, Rasperry Pi, and Mac. It
  should in theory work out of the box on any system with Quicklisp
  (although you could hand install) and CLACK (easily switched out
  and the ecl Android/iPhone branch for example doesn't use).
