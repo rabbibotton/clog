@@ -27,15 +27,20 @@ Production: apt install libgtk-3-0 libwebkit2gtk-4.0-37
 ./make-snake
 ./make-builder
 ```
-On Windows a precompiled clogframe.exe is included
+
+On Windows a precompiled clogframe.exe is availble at:
+https://rabbibotton.github.io/clog/clogframe.zip
+
+If you have the tools it can be built with make-windows.bat
+
 ```
-make-snake.exe
-make-builder.exe
+make-snake.bat
+make-builder.bat
 ```
 
 On All Platfroms:
 
-This will create three executable clogframe, snake and builder. clogframe
+This will create three executables clogframe, snake and builder. clogframe
 must be in the same directory wtih the other executables. Then
 run:
 ```
