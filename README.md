@@ -6,6 +6,8 @@
 
 [Learn to program Common Lisp and CLOG here - LEARN.md](LEARN.md)
 
+[Video of CLOG Builder in action](https://youtu.be/CgTJMxsz3EY)
+
 ---
 
 ![Image of CLOG](https://rabbibotton.github.io/images/clog.png)
@@ -56,10 +58,8 @@ CLOG is developed with ECL and SBCL, it is tested fairly regulary on
  and the ecl Android/iPhone branch for example doesn't use).
 
 CLOG is in QuickLisp (ql:quickload :clog), however I recommend
-installing Ultralisp into your QuickLisp as you likely want the
-most up to date version or you can also clone the github repo into
-~/common-lisp directory [or other quicklisp/asdf findable directory
-``(push #P"path/to/dir/of/projects" ql:*local-project-directories*)`` ]:
+cloning CLOG into ~/common-lisp directory [or other quicklisp/asdf
+findable directory ``(push #P"path/to/dir/of/projects" ql:*local-project-directories*)`` ]:
 
 ```
 For git (you need the ace editor plug in for the builder too from git):
@@ -74,7 +74,7 @@ To update in the future go to the created directories and type:
 git pull
 
 
-To add UltraLisp to QuickLisp (_RECOMMENDED_):
+To add UltraLisp to QuickLisp (updates quicker than the standard QuickLisp):
 
 To add UtraLisp to quicklisp install:
 (ql-dist:install-dist "http://dist.ultralisp.org/"

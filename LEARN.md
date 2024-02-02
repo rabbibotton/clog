@@ -37,6 +37,12 @@ already being productive means having a bang up time doin' it all.
 -  [14 - Kindergarten          - Concurrent and Parallel Programing](https://docs.google.com/document/d/10MGPC7j4lpGrMlQS4xtQTEGrvpBecgDUnqu1OrjSVxk)
 -  [15 - Pulling it All Togeher With A Real GUI App - clos-encounters game](https://github.com/rabbibotton/clos-encounters)
 
+CLOG Videos
+
+- [CLOG "Plunger" Video series use CLOG Builder to create a pro-app](https://www.youtube.com/playlist?list=PLSUeblYuDUiOucAaqkrVlmOG4p-q7lFU6)
+- [CLOG Extra - Learn tips on using CLOG](https://www.youtube.com/playlist?list=PLSUeblYuDUiNWHCf8xbHNlxPFQ5clF0YG)
+- [Common Lisp The Language 2ed Book Course](https://www.youtube.com/playlist?list=PLSUeblYuDUiNqagWU4NF4w5zsjs6Xo7H9)
+
 Other Tutorials and General Material:
 - [lisp-lang](https://lisp-lang.org/)
 - [Awesome-CL libraries](https://github.com/CodyReichert/awesome-cl)
@@ -54,11 +60,6 @@ Full Free Books:
 ![Image of CLOG](https://rabbibotton.github.io/images/demo-clog-contact.png)
 
 CLOG Builder Tutorials (Reddit links)
-
-View the CLOG "Plunger" Video series (more weekly) and learn by example
-how to use the CLOG Builder to create a pro-app:
-
-https://www.youtube.com/playlist?list=PLSUeblYuDUiOucAaqkrVlmOG4p-q7lFU6
 
 -  [01 - Chat App                        ](https://www.reddit.com/r/lisp/comments/sj1tv5/clog_builder_tutorial_1_a_chat_app_from_start_to/)
 -  [02 - Building a Web Page             ](https://www.reddit.com/r/lisp/comments/sn8j77/clog_builder_tutorial_2_building_a_web_page/)
