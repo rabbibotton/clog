@@ -35,20 +35,21 @@
 7. Download QuickLisp:
 
    Open the Git Bash shell from your windows apps and run
-
+```
    cd
    curl -o /tmp/ql.lisp http://beta.quicklisp.org/quicklisp.lisp
+```
 
 8. Install QuickLisp:
 
    Continue in the Git Bash shell and run
-   ```
+```
    sbcl --no-sysinit --no-userinit --load /tmp/ql.lisp \
        --eval '(quicklisp-quickstart:install :path "~/.quicklisp")' \
        --eval '(ql:add-to-init-file)' \
        --quit
    sbcl --eval '(ql:quickload :quicklisp-slime-helper)' --quit
-   ```
+```
    
    Run rho emacs with (I would add to path or make a script):
 
@@ -66,15 +67,18 @@
    Quit emacs - C-x C-y
 
    Start again emacs
-
+   
+```
    /c/Program\ Files/rho-emacs/rho
-
+```
    Run Slime - M-x slime
 
 7. Install CLOG:
-
+8. 
+```
    (ql:quickload :clog)
    (clog:run-demo 1)
+```
 
    [Learn about CLOG](README.md)
    [Learn Common-Lisp](LEARN.md)
