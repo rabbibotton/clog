@@ -815,14 +815,15 @@ The on-window-change clog-obj received is the new window"))
                                           title-class
                                           html-id)
   (:documentation "Create a clog-gui-window. If client-movement is t then
-use jquery-ui to move/resize and will not work on mobile. When client-movement
-is t only on-window-move is fired once at start of drag and on-window-move-done
-at end of drag and on-window-resize at start of resize and
-on-window-resize-done at end of resize. If has-pinner a toggle wil appear on
-title bar to allow pinning the window in place, if keep-on-top t then when
-pinned also will keep-on-top. If had-pinned is nil and keep-on-top t then
-the window will be set to keep-on-top always. window-param is a general parameter
-for identifiying the window to use with window-to-top-by-param or window-by-param."))
+use jquery-ui to move/resize and will not work on mobile and touch events
+are limitted to clicks. When client-movement is t only on-window-move is fired
+once at start of drag and on-window-move-done at end of drag and
+on-window-resize at start of resize and on-window-resize-done at end of resize.
+If has-pinner a toggle wil appear on title bar to allow pinning the window in
+place, if keep-on-top t then when pinned also will keep-on-top. If had-pinned
+is nil and keep-on-top t then the window will be set to keep-on-top always.
+window-param is a general parameter for identifiying the window to use with
+window-to-top-by-param or window-by-param."))
 
 (defmethod create-gui-window ((obj clog-obj) &key (title "New Window")
                                                (content "")

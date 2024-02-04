@@ -109,7 +109,7 @@
                                          <center>CLOG</center>
                                          <center>The Common Lisp Omnificent GUI</center></div>
                                          <div><p><center>Tutorial 22</center>
-                                         <center>(c) 2021 - David Botton</center></p></div>"
+                                         <center>(c) 2024 - David Botton</center></p></div>"
                                    :hidden  t
                                    :width   200
                                    :height  215)))
@@ -129,7 +129,7 @@
 (defun on-new-window (body)
   (setf (title (html-document body)) "Tutorial 22")
   ;; For web oriented apps consider using the :client-movement option.
-  ;; See clog-gui-initialize documentation.
+  ;; See clog-gui-window documentation.
   (clog-gui-initialize body)
   (add-class body "w3-cyan")
   (let* ((menu  (create-gui-menu-bar body))
