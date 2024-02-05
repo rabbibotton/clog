@@ -71,17 +71,21 @@ CONNECTION-ID to it and then return it. The HTML-ID must be unique. (private)"
 ;; Low Level - clog-element
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;
 ;; create-element ;;
-;;;;;;;;;;;;;;;;;;
-(defgeneric create-element (clog-obj html-tag &rest all-args &key content clog-type html-id
-                                                                  auto-place &allow-other-keys )
-  (:documentation "Create a new CLOG-element as child of CLOG-OBJ with any possible keywords.")
-  (:method (clog-obj html-tag &rest all-args &key (content "")
-                                                  clog-type
-                                                  (html-id (clog-connection:generate-id))
-                                                  (auto-place t)
-                              &allow-other-keys )
+;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric create-element (clog-obj html-tag &rest all-args
+			    &key content clog-type html-id auto-place
+			    &allow-other-keys)
+  (:documentation "Create a new CLOG-element as child of CLOG-OBJ with any possible keyword."))
+
+(defmethod create-element (clog-obj html-tag &rest all-args
+			   &key (content "")
+			     clog-type
+                             html-id
+                             (auto-place t)
+                           &allow-other-keys)
     (let* ((extra-args (alexandria:remove-from-plist all-args :content :clog-type :html-id :auto-place))
            (html (with-output-to-string (*standard-output*)
                    (format t "<~(~a~) " html-tag)
@@ -96,7 +100,7 @@ CONNECTION-ID to it and then return it. The HTML-ID must be unique. (private)"
       (create-child clog-obj html
                     :clog-type  clog-type
                     :html-id    html-id
-                    :auto-place auto-place))))
+                    :auto-place auto-place)))
 
 ;;;;;;;;;;;;;;;;;;
 ;; create-child ;;
@@ -518,7 +522,7 @@ Normally index follows normal sequence of elements."))
 <tag>Text Content</tag> - Text content is the content contained by the
                           tag including child tags. This should not be
                           confused with the 'Value' of a Form Tag.
-                          User TEXT-VALUE for just the text associated
+                          Use TEXT-VALUE for just the text associated
                           with <tag>. (See clog-form.lisp)"))
 
 (defmethod text ((obj clog-element))
@@ -538,7 +542,7 @@ Normally index follows normal sequence of elements."))
 (defgeneric text-value (clog-element)
   (:documentation "Get/Setf the first text node of CLOG-ELEMENT.
 Unlike TEXT this is only the text associated with this <tag>
-Additionally for forms get/setf the value."))
+Additionally works for forms and can get/setf the values."))
 
 (defmethod text-value ((obj clog-element))
   (jquery-query obj (format nil "contents().not(~A.children()).text()"
@@ -957,7 +961,6 @@ flex-basis (default :auto = use width or height) for CLOG-ELEMENT"))
 (defmethod set-flex ((obj clog-element)
                      &key (grow 0) (shrink 1) (flex-basis :auto))
   (setf (style obj "flex") (format nil "~A ~A ~A" grow shrink flex-basis)))
-
 
 ;;;;;;;;;;;;;;;
 ;; flex-wrap ;;

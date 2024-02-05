@@ -22,7 +22,7 @@ own context and therefore its own copy of this variable when
 dynamically bound. As a result no thread protection is needed to
 access. To use dynamically bind the *connection-cache* and set it
 to (list :cache) turn on caching. By default this is off its main use
-is in initial setup complex pages. (private)
+is during initial setup of complex pages. (private)
 See macro with-connection-cache.")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -584,7 +584,6 @@ object"))
 (defmethod set-on-resize ((obj clog-obj) handler)
   (set-on-event obj "resize" handler))
 
-
 ;;;;;;;;;;;;;;;;;;
 ;; set-on-focus ;;
 ;;;;;;;;;;;;;;;;;;
@@ -682,7 +681,6 @@ is nil unbind the event."))
 
 (defmethod set-on-drag-enter ((obj clog-obj) handler)
   (set-on-event obj "dragenter" handler))
-
 
 ;;;;;;;;;;;;;;;;;;;;;;;
 ;; set-on-drag-leave ;;
