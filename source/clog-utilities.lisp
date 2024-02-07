@@ -136,6 +136,38 @@ CLOG-OBJ unless :NAME is set and is used instead."))
       "off"))
 
 ;;;;;;;;;;;;;;;;;;;
+;; js-to-integer ;;
+;;;;;;;;;;;;;;;;;;;
+
+(defun js-to-integer (value &key (default 0))
+  "Returns two values first as an integer and second the original value"
+  (cond ((typep value 'integer)
+	 (values value value))
+	((typep value 'string)
+	 (let ((r (parse-integer value :junk-allowed t)))
+	   (if r
+	       (values r value)
+	       (values default value))))
+	(t
+	 (values default value))))
+
+;;;;;;;;;;;;;;;;;
+;; js-to-float ;;
+;;;;;;;;;;;;;;;;;
+
+(defun js-to-float (value &key (default 0.0d0))
+  "Returns two values first as a float and second the original value"
+  (cond ((typep value 'float)
+	 (values value value))
+	((typep value 'string)
+	 (let ((r (parse-float value :type 'double-float :junk-allowed t)))
+	   (if r
+	       (values r value)
+	       (values default value))))
+	(t
+	 (values default value))))
+
+;;;;;;;;;;;;;;;;;;;
 ;; escape-string ;;
 ;;;;;;;;;;;;;;;;;;;
 

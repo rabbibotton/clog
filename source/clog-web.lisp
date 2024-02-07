@@ -17,7 +17,7 @@
 
 (mgl-pax:define-package :clog-web
   (:documentation "CLOG-WEB a web page style abstraction for CLOG")
-  (:use #:cl #:parse-float #:clog #:mgl-pax))
+  (:use #:cl #:clog #:mgl-pax))
 
 (cl:in-package :clog-web)
 

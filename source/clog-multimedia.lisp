@@ -43,7 +43,7 @@
   (:documentation "Get/Setf media in seconds property."))
 
 (defmethod media-duration ((obj clog-multimedia))
-  (parse-float (property obj "duration" :default-answer 0) :type 'double-float :junk-allowed t))
+  (js-to-float (property obj "duration")))
 
 ;;;;;;;;;;;;;;;;;;
 ;; media-source ;;
@@ -69,7 +69,7 @@
   (:documentation "Get/Setf postion of media in seconds."))
 
 (defmethod media-position ((obj clog-multimedia))
-  (parse-float (property obj "currentTime" :default-answer 0) :type 'double-float :junk-allowed t))
+  (js-to-float (property obj "currentTime")))
 
 (defgeneric (setf media-position) (value clog-multimedia)
   (:documentation "Set media source VALUE for CLOG-MULTIMEDIA"))
@@ -160,7 +160,7 @@ duration."))
   (:documentation "Get/Setf media volume, not system volume. 0.0 .. 1.0"))
 
 (defmethod media-volume ((obj clog-multimedia))
-  (parse-float (property obj "volume" :default-answer 0) :type 'double-float :junk-allowed t))
+  (js-to-float (property obj "volume")))
 
 (defgeneric (setf media-volume) (value clog-multimedia)
   (:documentation "Set media source VALUE for CLOG-MULTIMEDIA"))

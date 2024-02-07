@@ -78,7 +78,8 @@ CONNECTION-ID to it and then return it. The HTML-ID must be unique. (private)"
 (defgeneric create-element (clog-obj html-tag &rest all-args
 			    &key content clog-type html-id auto-place
 			    &allow-other-keys)
-  (:documentation "Create a new CLOG-element as child of CLOG-OBJ with any possible keyword."))
+  (:documentation "Create a new CLOG-ELEMENT as child of CLOG-OBJ with any
+possible tag and keywords."))
 
 (defmethod create-element (clog-obj html-tag &rest all-args
 			   &key (content "")
@@ -86,14 +87,19 @@ CONNECTION-ID to it and then return it. The HTML-ID must be unique. (private)"
                              html-id
                              (auto-place t)
                            &allow-other-keys)
-    (let* ((extra-args (alexandria:remove-from-plist all-args :content :clog-type :html-id :auto-place))
+  (let* ((extra-args (alexandria:remove-from-plist all-args
+						   :content :clog-type
+						   :html-id :auto-place))
            (html (with-output-to-string (*standard-output*)
                    (format t "<~(~a~) " html-tag)
                    (loop for (key value) on extra-args by #'cddr
                          do (format t "~(~a~)=~s" key value))
                    (format t " id=~s>~A</~(~a~)>" html-id content html-tag)))
            (clog-type (or clog-type
-                          (let* ((class-name (intern (string-upcase (format nil "CLOG-~a" html-tag)) :clog)))
+                          (let* ((class-name (intern (string-upcase
+						      (format nil "CLOG-~a"
+							      html-tag))
+						     :clog)))
                             (when (find-class class-name nil)
                               class-name))
                           'clog-element)))
@@ -599,8 +605,7 @@ Additionally works for forms and can get/setf the values."))
 in pixels (css left in pixels)."))
 
 (defmethod position-left ((obj clog-element))
-  (parse-integer (jquery-query obj "position().left" :default-answer 0)
-                 :junk-allowed t))
+  (js-to-integer (jquery-query obj "position().left")))
 
 ;;;;;;;;;;;;;;;;;;
 ;; position-top ;;
@@ -611,8 +616,7 @@ in pixels (css left in pixels)."))
 in pixels (css top in pixels)."))
 
 (defmethod position-top ((obj clog-element))
-  (parse-integer (jquery-query obj "position().top" :default-answer 0)
-                 :junk-allowed t))
+  (js-to-integer (jquery-query obj "position().top")))
 
 ;;;;;;;;;;;;;;;;;
 ;; client-left ;;
@@ -623,8 +627,7 @@ in pixels (css top in pixels)."))
 in pixels. It does not include the margin or padding."))
 
 (defmethod client-left ((obj clog-element))
-  (parse-integer (property obj "clientLeft" :default-answer 0)
-                 :junk-allowed t))
+  (js-to-integer (property obj "clientLeft")))
 
 ;;;;;;;;;;;;;;;;
 ;; client-top ;;
@@ -635,8 +638,7 @@ in pixels. It does not include the margin or padding."))
 in pixels. It does not include the margin or padding."))
 
 (defmethod client-top ((obj clog-element))
-  (parse-integer (property obj "clientTop" :default-answer 0)
-                 :junk-allowed t))
+  (js-to-integer (property obj "clientTop")))
 
 ;;;;;;;;;;;;;;;;;;
 ;; client-width ;;
@@ -648,8 +650,7 @@ CSS width + CSS padding - width of vertical scrollbar (if present)
 Does not include the border or margin."))
 
 (defmethod client-width ((obj clog-element))
-  (parse-integer (property obj "clientWidth" :default-answer 0)
-                 :junk-allowed t))
+  (js-to-integer (property obj "clientWidth")))
 
 ;;;;;;;;;;;;;;;;;;;
 ;; client-height ;;
@@ -661,8 +662,7 @@ CSS height + CSS padding - height of horizontal scrollbar (if present)
 Does not include the border or margin."))
 
 (defmethod client-height ((obj clog-element))
-  (parse-integer (property obj "clientHeight" :default-answer 0)
-                 :junk-allowed t))
+  (js-to-integer (property obj "clientHeight")))
 
 ;;;;;;;;;;;;;;;;;
 ;; offset-left ;;
@@ -673,7 +673,7 @@ Does not include the border or margin."))
 child border left."))
 
 (defmethod offset-left ((obj clog-element))
-  (property obj "offsetLeft"))
+  (js-to-integer (property obj "offsetLeft")))
 
 ;;;;;;;;;;;;;;;;
 ;; offset-top ;;
@@ -684,7 +684,7 @@ child border left."))
 child border top."))
 
 (defmethod offset-top ((obj clog-element))
-  (property obj "offsetTop"))
+  (js-to-integer (property obj "offsetTop")))
 
 ;;;;;;;;;;;;;;;;;;
 ;; offset-width ;;
@@ -695,7 +695,7 @@ child border top."))
 vertical scrollbar (if present) + Border"))
 
 (defmethod offset-width ((obj clog-element))
-  (property obj "offsetWidth"))
+  (js-to-integer (property obj "offsetWidth")))
 
 ;;;;;;;;;;;;;;;;;;;
 ;; offset-height ;;
@@ -706,7 +706,7 @@ vertical scrollbar (if present) + Border"))
 horizontal scrollbar (if present) + Border"))
 
 (defmethod offset-height ((obj clog-element))
-  (property obj "offsetHeight"))
+  (js-to-integer (property obj "offsetHeight")))
 
 ;;;;;;;;;;;;;;;;;
 ;; scroll-left ;;
@@ -717,8 +717,7 @@ horizontal scrollbar (if present) + Border"))
 content is scrolled to the left. For RTL languages is negative."))
 
 (defmethod scroll-left ((obj clog-element))
-  (parse-integer (property obj "scrollLeft" :default-answer 0)
-                 :junk-allowed t))
+  (js-to-integer (property obj "scrollLeft")))
 
 (defgeneric (setf scroll-left) (value clog-element)
   (:documentation "Set scroll-left VALUE for CLOG-ELEMENT"))
@@ -735,8 +734,7 @@ content is scrolled to the left. For RTL languages is negative."))
 content has been scrolled upward."))
 
 (defmethod scroll-top ((obj clog-element))
-  (parse-integer (property obj "scrollTop" :default-answer 0)
-                 :junk-allowed t))
+  (js-to-integer (property obj "scrollTop")))
 
 (defgeneric (setf scroll-top) (value clog-element)
   (:documentation "Set scroll-top VALUE for CLOG-ELEMENT"))
@@ -753,8 +751,7 @@ content has been scrolled upward."))
 of an element or the width of the element itself, whichever is greater."))
 
 (defmethod scroll-width ((obj clog-element))
-  (parse-integer (property obj "scrollWidth" :default-answer 0)
-                 :junk-allowed t))
+  (js-to-integer (property obj "scrollWidth")))
 
 ;;;;;;;;;;;;;;;;;;;
 ;; scroll-height ;;
@@ -765,8 +762,7 @@ of an element or the width of the element itself, whichever is greater."))
 content not visible on the screen due to overflow."))
 
 (defmethod scroll-height ((obj clog-element))
-  (parse-integer (property obj "scrollHeight" :default-answer 0)
-                 :junk-allowed t))
+  (js-to-integer (property obj "scrollHeight")))
 
 ;;;;;;;;;;;;;;
 ;; html-tag ;;
@@ -1382,7 +1378,7 @@ Note: z-index only works on Elements with Position Type of absolute,
       relative and fixed."))
 
 (defmethod z-index ((obj clog-element))
-  (parse-integer (style obj "z-index" :default-answer 0) :junk-allowed t))
+  (js-to-integer (style obj "z-index")))
 
 (defgeneric (setf z-index) (value clog-element)
   (:documentation "Set z-index VALUE for CLOG-ELEMENT"))
@@ -1447,8 +1443,7 @@ right, top and bottom are interpreted.
 parent in the DOM."))
 
 (defmethod position-top ((obj clog-element))
-  (parse-integer (jquery-query obj "position().top" :default-answer 0)
-                 :junk-allowed t))
+  (js-to-integer (jquery-query obj "position().top")))
 
 ;;;;;;;;;;;;;;;;;;;
 ;; position-left ;;
@@ -1459,8 +1454,7 @@ parent in the DOM."))
 parent in the DOM."))
 
 (defmethod position-left ((obj clog-element))
-  (parse-integer (jquery-query obj "position().left" :default-answer 0)
-                 :junk-allowed t))
+  (js-to-integer (jquery-query obj "position().left")))
 
 ;;;;;;;;;;;;;;;;
 ;; offset-top ;;
@@ -1470,8 +1464,7 @@ parent in the DOM."))
   (:documentation "Position in pixels from top relative to the document."))
 
 (defmethod offset-top ((obj clog-element))
-  (parse-integer (jquery-query obj "offset().top" :default-answer 0)
-                 :junk-allowed t))
+  (js-to-integer (jquery-query obj "offset().top")))
 
 ;;;;;;;;;;;;;;;;;
 ;; offset-left ;;
@@ -1481,9 +1474,7 @@ parent in the DOM."))
   (:documentation "Position in pixels from left relative to the document."))
 
 (defmethod offset-left ((obj clog-element))
-  (parse-integer (jquery-query obj "offset().left" :default-answer 0)
-                 :junk-allowed t))
-
+  (js-to-integer (jquery-query obj "offset().left")))
 
 ;;;;;;;;;;;;;;;;;;
 ;; set-geometry ;;
@@ -1532,7 +1523,7 @@ UNITS (default :px) is used."))
 ;;;;;;;;;;;
 
 (defgeneric right (clog-element)
-  (:documentation "Get/Setf right (defaults to us :px units)."))
+  (:documentation "Get/Setf right (defaults to use :px units)."))
 
 (defmethod right ((obj clog-element))
   (style obj "right"))
@@ -1548,7 +1539,7 @@ UNITS (default :px) is used."))
 ;;;;;;;;;
 
 (defgeneric top (clog-element)
-  (:documentation "Get/Setf top (defaults to us :px units)."))
+  (:documentation "Get/Setf top (defaults to use :px units)."))
 
 (defmethod top ((obj clog-element))
   (style obj "top"))
@@ -1564,7 +1555,7 @@ UNITS (default :px) is used."))
 ;;;;;;;;;;;;
 
 (defgeneric bottom (clog-element)
-  (:documentation "Get/Setf bottom (defaults to us :px units)."))
+  (:documentation "Get/Setf bottom (defaults to use :px units)."))
 
 (defmethod bottom ((obj clog-element))
   (style obj "bottom"))
@@ -1690,9 +1681,9 @@ UNITS (default :px) is used."))
 ;;  For reference:
 ;;  | Margin | Border | Padding | Scroll | [Element] | Scroll | Padding ...
 ;;
-;;  Height and Width of Element are in clog-base
-;;  All the following have the advantage of the CSS related size properties
-;;  in that the results are always pixels and numeric.
+;;  Height and Width of Element are in clog-base 
+;;  All the following have the advantage in that the results are always
+;;  pixels and numeric.
 
 ;;;;;;;;;;;;;;;;;;
 ;; inner-height ;;
@@ -1702,7 +1693,7 @@ UNITS (default :px) is used."))
   (:documentation "Get/Setf inner-height. Includes padding but not border."))
 
 (defmethod inner-height ((obj clog-element))
-  (jquery-query obj "innerHeight()"))
+  (js-to-intger (jquery-query obj "innerHeight()")))
 
 (defgeneric (setf inner-height) (value clog-element)
   (:documentation "Set inner-height VALUE for CLOG-ELEMENT"))
@@ -1719,7 +1710,7 @@ UNITS (default :px) is used."))
   (:documentation "Get/Setf inner-width. Includes padding but not border."))
 
 (defmethod inner-width ((obj clog-element))
-  (jquery-query obj "innerWidth()"))
+  (js-to-integer (jquery-query obj "innerWidth()")))
 
 (defgeneric (setf inner-width) (value clog-element)
   (:documentation "Set inner-width VALUE for CLOG-ELEMENT"))
@@ -1737,7 +1728,7 @@ UNITS (default :px) is used."))
 margin."))
 
 (defmethod outer-height ((obj clog-element))
-  (jquery-query obj "outerHeight()"))
+  (js-to-integer (jquery-query obj "outerHeight()")))
 
 ;;;;;;;;;;;;;;;;;
 ;; outer-width ;;
@@ -1748,7 +1739,7 @@ margin."))
 but not margin."))
 
 (defmethod outer-width ((obj clog-element))
-  (jquery-query obj "outerWidth()"))
+  (js-to-integer (jquery-query obj "outerWidth()")))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; outer-height-to-margin ;;
@@ -1770,7 +1761,7 @@ margin."))
 margin."))
 
 (defmethod outer-width-to-margin ((obj clog-element))
-  (jquery-query obj "outerWidth(true)"))
+  (js-to-integer (jquery-query obj "outerWidth(true)")))
 
 ;;;;;;;;;;;
 ;; color ;;

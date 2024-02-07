@@ -75,7 +75,7 @@ no redirection of browser takes place. REWRITE-URL must be same domain."))
   (:documentation "Get/Setf inner height of browser window."))
 
 (defmethod inner-height ((obj clog-window))
-  (parse-integer (query obj "innerHeight" :default-answer 0) :junk-allowed t))
+  (js-to-integer (query obj "innerHeight")))
 
 (defgeneric (setf inner-height) (value clog-window))
 
@@ -91,7 +91,7 @@ no redirection of browser takes place. REWRITE-URL must be same domain."))
   (:documentation "Get/Setf inner width of browser window."))
 
 (defmethod inner-width ((obj clog-window))
-  (parse-integer (query obj "innerWidth" :default-answer 0) :junk-allowed t))
+  (js-to-integer (query obj "innerWidth")))
 
 (defgeneric (setf inner-width) (value clog-window))
 
@@ -107,7 +107,7 @@ no redirection of browser takes place. REWRITE-URL must be same domain."))
   (:documentation "Get/Setf outer height of browser window."))
 
 (defmethod outer-height ((obj clog-window))
-  (parse-integer (query obj "outerHeight" :default-answer 0) :junk-allowed t))
+  (js-to-integer (query obj "outerHeight")))
 
 (defgeneric (setf outer-height) (value clog-window))
 
@@ -123,7 +123,7 @@ no redirection of browser takes place. REWRITE-URL must be same domain."))
   (:documentation "Get/Setf outer width of browser window."))
 
 (defmethod outer-width ((obj clog-window))
-  (parse-integer (query obj "outerWidth" :default-answer 0) :junk-allowed t))
+  (js-to-integer (query obj "outerWidth")))
 
 (defgeneric (setf outer-width) (value clog-window))
 
@@ -139,7 +139,7 @@ no redirection of browser takes place. REWRITE-URL must be same domain."))
   (:documentation "Get/Setf browser window x offset from left edge."))
 
 (defmethod x-offset ((obj clog-window))
-  (parse-integer (query obj "pageXOffset" :default-answer 0) :junk-allowed t))
+  (js-to-integer (query obj "pageXOffset")))
 
 (defgeneric (setf x-offset) (value clog-window))
 
@@ -155,7 +155,7 @@ no redirection of browser takes place. REWRITE-URL must be same domain."))
   (:documentation "Get/Setf browser window y offset from top edge."))
 
 (defmethod y-offset ((obj clog-window))
-  (parse-integer (query obj "pageYOffset" :default-answer 0) :junk-allowed t))
+  (js-to-integer (query obj "pageYOffset")))
 
 (defgeneric (setf y-offset) (value clog-window))
 
@@ -171,7 +171,7 @@ no redirection of browser takes place. REWRITE-URL must be same domain."))
   (:documentation "Get/Setf browser y postion."))
 
 (defmethod top ((obj clog-window))
-  (parse-integer (query obj "screenY" :default-answer 0) :junk-allowed t))
+  (js-to-integer (query obj "screenY")))
 
 (defgeneric (setf top) (value clog-window))
 
@@ -187,7 +187,7 @@ no redirection of browser takes place. REWRITE-URL must be same domain."))
   (:documentation "Get/Setf browser x position."))
 
 (defmethod left ((obj clog-window))
-  (parse-integer (query obj "screenX" :default-answer 0) :junk-allowed t))
+  (js-to-integer (query obj "screenX")))
 
 (defgeneric (setf left) (value clog-window))
 
@@ -213,7 +213,7 @@ no redirection of browser takes place. REWRITE-URL must be same domain."))
   (:documentation "Get screen width."))
 
 (defmethod screen-width ((obj clog-window))
-  (parse-integer (query obj "screen.width" :default-answer 0) :junk-allowed t))
+  (js-to-integer (query obj "screen.width")))
 
 ;;;;;;;;;;;;;;;;;;;
 ;; screen-height ;;
@@ -223,7 +223,7 @@ no redirection of browser takes place. REWRITE-URL must be same domain."))
   (:documentation "Get screen height."))
 
 (defmethod screen-height ((obj clog-window))
-  (parse-integer (query obj "screen.height" :default-answer 0) :junk-allowed t))
+  (js-to-integer (query obj "screen.height")))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; screen-available-width ;;
@@ -233,7 +233,7 @@ no redirection of browser takes place. REWRITE-URL must be same domain."))
   (:documentation "Get available screen width."))
 
 (defmethod screen-available-width ((obj clog-window))
-  (parse-integer (query obj "screen.availWidth" :default-answer 0) :junk-allowed t))
+  (js-to-integer (query obj "screen.availWidth")))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; screen-available-height ;;
@@ -243,7 +243,7 @@ no redirection of browser takes place. REWRITE-URL must be same domain."))
   (:documentation "Get available screen height."))
 
 (defmethod screen-available-height ((obj clog-window))
-  (parse-integer (query obj "screen.availHeight" :default-answer 0) :junk-allowed t))
+  (js-to-integer (query obj "screen.availHeight")))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; screen-available-left ;;
@@ -253,7 +253,7 @@ no redirection of browser takes place. REWRITE-URL must be same domain."))
   (:documentation "Get available screen left."))
 
 (defmethod screen-available-left ((obj clog-window))
-  (parse-integer (query obj "screen.availLeft" :default-answer 0) :junk-allowed t))
+  (js-to-integer (query obj "screen.availLeft")))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; screen-available-top ;;
@@ -263,7 +263,7 @@ no redirection of browser takes place. REWRITE-URL must be same domain."))
   (:documentation "Get available screen top."))
 
 (defmethod screen-available-top ((obj clog-window))
-  (parse-integer (query obj "screen.availTop" :default-answer 0) :junk-allowed t))
+  (js-to-integer (query obj "screen.availTop")))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;
 ;; screen-color-depth ;;
@@ -557,7 +557,7 @@ on-storage event is fired for changes to :local storage keys."))
 (local = persistant or session)"))
 
 (defmethod storage-length ((obj clog-window) storage-type)
-  (parse-integer (query obj (format nil "~(~a~)Storage.length" storage-type) :default-answer 0)))
+  (js-to-integer (query obj (format nil "~(~a~)Storage.length" storage-type))))
 
 ;;;;;;;;;;;;;;;;;
 ;; storage-key ;;

@@ -8,7 +8,7 @@
 
 (mgl-pax:define-package :clog-webgl
   (:documentation "CLOG-WEBGL bindings to WebGL")
-  (:use #:cl #:parse-float #:clog #:mgl-pax))
+  (:use #:cl #:clog #:mgl-pax))
 
 (cl:in-package :clog-webgl)
 
@@ -192,13 +192,13 @@ can be webgl (version 1) or webgl2 (default)"))
   (:documentation "Drawing are of buffer width. returns float"))
 
 (defmethod drawing-buffer-width ((obj clog-webgl))
-  (parse-float (query obj "drawingBufferWidth")))
+  (js-to-float (query obj "drawingBufferWidth")))
 
 (defgeneric drawing-buffer-height (clog-webgl)
   (:documentation "Drawing are of buffer height. returns float"))
 
 (defmethod drawing-buffer-height ((obj clog-webgl))
-  (parse-float (query obj "drawingBufferHeight")))
+  (js-to-float (query obj "drawingBufferHeight")))
 
 (defgeneric buffer-parameter (clog-webgl glenum-target glenum-pname)
   (:documentation "Returns information about the buffer.
@@ -262,7 +262,7 @@ When using a WebGL 2 context, the following values are available additionally:
   (query obj "getContextAttributes()"))
 
 (defmethod webgl-error ((obj clog-webgl))
-  (parse-integer (query obj "getError()")))
+  (js-to-integer (query obj "getError()")))
 
 ;; WebGLRenderingContext.getExtension()
 
@@ -430,7 +430,7 @@ Equivalent to :FRAMEBUFFER. Used as a destination for drawing, rendering, cleari
 Used as a source for reading operations."))
 
 (defmethod check-frame-buffer-status ((obj clog-webgl) target)
-  (parse-integer (query obj (format nil "checkFrameBufferStatus(~A.~A)"
+  (js-to-integer (query obj (format nil "checkFrameBufferStatus(~A.~A)"
                                     (script-id obj) target))
                  :junk-allowed t))
 

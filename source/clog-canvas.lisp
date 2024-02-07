@@ -120,7 +120,7 @@ See https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/fi
   (:documentation "Setf/get global alpha"))
 
 (defmethod global-alpha ((obj clog-context2d))
-  (parse-float (query obj "globalAlpha")))
+  (js-to-float (query obj "globalAlpha")))
 
 (defmethod (setf global-alpha) (value (obj clog-context2d))
   (execute obj (format nil "globalAlpha=~A" value)))
@@ -188,7 +188,7 @@ https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/global
   (:documentation "Setf/get miter style limit"))
 
 (defmethod line-dash-offset ((obj clog-context2d))
-  (parse-float (query obj "lineDashOffset")))
+  (js-to-float (query obj "lineDashOffset")))
 
 (defmethod (setf line-dash-offset) (value (obj clog-context2d))
   (execute obj (format nil "lineDashOffset=~A" value)))
@@ -229,7 +229,7 @@ https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/global
   (:documentation "Setf/get miter style limit"))
 
 (defmethod miter-limit ((obj clog-context2d))
-  (parse-float (query obj "miterLimit")))
+  (js-to-float (query obj "miterLimit")))
 
 (defmethod (setf miter-limit) (value (obj clog-context2d))
   (execute obj (format nil "miterLimit=~A" value)))
@@ -242,7 +242,7 @@ https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/global
   (:documentation "Setf/get text shadow blur"))
 
 (defmethod shadow-blur ((obj clog-context2d))
-  (parse-float (query obj "shadowBlur")))
+  (js-to-float (query obj "shadowBlur")))
 
 (defmethod (setf shadow-blur) (value (obj clog-context2d))
   (execute obj (format nil "shadowBlur=~A" value)))
@@ -268,7 +268,7 @@ https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/global
   (:documentation "Setf/get text shadow offset x"))
 
 (defmethod shadow-offset-x ((obj clog-context2d))
-  (parse-float (query obj "shadowOffsetX")))
+  (js-to-float (query obj "shadowOffsetX")))
 
 (defmethod (setf shadow-offset-x) (value (obj clog-context2d))
   (execute obj (format nil "shadowOffsetX=~A" value)))
@@ -281,7 +281,7 @@ https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/global
   (:documentation "Setf/get text shadow offset y"))
 
 (defmethod shadow-offset-y ((obj clog-context2d))
-  (parse-float (query obj "shadowOffsetY=~A")))
+  (js-to-float (query obj "shadowOffsetY=~A")))
 
 (defmethod (setf shadow-offset-y) (value (obj clog-context2d))
   (execute obj (format nil "shadowOffsetY=~A" value)))
@@ -921,10 +921,10 @@ https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/global
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defmethod width ((obj clog-image-data))
-  (parse-integer (query obj "width")))
+  (js-to-integer (query obj "width")))
 
 (defmethod height ((obj clog-image-data))
-  (parse-integer (query obj "height")))
+  (js-to-integer (query obj "height")))
 
 (defgeneric json-image-data (clog-image-data)
   (:documentation "Setf/get json image data"))
@@ -948,73 +948,73 @@ https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/global
 
 (defmethod width ((obj clog-text-metrics))
   "Width of text"
-  (parse-float (query obj "width")))
+  (js-to-float (query obj "width")))
 
 (defgeneric actual-bounding-box-left (clog-text-metrics)
   (:documentation "Actual bounding box left"))
 
 (defmethod actual-bounding-box-left ((obj clog-text-metrics))
-  (parse-float (query obj "actualBoundingBoxLeft")))
+  (js-to-float (query obj "actualBoundingBoxLeft")))
 
 (defgeneric actual-bounding-box-right (clog-text-metrics)
   (:documentation "Actual bounding box right"))
 
 (defmethod actual-bounding-box-right ((obj clog-text-metrics))
-  (parse-float (query obj "actualBoundingBoxRight")))
+  (js-to-float (query obj "actualBoundingBoxRight")))
 
 (defgeneric actual-bounding-box-ascent (clog-text-metrics)
   (:documentation "Actual bounding box ascent"))
 
 (defmethod actual-bounding-box-ascent ((obj clog-text-metrics))
-  (parse-float (query obj "actualBoundingBoxAscent")))
+  (js-to-float (query obj "actualBoundingBoxAscent")))
 
 (defgeneric actual-bounding-box-descent (clog-text-metrics)
   (:documentation "Actual bounding box descent"))
 
 (defmethod actual-bounding-box-descent ((obj clog-text-metrics))
-  (parse-float (query obj "actualBoundingBoxDescent")))
+  (js-to-float (query obj "actualBoundingBoxDescent")))
 
 (defgeneric font-bounding-box-ascent (clog-text-metrics)
   (:documentation "Font bounding box ascent"))
 
 (defmethod font-bounding-box-ascent ((obj clog-text-metrics))
-  (parse-float (query obj "fontBoundingBoxAscent")))
+  (js-to-float (query obj "fontBoundingBoxAscent")))
 
 (defgeneric font-bounding-box-descent (clog-text-metrics)
   (:documentation "Font bounding box descent"))
 
 (defmethod font-bounding-box-descent ((obj clog-text-metrics))
-  (parse-float (query obj "fontBoundingBoxDescent")))
+  (js-to-float (query obj "fontBoundingBoxDescent")))
 
 (defgeneric em-height-ascent (clog-text-metrics)
   (:documentation "'M' height ascent"))
 
 (defmethod em-height-ascent ((obj clog-text-metrics))
-  (parse-float (query obj "emHeightAscent")))
+  (js-to-float (query obj "emHeightAscent")))
 
 (defgeneric em-height-descent (clog-text-metrics)
   (:documentation "'M' height descent"))
 
 (defmethod em-height-descent ((obj clog-text-metrics))
-  (parse-float (query obj "emHeightDescent")))
+  (js-to-float (query obj "emHeightDescent")))
 
 (defgeneric hanging-baseline (clog-text-metrics)
   (:documentation "Hanging baseline"))
 
 (defmethod hanging-baseline ((obj clog-text-metrics))
-  (parse-float (query obj "hangingBaseline")))
+  (js-to-float (query obj "hangingBaseline")))
 
 (defgeneric alphabetic-baseline (clog-text-metrics)
   (:documentation "Alphabetic baseline"))
 
 (defmethod alphabetic-baseline ((obj clog-text-metrics))
-  (parse-float (query obj "alphabeticBaseline")))
+  (js-to-float (query obj "alphabeticBaseline")))
 
 (defgeneric ideographic-baseline (clog-text-metrics)
   (:documentation "Ideographic baseline"))
 
 (defmethod ideographic-baseline ((obj clog-text-metrics))
-  (parse-float (query obj "ideographicBaseline")))
+  (js-to-float (query obj "ideographicBaseline")))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

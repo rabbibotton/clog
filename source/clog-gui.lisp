@@ -15,7 +15,7 @@
 
 (mgl-pax:define-package :clog-gui
   (:documentation "CLOG-GUI a desktop GUI abstraction for CLOG")
-  (:use #:cl #:parse-float #:clog #:mgl-pax))
+  (:use #:cl #:clog #:mgl-pax))
 
 (cl:in-package :clog-gui)
 
@@ -355,8 +355,8 @@ window or nil if not found"))
 
 (defun make-in-bounds (obj mbh bh bw)
   "Insure obj in bounds of gui (private)"
-  (let* ((top-loc   (parse-integer (top obj) :junk-allowed t))
-	 (left-loc  (parse-integer (left obj) :junk-allowed t))
+  (let* ((top-loc   (js-to-integer (top obj)))
+	 (left-loc  (js-to-integer (left obj)))
 	 (width-loc (width obj)))
     (if (< (+ left-loc width-loc) 25)
 	(setf (left obj) (unit :px (- 25 width-loc))))
@@ -730,9 +730,9 @@ The on-window-change clog-obj received is the new window"))
           (setf (drag-obj app) target)
           (cond ((equalp (in-drag app) "m")
                  (setf obj-top
-                       (parse-integer (top (drag-obj app)) :junk-allowed t))
+                       (js-to-integer (top (drag-obj app))))
                  (setf obj-left
-                       (parse-integer (left (drag-obj app)) :junk-allowed t))
+                       (js-to-integer (left (drag-obj app))))
                  (setf perform-drag (fire-on-window-can-move (drag-obj app))))
                 ((equalp (in-drag app) "s")
                  (setf obj-top  (height (drag-obj app)))
