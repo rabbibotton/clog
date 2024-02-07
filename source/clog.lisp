@@ -97,6 +97,8 @@ embedded in a native template application.)"
   (p-on-js       function)
   (escape-string function)
   (lf-to-br      function)
+  (js-to-integer function)
+  (js-to-float   function)
 
   "CLOG Color utilities"
   (rgb           function)

@@ -10,16 +10,16 @@ Using VSCODE instead of emacs:
 
 git clone https://github.com/fare/asdf.git
 
-- Download and install vscode
-
-- Go to - https://marketplace.visualstudio.com/items?itemName=rheller.alive
-
-You need to insure you have pre-requisites installed so open sbcl or slime in Emacs and run;
+- You need to insure you have pre-requisites installed so open sbcl or slime in Emacs and run:
 
 (ql:quickload :cl-json)
 (ql:quickload :bordeaux-threads)
 (ql:quickload :usocket)
 (ql:quickload :flexi-streams)
+
+- Download and install vscode
+
+- Go to - https://marketplace.visualstudio.com/items?itemName=rheller.alive
 
 Click install and follow directions
 
