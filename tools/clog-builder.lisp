@@ -2980,11 +2980,10 @@ to use that asdf system's static root."
                                        (asdf:system-source-directory system))))
   (when app
     (setf *app-mode* app))
-  (when (eql port 0)
-    (setf port (clog-connection:random-port)))
   (if static-root
       (initialize nil :port port :static-root static-root)
       (initialize nil :port port))
+  (setf port clog:*clog-port*)
   (set-on-new-window 'on-new-builder :path "/builder")
   (set-on-new-window 'on-new-db-admin :path "/dbadmin")
   (set-on-new-window 'on-attach-builder-page :path "/builder-page")

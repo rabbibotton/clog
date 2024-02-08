@@ -102,7 +102,8 @@ returns returns a blank page, if it is set to :error will signal an error and if
 set to a string will display the string. boot-function if set is called with the
 url and the contents of boot-file and its return value replaces the contents
 sent to the brower, this allows adding content for search engine optimization,
-see tutorial 12 for an example."
+see tutorial 12 for an example. If port is nil or 0 a random available port
+number is chosen."
   (declare (ignorable host
                       port
                       server
@@ -122,11 +123,13 @@ see tutorial 12 for an example."
     (set-on-new-window on-new-window-handler :path "/" :boot-file boot-file))
   (unless *clog-running*
     (setf *clog-running* t)
+    (when (or (eql port 0) (eq port nil))
+      (setf port (clog-connection:random-port)))
     (setf *clog-port* port)
     (setf *static-root* (truename (or *overide-static-root*
                                       static-root)))
     (apply #'clog-connection:initialize
-           (append (list #'on-connect :static-root *static-root*)
+           (append (list #'on-connect :static-root *static-root* :port *clog-port*)
                    rest))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;
