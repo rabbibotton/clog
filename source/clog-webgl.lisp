@@ -431,8 +431,7 @@ Used as a source for reading operations."))
 
 (defmethod check-frame-buffer-status ((obj clog-webgl) target)
   (js-to-integer (query obj (format nil "checkFrameBufferStatus(~A.~A)"
-                                    (script-id obj) target))
-                 :junk-allowed t))
+                                    (script-id obj) target))))
 
 (defgeneric clear-color (clog-webgl red green blue alpha)
   (:documentation "Specifies the color values used when clearing color buffers

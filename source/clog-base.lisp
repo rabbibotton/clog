@@ -1200,13 +1200,14 @@ ON-TOUCH-MOVE-HANDLER is nil unbind the event."))
 ON-TOUCH-END-HANDLER is nil unbind the event."))
 
 (defmethod set-on-touch-end ((obj clog-obj) handler
-			     &key (one-time nil) (cancel-event nil))
+                             &key (one-time nil) (cancel-event nil))
   (set-event obj "touchend"
-	     (when handler
-	       (lambda (data)
-		 (funcall handler obj '(:event-type :touch))))
-	     :one-time one-time
-	     :cancel-event cancel-event))
+             (when handler
+               (lambda (data)
+                 (declare (ignore data))
+                 (funcall handler obj '(:event-type :touch))))
+             :one-time one-time
+             :cancel-event cancel-event))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; set-on-touch-cancel ;;
@@ -1220,7 +1221,7 @@ ON-TOUCH-CANCEL-HANDLER is nil unbind the event."))
   (set-event obj "touchcancel"
 	     (when handler
 	       (lambda (data)
-		 (declare (ignore dara))
+		 (declare (ignore data))
 		 (funcall handler obj)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;

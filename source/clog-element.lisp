@@ -1693,7 +1693,7 @@ UNITS (default :px) is used."))
   (:documentation "Get/Setf inner-height. Includes padding but not border."))
 
 (defmethod inner-height ((obj clog-element))
-  (js-to-intger (jquery-query obj "innerHeight()")))
+  (js-to-integer (jquery-query obj "innerHeight()")))
 
 (defgeneric (setf inner-height) (value clog-element)
   (:documentation "Set inner-height VALUE for CLOG-ELEMENT"))
