@@ -1526,7 +1526,7 @@ It parse the string TEXT without using READ functions."
     (if *app-mode*
         (open-browser :url (format nil "http://127.0.0.1:~A/test" *clog-port*))
         (open-window (window (connection-body obj))
-                     (format nil "http://127.0.0.1:~A/test" *clog-port*)))
+                     (format nil "/test" *clog-port*)))
     (on-open-file obj :title-class "w3-yellow" :title "test eval" :text result)))
 
 (defun on-show-control-properties-win (obj)
