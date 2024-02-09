@@ -1615,6 +1615,7 @@ It parse the string TEXT without using READ functions."
           (setf (clog-ace:read-only-p (event-editor app)) t)
           (set-on-event (event-editor app) "clog-save-ace"
                         (lambda (obj)
+                          (declare (ignore obj))
                           ;; toggle focus to force a save of event
                           (focus (events-list app))
                           (focus (event-editor app))))
@@ -1798,6 +1799,7 @@ It parse the string TEXT without using READ functions."
            (file-name        "")
            (render-file-name "")
            (panel-id  (html-id content)))
+      (declare (ignore spacer))
       (setf (background-color (top-panel box)) :black)
       (setf (checkedp cbox) t)
       (setf (advisory-title btn-copy) "copy")
@@ -1994,6 +1996,7 @@ It parse the string TEXT without using READ functions."
                                                        (when fname
                                                          (open-file-name fname)))))))
       (labels ((do-save (obj fname data)
+                 (declare (ignore obj data))
                  (setf file-name fname)
                  (setf render-file-name (format nil "~A~A.lisp"
                                                 (directory-namestring file-name)
@@ -2496,7 +2499,7 @@ It parse the string TEXT without using READ functions."
     (setf (gethash (format nil "~A-link" panel-uid) *app-sync-hash*)
           (lambda (obj)
             (setf content obj)
-            (setf panel-id (html-id content))
+            (setf panel-uid (html-id content))
             (destroy txt-area)
             (remhash (format nil "~A-link" panel-uid) *app-sync-hash*)))
     (unless url-launch
@@ -2598,11 +2601,11 @@ It parse the string TEXT without using READ functions."
            (btn-redo  (create-img tool-bar :alt-text "redo"     :url-src img-btn-redo  :class btn-class))
            (btn-save  (create-img tool-bar :alt-text "save"     :url-src img-btn-save  :class btn-class))
            (btn-load  (create-img tool-bar :alt-text "load"     :url-src img-btn-load  :class btn-class))
-           (spacer    (create-span tool-bar :content "&nbsp;"))
+           (spacer1   (create-span tool-bar :content "&nbsp;"))
            (btn-efrm  (create-button tool-bar :content "Eval Form" :class (format nil "w3-tiny ~A" btn-class)))
            (btn-esel  (create-button tool-bar :content "Eval Sel"  :class (format nil "w3-tiny ~A" btn-class)))
            (btn-test  (create-button tool-bar :content "Eval All"  :class (format nil "w3-tiny ~A" btn-class)))
-           (spacer    (create-span tool-bar :content "&nbsp;&nbsp;"))
+           (spacer2   (create-span tool-bar :content "&nbsp;&nbsp;"))
            (btn-help  (create-span tool-bar :content "?" :class "w3-tiny w3-ripple"))
            (content   (center-panel box))
            (pac-line  (create-form-element content :text :class "w3-black"))
@@ -2612,7 +2615,7 @@ It parse the string TEXT without using READ functions."
            (is-dirty  nil)
            (last-date nil)
            (file-name ""))
-      (declare (ignore spacer))
+      (declare (ignore spacer1 spacer2))
       (when text
         (setf (text-value ace) text))
       (set-on-window-focus win
@@ -2662,6 +2665,7 @@ It parse the string TEXT without using READ functions."
       (setup-lisp-ace ace status)
       (set-on-click btn-help
                     (lambda (obj)
+                      (declare (ignore obj))
                       (alert-dialog win
                                     "<table>
 <tr><td>cmd/alt-,</td><td>Configure editor</td></tr>
