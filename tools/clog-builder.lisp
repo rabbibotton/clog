@@ -2478,7 +2478,8 @@ It parse the string TEXT without using READ functions."
          (curl       (if custom-boot
                          (format nil "&curl=~A" (quri:url-encode custom-boot))
                          ""))
-         (link       (format nil "http://127.0.0.1:8080/~A?bid=~A~A" boot-loc panel-uid curl))
+         (link       (format nil "http://127.0.0.1:~A/~A?bid=~A~A" clog:*clog-port* boot-loc panel-uid curl))
+         (link-rel   (format nil "/~A?bid=~A~A" boot-loc panel-uid curl))
          (btn-txt    (if url-launch
                          "Click to launch default browser or copy URL."
                          "Click if browser does not open new page shortly."))
@@ -2503,7 +2504,7 @@ It parse the string TEXT without using READ functions."
             (destroy txt-area)
             (remhash (format nil "~A-link" panel-uid) *app-sync-hash*)))
     (unless url-launch
-      (open-window (window (connection-body obj)) link))))
+      (open-window (window (connection-body obj)) link-rel))))
 
 (defun on-help-about-builder (obj)
   "Open about box"
