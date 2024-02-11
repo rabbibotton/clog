@@ -1247,7 +1247,7 @@ of controls and double click to select control."
                 (format nil
                         "~A.commands.addCommand({
     name: 'save-ace',
-    bindKey: {win: 'Ctl-s',  mac: 'Command-s'},
+    bindKey: {win: 'Ctrl-s',  mac: 'Command-s'},
     exec: function(editor) {
         ~A.trigger('clog-save-ace');
     },
@@ -1325,7 +1325,7 @@ of controls and double click to select control."
                 (format nil
                         "~A.commands.addCommand({
     name: 'expand-region',
-    bindKey: {win: 'Ctl-=',  mac: 'Control-='},
+    bindKey: {win: 'Ctrl-=',  mac: 'Control-='},
     exec: function(editor) {
         var currentRange = editor.selection.getAllRanges()[0];
         var start = editor.session.doc.positionToIndex(currentRange.start);
