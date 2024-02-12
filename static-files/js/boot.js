@@ -33,15 +33,12 @@ function Shutdown_ws(event) {
 	ws = null;
     }
     clearInterval (pingerid);
-    clearInterval (retryid);
     if (clog['html_on_close'] != '') {
         $(document.body).html(clog['html_on_close']);
     }
 }
 
 function Setup_ws() {
-    clearInterval (retryid);
-    retryid = 0;
     ws.onmessage = function (event) {
         try {
             if (clog_debug == true) {
@@ -55,6 +52,7 @@ function Setup_ws() {
 
     var rc = function (event) {
 	console.log (event);
+	clearInterval (retryid);
 	ws = null;
 	ws = new WebSocket (adr  + '?r=' + clog['connection_id']);
         ws.onopen = function (event) {
@@ -64,8 +62,7 @@ function Setup_ws() {
         ws.onclose = function (event) {
             console.log ('reconnect failure');
 	    console.log (Date.now());
-	    if (retryid == 0)
-		retryid = setInterval(function () {rc("Failed reconnect - trying again")}, 500);
+	    retryid = setInterval(function () {rc("Failed reconnect - trying again")}, 500);
         }
     }
 
