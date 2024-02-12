@@ -2,6 +2,7 @@ var ws=null;
 var adr; var adrc;
 var clog={};
 var pingerid;
+var retryid;
 var s = document.location.search;
 var tokens;
 var r = /[?&]?([^=]+)=([^&]*)/g;
@@ -32,12 +33,15 @@ function Shutdown_ws(event) {
 	ws = null;
     }
     clearInterval (pingerid);
+    clearInterval (retryid);
     if (clog['html_on_close'] != '') {
         $(document.body).html(clog['html_on_close']);
     }
 }
 
 function Setup_ws() {
+    clearInterval (retryid);
+    retryid = 0;
     ws.onmessage = function (event) {
         try {
             if (clog_debug == true) {
@@ -49,18 +53,25 @@ function Setup_ws() {
         }
     }
 
-    ws.onerror = function (event) {
-        console.log ('onerror: reconnect');
-        ws = null;
-        ws = new WebSocket (adr  + '?r=' + clog['connection_id']);
+    var rc = function (event) {
+	console.log (event);
+	ws = null;
+	ws = new WebSocket (adr  + '?r=' + clog['connection_id']);
         ws.onopen = function (event) {
-            console.log ('onerror: reconnect successful');
+            console.log ('reconnect successful');
             Setup_ws();
         }
         ws.onclose = function (event) {
-            console.log ('onerror: reconnect failure');
-            Shutdown_ws(event);
+            console.log ('reconnect failure');
+	    console.log (Date.now());
+	    if (retryid == 0)
+		retryid = setInterval(function () {rc("Failed reconnect - trying again")}, 500);
         }
+    }
+
+    ws.onerror = function (event) {
+        console.log ('onerror: reconnect');
+	rc("onerror - trying reconnect")
     }
 
     ws.onclose = function (event) {
@@ -68,17 +79,7 @@ function Setup_ws() {
             console.log("WebSocket connection got normal close from server. Don't reconnect.");
             Shutdown_ws(event);
         } else {
-            console.log ('onclose: reconnect');
-            ws = null;
-            ws = new WebSocket (adr + '?r=' + clog['connection_id']);
-            ws.onopen = function (event) {
-                console.log ('onclose: reconnect successful');
-                Setup_ws();
-            }
-            ws.onclose = function (event) {
-                console.log ('onclose: reconnect failure');
-                Shutdown_ws(event);
-            }
+	    rc("onclose - trying reconnnect");
         }
     }
 }
