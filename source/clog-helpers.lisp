@@ -92,12 +92,15 @@
 ;; clog-repl ;;
 ;;;;;;;;;;;;;;;
 
-(defun clog-repl (&key (clog-gui-initialize t) (clog-web-initialize t))
+(defun clog-repl (&key (clog-gui-initialize t)
+		    (clog-web-initialize t)
+		    (boot-file "/debug.html")
+		    (port 8080))
   "Set a path /repl that opens a blank page and sets the global
 clog-user:*body* to last window openned to /repl. Debug mode is
-set (logging to browser console), "
+set (logging to browser console) in the default debug.html boot-file."
   (unless *clog-running*
-    (initialize nil :boot-file "/debug.html"))
+    (initialize nil :boot-file boot-file :port port))
   (set-on-new-window (lambda (body)
                        (clog-connection:debug-mode (connection-id body))
                        (when clog-web-initialize

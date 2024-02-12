@@ -1010,6 +1010,7 @@ embedded in a native template application.)"
   (head-element     generic-function)
   (body-element     generic-function)
   (document-element generic-function)
+  (visibility-state generic-function)
   (ready-state      generic-function)
   (load-css         generic-function)
   (load-script      generic-function)
@@ -1020,6 +1021,8 @@ embedded in a native template application.)"
 
   "CLOG-Document - Events"
   (set-on-full-screen-change generic-function)
+  (set-on-visibility-change  generic-function)
+  (set-on-ready-state-change generic-function)
   (set-on-load-script        generic-function))
 
 (defsection @clog-navigator (:title "CLOG Navigator Objects")

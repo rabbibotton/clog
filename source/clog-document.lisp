@@ -141,10 +141,27 @@ clog-document object. (Private)"))
 ;;;;;;;;;;;;;;;;;
 
 (defgeneric ready-state (clog-document)
-  (:documentation "Get ready-state."))
+  (:documentation "Get ready-state. Returns 'loading'|'interactive'|'complete'.
+The state would only change if the boot-page was still loading css, graphics, etc.
+Under normal circumstance there is no need in CLOG to check if the state is ready
+as on-new-window is only called once one can interact with page. See also
+SET-ON-READY-STATE-CHANGE"))
 
 (defmethod ready-state ((obj clog-document))
   (query obj "readyState"))
+
+;;;;;;;;;;;;;;;;;;;;;;
+;; visibility-state ;;
+;;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric visibility-state (clog-document)
+  (:documentation "Get visibility-state. Returns the string 'visible' if
+browser is in non-minmized state and is partialy visible and 'hidden' is
+browser is minimized or no part of page is visible including an OS screen
+lock."))
+
+(defmethod visibility-state ((obj clog-document))
+  (query obj "visibilityState"))
 
 ;;;;;;;;;;;;;;
 ;; load-css ;;
@@ -286,3 +303,30 @@ If ON-FULL-SCREEN-CHANGE-HANDLER is nil unbind the event."))
 
 (defmethod set-on-full-screen-change ((obj clog-document) handler)
   (set-on-event obj "fullscreenchange" handler))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; set-on-visibility-change ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric set-on-visibility-change (clog-document
+                                       on-visibility-change-handler)
+  (:documentation "Set the ON-VISIBILITY-CHANGE-HANDLER for CLOG-OBJ.
+If ON-VISIBILITY-CHANGE-HANDLER is nil unbind the event. This event
+is fired when the page visibility has changed such as a tab being
+switch of browser minimized. Use the VISIBILITY-STATE property to
+identify chage."))
+
+(defmethod set-on-visibility-change ((obj clog-document) handler)
+  (set-on-event obj "visibilitychange" handler))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; set-on-ready-state-change ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric set-on-ready-state-change (clog-document
+                                       on-ready-state-change-handler)
+  (:documentation "Set the ON-READY-STATE-CHANGE-HANDLER for CLOG-OBJ.
+If ON-READY-STATE-CHANGE-HANDLER is nil unbind the event."))
+
+(defmethod set-on-ready-state-change ((obj clog-document) handler)
+  (set-on-event obj "readystatechange" handler))
