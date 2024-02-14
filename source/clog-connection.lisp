@@ -353,6 +353,9 @@ the default answer. (Private)"
                                  (t (c)
                                    (format t "Condition caught in clog-server :message - ~A.~&" c)
                                    (values 0 c)))))
+	(websocket-driver:on :error ws
+			     (lambda (msg)
+			       (format t "Websocket error - ~A~&" msg)))
         (websocket-driver:on :close ws
                              (lambda (&key code reason)
                                (declare (ignore code reason))
