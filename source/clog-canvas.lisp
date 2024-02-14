@@ -440,7 +440,7 @@ https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/global
 ;;;;;;;;;;;;;;;;;;;;;;;
 
 (defgeneric create-image-data (clog-context2d width height)
-  (:documentation "Create black image data"))
+  (:documentation "Create blank image data"))
 
 (defmethod create-image-data ((obj clog-context2d) width height)
   (let ((web-id (clog-connection:generate-id)))
