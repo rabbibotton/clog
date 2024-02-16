@@ -658,6 +658,10 @@ The on-window-change clog-obj received is the new window"))
     :accessor keep-on-top
     :initform nil
     :documentation "If t don't change z-order")
+   (window-size-mutex
+    :reader window-size-mutex
+    :initform (bordeaux-threads:make-lock)
+    :documentation "Sync maximize / normalize events")
    (window-select-item
     :accessor window-select-item
     :initform nil
@@ -1061,7 +1065,7 @@ the browser."))
 :focus (default t)."))
 
 (defmethod window-maximize ((obj clog-gui-window) &key (focus t))
-  (with-sync-event (obj) ; prevent race condition of maximize/normalize
+  (bordeaux-threads:with-lock-held ((window-size-mutex obj)) ; prevent race condition of maximize/normalize
     (let ((app (connection-data-item obj "clog-gui")))
       (when focus
 	(unless (keep-on-top obj)
@@ -1092,7 +1096,7 @@ the browser."))
 :focus (default t)."))
 
 (defmethod window-normalize ((obj clog-gui-window) &key (focus t))
-  (with-sync-event (obj) ; prevent race condition of maximize/normalize
+  (bordeaux-threads:with-lock-held ((window-size-mutex obj)) ; prevent race condition of maximize/normalize
     (when focus
       (unless (keep-on-top obj)
 	(window-focus obj)))
