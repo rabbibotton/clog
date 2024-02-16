@@ -115,7 +115,7 @@
   (let ((h (gethash panel-id (control-lists app))))
     (if h
 	h
-	(make-hash-table* :test #'equalp))))
+	(make-hash-table* :test #'equalp)))) ;; return empty hash to avoid map fails
 
 (defun add-to-control-list (app panel-id control)
   "Add a CONTROL on to control-list on PANEL-ID"
@@ -240,7 +240,6 @@
          (place-after control (get-placer control)))
        (get-control-list app panel-id))
       snap)))
-
 
 (defun save-panel (fname content panel-id hide-loc)
   "Save panel to FNAME"
@@ -872,7 +871,7 @@ not a temporarily attached one when using select-control."
           (with-input-from-string (n result)
             (let ((*standard-output* s)
                   (*print-case*      :downcase))
-              (format t ";;;; CLOG Builder generated code - modify original clog file")
+              (format t ";;;; CLOG Builder generated code - modify original .clog file and rerender")
               (loop
                 (let ((l (read n nil)))
                   (unless l (return))
