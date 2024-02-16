@@ -307,7 +307,8 @@ returns returns a blank page, if it is set to :error will signal an error and if
 set to a string will display the string. boot-function if set is called with the
 url and the contents of boot-file and its return value replaces the contents
 sent to the brower, this allows adding content for search engine optimization,
-see tutorial 12 for an example.</p></li>
+see tutorial 12 for an example. If port is nil or 0 a random available port
+number is chosen.</p></li>
 </ul>
 <p><a id="x-28CLOG-3A-2ASTATIC-ROOT-2A-20VARIABLE-29"></a>
 <a id="CLOG:*STATIC-ROOT*%20VARIABLE"></a></p>
@@ -462,6 +463,20 @@ and not for security purposes or html escapes.</p></li>
 <li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#CLOG:LF-TO-BR%20FUNCTION" >LF-TO-BR</a></span></span> <span class="locative-args">STR</span></span></p>
 
 <p>Change line feeds to <br>.</p></li>
+</ul>
+<p><a id="x-28CLOG-3AJS-TO-INTEGER-20FUNCTION-29"></a>
+<a id="CLOG:JS-TO-INTEGER%20FUNCTION"></a></p>
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#CLOG:JS-TO-INTEGER%20FUNCTION" >JS-TO-INTEGER</a></span></span> <span class="locative-args">VALUE &amp;KEY (DEFAULT 0)</span></span></p>
+
+<p>Returns two values first as an integer and second the original value</p></li>
+</ul>
+<p><a id="x-28CLOG-3AJS-TO-FLOAT-20FUNCTION-29"></a>
+<a id="CLOG:JS-TO-FLOAT%20FUNCTION"></a></p>
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#CLOG:JS-TO-FLOAT%20FUNCTION" >JS-TO-FLOAT</a></span></span> <span class="locative-args">VALUE &amp;KEY (DEFAULT 0.0d0)</span></span></p>
+
+<p>Returns two values first as a float and second the original value</p></li>
 </ul>
 <p>CLOG Color utilities</p>
 <p><a id="x-28CLOG-3ARGB-20FUNCTION-29"></a>
@@ -1154,7 +1169,8 @@ element objects.</p></li>
 <ul>
 <li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:CREATE-ELEMENT%20GENERIC-FUNCTION" >CREATE-ELEMENT</a></span></span> <span class="locative-args">CLOG-OBJ HTML-TAG &amp;REST ALL-ARGS &amp;KEY CONTENT CLOG-TYPE HTML-ID AUTO-PLACE &amp;ALLOW-OTHER-KEYS</span></span></p>
 
-<p>Create a new CLOG-element as child of <code>CLOG-OBJ</code> with any possible keywords.</p></li>
+<p>Create a new <a href="#CLOG:CLOG-ELEMENT%20CLASS" title="CLOG:CLOG-ELEMENT CLASS"><code>CLOG-ELEMENT</code></a> as child of <code>CLOG-OBJ</code> with any
+possible tag and keywords.</p></li>
 </ul>
 <p><a id="x-28CLOG-3ACREATE-CHILD-20GENERIC-FUNCTION-29"></a>
 <a id="CLOG:CREATE-CHILD%20GENERIC-FUNCTION"></a></p>
@@ -1380,7 +1396,7 @@ Normally index follows normal sequence of elements.</p></li>
 <p><tag>Text Content</tag> - Text content is the content contained by the
                           tag including child tags. This should not be
                           confused with the 'Value' of a Form Tag.
-                          User <a href="#CLOG:TEXT-VALUE%20GENERIC-FUNCTION" title="CLOG:TEXT-VALUE GENERIC-FUNCTION"><code>TEXT-VALUE</code></a> for just the text associated
+                          Use <a href="#CLOG:TEXT-VALUE%20GENERIC-FUNCTION" title="CLOG:TEXT-VALUE GENERIC-FUNCTION"><code>TEXT-VALUE</code></a> for just the text associated
                           with <tag>. (See clog-form.lisp)</p></li>
 </ul>
 <p><a id="x-28CLOG-3ATEXT-VALUE-20GENERIC-FUNCTION-29"></a>
@@ -1390,7 +1406,7 @@ Normally index follows normal sequence of elements.</p></li>
 
 <p>Get/Setf the first text node of <code>CLOG-ELEMENT</code>.
 Unlike <a href="#CLOG:TEXT%20GENERIC-FUNCTION" title="CLOG:TEXT GENERIC-FUNCTION"><code>TEXT</code></a> this is only the text associated with this <tag>
-Additionally for forms get/setf the value.</p></li>
+Additionally works for forms and can get/setf the values.</p></li>
 </ul>
 <p><a id="x-28CLOG-3ATEXT-DIRECTION-TYPE-20TYPE-29"></a>
 <a id="CLOG:TEXT-DIRECTION-TYPE%20TYPE"></a></p>
@@ -1982,14 +1998,14 @@ parent in the DOM.</p></li>
 <ul>
 <li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:RIGHT%20GENERIC-FUNCTION" >RIGHT</a></span></span> <span class="locative-args">CLOG-ELEMENT</span></span></p>
 
-<p>Get/Setf right (defaults to us :px units).</p></li>
+<p>Get/Setf right (defaults to use :px units).</p></li>
 </ul>
 <p><a id="x-28CLOG-3ABOTTOM-20GENERIC-FUNCTION-29"></a>
 <a id="CLOG:BOTTOM%20GENERIC-FUNCTION"></a></p>
 <ul>
 <li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:BOTTOM%20GENERIC-FUNCTION" >BOTTOM</a></span></span> <span class="locative-args">CLOG-ELEMENT</span></span></p>
 
-<p>Get/Setf bottom (defaults to us :px units).</p></li>
+<p>Get/Setf bottom (defaults to use :px units).</p></li>
 </ul>
 <p><a id="x-28CLOG-3ABOX-HEIGHT-20GENERIC-FUNCTION-29"></a>
 <a id="CLOG:BOX-HEIGHT%20GENERIC-FUNCTION"></a></p>
@@ -4609,7 +4625,7 @@ https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/global
 <ul>
 <li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:CREATE-IMAGE-DATA%20GENERIC-FUNCTION" >CREATE-IMAGE-DATA</a></span></span> <span class="locative-args">CLOG-CONTEXT2D WIDTH HEIGHT</span></span></p>
 
-<p>Create black image data</p></li>
+<p>Create blank image data</p></li>
 </ul>
 <p><a id="x-28CLOG-3ACREATE-CONIC-GRADIENT-20GENERIC-FUNCTION-29"></a>
 <a id="CLOG:CREATE-CONIC-GRADIENT%20GENERIC-FUNCTION"></a></p>
@@ -6643,14 +6659,15 @@ The on-window-change clog-obj received is the new window</p></li>
 <li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-GUI:CREATE-GUI-WINDOW%20GENERIC-FUNCTION" >CREATE-GUI-WINDOW</a></span></span> <span class="locative-args">CLOG-OBJ &amp;KEY TITLE CONTENT LEFT TOP WIDTH HEIGHT MAXIMIZE HAS-PINNER KEEP-ON-TOP WINDOW-PARAM HIDDEN CLIENT-MOVEMENT BORDER-CLASS TITLE-CLASS HTML-ID</span></span></p>
 
 <p>Create a clog-gui-window. If client-movement is t then
-use jquery-ui to move/resize and will not work on mobile. When client-movement
-is t only on-window-move is fired once at start of drag and on-window-move-done
-at end of drag and on-window-resize at start of resize and
-on-window-resize-done at end of resize. If has-pinner a toggle wil appear on
-title bar to allow pinning the window in place, if keep-on-top t then when
-pinned also will keep-on-top. If had-pinned is nil and keep-on-top t then
-the window will be set to keep-on-top always. window-param is a general parameter
-for identifiying the window to use with window-to-top-by-param or window-by-param.</p></li>
+use jquery-ui to move/resize and will not work on mobile and touch events
+are limitted to clicks. When client-movement is t only on-window-move is fired
+once at start of drag and on-window-move-done at end of drag and
+on-window-resize at start of resize and on-window-resize-done at end of resize.
+If has-pinner a toggle wil appear on title bar to allow pinning the window in
+place, if keep-on-top t then when pinned also will keep-on-top. If had-pinned
+is nil and keep-on-top t then the window will be set to keep-on-top always.
+window-param is a general parameter for identifiying the window to use with
+window-to-top-by-param or window-by-param.</p></li>
 </ul>
 <p><a id="x-28CLOG-GUI-3AWINDOW-TITLE-20GENERIC-FUNCTION-29"></a>
 <a id="CLOG-GUI:WINDOW-TITLE%20GENERIC-FUNCTION"></a></p>
@@ -8098,12 +8115,26 @@ on-storage event is fired for changes to :local storage keys.</p></li>
 
 <p>Reader for Body Element object</p></li>
 </ul>
+<p><a id="x-28CLOG-3AVISIBILITY-STATE-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG:VISIBILITY-STATE%20GENERIC-FUNCTION"></a></p>
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:VISIBILITY-STATE%20GENERIC-FUNCTION" >VISIBILITY-STATE</a></span></span> <span class="locative-args">CLOG-DOCUMENT</span></span></p>
+
+<p>Get visibility-state. Returns the string 'visible' if
+browser is in non-minmized state and is partialy visible and 'hidden' is
+browser is minimized or no part of page is visible including an OS screen
+lock.</p></li>
+</ul>
 <p><a id="x-28CLOG-3AREADY-STATE-20GENERIC-FUNCTION-29"></a>
 <a id="CLOG:READY-STATE%20GENERIC-FUNCTION"></a></p>
 <ul>
 <li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:READY-STATE%20GENERIC-FUNCTION" >READY-STATE</a></span></span> <span class="locative-args">CLOG-DOCUMENT</span></span></p>
 
-<p>Get ready-state.</p></li>
+<p>Get ready-state. Returns 'loading'|'interactive'|'complete'.
+The state would only change if the boot-page was still loading css, graphics, etc.
+Under normal circumstance there is no need in CLOG to check if the state is ready
+as on-new-window is only called once one can interact with page. See also
+<a href="#CLOG:SET-ON-READY-STATE-CHANGE%20GENERIC-FUNCTION" title="CLOG:SET-ON-READY-STATE-CHANGE GENERIC-FUNCTION"><code>SET-ON-READY-STATE-CHANGE</code></a></p></li>
 </ul>
 <p><a id="x-28CLOG-3ALOAD-CSS-20GENERIC-FUNCTION-29"></a>
 <a id="CLOG:LOAD-CSS%20GENERIC-FUNCTION"></a></p>
@@ -8160,6 +8191,25 @@ If <code>LOAD-ONLY-ONCE</code> is t first checks if previously loaded with load-
 
 <p>Set the <code>ON-FULL-SCREEN-CHANGE-HANDLER</code> for <a href="#CLOG:CLOG-OBJ%20CLASS" title="CLOG:CLOG-OBJ CLASS"><code>CLOG-OBJ</code></a>.
 If <code>ON-FULL-SCREEN-CHANGE-HANDLER</code> is nil unbind the event.</p></li>
+</ul>
+<p><a id="x-28CLOG-3ASET-ON-VISIBILITY-CHANGE-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG:SET-ON-VISIBILITY-CHANGE%20GENERIC-FUNCTION"></a></p>
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:SET-ON-VISIBILITY-CHANGE%20GENERIC-FUNCTION" >SET-ON-VISIBILITY-CHANGE</a></span></span> <span class="locative-args">CLOG-DOCUMENT ON-VISIBILITY-CHANGE-HANDLER</span></span></p>
+
+<p>Set the <code>ON-VISIBILITY-CHANGE-HANDLER</code> for <a href="#CLOG:CLOG-OBJ%20CLASS" title="CLOG:CLOG-OBJ CLASS"><code>CLOG-OBJ</code></a>.
+If <code>ON-VISIBILITY-CHANGE-HANDLER</code> is nil unbind the event. This event
+is fired when the page visibility has changed such as a tab being
+switch of browser minimized. Use the <a href="#CLOG:VISIBILITY-STATE%20GENERIC-FUNCTION" title="CLOG:VISIBILITY-STATE GENERIC-FUNCTION"><code>VISIBILITY-STATE</code></a> property to
+identify chage.</p></li>
+</ul>
+<p><a id="x-28CLOG-3ASET-ON-READY-STATE-CHANGE-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG:SET-ON-READY-STATE-CHANGE%20GENERIC-FUNCTION"></a></p>
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:SET-ON-READY-STATE-CHANGE%20GENERIC-FUNCTION" >SET-ON-READY-STATE-CHANGE</a></span></span> <span class="locative-args">CLOG-DOCUMENT ON-READY-STATE-CHANGE-HANDLER</span></span></p>
+
+<p>Set the <code>ON-READY-STATE-CHANGE-HANDLER</code> for <a href="#CLOG:CLOG-OBJ%20CLASS" title="CLOG:CLOG-OBJ CLASS"><code>CLOG-OBJ</code></a>.
+If <code>ON-READY-STATE-CHANGE-HANDLER</code> is nil unbind the event.</p></li>
 </ul>
 <p><a id="x-28CLOG-3ASET-ON-LOAD-SCRIPT-20GENERIC-FUNCTION-29"></a>
 <a id="CLOG:SET-ON-LOAD-SCRIPT%20GENERIC-FUNCTION"></a></p>
@@ -8427,11 +8477,11 @@ result or <code>DEFAULT-ANSWER</code> on time out.</p></li>
 <p><a id="x-28CLOG-3ACLOG-REPL-20FUNCTION-29"></a>
 <a id="CLOG:CLOG-REPL%20FUNCTION"></a></p>
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#CLOG:CLOG-REPL%20FUNCTION" >CLOG-REPL</a></span></span> <span class="locative-args">&amp;KEY (CLOG-GUI-INITIALIZE <code>T</code>) (CLOG-WEB-INITIALIZE <code>T</code>)</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#CLOG:CLOG-REPL%20FUNCTION" >CLOG-REPL</a></span></span> <span class="locative-args">&amp;KEY (CLOG-GUI-INITIALIZE <code>T</code>) (CLOG-WEB-INITIALIZE <code>T</code>) (BOOT-FILE &quot;/debug.html&quot;) (PORT 8080)</span></span></p>
 
 <p>Set a path /repl that opens a blank page and sets the global
 clog-user:*body* to last window openned to /repl. Debug mode is
-set (logging to browser console), </p></li>
+set (logging to browser console) in the default debug.html boot-file.</p></li>
 </ul>
 <p><a id="x-28CLOG-3ASAVE-BODY-TO-FILE-20FUNCTION-29"></a>
 <a id="CLOG:SAVE-BODY-TO-FILE%20FUNCTION"></a></p>
