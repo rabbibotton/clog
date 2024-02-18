@@ -69,6 +69,11 @@ git clone https://github.com/rabbibotton/clog.git
 git clone https://github.com/rabbibotton/clog-ace.git
 git clone https://github.com/rabbibotton/clog-terminal.git
 
+For now one, until fix integrated, should also clone a branch of fast-websockets
+if using larger files in the builder:
+
+https://github.com/rabbibotton/fast-websocket.git
+
 To update in the future go to the created directories and type:
 
 git pull
