@@ -67,7 +67,7 @@
         (sel (text-value (project-list panel))))
     (unless (equal sel "None")
       (let ((sys (asdf:find-system (format nil "~A/tools" sel))))
-        (dolist (n (asdf:module-components sys))
+        (dolist (n (asdf:component-children sys))
           (let ((name      (format nil "~A" (asdf:component-relative-pathname n)))
                 (file-name (asdf:component-pathname n)))
             (when (and (> (length name) 5)
@@ -128,27 +128,28 @@
                                     sel))
     (when (current-project app)
       (cond ((member sel already :test #'equal)
-             ;; entry point
-             (setf (text-value (entry-point panel))
-                   (or (asdf/system:component-entry-point
-                        (asdf:find-system sel))
-                       ""))
-             (setf (current-project-dir app)
-                   (asdf:component-pathname
-                    (asdf:find-system sel)))
-             ;; fill runtime
-             (dolist (n (asdf:module-components
-                         (asdf:find-system sel)))
-               (let ((name (asdf:component-relative-pathname n))
-                     (path (asdf:component-pathname n)))
-                 (add-select-option (runtime-list panel) path name)))
-             (dolist (n (asdf:system-depends-on
-                         (asdf:find-system sel)))
-               (add-select-option (runtime-deps panel) n n))
+	     (let ((fs (asdf:find-system sel)))
+               ;; entry point
+               (setf (text-value (entry-point panel))
+                     (or (asdf/system:component-entry-point
+                          fs)
+			 ""))
+               (setf (current-project-dir app)
+                     (asdf:component-pathname
+                      fs))
+               ;; fill runtime
+               (dolist (n (asdf:component-children
+                           fs))
+		 (let ((name (asdf:component-relative-pathname n))
+                       (path (asdf:component-pathname n)))
+                   (add-select-option (runtime-list panel) path name)))
+               (dolist (n (asdf:system-depends-on
+                           fs))
+		 (add-select-option (runtime-deps panel) n n)))
              ;; fill designtime)
              (handler-case
                  (let ((sys (asdf:find-system (format nil "~A/tools" sel))))
-                   (dolist (n (asdf:module-components sys))
+                   (dolist (n (asdf:component-children sys))
                      (let ((name (asdf:component-relative-pathname n))
                            (path (asdf:component-pathname n)))
                        (add-select-option (designtime-list panel) path name)))
@@ -180,7 +181,8 @@
                       (cond (answer
                              (projects-load sel)
                              (ignore-errors
-                              (projects-load (format nil "~A/tools" sel)))
+			      (progn
+				(projects-load (format nil "~A/tools" sel))))
                              (projects-load sel)
                              (projects-populate panel))
                             (t
@@ -337,7 +339,7 @@
            (alert-toast target "Invalid action" "No /tools project" :time-out 1))
           ((equal (subseq item (1- (length item))) "/")
            (setf (inner-html list) "")
-           (dolist (n (asdf:module-components
+           (dolist (n (asdf:component-children
                        (asdf:find-component
                         (asdf:find-system system)
                         (subseq disp 0 (1- (length disp))))))
