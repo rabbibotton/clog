@@ -60,8 +60,8 @@
 (defmethod init-<%= (@ sys-name) %> ((obj <%= (@ sys-name) %>-element))
   (check-type obj clog:clog-obj)
   ;; Only init once
-  ;; use load-css for any css files to load
-  ;; ise load-script for any js files to load
+  ;; Use load-css for any css files to load
+  ;; Use load-script for any js files to load
   )
 
 (defgeneric attach-<%= (@ sys-name) %> (<%= (@ sys-name) %>-element)
