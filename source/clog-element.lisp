@@ -2150,6 +2150,12 @@ A list of standard cursor types can be found at:
         (format nil "~A ~A ~A ~A ~A"
                 font-style font-variant font-weight font-height font-family)))
 
+(defgeneric font-css (value)
+  (:documentation "Get/Setf font raw css value"))
+
+(defmethod font-css ((obj clog-element))
+  (style obj "font"))
+
 (defgeneric (setf font-css) (value clog-element)
   (:documentation "Set font VALUE for CLOG-ELEMENT"))
 

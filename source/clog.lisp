@@ -360,8 +360,6 @@ embedded in a native template application.)"
   (font-variant-type          type)
   (system-font-type           type)
   (font                       generic-function)
-  ;; This is not defined.
-  #+nil
   (font-css                   generic-function)
   (set-font                   generic-function)
   (text-alignment-type        type)
