@@ -19,9 +19,12 @@
 ;; make-clog-window ;;
 ;;;;;;;;;;;;;;;;;;;;;;
 
-(defun make-clog-window (connection-id)
+(defun make-clog-window (connection-id &key html-id)
   "Construct a new clog-window. (Private)"
-  (make-instance 'clog-window :connection-id connection-id :html-id "window"))
+  (make-instance 'clog-window :connection-id connection-id
+                              :html-id (if html-id
+                                           html-id
+                                           "window")))
 
 ;;;;;;;;;;;;;;;;;
 ;; window-name ;;
@@ -384,14 +387,18 @@ events and messages may not be trasmitted on most browsers."))
 
 (defgeneric open-window (clog-window url &key name specs replace)
   (:documentation "This will launch a new window of current browser where
-CLOG-WINDOW is displayed (remote or local). In modern browsers it is
-very limitted to just open a new tab with url unless is a localhost url."))
+CLOG-WINDOW is displayed (remote or local) and returns a new clog-window.
+In modern browsers it is very limitted to just open a new tab with url
+unless is a localhost url."))
 
 (defmethod open-window ((obj clog-window) url &key
                                                 (name "_blank")
                                                 (specs "")
                                                 (replace "false"))
-  (execute obj (format nil "open('~A','~A','~A',~A)" url name specs replace)))
+  (let ((new-id (format nil "CLOG~A" (clog-connection:generate-id))))
+    (execute obj (format nil "clog['~A']=open('~A','~A','~A',~A)"
+                         new-id url name specs replace))
+    (make-clog-window (connection-id obj) :html-id new-id)))
 
 ;;;;;;;;;;;;;;;;;;
 ;; close-window ;;
