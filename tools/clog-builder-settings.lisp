@@ -12,7 +12,8 @@
 ;; Best Dark Theme for Lisp
 ;;(defparameter *editor-theme* "ace/theme/terminal")
 (defparameter *editor-mode* "ace/mode/lisp")
-(defparameter *editor-keybinding* "ace/keyboard/emacs")
+;;(defparameter *editor-keybinding* "ace/keyboard/emacs")
+(defparameter *editor-keybinding* "ace/keyboard/ace")
 (defparameter *editor-tab-size* 2)
 (defparameter *editor-renderer-options*
 "fontSize : 14,
@@ -22,6 +23,7 @@
  showPrintMargin : true,
  showLineNumbers : true,
  showGutter : true,
+ enableBasicAutocompletion: true,
  enableLiveAutocompletion : true")
 
 (defparameter *import-types*
