@@ -1407,9 +1407,17 @@ var endRange = ~:*~A.session.doc.indexToPosition(endIndex);
                               (when r
                                 (setf (text status) (string-downcase r))))))))))
     (clog-ace:set-auto-completion editor t)
-    (setf (clog-ace:theme editor) "ace/theme/xcode")
-    (setf (clog-ace:mode editor) "ace/mode/lisp")
-    (setf (clog-ace:tab-size editor) 2)))
+    (setf (clog-ace:theme editor) *editor-theme*)
+    (setf (clog-ace:mode editor) *editor-mode*)
+    (setf (clog-ace:tab-size editor) *editor-tab-size*)
+    (js-execute editor
+                (format nil "~A.setKeyboardHandler('~A')"
+                        (clog-ace::js-ace editor)
+                        *editor-keybinding*))
+    (js-execute editor
+                (format nil "~A.setOptions({~A})"
+                        (clog-ace::js-ace editor)
+                        *editor-renderer-options*))))
 
 (defun get-package-from-string (c)
   "Determine the currect package based on src contained in string C"

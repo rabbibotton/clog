@@ -7,6 +7,23 @@
 
 (in-package :clog-tools)
 
+;; Best Light Theme for Lisp
+(defparameter *editor-theme* "ace/theme/iplastic")
+;; Best Dark Theme for Lisp
+;;(defparameter *editor-theme* "ace/theme/terminal")
+(defparameter *editor-mode* "ace/mode/lisp")
+(defparameter *editor-keybinding* "ace/keyboard/emacs")
+(defparameter *editor-tab-size* 2)
+(defparameter *editor-renderer-options*
+"fontSize : 14,
+ showInvisibles : false,
+ displayIndentGuides : true,
+ printMarginColumn : 80,
+ showPrintMargin : true,
+ showLineNumbers : true,
+ showGutter : true,
+ enableLiveAutocompletion : true")
+
 (defparameter *import-types*
   (list '(:tag "label"
           :control "label")
