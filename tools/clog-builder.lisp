@@ -2597,7 +2597,20 @@ It parse the string TEXT without using READ functions."
                                      :client-movement *client-side-movement*)))
     (create-thread-list (window-content win))))
 
-(defun on-open-file (obj &key open-file (title "New Source Editor") text (title-class "w3-black"))
+(defun on-open-file-window (body)
+  (set-html-on-close body "Connection Lost")
+  (let ((app (make-instance 'builder-app-data)))
+    (setf (connection-data-item body "builder-app-data") app)
+    (setf (title (html-document body)) "CLOG Builder - Source Editor")
+    (clog-gui-initialize body)
+    (add-class body "w3-blue-grey")
+    (on-open-file body :maximized t)))
+
+(defun on-open-file (obj &key open-file
+                           (title "New Source Editor")
+                           text
+                           (title-class "w3-black")
+                           maximized)
   "Open a new text editor"
   (unless (window-to-top-by-title obj open-file)
     (let* ((app (connection-data-item obj "builder-app-data"))
@@ -2633,6 +2646,8 @@ It parse the string TEXT without using READ functions."
            (last-date nil)
            (file-name ""))
       (declare (ignore spacer1 spacer2))
+      (when maximized
+        (window-maximize win))
       (when text
         (setf (text-value ace) text))
       (set-on-window-focus win
@@ -2904,23 +2919,27 @@ It parse the string TEXT without using READ functions."
            (win   (create-gui-menu-drop-down menu :content "Window"))
            (help  (create-gui-menu-drop-down menu :content "Help")))
       (declare (ignore icon))
-      (create-gui-menu-item file  :content "New CLOG-GUI Panel"        :on-click 'on-new-builder-panel)
-      (create-gui-menu-item file  :content "New CLOG-WEB Page"         :on-click 'on-new-builder-page)
-      (create-gui-menu-item file  :content "New Basic HTML Page"       :on-click 'on-new-builder-basic-page)
-      (create-gui-menu-item file  :content "New CLOG-WEB Delay Launch" :on-click 'on-new-builder-launch-page)
-      (create-gui-menu-item file  :content "New Custom Boot Page"      :on-click 'on-new-builder-custom)
-      (create-gui-menu-item file  :content "New Application Template"  :on-click 'on-new-app-template)
-      (create-gui-menu-item src   :content "Project Window"            :on-click 'on-show-project)
-      (create-gui-menu-item src   :content "New Source Editor"         :on-click 'on-open-file)
-      (Create-gui-menu-item src   :content "New System Browser"        :on-click 'on-new-sys-browser)
-      (create-gui-menu-item src   :content "New ASDF System Browser"   :on-click 'on-new-asdf-browser)
-      (create-gui-menu-item tools :content "Control Events"            :on-click 'on-show-control-events-win)
-      (create-gui-menu-item tools :content "Directory Window"          :on-click 'on-dir-win)
-      (create-gui-menu-item tools :content "List Callers"              :on-click 'on-show-callers)
-      (create-gui-menu-item tools :content "List Callees"              :on-click 'on-show-callees)
-      (create-gui-menu-item tools :content "Thread Viewer"             :on-click 'on-show-thread-viewer)
-      (create-gui-menu-item tools :content "CLOG Builder REPL"         :on-click 'on-repl)
-      (create-gui-menu-item tools :content "Copy/Cut History"          :on-click 'on-show-copy-history-win)
+      (create-gui-menu-item file  :content "New CLOG-GUI Panel"          :on-click 'on-new-builder-panel)
+      (create-gui-menu-item file  :content "New CLOG-WEB Page"           :on-click 'on-new-builder-page)
+      (create-gui-menu-item file  :content "New Basic HTML Page"         :on-click 'on-new-builder-basic-page)
+      (create-gui-menu-item file  :content "New CLOG-WEB Delay Launch"   :on-click 'on-new-builder-launch-page)
+      (create-gui-menu-item file  :content "New Custom Boot Page"        :on-click 'on-new-builder-custom)
+      (create-gui-menu-item file  :content "New Application Template"    :on-click 'on-new-app-template)
+      (create-gui-menu-item src   :content "Project Window"              :on-click 'on-show-project)
+      (create-gui-menu-item src   :content "New Source Editor"           :on-click 'on-open-file)
+      (create-gui-menu-item src   :content "New Source Editor (New Tab)" :on-click
+                            (lambda (obj)
+                              (declare (ignore obj))
+                              (open-window (window body) "/source-editor")))
+      (Create-gui-menu-item src   :content "New System Browser"          :on-click 'on-new-sys-browser)
+      (create-gui-menu-item src   :content "New ASDF System Browser"     :on-click 'on-new-asdf-browser)
+      (create-gui-menu-item tools :content "Control Events"              :on-click 'on-show-control-events-win)
+      (create-gui-menu-item tools :content "Directory Window"            :on-click 'on-dir-win)
+      (create-gui-menu-item tools :content "List Callers"                :on-click 'on-show-callers)
+      (create-gui-menu-item tools :content "List Callees"                :on-click 'on-show-callees)
+      (create-gui-menu-item tools :content "Thread Viewer"               :on-click 'on-show-thread-viewer)
+      (create-gui-menu-item tools :content "CLOG Builder REPL"           :on-click 'on-repl)
+      (create-gui-menu-item tools :content "Copy/Cut History"            :on-click 'on-show-copy-history-win)
       (unless *app-mode*
         (create-gui-menu-item tools :content "Image to HTML Data"        :on-click 'on-image-to-data))
       (create-gui-menu-item tools :content "Launch DB Admin"           :on-click
@@ -3009,6 +3028,7 @@ to use that asdf system's static root."
   (set-on-new-window 'on-new-db-admin :path "/dbadmin")
   (set-on-new-window 'on-attach-builder-page :path "/builder-page")
   (set-on-new-window 'on-convert-image :path "/image-to-data")
+  (set-on-new-window 'on-open-file-window :path "/source-editor")
   (when clogframe
     (uiop:run-program (list "./clogframe"
                             "CLOG Builder"
