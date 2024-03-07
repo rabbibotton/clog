@@ -8,6 +8,7 @@
 (in-package :clog-tools)
 
 (defparameter *start-project* nil)
+(defparameter *start-dir* nil)
 
 (defparameter *client-side-movement* nil)
 
@@ -1779,6 +1780,17 @@ It parse the string TEXT without using READ functions."
     (setf (hiddenp (right-panel app)) (not bool))
     (setf (hiddenp (left-panel app)) (not bool))))
 
+(defun on-new-builder-panel-ext (obj &key open-file popup)
+  (open-window (window (connection-body obj))
+               (if open-file
+                   (format nil "/panel-editor?open-file=~A"
+                           open-file)
+                   "/source-editor")
+               :specs (if popup
+                          "width=645,height-430"
+                          "")
+               :name "_blank"))
+
 (defun on-new-builder-panel (obj &key (open-file nil))
   "Open new panel"
   (unless (and open-file
@@ -2599,12 +2611,24 @@ It parse the string TEXT without using READ functions."
 
 (defun on-open-file-window (body)
   (set-html-on-close body "Connection Lost")
-  (let ((app (make-instance 'builder-app-data)))
+  (let ((app (make-instance 'builder-app-data))
+        (file (form-data-item (form-get-data body) "open-file")))
     (setf (connection-data-item body "builder-app-data") app)
     (setf (title (html-document body)) "CLOG Builder - Source Editor")
     (clog-gui-initialize body)
     (add-class body "w3-blue-grey")
-    (on-open-file body :maximized t)))
+    (on-open-file body :open-file file :maximized t)))
+
+(defun on-open-file-ext (obj &key open-file popup)
+  (open-window (window (connection-body obj))
+               (if open-file
+                   (format nil "/source-editor?open-file=~A"
+                           open-file)
+                   "/source-editor")
+               :specs (if popup
+                          "width=645,height-430"
+                          "")
+               :name "_blank"))
 
 (defun on-open-file (obj &key open-file
                            (title "New Source Editor")
@@ -2715,22 +2739,26 @@ It parse the string TEXT without using READ functions."
                                  (clog-ace:resize ace)))
       (flet ((open-file-name (fname)
                (window-focus win)
-               (when fname
-                 (setf last-date (file-write-date fname))
-                 (setf file-name fname)
-                 (setf (window-title win) fname)
-                 (let ((c (or (read-file fname) "" :clog-obj obj)))
-                   (cond ((or (equalp (pathname-type fname) "lisp")
-                              (equalp (pathname-type fname) "asd"))
-                          (setf (clog-ace:mode ace) "ace/mode/lisp")
-                          (setf (text-value pac-line) (get-package-from-string c))
-                          (setf lisp-file t)
-                          (setf (current-editor-is-lisp app) (text-value pac-line)))
-                         (t
-                          (setf lisp-file nil)
-                          (setf (current-editor-is-lisp app) nil)
-                          (setf (clog-ace:mode ace) (clog-ace:get-mode-from-extension ace fname))))
-                   (setf (clog-ace:text-value ace) c)))))
+               (handler-case
+                   (when fname
+                     (setf last-date (file-write-date fname))
+                     (setf file-name fname)
+                     (setf (window-title win) fname)
+                     (let ((c (or (read-file fname) "" :clog-obj obj)))
+                       (cond ((or (equalp (pathname-type fname) "lisp")
+                                  (equalp (pathname-type fname) "asd"))
+                              (setf (clog-ace:mode ace) "ace/mode/lisp")
+                              (setf (text-value pac-line) (get-package-from-string c))
+                              (setf lisp-file t)
+                              (setf (current-editor-is-lisp app) (text-value pac-line)))
+                             (t
+                              (setf lisp-file nil)
+                              (setf (current-editor-is-lisp app) nil)
+                              (setf (clog-ace:mode ace) (clog-ace:get-mode-from-extension ace fname))))
+                       (setf (clog-ace:text-value ace) c)))
+                 (error (condition)
+	           (alert-toast obj "File Error" (format nil "Error: ~A" condition))
+	           (format t "Error: ~A" condition)))))
         (when open-file
           (open-file-name open-file))
         (set-on-click btn-load (lambda (obj)
@@ -2888,9 +2916,10 @@ It parse the string TEXT without using READ functions."
                                            :title-class "w3-red"
                                            :text c)))))))
 
-(defun on-dir-win (obj &key dir)
+(defun on-dir-win (obj &key dir top left)
   "Open dir window"
   (let* ((win (create-gui-window obj :title "Directory Window"
+                                     :top top :left left
                                      :width 600 :height 400
                                      :client-movement *client-side-movement*))
          (d   (create-dir-view (window-content win))))
@@ -2898,10 +2927,14 @@ It parse the string TEXT without using READ functions."
     (when dir
       (populate-dir-win d dir))))
 
+(defun on-open-panel-window (body)
+  (on-new-builder body))
+
 (defun on-new-builder (body)
   "Launch instance of the CLOG Builder"
   (set-html-on-close body "Connection Lost")
-  (let ((app (make-instance 'builder-app-data)))
+  (let ((app       (make-instance 'builder-app-data))
+        (open-file (form-data-item (form-get-data body) "open-file")))
     (setf (connection-data-item body "builder-app-data") app)
     (setf (title (html-document body)) "CLOG Builder")
     (clog-gui-initialize body :body-left-offset 10 :body-right-offset 10)
@@ -2926,12 +2959,13 @@ It parse the string TEXT without using READ functions."
       (create-gui-menu-item file  :content "New Custom Boot Page"        :on-click 'on-new-builder-custom)
       (create-gui-menu-item file  :content "New Application Template"    :on-click 'on-new-app-template)
       (create-gui-menu-item src   :content "Project Window"              :on-click 'on-show-project)
+      (create-gui-menu-item src   :content "Directory Window"            :on-click 'on-dir-win)
       (create-gui-menu-item src   :content "New Source Editor"           :on-click 'on-open-file)
       (create-gui-menu-item src   :content "New Source Editor (New Tab)" :on-click
                             (lambda (obj)
                               (declare (ignore obj))
                               (open-window (window body) "/source-editor")))
-      (Create-gui-menu-item src   :content "New System Browser"          :on-click 'on-new-sys-browser)
+      (create-gui-menu-item src   :content "New System Browser"          :on-click 'on-new-sys-browser)
       (create-gui-menu-item src   :content "New ASDF System Browser"     :on-click 'on-new-asdf-browser)
       (create-gui-menu-item tools :content "Control Events"              :on-click 'on-show-control-events-win)
       (create-gui-menu-item tools :content "Directory Window"            :on-click 'on-dir-win)
@@ -2991,7 +3025,13 @@ It parse the string TEXT without using READ functions."
     (on-show-control-properties-win body)
     (on-show-control-list-win body)
     (on-show-copy-history-win body)
-    (on-show-project body :project *start-project*)
+    (cond
+      (open-file
+       (on-new-builder-panel body :open-file open-file))
+      (*start-dir*
+       (on-dir-win body :dir *start-dir* :top 60 :left 232))
+      (t
+        (on-show-project body :project *start-project*)))
     (set-on-before-unload (window body) (lambda(obj)
                                           (declare (ignore obj))
                                           ;; return empty string to prevent nav off page
@@ -3006,15 +3046,17 @@ It parse the string TEXT without using READ functions."
 clog-builder window.")
 
 (defun clog-builder (&key (port 8080) (start-browser t)
-                       app project static-root system clogframe)
+                       app project dir static-root system clogframe)
   "Start clog-builder. When PORT is 0 choose a random port. When APP is
 t, shutdown applicatoin on termination of first window. If APP eq :BATCH then
 must specific default project :PROJECT and it will be batch rerendered
 and shutdown application. You can set the specific STATIC-ROOT or set SYSTEM
-to use that asdf system's static root."
+to use that asdf system's static root. if DIR then the directory window
+instead of the project window will be displayed."
   (if project
       (setf *start-project* (string-downcase (format nil "~A" project)))
       (setf *start-project* nil))
+  (setf *start-dir* dir)
   (when system
     (setf static-root (merge-pathnames "./www/"
                                        (asdf:system-source-directory system))))
@@ -3028,6 +3070,7 @@ to use that asdf system's static root."
   (set-on-new-window 'on-new-db-admin :path "/dbadmin")
   (set-on-new-window 'on-attach-builder-page :path "/builder-page")
   (set-on-new-window 'on-convert-image :path "/image-to-data")
+  (set-on-new-window 'on-open-panel-window :path "/panel-editor")
   (set-on-new-window 'on-open-file-window :path "/source-editor")
   (when clogframe
     (uiop:run-program (list "./clogframe"

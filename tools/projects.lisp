@@ -1,7 +1,8 @@
-;;;; CLOG Builder generated code - modify original clog file
+;;;; CLOG Builder generated code - modify original .clog file and rerender
 (in-package :clog-tools)
 (defclass projects (clog:clog-panel)
-          ((design-plugin :reader design-plugin)
+          ((open-ext :reader open-ext) (ext-win-label :reader ext-win-label)
+           (design-plugin :reader design-plugin)
            (design-del-dep :reader design-del-dep)
            (design-add-dep :reader design-add-dep)
            (design-deps :reader design-deps)
@@ -34,105 +35,112 @@
   (let ((panel
          (change-class
           (clog:create-div clog-obj :content
-                           "<label for=\"undefined\" style=\"box-sizing: content-box; position: absolute; left: 5px; top: 6.99858px;\" id=\"CLOGB3871065905\" data-clog-name=\"projects-label\">Current Project</label><select style=\"box-sizing: content-box; position: absolute; left: 5px; top: 35px; width: 386.54px; height: 22px; bottom: 309.041px;\" id=\"CLOGB3871065906\" data-clog-name=\"project-list\"></select><button style=\"box-sizing: content-box; position: absolute; left: 400px; top: 32px; height: 22px; width: 90px;\" title=\"Manualy projects .asd file\" id=\"CLOGB3871065907\" data-clog-name=\"edit-asd\">Edit .asd</button><label for=\"CLOGB386871257741\" style=\"box-sizing: content-box; position: absolute; left: 5px; top: 69px;\" id=\"CLOGB3871065908\" data-clog-name=\"entry-point-label\">Entry Point - package:function</label><input type=\"TEXT\" value=\"\" style=\"box-sizing: content-box; position: absolute; left: 5px; top: 94px; width: 381px; height: 22.5px;\" id=\"CLOGB3871065909\" data-clog-name=\"entry-point\"><button style=\"box-sizing: content-box; position: absolute; left: 400px; top: 92px; width: 90px; height: 22.5px;\" id=\"CLOGB3871065910\" data-clog-name=\"run-button\">Run</button><button style=\"box-sizing: content-box; position: absolute; left: 520px; top: 8px; width: 100px; height: 22px;\" title=\"Create new project from template\" id=\"CLOGB3871065911\" data-clog-name=\"new-project-button\">New</button><button style=\"box-sizing: content-box; position: absolute; left: 520px; top: 43px; width: 100px; height: 22px; bottom: 309.041px;\" title=\"ASDF unload project from Lisp image\" id=\"CLOGB3871065912\" data-clog-name=\"unload-project-button\">Unload</button><button style=\"box-sizing: content-box; position: absolute; left: 521px; top: 79px; width: 100px; height: 22px; bottom: 309.041px;\" title=\"ASDF reload project in to Lisp image\" id=\"CLOGB3871065913\" data-clog-name=\"reload-project-button\">Reload</button><button style=\"box-sizing: content-box; position: absolute; left: 521px; top: 116px; width: 100px;\" tabindex=\"0\" title=\"Rerender all clog files to Lisp\" id=\"CLOGB3871065914\" data-clog-name=\"rerender-button\">Rerender</button><div style=\"box-sizing: content-box; position: absolute; left: 0px; top: 69px; width: 512px; height: 10px;\" id=\"CLOGB3871065915\" data-clog-name=\"file-group\"><label for=\"CLOGB3868393710\" style=\"box-sizing: content-box; position: absolute; left: 5px; top: 65px;\" id=\"CLOGB3871065916\" data-clog-name=\"runtime-label\">Runtime System</label><label for=\"CLOGB3868452429\" style=\"box-sizing: content-box; position: absolute; left: 5px; top: 85px;\" id=\"CLOGB3871065917\" data-clog-name=\"dbl-click1\">(double click to launch)</label><select size=\"4\" style=\"box-sizing: content-box; position: absolute; left: 5px; top: 115px; width: 260px; height: 196px;\" id=\"CLOGB3871065918\" data-clog-name=\"runtime-list\"></select><button style=\"box-sizing: content-box; position: absolute; left: 5px; top: 320px;\" id=\"CLOGB3871065919\" data-clog-name=\"runtime-add-lisp\">Add .lisp</button><button style=\"box-sizing: content-box; position: absolute; left: 93px; top: 320px; width: 65px; height: 22px;\" id=\"CLOGB3871065920\" data-clog-name=\"runtime-delete\">Remove</button><button style=\"box-sizing: content-box; position: absolute; left: 180px; top: 320px; width: 65px;\" id=\"CLOGB3871065921\" data-clog-name=\"runtime-dir\">View Dir</button><label for=\"CLOGB3868619266\" style=\"box-sizing: content-box; position: absolute; left: 5px; top: 365px;\" id=\"CLOGB3871065922\" data-clog-name=\"runtime-deps-label\">Runtime Dependecies</label><label for=\"CLOGB3868452430\" style=\"box-sizing: content-box; position: absolute; left: 290px; top: 85px;\" id=\"CLOGB3871065923\" data-clog-name=\"dbl-click2\">(double click to launch)</label><select size=\"4\" style=\"box-sizing: content-box; position: absolute; left: 5px; top: 395px; width: 260px; height: 75px;\" id=\"CLOGB3871065924\" data-clog-name=\"runtime-deps\"></select><button style=\"box-sizing: content-box; position: absolute; left: 5px; top: 480px; width: 65px;\" id=\"CLOGB3871065925\" data-clog-name=\"runtime-add-dep\">Add</button><button style=\"box-sizing: content-box; position: absolute; left: 95px; top: 480px; width: 65px; height: 22px;\" id=\"CLOGB3871065926\" data-clog-name=\"runtime-del-dep\">Remove</button><label for=\"CLOGB3868393704\" style=\"box-sizing: content-box; position: absolute; left: 290.007px; top: 65px;\" id=\"CLOGB3871065927\" data-clog-name=\"designtime-label\">Design Time System (/tools)</label><select size=\"4\" style=\"box-sizing: content-box; position: absolute; left: 290px; top: 115px; width: 265px; height: 195.545px;\" id=\"CLOGB3871065928\" data-clog-name=\"designtime-list\"></select><button style=\"box-sizing: content-box; position: absolute; left: 290px; top: 320px;\" id=\"CLOGB3871065929\" data-clog-name=\"designtime-add-clog\">Add .clog</button><button style=\"box-sizing: content-box; position: absolute; left: 386px; top: 320px;\" id=\"CLOGB3871065930\" data-clog-name=\"designtime-add-lisp\">Add .lisp</button><button style=\"box-sizing: content-box; position: absolute; left: 478px; top: 320px; width: 65px; height: 22px;\" id=\"CLOGB3871065931\" data-clog-name=\"designtime-delete\">Remove</button><label for=\"CLOGB3868619268\" style=\"box-sizing: content-box; position: absolute; left: 290px; top: 365px;\" id=\"CLOGB3871065932\" data-clog-name=\"design-deps-label\">Design Dependecies</label><select size=\"4\" style=\"box-sizing: content-box; position: absolute; left: 290px; top: 395px; width: 263.358px; height: 75px;\" id=\"CLOGB3871065933\" data-clog-name=\"design-deps\"></select><button style=\"box-sizing: content-box; position: absolute; left: 290px; top: 480px; width: 65px; height: 22px;\" id=\"CLOGB3871065934\" data-clog-name=\"design-add-dep\">Add</button><button style=\"box-sizing: content-box; position: absolute; left: 380px; top: 480px; width: 65px; height: 22px;\" id=\"CLOGB3871065935\" data-clog-name=\"design-del-dep\">Remove</button><button style=\"box-sizing: content-box; position: absolute; left: 470px; top: 480px; width: 65px; height: 22px;\" id=\"CLOGB3871065936\" data-clog-name=\"design-plugin\">Plugin</button></div>"
+                           "<label for=\"undefined\" style=\"box-sizing: content-box; position: absolute; left: 5px; top: 6.99858px;\" id=\"CLOGB3918817929\" data-clog-name=\"projects-label\">Current Project</label><select style=\"box-sizing: content-box; position: absolute; left: 5px; top: 35px; width: 386.54px; height: 22px; bottom: 309.041px;\" id=\"CLOGB3918817930\" data-clog-name=\"project-list\"></select><button style=\"box-sizing: content-box; position: absolute; left: 400px; top: 32px; height: 22px; width: 90px;\" title=\"Manualy projects .asd file\" id=\"CLOGB3918817931\" data-clog-name=\"edit-asd\">Edit .asd</button><label for=\"CLOGB386871257741\" style=\"box-sizing: content-box; position: absolute; left: 5px; top: 69px;\" id=\"CLOGB3918817932\" data-clog-name=\"entry-point-label\">Entry Point - package:function</label><input type=\"TEXT\" value=\"\" style=\"box-sizing: content-box; position: absolute; left: 5px; top: 94px; width: 381px; height: 22.5px;\" id=\"CLOGB3918817933\" data-clog-name=\"entry-point\"><button style=\"box-sizing: content-box; position: absolute; left: 400px; top: 92px; width: 90px; height: 22.5px;\" id=\"CLOGB3918817934\" data-clog-name=\"run-button\">Run</button><button style=\"box-sizing: content-box; position: absolute; left: 520px; top: 8px; width: 100px; height: 22px;\" title=\"Create new project from template\" id=\"CLOGB3918817935\" data-clog-name=\"new-project-button\">New</button><button style=\"box-sizing: content-box; position: absolute; left: 520px; top: 43px; width: 100px; height: 22px; bottom: 309.041px;\" title=\"ASDF unload project from Lisp image\" id=\"CLOGB3918817936\" data-clog-name=\"unload-project-button\">Unload</button><button style=\"box-sizing: content-box; position: absolute; left: 521px; top: 79px; width: 100px; height: 22px; bottom: 309.041px;\" title=\"ASDF reload project in to Lisp image\" id=\"CLOGB3918817937\" data-clog-name=\"reload-project-button\">Reload</button><button style=\"box-sizing: content-box; position: absolute; left: 521px; top: 116px; width: 100px;\" tabindex=\"0\" title=\"Rerender all clog files to Lisp\" id=\"CLOGB3918817938\" data-clog-name=\"rerender-button\">Rerender</button><div style=\"box-sizing: content-box; position: absolute; left: 0px; top: 69px; width: 512px; height: 10px;\" id=\"CLOGB3918817939\" data-clog-name=\"file-group\"><label for=\"CLOGB3868393710\" style=\"box-sizing: content-box; position: absolute; left: 5px; top: 65px;\" id=\"CLOGB3918817940\" data-clog-name=\"runtime-label\">Runtime System</label><label for=\"CLOGB3868452429\" style=\"box-sizing: content-box; position: absolute; left: 5px; top: 85px;\" id=\"CLOGB3918817941\" data-clog-name=\"dbl-click1\">(double click to launch)</label><select size=\"4\" style=\"box-sizing: content-box; position: absolute; left: 5px; top: 115px; width: 260px; height: 196px;\" id=\"CLOGB3918817942\" data-clog-name=\"runtime-list\"></select><button style=\"box-sizing: content-box; position: absolute; left: 5px; top: 320px;\" id=\"CLOGB3918817943\" data-clog-name=\"runtime-add-lisp\">Add .lisp</button><button style=\"box-sizing: content-box; position: absolute; left: 93px; top: 320px; width: 65px; height: 22px;\" id=\"CLOGB3918817944\" data-clog-name=\"runtime-delete\">Remove</button><button style=\"box-sizing: content-box; position: absolute; left: 180px; top: 320px; width: 65px;\" id=\"CLOGB3918817945\" data-clog-name=\"runtime-dir\">View Dir</button><label for=\"CLOGB3868619266\" style=\"box-sizing: content-box; position: absolute; left: 5px; top: 365px;\" id=\"CLOGB3918817946\" data-clog-name=\"runtime-deps-label\">Runtime Dependencies</label><label for=\"CLOGB3868452430\" style=\"box-sizing: content-box; position: absolute; left: 290px; top: 85px;\" id=\"CLOGB3918817947\" data-clog-name=\"dbl-click2\">(double click to launch)</label><select size=\"4\" style=\"box-sizing: content-box; position: absolute; left: 5px; top: 395px; width: 260px; height: 75px;\" id=\"CLOGB3918817948\" data-clog-name=\"runtime-deps\"></select><button style=\"box-sizing: content-box; position: absolute; left: 5px; top: 480px; width: 65px;\" id=\"CLOGB3918817949\" data-clog-name=\"runtime-add-dep\">Add</button><button style=\"box-sizing: content-box; position: absolute; left: 95px; top: 480px; width: 65px; height: 22px;\" id=\"CLOGB3918817950\" data-clog-name=\"runtime-del-dep\">Remove</button><label for=\"CLOGB3868393704\" style=\"box-sizing: content-box; position: absolute; left: 290.007px; top: 65px;\" id=\"CLOGB3918817951\" data-clog-name=\"designtime-label\">Design Time System (/tools)</label><select size=\"4\" style=\"box-sizing: content-box; position: absolute; left: 290px; top: 115px; width: 265px; height: 195.545px;\" id=\"CLOGB3918817952\" data-clog-name=\"designtime-list\"></select><button style=\"box-sizing: content-box; position: absolute; left: 290px; top: 320px;\" id=\"CLOGB3918817953\" data-clog-name=\"designtime-add-clog\">Add .clog</button><button style=\"box-sizing: content-box; position: absolute; left: 386px; top: 320px;\" id=\"CLOGB3918817954\" data-clog-name=\"designtime-add-lisp\">Add .lisp</button><button style=\"box-sizing: content-box; position: absolute; left: 478px; top: 320px; width: 65px; height: 22px;\" id=\"CLOGB3918817955\" data-clog-name=\"designtime-delete\">Remove</button><label for=\"CLOGB3868619268\" style=\"box-sizing: content-box; position: absolute; left: 290px; top: 365px;\" id=\"CLOGB3918817956\" data-clog-name=\"design-deps-label\">Design Dependencies</label><select size=\"4\" style=\"box-sizing: content-box; position: absolute; left: 290px; top: 395px; width: 263.358px; height: 75px;\" id=\"CLOGB3918817957\" data-clog-name=\"design-deps\"></select><button style=\"box-sizing: content-box; position: absolute; left: 290px; top: 480px; width: 65px; height: 22px;\" id=\"CLOGB3918817958\" data-clog-name=\"design-add-dep\">Add</button><button style=\"box-sizing: content-box; position: absolute; left: 380px; top: 480px; width: 65px; height: 22px;\" id=\"CLOGB3918817959\" data-clog-name=\"design-del-dep\">Remove</button><button style=\"box-sizing: content-box; position: absolute; left: 470px; top: 480px; width: 65px; height: 22px;\" id=\"CLOGB3918817960\" data-clog-name=\"design-plugin\">Plugin</button></div>
+<label for=\"CLOGB391881683346\" style=\"box-sizing: content-box; position: absolute; left: 531px; top: 151px;\" class=\"\" id=\"CLOGB3918817961\" data-clog-name=\"ext-win-label\">Open External</label><input type=\"CHECKBOX\" value=\"\" style=\"box-sizing: content-box; position: absolute; left: 513px; top: 155px;\" id=\"CLOGB3918817962\" data-clog-name=\"open-ext\">"
                            :hidden hidden :class class :html-id html-id
                            :auto-place auto-place)
           'projects)))
+    (setf (slot-value panel 'open-ext)
+            (attach-as-child clog-obj "CLOGB3918817962" :clog-type
+             'clog:clog-form-element :new-id t))
+    (setf (slot-value panel 'ext-win-label)
+            (attach-as-child clog-obj "CLOGB3918817961" :clog-type
+             'clog:clog-label :new-id t))
     (setf (slot-value panel 'design-plugin)
-            (attach-as-child clog-obj "CLOGB3871065936" :clog-type
+            (attach-as-child clog-obj "CLOGB3918817960" :clog-type
              'clog:clog-button :new-id t))
     (setf (slot-value panel 'design-del-dep)
-            (attach-as-child clog-obj "CLOGB3871065935" :clog-type
+            (attach-as-child clog-obj "CLOGB3918817959" :clog-type
              'clog:clog-button :new-id t))
     (setf (slot-value panel 'design-add-dep)
-            (attach-as-child clog-obj "CLOGB3871065934" :clog-type
+            (attach-as-child clog-obj "CLOGB3918817958" :clog-type
              'clog:clog-button :new-id t))
     (setf (slot-value panel 'design-deps)
-            (attach-as-child clog-obj "CLOGB3871065933" :clog-type
+            (attach-as-child clog-obj "CLOGB3918817957" :clog-type
              'clog:clog-select :new-id t))
     (setf (slot-value panel 'design-deps-label)
-            (attach-as-child clog-obj "CLOGB3871065932" :clog-type
+            (attach-as-child clog-obj "CLOGB3918817956" :clog-type
              'clog:clog-label :new-id t))
     (setf (slot-value panel 'designtime-delete)
-            (attach-as-child clog-obj "CLOGB3871065931" :clog-type
+            (attach-as-child clog-obj "CLOGB3918817955" :clog-type
              'clog:clog-button :new-id t))
     (setf (slot-value panel 'designtime-add-lisp)
-            (attach-as-child clog-obj "CLOGB3871065930" :clog-type
+            (attach-as-child clog-obj "CLOGB3918817954" :clog-type
              'clog:clog-button :new-id t))
     (setf (slot-value panel 'designtime-add-clog)
-            (attach-as-child clog-obj "CLOGB3871065929" :clog-type
+            (attach-as-child clog-obj "CLOGB3918817953" :clog-type
              'clog:clog-button :new-id t))
     (setf (slot-value panel 'designtime-list)
-            (attach-as-child clog-obj "CLOGB3871065928" :clog-type
+            (attach-as-child clog-obj "CLOGB3918817952" :clog-type
              'clog:clog-select :new-id t))
     (setf (slot-value panel 'designtime-label)
-            (attach-as-child clog-obj "CLOGB3871065927" :clog-type
+            (attach-as-child clog-obj "CLOGB3918817951" :clog-type
              'clog:clog-label :new-id t))
     (setf (slot-value panel 'runtime-del-dep)
-            (attach-as-child clog-obj "CLOGB3871065926" :clog-type
+            (attach-as-child clog-obj "CLOGB3918817950" :clog-type
              'clog:clog-button :new-id t))
     (setf (slot-value panel 'runtime-add-dep)
-            (attach-as-child clog-obj "CLOGB3871065925" :clog-type
+            (attach-as-child clog-obj "CLOGB3918817949" :clog-type
              'clog:clog-button :new-id t))
     (setf (slot-value panel 'runtime-deps)
-            (attach-as-child clog-obj "CLOGB3871065924" :clog-type
+            (attach-as-child clog-obj "CLOGB3918817948" :clog-type
              'clog:clog-select :new-id t))
     (setf (slot-value panel 'dbl-click2)
-            (attach-as-child clog-obj "CLOGB3871065923" :clog-type
+            (attach-as-child clog-obj "CLOGB3918817947" :clog-type
              'clog:clog-label :new-id t))
     (setf (slot-value panel 'runtime-deps-label)
-            (attach-as-child clog-obj "CLOGB3871065922" :clog-type
+            (attach-as-child clog-obj "CLOGB3918817946" :clog-type
              'clog:clog-label :new-id t))
     (setf (slot-value panel 'runtime-dir)
-            (attach-as-child clog-obj "CLOGB3871065921" :clog-type
+            (attach-as-child clog-obj "CLOGB3918817945" :clog-type
              'clog:clog-button :new-id t))
     (setf (slot-value panel 'runtime-delete)
-            (attach-as-child clog-obj "CLOGB3871065920" :clog-type
+            (attach-as-child clog-obj "CLOGB3918817944" :clog-type
              'clog:clog-button :new-id t))
     (setf (slot-value panel 'runtime-add-lisp)
-            (attach-as-child clog-obj "CLOGB3871065919" :clog-type
+            (attach-as-child clog-obj "CLOGB3918817943" :clog-type
              'clog:clog-button :new-id t))
     (setf (slot-value panel 'runtime-list)
-            (attach-as-child clog-obj "CLOGB3871065918" :clog-type
+            (attach-as-child clog-obj "CLOGB3918817942" :clog-type
              'clog:clog-select :new-id t))
     (setf (slot-value panel 'dbl-click1)
-            (attach-as-child clog-obj "CLOGB3871065917" :clog-type
+            (attach-as-child clog-obj "CLOGB3918817941" :clog-type
              'clog:clog-label :new-id t))
     (setf (slot-value panel 'runtime-label)
-            (attach-as-child clog-obj "CLOGB3871065916" :clog-type
+            (attach-as-child clog-obj "CLOGB3918817940" :clog-type
              'clog:clog-label :new-id t))
     (setf (slot-value panel 'file-group)
-            (attach-as-child clog-obj "CLOGB3871065915" :clog-type
+            (attach-as-child clog-obj "CLOGB3918817939" :clog-type
              'clog:clog-div :new-id t))
     (setf (slot-value panel 'rerender-button)
-            (attach-as-child clog-obj "CLOGB3871065914" :clog-type
+            (attach-as-child clog-obj "CLOGB3918817938" :clog-type
              'clog:clog-button :new-id t))
     (setf (slot-value panel 'reload-project-button)
-            (attach-as-child clog-obj "CLOGB3871065913" :clog-type
+            (attach-as-child clog-obj "CLOGB3918817937" :clog-type
              'clog:clog-button :new-id t))
     (setf (slot-value panel 'unload-project-button)
-            (attach-as-child clog-obj "CLOGB3871065912" :clog-type
+            (attach-as-child clog-obj "CLOGB3918817936" :clog-type
              'clog:clog-button :new-id t))
     (setf (slot-value panel 'new-project-button)
-            (attach-as-child clog-obj "CLOGB3871065911" :clog-type
+            (attach-as-child clog-obj "CLOGB3918817935" :clog-type
              'clog:clog-button :new-id t))
     (setf (slot-value panel 'run-button)
-            (attach-as-child clog-obj "CLOGB3871065910" :clog-type
+            (attach-as-child clog-obj "CLOGB3918817934" :clog-type
              'clog:clog-button :new-id t))
     (setf (slot-value panel 'entry-point)
-            (attach-as-child clog-obj "CLOGB3871065909" :clog-type
+            (attach-as-child clog-obj "CLOGB3918817933" :clog-type
              'clog:clog-form-element :new-id t))
     (setf (slot-value panel 'entry-point-label)
-            (attach-as-child clog-obj "CLOGB3871065908" :clog-type
+            (attach-as-child clog-obj "CLOGB3918817932" :clog-type
              'clog:clog-label :new-id t))
     (setf (slot-value panel 'edit-asd)
-            (attach-as-child clog-obj "CLOGB3871065907" :clog-type
+            (attach-as-child clog-obj "CLOGB3918817931" :clog-type
              'clog:clog-button :new-id t))
     (setf (slot-value panel 'project-list)
-            (attach-as-child clog-obj "CLOGB3871065906" :clog-type
+            (attach-as-child clog-obj "CLOGB3918817930" :clog-type
              'clog:clog-select :new-id t))
     (setf (slot-value panel 'projects-label)
-            (attach-as-child clog-obj "CLOGB3871065905" :clog-type
+            (attach-as-child clog-obj "CLOGB3918817929" :clog-type
              'clog:clog-label :new-id t))
     (let ((target (projects-label panel)))
       (declare (ignorable target))
@@ -177,6 +185,11 @@
       (setf (attribute target "for")
               (clog:js-query target
                              "$('[data-clog-name=\\'design-deps\\']').attr('id')")))
+    (let ((target (ext-win-label panel)))
+      (declare (ignorable target))
+      (setf (attribute target "for")
+              (clog:js-query target
+                             "$('[data-clog-name=\\'open-ext\\']').attr('id')")))
     (clog:set-on-change (project-list panel)
                         (lambda (target)
                           (declare (ignorable target))
@@ -222,7 +235,7 @@
     (clog:set-on-double-click (runtime-list panel)
                               (lambda (target)
                                 (declare (ignorable target))
-                                (open-projects-component target
+                                (open-projects-component target panel
                                  (text-value (project-list panel)) target)))
     (clog:set-on-click (runtime-add-lisp panel)
                        (lambda (target)
@@ -257,7 +270,7 @@
     (clog:set-on-double-click (designtime-list panel)
                               (lambda (target)
                                 (declare (ignorable target))
-                                (open-projects-component target
+                                (open-projects-component target panel
                                  (format nil "~A/tools"
                                          (text-value (project-list panel)))
                                  target)))

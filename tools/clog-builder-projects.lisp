@@ -332,7 +332,7 @@
           (pprint n s)))))
   (projects-load system))
 
-(defun open-projects-component (target system list)
+(defun open-projects-component (target panel system list)
   (let ((disp (select-text target))
         (item (text-value target)))
     (cond ((equal item "")
@@ -348,6 +348,10 @@
                (add-select-option list path name))))
           ((and (> (length item) 5)
                 (equal (subseq item (- (length item) 5)) ".clog"))
-           (on-new-builder-panel target :open-file item))
+           (if (checkedp (open-ext panel))
+               (on-new-builder-panel-ext target :open-file item)
+               (on-new-builder-panel target :open-file item)))
           (t
-           (on-open-file target :open-file item)))))
+           (if (checkedp (open-ext panel))
+               (on-open-file-ext target :open-file item)
+               (on-open-file target :open-file item))))))

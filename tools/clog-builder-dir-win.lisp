@@ -22,9 +22,13 @@
     (unless (equal item "")
       (cond ((and (> (length item) 5)
                   (equal (subseq item (- (length item) 5)) ".clog"))
-             (on-new-builder-panel panel :open-file item))
+             (if (checkedp (open-file-ext panel))
+                 (on-new-builder-panel-ext panel :open-file item)
+                 (on-new-builder-panel panel :open-file item)))
             (t
-             (on-open-file panel :open-file item))))))
+             (if (checkedp (open-file-ext panel))
+                 (on-open-file-ext panel :open-file item)
+                 (on-open-file panel :open-file item)))))))
 
 (defun on-delete-dir-win (panel)
   (let ((item (value (files panel))))
