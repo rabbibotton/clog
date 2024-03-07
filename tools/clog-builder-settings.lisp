@@ -1,12 +1,17 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; CLOG Builder - UI Design tool for CLOG                                ;;;;
-;;;; (c) 2020-2022 David Botton                                            ;;;;
+;;;; (c) 2020-2024 David Botton                                            ;;;;
 ;;;; License BSD 3 Clause                                                  ;;;;
 ;;;;                                                                       ;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (in-package :clog-tools)
 
+;; These are defaults, if the file preferences.lisp exists
+;; they will be used instead
+
+;; Open panels and files in new browser tabs by default
+(defparameter *open-external* nil)
 ;; Best Light Theme for Lisp
 (defparameter *editor-theme* "ace/theme/iplastic")
 ;; Best Dark Theme for Lisp

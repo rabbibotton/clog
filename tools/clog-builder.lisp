@@ -1,6 +1,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; CLOG Builder - UI Design tool for CLOG                                ;;;;
-;;;; (c) 2020-2022 David Botton                                            ;;;;
+;;;; (c) 2020-2024 David Botton                                            ;;;;
 ;;;; License BSD 3 Clause                                                  ;;;;
 ;;;;                                                                       ;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -2924,6 +2924,8 @@ It parse the string TEXT without using READ functions."
                                      :client-movement *client-side-movement*))
          (d   (create-dir-view (window-content win))))
     (set-geometry d :units "%" :width 100 :height 100)
+    (when *open-external*
+      (setf (checkedp (open-file-ext d)) t))
     (when dir
       (populate-dir-win d dir))))
 
@@ -3053,6 +3055,11 @@ must specific default project :PROJECT and it will be batch rerendered
 and shutdown application. You can set the specific STATIC-ROOT or set SYSTEM
 to use that asdf system's static root. if DIR then the directory window
 instead of the project window will be displayed."
+  (load (format nil "~A/preferences.lisp"
+                (merge-pathnames "./tools/"
+                                 (asdf:system-source-directory :clog)))
+        :if-does-not-exist nil
+        :verbose t)
   (if project
       (setf *start-project* (string-downcase (format nil "~A" project)))
       (setf *start-project* nil))

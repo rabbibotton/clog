@@ -1,0 +1,15 @@
+(in-package :clog-tools)
+
+(setf *open-external* t)
+(setf *editor-theme* "ace/theme/terminal")
+(setf *editor-keybinding* "ace/keyboard/emacs")
+(setf *editor-renderer-options*
+"fontSize : 16,
+ showInvisibles : false,
+ displayIndentGuides : true,
+ printMarginColumn : 80,
+ showPrintMargin : true,
+ showLineNumbers : true,
+ showGutter : true,
+ enableBasicAutocompletion: true,
+ enableLiveAutocompletion : true")

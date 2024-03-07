@@ -11,6 +11,8 @@
 
 (defun projects-setup (panel)
   (let* ((app (connection-data-item panel "builder-app-data")))
+    (when *open-external*
+      (setf (checkedp (open-ext panel)) t))
     (when (uiop:directory-exists-p #P"~/common-lisp/")
       (pushnew #P"~/common-lisp/"
                (symbol-value (read-from-string "ql:*local-project-directories*"))
