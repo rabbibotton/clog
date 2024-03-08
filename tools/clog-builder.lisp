@@ -2614,7 +2614,9 @@ It parse the string TEXT without using READ functions."
   (let ((app (make-instance 'builder-app-data))
         (file (form-data-item (form-get-data body) "open-file")))
     (setf (connection-data-item body "builder-app-data") app)
-    (setf (title (html-document body)) "CLOG Builder - Source Editor")
+    (if file
+      (setf (title (html-document body)) file)
+      (setf (title (html-document body)) (format nil "CLOG Builder - Source Editor")))
     (clog-gui-initialize body)
     (add-class body "w3-blue-grey")
     (on-open-file body :open-file file :maximized t)))
@@ -2730,7 +2732,7 @@ It parse the string TEXT without using READ functions."
 <tr><td>cmd/ctl-s</td><td> Save</td></tr>
 <tr><td>ctl-=</td><td>Expand region</td></tr>
 <tr><td>opt/alt-m</td><td>Macroexpand</td></tr>
-</table>"
+</table><p><a target='_blank' href='https://github.com/ajaxorg/ace/wiki/Default-Keyboard-Shortcuts'>Default Keybindings</a>"
                                     :width 400 :height 300
                                     :title "Help")))
       (set-on-window-size-done win
@@ -2773,7 +2775,6 @@ It parse the string TEXT without using READ functions."
                           (setf is-dirty t)))
       (set-on-event ace "clog-save-ace"
                     (lambda (obj)
-                      (declare (ignore obj))
                       (unless (equal file-name "")
                         (add-class btn-save "w3-animate-top")
                         (write-file (text-value ace) file-name :clog-obj obj)

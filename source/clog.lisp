@@ -934,6 +934,11 @@ embedded in a native template application.)"
   (navigator         generic-function))
 
 (defsection @clog-window (:title "CLOG Window Objects")
+  "CLOG Popups"
+  (enable-clog-popup       function)
+  (open-clog-popup         function)
+  (clog-popup-openned      function)
+
   "CLOG-Window - CLOG Window Objects"
   (clog-window class)
 

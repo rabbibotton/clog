@@ -1,6 +1,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; CLOG - The Common Lisp Omnificent GUI                                 ;;;;
-;;;; (c) 2020-2022 David Botton                                            ;;;;
+;;;; (c) 2020-2024 David Botton                                            ;;;;
 ;;;; License BSD 3 Clause                                                  ;;;;
 ;;;;                                                                       ;;;;
 ;;;; clog-connection.lisp                                                  ;;;;
@@ -61,6 +61,7 @@ script."
   (new-line          function)
   (alert-box         function)
   (generate-id       function)
+  (random-hex-string function)
   (debug-mode        function)
   (set-html-on-close function))
 
@@ -94,7 +95,8 @@ script."
 (defparameter *isaac-ctx*
   (isaac:init-self-seed :count 5
                         :is64 #+:X86-64 t #-:X86-64 nil)
-  "A ISAAC::ISAAC-CTX. Or, a ISAAC::ISAAC64-CTX on X86-64. It will be used to generate random hex strings for connection IDs")
+  "A ISAAC::ISAAC-CTX. Or, a ISAAC::ISAAC64-CTX on X86-64. It will be used to
+generate random hex strings for connection IDs")
 
 (defvar *queries*        (make-hash-table*) "Query ID to Answers")
 (defvar *queries-sems*   (make-hash-table*) "Query ID to semiphores")
@@ -113,7 +115,8 @@ script."
   "Dynamic variable indicating the url path used.")
 
 (defparameter *compiled-boot-js*
-  (with-open-file (stream (merge-pathnames #P"static-files/js/boot.js" (asdf:system-source-directory :clog)))
+  (with-open-file (stream (merge-pathnames #P"static-files/js/boot.js"
+                                           (asdf:system-source-directory :clog)))
     (let ((content (make-string (file-length stream))))
       (read-sequence content stream)
       content))
