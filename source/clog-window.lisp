@@ -34,11 +34,13 @@ them.")
 (defun open-clog-popup (obj &key (path *clog-popup-path*)
                               (add-sync-to-path t)
                               (sync-key (clog-connection:random-hex-string))
-                              specs name (wait-timeout 10))
+                              (name "_blank")
+                              (specs "")
+                              (wait-timeout 10))
   "Open a new browser window/popup in most cases a tab. Since they are controlled
 by clog you have full control of the new popups and are more flexible than using
-open-windo. Returns the clog-body of the new window on the new connection or nil
-if failed within :WAIT-TIMEOUT"
+open-windo. Returns the clog-body and the clog-window in the same connnection as
+obj of the new window on the new connection or nil if failed within :WAIT-TIMEOUT"
   (let* ((sem     (bordeaux-threads:make-semaphore))
          (mpath   (if add-sync-to-path
                       (format nil "~A?sync=~A" path sync-key)
@@ -48,7 +50,7 @@ if failed within :WAIT-TIMEOUT"
     (bordeaux-threads:wait-on-semaphore sem :timeout wait-timeout)
     (setf sem (gethash sync-key *clog-popup-sync-hash*))
     (if (typep sem 'clog-obj)
-        sem
+        (values sem new-win)
         nil)))
 
 (defun clog-popup-openned (obj sync-key)
