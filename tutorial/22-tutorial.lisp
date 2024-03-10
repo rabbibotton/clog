@@ -49,6 +49,24 @@
                                     :height 200)))
     (create-div win :content "I can be pinned. Just click the pin on window bar.")))
 
+(defun on-file-pop-tab (obj)
+  (let ((pop (open-clog-popup obj)))
+    (cond (pop ; pop is the body of the new browser tab/window
+            (clog-gui-initialize pop)
+            (add-class pop "w3-cyan")
+            (create-div pop :content "I am a popup browser tab"))
+          (t
+            (alert-toast obj "Popup failure" "Unable to open popup tab")))))
+
+(defun on-file-pop-win (obj)
+  (let ((pop (open-clog-popup obj :specs "width=320,height=320")))
+    (cond (pop ; pop is the body of the new browser tab/window
+            (clog-gui-initialize pop )
+            (add-class pop "w3-cyan")
+            (create-div pop :content "I am a popup window when the browser allows it otherwise a tab"))
+          (t
+            (alert-toast obj "Popup failure" "Unable to open popup tab")))))
+
 (defun on-dlg-alert (obj)
   (alert-dialog obj "This is a modal alert box"))
 
@@ -131,6 +149,7 @@
   ;; For web oriented apps consider using the :client-movement option.
   ;; See clog-gui-window documentation.
   (clog-gui-initialize body)
+  (enable-clog-popup) ; To allow browser popups
   (add-class body "w3-cyan")
   (let* ((menu  (create-gui-menu-bar body))
          (tmp   (create-gui-menu-icon menu :on-click 'on-help-about))
@@ -140,9 +159,11 @@
          (tmp   (create-gui-menu-item file :content "Drawing" :on-click 'on-file-drawing))
          (tmp   (create-gui-menu-item file :content "Movie" :on-click 'on-file-movies))
          (tmp   (create-gui-menu-item file :content "Pinned" :on-click 'on-file-pinned))
+         (tmp   (create-gui-menu-item file :content "Popup Browser Tab" :on-click 'on-file-pop-tab))
+         (tmp   (create-gui-menu-item file :content "Popup Browser Window" :on-click 'on-file-pop-win))
          (win   (create-gui-menu-drop-down menu :content "Window"))
-	 (tmp   (create-gui-menu-item win :content "Maximize" :on-click 'on-maximize-window))
-	 (tmp   (create-gui-menu-item win :content "Normalize" :on-click 'on-normalize-window))
+         (tmp   (create-gui-menu-item win :content "Maximize" :on-click 'on-maximize-window))
+         (tmp   (create-gui-menu-item win :content "Normalize" :on-click 'on-normalize-window))
          (tmp   (create-gui-menu-item win :content "Maximize All" :on-click 'maximize-all-windows))
          (tmp   (create-gui-menu-item win :content "Normalize All" :on-click 'normalize-all-windows))
          (tmp   (create-gui-menu-window-select win))
