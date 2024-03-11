@@ -1188,7 +1188,7 @@ of controls and double click to select control."
                                      (lambda (obj prefix)
                                        (declare (ignore obj))
                                        (when (current-editor-is-lisp app)
-                                         ;; we need to modify Ace's lisp mode to treat : as part of symbol
+                                         ;; we needed to modify Ace's lisp mode to treat : as part of symbol
                                          ;; otherwise lookups do not consider the symbols package. I did
                                          ;; using code mathod but then the automatic replace is only on the symbol
                                          (let* ((p (when (current-control app)
@@ -1783,7 +1783,7 @@ It parse the string TEXT without using READ functions."
 (defun on-new-builder-panel-ext (obj &key open-file popup)
   (open-window (window (connection-body obj))
                (if open-file
-                   (format nil "/panel-editor?open-file=~A"
+                   (format nil "/panel-editor?open-panel=~A"
                            open-file)
                    "/source-editor")
                :specs (if popup
@@ -2609,18 +2609,6 @@ It parse the string TEXT without using READ functions."
                                      :client-movement *client-side-movement*)))
     (create-thread-list (window-content win))))
 
-(defun on-open-file-window (body)
-  (set-html-on-close body "Connection Lost")
-  (let ((app (make-instance 'builder-app-data))
-        (file (form-data-item (form-get-data body) "open-file")))
-    (setf (connection-data-item body "builder-app-data") app)
-    (if file
-      (setf (title (html-document body)) file)
-      (setf (title (html-document body)) (format nil "CLOG Builder - Source Editor")))
-    (clog-gui-initialize body)
-    (add-class body "w3-blue-grey")
-    (on-open-file body :open-file file :maximized t)))
-
 (defun on-open-file-ext (obj &key open-file popup)
   (open-window (window (connection-body obj))
                (if open-file
@@ -2930,14 +2918,18 @@ It parse the string TEXT without using READ functions."
     (when dir
       (populate-dir-win d dir))))
 
+(defun on-open-file-window (body)
+  (on-new-builder body))
+
 (defun on-open-panel-window (body)
   (on-new-builder body))
 
-(defun on-new-builder (body)
+(defun on-new-builder (body &key file)
   "Launch instance of the CLOG Builder"
   (set-html-on-close body "Connection Lost")
-  (let ((app       (make-instance 'builder-app-data))
-        (open-file (form-data-item (form-get-data body) "open-file")))
+  (let ((app        (make-instance 'builder-app-data))
+        (open-file  (form-data-item (form-get-data body) "open-file"))
+        (open-panel (form-data-item (form-get-data body) "open-panel")))
     (setf (connection-data-item body "builder-app-data") app)
     (setf (title (html-document body)) "CLOG Builder")
     (clog-gui-initialize body :body-left-offset 10 :body-right-offset 10)
@@ -3029,8 +3021,12 @@ It parse the string TEXT without using READ functions."
     (on-show-control-list-win body)
     (on-show-copy-history-win body)
     (cond
+      (open-panel
+       (setf (title (html-document body)) open-panel)
+       (on-new-builder-panel body :open-file open-panel))
       (open-file
-       (on-new-builder-panel body :open-file open-file))
+       (setf (title (html-document body)) open-file)
+       (on-open-file body :open-file open-file :maximized t))   
       (*start-dir*
        (on-dir-win body :dir *start-dir* :top 60 :left 232))
       (t
