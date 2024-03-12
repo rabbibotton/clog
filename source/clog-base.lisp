@@ -84,6 +84,16 @@ during attachment. (Private)"))
       "'body'"
       (format nil "clog['~A']" (html-id obj))))
 
+;;;;;;;;;;;;;;;;;;;
+;; cached-excute ;;
+;;;;;;;;;;;;;;;;;;;
+
+(defun cached-execute (connection-id script)
+  "Excute SCRIPT on browser, if connection cache enabled use. (Private)"
+  (if *connection-cache*
+      (push script *connection-cache*)
+      (clog-connection:execute connection-id script)))
+
 ;;;;;;;;;;;;;;;;
 ;; js-execute ;;
 ;;;;;;;;;;;;;;;;
@@ -93,9 +103,7 @@ during attachment. (Private)"))
 discarded, return CLOG-OBJ. (Internal)"))
 
 (defmethod js-execute ((obj clog-obj) script)
-  (if *connection-cache*
-      (push script *connection-cache*)
-      (clog-connection:execute (connection-id obj) script))
+  (cached-execute (connection-id obj) script)
   obj)
 
 ;;;;;;;;;;;;;;
