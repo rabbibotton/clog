@@ -32,12 +32,11 @@ Some sample jquery selectors:
     selector1, selectorN, ..."))
 
 (defmethod create-jquery ((obj clog-obj) jquery)
-  (let ((html-id (format nil "CLOG~A" (clog-connection:generate-id))))
-    (clog-connection:execute
-     (connection-id obj)
-     (format nil
-             "clog['~A']=$(\"~A\")"
-             html-id jquery))
+  (let ((html-id (format nil "CLOG~A" (generate-id))))
+    (js-execute obj
+                (format nil
+                        "clog['~A']=$(\"~A\")"
+                        html-id jquery))
     (make-clog-element (connection-id obj) html-id :clog-type 'clog-jquery)))
 
 ;;;;;;;;;;;;

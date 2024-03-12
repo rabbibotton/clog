@@ -1,6 +1,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; CLOG - The Common Lisp Omnificent GUI                                 ;;;;
-;;;; (c) 2020-2021 David Botton                                            ;;;;
+;;;; (c) 2020-2024 David Botton                                            ;;;;
 ;;;; License BSD 3 Clause                                                  ;;;;
 ;;;;                                                                       ;;;;
 ;;;; clog-webgl.lisp                                                       ;;;;
@@ -176,7 +176,7 @@ can be webgl (version 1) or webgl2 (default)"))
 
 
 (defmethod create-webgl ((obj clog-canvas) &key (context "webgl2"))
-  (let ((web-id (clog-connection:generate-id)))
+  (let ((web-id (generate-id)))
     (js-execute obj (format nil "clog['~A']=clog['~A'].getContext('~A')"
                             web-id
                             (html-id obj) context))
@@ -869,7 +869,7 @@ See https://github.com/KhronosGroup/WebGL/blob/main/specs/latest/2.0/webgl2.idl
 For :GLENUM values"))
 
 (defmethod create-shader ((obj clog-webgl) glenum-type)
-  (let ((web-id (clog-connection:generate-id)))
+  (let ((web-id (generate-id)))
     (js-execute obj (format nil "clog['~A']=~A.createShader(~A.~A)"
                             web-id
                             (script-id obj) (script-id obj) glenum-type))
@@ -944,7 +944,7 @@ Returns a GLenum indicating whether the shader is a vertex shader (gl.VERTEX_SHA
   (:documentation "Create a clog-webgl-program"))
 
 (defmethod create-program ((obj clog-webgl))
-  (let ((web-id (clog-connection:generate-id)))
+  (let ((web-id (generate-id)))
     (js-execute obj (format nil "clog['~A']=~A.createProgram()"
                             web-id
                             (script-id obj)))
@@ -1010,7 +1010,7 @@ Returns a GLint indicating the number of uniform blocks containing active unifor
   (:documentation "Returns the location of an uniform variable in clog-webgl-program"))
 
 (defmethod uniform-location ((obj clog-webgl-program) name)
-  (let ((web-id (clog-connection:generate-id)))
+  (let ((web-id (generate-id)))
     (js-execute obj (format nil "clog['~A']=~A.getUniformLocation(~A,'~A')"
                             web-id
                             (script-id (gl obj)) (script-id obj) name))
@@ -1037,7 +1037,7 @@ validation of WebGLProgram objects."))
   (:documentation "Query about unknown attributes"))
 
 (defmethod active-attribute ((obj clog-webgl-program) index)
-  (let ((web-id (clog-connection:generate-id)))
+  (let ((web-id (generate-id)))
     (js-execute obj (format nil "clog['~A']=~A.getActiveAttrib(~A,~A)"
                             web-id
                             (script-id (gl obj)) (script-id obj) index))
@@ -1049,7 +1049,7 @@ validation of WebGLProgram objects."))
   (:documentation "Query about unknown uniforms"))
 
 (defmethod active-uniform ((obj clog-webgl-program) index)
-  (let ((web-id (clog-connection:generate-id)))
+  (let ((web-id (generate-id)))
     (js-execute obj (format nil "clog['~A']=~A.getActiveUniform(~A,~A)"
                             web-id
                             (script-id (gl obj)) (script-id obj) index))
@@ -1117,7 +1117,7 @@ in WebGL2 the following added:
 :PIXEL_UNPACK_BUFFER : Buffer used for pixel transfer operations."))
 
 (defmethod create-webgl-buffer ((obj clog-webgl) &key bind-type)
-  (let ((web-id (clog-connection:generate-id)))
+  (let ((web-id (generate-id)))
     (js-execute obj (format nil "clog['~A']=~A.createBuffer()"
                             web-id
                             (script-id obj)))
@@ -1195,7 +1195,7 @@ DATA-TYPE is the WebGL data type as a string \"Float32Array\""))
   (:documentation "Create a clog-webgl-vertex-array"))
 
 (defmethod create-vertex-array ((obj clog-webgl))
-  (let ((web-id (clog-connection:generate-id)))
+  (let ((web-id (generate-id)))
     (js-execute obj (format nil "clog['~A']=~A.createVertexArray()"
                             web-id
                             (script-id obj)))
@@ -1234,7 +1234,7 @@ clear* and blit-frame-buffer.
 and blit-frame-buffer."))
 
 (defmethod create-webgl-frame-buffer ((obj clog-webgl) &key bind-type)
-  (let ((web-id (clog-connection:generate-id)))
+  (let ((web-id (generate-id)))
     (js-execute obj (format nil "clog['~A']=~A.createFramebuffer()"
                             web-id
                             (script-id obj)))
@@ -1289,7 +1289,7 @@ and blit-frame-buffer"))
 is set binds the render-buffer to :RENDERBUFFER"))
 
 (defmethod create-webgl-render-buffer ((obj clog-webgl) &key bind-type)
-  (let ((web-id (clog-connection:generate-id)))
+  (let ((web-id (generate-id)))
     (js-execute obj (format nil "clog['~A']=~A.createRenderbuffer()"
                             web-id
                             (script-id obj)))
@@ -1343,7 +1343,7 @@ in WebGL 2 also:
 :TEXTURE_2D_ARRAY : A two-dimensional array texture."))
 
 (defmethod create-webgl-texture ((obj clog-webgl) &key bind-type)
-  (let ((web-id (clog-connection:generate-id)))
+  (let ((web-id (generate-id)))
     (js-execute obj (format nil "clog['~A']=~A.createTexture()"
                             web-id
                             (script-id obj)))

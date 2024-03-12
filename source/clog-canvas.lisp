@@ -56,7 +56,7 @@
 
 
 (defmethod create-context2d ((obj clog-canvas))
-  (let ((web-id (clog-connection:generate-id)))
+  (let ((web-id (generate-id)))
     (js-execute obj (format nil "clog['~A']=clog['~A'].getContext('2d')"
                             web-id
                             (html-id obj)))
@@ -443,7 +443,7 @@ https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/global
   (:documentation "Create blank image data"))
 
 (defmethod create-image-data ((obj clog-context2d) width height)
-  (let ((web-id (clog-connection:generate-id)))
+  (let ((web-id (generate-id)))
     (js-execute obj (format nil "clog['~A']=~A.createImageData(~A,~A)"
                             web-id (script-id obj)
                             width height))
@@ -459,7 +459,7 @@ https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/global
   (:documentation "Create conic gradient"))
 
 (defmethod create-conic-gradient ((obj clog-context2d) start-angle x y)
-  (let ((web-id (clog-connection:generate-id)))
+  (let ((web-id (generate-id)))
     (js-execute obj (format nil "clog['~A']=~A.createConicGradient(~A,~A,~A)"
                             web-id (script-id obj)
                             start-angle x y))
@@ -475,7 +475,7 @@ https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/global
   (:documentation "Create linear gradient"))
 
 (defmethod create-linear-gradient ((obj clog-context2d) x0 y0 x1 y1)
-  (let ((web-id (clog-connection:generate-id)))
+  (let ((web-id (generate-id)))
     (js-execute obj (format nil "clog['~A']=~A.createLinearGradient(~A,~A,~A,~A)"
                             web-id (script-id obj)
                              x0 y0 x1 y1))
@@ -491,7 +491,7 @@ https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/global
   (:documentation "Create radial gradient"))
 
 (defmethod create-radial-gradient ((obj clog-context2d) x0 y0 r0 x1 y1 r1)
-  (let ((web-id (clog-connection:generate-id)))
+  (let ((web-id (generate-id)))
     (js-execute obj (format nil "clog['~A']=~A.createRadialGradient(~A,~A,~A,~A,~A,~A)"
                             web-id (script-id obj)
                             x0 y0 r0 x1 y1 r1))
@@ -612,7 +612,7 @@ https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/global
   (:documentation "Get image data from clog-context2d. Returns a CLOG-IMAGE-DATA"))
 
 (defmethod get-image-data ((obj clog-context2d) sx sy sw sh)
-  (let ((web-id (clog-connection:generate-id)))
+  (let ((web-id (generate-id)))
     (js-execute obj (format nil "clog['~A']=~A.getImageData(~A,~A,~A,~A)"
                             web-id (script-id obj)
                             sx sy sw sh))
@@ -639,7 +639,7 @@ https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/global
   (:documentation "Get current transform matrix as clog-matrix"))
 
 (defmethod get-transform ((obj clog-context2d))
-  (let ((web-id (clog-connection:generate-id)))
+  (let ((web-id (generate-id)))
     (js-execute obj (format nil "clog['~A']=~A.getTransform()"
                             web-id (script-id obj)))
     (make-instance 'clog-matrix
@@ -695,7 +695,7 @@ https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/global
   (:documentation "Measure text returns a clog-text-metrics object"))
 
 (defmethod measure-text ((obj clog-context2d) text)
-  (let ((web-id (clog-connection:generate-id)))
+  (let ((web-id (generate-id)))
     (js-execute obj (format nil "clog['~A']=~A.measureText('~A')"
                             web-id
                             (script-id obj) text))
@@ -1033,7 +1033,7 @@ json array 6 element for 2d or 16 for 3d."))
 
 
 (defmethod create-matrix ((obj clog-canvas) &key matrix)
-  (let ((web-id (clog-connection:generate-id)))
+  (let ((web-id (generate-id)))
     (js-execute obj (format nil "clog['~A']=DOMMatrix(~A)"
                             web-id
                             (if matrix
@@ -1082,7 +1082,7 @@ json array 6 element for 2d or 16 for 3d."))
   (:documentation "Return flip-x a clog-matrix"))
 
 (defmethod flip-x ((obj clog-matrix))
-  (let ((web-id (clog-connection:generate-id)))
+  (let ((web-id (generate-id)))
     (js-execute obj (format nil "clog['~A']=~A.flipX()"
                             web-id (script-id obj)))
     (make-instance 'clog-matrix
@@ -1097,7 +1097,7 @@ json array 6 element for 2d or 16 for 3d."))
   (:documentation "Return flip-y a clog-matrix"))
 
 (defmethod flip-y ((obj clog-matrix))
-  (let ((web-id (clog-connection:generate-id)))
+  (let ((web-id (generate-id)))
     (js-execute obj (format nil "clog['~A']=~A.flipY()"
                             web-id (script-id obj)))
     (make-instance 'clog-matrix
@@ -1112,7 +1112,7 @@ json array 6 element for 2d or 16 for 3d."))
   (:documentation "Return inverse a clog-matrix"))
 
 (defmethod inverse ((obj clog-matrix))
-  (let ((web-id (clog-connection:generate-id)))
+  (let ((web-id (generate-id)))
     (js-execute obj (format nil "clog['~A']=~A.inverse()"
                             web-id (script-id obj)))
     (make-instance 'clog-matrix
@@ -1127,7 +1127,7 @@ json array 6 element for 2d or 16 for 3d."))
   (:documentation "Return multiply a clog-matrix"))
 
 (defmethod multiply ((obj clog-matrix) by-matrix)
-  (let ((web-id (clog-connection:generate-id)))
+  (let ((web-id (generate-id)))
     (js-execute obj (format nil "clog['~A']=~A.multiply(~A)"
                             web-id (script-id obj) (script-id by-matrix)))
     (make-instance 'clog-matrix
@@ -1144,7 +1144,7 @@ json array 6 element for 2d or 16 for 3d."))
   (:documentation "Return rotate a clog-matrix"))
 
 (defmethod rotate ((obj clog-matrix) angle)
-  (let ((web-id (clog-connection:generate-id)))
+  (let ((web-id (generate-id)))
     (js-execute obj (format nil "clog['~A']=~A.rotate(~A)"
                             web-id (script-id obj) angle))
     (make-instance 'clog-matrix
@@ -1162,7 +1162,7 @@ json array 6 element for 2d or 16 for 3d."))
 sy sz ox oy oz"))
 
 (defmethod scale-matrix ((obj clog-matrix) sx &optional sy sz ox oy oz)
-  (let ((web-id (clog-connection:generate-id)))
+  (let ((web-id (generate-id)))
     (js-execute obj (format nil "clog['~A']=~A.scale(~A~A~A~A~A~A)"
                             web-id (script-id obj) sx
                             (if sy (format nil ",~A" sy) "")
@@ -1183,7 +1183,7 @@ sy sz ox oy oz"))
 sy sz ox oy oz"))
 
 (defmethod scale3d ((obj clog-matrix) sx &optional sy sz ox oy oz)
-  (let ((web-id (clog-connection:generate-id)))
+  (let ((web-id (generate-id)))
     (js-execute obj (format nil "clog['~A']=~A.scale3d(~A~A~A~A~A~A)"
                             web-id (script-id obj) sx
                             (if sy (format nil ",~A" sy) "")
@@ -1205,7 +1205,7 @@ sy sz ox oy oz"))
   (:documentation "Return translate-matrix a clog-matrix by x y and optionally z"))
 
 (defmethod translate-matrix ((obj clog-matrix) x y &optional z)
-  (let ((web-id (clog-connection:generate-id)))
+  (let ((web-id (generate-id)))
     (js-execute obj (format nil "clog['~A']=~A.translate(~A,~A~A)"
                             web-id (script-id obj) x y
                             (if z (format nil ",~A" z) "")))
@@ -1228,7 +1228,7 @@ sy sz ox oy oz"))
 
 
 (defmethod create-path2d ((obj clog-canvas) &key path2d)
-  (let ((web-id (clog-connection:generate-id)))
+  (let ((web-id (generate-id)))
     (js-execute obj (format nil "clog['~A']=Path2D(~A)"
                             web-id
                             (if path2d

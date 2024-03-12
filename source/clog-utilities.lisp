@@ -8,18 +8,6 @@
 
 (cl:in-package :clog)
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Implementation - make-hash-table*
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(defun make-hash-table* (&rest args)
-  "Use native concurrent hash tables"
-  ;; This covers sbcl ecl mazzano lw and ccl.
-  ;; (lw and ccl default hash is synchronized)
-  #+(or sbcl ecl mezzano)
-  (apply #'make-hash-table :synchronized t args)
-  #-(or sbcl ecl mezzano) (apply #'make-hash-table args))
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Implementation - with-clog-create ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -166,33 +154,6 @@ CLOG-OBJ unless :NAME is set and is used instead."))
 	       (values default value))))
 	(t
 	 (values default value))))
-
-;;;;;;;;;;;;;;;;;;;
-;; escape-string ;;
-;;;;;;;;;;;;;;;;;;;
-
-(defun escape-string (str &key (no-nil nil) (html nil))
-  "Escape STR for sending to browser script. If no-nil is t (default is nil)
-if str is NIL returns empty string otherwise returns nil. If html is t the
-quotes are changed to html entities and \n and \r are eliminated. Escape
-string is used for wire readiness i.e. ability to be evaluated client side
-and not for security purposes or html escapes."
-  (if (and (not str) (not no-nil))
-      nil
-      (let ((res))
-        (setf res (format nil "~@[~A~]" str))
-        (setf res (ppcre:regex-replace-all "\\x5C" res "\\x5C")) ; \
-        (cond (html
-               (setf res (ppcre:regex-replace-all "\\x22" res "&#x22;")) ; "
-               (setf res (ppcre:regex-replace-all "\\x27" res "&#x27;")) ; '
-               (setf res (ppcre:regex-replace-all "\\x0A" res "&#x0A;")) ; \n
-               (setf res (ppcre:regex-replace-all "\\x0D" res "&#x0D"))) ; \r
-              (t
-               (setf res (ppcre:regex-replace-all "\\x22" res "\\x22")) ; "
-               (setf res (ppcre:regex-replace-all "\\x27" res "\\x27")) ; '
-               (setf res (ppcre:regex-replace-all "\\x0A" res "\\x0A")) ; \n
-               (setf res (ppcre:regex-replace-all "\\x0D" res "\\x0D")))) ; \r
-        res)))
 
 ;;;;;;;;;;;;;;
 ;; lf-to-br ;;

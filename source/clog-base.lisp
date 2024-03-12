@@ -98,6 +98,18 @@ discarded, return CLOG-OBJ. (Internal)"))
       (clog-connection:execute (connection-id obj) script))
   obj)
 
+;;;;;;;;;;;;;;
+;; js-query ;;
+;;;;;;;;;;;;;;
+
+(defgeneric js-query (clog-obj script &key default-answer)
+  (:documentation "Execure SCRIPT on browser and return result. (Internal)"))
+
+(defmethod js-query ((obj clog-obj) script &key (default-answer nil))
+  (flush-connection-cache obj)
+  (clog-connection:query (connection-id obj) script
+			 :default-answer default-answer))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; with-connection-cache ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -120,18 +132,6 @@ flushed with FLUSH-CONNECTION-CACHE or a query is made."
       (unless (eq script :cache)
 	(clog-connection:execute (connection-id clog-obj) script)))
     (setf *connection-cache* (list :cache))))
-
-;;;;;;;;;;;;;;
-;; js-query ;;
-;;;;;;;;;;;;;;
-
-(defgeneric js-query (clog-obj script &key default-answer)
-  (:documentation "Execure SCRIPT on browser and return result. (Internal)"))
-
-(defmethod js-query ((obj clog-obj) script &key (default-answer nil))
-  (flush-connection-cache obj)
-  (clog-connection:query (connection-id obj) script
-			 :default-answer default-answer))
 
 ;;;;;;;;;;;;;
 ;; execute ;;

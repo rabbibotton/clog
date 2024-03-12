@@ -16,15 +16,13 @@
   (:documentation "Get the form data as an a-list sent by the get method"))
 
 (defmethod form-get-data ((obj clog-obj))
-  (quri:uri-query-params
-   (quri:uri (clog-connection:query (connection-id obj) "location.href"))))
+  (quri:uri-query-params (quri:uri (js-query obj "location.href"))))
 
 (defgeneric form-post-data (clog-obj)
   (:documentation "Get the form data as an a-list sent by post method"))
 
 (defmethod form-post-data ((obj clog-obj))
-  (quri:url-decode-params
-   (clog-connection:query (connection-id obj) "clog['post-data']")))
+  (quri:url-decode-params (js-query obj "clog['post-data']")))
 
 (defgeneric form-multipart-data (clog-obj)
   (:documentation "Get the form data as an a-list sent with the multipart
@@ -438,9 +436,8 @@ have this set true ever. Autofocus on element when form loaded."))
 group called NAME."))
 
 (defmethod radio-value ((obj clog-obj) name)
-  (clog-connection:query (connection-id obj)
-            (format nil "$('input:radio[name=~A]:checked').val()"
-                    name)))
+  (js-query obj (format nil "$('input:radio[name=~A]:checked').val()"
+                        name)))
 
 ;;;;;;;;;;;;;;;;;;;;
 ;; checkbox-value ;;
@@ -450,9 +447,8 @@ group called NAME."))
   (:documentation "Returns t or nil on the selected checkbox button."))
 
 (defmethod checkbox-value ((obj clog-obj) name)
-  (js-on-p (clog-connection:query (connection-id obj)
-                     (format nil "$('input:checkbox[name=~A]:checked').val()"
-                             name))))
+  (js-on-p (js-query obj (format nil "$('input:checkbox[name=~A]:checked').val()"
+                                 name))))
 
 ;;;;;;;;;;;;;;;;;;
 ;; select-value ;;
@@ -463,20 +459,18 @@ group called NAME."))
 be unique name on entire document."))
 
 (defmethod select-value ((obj clog-obj) name)
-  (clog-connection:query (connection-id obj)
-            (format nil "$('select[name=~A] option:selected').val()" name)))
+  (js-query obj (format nil "$('select[name=~A] option:selected').val()" name)))
 
-;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;
 ;; textarea-value ;;
-;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;
 
 (defgeneric textarea-value (clog-obj name)
   (:documentation "Returns the value of textarea item called NAME and must
 be unique name on entire document."))
 
 (defmethod textarea-value ((obj clog-obj) name)
-  (clog-connection:query (clog::connection-id obj)
-            (format nil "$('textarea#~A').val()" name)))
+  (js-query obj (format nil "$('textarea#~A').val()" name)))
 
 ;;;;;;;;;;;;;;;;
 ;; name-value ;;
@@ -487,8 +481,7 @@ be unique name on entire document."))
 be unique name on entire document."))
 
 (defmethod name-value ((obj clog-obj) name)
-  (clog-connection:query (connection-id obj)
-            (format nil "$('input[name=~A]').val()" name)))
+  (js-query obj (format nil "$('input[name=~A]').val()" name)))
 
 ;;;;;;;;;;;;;
 ;; pattern ;;

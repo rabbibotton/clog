@@ -846,7 +846,7 @@ window-to-top-by-param or window-by-param."))
                                                (html-id nil))
   (let ((app (connection-data-item obj "clog-gui")))
     (unless html-id
-      (setf html-id (clog-connection:generate-id)))
+      (setf html-id (generate-id)))
     (when (eql (hash-table-count (windows app)) 0)
       ;; If previously no open windows reset default position
       (setf (last-x app) 0)
@@ -1433,7 +1433,7 @@ interactions. Use window-end-modal to undo."))
   "Create an alert toast with option :TIME-OUT. If place-top is t then alert
 is placed in DOM at top of html body instead of bottom of html body."
   (unless html-id
-      (setf html-id (clog-connection:generate-id)))
+      (setf html-id (generate-id)))
   (let* ((body   (connection-data-item obj "clog-body"))
          (win    (create-child body
                              (format nil
@@ -1472,7 +1472,7 @@ is placed in DOM at top of html body instead of bottom of html body."
                                    (html-id nil))
   "Create an alert dialog box with CONTENT centered."
   (unless html-id
-      (setf html-id (clog-connection:generate-id)))
+      (setf html-id (generate-id)))
   (let* ((body (connection-data-item obj "clog-body"))
          (win  (create-gui-window obj
                                   :title    title
@@ -1525,7 +1525,7 @@ is placed in DOM at top of html body instead of bottom of html body."
   "Create an input dialog box with CONTENT centered and an input box.
 Calls on-input with input box contents or nil if canceled."
   (unless html-id
-      (setf html-id (clog-connection:generate-id)))
+      (setf html-id (generate-id)))
   (let* ((body (connection-data-item obj "clog-body"))
          (inp  (if (eql rows 1)
                    (format nil "<input type='text' id='~A-input' size='~A' value='~A'>"
@@ -1607,7 +1607,7 @@ Calls on-input with input box contents or nil if canceled."
   "Create a confirmation dialog box with CONTENT centered.
 Calls on-input with t if confirmed or nil if canceled."
   (unless html-id
-      (setf html-id (clog-connection:generate-id)))
+      (setf html-id (generate-id)))
   (let* ((body (connection-data-item obj "clog-body"))
          (win  (create-gui-window obj
                                   :title          title
@@ -1698,7 +1698,7 @@ The size of any texarea field is controled by the size and rows parameters
 Calls on-input after OK or Cancel with an a-list of field name to value
 if confirmed or nil if canceled."
   (unless html-id
-    (setf html-id (clog-connection:generate-id)))
+    (setf html-id (generate-id)))
   (let* ((body (connection-data-item obj "clog-body"))
          (fls (format nil "~{~A~}"
                       (mapcar (lambda (l)

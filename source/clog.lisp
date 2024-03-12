@@ -16,6 +16,11 @@
 
 (mgl-pax:define-package :clog
   (:documentation "The Common List Omnificent GUI - CLOG")
+  (:import-from :clog-connection
+                #:make-hash-table*
+                #:escape-string
+                #:generate-id
+                #:random-hex-string)
   (:use #:cl #:parse-float #:mgl-pax))
 
 (cl:in-package :clog)
@@ -83,6 +88,10 @@ embedded in a native template application.)"
 
   "Declerative Syntax Support"
   (with-clog-create macro)
+
+  "CLOG ID utilities"
+  (generate-id       function)
+  (random-hex-string function)
 
   "CLOG-Group - Utility Class for CLOG-Obj storage"
   (clog-group    class)

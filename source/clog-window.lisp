@@ -33,7 +33,7 @@ them.")
 
 (defun open-clog-popup (obj &key (path *clog-popup-path*)
                               (add-sync-to-path t)
-                              (sync-key (clog-connection:random-hex-string))
+                              (sync-key (random-hex-string))
                               (name "_blank")
                               (specs "")
                               (wait-timeout 10))
@@ -447,7 +447,7 @@ unless is a localhost url."))
 (defmethod open-window ((obj clog-window) url &key
                                                 (name "_blank")
                                                 (specs ""))
-  (let ((new-id (format nil "CLOG~A" (clog-connection:generate-id))))
+  (let ((new-id (format nil "CLOG~A" (generate-id))))
     (execute obj (format nil "clog['~A']=open('~A','~A','~A')"
                          new-id url name specs))
     (make-clog-window (connection-id obj) :html-id new-id)))

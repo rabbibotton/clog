@@ -16,6 +16,7 @@
                (:module "source"
                 :components ((:file "asdf-ext")
                              (:file "clog-connection")
+                             (:file "clog-connection-websockets")
                              (:file "clog")
                              (:file "clog-utilities")
                              (:file "clog-base")

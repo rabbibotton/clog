@@ -229,7 +229,7 @@ HTML-ID if set is the base and top,left,right,center, bottom are added e.g.
 if :HTML-ID \"myid\" then the HTML-ID for center will be: myid-center"
   (let ((panel-box (make-instance 'clog-panel-box-layout)))
     (unless html-id
-      (setf html-id (clog-connection:generate-id)))
+      (setf html-id (generate-id)))
     (setf (top-panel panel-box)
           (create-panel clog-obj :left 0 :top 0 :right 0 :height top-height
                                  :units units

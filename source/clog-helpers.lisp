@@ -102,7 +102,7 @@ set (logging to browser console) in the default debug.html boot-file."
   (unless *clog-running*
     (initialize nil :boot-file boot-file :port port))
   (set-on-new-window (lambda (body)
-                       (clog-connection:debug-mode (connection-id body))
+                       (debug-mode body)
                        (when clog-web-initialize
                          (clog-web:clog-web-initialize body))
                        (when clog-gui-initialize

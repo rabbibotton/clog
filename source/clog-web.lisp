@@ -843,7 +843,7 @@ propetery will be set to nil on creation."))
   "Create an alert toast with option :TIME-OUT. If place-top is t then alert
 is placed in DOM at top of OBJ instead of bottom of OBJ."
   (unless html-id
-      (setf html-id (clog-connection:generate-id)))
+      (setf html-id (generate-id)))
   (let* ((panel (create-child obj
                               (format nil
 "  <div class='w3-panel ~A w3-animate-right w3-display-container'>~
@@ -914,7 +914,7 @@ the value if set in the theme settings."
       (when (getf (settings website) :color-class)
         (setf color-class (getf (settings website) :color-class)))))
   (unless html-id
-    (setf html-id (clog-connection:generate-id)))
+    (setf html-id (generate-id)))
   (let* ((fls (format nil "~{~A~}"
                       (mapcar (lambda (l)
                                 (cond
