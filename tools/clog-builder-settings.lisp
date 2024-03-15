@@ -787,103 +787,151 @@
   '((:name        "on-create"
      :parameters  "target")
     (:name        "on-click"
-     :parameters  "target")
+     :parameters  "target"
+     :js-event    "onclick")
     (:name        "on-focus"
-     :parameters  "target")
+     :parameters  "target"
+     :js-event    "onfocus")
     (:name        "on-blur"
-     :parameters  "target")
+     :parameters  "target"
+     :js-event    "onblur")
     (:name        "on-change"
-     :parameters  "target")
+     :parameters  "target"
+     :js-event    "onchange")
     (:name        "on-input"
-     :parameters  "target")
+     :parameters  "target"
+     :js-event    "oninput")
     (:name        "on-focus-in"
-     :parameters  "target")
+     :parameters  "target"
+     :js-event    "onfocusin")
     (:name        "on-focus-out"
-     :parameters  "target")
+     :parameters  "target"
+     :js-event    "onfocusout")
     (:name        "on-reset"
-     :parameters  "target")
+     :parameters  "target"
+     :js-event    "onreset")
     (:name        "on-search"
-     :parameters  "target")
+     :parameters  "target"
+     :js-event    "onsearch")
     (:name        "on-select"
-     :parameters  "target")
+     :parameters  "target"
+     :js-event    "onselect")
     (:name        "on-submit"
-     :parameters  "target")
+     :parameters  "target"
+     :js-event    "onsubmit")
     (:name        "on-context-menu"
-     :parameters  "target")
+     :parameters  "target"
+     :js-event    "oncontextmenu")
     (:name        "on-double-click"
-     :parameters  "target")
+     :parameters  "target"
+     :js-event    "ondblclick")
     (:name        "on-mouse-click"
-     :parameters  "target data")
+     :parameters  "target data"
+     :js-event    "onmouseclick")
     (:name        "on-mouse-double-click"
-     :parameters  "target data")
+     :parameters  "target data"
+     :js-event    "onmousedoubleclick")
     (:name        "on-mouse-right-click"
-     :parameters  "target data")
+     :parameters  "target data"
+     :js-event    "onmouserightclick")
     (:name        "on-mouse-enter"
-     :parameters  "target")
+     :parameters  "target"
+     :js-event    "onmouseenter")
     (:name        "on-mouse-leave"
-     :parameters  "target")
+     :parameters  "target"
+     :js-event    "onmouseleave")
     (:name        "on-mouse-over"
-     :parameters  "target")
+     :parameters  "target"
+     :js-event    "onmouseover")
     (:name        "on-mouse-out"
-     :parameters  "target")
+     :parameters  "target"
+     :js-event    "onmouseout")
     (:name        "on-mouse-down"
-     :parameters  "target data")
+     :parameters  "target data"
+     :js-event    "onmousedown")
     (:name        "on-mouse-up"
-     :parameters  "target data")
+     :parameters  "target data"
+     :js-event    "onmouseup")
     (:name        "on-mouse-move"
-     :parameters  "target data")
+     :parameters  "target data"
+     :js-event    "onmousemove")
     (:name        "on-pointer-enter"
-     :parameters  "target")
+     :parameters  "target"
+     :js-event    "onpointerenter")
     (:name        "on-pointer-leave"
-     :parameters  "target")
+     :parameters  "target"
+     :js-event    "onpointerleave")
     (:name        "on-pointer-over"
-     :parameters  "target")
+     :parameters  "target"
+     :js-event    "onpointerover")
     (:name        "on-pointer-out"
-     :parameters  "target")
+     :parameters  "target"
+     :js-event    "onpointerout")
     (:name        "on-pointer-down"
-     :parameters  "target data")
+     :parameters  "target data"
+     :js-event    "onpointerdown")
     (:name        "on-pointer-up"
-     :parameters  "target data")
+     :parameters  "target data"
+     :js-event    "onpointerup")
     (:name        "on-pointer-move"
-     :parameters  "target data")
+     :parameters  "target data"
+     :js-event    "onpointermove")
     (:name        "on-touch-start"
-     :parameters  "target data")
+     :parameters  "target data"
+     :js-event    "ontouchstart")
     (:name        "on-touch-move"
-     :parameters  "target data")
+     :parameters  "target data"
+     :js-event    "ontouchmove")
     (:name        "on-touch-end"
-     :parameters  "target data")
+     :parameters  "target data"
+     :js-event    "ontouchend")
     (:name        "on-touch-cancel"
-     :parameters  "target data")
+     :parameters  "target data"
+     :js-event    "ontouchcancel")
     (:name        "on-character"
      :parameters  "target data")
     (:name        "on-key-down"
-     :parameters  "target data")
+     :parameters  "target data"
+     :js-event    "onkeydown")
     (:name        "on-key-up"
-     :parameters  "target data")
+     :parameters  "target data"
+     :js-event    "onkeyup")
     (:name        "on-key-press"
-     :parameters  "target data")
+     :parameters  "target data"
+     :js-event    "onkeypress")
     (:name        "on-copy"
-     :parameters  "target")
+     :parameters  "target"
+     :js-event    "oncopy")
     (:name        "on-cut"
-     :parameters  "target")
+     :parameters  "target"
+     :js-event    "oncut")
     (:name        "on-paste"
-     :parameters  "target")
+     :parameters  "target"
+     :js-event    "onpaste")
     (:name        "on-resize"
-     :parameters  "target")
+     :parameters  "target"
+     :js-event    "onresize")
     (:name        "on-drag-start"
-     :parameters  "target")
+     :parameters  "target"
+     :js-event    "ondragstart")
     (:name        "on-drag"
-     :parameters  "target")
+     :parameters  "target"
+     :js-event    "ondrag")
     (:name        "on-drag-end"
-     :parameters  "target")
+     :parameters  "target"
+     :js-event    "ondragend")
     (:name        "on-drag-enter"
-     :parameters  "target")
+     :parameters  "target"
+     :js-event    "ondragenter")
     (:name        "on-drag-leave"
-     :parameters  "target")
+     :parameters  "target"
+     :js-event    "ondragleave")
     (:name        "on-drag-over"
-     :parameters  "target")
+     :parameters  "target"
+     :js-event    "ondragover")
     (:name        "on-drop"
-     :parameters  "target data")))
+     :parameters  "target data"
+     :js-event    "ondrop")))
 
 (defparameter *supported-controls*
   (list
