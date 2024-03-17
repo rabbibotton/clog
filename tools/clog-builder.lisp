@@ -1487,9 +1487,11 @@ var endRange = ~:*~A.session.doc.indexToPosition(endIndex);
                               (if r
                                   (setf r (car r))
                                   (setf r (swank:operator-arglist ms package)))
-                              (setf (advisory-title status) (documentation (find-symbol ms) 'function))
+                              (when status
+                                (setf (advisory-title status) (documentation (find-symbol ms) 'function)))
                               (when r
-                                (setf (text status) (string-downcase r))))))))))
+                                (when status
+                                  (setf (text status) (string-downcase r)))))))))))
     (clog-ace:set-auto-completion editor t)
     (setf (clog-ace:theme editor) *editor-theme*)
     (setf (clog-ace:mode editor) *editor-mode*)
@@ -1782,11 +1784,12 @@ It parse the string TEXT without using READ functions."
           (setf (height (event-js-editor app)) "")
           (set-geometry (event-js-editor app) :top 35 :left 5 :right 5 :bottom 30)
           (clog-ace:resize (event-js-editor app))
-          (setf status (create-div content :class "w3-tiny w3-border"))
+          (setf status (create-div content :class "w3-tiny w3-border"
+                                           :content "Use $(\"data-clog-name='control-name']\") to access controls."))
           (setf (positioning status) :absolute)
           (setf (width status) "")
           (set-geometry status :height 20 :left 5 :right 5 :bottom 5)
-          (setup-lisp-ace (event-js-editor app) status :package "clog-user")
+          (setup-lisp-ace (event-js-editor app) nil :package "clog-user")
           (setf (clog-ace:mode (event-js-editor app)) "ace/mode/javascript")
           (set-on-window-size-done win (lambda (obj)
                                          (declare (ignore obj))
