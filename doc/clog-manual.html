@@ -367,10 +367,10 @@ for openning windows on remote machines.</p></li>
 <p><span class="outer-navigation"><span class="navigation"> <a href="#CLOG:@CLOG-SYSTEM%20MGL-PAX:SECTION" title="CLOG System">&#8592;</a> <a href="clog-manual.html" title="The CLOG manual">&#8593;</a> <a href="#CLOG:@CLOG-OBJ%20MGL-PAX:SECTION" title="CLOG Objects">&#8594;</a> <a href="#CLOG:@CLOG-UTILITIES%20MGL-PAX:SECTION" title="CLOG Utilities">&#8634;</a></span></span></p>
 <h2><a href="#CLOG:@CLOG-UTILITIES%20MGL-PAX:SECTION">5 CLOG Utilities</a></h2>
 <p>Concurrent Hash Tables</p>
-<p><a id="x-28CLOG-3AMAKE-HASH-TABLE-2A-20FUNCTION-29"></a>
-<a id="CLOG:MAKE-HASH-TABLE*%20FUNCTION"></a></p>
+<p><a id="x-28CLOG-CONNECTION-3AMAKE-HASH-TABLE-2A-20FUNCTION-29"></a>
+<a id="CLOG-CONNECTION:MAKE-HASH-TABLE*%20FUNCTION"></a></p>
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#CLOG:MAKE-HASH-TABLE*%20FUNCTION" >MAKE-HASH-TABLE*</a></span></span> <span class="locative-args">&amp;REST ARGS</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#CLOG-CONNECTION:MAKE-HASH-TABLE*%20FUNCTION" >MAKE-HASH-TABLE*</a></span></span> <span class="locative-args">&amp;REST ARGS</span></span></p>
 
 <p>Use native concurrent hash tables</p></li>
 </ul>
@@ -387,6 +387,21 @@ levels of decleraton are used as the parent clog-obj. To bind a
 variable to any created clog object using :bind var. See tutorial 33
 and 22 for examples. All create- symbols must be in or used by
 package.</p></li>
+</ul>
+<p>CLOG ID utilities</p>
+<p><a id="x-28CLOG-CONNECTION-3AGENERATE-ID-20FUNCTION-29"></a>
+<a id="CLOG-CONNECTION:GENERATE-ID%20FUNCTION"></a></p>
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#CLOG-CONNECTION:GENERATE-ID%20FUNCTION" >GENERATE-ID</a></span></span></span></p>
+
+<p>Generate unique ids for use in scripts.</p></li>
+</ul>
+<p><a id="x-28CLOG-CONNECTION-3ARANDOM-HEX-STRING-20FUNCTION-29"></a>
+<a id="CLOG-CONNECTION:RANDOM-HEX-STRING%20FUNCTION"></a></p>
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#CLOG-CONNECTION:RANDOM-HEX-STRING%20FUNCTION" >RANDOM-HEX-STRING</a></span></span></span></p>
+
+<p>Generate cryptographic grade random ids for use in connections.</p></li>
 </ul>
 <p>CLOG-Group - Utility Class for CLOG-Obj storage</p>
 <p><a id="x-28CLOG-3ACLOG-GROUP-20CLASS-29"></a>
@@ -446,10 +461,10 @@ their <a href="#CLOG:HTML-ID%20GENERIC-FUNCTION" title="CLOG:HTML-ID GENERIC-FUN
 
 <p>Return &quot;on&quot; if <code>VALUE</code> t or return &quot;off&quot;</p></li>
 </ul>
-<p><a id="x-28CLOG-3AESCAPE-STRING-20FUNCTION-29"></a>
-<a id="CLOG:ESCAPE-STRING%20FUNCTION"></a></p>
+<p><a id="x-28CLOG-CONNECTION-3AESCAPE-STRING-20FUNCTION-29"></a>
+<a id="CLOG-CONNECTION:ESCAPE-STRING%20FUNCTION"></a></p>
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#CLOG:ESCAPE-STRING%20FUNCTION" >ESCAPE-STRING</a></span></span> <span class="locative-args">STR &amp;KEY (NO-NIL <code>NIL</code>) (HTML <code>NIL</code>)</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#CLOG-CONNECTION:ESCAPE-STRING%20FUNCTION" >ESCAPE-STRING</a></span></span> <span class="locative-args">STR &amp;KEY (NO-NIL <code>NIL</code>) (HTML <code>NIL</code>)</span></span></p>
 
 <p>Escape <code>STR</code> for sending to browser script. If no-nil is t (default is nil)
 if str is <code>NIL</code> returns empty string otherwise returns nil. If html is t the
@@ -7694,6 +7709,32 @@ replace the browser contents with <code>HTML</code>.</p></li>
 <a id="CLOG:@CLOG-WINDOW%20MGL-PAX:SECTION"></a></p>
 <p><span class="outer-navigation"><span class="navigation"> <a href="#CLOG:@CLOG-BODY%20MGL-PAX:SECTION" title="CLOG Body Objects">&#8592;</a> <a href="clog-manual.html" title="The CLOG manual">&#8593;</a> <a href="#CLOG:@CLOG-DOCUMENT%20MGL-PAX:SECTION" title="CLOG Document Objects">&#8594;</a> <a href="#CLOG:@CLOG-WINDOW%20MGL-PAX:SECTION" title="CLOG Window Objects">&#8634;</a></span></span></p>
 <h2><a href="#CLOG:@CLOG-WINDOW%20MGL-PAX:SECTION">24 CLOG Window Objects</a></h2>
+<p>CLOG Popups</p>
+<p><a id="x-28CLOG-3AENABLE-CLOG-POPUP-20FUNCTION-29"></a>
+<a id="CLOG:ENABLE-CLOG-POPUP%20FUNCTION"></a></p>
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#CLOG:ENABLE-CLOG-POPUP%20FUNCTION" >ENABLE-CLOG-POPUP</a></span></span> <span class="locative-args">&amp;KEY (PATH <code>*CLOG-POPUP-PATH*</code>)</span></span></p>
+
+<p>Enable handling of clog enabled popups</p></li>
+</ul>
+<p><a id="x-28CLOG-3AOPEN-CLOG-POPUP-20FUNCTION-29"></a>
+<a id="CLOG:OPEN-CLOG-POPUP%20FUNCTION"></a></p>
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#CLOG:OPEN-CLOG-POPUP%20FUNCTION" >OPEN-CLOG-POPUP</a></span></span> <span class="locative-args">OBJ &amp;KEY (PATH <code>*CLOG-POPUP-PATH*</code>) (ADD-SYNC-TO-PATH <code>T</code>) (SYNC-KEY (<a href="#CLOG-CONNECTION:RANDOM-HEX-STRING%20FUNCTION" title="CLOG-CONNECTION:RANDOM-HEX-STRING FUNCTION"><code>RANDOM-HEX-STRING</code></a>)) (NAME &quot;_blank&quot;) (SPECS &quot;&quot;) (WAIT-TIMEOUT 10)</span></span></p>
+
+<p>Open a new browser window/popup in most cases a tab. Since they are controlled
+by clog you have full control of the new popups and are more flexible than using
+open-windo. Returns the clog-body and the clog-window in the same connnection as
+obj of the new window on the new connection or nil if failed within <code>:WAIT-TIMEOUT</code></p></li>
+</ul>
+<p><a id="x-28CLOG-3ACLOG-POPUP-OPENNED-20FUNCTION-29"></a>
+<a id="CLOG:CLOG-POPUP-OPENNED%20FUNCTION"></a></p>
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#CLOG:CLOG-POPUP-OPENNED%20FUNCTION" >CLOG-POPUP-OPENNED</a></span></span> <span class="locative-args">OBJ SYNC-KEY</span></span></p>
+
+<p>Used to notify open-clog-popup the new popup window is ready for custom
+clog-popup handlers.</p></li>
+</ul>
 <p>CLOG-Window - CLOG Window Objects</p>
 <p><a id="x-28CLOG-3ACLOG-WINDOW-20CLASS-29"></a>
 <a id="CLOG:CLOG-WINDOW%20CLASS"></a></p>
@@ -7878,11 +7919,12 @@ events and messages may not be trasmitted on most browsers.</p></li>
 <p><a id="x-28CLOG-3AOPEN-WINDOW-20GENERIC-FUNCTION-29"></a>
 <a id="CLOG:OPEN-WINDOW%20GENERIC-FUNCTION"></a></p>
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:OPEN-WINDOW%20GENERIC-FUNCTION" >OPEN-WINDOW</a></span></span> <span class="locative-args">CLOG-WINDOW URL &amp;KEY NAME SPECS REPLACE</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:OPEN-WINDOW%20GENERIC-FUNCTION" >OPEN-WINDOW</a></span></span> <span class="locative-args">CLOG-WINDOW URL &amp;KEY NAME SPECS</span></span></p>
 
 <p>This will launch a new window of current browser where
-<code>CLOG-WINDOW</code> is displayed (remote or local). In modern browsers it is
-very limitted to just open a new tab with url unless is a localhost url.</p></li>
+<code>CLOG-WINDOW</code> is displayed (remote or local) and returns a new clog-window.
+In modern browsers it is very limitted to just open a new tab with url
+unless is a localhost url.</p></li>
 </ul>
 <p><a id="x-28CLOG-3ACLOSE-WINDOW-20GENERIC-FUNCTION-29"></a>
 <a id="CLOG:CLOSE-WINDOW%20GENERIC-FUNCTION"></a></p>

@@ -22,7 +22,7 @@ embedded in a native template application.)
 [CLOG - Technical Overview and Purpose](CONCEPT.md)
 [CLOG - Reference Manual](https://rabbibotton.github.io/clog/clog-manual.html)
 
-STATUS: CLOG and CLOG Builder 1.8 released.
+STATUS: CLOG and CLOG Builder 1.9 released.
 
 CLOG is actually based on GNOGA, a framework I wrote for Ada in 2013
 and used in commercial production code for the last 10+ years. CLOG
@@ -263,7 +263,7 @@ CLOG Tutorials
 - [19-tutorial.lisp](tutorial/19-tutorial.lisp) - Using JavaScript components
 - [20-tutorial.lisp](tutorial/20-tutorial.lisp) - New CLOG plugin from JavaScript component
 - [21-tutorial.lisp](tutorial/21-tutorial.lisp) - New CLOG plugin in Common-Lisp
-- [22-tutorial.lisp](tutorial/22-tutorial.lisp) - CLOG GUI Menus and Desktop Look and Feel
+- [22-tutorial.lisp](tutorial/22-tutorial.lisp) - CLOG GUI Menus and Desktop Look and Feel, and popups
 - [23-tutorial.lisp](tutorial/23-tutorial.lisp) - Using semaphores to wait for input
 - [24-tutorial.lisp](tutorial/24-tutorial.lisp) - CLOG WEB containers
 - [25-tutorial.lisp](tutorial/25-tutorial.lisp) - A "local" web app using CLOG WEB
