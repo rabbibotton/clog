@@ -76,6 +76,12 @@
                ;; clog-builder code
                (:file "clog-builder-settings")
                (:file "clog-builder")
+               (:file "clog-builder-control-list")
+               (:file "clog-builder-eval")
+               (:file "clog-builder-files")
+               (:file "clog-builder-panels")
+               (:file "clog-builder-render")
+               (:file "clog-builder-ace")
                (:file "clog-builder-templates")
                (:file "clog-builder-projects")
                (:file "clog-builder-asdf-browser")               
