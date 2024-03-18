@@ -1,12 +1,13 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; CLOG - The Common Lisp Omnificent GUI                                 ;;;;
-;;;; (c) 2020-2022 David Botton                                            ;;;;
-;;;; License BSD 3 Clause                                                  ;;;;
+;;;; (c) David Botton                                                      ;;;;
 ;;;;                                                                       ;;;;
 ;;;; clog-style.lisp                                                       ;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (cl:in-package :clog)
+
+;;; CSS style blocks, see clog-document.lisp for load-css
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Implementation - clog-style-block

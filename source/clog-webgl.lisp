@@ -1,7 +1,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; CLOG - The Common Lisp Omnificent GUI                                 ;;;;
-;;;; (c) 2020-2024 David Botton                                            ;;;;
-;;;; License BSD 3 Clause                                                  ;;;;
+;;;; (c) David Botton                                                      ;;;;
 ;;;;                                                                       ;;;;
 ;;;; clog-webgl.lisp                                                       ;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -14,7 +13,6 @@
 
 ;; Use clog-canvas to create the html element and then use
 ;; clog-webgl:create-webgl to obtain the WebGL2 context
-
 
 (defsection @clog-webgl (:title "CLOG WebGL Objects")
   "CLOG-WebGL - Class for CLOG WebGL objects"

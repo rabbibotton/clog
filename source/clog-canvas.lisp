@@ -1,12 +1,13 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; CLOG - The Common Lisp Omnificent GUI                                 ;;;;
-;;;; (c) 2020-2021 David Botton                                            ;;;;
-;;;; License BSD 3 Clause                                                  ;;;;
+;;;; (c) David Botton                                                      ;;;;
 ;;;;                                                                       ;;;;
 ;;;; clog-canvas.lisp                                                      ;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (cl:in-package :clog)
+
+;;; Canvas and 2d Context, for 3d WebGL2 context see clog-webgl.lisp
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Implementation - clog-canvas

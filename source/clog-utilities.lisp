@@ -1,10 +1,11 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; CLOG - The Common Lisp Omnificent GUI                                 ;;;;
-;;;; (c) 2020-2022 David Botton                                            ;;;;
-;;;; License BSD 3 Clause                                                  ;;;;
+;;;; (c) David Botton                                                      ;;;;
 ;;;;                                                                       ;;;;
 ;;;; clog-utilities.lisp                                                   ;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;;; Utilites for use with the CLOG framework
 
 (cl:in-package :clog)
 
@@ -52,36 +53,6 @@ package."
         `(let* ,(reverse let-bindings)
            (declare (ignore ,@(set-difference (mapcar #'first let-bindings) used-bindings)))
            ,@body)))))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Implementation - clog-group
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(defclass clog-group ()
-  ((controls
-   :accessor controls
-   :initform (make-hash-table* :test 'equalp))))
-
-(defun create-group ()
-  "Return a new CLOG-GROUP object for storing CLOG-OBJs. They are indexed by
-their HTML-ID or an arbitrary NAME."
-  (make-instance 'clog-group))
-
-(defgeneric add (clog-group clog-obj &key name)
-  (:documentation "Add CLOG-OBJ to a CLOG-GROUP indexed by the html-id of
-CLOG-OBJ unless :NAME is set and is used instead."))
-
-(defmethod add ((group clog-group) clog-obj &key (name nil))
-  (let ((id (if name
-                name
-                (html-id clog-obj))))
-    (setf (gethash id (controls group)) clog-obj)))
-
-(defgeneric obj (clog-group name)
-  (:documentation "Retrieve from CLOG-GROUP the CLOG-OBJ with name"))
-
-(defmethod obj ((group clog-group) name)
-  (gethash name (controls group)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Implementation - JS Utilities

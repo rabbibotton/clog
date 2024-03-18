@@ -1,12 +1,11 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; CLOG - The Common Lisp Omnificent GUI                                 ;;;;
-;;;; (c) 2020-2022 David Botton                                            ;;;;
-;;;; License BSD 3 Clause                                                  ;;;;
+;;;; (c) David Botton                                                      ;;;;
 ;;;;                                                                       ;;;;
 ;;;; clog-web-themes.lisp                                                  ;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; Built in clog-web-site themese
+;; Built in clog-web-site themes
 
 (cl:in-package :clog-web)
 

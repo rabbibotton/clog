@@ -1,7 +1,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; CLOG - The Common Lisp Omnificent GUI                                 ;;;;
-;;;; (c) 2020-2022 David Botton                                            ;;;;
-;;;; License BSD 3 Clause                                                  ;;;;
+;;;; (c) David Botton                                                      ;;;;
 ;;;;                                                                       ;;;;
 ;;;; clog-jquery.lisp                                                      ;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -55,7 +54,7 @@ Some sample jquery selectors:
 
 (defgeneric jquery-execute (clog-obj method)
   (:documentation "Execute the jQuery METHOD on and CLOG-OBJ. Result is
-dicarded, return CLOG-OBJ."))
+dicarded, returns CLOG-OBJ."))
 
 (defmethod jquery-execute ((obj clog-obj) method)
   (js-execute obj (format nil "~A.~A" (jquery obj) method)))

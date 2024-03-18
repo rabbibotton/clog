@@ -1,65 +1,14 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; CLOG - The Common Lisp Omnificent GUI                                 ;;;;
-;;;; (c) 2020-2022 David Botton                                            ;;;;
-;;;; License BSD 3 Clause                                                  ;;;;
+;;;; (c) David Botton                                                      ;;;;
 ;;;;                                                                       ;;;;
 ;;;; clog-window.lisp                                                      ;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (cl:in-package :clog)
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Implementation - clog popup windows
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(defparameter *clog-popup-sync-hash* (make-hash-table :test 'equalp)
-  "Used for syncing clog popup window creation with the thread creating
-them.")
-
-(defparameter *clog-popup-path* "/clogwin"
-  "Default URL for popup windows")
-
-(defun clog-popup-handler (body)
-  "Handle the connection of a new popup clog window (internal)"
-  (let ((sync (form-data-item (form-get-data body) "sync")))
-    (cond (sync
-           (clog-popup-openned body sync))
-          (t
-           (create-div body :content "Invalid Access")))))
-
-(defun enable-clog-popup (&key (path *clog-popup-path*))
-  "Enable handling of clog enabled popups"
-  (set-on-new-window 'clog-popup-handler :path path))
-
-(defun open-clog-popup (obj &key (path *clog-popup-path*)
-                              (add-sync-to-path t)
-                              (sync-key (random-hex-string))
-                              (name "_blank")
-                              (specs "")
-                              (wait-timeout 10))
-  "Open a new browser window/popup in most cases a tab. Since they are controlled
-by clog you have full control of the new popups and are more flexible than using
-open-windo. Returns the clog-body and the clog-window in the same connnection as
-obj of the new window on the new connection or nil if failed within :WAIT-TIMEOUT"
-  (let* ((sem     (bordeaux-threads:make-semaphore))
-         (mpath   (if add-sync-to-path
-                      (format nil "~A?sync=~A" path sync-key)
-                      path))
-         (new-win (open-window (window (connection-body obj)) mpath :specs specs :name name)))
-    (setf (gethash sync-key *clog-popup-sync-hash*) sem)
-    (bordeaux-threads:wait-on-semaphore sem :timeout wait-timeout)
-    (setf sem (gethash sync-key *clog-popup-sync-hash*))
-    (if (typep sem 'clog-obj)
-        (values sem new-win)
-        nil)))
-
-(defun clog-popup-openned (obj sync-key)
-  "Used to notify open-clog-popup the new popup window is ready for custom
-clog-popup handlers."
-  (let ((sem (gethash sync-key *clog-popup-sync-hash*)))
-    (when sem
-      (setf (gethash sync-key *clog-popup-sync-hash*) (connection-body obj))
-      (bordeaux-threads:signal-semaphore sem))))
+;; clog-window and clop-popup a clog based system to support child windows
+;; even without browser support or premissions.
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Implementation - clog-window
@@ -661,3 +610,56 @@ STORAGE-TYPE. (local = persistant or session)"))
                        (escape-string key-name)
                        (escape-string value)))
   value)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Implementation - clog popup windows
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defparameter *clog-popup-sync-hash* (make-hash-table :test 'equalp)
+  "Used for syncing clog popup window creation with the thread creating
+them.")
+
+(defparameter *clog-popup-path* "/clogwin"
+  "Default URL for popup windows")
+
+(defun clog-popup-handler (body)
+  "Handle the connection of a new popup clog window (internal)"
+  (let ((sync (form-data-item (form-get-data body) "sync")))
+    (cond (sync
+           (clog-popup-openned body sync))
+          (t
+           (create-div body :content "Invalid Access")))))
+
+(defun enable-clog-popup (&key (path *clog-popup-path*))
+  "Enable handling of clog enabled popups"
+  (set-on-new-window 'clog-popup-handler :path path))
+
+(defun open-clog-popup (obj &key (path *clog-popup-path*)
+                              (add-sync-to-path t)
+                              (sync-key (random-hex-string))
+                              (name "_blank")
+                              (specs "")
+                              (wait-timeout 10))
+  "Open a new browser window/popup in most cases a tab. Since they are controlled
+by clog you have full control of the new popups and are more flexible than using
+open-windo. Returns the clog-body and the clog-window in the same connnection as
+obj of the new window on the new connection or nil if failed within :WAIT-TIMEOUT"
+  (let* ((sem     (bordeaux-threads:make-semaphore))
+         (mpath   (if add-sync-to-path
+                      (format nil "~A?sync=~A" path sync-key)
+                      path))
+         (new-win (open-window (window (connection-body obj)) mpath :specs specs :name name)))
+    (setf (gethash sync-key *clog-popup-sync-hash*) sem)
+    (bordeaux-threads:wait-on-semaphore sem :timeout wait-timeout)
+    (setf sem (gethash sync-key *clog-popup-sync-hash*))
+    (if (typep sem 'clog-obj)
+        (values sem new-win)
+        nil)))
+
+(defun clog-popup-openned (obj sync-key)
+  "Used to notify open-clog-popup the new popup window is ready for custom
+clog-popup handlers."
+  (let ((sem (gethash sync-key *clog-popup-sync-hash*)))
+    (when sem
+      (setf (gethash sync-key *clog-popup-sync-hash*) (connection-body obj))
+      (bordeaux-threads:signal-semaphore sem))))

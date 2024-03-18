@@ -1,7 +1,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; CLOG - The Common Lisp Omnificent GUI                                 ;;;;
-;;;; (c) 2020-2022 David Botton                                            ;;;;
-;;;; License BSD 3 Clause                                                  ;;;;
+;;;; (c) David Botton                                                      ;;;;
 ;;;;                                                                       ;;;;
 ;;;; clog-gui.lisp                                                         ;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -11,7 +10,7 @@
 ;;; does not require additional components outside of the css file. In addition
 ;;; clog-gui uses jQueryUI and its default css file to provide client side
 ;;; movement when needed, if client side movement is not used it is possible
-;;; to pass nil to the initilization function for both.
+;;; to pass nil to the initilization function for both the js and css.
 
 (mgl-pax:define-package :clog-gui
   (:documentation "CLOG-GUI a desktop GUI abstraction for CLOG")

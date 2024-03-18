@@ -1,10 +1,16 @@
-;;;; clog.asd
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;; CLOG - The Common Lisp Omnificent GUI                                 ;;;;
+;;;; (c) 2020-2024 David Botton                                            ;;;;
+;;;; License BSD 3 Clause                                                  ;;;;
+;;;;                                                                       ;;;;
+;;;; clog.asd                                                              ;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (asdf:defsystem #:clog
-  :description "The Common Lisp Omnificent GUI"
+  :description "CLOG - The Common Lisp Omnificent GUI"
   :author "David Botton <david@botton.com>"
   :license  "BSD"
-  :version "1.6.0"
+  :version "1.9.0"
   :serial t
   :depends-on (#:clack #:websocket-driver #:alexandria #:hunchentoot #:cl-ppcre
                        #:bordeaux-threads #:trivial-open-browser #:parse-float #:quri
@@ -14,41 +20,52 @@
   :components ((:module "static-files"
                 :components ((:static-file "js/boot.js")))
                (:module "source"
-                :components ((:file "asdf-ext")
+                :components (;; ASDF Extension for CLOG Panel files
+                             (:file "asdf-ext")
+                             ;; Connectivity
                              (:file "clog-connection")
                              (:file "clog-connection-websockets")
+                             ;; CLOG Framework
                              (:file "clog")
+                             (:file "clog-system")
                              (:file "clog-utilities")
+                             ;; Base System
                              (:file "clog-base")
                              (:file "clog-element")
                              (:file "clog-jquery")
-                             (:file "clog-element-common")
-                             (:file "clog-style")
-                             (:file "clog-canvas")
-                             (:file "clog-webgl")
-                             (:file "clog-form")
-                             (:file "clog-multimedia")
-                             (:file "clog-window")
+                             ;; DOM Elements
+                             (:file "clog-body")
                              (:file "clog-document")
+                             (:file "clog-window")
                              (:file "clog-location")
                              (:file "clog-navigator")
-                             (:file "clog-body")
-                             (:file "clog-system")
+                             (:file "clog-style")
+                             ;; HTML Elements
+                             (:file "clog-element-common")
+                             (:file "clog-form")
+                             (:file "clog-multimedia")
+                             (:file "clog-canvas")
+                             (:file "clog-webgl")
+                             ;; CLOG Extensions
                              (:file "clog-panel")
                              (:file "clog-presentations")
                              (:file "clog-data")
                              (:file "clog-dbi")
                              (:file "clog-auth")
-                             (:file "clog-gui")
+                             ;; W3CSS Bindings
                              (:file "clog-web")
                              (:file "clog-web-dbi")
                              (:file "clog-web-themes")
+                             ;; Desktop Environment
+                             (:file "clog-gui")
+                             ;; CLOG Programming Tools
                              (:file "clog-helpers")))))
 
 (asdf:defsystem #:clog/docs
   :depends-on (#:clog #:3BMD #:colorize)
   :pathname "source/"
-  :components ((:file "clog-docs")))
+  :components (;; CLOG documentation creation utils and additional documentation
+               (:file "clog-docs")))
 
 (asdf:defsystem #:clog/tools
   :depends-on (#:clog #:clog-ace #:clog-terminal #:s-base64 #:swank
@@ -56,17 +73,6 @@
   :pathname "tools/"
   :components (;; clog-db-admin app
                (:file "clog-db-admin")
-               ;; clog-builder generated clode
-               (:file "clog-templates")
-               (:file "image-to-data")
-               (:file "quick-start")
-               (:file "threads")
-               (:file "systems")
-               (:file "sys-browser")
-               (:file "projects")
-               (:file "project-directory")
-               (:file "clog-builder-repl")
-               (:file "dir-view")
                ;; clog-builder code
                (:file "clog-builder-settings")
                (:file "clog-builder")
@@ -75,4 +81,15 @@
                (:file "clog-builder-asdf-browser")               
                (:file "clog-builder-sys-browser")
                (:file "clog-builder-dir-win")
-               (:file "clog-builder-images")))
+               (:file "clog-builder-images")
+               ;; clog-builder panels (post-render)
+               (:file "panel-clog-templates")
+               (:file "panel-image-to-data")
+               (:file "panel-quick-start")
+               (:file "panel-threads")
+               (:file "panel-systems")
+               (:file "panel-sys-browser")
+               (:file "panel-projects")
+               (:file "panel-project-directory")
+               (:file "panel-clog-builder-repl")
+               (:file "panel-dir-view")))

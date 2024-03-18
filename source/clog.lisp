@@ -1,6 +1,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; CLOG - The Common Lisp Omnificent GUI                                 ;;;;
-;;;; (c) 2020-2022 David Botton                                            ;;;;
+;;;; (c) 2020-2024 David Botton                                            ;;;;
 ;;;; License BSD 3 Clause                                                  ;;;;
 ;;;;                                                                       ;;;;
 ;;;; clog.lisp                                                             ;;;;
@@ -15,7 +15,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (mgl-pax:define-package :clog
-  (:documentation "The Common List Omnificent GUI - CLOG")
+  (:documentation "CLOG - The Common List Omnificent GUI")
   (:import-from :clog-connection
                 #:make-hash-table*
                 #:escape-string
@@ -28,6 +28,7 @@
 (defmethod exportable-reference-p ((package (eql (find-package :clog)))
                                    symbol (locative-type (eql 'section))
                                    locative-args)
+  "Extend mgl-pax extension for exporting CLOG"
   t)
 
 (defsection @clog-manual (:title "The CLOG manual")
@@ -137,10 +138,11 @@ embedded in a native template application.)"
   (*store-new-objects*         variable)
   (connection-data             generic-function)
   (connection-data-item        generic-function)
+  (remove-connection-data-item generic-function)
   (connection-body             generic-function)
+  (connection-path             generic-function)
   (connection-sync             generic-function)
   (with-sync-event             macro)
-  (remove-connection-data-item generic-function)
   (validp                      generic-function)
   (with-connection-cache       macro)
   (flush-connection-cache      function)

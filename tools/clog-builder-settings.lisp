@@ -1,6 +1,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; CLOG Builder - UI Design tool for CLOG                                ;;;;
-;;;; (c) 2020-2024 David Botton                                            ;;;;
+;;;; (c) David Botton                                                      ;;;;
 ;;;; License BSD 3 Clause                                                  ;;;;
 ;;;;                                                                       ;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -8,7 +8,7 @@
 (in-package :clog-tools)
 
 ;; These are defaults, if the file preferences.lisp exists
-;; they will be used instead
+;; the values set there will be used instead
 
 ;; Open panels and files in new browser tabs by default
 (defparameter *open-external* nil)

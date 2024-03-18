@@ -1,7 +1,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; CLOG - The Common Lisp Omnificent GUI                                 ;;;;
-;;;; (c) 2020-2022 David Botton                                            ;;;;
-;;;; License BSD 3 Clause                                                  ;;;;
+;;;; (c) David Botton                                                      ;;;;
 ;;;;                                                                       ;;;;
 ;;;; clog-presentations.lisp                                               ;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -9,9 +8,10 @@
 (cl:in-package :clog)
 
 ;;; clog-presentations - link Lisp objects and CLOG objects
+;;;                      see also clog-data.lisp
 ;;;
-;;; set-event is the event to be fired, it must be a one parameter event time
-;;;           like on-focus, on-click, etc.
+;;; set-event is the event to be fired, it must be a CLOG set-on-* event
+;;;           one parameter event with no data like on-focus, on-click, etc.
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Implementation - clog-presentations

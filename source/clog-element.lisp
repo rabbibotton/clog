@@ -1,14 +1,13 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; CLOG - The Common Lisp Omnificent GUI                                 ;;;;
-;;;; (c) 2020-2022 David Botton                                            ;;;;
-;;;; License BSD 3 Clause                                                  ;;;;
+;;;; (c) David Botton                                                      ;;;;
 ;;;;                                                                       ;;;;
 ;;;; clog-element.lisp                                                     ;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (cl:in-package :clog)
 
-;;; clog-elements represent the base object for visual html elements.
+;;; clog-elements represent the base object for html elements.
 
 (defvar *store-new-objects* nil
   "Dynamic variable that when true every create-* or attach-* will also
@@ -40,11 +39,11 @@ element objects."))
 
 (defun create-with-html (connection-id html
                          &key (clog-type 'clog-element) (html-id nil))
-  "Create a new clog-element and attach it to HTML on
+  "Low-level create a new CLOG-ELEMENT and attach it to HTML element on
 CONNECTION-ID. There must be a single outer block that will be set to
-an internal id. The returned CLOG-Element requires placement or will
+an internal id. The returned CLOG-ELEMENT requires placement or will
 not be visible, ie. place-after, etc. as it exists in the javascript
-clog array but is not in the DOM. If HTML-ID is nil one is generated.
+clog array but is not in the DOM. If HTML-ID is nil, one is generated.
 (private)"
   (let ((web-id (if html-id
                     html-id
@@ -60,7 +59,7 @@ clog array but is not in the DOM. If HTML-ID is nil one is generated.
 ;;;;;;;;;;;;
 
 (defun attach (connection-id html-id)
-  "Create a new clog-obj and attach an existing element with HTML-ID on
+  "Create a new CLOG-OBJ and attach an existing element with HTML-ID on
 CONNECTION-ID to it and then return it. The HTML-ID must be unique. (private)"
   (cached-execute connection-id
               (format nil "clog['~A']=$('#~A').get(0)" html-id html-id))
@@ -112,7 +111,7 @@ possible tag and keywords."))
 ;;;;;;;;;;;;;;;;;;
 
 (defgeneric create-child (clog-obj html &key html-id auto-place clog-type)
-  (:documentation "Create a new CLOG-Element or sub-type of CLOG-TYPE from HTML
+  (:documentation "Create a new CLOG-ELEMENT or sub-type of CLOG-TYPE from HTML
 as child of CLOG-OBJ and if :AUTO-PLACE (default t) place-inside-bottom-of
 CLOG-OBJ. If HTML-ID is nil one will be generated."))
 
@@ -297,7 +296,6 @@ after attachment is changed to one unique to this session."))
 (defmethod place-text-inside-bottom-of ((obj clog-obj) text)
   (jquery-execute obj (format nil "append(document.createTextNode('~A'))" (escape-string text)))
   text)
-
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Properties - clog-element

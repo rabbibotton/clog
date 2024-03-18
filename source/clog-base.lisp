@@ -1,7 +1,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; CLOG - The Common Lisp Omnificent GUI                                 ;;;;
-;;;; (c) 2020-2022 David Botton                                            ;;;;
-;;;; License BSD 3 Clause                                                  ;;;;
+;;;; (c) David Botton                                                      ;;;;
 ;;;;                                                                       ;;;;
 ;;;; clog-base.lisp                                                        ;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -54,7 +53,7 @@ lisp and an HTML DOM element."))
 ;;;;;;;;;;;;;
 
 (defgeneric html-id (clog-obj)
-  (:documentation "Internal html-id of CLOG-Obj. (Internal)"))
+  (:documentation "Internal html-id of clog-obj. (Internal)"))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; connection-data-mutex ;;
@@ -76,7 +75,7 @@ lisp and an HTML DOM element."))
 ;;;;;;;;;;;;;;;
 
 (defgeneric script-id (clog-obj)
-  (:documentation "Return the script id for OBJ based on the html-id set
+  (:documentation "Return the script id for CLOG-OBJ based on the html-id set
 during attachment. (Private)"))
 
 (defmethod script-id ((obj clog-obj))
@@ -99,8 +98,9 @@ during attachment. (Private)"))
 ;;;;;;;;;;;;;;;;
 
 (defgeneric js-execute (clog-obj script)
-  (:documentation "Execure SCRIPT on browser. Result is
-discarded, return CLOG-OBJ. (Internal)"))
+  (:documentation "Execute JavaScript SCRIPT on browser. CLOG-OBJ is used to
+obtain the connection the script should run on. Result is discarded, return
+CLOG-OBJ. (Internal)"))
 
 (defmethod js-execute ((obj clog-obj) script)
   (cached-execute (connection-id obj) script)
@@ -111,7 +111,8 @@ discarded, return CLOG-OBJ. (Internal)"))
 ;;;;;;;;;;;;;;
 
 (defgeneric js-query (clog-obj script &key default-answer)
-  (:documentation "Execure SCRIPT on browser and return result. (Internal)"))
+  (:documentation "Execute JavaScript SCRIPT on browser and return result.
+CLOG-OBJ us used to obtain the connection the script should run on. (Internal)"))
 
 (defmethod js-query ((obj clog-obj) script &key (default-answer nil))
   (flush-connection-cache obj)
@@ -134,7 +135,7 @@ flushed with FLUSH-CONNECTION-CACHE or a query is made."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defun flush-connection-cache (clog-obj)
-  "Flush connection cache if on."
+  "Flush connection cache if on CLOG-OBJ is located on."
   (when *connection-cache*
     (dolist (script (reverse *connection-cache*))
       (unless (eq script :cache)
@@ -146,8 +147,8 @@ flushed with FLUSH-CONNECTION-CACHE or a query is made."
 ;;;;;;;;;;;;;
 
 (defgeneric execute (clog-obj method)
-  (:documentation "Execute the JavaScript METHOD on OBJ. Result is
-discarded. see JQUERY-EXECUTE (Internal)"))
+  (:documentation "Execute the JavaScript METHOD on OBJ. Returns
+CLOG-OBJ. see JQUERY-EXECUTE (Internal)"))
 
 (defmethod execute ((obj clog-obj) method)
   (js-execute obj (format nil "~A.~A" (script-id obj) method)))
@@ -347,7 +348,7 @@ result or if time out DEFAULT-ANSWER. see JQUERY-QUERY (Internal)"))
 			 post-eval
 			 cancel-event
 			 one-time)
-  (:documentation "Create the hook for incoming events. (Private)"))
+  (:documentation "Create the low-level hook for incoming events. (Private)"))
 
 (defmethod set-event ((obj clog-obj) event handler
 		      &key (call-back-script "")
@@ -468,44 +469,18 @@ result or if time out DEFAULT-ANSWER. see JQUERY-QUERY (Internal)"))
 
 (defgeneric connection-data (clog-obj)
   (:documentation "Get connection-data that is associated with
-clog-obj that will persist regardless of thread. The event hooks
-are stored in this string based hash in the format of:
+clog-obj's connection that will persist regardless of thread calling.
+The event hooks are stored in this string based hash in the format of:
 \"html-id:event-name\" => #'event-handler. clog-* keys are reserved
-for internal use of clog. The key \"clog-body\" is set to the
-clog-body of this connection and accessible with CONNECTION-BODY."))
+for internal use of clog.
+
+The following default keys are set:
+\"clog-body\"      clog-body of this connection, see CONNECTION-BODY
+\"clog-path\"      html path used, see CONNECTION-PATH
+\"clog-sync\"      sempaphore used for syncing events, see CONNECTION-SYNC"))
 
 (defmethod connection-data ((obj clog-obj))
   (clog-connection:get-connection-data (connection-id obj)))
-
-;;;;;;;;;;;;;;;;;;;;;
-;; connection-body ;;
-;;;;;;;;;;;;;;;;;;;;;
-
-(defgeneric connection-body (clog-obj)
-  (:documentation "Get connection's clog-body."))
-
-(defmethod connection-body (clog-obj)
-  (connection-data-item clog-obj "clog-body"))
-
-;;;;;;;;;;;;;;;;;;;;;
-;; connection-sync ;;
-;;;;;;;;;;;;;;;;;;;;;
-
-(defgeneric connection-sync (clog-obj)
-  (:documentation "Get connection's clog-sync for optional syncing events."))
-
-(defmethod connection-sync (clog-obj)
-  (connection-data-item clog-obj "clog-sync"))
-
-;;;;;;;;;;;;;;;;;;;;;
-;; with-sync-event ;;
-;;;;;;;;;;;;;;;;;;;;;
-
-(defmacro with-sync-event ((clog-obj) &body body)
-  "Place at start of event to serialize access to the event. All events in
-an application share per connection the same queue of serialized events."
-  `(bordeaux-threads:with-lock-held (,`(connection-sync ,clog-obj))
-     ,@body))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; connection-data-item ;;
@@ -527,6 +502,10 @@ an application share per connection the same queue of serialized events."
      (setf (gethash item-name (connection-data obj)) value)))
   value)
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; remove-connection-data-item ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 (defgeneric remove-connection-data-item (clog-obj item-name)
   (:documentation "Remove item-name from connection-data."))
 
@@ -534,6 +513,46 @@ an application share per connection the same queue of serialized events."
   (bordeaux-threads:with-lock-held ((connection-data-mutex obj))
     (ignore-errors
      (remhash item-name (connection-data obj)))))
+
+;;;;;;;;;;;;;;;;;;;;;
+;; connection-body ;;
+;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric connection-body (clog-obj)
+  (:documentation "Get connection's clog-body."))
+
+(defmethod connection-body (clog-obj)
+  (connection-data-item clog-obj "clog-body"))
+
+;;;;;;;;;;;;;;;;;;;;;
+;; connection-path ;;
+;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric connection-path (clog-obj)
+  (:documentation "Get the HTML passed used to make the connection."))
+
+(defmethod connection-path (clog-obj)
+  (connection-data-item clog-obj "clog-path"))
+
+;;;;;;;;;;;;;;;;;;;;;
+;; connection-sync ;;
+;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric connection-sync (clog-obj)
+  (:documentation "Get connection's clog-sync for optional syncing events."))
+
+(defmethod connection-sync (clog-obj)
+  (connection-data-item clog-obj "clog-sync"))
+
+;;;;;;;;;;;;;;;;;;;;;
+;; with-sync-event ;;
+;;;;;;;;;;;;;;;;;;;;;
+
+(defmacro with-sync-event ((clog-obj) &body body)
+  "Place at start of event to serialize access to the event. All events in
+an application share per connection the same queue of serialized events."
+  `(bordeaux-threads:with-lock-held (,`(connection-sync ,clog-obj))
+     ,@body))
 
 ;;;;;;;;;;;;;;;;;;
 ;; set-on-event ;;
@@ -555,7 +574,6 @@ nil unbind all event handlers. (Internal)"))
 		 (funcall handler obj)))
 	     :cancel-event cancel-event
 	     :one-time     one-time))
-
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; set-on-event-with-data ;;
