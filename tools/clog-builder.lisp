@@ -1193,7 +1193,7 @@ of controls and double click to select control."
                                                        (when fname
                                                          (open-file-name fname)))))))
       (labels ((do-save (obj fname data)
-                 (declare (ignore obj data))
+                 (declare (ignore data))
                  (setf file-name fname)
                  (setf render-file-name (format nil "~A~A.lisp"
                                                 (directory-namestring file-name)
@@ -1559,7 +1559,6 @@ of controls and double click to select control."
                                  (on-populate-control-properties-win content :win win)
                                  (on-populate-control-list-win content :win win))))
       (set-on-click btn-load (lambda (obj)
-                               (declare (ignore obj))
                                (server-file-dialog win "Load Panel" (directory-namestring (if (equal file-name "")
                                                                                               (current-project-dir app)
                                                                                               file-name))
@@ -1903,7 +1902,7 @@ of controls and double click to select control."
                      (setf last-date (file-write-date fname))
                      (setf file-name fname)
                      (setf (window-title win) fname)
-                     (let ((c (or (read-file fname) "" :clog-obj obj)))
+                     (let ((c (or (read-file fname :clog-obj obj) "")))
                        (cond ((or (equalp (pathname-type fname) "lisp")
                                   (equalp (pathname-type fname) "asd"))
                               (setf (clog-ace:mode ace) "ace/mode/lisp")
@@ -2093,7 +2092,7 @@ of controls and double click to select control."
 (defun on-open-panel-window (body)
   (on-new-builder body))
 
-(defun on-new-builder (body &key file)
+(defun on-new-builder (body)
   "Launch instance of the CLOG Builder"
   (set-html-on-close body "Connection Lost")
   (let ((app        (make-instance 'builder-app-data))
