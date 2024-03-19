@@ -244,13 +244,14 @@ var endRange = ~:*~A.session.doc.indexToPosition(endIndex);
 
 (defun get-package-from-string (c)
   "Determine the currect package based on src contained in string C"
-  (with-input-from-string (ins c)
-    (loop
-      (let ((form (read ins nil)))
-        (unless form (return "clog-user"))
-        (unless (consp form) (return "clog-user"))
-        (when (eq (car form) 'in-package)
-          (return (string-downcase (second form))))))))
+  (when (typep c 'string)
+    (with-input-from-string (ins c)
+      (loop
+        (let ((form (read ins nil)))
+          (unless form (return "clog-user"))
+          (unless (consp form) (return "clog-user"))
+          (when (eq (car form) 'in-package)
+            (return (string-downcase (second form)))))))))
 
 ;; Expand region
 
