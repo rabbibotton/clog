@@ -105,7 +105,7 @@
 
 (defun projects-populate (panel)
   (let ((app (connection-data-item panel "builder-app-data"))
-        (already (asdf/operate:already-loaded-systems))
+        (already (asdf:already-loaded-systems))
         (sel (text-value (project-list panel))))
     (reset-control-pallete panel)
     (setf (inner-html (runtime-list panel)) "")

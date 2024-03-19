@@ -199,8 +199,8 @@
                          (declare (ignorable target))
                          (let ((sel (text-value (project-list panel))))
                            (on-open-file panel :open-file
-                            (asdf/system:system-source-file
-                             (asdf/system:find-system sel))))))
+                            (asdf:system-source-file
+                             (asdf:find-system sel))))))
     (clog:set-on-change (entry-point panel)
                         (lambda (target)
                           (declare (ignorable target))
@@ -218,7 +218,7 @@
                          (declare (ignorable target))
                          (let ((sel (text-value (project-list panel))))
                            (unless (equal sel "None")
-                             (asdf/system-registry:clear-system sel)
+                             (asdf:clear-system sel)
                              (setf (text-value (project-list panel)) "None")
                              (projects-populate panel)))))
     (clog:set-on-click (reload-project-button panel)
@@ -226,7 +226,7 @@
                          (declare (ignorable target))
                          (let ((sel (text-value (project-list panel))))
                            (unless (equal sel "None")
-                             (asdf/system-registry:clear-system sel)
+                             (asdf:clear-system sel)
                              (projects-populate panel)))))
     (clog:set-on-click (rerender-button panel)
                        (lambda (target)

@@ -103,18 +103,18 @@
                                     (setf (inner-html (files panel)) "")
                                     (dolist
                                         (n
-                                         (asdf/component:module-components
-                                          (asdf/component:find-component
-                                           (asdf/system:find-system
+                                         (asdf:module-components
+                                          (asdf:find-component
+                                           (asdf:find-system
                                             (text-value
                                              (loaded-systems panel)))
                                            (subseq disp 0
                                                    (1- (length disp))))))
                                       (let ((name
-                                             (asdf/component:component-relative-pathname
+                                             (asdf:component-relative-pathname
                                               n))
                                             (path
-                                             (asdf/component:component-pathname
+                                             (asdf:component-pathname
                                               n)))
                                         (add-select-option (files panel) path
                                          name))))
@@ -160,6 +160,6 @@
                        (lambda (target)
                          (declare (ignorable target))
                          (on-dir-win panel :dir
-                          (asdf/system:system-source-directory
+                          (asdf:system-source-directory
                            (text-value (loaded-systems panel))))))
     panel))
