@@ -169,7 +169,8 @@
                  (error (condition)
 	           (alert-toast obj "File Error" (format nil "Error: ~A" condition))
 	           (format t "Error: ~A" condition)))))
-        (when open-file
+        (when (and open-file
+                   (not (equalp open-file " ")))
           (open-file-name open-file))
         (set-on-click btn-load (lambda (obj)
                                  (server-file-dialog obj "Load Source" (directory-namestring (if (equal file-name "")
