@@ -14,7 +14,7 @@
 
 (defun on-file-with-menu (obj)
   (let ((win (create-gui-window obj :title "Window With Menu")))
-    (let* ((menu  (create-gui-menu-bar (window-content win)))
+    (let* ((menu  (create-gui-menu-bar (window-content win) :main-menu nil))
            (file  (create-gui-menu-drop-down menu :content "Menu 1"))
            (tmp   (create-gui-menu-item file :content "Count" :on-click 'on-file-count))
            (file  (create-gui-menu-drop-down menu :content "Menu 2"))
