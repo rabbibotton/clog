@@ -76,6 +76,8 @@
                ;; clog-builder code
                (:file "clog-builder-settings")
                (:file "clog-builder")
+               (:file "clog-builder-control-events")
+               (:file "clog-builder-control-properties")
                (:file "clog-builder-control-list")
                (:file "clog-builder-eval")
                (:file "clog-builder-files")

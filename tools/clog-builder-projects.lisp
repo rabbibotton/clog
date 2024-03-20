@@ -1,5 +1,21 @@
 (in-package :clog-tools)
 
+(defun on-show-project (obj &key project)
+  (let ((app (connection-data-item obj "builder-app-data")))
+    (when project
+      (setf (current-project app) project))
+    (if (project-win app)
+        (window-focus (project-win app))
+        (let* ((win (create-gui-window obj :title "Project Window"
+                                           :top 60 :left 232
+                                           :width 643 :height 625
+                                           :has-pinner t :client-movement *client-side-movement*)))
+          (create-projects (window-content win))
+          (setf (project-win app) win)
+          (set-on-window-close win (lambda (obj)
+                                     (declare (ignore obj))
+                                     (setf (project-win app) nil)))))))
+
 (defun projects-load (fname)
   (funcall (read-from-string "ql:quickload") fname))
 
