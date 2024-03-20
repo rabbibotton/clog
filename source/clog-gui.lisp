@@ -399,17 +399,20 @@ in on-resize, on-full-screen-change and on-orientation-change events."))
 (defclass clog-gui-menu-bar (clog-div)()
   (:documentation "Menu bar"))
 
-(defgeneric create-gui-menu-bar (clog-obj &key class html-id)
+(defgeneric create-gui-menu-bar (clog-obj &key class html-id main-menu)
   (:documentation "Attached a menu bar to a CLOG-OBJ in general a
-clog-body."))
+clog-body. If main-menu add as main menu bar."))
 
 (defmethod create-gui-menu-bar ((obj clog-obj)
                                 &key (class "w3-bar w3-black w3-card-4")
-                                  (html-id nil))
-  (let ((div (create-div obj :class class :html-id html-id))
-        (app (connection-data-item obj "clog-gui")))
+                                  (html-id nil)
+                                  (main-menu t))
+  (let* ((div (create-div obj :class class :html-id html-id))
+         (blank (create-a div))
+         (app (connection-data-item obj "clog-gui")))
     (change-class div 'clog-gui-menu-bar)
-    (setf (menu app) div)
+    (when main-menu
+        (setf (menu app) div))
     div))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

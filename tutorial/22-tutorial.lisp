@@ -12,6 +12,17 @@
       ;; windows
       (create-div (window-content win) :content n))))
 
+(defun on-file-with-menu (obj)
+  (let ((win (create-gui-window obj :title "Window With Menu")))
+    (let* ((menu  (create-gui-menu-bar (window-content win)))
+           (file  (create-gui-menu-drop-down menu :content "Menu 1"))
+           (tmp   (create-gui-menu-item file :content "Count" :on-click 'on-file-count))
+           (file  (create-gui-menu-drop-down menu :content "Menu 2"))
+           (tmp   (create-gui-menu-item file :content "Count" :on-click 'on-file-count)))
+      (declare (ignore tmp))
+      (add-class menu "w3-small")
+      (create-div (window-content win) :content "Some Text"))))
+
 (defun on-file-browse (obj)
   (let ((win (create-gui-window obj :title "Browse")))
     (create-child (window-content win)
@@ -155,6 +166,7 @@
          (tmp   (create-gui-menu-icon menu :on-click 'on-help-about))
          (file  (create-gui-menu-drop-down menu :content "File"))
          (tmp   (create-gui-menu-item file :content "Count" :on-click 'on-file-count))
+         (tmp   (create-gui-menu-item file :content "Window With Menu" :on-click 'on-file-with-menu))
          (tmp   (create-gui-menu-item file :content "Browse" :on-click 'on-file-browse))
          (tmp   (create-gui-menu-item file :content "Drawing" :on-click 'on-file-drawing))
          (tmp   (create-gui-menu-item file :content "Movie" :on-click 'on-file-movies))
