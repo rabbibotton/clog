@@ -1,6 +1,9 @@
 (in-package :clog-tools)
 
 (setf *open-external* t)
+(setf *open-external-with-emacs* nil)
+(setf *open-external-in-popup* nil)
+(setf *open-external-panels-in-popup* t)
 (setf *editor-theme* "ace/theme/terminal")
 (setf *editor-keybinding* "ace/keyboard/emacs")
 (setf *editor-renderer-options*

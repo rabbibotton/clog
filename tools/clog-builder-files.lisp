@@ -30,15 +30,17 @@
 	  (format t "Error: ~A" condition)))))
 
 (defun on-open-file-ext (obj &key open-file popup)
-  (open-window (window (connection-body obj))
-               (if open-file
-                   (format nil "/source-editor?open-file=~A"
-                           open-file)
-                   "/source-editor")
-               :specs (if popup
-                          "width=645,height-430"
-                          "")
-               :name "_blank"))
+  (if (and *open-external-with-emacs* open-file)
+      (swank:ed-in-emacs open-file)
+      (open-window (window (connection-body obj))
+                   (if open-file
+                       (format nil "/source-editor?open-file=~A"
+                               open-file)
+                       "/source-editor")
+                   :specs (if (or popup *open-external-in-popup*)
+                              "width=800,height=600"
+                              "")
+                   :name "_blank")))
 
 (defun on-open-file (obj &key open-file
                            (title "New Source Editor")
@@ -60,6 +62,7 @@
            (m-load   (create-gui-menu-item m-file :content "load"))
            (m-save   (create-gui-menu-item m-file :content "save (cmd/ctrl-s)"))
            (m-saveas (create-gui-menu-item m-file :content "save as.."))
+           (m-emacs  (create-gui-menu-item m-file :content "open in emacs"))
            (m-edit   (create-gui-menu-drop-down menu :content "Edit"))
            (m-undo   (create-gui-menu-item m-edit :content "undo"))
            (m-redo   (create-gui-menu-item m-edit :content "redo"))
@@ -215,6 +218,7 @@
                         (setf last-date (file-write-date file-name))
                         (sleep .5)
                         (remove-class btn-save "w3-animate-top"))))
+      (set-on-click m-emacs (lambda (obj) (swank:ed-in-emacs file-name)))
       (flet ((save (obj data &key save-as)
                (cond ((or (equal file-name "")
                           (getf data :shift-key)

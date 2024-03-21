@@ -485,8 +485,8 @@ not a temporarily attached one when using select-control."
                    (format nil "/panel-editor?open-panel=~A"
                            open-file)
                    "/source-editor")
-               :specs (if popup
-                          "width=645,height-430"
+               :specs (if (or popup *open-external-panels-in-popup*)
+                          "width=1280,height=700"
                           "")
                :name "_blank"))
 

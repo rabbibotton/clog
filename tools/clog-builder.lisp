@@ -352,21 +352,21 @@ clog-builder window.")
            (win   (create-gui-menu-drop-down menu :content "Window"))
            (help  (create-gui-menu-drop-down menu :content "Help")))
       (declare (ignore icon))
-      (create-gui-menu-item file  :content "New CLOG-GUI Panel"          :on-click 'on-new-builder-panel)
-      (create-gui-menu-item file  :content "New CLOG-WEB Page"           :on-click 'on-new-builder-page)
-      (create-gui-menu-item file  :content "New Basic HTML Page"         :on-click 'on-new-builder-basic-page)
-      (create-gui-menu-item file  :content "New CLOG-WEB Delay Launch"   :on-click 'on-new-builder-launch-page)
-      (create-gui-menu-item file  :content "New Custom Boot Page"        :on-click 'on-new-builder-custom)
-      (create-gui-menu-item file  :content "New Application Template"    :on-click 'on-new-app-template)
-      (create-gui-menu-item src   :content "Project Window"              :on-click 'on-show-project)
-      (create-gui-menu-item src   :content "Directory Window"            :on-click 'on-dir-win)
-      (create-gui-menu-item src   :content "New Source Editor"           :on-click 'on-open-file)
-      (create-gui-menu-item src   :content "New Source Editor (New Tab)" :on-click
+      (create-gui-menu-item file  :content "New CLOG-GUI Panel"                    :on-click 'on-new-builder-panel)
+      (create-gui-menu-item file  :content "New CLOG-WEB Page in New Tab"          :on-click 'on-new-builder-page)
+      (create-gui-menu-item file  :content "New Basic HTML Page in New Tab"        :on-click 'on-new-builder-basic-page)
+      (create-gui-menu-item file  :content "New CLOG-WEB Page Delayed in New Tab"  :on-click 'on-new-builder-launch-page)
+      (create-gui-menu-item file  :content "New Custom Boot Page in New Tab"       :on-click 'on-new-builder-custom)
+      (create-gui-menu-item file  :content "New Application Template"              :on-click 'on-new-app-template)
+      (create-gui-menu-item src   :content "Project Window"               :on-click 'on-show-project)
+      (create-gui-menu-item src   :content "Directory Window"             :on-click 'on-dir-win)
+      (create-gui-menu-item src   :content "New Source Editor"            :on-click 'on-open-file)
+      (create-gui-menu-item src   :content "New Source Editor in New Tab" :on-click
                             (lambda (obj)
                               (declare (ignore obj))
                               (open-window (window body) "/source-editor?open-file=%20")))
-      (create-gui-menu-item src   :content "New System Browser"          :on-click 'on-new-sys-browser)
-      (create-gui-menu-item src   :content "New ASDF System Browser"     :on-click 'on-new-asdf-browser)
+      (create-gui-menu-item src   :content "New System Browser"           :on-click 'on-new-sys-browser)
+      (create-gui-menu-item src   :content "New ASDF System Browser"      :on-click 'on-new-asdf-browser)
       (create-gui-menu-item tools :content "Control CLOG Events"         :on-click 'on-show-control-events-win)
       (create-gui-menu-item tools :content "Control JavaScript Events"   :on-click 'on-show-control-js-events-win)
       (create-gui-menu-item tools :content "Control ParenScript Events"  :on-click 'on-show-control-ps-events-win)
@@ -446,10 +446,14 @@ clog-builder window.")
                                           (declare (ignore obj))
                                           ;; return empty string to prevent nav off page
                                           "")))
+  (when *app-mode*
+    (incf *app-mode*))
   (run body)
   (when *app-mode*
-    (clog:shutdown)
-    (uiop:quit)))
+    (decf *app-mode*)
+    (when (<= *app-mode* 0)
+      (clog:shutdown)
+      (uiop:quit))))
 
 (defun clog-builder (&key (port 8080) (start-browser t)
                        app project dir static-root system clogframe)
@@ -472,7 +476,8 @@ instead of the project window will be displayed."
     (setf static-root (merge-pathnames "./www/"
                                        (asdf:system-source-directory system))))
   (when app
-    (setf *app-mode* app))
+    (unless *app-mode*
+      (setf *app-mode* 0)))
   (if static-root
       (initialize nil :port port :static-root static-root)
       (initialize nil :port port))
@@ -489,5 +494,5 @@ instead of the project window will be displayed."
                             (format nil "~A/builder" port)
                             (format nil "~A" 1280) (format nil "~A" 840))))
   (when start-browser
-    (format t "If browser does not start go to http://127.0.0.1:~A/builder" port)
+    (format t "~%If browser does not start go to http://127.0.0.1:~A/builder~%~%" port)
     (open-browser :url (format nil "http://127.0.0.1:~A/builder" port))))
