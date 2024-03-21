@@ -73,7 +73,7 @@
            (m-test   (create-gui-menu-item m-lisp :content "Evaluate All"))
            (m-help   (create-gui-menu-drop-down menu :content "Help"))
            (m-helpk  (create-gui-menu-item m-help :content "Keyboard Help"))
-           (tool-bar  (create-div (top-panel box) :class "w3-center"))
+           (tool-bar  (create-div (top-panel box)))
            (btn-class "w3-button w3-white w3-border w3-border-black w3-ripple")
            (btn-copy  (create-img tool-bar :alt-text "copy"     :url-src img-btn-copy  :class btn-class))
            (btn-paste (create-img tool-bar :alt-text "paste"    :url-src img-btn-paste :class btn-class))
@@ -154,10 +154,10 @@
                  (declare (ignore obj))
                  (alert-dialog win
                                     "<table>
-<tr><td>cmd/alt-,</td><td>Configure editor</td></tr>
+<tr><td>cmd/ctrl-,</td><td>Configure editor</td></tr>
 <tr><td>cmd/alt-.</td><td> Launch system browser</td></tr>
 <tr><td>cmd/alt-[</td><td> Evaluate form</td></tr>
-<tr><td>cmd/ctl-s</td><td> Save</td></tr>
+<tr><td>cmd/ctrl-s</td><td> Save</td></tr>
 <tr><td>ctl-=</td><td>Expand region</td></tr>
 <tr><td>opt/alt-m</td><td>Macroexpand</td></tr>
 </table><p><a target='_blank' href='https://github.com/ajaxorg/ace/wiki/Default-Keyboard-Shortcuts'>Default Keybindings</a>"
@@ -169,38 +169,40 @@
                                (lambda (obj)
                                  (declare (ignore obj))
                                  (clog-ace:resize ace)))
-      (flet ((open-file-name (fname)
-               (window-focus win)
-               (handler-case
-                   (when fname
-                     (setf last-date (file-write-date fname))
-                     (setf file-name fname)
-                     (setf (window-title win) fname)
-                     (let ((c (or (read-file fname :clog-obj obj) "")))
-                       (cond ((or (equalp (pathname-type fname) "lisp")
-                                  (equalp (pathname-type fname) "asd"))
-                              (setf (clog-ace:mode ace) "ace/mode/lisp")
-                              (setf (text-value pac-line) (get-package-from-string c))
-                              (setf lisp-file t)
-                              (setf (current-editor-is-lisp app) (text-value pac-line)))
-                             (t
-                              (setf lisp-file nil)
-                              (setf (current-editor-is-lisp app) nil)
-                              (setf (clog-ace:mode ace) (clog-ace:get-mode-from-extension ace fname))))
-                       (setf (clog-ace:text-value ace) c)))
-                 (error (condition)
-	           (alert-toast obj "File Error" (format nil "Error: ~A" condition))
-	           (format t "Error: ~A" condition)))))
+      (labels ((open-file-name (fname)
+                 (window-focus win)
+                 (handler-case
+                     (when fname
+                       (setf last-date (file-write-date fname))
+                       (setf file-name fname)
+                       (setf (window-title win) fname)
+                       (let ((c (or (read-file fname :clog-obj obj) "")))
+                         (cond ((or (equalp (pathname-type fname) "lisp")
+                                    (equalp (pathname-type fname) "asd"))
+                                (setf (clog-ace:mode ace) "ace/mode/lisp")
+                                (setf (text-value pac-line) (get-package-from-string c))
+                                (setf lisp-file t)
+                                (setf (current-editor-is-lisp app) (text-value pac-line)))
+                               (t
+                                (setf lisp-file nil)
+                                (setf (current-editor-is-lisp app) nil)
+                                (setf (clog-ace:mode ace) (clog-ace:get-mode-from-extension ace fname))))
+                         (setf (clog-ace:text-value ace) c)))
+                   (error (condition)
+	             (alert-toast obj "File Error" (format nil "Error: ~A" condition))
+	             (format t "Error: ~A" condition))))
+               (load-file (obj)
+                 (server-file-dialog obj "Load Source" (directory-namestring (if (equal file-name "")
+                                                                                 (current-project-dir app)
+                                                                                 file-name))
+                                     (lambda (fname)
+                                       (open-file-name fname)
+                                       (setf is-dirty nil)))))
         (when (and open-file
                    (not (equalp open-file " ")))
           (open-file-name open-file))
-        (set-on-click btn-load (lambda (obj)
-                                 (server-file-dialog obj "Load Source" (directory-namestring (if (equal file-name "")
-                                                                                                 (current-project-dir app)
-                                                                                                 file-name))
-                                                     (lambda (fname)
-                                                       (open-file-name fname)
-                                                       (setf is-dirty nil))))))
+        (set-on-click btn-load (lambda (obj) (load-file obj)))
+        (set-on-click m-load (lambda (obj) (load-file obj))))
       (set-on-input ace (lambda (obj)
                           (declare (ignore obj))
                           (setf is-dirty t)))
