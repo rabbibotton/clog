@@ -12,10 +12,12 @@
 
 ;; Open panels and files in new browser tabs by default
 (defparameter *open-external* nil)
-;; Open files in browser popus instead of tabs if browser allows
+;; Open files in browser popups instead of tabs if browser allows
 (defparameter *open-external-in-popup* nil)
-;; Open panels in browser popus instead of tabs if browser allows
+;; Open panel editors in browser popus instead of tabs if browser allows
 (defparameter *open-external-panels-in-popup* nil)
+;; Open panels as popups by default
+(defparameter *open-panels-as-popups* nil)
 ;; Use emacs instead of the source-editor when openning external
 (defparameter *open-external-with-emacs* nil)
 ;; Best Light Theme for Lisp
