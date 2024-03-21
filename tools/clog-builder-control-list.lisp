@@ -152,7 +152,8 @@ of controls and double click to select control."
                              (when (equal (html-id control) "undefined") (return))
                              (setf dcc (attribute control "data-clog-composite-control"))
                              (setf dln (attribute control "data-clog-name"))
-                             (unless (equal dln "undefined")
+                             (unless (or (equal dln "undefined")
+                                         (eq dln nil))
                                (let ((list-item (create-div lwin :content (format nil "&#8597; ~A~A" sim dln)))
                                      (status    (hiddenp (get-placer control))))
                                  (if status
