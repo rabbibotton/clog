@@ -20,6 +20,7 @@ connectivity to the browser or other websocket client (often a browser
 embedded in a native template application.)
 
 [CLOG - Technical Overview and Purpose](CONCEPT.md)
+
 [CLOG - Reference Manual](https://rabbibotton.github.io/clog/clog-manual.html)
 
 STATUS: CLOG and CLOG Builder 1.9 released.
