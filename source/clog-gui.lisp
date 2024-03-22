@@ -59,6 +59,7 @@
   (window-maximize             generic-function)
   (window-normalize            generic-function)
   (window-toggle-maximize      generic-function)
+  (window-toggle-pinned        generic-function)
   (window-keep-on-top          generic-function)
   (window-make-modal           generic-function)
   (window-end-modal            generic-function)
@@ -826,7 +827,7 @@ use jquery-ui to move/resize and will not work on mobile and touch events
 are limitted to clicks. When client-movement is t only on-window-move is fired
 once at start of drag and on-window-move-done at end of drag and
 on-window-resize at start of resize and on-window-resize-done at end of resize.
-If has-pinner a toggle wil appear on title bar to allow pinning the window in
+If has-pinner a toggle will appear on title bar to allow pinning the window in
 place, if keep-on-top t then when pinned also will keep-on-top. If had-pinned
 is nil and keep-on-top t then the window will be set to keep-on-top always.
 window-param is a general parameter for identifiying the window to use with
@@ -929,7 +930,7 @@ window-to-top-by-param or window-by-param."))
       (if has-pinner
           (set-on-click (pinner win) (lambda (obj)
                                        (declare (ignore obj))
-                                       (window-toggle-pin win keep-on-top)))
+                                       (window-toggle-pinned win :keep-on-top keep-on-top)))
           (when keep-on-top
             (window-keep-on-top win)))
       (set-on-click (closer win) (lambda (obj)
@@ -1128,48 +1129,56 @@ the browser."))
 ;; window-toggle-pinned ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defgeneric window-toggle-pin (clog-gui-window keep-on-top)
+(defgeneric window-toggle-pinned (clog-gui-window &key state keep-on-top)
   (:documentation "Toggle the pinned state of a CLOG-GUI-WINDOW. A pinned
-window cannot be moved, closed, resized, maximized or normalized and if
-keep-on-top t when pinned is always on top. A new window is always unpinned."))
+window cannot be moved, closed, resized, maximized or normalized. A new
+window is always unpinned. If keep-on-top the keep-on-top state is toggled
+to match the pinned state. :state forces state. Returns new state"))
 
-(defmethod window-toggle-pin ((win clog-gui-window) keep-on-top)
-  (if (pinnedp win)
+(defmethod window-toggle-pinned ((win clog-gui-window) &key (state :toggle)
+                                                         keep-on-top)
+  (if (or (eq state nil)
+          (and (eq state :toggle)
+               (pinnedp win)))
       (progn
         (when (pinner win)
           (setf (inner-html (pinner win)) "☐"))
         (when keep-on-top
-          (setf (keep-on-top win) nil)
-          (window-focus win))
+          (window-keep-on-top win :state nil))
         (setf (pinnedp win) nil)
         (set-on-window-can-close win nil)
         (set-on-window-can-size win nil)
         (set-on-window-can-move win nil)
         (set-on-window-can-maximize win nil)
-        (set-on-window-can-normalize win nil))
-      (flet ((no-op (obj) (declare (ignore obj))))
+        (set-on-window-can-normalize win nil)
+        nil)
+      (flet ((no-op (obj) (declare (ignore obj)) nil))
         (when (pinner win)
           (setf (inner-html (pinner win)) "☑"))
         (when keep-on-top
-          (setf (keep-on-top win) t)
-          (setf (z-index win) 1))
+          (window-keep-on-top win))
         (setf (pinnedp win) t)
         (set-on-window-can-close win #'no-op)
         (set-on-window-can-size win #'no-op)
         (set-on-window-can-move win #'no-op)
         (set-on-window-can-maximize win #'no-op)
-        (set-on-window-can-normalize win #'no-op))))
+        (set-on-window-can-normalize win #'no-op)
+        t)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;
 ;; window-keep-on-top ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defgeneric window-keep-on-top (clog-gui-window)
-  (:documentation "Set CLOG-GUI-WINDOW to stay on top. Use window-focus to undue."))
+(defgeneric window-keep-on-top (clog-gui-window &key state)
+  (:documentation "Set CLOG-GUI-WINDOW to stay on top based on state (default t)."))
 
-(defmethod window-keep-on-top ((obj clog-gui-window))
-  (setf (keep-on-top obj) t)
-  (setf (z-index obj) 1))
+(defmethod window-keep-on-top ((obj clog-gui-window) &key (state t))
+  (cond (state
+         (setf (keep-on-top obj) t)
+         (setf (z-index obj) 1))
+        (t
+         (setf (keep-on-top obj) nil)
+         (window-focus obj))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;
 ;; window-make-modal ;;

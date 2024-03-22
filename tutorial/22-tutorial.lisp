@@ -50,7 +50,29 @@
                               :source "https://www.w3schools.com/html/mov_bbb.mp4")))
     (set-geometry movie :units "%" :width 100 :height 100)))
 
+(defun on-file-on-top (obj)
+  (let ((win (create-gui-window obj :title "Pin me!"
+                                    :has-pinner nil
+                                    :keep-on-top t
+                                    :top 200
+                                    :left 0
+                                    :width 200
+                                    :height 200)))
+    (create-div (window-content win)
+                :content "I am always on top")))
+
 (defun on-file-pinned (obj)
+  (let ((win (create-gui-window obj :title "Pin me!"
+                                    :has-pinner t
+                                    :keep-on-top nil
+                                    :top 200
+                                    :left 0
+                                    :width 200
+                                    :height 200)))
+    (create-div (window-content win)
+                :content "I can be pinned but do not stay on top. Just click the pin on window bar.")))
+
+(defun on-file-pinned-on-top (obj)
   (let ((win (create-gui-window obj :title "Pin me!"
                                     :has-pinner t
                                     :keep-on-top t
@@ -58,7 +80,8 @@
                                     :left 0
                                     :width 200
                                     :height 200)))
-    (create-div win :content "I can be pinned. Just click the pin on window bar.")))
+    (create-div (window-content win)
+                :content "I can be pinned and stay on top. Just click the pin on window bar.")))
 
 (defun on-file-pop-tab (obj)
   (let ((pop (open-clog-popup obj)))
@@ -170,7 +193,9 @@
          (tmp   (create-gui-menu-item file :content "Browse" :on-click 'on-file-browse))
          (tmp   (create-gui-menu-item file :content "Drawing" :on-click 'on-file-drawing))
          (tmp   (create-gui-menu-item file :content "Movie" :on-click 'on-file-movies))
+         (tmp   (create-gui-menu-item file :content "Always on Top" :on-click 'on-file-on-top))
          (tmp   (create-gui-menu-item file :content "Pinned" :on-click 'on-file-pinned))
+         (tmp   (create-gui-menu-item file :content "Pinned and on Always Top" :on-click 'on-file-pinned-on-top))
          (tmp   (create-gui-menu-item file :content "Popup Browser Tab" :on-click 'on-file-pop-tab))
          (tmp   (create-gui-menu-item file :content "Popup Browser Window" :on-click 'on-file-pop-win))
          (win   (create-gui-menu-drop-down menu :content "Window"))
