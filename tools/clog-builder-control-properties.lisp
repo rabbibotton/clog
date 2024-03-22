@@ -10,6 +10,8 @@
         (add-class content "w3-small")
         (set-on-window-close win (lambda (obj)
                                    (setf (control-properties-win app) nil)))
+        (set-on-window-move win (lambda (obj)
+                                  (setf (height obj) (height obj))))
         (window-toggle-pinned win :state t)
         (setf (control-properties-win app) win)
         (setf (properties-list app) control-list)
