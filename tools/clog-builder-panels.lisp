@@ -131,38 +131,39 @@
   ;; any click on panel directly will focus window
   (when win
     (window-focus win))
-  (let* ((control-record    (control-info (value (select-tool app))))
-         (control-type-name (getf control-record :create-type)))
-    (cond ((eq control-type-name :custom-query)
-           (input-dialog win "Enter html (must have an outer element):"
-                         (lambda (custom-query)
-                           (when custom-query
-                             (do-drop-new-control
-                               app content data
-                               :win win
-                               :custom-query custom-query)))
-                         :width 500
-                         :height 300
-                         :rows 5
-                         :size 40
-                         :title "Custom HTML Control"
-                         :default-value (getf control-record :create-content)))
-          ((eq control-type-name :custom-block)
-           (input-dialog win "Enter html to create control:"
-                         (lambda (custom-query)
-                           (when custom-query
-                             (do-drop-new-control
-                               app content data
-                               :win win
-                               :custom-query custom-query)))
-                         :width 500
-                         :height 300
-                         :rows 5
-                         :size 40
-                         :title "Custom HTML Block"
-                         :default-value (getf control-record :create-content)))
-          (t
-           (do-drop-new-control app content data :win win)))))
+  (when (select-tool app)
+    (let* ((control-record    (control-info (value (select-tool app))))
+           (control-type-name (getf control-record :create-type)))
+      (cond ((eq control-type-name :custom-query)
+             (input-dialog win "Enter html (must have an outer element):"
+                           (lambda (custom-query)
+                             (when custom-query
+                               (do-drop-new-control
+                                 app content data
+                                 :win win
+                                 :custom-query custom-query)))
+                           :width 500
+                           :height 300
+                           :rows 5
+                           :size 40
+                           :title "Custom HTML Control"
+                           :default-value (getf control-record :create-content)))
+            ((eq control-type-name :custom-block)
+             (input-dialog win "Enter html to create control:"
+                           (lambda (custom-query)
+                             (when custom-query
+                               (do-drop-new-control
+                                 app content data
+                                 :win win
+                                 :custom-query custom-query)))
+                           :width 500
+                           :height 300
+                           :rows 5
+                           :size 40
+                           :title "Custom HTML Block"
+                           :default-value (getf control-record :create-content)))
+            (t
+             (do-drop-new-control app content data :win win))))))
 
 (defun do-drop-new-control (app content data &key win custom-query)
   "Create new control dropped at event DATA on CONTENT of WIN)"
@@ -311,7 +312,8 @@
                          (declare (ignore obj))
                          (let ((last  (current-control app))
                                (shift (getf data :shift-key)))
-                           (if (not (equal (value (select-tool app)) ""))
+                           (if (and (select-tool app)
+                                    (not (equal (value (select-tool app)) "")))
                                (when (do-drop-new-control app content data :win win)
                                  (incf-next-id content)))
                            (cond ((and last
@@ -521,7 +523,9 @@ not a temporarily attached one when using select-control."
            (m-rndr   (create-gui-menu-item m-lisp :content "render form to lisp"))
            (m-rndras (create-gui-menu-item m-lisp :content "render form to lisp as..."))
            (m-test   (create-gui-menu-item m-lisp :content "evaluate and test"))
-           (m-events (create-gui-menu-drop-down menu :content "Events"))
+           (m-events (create-gui-menu-drop-down menu :content "controls"))
+           (tmp      (create-gui-menu-item m-events :content "show control properties"  :on-click 'on-show-control-properties-win))
+           (tmp      (create-gui-menu-item m-events :content "show controls window"     :on-click 'on-show-control-list-win))
            (tmp      (create-gui-menu-item m-events :content "show CLOG events"         :on-click 'on-show-control-events-win))
            (tmp      (create-gui-menu-item m-events :content "show JavaScript events"   :on-click 'on-show-control-js-events-win))
            (tmp      (create-gui-menu-item m-events :content "show ParenScript events"  :on-click 'on-show-control-ps-events-win))
@@ -643,6 +647,8 @@ not a temporarily attached one when using select-control."
       (setf (attribute content "data-custom-slots") "")
       ;; activate associated windows on open
       (on-show-control-events-win win)
+      (on-show-control-properties-win win)
+      (on-show-control-list-win win)
       (panel-mode win t)
       (on-populate-control-properties-win content :win win)
       (on-populate-control-list-win content :win win)

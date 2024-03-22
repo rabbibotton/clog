@@ -44,11 +44,12 @@ replaced. (Exported)"
 (defun reset-control-pallete (panel)
   (let* ((app (connection-data-item panel "builder-app-data"))
          (pallete (select-tool app)))
-    (setf (inner-html pallete) "")
-    (dolist (control *supported-controls*)
-      (if (equal (getf control :name) "group")
-          (add-select-optgroup pallete (getf control :description))
-          (add-select-option pallete (getf control :name) (getf control :description))))))
+    (when pallete
+      (setf (inner-html pallete) "")
+      (dolist (control *supported-controls*)
+        (if (equal (getf control :name) "group")
+            (add-select-optgroup pallete (getf control :description))
+            (add-select-option pallete (getf control :name) (getf control :description)))))))
 
 ;; Global Internal Config
 
@@ -155,6 +156,10 @@ clog-builder window.")
     :accessor control-ps-events-win
     :initform nil
     :documentation "Current control events window")
+   (controls-win
+    :accessor controls-win
+    :initform nil
+    :documentation "Current controls window")
    (control-list-win
     :accessor control-list-win
     :initform nil
@@ -193,9 +198,12 @@ clog-builder window.")
 
 (defun panel-mode (obj bool)
   "Set the status for display or hiding the side panels."
-  (let ((app (connection-data-item obj "builder-app-data")))
-    (setf (hiddenp (right-panel app)) (not bool))
-    (setf (hiddenp (left-panel app)) (not bool))))
+  (when obj
+    (let ((app (connection-data-item obj "builder-app-data")))
+      (when (right-panel app)
+        (setf (hiddenp (right-panel app)) (not bool)))
+      (when (left-panel app)
+        (setf (hiddenp (left-panel app)) (not bool))))))
 
 (defun on-help-about-builder (obj)
   "Open about box"
@@ -423,8 +431,6 @@ clog-builder window.")
                               (open-window (window body) "https://www.w3schools.com/w3css/")))
       (create-gui-menu-item help  :content "About CLOG Builder"   :on-click #'on-help-about-builder)
       (create-gui-menu-full-screen menu))
-    (on-show-control-properties-win body)
-    (on-show-control-list-win body)
     (on-show-copy-history-win body)
     (cond
       (open-panel
