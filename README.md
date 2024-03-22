@@ -58,11 +58,13 @@ CLOG is developed with ECL and SBCL, it is tested fairly regulary on
  and the ecl Android/iPhone branch for example doesn't use).
 
 CLOG is in QuickLisp (ql:quickload :clog), however I recommend
+adding the UltraLisp distribution to it as QuickLisp is update
+infrequenty. It is also worthwhile if wish to see the source,
 cloning CLOG into ~/common-lisp directory [or other quicklisp/asdf
 findable directory ``(push #P"path/to/dir/of/projects" ql:*local-project-directories*)`` ]:
 
 ```
-For git (you need the ace editor plug in for the builder too from git):
+For git (you need the clog-ace and clog-terminal for the builder too from git):
 
 cd ~/common-lisp
 git clone https://github.com/rabbibotton/clog.git
@@ -74,7 +76,7 @@ if using larger files in the builder:
 
 git clone https://github.com/rabbibotton/fast-websocket.git
 
-To update in the future go to the created directories and type:
+To update do _often_ in the future go to the created directories and type:
 
 git pull
 
