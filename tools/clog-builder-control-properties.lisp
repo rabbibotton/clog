@@ -92,6 +92,7 @@
             (when (current-control app)
               (let* (panel-controls
                      (cname    (attribute control "data-clog-name"))
+                     (ctype    (attribute control "data-clog-type"))
                      (panel-id (attribute placer "data-panel-id"))
                      (panel    (attach-as-child obj panel-id)))
                 (maphash (lambda (k v)
@@ -127,6 +128,12 @@
                              nil)
                  props)
                 (push
+                 `("type"  ,ctype
+                           :read-only
+                           nil
+                           nil)
+                 props)
+                (push
                  `("name"    ,cname
                              nil
                              ,(lambda (obj)
@@ -154,12 +161,13 @@
                          (setf (editablep td2) (funcall (third item) control td1 td2))))
                       (t
                        (setf (editablep td2) t)))
-                (set-on-blur td2
-                             (lambda (obj)
-                               (funcall (fourth item) obj)
-                               (when placer
-                                 (jquery-execute placer "trigger('clog-builder-snap-shot')")
-                                 (set-geometry placer :top (position-top control)
-                                                      :left (position-left control)
-                                                      :width (client-width control)
-                                                      :height (client-height control)))))))))))))
+                (when (fourth item)
+                  (set-on-blur td2
+                               (lambda (obj)
+                                 (funcall (fourth item) obj)
+                                 (when placer
+                                   (jquery-execute placer "trigger('clog-builder-snap-shot')")
+                                   (set-geometry placer :top (position-top control)
+                                                        :left (position-left control)
+                                                        :width (client-width control)
+                                                        :height (client-height control))))))))))))))
