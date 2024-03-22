@@ -94,12 +94,6 @@ embedded in a native template application.)"
   (generate-id       function)
   (random-hex-string function)
 
-  "CLOG-Group - Utility Class for CLOG-Obj storage"
-  (clog-group    class)
-  (create-group  function)
-  (add           generic-function)
-  (obj           generic-function)
-
   "CLOG JS utilities"
   (js-true-p     function)
   (p-true-js     function)

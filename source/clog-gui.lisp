@@ -410,6 +410,7 @@ clog-body. If main-menu add as main menu bar."))
   (let* ((div (create-div obj :class class :html-id html-id))
          (blank (create-a div))
          (app (connection-data-item obj "clog-gui")))
+    (declare (ignore blank))
     (change-class div 'clog-gui-menu-bar)
     (when main-menu
         (setf (menu app) div))

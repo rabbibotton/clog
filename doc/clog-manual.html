@@ -403,35 +403,6 @@ package.</p></li>
 
 <p>Generate cryptographic grade random ids for use in connections.</p></li>
 </ul>
-<p>CLOG-Group - Utility Class for CLOG-Obj storage</p>
-<p><a id="x-28CLOG-3ACLOG-GROUP-20CLASS-29"></a>
-<a id="CLOG:CLOG-GROUP%20CLASS"></a></p>
-<ul>
-<li><span class=reference-bullet><span class=reference><span class="locative-type">[class]</span> <span class="reference-object"><a href="#CLOG:CLOG-GROUP%20CLASS" >CLOG-GROUP</a></span></span></span></li>
-</ul>
-<p><a id="x-28CLOG-3ACREATE-GROUP-20FUNCTION-29"></a>
-<a id="CLOG:CREATE-GROUP%20FUNCTION"></a></p>
-<ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#CLOG:CREATE-GROUP%20FUNCTION" >CREATE-GROUP</a></span></span></span></p>
-
-<p>Return a new <a href="#CLOG:CLOG-GROUP%20CLASS" title="CLOG:CLOG-GROUP CLASS"><code>CLOG-GROUP</code></a> object for storing <a href="#CLOG:CLOG-OBJ%20CLASS" title="CLOG:CLOG-OBJ CLASS"><code>CLOG-OBJ</code></a>s. They are indexed by
-their <a href="#CLOG:HTML-ID%20GENERIC-FUNCTION" title="CLOG:HTML-ID GENERIC-FUNCTION"><code>HTML-ID</code></a> or an arbitrary <a href="#CLOG:NAME%20GENERIC-FUNCTION" title="CLOG:NAME GENERIC-FUNCTION"><code>NAME</code></a>.</p></li>
-</ul>
-<p><a id="x-28CLOG-3AADD-20GENERIC-FUNCTION-29"></a>
-<a id="CLOG:ADD%20GENERIC-FUNCTION"></a></p>
-<ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:ADD%20GENERIC-FUNCTION" >ADD</a></span></span> <span class="locative-args">CLOG-GROUP CLOG-OBJ &amp;KEY NAME</span></span></p>
-
-<p>Add <code>CLOG-OBJ</code> to a <code>CLOG-GROUP</code> indexed by the html-id of
-<code>CLOG-OBJ</code> unless <code>:NAME</code> is set and is used instead.</p></li>
-</ul>
-<p><a id="x-28CLOG-3AOBJ-20GENERIC-FUNCTION-29"></a>
-<a id="CLOG:OBJ%20GENERIC-FUNCTION"></a></p>
-<ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:OBJ%20GENERIC-FUNCTION" >OBJ</a></span></span> <span class="locative-args">CLOG-GROUP NAME</span></span></p>
-
-<p>Retrieve from <code>CLOG-GROUP</code> the <a href="#CLOG:CLOG-OBJ%20CLASS" title="CLOG:CLOG-OBJ CLASS"><code>CLOG-OBJ</code></a> with name</p></li>
-</ul>
 <p>CLOG JS utilities</p>
 <p><a id="x-28CLOG-3AJS-TRUE-P-20FUNCTION-29"></a>
 <a id="CLOG:JS-TRUE-P%20FUNCTION"></a></p>
@@ -611,11 +582,15 @@ create a connection-data-item keyed by the html-id</p></li>
 <li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:CONNECTION-DATA%20GENERIC-FUNCTION" >CONNECTION-DATA</a></span></span> <span class="locative-args">CLOG-OBJ</span></span></p>
 
 <p>Get connection-data that is associated with
-clog-obj that will persist regardless of thread. The event hooks
-are stored in this string based hash in the format of:
+clog-obj's connection that will persist regardless of thread calling.
+The event hooks are stored in this string based hash in the format of:
 &quot;html-id:event-name&quot; =&gt; #'event-handler. clog-* keys are reserved
-for internal use of clog. The key &quot;clog-body&quot; is set to the
-clog-body of this connection and accessible with <a href="#CLOG:CONNECTION-BODY%20GENERIC-FUNCTION" title="CLOG:CONNECTION-BODY GENERIC-FUNCTION"><code>CONNECTION-BODY</code></a>.</p></li>
+for internal use of clog.</p>
+
+<p>The following default keys are set:
+&quot;clog-body&quot;      clog-body of this connection, see <a href="#CLOG:CONNECTION-BODY%20GENERIC-FUNCTION" title="CLOG:CONNECTION-BODY GENERIC-FUNCTION"><code>CONNECTION-BODY</code></a>
+&quot;clog-path&quot;      html path used, see <a href="#CLOG:CONNECTION-PATH%20GENERIC-FUNCTION" title="CLOG:CONNECTION-PATH GENERIC-FUNCTION"><code>CONNECTION-PATH</code></a>
+&quot;clog-sync&quot;      sempaphore used for syncing events, see <a href="#CLOG:CONNECTION-SYNC%20GENERIC-FUNCTION" title="CLOG:CONNECTION-SYNC GENERIC-FUNCTION"><code>CONNECTION-SYNC</code></a></p></li>
 </ul>
 <p><a id="x-28CLOG-3ACONNECTION-DATA-ITEM-20GENERIC-FUNCTION-29"></a>
 <a id="CLOG:CONNECTION-DATA-ITEM%20GENERIC-FUNCTION"></a></p>
@@ -624,12 +599,26 @@ clog-body of this connection and accessible with <a href="#CLOG:CONNECTION-BODY%
 
 <p>Get/Setf item-name from connection-data.</p></li>
 </ul>
+<p><a id="x-28CLOG-3AREMOVE-CONNECTION-DATA-ITEM-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG:REMOVE-CONNECTION-DATA-ITEM%20GENERIC-FUNCTION"></a></p>
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:REMOVE-CONNECTION-DATA-ITEM%20GENERIC-FUNCTION" >REMOVE-CONNECTION-DATA-ITEM</a></span></span> <span class="locative-args">CLOG-OBJ ITEM-NAME</span></span></p>
+
+<p>Remove item-name from connection-data.</p></li>
+</ul>
 <p><a id="x-28CLOG-3ACONNECTION-BODY-20GENERIC-FUNCTION-29"></a>
 <a id="CLOG:CONNECTION-BODY%20GENERIC-FUNCTION"></a></p>
 <ul>
 <li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:CONNECTION-BODY%20GENERIC-FUNCTION" >CONNECTION-BODY</a></span></span> <span class="locative-args">CLOG-OBJ</span></span></p>
 
 <p>Get connection's clog-body.</p></li>
+</ul>
+<p><a id="x-28CLOG-3ACONNECTION-PATH-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG:CONNECTION-PATH%20GENERIC-FUNCTION"></a></p>
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:CONNECTION-PATH%20GENERIC-FUNCTION" >CONNECTION-PATH</a></span></span> <span class="locative-args">CLOG-OBJ</span></span></p>
+
+<p>Get the <code>HTML</code> passed used to make the connection.</p></li>
 </ul>
 <p><a id="x-28CLOG-3ACONNECTION-SYNC-20GENERIC-FUNCTION-29"></a>
 <a id="CLOG:CONNECTION-SYNC%20GENERIC-FUNCTION"></a></p>
@@ -645,13 +634,6 @@ clog-body of this connection and accessible with <a href="#CLOG:CONNECTION-BODY%
 
 <p>Place at start of event to serialize access to the event. All events in
 an application share per connection the same queue of serialized events.</p></li>
-</ul>
-<p><a id="x-28CLOG-3AREMOVE-CONNECTION-DATA-ITEM-20GENERIC-FUNCTION-29"></a>
-<a id="CLOG:REMOVE-CONNECTION-DATA-ITEM%20GENERIC-FUNCTION"></a></p>
-<ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:REMOVE-CONNECTION-DATA-ITEM%20GENERIC-FUNCTION" >REMOVE-CONNECTION-DATA-ITEM</a></span></span> <span class="locative-args">CLOG-OBJ ITEM-NAME</span></span></p>
-
-<p>Remove item-name from connection-data.</p></li>
 </ul>
 <p><a id="x-28CLOG-3AVALIDP-20GENERIC-FUNCTION-29"></a>
 <a id="CLOG:VALIDP%20GENERIC-FUNCTION"></a></p>
@@ -673,7 +655,7 @@ flushed with <a href="#CLOG:FLUSH-CONNECTION-CACHE%20FUNCTION" title="CLOG:FLUSH
 <ul>
 <li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#CLOG:FLUSH-CONNECTION-CACHE%20FUNCTION" >FLUSH-CONNECTION-CACHE</a></span></span> <span class="locative-args">CLOG-OBJ</span></span></p>
 
-<p>Flush connection cache if on.</p></li>
+<p>Flush connection cache if on <code>CLOG-OBJ</code> is located on.</p></li>
 </ul>
 <p>CLOG-Obj - Internals for Extensions and Plugins</p>
 <p><a id="x-28CLOG-3AHTML-ID-20GENERIC-FUNCTION-29"></a>
@@ -681,14 +663,14 @@ flushed with <a href="#CLOG:FLUSH-CONNECTION-CACHE%20FUNCTION" title="CLOG:FLUSH
 <ul>
 <li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:HTML-ID%20GENERIC-FUNCTION" >HTML-ID</a></span></span> <span class="locative-args">CLOG-OBJ</span></span></p>
 
-<p>Internal html-id of CLOG-Obj. (Internal)</p></li>
+<p>Internal html-id of clog-obj. (Internal)</p></li>
 </ul>
 <p><a id="x-28CLOG-3ASCRIPT-ID-20GENERIC-FUNCTION-29"></a>
 <a id="CLOG:SCRIPT-ID%20GENERIC-FUNCTION"></a></p>
 <ul>
 <li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:SCRIPT-ID%20GENERIC-FUNCTION" >SCRIPT-ID</a></span></span> <span class="locative-args">CLOG-OBJ</span></span></p>
 
-<p>Return the script id for <a href="#CLOG:OBJ%20GENERIC-FUNCTION" title="CLOG:OBJ GENERIC-FUNCTION"><code>OBJ</code></a> based on the html-id set
+<p>Return the script id for <code>CLOG-OBJ</code> based on the html-id set
 during attachment. (Private)</p></li>
 </ul>
 <p><a id="x-28CLOG-3AEXECUTE-20GENERIC-FUNCTION-29"></a>
@@ -696,15 +678,15 @@ during attachment. (Private)</p></li>
 <ul>
 <li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:EXECUTE%20GENERIC-FUNCTION" >EXECUTE</a></span></span> <span class="locative-args">CLOG-OBJ METHOD</span></span></p>
 
-<p>Execute the JavaScript <code>METHOD</code> on <a href="#CLOG:OBJ%20GENERIC-FUNCTION" title="CLOG:OBJ GENERIC-FUNCTION"><code>OBJ</code></a>. Result is
-discarded. see <a href="#CLOG:JQUERY-EXECUTE%20GENERIC-FUNCTION" title="CLOG:JQUERY-EXECUTE GENERIC-FUNCTION"><code>JQUERY-EXECUTE</code></a> (Internal)</p></li>
+<p>Execute the JavaScript <code>METHOD</code> on <code>OBJ</code>. Returns
+<code>CLOG-OBJ</code>. see <a href="#CLOG:JQUERY-EXECUTE%20GENERIC-FUNCTION" title="CLOG:JQUERY-EXECUTE GENERIC-FUNCTION"><code>JQUERY-EXECUTE</code></a> (Internal)</p></li>
 </ul>
 <p><a id="x-28CLOG-3AQUERY-20GENERIC-FUNCTION-29"></a>
 <a id="CLOG:QUERY%20GENERIC-FUNCTION"></a></p>
 <ul>
 <li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:QUERY%20GENERIC-FUNCTION" >QUERY</a></span></span> <span class="locative-args">CLOG-OBJ METHOD &amp;KEY DEFAULT-ANSWER</span></span></p>
 
-<p>Execute the JavaScript query <code>METHOD</code> on <a href="#CLOG:OBJ%20GENERIC-FUNCTION" title="CLOG:OBJ GENERIC-FUNCTION"><code>OBJ</code></a> and return
+<p>Execute the JavaScript query <code>METHOD</code> on <code>OBJ</code> and return
 result or if time out <code>DEFAULT-ANSWER</code>. see <a href="#CLOG:JQUERY-QUERY%20GENERIC-FUNCTION" title="CLOG:JQUERY-QUERY GENERIC-FUNCTION"><code>JQUERY-QUERY</code></a> (Internal)</p></li>
 </ul>
 <p><a id="x-28CLOG-3AJS-EXECUTE-20GENERIC-FUNCTION-29"></a>
@@ -712,15 +694,17 @@ result or if time out <code>DEFAULT-ANSWER</code>. see <a href="#CLOG:JQUERY-QUE
 <ul>
 <li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:JS-EXECUTE%20GENERIC-FUNCTION" >JS-EXECUTE</a></span></span> <span class="locative-args">CLOG-OBJ SCRIPT</span></span></p>
 
-<p>Execure <code>SCRIPT</code> on browser. Result is
-discarded, return <code>CLOG-OBJ</code>. (Internal)</p></li>
+<p>Execute JavaScript <code>SCRIPT</code> on browser. <code>CLOG-OBJ</code> is used to
+obtain the connection the script should run on. Result is discarded, return
+<code>CLOG-OBJ</code>. (Internal)</p></li>
 </ul>
 <p><a id="x-28CLOG-3AJS-QUERY-20GENERIC-FUNCTION-29"></a>
 <a id="CLOG:JS-QUERY%20GENERIC-FUNCTION"></a></p>
 <ul>
 <li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:JS-QUERY%20GENERIC-FUNCTION" >JS-QUERY</a></span></span> <span class="locative-args">CLOG-OBJ SCRIPT &amp;KEY DEFAULT-ANSWER</span></span></p>
 
-<p>Execure <code>SCRIPT</code> on browser and return result. (Internal)</p></li>
+<p>Execute JavaScript <code>SCRIPT</code> on browser and return result.
+<code>CLOG-OBJ</code> us used to obtain the connection the script should run on. (Internal)</p></li>
 </ul>
 <p><a id="x-28CLOG-3ASET-ON-EVENT-20GENERIC-FUNCTION-29"></a>
 <a id="CLOG:SET-ON-EVENT%20GENERIC-FUNCTION"></a></p>
@@ -1192,7 +1176,7 @@ possible tag and keywords.</p></li>
 <ul>
 <li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:CREATE-CHILD%20GENERIC-FUNCTION" >CREATE-CHILD</a></span></span> <span class="locative-args">CLOG-OBJ HTML &amp;KEY HTML-ID AUTO-PLACE CLOG-TYPE</span></span></p>
 
-<p>Create a new CLOG-Element or sub-type of <code>CLOG-TYPE</code> from <code>HTML</code>
+<p>Create a new <a href="#CLOG:CLOG-ELEMENT%20CLASS" title="CLOG:CLOG-ELEMENT CLASS"><code>CLOG-ELEMENT</code></a> or sub-type of <code>CLOG-TYPE</code> from <code>HTML</code>
 as child of <code>CLOG-OBJ</code> and if <code>:AUTO-PLACE</code> (default t) place-inside-bottom-of
 <code>CLOG-OBJ</code>. If <code>HTML-ID</code> is nil one will be generated.</p></li>
 </ul>
@@ -6519,10 +6503,10 @@ If <code>W3-CSS-URL</code> has not been loaded before is installed unless is nil
 <p><a id="x-28CLOG-GUI-3ACREATE-GUI-MENU-BAR-20GENERIC-FUNCTION-29"></a>
 <a id="CLOG-GUI:CREATE-GUI-MENU-BAR%20GENERIC-FUNCTION"></a></p>
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-GUI:CREATE-GUI-MENU-BAR%20GENERIC-FUNCTION" >CREATE-GUI-MENU-BAR</a></span></span> <span class="locative-args">CLOG-OBJ &amp;KEY CLASS HTML-ID</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-GUI:CREATE-GUI-MENU-BAR%20GENERIC-FUNCTION" >CREATE-GUI-MENU-BAR</a></span></span> <span class="locative-args">CLOG-OBJ &amp;KEY CLASS HTML-ID MAIN-MENU</span></span></p>
 
 <p>Attached a menu bar to a <code>CLOG-OBJ</code> in general a
-clog-body.</p></li>
+clog-body. If main-menu add as main menu bar.</p></li>
 </ul>
 <p><a id="x-28CLOG-GUI-3ACLOG-GUI-MENU-DROP-DOWN-20CLASS-29"></a>
 <a id="CLOG-GUI:CLOG-GUI-MENU-DROP-DOWN%20CLASS"></a></p>
@@ -8466,7 +8450,7 @@ Some sample jquery selectors:
 <li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:JQUERY-EXECUTE%20GENERIC-FUNCTION" >JQUERY-EXECUTE</a></span></span> <span class="locative-args">CLOG-OBJ METHOD</span></span></p>
 
 <p>Execute the jQuery <code>METHOD</code> on and <code>CLOG-OBJ</code>. Result is
-dicarded, return <code>CLOG-OBJ</code>.</p></li>
+dicarded, returns <code>CLOG-OBJ</code>.</p></li>
 </ul>
 <p><a id="x-28CLOG-3AJQUERY-QUERY-20GENERIC-FUNCTION-29"></a>
 <a id="CLOG:JQUERY-QUERY%20GENERIC-FUNCTION"></a></p>
