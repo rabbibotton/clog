@@ -7,11 +7,11 @@
         (window-focus (control-events-win app))
         (let* ((win     (create-gui-window obj :title "Control CLOG Events"
                                                :left 225
-                                               :top 480
                                                :height 200 :width 645
                                                :has-pinner t :client-movement *client-side-movement*))
                (content (window-content win))
                status)
+          (set-geometry win :top "" :bottom 0)
           (setf (current-editor-is-lisp app) t)
           (set-on-window-focus win
                                (lambda (obj)
@@ -42,15 +42,6 @@
           (set-on-window-size-done win (lambda (obj)
                                          (declare (ignore obj))
                                          (clog-ace:resize (event-editor app))))
-          (panel-mode win t)
-          (set-on-window-focus win
-                               (lambda (obj)
-                                 (declare (ignore obj))
-                                 (panel-mode win t)))
-          (set-on-window-blur win
-                              (lambda (obj)
-                                (declare (ignore obj))
-                                (panel-mode win nil)))
           (set-on-window-close win (lambda (obj)
                                      (declare (ignore obj))
                                      (setf (event-editor app) nil)
@@ -65,11 +56,11 @@
         (window-focus (control-js-events-win app))
         (let* ((win     (create-gui-window obj :title "Control Client JavaScript Events"
                                                :left 225
-                                               :top 700
                                                :height 200 :width 645
                                                :has-pinner t :client-movement *client-side-movement*))
                (content (window-content win))
                status)
+          (set-geometry win :top "" :bottom 0)
           (setf (current-editor-is-lisp app) nil)
           (set-on-window-focus win
                                (lambda (obj)
@@ -102,15 +93,6 @@
           (set-on-window-size-done win (lambda (obj)
                                          (declare (ignore obj))
                                          (clog-ace:resize (event-js-editor app))))
-          (panel-mode win t)
-          (set-on-window-focus win
-                               (lambda (obj)
-                                 (declare (ignore obj))
-                                 (panel-mode win t)))
-          (set-on-window-blur win
-                              (lambda (obj)
-                                (declare (ignore obj))
-                                (panel-mode win nil)))
           (set-on-window-close win (lambda (obj)
                                      (declare (ignore obj))
                                      (setf (event-js-editor app) nil)
@@ -125,11 +107,11 @@
         (window-focus (control-ps-events-win app))
         (let* ((win     (create-gui-window obj :title "Control Client ParenScript Events"
                                                :left 225
-                                               :top 700
                                                :height 200 :width 645
                                                :has-pinner t :client-movement *client-side-movement*))
                (content (window-content win))
                status)
+          (set-geometry win :top "" :bottom 0)
           (setf (current-editor-is-lisp app) nil)
           (set-on-window-focus win
                                (lambda (obj)
@@ -161,15 +143,6 @@
           (set-on-window-size-done win (lambda (obj)
                                          (declare (ignore obj))
                                          (clog-ace:resize (event-ps-editor app))))
-          (panel-mode win t)
-          (set-on-window-focus win
-                               (lambda (obj)
-                                 (declare (ignore obj))
-                                 (panel-mode win t)))
-          (set-on-window-blur win
-                              (lambda (obj)
-                                (declare (ignore obj))
-                                (panel-mode win nil)))
           (set-on-window-close win (lambda (obj)
                                      (declare (ignore obj))
                                      (setf (event-ps-editor app) nil)
@@ -179,75 +152,76 @@
 
 (defun on-populate-control-events-win (obj)
   "Populate the control events for the current control"
-  (let* ((app       (connection-data-item obj "builder-app-data"))
-         (event-win (control-events-win app))
-         (elist     (events-list app))
-         (control   (current-control app)))
-    (when event-win
-      (set-on-blur (event-editor app) nil)
-      (set-on-change elist nil)
-      (setf (inner-html elist) "")
-      (remove-attribute elist "data-current-event")
-      (setf (text-value (event-editor app)) "")
-      (setf (clog-ace:read-only-p (event-editor app)) t)
-      (when control
-        (let ((info (control-info (attribute control "data-clog-type"))))
-          (labels ((populate-options (&key (current ""))
-                     (set-on-change elist nil)
-                     (setf (inner-html elist) "")
-                     (add-select-option elist "" "Select Event")
-                     (dolist (event (getf info :events))
-                       (let ((attr (format nil "data-~A" (getf event :name))))
-                         (add-select-option elist
-                                            (getf event :name)
-                                            (format nil "~A ~A (panel ~A)"
-                                                    (if (has-attribute control attr)
-                                                        "&#9632;‎ "
-                                                        "&#9633; ")
-                                                    (getf event :name)
-                                                    (getf event :parameters))
-                                            :selected (equal attr current))))
-                     (set-on-change elist #'on-change))
-                   (on-blur (obj)
-                     (declare (ignore obj))
-                     (set-on-blur (event-editor app) nil)
-                     (let ((attr (attribute elist "data-current-event")))
-                       (unless (equalp attr "undefined")
-                         (let ((opt (select-text elist))
-                               (txt (text-value (event-editor app))))
-                           (setf (char opt 0) #\space)
-                           (setf opt (string-left-trim "#\space" opt))
-                           (cond ((or (equal txt "")
-                                      (equalp txt "undefined"))
-                                  (setf (select-text elist) (format nil "~A ~A" (code-char 9633) opt))
-                                  (remove-attribute control attr))
-                                 (t
-                                  (setf (select-text elist) (format nil "~A ~A" (code-char 9632) opt))
-                                  (setf (attribute control attr) txt))))
-                         (jquery-execute (get-placer control) "trigger('clog-builder-snap-shot')")))
-                     (set-on-blur (event-editor app) #'on-blur))
-                   (on-change (obj)
-                     (declare (ignore obj))
-                     (set-on-blur (event-editor app) nil)
-                     (let ((event (select-value elist "clog-events")))
-                       (cond ((equal event "")
-                              (set-on-blur (event-editor app) nil)
-                              (remove-attribute elist "data-current-event")
-                              (setf (text-value (event-editor app)) "")
-                              (setf (clog-ace:read-only-p (event-editor app)) t))
-                             (t
-                              (setf (clog-ace:read-only-p (event-editor app)) nil)
-                              (let* ((attr (format nil "data-~A" event))
-                                     (txt  (attribute control attr)))
-                                (setf (text-value (event-editor app))
-                                      (if (equalp txt "undefined")
-                                          ""
-                                          txt))
-                                (setf (attribute elist "data-current-event") attr)
-                                (set-on-blur (event-editor app) #'on-blur)))))))
-            (populate-options))))))
-  (on-populate-control-ps-events-win obj)
-  (on-populate-control-js-events-win obj))
+  (when obj
+    (let* ((app       (connection-data-item obj "builder-app-data"))
+           (event-win (control-events-win app))
+           (elist     (events-list app))
+           (control   (current-control app)))
+      (when event-win
+        (set-on-blur (event-editor app) nil)
+        (set-on-change elist nil)
+        (setf (inner-html elist) "")
+        (remove-attribute elist "data-current-event")
+        (setf (text-value (event-editor app)) "")
+        (setf (clog-ace:read-only-p (event-editor app)) t)
+        (when control
+          (let ((info (control-info (attribute control "data-clog-type"))))
+            (labels ((populate-options (&key (current ""))
+                       (set-on-change elist nil)
+                       (setf (inner-html elist) "")
+                       (add-select-option elist "" "Select Event")
+                       (dolist (event (getf info :events))
+                         (let ((attr (format nil "data-~A" (getf event :name))))
+                           (add-select-option elist
+                                              (getf event :name)
+                                              (format nil "~A ~A (panel ~A)"
+                                                      (if (has-attribute control attr)
+                                                          "&#9632;‎ "
+                                                          "&#9633; ")
+                                                      (getf event :name)
+                                                      (getf event :parameters))
+                                              :selected (equal attr current))))
+                       (set-on-change elist #'on-change))
+                     (on-blur (obj)
+                       (declare (ignore obj))
+                       (set-on-blur (event-editor app) nil)
+                       (let ((attr (attribute elist "data-current-event")))
+                         (unless (equalp attr "undefined")
+                           (let ((opt (select-text elist))
+                                 (txt (text-value (event-editor app))))
+                             (setf (char opt 0) #\space)
+                             (setf opt (string-left-trim "#\space" opt))
+                             (cond ((or (equal txt "")
+                                        (equalp txt "undefined"))
+                                    (setf (select-text elist) (format nil "~A ~A" (code-char 9633) opt))
+                                    (remove-attribute control attr))
+                                   (t
+                                    (setf (select-text elist) (format nil "~A ~A" (code-char 9632) opt))
+                                    (setf (attribute control attr) txt))))
+                           (jquery-execute (get-placer control) "trigger('clog-builder-snap-shot')")))
+                       (set-on-blur (event-editor app) #'on-blur))
+                     (on-change (obj)
+                       (declare (ignore obj))
+                       (set-on-blur (event-editor app) nil)
+                       (let ((event (select-value elist "clog-events")))
+                         (cond ((equal event "")
+                                (set-on-blur (event-editor app) nil)
+                                (remove-attribute elist "data-current-event")
+                                (setf (text-value (event-editor app)) "")
+                                (setf (clog-ace:read-only-p (event-editor app)) t))
+                               (t
+                                (setf (clog-ace:read-only-p (event-editor app)) nil)
+                                (let* ((attr (format nil "data-~A" event))
+                                       (txt  (attribute control attr)))
+                                  (setf (text-value (event-editor app))
+                                        (if (equalp txt "undefined")
+                                            ""
+                                            txt))
+                                  (setf (attribute elist "data-current-event") attr)
+                                  (set-on-blur (event-editor app) #'on-blur)))))))
+              (populate-options))))))
+    (on-populate-control-ps-events-win obj)
+    (on-populate-control-js-events-win obj)))
 
 (defun on-populate-control-js-events-win (obj)
   "Populate the control js events for the current control"

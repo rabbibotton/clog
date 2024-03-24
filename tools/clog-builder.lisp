@@ -100,14 +100,6 @@ clog-builder window.")
     :accessor project-win
     :initform nil
     :documentation "Project window")
-   (right-panel
-    :accessor right-panel
-    :initform nil
-    :documentation "Right panel")
-   (left-panel
-    :accessor left-panel
-    :initform nil
-    :documentation "Left panel")
    (control-properties-win
     :accessor control-properties-win
     :initform nil
@@ -195,15 +187,6 @@ clog-builder window.")
                                          (declare (ignore obj))
                                          (setf (hiddenp win) t)
                                          nil))))))
-
-(defun panel-mode (obj bool)
-  "Set the status for display or hiding the side panels."
-  (when obj
-    (let ((app (connection-data-item obj "builder-app-data")))
-      (when (right-panel app)
-        (setf (hiddenp (right-panel app)) (not bool)))
-      (when (left-panel app)
-        (setf (hiddenp (left-panel app)) (not bool))))))
 
 (defun on-help-about-builder (obj)
   "Open about box"
@@ -342,7 +325,8 @@ clog-builder window.")
   (set-html-on-close body "Connection Lost")
   (let ((app        (make-instance 'builder-app-data))
         (open-file  (form-data-item (form-get-data body) "open-file"))
-        (open-panel (form-data-item (form-get-data body) "open-panel")))
+        (open-panel (form-data-item (form-get-data body) "open-panel"))
+        (open-ext   (form-data-item (form-get-data body) "open-ext")))
     (setf (connection-data-item body "builder-app-data") app)
     (setf (title (html-document body)) "CLOG Builder")
     (clog-gui-initialize body)
@@ -435,7 +419,7 @@ clog-builder window.")
     (cond
       (open-panel
        (setf (title (html-document body)) open-panel)
-       (on-new-builder-panel body :open-file open-panel))
+       (on-new-builder-panel body :open-file open-panel :open-ext open-ext))
       (open-file
        (setf (title (html-document body)) open-file)
        (on-open-file body :open-file open-file :maximized t))   

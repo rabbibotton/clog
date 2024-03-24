@@ -29,6 +29,8 @@
   (let* ((app (connection-data-item panel "builder-app-data")))
     (when *open-external*
       (setf (checkedp (open-ext panel)) t))
+    (when *open-panels-as-popups*
+      (setf (checkedp (pop-panel panel)) t))
     (when (uiop:directory-exists-p #P"~/common-lisp/")
       (pushnew #P"~/common-lisp/"
                (symbol-value (read-from-string "ql:*local-project-directories*"))
@@ -367,8 +369,8 @@
           ((and (> (length item) 5)
                 (equal (subseq item (- (length item) 5)) ".clog"))
            (if (checkedp (open-ext panel))
-               (on-new-builder-panel-ext target :open-file item)
-               (on-new-builder-panel target :open-file item)))
+               (on-new-builder-panel-ext target :open-file item :open-ext (checkedp (pop-panel panel)))
+               (on-new-builder-panel target :open-file item :open-ext (checkedp (pop-panel panel)))))
           (t
            (if (checkedp (open-ext panel))
                (on-open-file-ext target :open-file item)

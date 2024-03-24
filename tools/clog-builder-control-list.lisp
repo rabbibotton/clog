@@ -109,97 +109,100 @@
           (on-size win))))
     (window-focus (controls-win app))))
 
-(defun on-populate-control-list-win (content &key win)
+(defun on-populate-control-list-win (content &key win clear)
   "Populate the control-list-window to allow drag and drop adjust of order
 of controls and double click to select control."
   (when content
-    (with-sync-event (content)
-      (let ((app (connection-data-item content "builder-app-data")))
-        (let ((panel-id (html-id content))
-              (last-ctl nil))
+    (let ((app (connection-data-item content "builder-app-data")))
+      (if clear
           (when (control-list-win app)
-            (let ((lwin (control-list-win app)))
-              (setf (inner-html lwin) "")
-              (set-on-mouse-click (create-div lwin :content (attribute content "data-clog-name"))
-                                  (lambda (obj data)
-                                    (declare (ignore obj data))
-                                    (deselect-current-control app)
-                                    (on-populate-control-properties-win content :win win)
-                                    (on-populate-control-list-win content :win win)))
-              (labels ((add-siblings (control sim)
-                         (let (dln dcc)
-                           (loop
-                             (when (equal (html-id control) "undefined") (return))
-                             (setf dcc (attribute control "data-clog-composite-control"))
-                             (setf dln (attribute control "data-clog-name"))
-                             (unless (or (equal dln "undefined")
-                                         (eq dln nil))
-                               (let ((list-item (create-div lwin :content (format nil "&#8597; ~A~A" sim dln)))
-                                     (status    (hiddenp (get-placer control))))
-                                 (if status
-                                     (setf (color list-item) :darkred)
-                                     (setf (background-color list-item) :grey))
-                                 (setf (draggablep list-item) t)
-                                 (setf (attribute list-item "data-clog-control") (html-id control))
-                                 ;; click to select item
-                                 (set-on-mouse-down list-item
-                                                    (lambda (obj data)
-                                                      (let* ((html-id (attribute obj "data-clog-control"))
-                                                             (control (get-from-control-list app
-                                                                                             panel-id
-                                                                                             html-id)))
-                                                        (cond ((or (getf data :shift-key)
-                                                                   (getf data :ctrl-key)
-                                                                   (getf data :meta-key))
-                                                               (when (drop-new-control app content data)
-                                                                 (incf-next-id content)))
-                                                              (t
-                                                               (when last-ctl
-                                                                 (set-border last-ctl "0px" :dotted :blue))
-                                                               (set-border list-item "2px" :dotted :blue)
-                                                               (setf last-ctl list-item)
-                                                               (select-control control))))))
-                                 (set-on-double-click list-item
-                                                      (lambda (obj)
-                                                        (let* ((html-id (attribute obj "data-clog-control"))
-                                                               (control (get-from-control-list app
-                                                                                               panel-id
-                                                                                               html-id))
-                                                               (placer  (get-placer control))
-                                                               (state   (hiddenp placer)))
-                                                          (setf (hiddenp placer) (not state))
-                                                          (select-control control)
-                                                          (on-populate-control-list-win content :win win))))
-                                 ;; drag and drop to change
-                                 (set-on-drag-over list-item (lambda (obj)(declare (ignore obj))()))
-                                 (set-on-drop list-item
-                                              (lambda (obj data)
-                                                (let* ((id       (attribute obj "data-clog-control"))
-                                                       (control1 (get-from-control-list app
-                                                                                        panel-id
-                                                                                        id))
-                                                       (control2 (get-from-control-list app
-                                                                                        panel-id
-                                                                                        (getf data :drag-data)))
-                                                       (placer1  (get-placer control1))
-                                                       (placer2  (get-placer control2)))
-                                                  (if (getf data :shift-key)
-                                                      (place-inside-bottom-of control1 control2)
-                                                      (place-before control1 control2))
-                                                  (place-after control2 placer2)
-                                                  (set-geometry placer1 :top (position-top control1)
-                                                                        :left (position-left control1)
-                                                                        :width (client-width control1)
-                                                                        :height (client-height control1))
-                                                  (set-geometry placer2 :top (position-top control2)
-                                                                        :left (position-left control2)
-                                                                        :width (client-width control2)
-                                                                        :height (client-height control2))
-                                                  (on-populate-control-properties-win content :win win)
-                                                  (on-populate-control-list-win content :win win))))
-                                 (set-on-drag-start list-item (lambda (obj)(declare (ignore obj))())
-                                                    :drag-data (html-id control))
-                                 (when (equal dcc "undefined") ; when t is not a composite control
-                                   (add-siblings (first-child control) (format nil "~A&#8594;" sim)))))
-                             (setf control (next-sibling control))))))
-                (add-siblings (first-child content) "")))))))))
+            (setf (inner-html (control-list-win app)) ""))
+          (with-sync-event (content)
+            (let ((panel-id (html-id content))
+                  (last-ctl nil))
+              (when (control-list-win app)
+                (let ((lwin (control-list-win app)))
+                  (setf (inner-html lwin) "")
+                  (set-on-mouse-click (create-div lwin :content (attribute content "data-clog-name"))
+                                      (lambda (obj data)
+                                        (declare (ignore obj data))
+                                        (deselect-current-control app)
+                                        (on-populate-control-properties-win content :win win)
+                                        (on-populate-control-list-win content :win win)))
+                  (labels ((add-siblings (control sim)
+                             (let (dln dcc)
+                               (loop
+                                 (when (equal (html-id control) "undefined") (return))
+                                 (setf dcc (attribute control "data-clog-composite-control"))
+                                 (setf dln (attribute control "data-clog-name"))
+                                 (unless (or (equal dln "undefined")
+                                             (eq dln nil))
+                                   (let ((list-item (create-div lwin :content (format nil "&#8597; ~A~A" sim dln)))
+                                         (status    (hiddenp (get-placer control))))
+                                     (if status
+                                         (setf (color list-item) :darkred)
+                                         (setf (background-color list-item) :grey))
+                                     (setf (draggablep list-item) t)
+                                     (setf (attribute list-item "data-clog-control") (html-id control))
+                                     ;; click to select item
+                                     (set-on-mouse-down list-item
+                                                        (lambda (obj data)
+                                                          (let* ((html-id (attribute obj "data-clog-control"))
+                                                                 (control (get-from-control-list app
+                                                                                                 panel-id
+                                                                                                 html-id)))
+                                                            (cond ((or (getf data :shift-key)
+                                                                       (getf data :ctrl-key)
+                                                                       (getf data :meta-key))
+                                                                   (when (drop-new-control app content data)
+                                                                     (incf-next-id content)))
+                                                                  (t
+                                                                   (when last-ctl
+                                                                     (set-border last-ctl "0px" :dotted :blue))
+                                                                   (set-border list-item "2px" :dotted :blue)
+                                                                   (setf last-ctl list-item)
+                                                                   (select-control control))))))
+                                     (set-on-double-click list-item
+                                                          (lambda (obj)
+                                                            (let* ((html-id (attribute obj "data-clog-control"))
+                                                                   (control (get-from-control-list app
+                                                                                                   panel-id
+                                                                                                   html-id))
+                                                                   (placer  (get-placer control))
+                                                                   (state   (hiddenp placer)))
+                                                              (setf (hiddenp placer) (not state))
+                                                              (select-control control)
+                                                              (on-populate-control-list-win content :win win))))
+                                     ;; drag and drop to change
+                                     (set-on-drag-over list-item (lambda (obj)(declare (ignore obj))()))
+                                     (set-on-drop list-item
+                                                  (lambda (obj data)
+                                                    (let* ((id       (attribute obj "data-clog-control"))
+                                                           (control1 (get-from-control-list app
+                                                                                            panel-id
+                                                                                            id))
+                                                           (control2 (get-from-control-list app
+                                                                                            panel-id
+                                                                                            (getf data :drag-data)))
+                                                           (placer1  (get-placer control1))
+                                                           (placer2  (get-placer control2)))
+                                                      (if (getf data :shift-key)
+                                                          (place-inside-bottom-of control1 control2)
+                                                          (place-before control1 control2))
+                                                      (place-after control2 placer2)
+                                                      (set-geometry placer1 :top (position-top control1)
+                                                                            :left (position-left control1)
+                                                                            :width (client-width control1)
+                                                                            :height (client-height control1))
+                                                      (set-geometry placer2 :top (position-top control2)
+                                                                            :left (position-left control2)
+                                                                            :width (client-width control2)
+                                                                            :height (client-height control2))
+                                                      (on-populate-control-properties-win content :win win)
+                                                      (on-populate-control-list-win content :win win))))
+                                     (set-on-drag-start list-item (lambda (obj)(declare (ignore obj))())
+                                                        :drag-data (html-id control))
+                                     (when (equal dcc "undefined") ; when t is not a composite control
+                                       (add-siblings (first-child control) (format nil "~A&#8594;" sim)))))
+                                 (setf control (next-sibling control))))))
+                    (add-siblings (first-child content) ""))))))))))

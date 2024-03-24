@@ -481,11 +481,13 @@ not a temporarily attached one when using select-control."
 
 ;; Panel Windows
 
-(defun on-new-builder-panel-ext (obj &key open-file popup)
+(defun on-new-builder-panel-ext (obj &key open-file popup open-ext)
   (open-window (window (connection-body obj))
                (if open-file
-                   (format nil "/panel-editor?open-panel=~A"
-                           open-file)
+                   (format nil "/panel-editor?open-panel=~A~A"
+                           open-file (if open-ext
+                                         (format nil "&open-ext=~A" open-ext)
+                                         ""))
                    "/source-editor")
                :specs (if (or popup *open-external-panels-in-popup*)
                           "width=1280,height=700"
@@ -589,9 +591,10 @@ not a temporarily attached one when using select-control."
         (multiple-value-bind (pop pop-win)
             (open-clog-popup obj :specs "width=640,height=480")
           (when pop
-            (create-div content :content "Panel is external. Click to bring to front.")
-            (set-on-click content
-                          (lambda (obj) (focus pop-win)))
+            (let ((msg (create-button content :content "Panel is external. Click to bring to front.")))
+              (set-geometry msg :units "%" :height 100 :width 100)
+              (set-on-click content
+                            (lambda (obj) (focus pop-win))))
             (setf ext-panel pop)
             (cond ((eq open-ext :custom)
                    (load-css (html-document pop) "/css/jquery-ui.css")
@@ -613,9 +616,13 @@ not a temporarily attached one when using select-control."
               (set-on-before-unload (window pop)
                                     (lambda (obj)
                                       (declare (ignore obj))
+                                      (deselect-current-control app)
+                                      (on-populate-control-events-win content)
+                                      (on-populate-control-list-win content :win win :clear t)
+                                      (on-populate-control-properties-win content :win win :clear t)
                                       (setf content nil)
                                       (setf ext-panel nil)
-                                      (window-close win)))
+                                      (Window-close win)))
               (set-on-click (create-gui-menu-item m-file :content "export as a boot html")
                             (lambda (obj)
                               (server-file-dialog obj "Export as a Boot HTML" "./"
@@ -649,23 +656,21 @@ not a temporarily attached one when using select-control."
       (on-show-control-events-win win)
       (on-show-control-properties-win win)
       (on-show-control-list-win win)
-      (panel-mode win t)
       (on-populate-control-properties-win content :win win)
       (on-populate-control-list-win content :win win)
       ;; setup window events
       (set-on-window-focus win
                            (lambda (obj)
                              (declare (ignore obj))
-                             (panel-mode win t)
                              (on-populate-control-properties-win content :win win)
                              (on-populate-control-list-win content :win win)))
-      (set-on-window-blur win
-                          (lambda (obj)
-                            (declare (ignore obj))
-                            (panel-mode win nil)))
       (set-on-window-close win
                            (lambda (obj)
                              (declare (ignore obj))
+                             (deselect-current-control app)
+                             (on-populate-control-events-win content)
+                             (on-populate-control-list-win content :win win :clear t)
+                             (on-populate-control-properties-win content :win win :clear t)
                              (setf (current-control app) nil)
                              (destroy-control-list app panel-id)
                              (when ext-panel
