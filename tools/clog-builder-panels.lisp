@@ -1,10 +1,5 @@
 (in-package :clog-tools)
 
-;; Cross page syncing
-
-(defvar *app-sync-hash* (make-hash-table* :test #'equal)
-  "Exchange app instance with new external pages")
-
 ;; Handle per content next-id counts
 
 (defun next-id (content)
@@ -513,7 +508,8 @@ not a temporarily attached one when using select-control."
            (m-saveas (create-gui-menu-item m-file :content "save as.."))
            (m-reopnp (create-gui-menu-item m-file :content "save, close and reopen as panel"))
            (m-reopn  (create-gui-menu-item m-file :content "save, close and popup this panel"))
-           (m-reopnh (create-gui-menu-item m-file :content "save, close and popup this panel no w3css"))
+           (m-reopnb (create-gui-menu-item m-file :content "save, close and popup this panel custom boot file"))
+           (m-reopnh (create-gui-menu-item m-file :content "save, close and popup this panel no css"))
            (m-edit   (create-gui-menu-drop-down menu :content "Edit"))
            (m-undo   (create-gui-menu-item m-edit :content "undo"))
            (m-redo   (create-gui-menu-item m-edit :content "redo"))
@@ -589,7 +585,12 @@ not a temporarily attached one when using select-control."
       (when (or open-ext
                 *open-panels-as-popups*)
         (multiple-value-bind (pop pop-win)
-            (open-clog-popup obj :specs "width=640,height=480")
+            (if (typep open-ext 'string)
+                (progn
+                  (enable-clog-popup :path "/customboot" :boot-file open-ext)
+                  (open-clog-popup obj :path "/customboot"
+                                       :specs "width=640,height=480"))
+                (open-clog-popup obj :specs "width=640,height=480"))
           (when pop
             (let ((msg (create-button content :content "Panel is external. Click to bring to front.")))
               (set-geometry msg :units "%" :height 100 :width 100)
@@ -929,6 +930,14 @@ not a temporarily attached one when using select-control."
                                    (save obj nil))
                                  (window-close win)
                                  (on-new-builder-panel obj :open-file file-name :open-ext :custom)))
+        (set-on-click m-reopnb (lambda (obj)
+                                 (input-dialog obj "Boot file Name?"
+                                               (lambda (file)
+                                                 (when file
+                                                   (when is-dirty
+                                                     (save obj nil))
+                                                   (window-close win)
+                                                   (on-new-builder-panel obj :open-file file-name :open-ext file))))))
         (set-on-click m-reopnp (lambda (obj)
                                  (when is-dirty
                                    (save obj nil))
@@ -953,3 +962,9 @@ not a temporarily attached one when using select-control."
 (defun on-new-builder-basic-page (obj)
   "Menu item to open new basic HTML page"
   (on-new-builder-panel obj :open-ext :custom))
+
+(defun on-new-builder-custom-page (obj)
+  (input-dialog obj "Boot file Name?"
+                (lambda (file)
+                  (when file
+                    (on-new-builder-panel obj :open-ext file)))))

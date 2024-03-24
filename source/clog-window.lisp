@@ -630,9 +630,9 @@ them.")
           (t
            (create-div body :content "Invalid Access")))))
 
-(defun enable-clog-popup (&key (path *clog-popup-path*))
+(defun enable-clog-popup (&key (path *clog-popup-path*) (boot-file "/boot.html"))
   "Enable handling of clog enabled popups"
-  (set-on-new-window 'clog-popup-handler :path path))
+  (set-on-new-window 'clog-popup-handler :path path :boot-file boot-file))
 
 (defun open-clog-popup (obj &key (path *clog-popup-path*)
                               (add-sync-to-path t)

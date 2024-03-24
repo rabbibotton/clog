@@ -940,6 +940,7 @@ embedded in a native template application.)"
 
 (defsection @clog-window (:title "CLOG Window Objects")
   "CLOG Popups"
+  (*clog-popup-path*       variable)
   (enable-clog-popup       function)
   (open-clog-popup         function)
   (clog-popup-openned      function)
