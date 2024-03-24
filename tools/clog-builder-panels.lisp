@@ -713,9 +713,9 @@ not a temporarily attached one when using select-control."
                        (system-clipboard-write obj (copy-buf app))
                        (let ((c (create-text-area (window-content (copy-history-win app))
                                                   :value (copy-buf app)
+                                                  :class "w3-input"
                                                   :auto-place nil)))
-                         (place-inside-top-of (window-content (copy-history-win app)) c)
-                         (setf (width c) "100%"))
+                         (place-inside-top-of (window-content (copy-history-win app)) c))
                        (maphash
                         (lambda (html-id control)
                           (declare (ignore html-id))
