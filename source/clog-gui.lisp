@@ -491,21 +491,21 @@ clog-body. If main-menu add as main menu bar."))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defclass clog-gui-menu-window-select (clog-select)()
-  (:documentation "Drop down containing windows. Selecting a window
-will maximize it on top."))
+  (:documentation "Drop down containing existing windows."))
 
 (defgeneric create-gui-menu-window-select (clog-obj
                                            &key class
                                              html-id)
-  (:documentation "Attached a clog-select as a menu item that auto updates
-with open windows and maximizes them unless is a keep-on-top window or
-on-window-can-maximize returns nil. Only one instance allowed."))
+  (:documentation "Attaches a clog-select as a menu item that auto updates
+with open windows and focuses them unless is a keep-on-top window.
+Only one instance allowed."))
 
 (defmethod create-gui-menu-window-select
     ((obj clog-obj)
-     &key (class "w3-select")
+     &key (class "w3-bar-item w3-button")
+       content
        (html-id nil))
-  (let ((window-select (create-select obj :class class :html-id html-id))
+  (let ((window-select (create-select obj :html-id html-id :class class))
         (app           (connection-data-item obj "clog-gui")))
     (change-class window-select 'clog-gui-menu-window-select)
     (setf (window-select app) window-select)
@@ -515,7 +515,8 @@ on-window-can-maximize returns nil. Only one instance allowed."))
                                        (unless (keep-on-top win)
                                          (setf (hiddenp win) nil)
                                          (window-focus win))))))
-    (create-option window-select :content "Select Window")
+    (when content
+      (create-option window-select :content content))
     window-select))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -923,6 +924,7 @@ window-to-top-by-param or window-by-param."))
       (when (window-select app)
         (setf (window-select-item win) (create-option (window-select app)
                                                       :content title
+                                                      :selected t
                                                       :value html-id)))
       (set-on-double-click (win-title win) (lambda (obj)
                                              (declare (ignore obj))
@@ -1029,6 +1031,8 @@ window-to-top-by-param or window-by-param."))
   (let ((app (connection-data-item obj "clog-gui")))
     (unless (keep-on-top obj)
       (setf (z-index obj) (incf (last-z app))))
+    (when (window-select app)
+      (setf (selectedp (window-select-item obj)) t))
     (fire-on-window-change obj app)))
 
 ;;;;;;;;;;;;;;;;;;
