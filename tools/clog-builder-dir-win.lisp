@@ -1,5 +1,12 @@
 (in-package :clog-tools)
 
+(defun on-setup-dir-win (panel)
+  (populate-dir-win panel "./")
+  (when *open-external*
+    (setf (checkedp (open-file-ext panel)) t))
+  (when *open-panels-as-popups*
+    (setf (checkedp (pop-clog panel)) t)))
+
 (defun populate-dir-win (panel d)
   (let ((dir (directory-namestring (uiop:truename* d))))
     (setf (current-dir panel) dir)
@@ -23,8 +30,8 @@
       (cond ((and (> (length item) 5)
                   (equal (subseq item (- (length item) 5)) ".clog"))
              (if (checkedp (open-file-ext panel))
-                 (on-new-builder-panel-ext panel :open-file item)
-                 (on-new-builder-panel panel :open-file item)))
+                 (on-new-builder-panel-ext panel :open-file item :open-ext (checkedp (pop-clog panel)))
+                 (on-new-builder-panel panel :open-file item :open-ext (checkedp (pop-clog panel)))))
             (t
              (if (checkedp (open-file-ext panel))
                  (on-open-file-ext panel :open-file item)
