@@ -483,7 +483,10 @@ not a temporarily attached one when using select-control."
                            open-file (if open-ext
                                          (format nil "&open-ext=~A" open-ext)
                                          ""))
-                   "/source-editor")
+                   (format nil "/panel-editor?open-panel=%20~A"
+                           (if open-ext
+                               (format nil "&open-ext=~A" open-ext)
+                               "")))
                :specs (if (or popup *open-external-panels-in-popup*)
                           "width=1280,height=700"
                           "")
@@ -957,14 +960,20 @@ not a temporarily attached one when using select-control."
 
 (defun on-new-builder-page (obj &key custom-boot url-launch)
   "Open new page"
-  (on-new-builder-panel obj :open-ext t))
+  (if *open-external*
+      (on-new-builder-panel-ext obj :open-ext t)
+      (on-new-builder-panel obj :open-ext t)))
 
 (defun on-new-builder-basic-page (obj)
   "Menu item to open new basic HTML page"
-  (on-new-builder-panel obj :open-ext :custom))
+  (if *open-external*
+      (on-new-builder-panel-ext obj :open-ext :custom)
+      (on-new-builder-panel obj :open-ext :custom)))
 
 (defun on-new-builder-custom-page (obj)
   (input-dialog obj "Boot file Name?"
                 (lambda (file)
                   (when file
-                    (on-new-builder-panel obj :open-ext file)))))
+                    (if *open-external*
+                        (on-new-builder-panel-ext obj :open-ext file)
+                        (on-new-builder-panel obj :open-ext file))))))

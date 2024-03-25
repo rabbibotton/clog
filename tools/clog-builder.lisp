@@ -345,15 +345,28 @@ clog-builder window.")
            (help  (create-gui-menu-drop-down menu :content "Help")))
       (declare (ignore icon))
       (add-class menu "w3-small")
-      (create-gui-menu-item file  :content "New CLOG Panel Editor"                   :on-click 'on-new-builder-panel)
-      (create-gui-menu-item file  :content "New CLOG Panel Popup Editor"             :on-click 'on-new-builder-page)
-      (create-gui-menu-item file  :content "New HTML Panel Popup Editor"             :on-click 'on-new-builder-basic-page)
-      (create-gui-menu-item file  :content "New Custom Boot Panel External Editor"   :on-click 'on-new-builder-custom-page)
-      (create-gui-menu-item file  :content "New Source Editor"                       :on-click 'on-open-file)
-      (create-gui-menu-item file  :content "New Source External Editor"              :on-click
-                            (lambda (obj)
-                              (declare (ignore obj))
-                              (open-window (window body) "/source-editor?open-file=%20")))
+      (let ((exter (create-button file :content "-" :class "w3-input")))
+        (flet ((exter-text ()
+                 (if *open-external*
+                     "open external tab"
+                     "open this tab")))
+          (setf (text-value exter) (exter-text))
+          (set-on-click exter (lambda (obj)
+                                (setf *open-external* (not *open-external*))
+                                (setf (text-value exter) (exter-text)))))
+        (create-gui-menu-item file  :content "New CLOG Panel Editor"                   :on-click
+                              (lambda (obj)
+                                (if *open-external*
+                                    (on-new-builder-panel-ext obj)
+                                    (on-new-builder-panel obj))))
+        (create-gui-menu-item file  :content "New Source Editor"                       :on-click
+                              (lambda (obj)
+                                (if *open-external*
+                                    (on-open-file-ext obj)
+                                    (on-open-file obj))))
+        (create-gui-menu-item file  :content "New CLOG Panel Popup Editor"             :on-click 'on-new-builder-page)
+        (create-gui-menu-item file  :content "New HTML Panel Popup Editor"             :on-click 'on-new-builder-basic-page)
+        (create-gui-menu-item file  :content "New Custom Boot Panel External Editor"   :on-click 'on-new-builder-custom-page))
       (create-gui-menu-item src   :content "Project Window"               :on-click 'on-show-project)
       (create-gui-menu-item src   :content "Directory Window"             :on-click 'on-dir-win)
       (create-gui-menu-item src   :content "New Project Template"         :on-click 'on-new-app-template)
@@ -419,11 +432,19 @@ clog-builder window.")
     (on-show-copy-history-win body)
     (cond
       (open-panel
-       (setf (title (html-document body)) open-panel)
+       (if (equal open-panel " ")
+           (setf open-panel nil)
+           (setf (title (html-document body)) open-panel))
+       (cond ((equalp open-ext "t")
+              (setf open-ext t))
+             ((equalp open-ext "custom")
+              (setf open-ext :custom)))
        (on-new-builder-panel body :open-file open-panel :open-ext open-ext))
       (open-file
-       (setf (title (html-document body)) open-file)
-       (on-open-file body :open-file open-file :maximized t))   
+       (if (equal open-file " ")
+           (setf open-file nil)
+           (setf (title (html-document body)) open-file))
+       (on-open-file body :open-file open-file :maximized t))
       (*start-dir*
        (on-dir-win body :dir *start-dir* :top 60 :left 232))
       (t

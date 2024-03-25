@@ -36,7 +36,7 @@
                    (if open-file
                        (format nil "/source-editor?open-file=~A"
                                open-file)
-                       "/source-editor")
+                       "/source-editor?open-file=%20")
                    :specs (if (or popup *open-external-in-popup*)
                               "width=800,height=600"
                               "")
