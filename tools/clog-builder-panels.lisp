@@ -598,7 +598,9 @@ not a temporarily attached one when using select-control."
             (let ((msg (create-button content :content "Panel is external. Click to bring to front.")))
               (set-geometry msg :units "%" :height 100 :width 100)
               (set-on-click content
-                            (lambda (obj) (focus pop-win))))
+                            (lambda (obj)
+                              (declare (ignore obj))
+                              (focus pop-win))))
             (setf ext-panel pop)
             (cond ((eq open-ext :custom)
                    (load-css (html-document pop) "/css/jquery-ui.css")
@@ -958,7 +960,7 @@ not a temporarily attached one when using select-control."
                              (when (drop-new-control app content data :win win)
                                (incf-next-id content))))))))
 
-(defun on-new-builder-page (obj &key custom-boot url-launch)
+(defun on-new-builder-page (obj)
   "Open new page"
   (if *open-external*
       (on-new-builder-panel-ext obj :open-ext t)
@@ -977,3 +979,11 @@ not a temporarily attached one when using select-control."
                     (if *open-external*
                         (on-new-builder-panel-ext obj :open-ext file)
                         (on-new-builder-panel obj :open-ext file))))))
+
+(defun on-quick-start (obj)
+  "Open quick start help"
+  (let* ((win (create-gui-window obj :title "Quick Start"
+                                     :top 40 :left 225
+                                     :width 600 :height 400
+                                     :client-movement *client-side-movement*)))
+    (create-quick-start (window-content win))))

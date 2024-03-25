@@ -201,8 +201,8 @@ clog-builder window.")
                                            </center>
                                          <center>(c) 2022-2024 - David Botton</center></p></div>"
                                                    img-clog-icon)
-                                  :width   200
-                                  :height  215
+                                  :width   220
+                                  :height  230
                                   :hidden  t)))
     (window-center about)
     (setf (visiblep about) t)
@@ -246,14 +246,6 @@ clog-builder window.")
         (set-geometry (create-text-area body :value pic-data) :width 500 :height 400)
         (create-br body)
         (create-div body :content (format nil "For example:<br>(create-img body :url-src \"~A\")" pic-data))))))
-
-(defun on-quick-start (obj)
-  "Open quick start help"
-  (let* ((win (create-gui-window obj :title "Quick Start"
-                                     :top 40 :left 225
-                                     :width 600 :height 400
-                                     :client-movement *client-side-movement*)))
-    (create-quick-start (window-content win))))
 
 (defun on-show-thread-viewer (obj)
   "Open thread views"
@@ -332,7 +324,8 @@ clog-builder window.")
     (clog-gui-initialize body)
     (add-class body "w3-blue-grey")
     (setf (z-index (create-panel body :positioning :fixed
-                                      :bottom 0 :left 222
+                                      :bottom 0 :left 0
+                                      :class "w3-gray"
                                       :content (format nil "static-root: ~A" clog::*static-root*)))
           -9999)
     (let* ((menu  (create-gui-menu-bar body))
@@ -352,6 +345,7 @@ clog-builder window.")
                      "open this tab")))
           (setf (text-value exter) (exter-text))
           (set-on-click exter (lambda (obj)
+                                (declare (ignore obj))
                                 (setf *open-external* (not *open-external*))
                                 (setf (text-value exter) (exter-text)))))
         (create-gui-menu-item file  :content "New CLOG Panel Editor"                   :on-click
@@ -393,7 +387,6 @@ clog-builder window.")
 			        (window-normalize (current-window obj)))))
       (create-gui-menu-item win   :content "Maximize All"       :on-click #'maximize-all-windows)
       (create-gui-menu-item win   :content "Normalize All"      :on-click #'normalize-all-windows)
-      (create-gui-menu-item help  :content "CLOG Quick Start"     :on-click 'on-quick-start)
       (create-gui-menu-item help  :content "CLOG Manual"          :on-click
                             (lambda (obj)
                               (declare (ignore obj))
