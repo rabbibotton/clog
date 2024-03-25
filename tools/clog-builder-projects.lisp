@@ -46,8 +46,7 @@
           (projects-populate panel)))))
 
 (defun projects-view-dir (panel)
-  (let* ((app (connection-data-item panel "builder-app-data"))
-         (sel (text-value (project-list panel))))
+  (let* ((sel (text-value (project-list panel))))
     (if (equal sel "None")
         (on-dir-win panel)
         (let ((sys (asdf:find-system (format nil "~A" sel))))
@@ -125,6 +124,8 @@
   (let ((app (connection-data-item panel "builder-app-data"))
         (already (asdf:already-loaded-systems))
         (sel (text-value (project-list panel))))
+    (setf (window-title (current-window panel))
+          (format nil "Project - ~A" sel))
     (reset-control-pallete panel)
     (setf (inner-html (runtime-list panel)) "")
     (setf (inner-html (designtime-list panel)) "")

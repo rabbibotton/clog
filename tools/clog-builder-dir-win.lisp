@@ -9,6 +9,8 @@
 
 (defun populate-dir-win (panel d)
   (let ((dir (directory-namestring (uiop:truename* d))))
+    (setf (window-title (current-window panel))
+          (format nil "Directory Listing - ~A" dir))
     (setf (current-dir panel) dir)
     ;; Dirs
     (setf (inner-html (folders panel)) "")

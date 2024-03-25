@@ -32,6 +32,8 @@
          (setf pac "All"))
        (setf filter (subseq filter (+ has-pac 1)))
        (setf (text-value (search-box panel)) filter))
+     (setf (window-title (current-window panel))
+           (format nil "System Browser - ~A" filter))
      (cond ((equalp pac "All")
             (setf class-only nil)
             (setf (classes panel) nil)
