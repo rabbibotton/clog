@@ -74,8 +74,10 @@
            (m-efrm   (create-gui-menu-item m-lisp :content "evaluate form"))
            (m-esel   (create-gui-menu-item m-lisp :content "evaluate selection"))
            (m-test   (create-gui-menu-item m-lisp :content "evaluate all"))
+           (m-brws   (create-gui-menu-item m-lisp :content "systen browse selection"))
            (m-desc   (create-gui-menu-item m-lisp :content "describe selection"))
            (m-doc    (create-gui-menu-item m-lisp :content "documentation on selection"))
+           (m-apro   (create-gui-menu-item m-lisp :content "apropos on selection"))
            (m-ppr    (create-gui-menu-item m-lisp :content "pretty print"))
            (m-help   (create-gui-menu-drop-down menu :content "Help"))
            (m-helpk  (create-gui-menu-item m-help :content "keyboard help"))
@@ -330,14 +332,25 @@
                              (declare (ignore obj))
                              (clog-ace:execute-command ace "redo")))
       (set-on-click m-desc (lambda (obj)
-                            (let ((r (make-array '(0) :element-type 'base-char
-                                                      :fill-pointer 0 :adjustable t)))
-                              (with-output-to-string (s r)
-                                (let ((*standard-output* s))
-                                  (describe (find-symbol (string-upcase (clog-ace:selected-text ace))
-                                                         (string-upcase (text-value pac-line)))))
-                                (on-open-file obj :title-class "w3-purple" :title "describe selection"
-                                              :text r)))))
+                             (let ((r (make-array '(0) :element-type 'base-char
+                                                       :fill-pointer 0 :adjustable t)))
+                               (with-output-to-string (s r)
+                                 (let ((*standard-output* s))
+                                   (describe (find-symbol (string-upcase (clog-ace:selected-text ace))
+                                                          (string-upcase (text-value pac-line)))))
+                                 (on-open-file obj :title-class "w3-purple" :title "describe selection"
+                                               :text r)))))
+      (set-on-click m-apro (lambda (obj)
+                             (let ((r (make-array '(0) :element-type 'base-char
+                                                       :fill-pointer 0 :adjustable t)))
+                               (with-output-to-string (s r)
+                                 (let ((*standard-output* s))
+                                   (apropos (clog-ace:selected-text ace)))
+                                 (on-open-file obj :title-class "w3-purple" :title "apropos selection"
+                                               :text r)))))
+      (set-on-click m-brws (lambda (obj)
+                             (declare (ignore obj))
+                             (on-new-sys-browser ace :search (clog-ace:selected-text ace))))
       (set-on-click m-doc (lambda (obj)
                             (open-window (window (connection-body obj))
                                          (format nil "http://l1sp.org/search?q=~A"
