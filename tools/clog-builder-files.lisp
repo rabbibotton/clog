@@ -52,7 +52,7 @@
     (let* ((app (connection-data-item obj "builder-app-data"))
            (win (create-gui-window obj :title title
                                        :title-class title-class
-                                       :width 645 :height 430
+                                       :width 700 :height 480
                                        :client-movement *client-side-movement*))
            (box (create-panel-box-layout (window-content win)
                                          :left-width 0 :right-width 0

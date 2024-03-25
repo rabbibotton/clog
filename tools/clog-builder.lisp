@@ -300,9 +300,10 @@ clog-builder window.")
   (let* ((win (create-gui-window obj :title "Directory Window"
                                      :top top :left left
                                      :width 600 :height 400
+                                     :has-pinner t
                                      :client-movement *client-side-movement*))
          (d   (create-dir-view (window-content win))))
-    (set-geometry d :units "%" :width 100 :height 100)
+    (set-geometry d :top 0 :left 0 :right 0 :bottom 0 :width "" :height "")
     (when *open-external*
       (setf (checkedp (open-file-ext d)) t))
     (when dir
@@ -422,7 +423,7 @@ clog-builder window.")
                               (declare (ignore obj))
                               (open-window (window body) "https://www.w3schools.com/w3css/")))
       (create-gui-menu-item help  :content "About CLOG Builder"   :on-click #'on-help-about-builder)
-      (create-gui-menu-window-select menu :class "w3-bar-item w3-button w3-dark-grey")
+      (create-gui-menu-window-select menu :class "w3-bar-item w3-button w3-black")
       (create-gui-menu-full-screen menu))
     (on-show-copy-history-win body)
     (cond
@@ -440,10 +441,19 @@ clog-builder window.")
            (setf open-file nil)
            (setf (title (html-document body)) (file-namestring open-file)))
        (on-open-file body :open-file open-file :maximized t))
-      (*start-dir*
-       (on-dir-win body :dir *start-dir* :top 60 :left 232))
       (t
-        (on-show-project body :project *start-project*)))
+       (when *start-project*
+         (projects-load *start-project*))
+       (on-show-project body :project *start-project*)
+       (when *start-dir*
+         (when *start-project*
+           (set-geometry (current-window body) :top 38 :left 5 :right "" :height "" :bottom 22)
+           (set-geometry (current-window body) :height (height (current-window body))
+                                               :bottom (bottom (current-window body))))
+         (on-dir-win body :dir *start-dir*)
+         (set-geometry (current-window body) :top 38 :left "" :right 5 :height "" :bottom 22)
+         (set-geometry (current-window body) :height (height (current-window body))
+                                             :bottom (bottom (current-window body))))))
     (set-on-before-unload (window body) (lambda(obj)
                                           (declare (ignore obj))
                                           ;; return empty string to prevent nav off page
@@ -470,10 +480,16 @@ instead of the project window will be displayed."
                                  (asdf:system-source-directory :clog)))
         :if-does-not-exist nil
         :verbose t)
+  (setf *start-project* nil)
+  (setf *start-dir* nil)
   (if project
-      (setf *start-project* (string-downcase (format nil "~A" project)))
+      (progn
+        (setf *start-project* (string-downcase (format nil "~A" project)))
+        (setf *start-dir* (format nil "~A" (asdf:system-source-directory project)))
+        (setf static-root (merge-pathnames "./www/" *start-dir*)))
       (setf *start-project* nil))
-  (setf *start-dir* dir)
+  (when dir
+    (setf *start-dir* dir))
   (when system
     (setf static-root (merge-pathnames "./www/"
                                        (asdf:system-source-directory system))))
