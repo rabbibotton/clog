@@ -162,8 +162,8 @@ BOOT-FILE will be used. If BOOT-FILE is nil path is removed."
   "Shutdown CLOG."
   (when *clog-running*
     (clrhash *url-to-on-new-window*)
-    (setf *clog-running* nil)
-    (clog-connection:shutdown-clog)))
+    (clog-connection:shutdown-clog)
+    (setf *clog-running* nil)))
 
 ;;;;;;;;;;;;;;;;
 ;; debug-mode ;;
