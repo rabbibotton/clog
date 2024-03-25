@@ -434,7 +434,7 @@ clog-builder window.")
       (open-panel
        (if (equal open-panel " ")
            (setf open-panel nil)
-           (setf (title (html-document body)) open-panel))
+           (setf (title (html-document body)) (file-namestring open-panel)))
        (cond ((equalp open-ext "t")
               (setf open-ext t))
              ((equalp open-ext "custom")
@@ -443,7 +443,7 @@ clog-builder window.")
       (open-file
        (if (equal open-file " ")
            (setf open-file nil)
-           (setf (title (html-document body)) open-file))
+           (setf (title (html-document body)) (file-namestring open-file)))
        (on-open-file body :open-file open-file :maximized t))
       (*start-dir*
        (on-dir-win body :dir *start-dir* :top 60 :left 232))

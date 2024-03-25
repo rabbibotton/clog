@@ -3,7 +3,7 @@
 ;; Code rendering utlities
 
 (defun render-clog-code (content hide-loc)
-  "Render panel to clog code and add tp CW window"
+  "Render panel to clog code and add to window"
   (let* ((app      (connection-data-item content "builder-app-data"))
          (panel-id (html-id content))
          (package  (attribute content "data-in-package"))
