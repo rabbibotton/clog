@@ -54,8 +54,10 @@ replaced. (Exported)"
 ;; Global Internal Config
 
 (defparameter *app-mode* nil
-  "If *app-mode* is t terminates the clog-builder process on exit of the first
+  "If *app-mode* is t terminates the clog-builder process on exit of the all
 clog-builder window.")
+(defparameter *clogframe-mode* nil
+  "If *clogframe-mode* is t no popup or tabs possible.")
 
 (defparameter *start-project* nil "Set the project to start with")
 (defparameter *start-dir* nil "Set the directory the dir win should start with")
@@ -371,7 +373,7 @@ clog-builder window.")
       (create-gui-menu-item tools :content "Thread Viewer"               :on-click 'on-show-thread-viewer)
       (create-gui-menu-item tools :content "CLOG Builder REPL"           :on-click 'on-repl)
       (create-gui-menu-item tools :content "Copy/Cut History"            :on-click 'on-show-copy-history-win)
-      (unless *app-mode*
+      (unless *clogframe-mode*
         (create-gui-menu-item tools :content "Image to HTML Data"        :on-click 'on-image-to-data))
       (create-gui-menu-item tools :content "Launch DB Admin"           :on-click
                             (lambda (obj)
@@ -488,7 +490,13 @@ instead of the project window will be displayed."
   (set-on-new-window 'on-open-panel-window :path "/panel-editor")
   (set-on-new-window 'on-open-file-window :path "/source-editor")
   (enable-clog-popup)
+  (setf *clogframe-mode* clogframe)
   (when clogframe
+    (setf *open-external-with-emacs* nil)
+    (setf *open-external-in-popup* nil)
+    (setf *open-panels-as-popups* nil)
+    (setf *open-external-panels-in-popup* nil)
+    (setf *open-external* nil)
     (uiop:run-program (list "./clogframe"
                             "CLOG Builder"
                             (format nil "~A/builder" port)
