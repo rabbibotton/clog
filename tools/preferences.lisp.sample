@@ -1,5 +1,7 @@
 (in-package :clog-tools)
 
+;; Preferences loaded on next call to clog-tools:clog-builder or [Eval All]
+
 ;; Open panels and files in new browser tabs by default
 (setf *open-external* nil)
 ;; Open files in browser popups instead of tabs if browser allows
