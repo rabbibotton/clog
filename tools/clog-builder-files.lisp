@@ -2,10 +2,10 @@
 
 ;; Local file utilities
 
-(defun read-file (infile &key clog-obj)
+(defun read-file (infile &key clog-obj if-does-not-exist)
   "Read local file named INFILE"
   (handler-case
-      (with-open-file (instream infile :direction :input :if-does-not-exist nil)
+      (with-open-file (instream infile :direction :input :if-does-not-exist if-does-not-exist)
 	(when instream
 	  (let* ((len    (file-length instream))
 		 (string (make-string len))
@@ -104,7 +104,8 @@
            (lisp-file t)
            (is-dirty  nil)
            (last-date nil)
-           (file-name ""))
+           (file-name (or open-file
+                          "")))
       (declare (ignore spacer1 spacer2))
       (add-class menu "w3-small")
       (setf (overflow (top-panel box)) :visible) ; let menus leave the top panel
@@ -197,8 +198,9 @@
                                 (setf (clog-ace:mode ace) (clog-ace:get-mode-from-extension ace fname))))
                          (setf (clog-ace:text-value ace) c)))
                    (error (condition)
-	             (alert-toast obj "File Error" (format nil "Error: ~A" condition))
-	             (format t "Error: ~A" condition))))
+                     (unless text
+	               (alert-toast obj "File Error" (format nil "Error: ~A" condition))
+	               (format t "Error: ~A" condition)))))
                (load-file (obj)
                  (server-file-dialog obj "Load Source" (directory-namestring (if (equal file-name "")
                                                                                  (current-project-dir app)
@@ -246,7 +248,8 @@
                                               (remove-class btn-save "w3-animate-top"))
                                             :initial-filename file-name)))
                      (t
-                      (cond ((eql last-date (file-write-date file-name))
+                      (cond ((or (not (probe-file file-name))
+                                 (eql last-date (file-write-date file-name)))
                              (add-class btn-save "w3-animate-top")
                              (write-file (text-value ace) file-name :clog-obj obj)
                              (setf is-dirty nil)

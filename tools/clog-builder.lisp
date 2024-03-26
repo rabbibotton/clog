@@ -58,6 +58,7 @@ replaced. (Exported)"
 clog-builder window.")
 (defparameter *clogframe-mode* nil
   "If *clogframe-mode* is t no popup or tabs possible.")
+(defparameter *preferances-file* nil "Location of the preferance file")
 
 (defparameter *start-project* nil "Set the project to start with")
 (defparameter *start-dir* nil "Set the directory the dir win should start with")
@@ -206,6 +207,7 @@ clog-builder window.")
                                   :width   220
                                   :height  230
                                   :hidden  t)))
+    (add-class about "w3-animate-opacity")
     (window-center about)
     (setf (visiblep about) t)
     (set-on-window-can-size about (lambda (obj)
@@ -309,6 +311,14 @@ clog-builder window.")
     (when dir
       (populate-dir-win d dir))))
 
+(defun on-opts-edit (body)
+  (let ((pref (read-file (format nil "~A.sample" *preferances-file*))))
+    (unless pref
+     (setf pref ";; No sample preferances file found"))
+    (on-open-file body :open-file *preferances-file*
+                       :text pref
+                       :title *preferances-file*)))
+
 (defun on-open-file-window (body)
   (on-new-builder body))
 
@@ -337,11 +347,12 @@ clog-builder window.")
            (file  (create-gui-menu-drop-down menu :content "Builder"))
            (src   (create-gui-menu-drop-down menu :content "Project"))
            (tools (create-gui-menu-drop-down menu :content "Tools"))
+           (opts  (create-gui-menu-drop-down menu :content "Options"))
            (win   (create-gui-menu-drop-down menu :content "Window"))
            (help  (create-gui-menu-drop-down menu :content "Help")))
       (declare (ignore icon))
       (add-class menu "w3-small")
-      (let ((exter (create-button file :content "-" :class "w3-input")))
+      (let ((exter (create-button file :content "-" :class "w3-input w3-button w3-ripple")))
         (flet ((exter-text ()
                  (if *open-external*
                      "open external tab"
@@ -380,6 +391,7 @@ clog-builder window.")
                             (lambda (obj)
                               (declare (ignore obj))
                               (open-window (window body) "/dbadmin")))
+      (create-gui-menu-item opts :content "Edit preferences.lisp"  :on-click 'on-opts-edit)
       (create-gui-menu-item win   :content "Maximize"           :on-click
 			    (lambda (obj)
 			      (when (current-window obj)
@@ -479,9 +491,11 @@ must specific default project :PROJECT and it will be batch rerendered
 and shutdown application. You can set the specific STATIC-ROOT or set SYSTEM
 to use that asdf system's static root. if DIR then the directory window
 instead of the project window will be displayed."
-  (load (format nil "~A/preferences.lisp"
-                (merge-pathnames "./tools/"
-                                 (asdf:system-source-directory :clog)))
+  (setf *preferances-file*
+        (format nil "~A/preferences.lisp"
+                (merge-pathnames "tools"
+                                 (asdf:system-source-directory :clog))))
+  (load *preferances-file*
         :if-does-not-exist nil
         :verbose t)
   (setf *start-project* nil)

@@ -1,13 +1,26 @@
 (in-package :clog-tools)
 
-(setf *open-external* t)
-(setf *open-external-with-emacs* nil)
+;; Open panels and files in new browser tabs by default
+(setf *open-external* nil)
+;; Open files in browser popups instead of tabs if browser allows
 (setf *open-external-in-popup* nil)
-(setf *open-external-panels-in-popup* t)
-(setf *editor-theme* "ace/theme/terminal")
-(setf *editor-keybinding* "ace/keyboard/emacs")
+;; Open panel editors in browser popus instead of tabs if browser allows
+(setf *open-external-panels-in-popup* nil)
+;; Open panels as popups by default
+(setf *open-panels-as-popups* nil)
+;; Use emacs instead of the source-editor when openning external
+(setf *open-external-with-emacs* nil)
+;; Best Light Theme for Lisp
+(setf *editor-theme* "ace/theme/iplastic")
+;; Best Dark Theme for Lisp
+;;(setf *editor-theme* "ace/theme/terminal")
+(setf *editor-mode* "ace/mode/lisp")
+;;(setf *editor-keybinding* "ace/keyboard/emacs")
+(setf *editor-keybinding* "ace/keyboard/ace")
+(setf *editor-tab-size* 2)
+;; See https://github.com/ajaxorg/ace/wiki/Configuring-Ace
 (setf *editor-renderer-options*
-"fontSize : 16,
+"fontSize : 14,
  showInvisibles : false,
  displayIndentGuides : true,
  printMarginColumn : 80,
