@@ -237,6 +237,7 @@
                                             (window-focus win)
                                             (when fname
                                               (setf file-name fname)
+                                              (setf (window-title win) fname)
                                               (add-class btn-save "w3-animate-top")
                                               (write-file (text-value ace) fname :clog-obj obj)
                                               (setf is-dirty nil)

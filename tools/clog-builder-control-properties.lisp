@@ -12,7 +12,7 @@
                                    (setf (control-properties-win app) nil)))
         (set-on-window-move win (lambda (obj)
                                   (setf (height obj) (height obj))))
-        (window-toggle-pinned win :state t)
+        (window-toggle-pinned win :state nil)
         (setf (control-properties-win app) win)
         (setf (properties-list app) control-list)
         (setf (background-color content) :silver)

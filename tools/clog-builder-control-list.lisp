@@ -61,7 +61,7 @@
                                    (setf (select-tool app) nil)
                                    (setf (control-list-win app) nil)))
         (reset-control-pallete pallete)
-        (window-toggle-pinned win :state t)
+        (window-toggle-pinned win :state nil)
         (set-geometry win :units "" :top "33px" :left 0 :height "" :bottom "5px" :right "")
         (set-geometry pallete :left 0 :top 0 :height sheight :right 0);:width (- swidth 10))
         (setf (background-color divider) :black)

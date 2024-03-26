@@ -75,6 +75,7 @@
                (:file "clog-db-admin")
                ;; clog-builder code
                (:file "clog-builder-settings")
+               (:file "clog-builder-settings-controls")
                (:file "clog-builder")
                (:file "clog-builder-control-events")
                (:file "clog-builder-control-properties")

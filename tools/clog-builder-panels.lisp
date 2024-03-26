@@ -863,6 +863,7 @@ not a temporarily attached one when using select-control."
                                             (lambda (fname)
                                               (window-focus win)
                                               (when fname
+                                                (setf file-name fname)
                                                 (do-save obj fname data)))
                                             :initial-filename file-name))
                        (t
