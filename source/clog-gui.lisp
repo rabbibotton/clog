@@ -1671,7 +1671,10 @@ Calls on-input with t if confirmed or nil if canceled."
     (focus ok)
     (set-on-click cancel (lambda (obj)
                            (declare (ignore obj))
-                           (window-close win))
+                           (when modal
+                                 (window-end-modal win))
+                           (window-close win)
+                           (funcall on-input nil))
                   :one-time t)
     (set-on-click ok (lambda (obj)
                        (declare (ignore obj))

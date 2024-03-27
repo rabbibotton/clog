@@ -38,7 +38,7 @@
                                                        l))))
                                            l)))
                                      :meta "swank"))
-    ;; run apropos on symbol
+    ;; find symbol in sys-browser
     (js-execute editor
                 (format nil
                         "~A.commands.addCommand({
@@ -254,10 +254,8 @@ var endRange = ~:*~A.session.doc.indexToPosition(endIndex);
             (return (string-downcase (second form)))))))))
 
 ;; Expand region
-
 (defun scan-exps (text)
   "Scan all expressions (and strings) in the text, return a list of start-end cons.
-
 It parse the string TEXT without using READ functions."
   (let ((char-count 0)
         (backslash 0)

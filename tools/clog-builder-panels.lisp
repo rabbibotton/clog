@@ -976,9 +976,9 @@ not a temporarily attached one when using select-control."
       (set-on-mouse-down content
                          (lambda (obj data)
                            (declare (ignore obj))
-                           (unless in-simulation
-                             (when (drop-new-control app content data :win win)
-                               (incf-next-id content))))))))
+                           (when (drop-new-control app content data :win win)
+                             (setf is-dirty t)
+                             (incf-next-id content)))))))
 
 (defun on-new-builder-page (obj)
   "Open new page"

@@ -170,13 +170,14 @@
                  (alert-dialog win
                                     "<table>
 <tr><td>cmd/ctrl-,</td><td>Configure editor</td></tr>
+<tr><td>F1</td><td>Command Palette</td></tr>
 <tr><td>cmd/alt-.</td><td> Launch system browser</td></tr>
 <tr><td>cmd/alt-[</td><td> Evaluate form</td></tr>
 <tr><td>cmd/ctrl-s</td><td> Save</td></tr>
 <tr><td>ctl-=</td><td>Expand region</td></tr>
 <tr><td>opt/alt-m</td><td>Macroexpand</td></tr>
 </table><p><a target='_blank' href='https://github.com/ajaxorg/ace/wiki/Default-Keyboard-Shortcuts'>Default Keybindings</a>"
-                                    :width 400 :height 300
+                                    :width 400 :height 350
                                     :title "Help")))
         (set-on-click btn-help #'on-help)
         (set-on-click m-helpk #'on-help))

@@ -161,12 +161,17 @@ clog-builder window.")
                                          <center>CLOG</center>
                                          <center>The Common Lisp Omnificent GUI</center></div>
                                          <div><p><center>
-                                           <a target=_blank href='https://github.com/sponsors/rabbibotton'>CLOG Builder</a>
+                                           <a target=_blank href='https://github.com/rabbibotton/clog'>CLOG Builder</a>
                                            </center>
-                                         <center>(c) 2022-2024 - David Botton</center></p></div>"
+                                         <center>(c) 2022-2024 - David Botton</center></p>
+                                                 <p>
+                                                 <center>
+                                           <a target=_blank href='https://github.com/sponsors/rabbibotton'>Sponsor CLOG</a>
+                                           </center>
+                                                 </div>"
                                                    img-clog-icon)
-                                  :width   220
-                                  :height  230
+                                  :width   400
+                                  :height  250
                                   :hidden  t)))
     (add-class about "w3-animate-opacity")
     (window-center about)
@@ -375,6 +380,16 @@ clog-builder window.")
                               (declare (ignore obj))
                               (open-window (window body) "/dbadmin")))
       (create-gui-menu-item opts :content "Edit preferences.lisp"  :on-click 'on-opts-edit)
+      (let ((exter (create-button opts :content "-" :class *builder-menu-button-class*)))
+        (flet ((exter-text ()
+                 (if *open-external-with-emacs*
+                     "open external files in emacs"
+                     "open all files in builder")))
+          (setf (text-value exter) (exter-text))
+          (set-on-click exter (lambda (obj)
+                                (declare (ignore obj))
+                                (setf *open-external-with-emacs* (not *open-external-with-emacs*))
+                                (setf (text-value exter) (exter-text))))))
       (create-gui-menu-item win   :content "Maximize"           :on-click
 			    (lambda (obj)
 			      (when (current-window obj)
