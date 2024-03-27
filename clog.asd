@@ -74,6 +74,7 @@
   :components (;; clog-db-admin app
                (:file "clog-db-admin")
                ;; clog-builder code
+               (:file "clog-builder-api")
                (:file "clog-builder-settings")
                (:file "clog-builder-settings-controls")
                (:file "clog-builder")
