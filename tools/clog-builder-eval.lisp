@@ -30,7 +30,7 @@
            (format nil "~A~%=>~A~%" result eval-result)
            *package*))))))
 
-(defun do-eval (obj form-string cname &key (package "clog-user") custom-boot)
+(defun do-eval (obj form-string cname &key (package "clog-user") (test t) custom-boot)
   "Render, evalute and run code for panel"
   (let* ((result (capture-eval (format nil "~A~% (clog:set-on-new-window~
                                                (lambda (body)~
@@ -47,9 +47,9 @@
                                            (format nil ":boot-file \"~A\" " custom-boot)
                                            ""))
                                :eval-in-package package)))
-    (if *app-mode*
-        (open-browser :url (format nil "http://127.0.0.1:~A/test" *clog-port*))
-        (open-window (window (connection-body obj))
-                     (format nil "/test" *clog-port*)))
+    (when test
+      (if *clogframe-mode*
+          (open-browser :url (format nil "http://127.0.0.1:~A/test" *clog-port*))
+          (open-window (window (connection-body obj)) "/test")))
     (on-open-file obj :title-class "w3-yellow" :title "test eval" :text result)))
 

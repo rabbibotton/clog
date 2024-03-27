@@ -15,7 +15,7 @@ Place as static and child control - Click the parent control in your panel. Clic
 Use the positioning property in the property panel<br data-clog-name="none-br-18-11" data-clog-type="br">
 <br data-clog-name="none-br-19-11" data-clog-type="br">
 <h3 data-clog-name="none-h3-20-11" data-clog-type="span">Access Children Controls</h3>
-Double click the parent control, it will freeze (unfreeze by double clicking it in the control list in the lower left panel), and children can not be manipulated<br data-clog-name="none-br-21-11" data-clog-type="br">
+Double click the parent control in the control list, it will freeze (unfreeze by double clicking it in the control list in the lower left panel), and children can not be manipulated<br data-clog-name="none-br-21-11" data-clog-type="br">
 <br data-clog-name="none-br-22-11" data-clog-type="br">
 <h3 data-clog-name="none-h3-23-11" data-clog-type="span">Change Creation/Tab Order</h3>
 Use the control list in lower left panel to drag and drop order<br data-clog-name="none-br-24-11" data-clog-type="br">
