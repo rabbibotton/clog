@@ -656,6 +656,7 @@ not a temporarily attached one when using select-control."
                                                        (get-control-list app panel-id)))))))
               (focus pop-win)))))
       (setf-next-id content 1)
+      (setf (css-class-name content) *builder-panel-class*)
       (setf (overflow content) :auto)
       (init-control-list app panel-id)
       ;; Setup panel window

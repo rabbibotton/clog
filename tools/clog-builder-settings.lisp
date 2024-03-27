@@ -48,6 +48,7 @@
 (defparameter *builder-menu-button-class* "w3-input w3-grey w3-button w3-ripple")
 (defparameter *builder-pallete-class* "w3-light-grey w3-small")
 (defparameter *builder-event-list-class* "w3-light-grey w3-small")
+(defparameter *builder-panel-class* "w3-white w3-sans-serif w3-medium")
 
 ;; Menus
 (defparameter *builder-menu-bar-class* "w3-bar w3-round w3-small w3-blue-grey w3-card-4")
@@ -59,4 +60,5 @@
 (defparameter *builder-title-class* "w3-blue-grey w3-round")
 (defparameter *builder-border-class* "w3-card-4 w3-white w3-border w3-round")
 (defparameter *builder-package-class* "w3-white w3-round")
+(defparameter *builder-status-bar-class* "w3-tiny w3-border")
 (defparameter *builder-icons-class* "w3-button w3-white w3-round w3-border w3-border-black w3-ripple")

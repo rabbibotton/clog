@@ -106,7 +106,7 @@
            (content   (center-panel box))
            (pac-line  (create-form-element content :text :class *builder-package-class*))
            (ace       (clog-ace:create-clog-ace-element content))
-           (status    (create-div content :class "w3-tiny w3-border"))
+           (status    (create-div content :class *builder-status-bar-class*))
            (lisp-file t)
            (is-dirty  nil)
            (last-date nil)
