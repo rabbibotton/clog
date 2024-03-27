@@ -172,7 +172,9 @@ clog-builder window.")
 
 (defun on-show-copy-history-win (obj)
   "Create and show copy/but history"
-  (let ((app (connection-data-item obj "builder-app-data")))
+  (let ((app (connection-data-item obj "builder-app-data"))
+        (*default-title-class*      *builder-title-class*)
+        (*default-border-class*     *builder-border-class*))
     (if (copy-history-win app)
         (progn
           (setf (hiddenp (copy-history-win app)) nil)
@@ -193,7 +195,9 @@ clog-builder window.")
 
 (defun on-help-about-builder (obj)
   "Open about box"
-  (let ((about (create-gui-window obj
+  (let ((*default-title-class*      *builder-title-class*)
+        (*default-border-class*     *builder-border-class*)
+        (about (create-gui-window obj
                                   :title   "About"
                                   :content (format nil "<div class='w3-black'>
                                          <center><img src='~A'></center>
@@ -215,7 +219,9 @@ clog-builder window.")
 
 (defun on-new-app-template (obj)
   "Menu option to create new project from template"
-  (let* ((win (create-gui-window obj :title "New Application Template"
+  (let* ((*default-title-class*      *builder-title-class*)
+         (*default-border-class*     *builder-border-class*)
+         (win (create-gui-window obj :title "New Application Template"
                                      :width 500 :height 400))
          (ct  (create-clog-templates (window-content win))))
     (window-center win)
@@ -227,14 +233,18 @@ clog-builder window.")
 
 (defun on-image-to-data (obj)
   "Menu option to create new project from template"
-  (let* ((win (create-gui-window obj :title "Convert Images to Data"
+  (let* ((*default-title-class*      *builder-title-class*)
+         (*default-border-class*     *builder-border-class*)
+         (win (create-gui-window obj :title "Convert Images to Data"
                                      :width 450 :height 200)))
     (create-image-to-data (window-content win))
     (window-center win)))
 
 (defun on-convert-image (body)
   "Convert image from form input from on-image-to-data"
-  (let ((params (form-multipart-data body)))
+  (let ((*default-title-class*      *builder-title-class*)
+        (*default-border-class*     *builder-border-class*)
+        (params (form-multipart-data body)))
     (create-div body :content params)
     (destructuring-bind (stream fname content-type)
         (form-data-item params "filename")
@@ -253,7 +263,9 @@ clog-builder window.")
 
 (defun on-show-thread-viewer (obj)
   "Open thread views"
-  (let* ((win (create-gui-window obj :title "Thread Viewer"
+  (let* ((*default-title-class*      *builder-title-class*)
+         (*default-border-class*     *builder-border-class*)
+         (win (create-gui-window obj :title "Thread Viewer"
                                      :top 40 :left 225
                                      :width 600 :height 400
                                      :client-movement *client-side-movement*)))
@@ -262,7 +274,9 @@ clog-builder window.")
 
 (defun on-repl (obj)
   "Open a REPL"
-  (let* ((win (create-gui-window obj :title "CLOG Builder REPL"
+  (let* ((*default-title-class*      *builder-title-class*)
+         (*default-border-class*     *builder-border-class*)
+         (win (create-gui-window obj :title "CLOG Builder REPL"
                                      :top 40 :left 225
                                      :width 600 :height 400
                                      :client-movement *client-side-movement*)))
@@ -271,35 +285,41 @@ clog-builder window.")
 
 (defun on-show-callers (body)
   "Open callers window"
-  (input-dialog body "Enter package:function-name :"
-                (lambda (result)
-                  (when result
-                    (handler-case
-                        (on-open-file body :title (format nil "Callers of ~A" result)
-                                           :title-class "w3-orange"
-                                           :text (swank::list-callers (read-from-string result)))
-                      (t (c)
-                        (on-open-file body :title "Error - Callers"
-                                           :title-class "w3-red"
-                                           :text c)))))))
+  (let ((*default-title-class*      *builder-title-class*)
+        (*default-border-class*     *builder-border-class*))
+    (input-dialog body "Enter package:function-name :"
+                  (lambda (result)
+                    (when result
+                      (handler-case
+                          (on-open-file body :title (format nil "Callers of ~A" result)
+                                             :title-class *builder-show-callers-class*
+                                             :text (swank::list-callers (read-from-string result)))
+                        (t (c)
+                          (on-open-file body :title "Error - Callers"
+                                             :title-class "w3-red"
+                                             :text c))))))))
 
 (defun on-show-callees (body)
   "Open callees window"
-  (input-dialog body "Enter package:function-name :"
-                (lambda (result)
-                  (when result
-                    (handler-case
-                        (on-open-file body :title (format nil "Callees of ~A" result)
-                                           :title-class "w3-orange"
-                                           :text (swank::list-callees (read-from-string result)))
-                      (t (c)
-                        (on-open-file body :title "Error - Callees"
-                                           :title-class "w3-red"
-                                           :text c)))))))
+  (let ((*default-title-class*      *builder-title-class*)
+        (*default-border-class*     *builder-border-class*))
+    (input-dialog body "Enter package:function-name :"
+                  (lambda (result)
+                    (when result
+                      (handler-case
+                          (on-open-file body :title (format nil "Callees of ~A" result)
+                                             :title-class *builder-show-callees-class*
+                                             :text (swank::list-callees (read-from-string result)))
+                        (t (c)
+                          (on-open-file body :title "Error - Callees"
+                                             :title-class "w3-red"
+                                             :text c))))))))
 
 (defun on-dir-win (obj &key dir top left)
   "Open dir window"
-  (let* ((win (create-gui-window obj :title "Directory Window"
+  (let* ((*default-title-class*      *builder-title-class*)
+         (*default-border-class*     *builder-border-class*)
+         (win (create-gui-window obj :title "Directory Window"
                                      :top top :left left
                                      :width 600 :height 400
                                      :has-pinner t
@@ -329,18 +349,25 @@ clog-builder window.")
   "Launch instance of the CLOG Builder"
   (set-html-on-close body "Connection Lost")
   (let ((app        (make-instance 'builder-app-data))
+        (*menu-bar-class*           *builder-menu-bar-class*)
+        (*menu-bar-drop-down-class* *builder-menu-bar-drop-down-class*)
+        (*menu-item-class*          *builder-menu-item-class*)
+        (*menu-window-select-class* *builder-menu-window-select-class*)
+        (*default-title-class*      *builder-title-class*)
+        (*default-border-class*     *builder-border-class*)
         (open-file  (form-data-item (form-get-data body) "open-file"))
         (open-panel (form-data-item (form-get-data body) "open-panel"))
         (open-ext   (form-data-item (form-get-data body) "open-ext")))
     (setf (connection-data-item body "builder-app-data") app)
     (setf (title (html-document body)) "CLOG Builder")
     (clog-gui-initialize body)
-    (add-class body "w3-blue-grey")
-    (setf (z-index (create-panel body :positioning :fixed
-                                      :bottom 0 :left 0
-                                      :class "w3-gray"
-                                      :content (format nil "static-root: ~A" clog::*static-root*)))
-          -9999)
+    (add-class body *builder-window-desktop-class*)
+    (when *builder-window-show-static-root-class*
+      (setf (z-index (create-panel body :positioning :fixed
+                                        :bottom 0 :left 0
+                                        :class *builder-window-show-static-root-class*
+                                        :content (format nil "static-root: ~A" clog::*static-root*)))
+          -9999))
     (let* ((menu  (create-gui-menu-bar body))
            (icon  (create-gui-menu-icon menu :image-url img-clog-icon
                                              :on-click  #'on-help-about-builder))
@@ -351,8 +378,7 @@ clog-builder window.")
            (win   (create-gui-menu-drop-down menu :content "Window"))
            (help  (create-gui-menu-drop-down menu :content "Help")))
       (declare (ignore icon))
-      (add-class menu "w3-small")
-      (let ((exter (create-button file :content "-" :class "w3-input w3-button w3-ripple")))
+      (let ((exter (create-button file :content "-" :class *builder-menu-button-class*)))
         (flet ((exter-text ()
                  (if *open-external*
                      "open external tab"
@@ -435,7 +461,7 @@ clog-builder window.")
                               (declare (ignore obj))
                               (open-window (window body) "https://www.w3schools.com/w3css/")))
       (create-gui-menu-item help  :content "About CLOG Builder"   :on-click #'on-help-about-builder)
-      (create-gui-menu-window-select menu :class "w3-bar-item w3-button w3-black")
+      (create-gui-menu-window-select menu)
       (create-gui-menu-full-screen menu))
     (on-show-copy-history-win body)
     (cond
@@ -465,7 +491,7 @@ clog-builder window.")
          (handler-case
              (on-dir-win body :dir *start-dir*)
            (error (msg)
-             (alert-toast body "Directory Error" (format nil "Unable to open directory ~A. " *start-dir*))
+             (alert-toast body "Directory Error" (format nil "Unable to open directory ~A. ~A" *start-dir* msg))
              (setf *start-dir* nil)))
          (set-geometry (current-window body) :top 38 :left "" :right 5 :height "" :bottom 22)
          (set-geometry (current-window body) :height (height (current-window body))
@@ -519,10 +545,10 @@ instead of the project window will be displayed."
       (initialize nil :port port))
   (setf port clog:*clog-port*)
   (set-on-new-window 'on-new-builder :path "/builder")
-  (set-on-new-window 'on-new-db-admin :path "/dbadmin")
-  (set-on-new-window 'on-convert-image :path "/image-to-data")
   (set-on-new-window 'on-open-panel-window :path "/panel-editor")
   (set-on-new-window 'on-open-file-window :path "/source-editor")
+  (set-on-new-window 'on-convert-image :path "/image-to-data")
+  (set-on-new-window 'on-new-db-admin :path "/dbadmin")
   (enable-clog-popup)
   (setf *clogframe-mode* clogframe)
   (when clogframe

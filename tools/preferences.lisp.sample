@@ -31,3 +31,25 @@
  showGutter : true,
  enableBasicAutocompletion: true,
  enableLiveAutocompletion : true")
+
+;; Builder Look and Feel
+
+(setf *builder-window-desktop-class* "w3-blue-grey")
+(setf *builder-window-show-static-root-class* "w3-grey")
+(setf *builder-show-callers-class* "w3-orange")
+(setf *builder-show-callees-class* "w3-orange")
+(setf *builder-menu-button-class* "w3-input w3-grey w3-button w3-ripple")
+(setf *builder-pallete-class* "w3-light-grey w3-small")
+(setf *builder-event-list-class* "w3-light-grey w3-small")
+
+;; Menus
+(setf *builder-menu-bar-class* "w3-bar w3-round w3-small w3-blue-grey w3-card-4")
+(setf *builder-menu-bar-drop-down-class* "w3-dropdown-content w3-bar-block w3-card-4")
+(setf *builder-menu-item-class* "w3-bar-item w3-blue-grey w3-button")
+(setf *builder-menu-window-select-class* "w3-grey w3-bar-item w3-button")
+
+;; Window treatements
+(setf *builder-title-class* "w3-blue-grey w3-round")
+(setf *builder-border-class* "w3-card-4 w3-white w3-border w3-round")
+(setf *builder-package-class* "w3-white w3-round")
+(setf *builder-icons-class* "w3-button w3-white w3-round w3-border w3-border-black w3-ripple")

@@ -5,7 +5,9 @@
   (let ((app (connection-data-item obj "builder-app-data")))
     (if (control-events-win app)
         (window-focus (control-events-win app))
-        (let* ((win     (create-gui-window obj :title "Control CLOG Events"
+        (let* ((*default-title-class*      *builder-title-class*)
+               (*default-border-class*     *builder-border-class*)
+               (win     (create-gui-window obj :title "Control CLOG Events"
                                                :left 225
                                                :height 200 :width 645
                                                :has-pinner t :client-movement *client-side-movement*))
@@ -18,7 +20,7 @@
                                  (declare (ignore obj))
                                  (setf (current-editor-is-lisp app) t)))
           (setf (control-events-win app) win)
-          (setf (events-list app) (create-select content :name "clog-events" :class "w3-gray w3-text-white"))
+          (setf (events-list app) (create-select content :name "clog-events" :class *builder-event-list-class*))
           (setf (positioning (events-list app)) :absolute)
           (set-geometry (events-list app) :top 5 :left 5 :right 5)
           (setf (event-editor app) (clog-ace:create-clog-ace-element content))
@@ -54,7 +56,9 @@
   (let ((app (connection-data-item obj "builder-app-data")))
     (if (control-js-events-win app)
         (window-focus (control-js-events-win app))
-        (let* ((win     (create-gui-window obj :title "Control Client JavaScript Events"
+        (let* ((*default-title-class*      *builder-title-class*)
+               (*default-border-class*     *builder-border-class*)
+               (win     (create-gui-window obj :title "Control Client JavaScript Events"
                                                :left 225
                                                :height 200 :width 645
                                                :has-pinner t :client-movement *client-side-movement*))
@@ -67,7 +71,7 @@
                                  (declare (ignore obj))
                                  (setf (current-editor-is-lisp app) nil)))
           (setf (control-js-events-win app) win)
-          (setf (events-js-list app) (create-select content :name "clog-js-events" :class "w3-gray w3-text-white"))
+          (setf (events-js-list app) (create-select content :name "clog-js-events" :class *builder-event-list-class*))
           (setf (positioning (events-js-list app)) :absolute)
           (set-geometry (events-js-list app) :top 5 :left 5 :right 5)
           (setf (event-js-editor app) (clog-ace:create-clog-ace-element content))
@@ -105,7 +109,9 @@
   (let ((app (connection-data-item obj "builder-app-data")))
     (if (control-ps-events-win app)
         (window-focus (control-ps-events-win app))
-        (let* ((win     (create-gui-window obj :title "Control Client ParenScript Events"
+        (let* ((*default-title-class*      *builder-title-class*)
+               (*default-border-class*     *builder-border-class*)
+               (win     (create-gui-window obj :title "Control Client ParenScript Events"
                                                :left 225
                                                :height 200 :width 645
                                                :has-pinner t :client-movement *client-side-movement*))
@@ -118,7 +124,7 @@
                                  (declare (ignore obj))
                                  (setf (current-editor-is-lisp app) nil)))
           (setf (control-ps-events-win app) win)
-          (setf (events-ps-list app) (create-select content :name "clog-ps-events" :class "w3-gray w3-text-white"))
+          (setf (events-ps-list app) (create-select content :name "clog-ps-events" :class *builder-event-list-class*))
           (setf (positioning (events-ps-list app)) :absolute)
           (set-geometry (events-ps-list app) :top 5 :left 5 :right 5)
           (setf (event-ps-editor app) (clog-ace:create-clog-ace-element content))

@@ -497,6 +497,12 @@ not a temporarily attached one when using select-control."
   (unless (and open-file
                (window-to-top-by-param obj open-file))
     (let* ((app (connection-data-item obj "builder-app-data"))
+           (*menu-bar-class*           *builder-menu-bar-class*)
+           (*menu-bar-drop-down-class* *builder-menu-bar-drop-down-class*)
+           (*menu-item-class*          *builder-menu-item-class*)
+           (*menu-window-select-class* *builder-menu-window-select-class*)
+           (*default-title-class*      *builder-title-class*)
+           (*default-border-class*     *builder-border-class*)
            ext-panel
            (win (create-gui-window obj :top 40 :left 225
                                        :width 645 :height 430
@@ -532,8 +538,8 @@ not a temporarily attached one when using select-control."
            (tmp      (create-gui-menu-item m-events :content "show ParenScript events"  :on-click 'on-show-control-ps-events-win))
            (m-help   (create-gui-menu-drop-down menu :content "Help"))
            (m-helpk  (create-gui-menu-item m-help :content "quick start"))
-           (tool-bar  (create-div (top-panel box)))
-           (btn-class "w3-button w3-white w3-border w3-border-black w3-ripple")
+           (tool-bar  (create-div (top-panel box) :class *builder-title-class*))
+           (btn-class *builder-icons-class*)
            (btn-copy  (create-img tool-bar :alt-text "copy"     :url-src img-btn-copy  :class btn-class))
            (btn-paste (create-img tool-bar :alt-text "paste"    :url-src img-btn-paste :class btn-class))
            (btn-cut   (create-img tool-bar :alt-text "cut"      :url-src img-btn-cut   :class btn-class))
@@ -545,9 +551,9 @@ not a temporarily attached one when using select-control."
            (btn-save  (create-img tool-bar :alt-text "save"     :url-src img-btn-save  :class btn-class))
            (btn-load  (create-img tool-bar :alt-text "load"     :url-src img-btn-load  :class btn-class))
            (cbox      (create-form-element tool-bar :checkbox :class "w3-margin-left"))
-           (cbox-lbl  (create-label tool-bar :content "&nbsp;auto render" :label-for cbox :class "w3-black"))
+           (cbox-lbl  (create-label tool-bar :content "&nbsp;auto render" :label-for cbox))
            (spacer    (create-span tool-bar :content "&nbsp;&nbsp;&nbsp;"))
-           (btn-help  (create-span tool-bar :content "?" :class "w3-tiny w3-ripple w3-black"))
+           (btn-help  (create-span tool-bar :content "?" :class "w3-tiny w3-ripple"))
            (content   (center-panel box))
            (in-simulation    nil)
            (undo-chain       nil)
@@ -560,6 +566,7 @@ not a temporarily attached one when using select-control."
       (declare (ignore spacer))
       (add-class menu "w3-small")
       (setf (overflow (top-panel box)) :visible) ; let menus leave the top panel
+      (add-class (top-panel box) *builder-title-class*)
       (setf (background-color (top-panel box)) :black)
       (setf (checkedp cbox) t)
       (setf (advisory-title btn-copy) "copy")
@@ -983,8 +990,9 @@ not a temporarily attached one when using select-control."
 
 (defun on-quick-start (obj)
   "Open quick start help"
-  (let* ((win (create-gui-window obj :title "Quick Start"
-                                     :top 40 :left 225
+  (let* ((*default-title-class*      *builder-title-class*)
+         (*default-border-class*     *builder-border-class*)
+         (win (create-gui-window obj :title "Quick Start"
                                      :width 600 :height 400
                                      :client-movement *client-side-movement*)))
     (create-quick-start (window-content win))))

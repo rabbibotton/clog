@@ -1,7 +1,9 @@
 (in-package :clog-tools)
 
 (defun on-new-asdf-browser (obj &key (project nil))
-  (let* ((win (create-gui-window obj :title "ASDF System Browser"
+  (let* ((*default-title-class*      *builder-title-class*)
+         (*default-border-class*     *builder-border-class*)
+         (win (create-gui-window obj :title "ASDF System Browser"
                                      :top 40 :left 225
                                      :width 592 :height 435
                                      :client-movement t))

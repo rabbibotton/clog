@@ -38,3 +38,25 @@
  showGutter : true,
  enableBasicAutocompletion: true,
  enableLiveAutocompletion : true")
+
+;; Builder Look and Feel
+
+(defparameter *builder-window-desktop-class* "w3-blue-grey")
+(defparameter *builder-window-show-static-root-class* "w3-grey")
+(defparameter *builder-show-callers-class* "w3-orange")
+(defparameter *builder-show-callees-class* "w3-orange")
+(defparameter *builder-menu-button-class* "w3-input w3-grey w3-button w3-ripple")
+(defparameter *builder-pallete-class* "w3-light-grey w3-small")
+(defparameter *builder-event-list-class* "w3-light-grey w3-small")
+
+;; Menus
+(defparameter *builder-menu-bar-class* "w3-bar w3-round w3-small w3-blue-grey w3-card-4")
+(defparameter *builder-menu-bar-drop-down-class* "w3-dropdown-content w3-bar-block w3-card-4")
+(defparameter *builder-menu-item-class* "w3-bar-item w3-blue-grey w3-button")
+(defparameter *builder-menu-window-select-class* "w3-grey w3-bar-item w3-button")
+
+;; Window treatements
+(defparameter *builder-title-class* "w3-blue-grey w3-round")
+(defparameter *builder-border-class* "w3-card-4 w3-white w3-border w3-round")
+(defparameter *builder-package-class* "w3-white w3-round")
+(defparameter *builder-icons-class* "w3-button w3-white w3-round w3-border w3-border-black w3-ripple")

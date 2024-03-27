@@ -1,7 +1,9 @@
 (in-package :clog-tools)
 
 (defun on-new-sys-browser (obj &key (search nil))
-  (let* ((win (create-gui-window obj :title "System Browser"
+  (let* ((*default-title-class*      *builder-title-class*)
+         (*default-border-class*     *builder-border-class*)
+         (win (create-gui-window obj :title "System Browser"
                                      :top 40 :left 225
                                      :width 685 :height 530
                                      :client-movement t))

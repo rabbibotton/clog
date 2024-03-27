@@ -45,11 +45,17 @@
 (defun on-open-file (obj &key open-file
                            (title "New Source Editor")
                            text
-                           (title-class "w3-black")
+                           (title-class *builder-title-class*)
                            maximized)
   "Open a new text editor"
   (unless (window-to-top-by-title obj open-file)
     (let* ((app (connection-data-item obj "builder-app-data"))
+           (*menu-bar-class*           *builder-menu-bar-class*)
+           (*menu-bar-drop-down-class* *builder-menu-bar-drop-down-class*)
+           (*menu-item-class*          *builder-menu-item-class*)
+           (*menu-window-select-class* *builder-menu-window-select-class*)
+           (*default-title-class*      *builder-title-class*)
+           (*default-border-class*     *builder-border-class*)
            (win (create-gui-window obj :title title
                                        :title-class title-class
                                        :width 700 :height 480
@@ -81,8 +87,8 @@
            (m-ppr    (create-gui-menu-item m-lisp :content "pretty print"))
            (m-help   (create-gui-menu-drop-down menu :content "Help"))
            (m-helpk  (create-gui-menu-item m-help :content "keyboard help"))
-           (tool-bar  (create-div (top-panel box)))
-           (btn-class "w3-button w3-white w3-border w3-border-black w3-ripple")
+           (tool-bar  (create-div (top-panel box) :class title-class))
+           (btn-class *builder-icons-class*)
            (btn-copy  (create-img tool-bar :alt-text "copy"     :url-src img-btn-copy  :class btn-class))
            (btn-paste (create-img tool-bar :alt-text "paste"    :url-src img-btn-paste :class btn-class))
            (btn-cut   (create-img tool-bar :alt-text "cut"      :url-src img-btn-cut   :class btn-class))
@@ -98,7 +104,7 @@
            (spacer2   (create-span tool-bar :content "&nbsp;&nbsp;"))
            (btn-help  (create-span tool-bar :content "?" :class "w3-tiny w3-ripple"))
            (content   (center-panel box))
-           (pac-line  (create-form-element content :text :class "w3-black"))
+           (pac-line  (create-form-element content :text :class *builder-package-class*))
            (ace       (clog-ace:create-clog-ace-element content))
            (status    (create-div content :class "w3-tiny w3-border"))
            (lisp-file t)

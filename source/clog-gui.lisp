@@ -85,13 +85,47 @@
   (input-dialog                function)
   (confirm-dialog              function)
   (form-dialog                 function)
-  (server-file-dialog          function))
+  (server-file-dialog          function)
+
+  "CLOG-GUI - Look and Feel"
+  (*menu-bar-class            variable)
+  (*menu-bar-class*           variable)
+  (*menu-bar-drop-down-class* variable)
+  (*menu-item-class*          variable)
+  (*menu-window-select-class* variable)
+  (*menu-full-screen-item*    variable)
+  (*menu-icon-image-class*    variable)
+  (*top-bar-height*           variable)
+  (*default-title-class*      variable)
+  (*default-border-class*     variable))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Default Settings
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; Menus
+(defparameter *menu-bar-class* "w3-bar w3-black w3-card-4")
+(defparameter *menu-bar-drop-down-class* "w3-dropdown-content w3-bar-block w3-card-4")
+(defparameter *menu-item-class* "w3-bar-item w3-button")
+(defparameter *menu-window-select-class* "w3-bar-item w3-button")
+(defparameter *menu-full-screen-item* "⤢")
+(defparameter *menu-icon-image-class* "w3-button w3-bar-item")
+
+;; New Window placement
+(defparameter *top-bar-height* 20
+  "Overlap on new windows created with top set as nil")
+
+;; Window treatements
+(defparameter *default-title-class* "w3-black"
+  "Window title bar class")
+(defparameter *default-border-class* "w3-card-4 w3-white w3-border"
+  "Window frame border")
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Implementation - clog-gui - Desktop GUI abstraction
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defconstant top-bar-height 20 "Overlap on new windows with nil set for top")
 
 (defclass clog-gui ()
   ((body
@@ -405,7 +439,7 @@ in on-resize, on-full-screen-change and on-orientation-change events."))
 clog-body. If main-menu add as main menu bar."))
 
 (defmethod create-gui-menu-bar ((obj clog-obj)
-                                &key (class "w3-bar w3-black w3-card-4")
+                                &key (class *menu-bar-class*)
                                   (html-id nil)
                                   (main-menu t))
   (let* ((div (create-div obj :class class :html-id html-id))
@@ -430,7 +464,7 @@ clog-body. If main-menu add as main menu bar."))
 
 (defmethod create-gui-menu-drop-down ((obj clog-gui-menu-bar)
                   &key (content "")
-                    (class "w3-dropdown-content w3-bar-block w3-card-4")
+                    (class *menu-bar-drop-down-class*)
                     (html-id nil))
   (let* ((hover  (create-div obj :class "w3-dropdown-hover"))
          (button (create-button hover :class "w3-button" :content content))
@@ -455,31 +489,7 @@ clog-body. If main-menu add as main menu bar."))
 (defmethod create-gui-menu-item ((obj clog-obj)
                                  &key (content "")
                                    (on-click nil)
-                                   (class "w3-bar-item w3-button")
-                                   (html-id nil))
-  (let ((span
-          (create-span obj :content content :class class :html-id html-id)))
-    (set-on-click span on-click)
-    (change-class span 'clog-gui-menu-item)))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; create-gui-menu-item ;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(defclass clog-gui-menu-item (clog-span)()
-  (:documentation "Menu item"))
-
-(defgeneric create-gui-menu-item (clog-gui-menu-drop-down
-                                  &key content
-                                    on-click
-                                    class
-                                    html-id)
-  (:documentation "Attached a menu item to a CLOG-GUI-MENU-DROP-DOWN"))
-
-(defmethod create-gui-menu-item ((obj clog-obj)
-                                 &key (content "")
-                                   (on-click nil)
-                                   (class "w3-bar-item w3-button")
+                                   (class *menu-item-class*)
                                    (html-id nil))
   (let ((span
           (create-span obj :content content :class class :html-id html-id)))
@@ -502,7 +512,7 @@ Only one instance allowed."))
 
 (defmethod create-gui-menu-window-select
     ((obj clog-obj)
-     &key (class "w3-bar-item w3-button")
+     &key (class *menu-window-select-class*)
        content
        (html-id nil))
   (let ((window-select (create-select obj :html-id html-id :class class))
@@ -525,15 +535,17 @@ Only one instance allowed."))
 
 (defgeneric create-gui-menu-full-screen (clog-gui-menu-bar &key html-id)
   (:documentation "Add as last item in menu bar to allow for a full screen
-icon ⤢ and full screen mode."))
+icon ⤢ (*menu-full-screen-item* default) and full screen mode."))
 
 (defmethod create-gui-menu-full-screen ((obj clog-gui-menu-bar)
                                         &key (html-id nil))
   (create-child obj
-          " <span class='w3-bar-item w3-right' style='user-select:none;'
-             onClick='if (document.fullscreenElement==null) {
-                         documentElement.requestFullscreen()
-                      } else {document.exitFullscreen();}'>⤢</span>"
+                (format nil
+                        " <span class='w3-bar-item w3-right' style='user-select:none;'
+                            onClick='if (document.fullscreenElement==null) {
+                              documentElement.requestFullscreen()
+                            } else {document.exitFullscreen();}'>~A</span>"
+                        *menu-full-screen-item*)
           :html-id html-id
           :clog-type 'clog-gui-menu-item))
 
@@ -548,9 +560,9 @@ icon ⤢ and full screen mode."))
   (:documentation "Add icon as menu bar item."))
 
 (defmethod create-gui-menu-icon ((obj clog-gui-menu-bar)
-                                 &key (image-url "/img/clogwicon.png")
+                                 &key (image-url *default-icon*)
                                    (on-click nil)
-                                   (class "w3-button w3-bar-item")
+                                   (class *menu-icon-image-class*)
                                    (html-id nil))
   (set-on-click
    (create-child obj
@@ -846,8 +858,8 @@ window-to-top-by-param or window-by-param."))
                                                (window-param nil)
                                                (hidden nil)
                                                (client-movement nil)
-                                               (border-class "w3-card-4 w3-white w3-border")
-                                               (title-class "w3-black")
+                                               (border-class *default-border-class*)
+                                               (title-class *default-title-class*)
                                                (html-id nil))
   (let ((app (connection-data-item obj "clog-gui")))
     (unless html-id
@@ -865,7 +877,7 @@ window-to-top-by-param or window-by-param."))
       (when (eql (last-y app) 0)
         (setf (last-y app) (menu-bar-height obj)))
       (setf top (last-y app))
-      (incf (last-y app) top-bar-height)
+      (incf (last-y app) *top-bar-height*)
       (when (> top (- (inner-height (window (body app))) (last-y app)))
         (setf (last-y app) (menu-bar-height obj))))
     (let ((win (create-child (body app)
@@ -1994,3 +2006,43 @@ machine, upon close ON-FILE-NAME called with filename or nil if failure."
                        (window-close win)
                        (funcall on-file-name (value input)))
                   :one-time t)))
+
+(defparameter *default-icon*
+  "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAcCAYAAAAAwr0iAAAAAXNSR0IArs4c6QAAAKZlWElmTU0A
+KgAAAAgABwEGAAMAAAABAAIAAAESAAMAAAABAAEAAAEaAAUAAAABAAAAYgEbAAUAAAABAAAAagEo
+AAMAAAABAAIAAAExAAIAAAAVAAAAcodpAAQAAAABAAAAiAAAAAAAAABIAAAAAQAAAEgAAAABUGl4
+ZWxtYXRvciBQcm8gMi4wLjUAAAACoAIABAAAAAEAAAAgoAMABAAAAAEAAAAcAAAAAMSXmL0AAAAJ
+cEhZcwAACxMAAAsTAQCanBgAAAQRaVRYdFhNTDpjb20uYWRvYmUueG1wAAAAAAA8eDp4bXBtZXRh
+IHhtbG5zOng9ImFkb2JlOm5zOm1ldGEvIiB4OnhtcHRrPSJYTVAgQ29yZSA2LjAuMCI+CiAgIDxy
+ZGY6UkRGIHhtbG5zOnJkZj0iaHR0cDovL3d3dy53My5vcmcvMTk5OS8wMi8yMi1yZGYtc3ludGF4
+LW5zIyI+CiAgICAgIDxyZGY6RGVzY3JpcHRpb24gcmRmOmFib3V0PSIiCiAgICAgICAgICAgIHht
+bG5zOmV4aWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20vZXhpZi8xLjAvIgogICAgICAgICAgICB4bWxu
+czp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iCiAgICAgICAgICAgIHhtbG5zOnRp
+ZmY9Imh0dHA6Ly9ucy5hZG9iZS5jb20vdGlmZi8xLjAvIj4KICAgICAgICAgPGV4aWY6Q29sb3JT
+cGFjZT4xPC9leGlmOkNvbG9yU3BhY2U+CiAgICAgICAgIDxleGlmOlBpeGVsWERpbWVuc2lvbj4z
+MjwvZXhpZjpQaXhlbFhEaW1lbnNpb24+CiAgICAgICAgIDxleGlmOlBpeGVsWURpbWVuc2lvbj4y
+ODwvZXhpZjpQaXhlbFlEaW1lbnNpb24+CiAgICAgICAgIDx4bXA6Q3JlYXRvclRvb2w+UGl4ZWxt
+YXRvciBQcm8gMi4wLjU8L3htcDpDcmVhdG9yVG9vbD4KICAgICAgICAgPHhtcDpNZXRhZGF0YURh
+dGU+MjAyMS0wMi0wNFQwMzo0MDoxOVo8L3htcDpNZXRhZGF0YURhdGU+CiAgICAgICAgIDx0aWZm
+OlJlc29sdXRpb25Vbml0PjI8L3RpZmY6UmVzb2x1dGlvblVuaXQ+CiAgICAgICAgIDx0aWZmOlBo
+b3RvbWV0cmljSW50ZXJwcmV0YXRpb24+MjwvdGlmZjpQaG90b21ldHJpY0ludGVycHJldGF0aW9u
+PgogICAgICAgICA8dGlmZjpDb21wcmVzc2lvbj4xPC90aWZmOkNvbXByZXNzaW9uPgogICAgICAg
+ICA8dGlmZjpPcmllbnRhdGlvbj4xPC90aWZmOk9yaWVudGF0aW9uPgogICAgICAgICA8dGlmZjpY
+UmVzb2x1dGlvbj43MjAwMDAvMTAwMDA8L3RpZmY6WFJlc29sdXRpb24+CiAgICAgICAgIDx0aWZm
+OllSZXNvbHV0aW9uPjcyMDAwMC8xMDAwMDwvdGlmZjpZUmVzb2x1dGlvbj4KICAgICAgPC9yZGY6
+RGVzY3JpcHRpb24+CiAgIDwvcmRmOlJERj4KPC94OnhtcG1ldGE+CjH2KYwAAAMuSURBVEgN7Za7
+a1RBFId3N3GjUQMJNuIDGwVFRW0sFBTRNpWVhYKFWtko2PgH2NgpgtgERK1EUQSxsBIMYpAIgsRX
+o4WFYNS8k/X7zc7vOrmbZO+uYOWBb8+ZM3PmzOvObKn0X/7hCtRqtXI+XYMj3+BvyySt0kcFpqEG
+y2J5slwuz2G3L3RegW7ozPeCr2shv9tRV4ZK2ytAsGYywyw0qxLlbtQkyD+LXzOWfx1qF2yGLbAc
+blP/BB2WRrolodOqEig5sg0q2GOgxBMwjW8TnKTjfuiADzAIK+AudWfQrQuBXY7Cvg6/4BFslx+9
+D87CeTgCvW5vje8ODINWq7gQEJKjte+PIZVvFC7DQTgEG9OeKetMhIToAfgEPWmbJW0a6zRrhr3w
+HCQzMA5acstFd4SjB1ZHrTOieA1O8gJ0HpoLDZ18DfYrkEyBBiCZg4lg1X9uovryPeM7ACMguQfN
+t8CN0H2gfZNMwmyw6smjmQ1I5ddwAnZDP1yDH2C5mh9gQ5mW3vOV2EMxUjN18uiap9LtUMUoaIUs
+jj3VkNAOWnbCqqT8NEYredpZdDcoJfH2pJVegS84t7r/TOOsQjgscmLr5D4Aifbcow+OAj8ahFZE
+KFYHVnIlS2oDp+7rTCgfgzcgUXCryUNg8vM92h/RG5QIXb9TMMKVjD4KN+AlWLTk7Sb3rL30urT2
+x+R/vgCcYfZofRqpqIMie57G2M4fxhEq9sTkHdhh0vlXbFwNkAnQt69G7TxYUzF+Fn0JhmCYN+Id
+ifUuzGGHRyw/gPdUSpR03pkI3mI/Tq4Ex0l0y2Fx1lly+3UYvAWHsSW+1Vpd/nTZLygBfek/g57N
+QJY0NVTpMrYP4E/sVkSD9cDvJ/2Fa9zlRTXBXoWd2J65Tq1m5TLmgqI2Y7FG+7xWidDFHhuPigAP
+Qvf3W7BoALr/jS4lobJnjVkbhPAMo7P/De6/kCbQg9Cnchr0bDaTrzQ4B47NH+5Fc2d7n7ZQR5ze
+7B8rZd3be2EHrAe9E/rP9xmewUPaj6LDoUtj5WtLSKpTG2ZUpAO1VUyRtmmbQgGxYw8mXCCxE8c3
+fttpliXs3y+7fSKpo8d7AAAAAElFTkSuQmCC")

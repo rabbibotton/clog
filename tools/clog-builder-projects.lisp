@@ -6,7 +6,9 @@
       (setf (current-project app) project))
     (if (project-win app)
         (window-focus (project-win app))
-        (let* ((win (create-gui-window obj :title "Project Window"
+        (let* ((*default-title-class*      *builder-title-class*)
+               (*default-border-class*     *builder-border-class*)
+               (win (create-gui-window obj :title "Project Window"
                                            :top 60 :left 232
                                            :width 643 :height 625
                                            :has-pinner t :client-movement *client-side-movement*)))
