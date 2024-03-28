@@ -153,7 +153,7 @@ package."
 (defun rgb-to-hex (rgb)
   "Return hex #rrggbb from rgb(red,green,blue)"
   (multiple-value-bind (m l)
-      (ppcre:scan-to-strings "rgba?\\s?\\((\\d+),\\s?(\\d+),\\s?(\\d+),?\\s?(\\d*)\\)" rgb)
+      (ppcre:scan-to-strings "rgba?\\s?\\((\\d+),\\s?(\\d+),\\s?(\\d+),?\\s?(\\d|\.*)\\)" rgb)
     (declare (ignore m))
     (format nil "#~2,'0x~2,'0x~2,'0x"
             (parse-integer (aref l 0))
