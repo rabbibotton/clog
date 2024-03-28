@@ -17,7 +17,7 @@ produce graphical user interfaces for applications locally or remotely.
 CLOG can take the place, or work alongside, most cross-platform GUI
 frameworks and website frameworks. The CLOG package starts up the
 connectivity to the browser or other websocket client (often a browser
-embedded in a native template application.)
+embedded in a native application.)
 
 - [CLOG - Reference Manual](https://rabbibotton.github.io/clog/clog-manual.html)
 
@@ -28,14 +28,17 @@ and used in commercial production code for the last 10+ years. CLOG
 itself is already used in commerical products, corporate websites,
 and other opensource projects.
 
-CLOG is being actively extended with new tools and new custom controls but the
-core API is stable and proven, the Builder is rich in features. Check the github
-discussion boards for the latest.
+CLOG is being actively extended, however the core API is stable and proven,
+the CLOG Builder is rich in features. Check the github discussion boards for
+the latest on the project.
+
+Consider sponsoring work on CLOG at https://github.com/sponsors/rabbibotton
 
 Some potential applications for CLOG:
 
 * Cross-platform GUIs and Reports
 * Secure websites and complex interactive web applications
+* Desktop buisiness software (CLOG Runs native on Windows, Mac and Linux)
 * Mobile software (CLOG Runs native on Android and iOS)
 * Massive multiplayer online games
 * Monitoring software for embedded systems
@@ -43,29 +46,27 @@ Some potential applications for CLOG:
   parallel programming techniques. (CLOG is a parallel GUI)
 * And the list goes on
 
-The key to CLOG is the relationship it forms with a Browser window
-or Browser control compiled to native code. CLOG uses websockets
+The key to CLOG is the relationship it forms with a browser window
+or browser control compiled to native code. CLOG uses websockets
 for communications and the browser to render a GUI that maintains
 an active soft realtime connection. For most CLOG applications all
 programming logic, events and decisions are done on the server
 which can be local, or remote over the web.
 
-CLOG is developed with ECL and SBCL, it is tested fairly regulary on
-Linux, Windows, Android, Rasperry Pi, and Mac. It
-should in theory work out of the box on any system with Quicklisp
-(although you could hand install) and CLACK (easily switched out
-and the ecl Android/iPhone branch for example doesn't use).
+CLOG is developed with ECL, CCL and SBCL, it is tested fairly
+regulary on Linux, Windows, Android, Rasperry Pi, and Mac. It
+is also know to work with the commercial Common Lisps as well.
 
-CLOG is in QuickLisp (ql:quickload :clog), however I recommend
+CLOG is in QuickLisp (ql:quickload :clog), however I one should
 adding the UltraLisp distribution as QuickLisp is update
-infrequenty.
+infrequenty (see below).
 
-However for the bleeding ede latest version and bug fixes clone
+However for the bleeding edge version and bug fixes clone
 CLOG into ~/common-lisp or a findable source directory, i.e.
 [ ``(push #P"path/to/dir/of/projects" ql:*local-project-directories*)`` ]
 
 For git (you also need the clog builder plugins clog-ace and clog-terminal
-for the builder from git):
+for the builder):
 
 ```
 cd ~/common-lisp
@@ -73,8 +74,8 @@ git clone https://github.com/rabbibotton/clog.git
 git clone https://github.com/rabbibotton/clog-ace.git
 git clone https://github.com/rabbibotton/clog-terminal.git
 ```
-For now should also clone my branch of fast-websockets as the maintainers
-version is broked for larger files even if using UltraLisp:
+For now you should also clone my branch of fast-websockets as the maintainers
+version is broken for larger files so even if using UltraLisp:
 
 ```
 git clone https://github.com/rabbibotton/fast-websocket.git
@@ -93,7 +94,7 @@ To add UltraLisp to QuickLisp:
                       :prompt nil)
 ```
 
-You still need often to update the UltraLisp and QuicLisp with:
+You still need to often update the UltraLisp and QuicLisp distros with:
 
 ```
 (ql:update-all-dists)
@@ -156,7 +157,7 @@ CLOG-USER> (setf (background-color *body*) "beige")
 CLOG-USER> (create-div *body* :content "Hello World!")
 ```
 
-The clog-repl URL is http://127.0.0.1:8080/repl ``*body*``` will always refer
+The clog-repl URL is http://127.0.0.1:8080/repl ``*body*`` will always refer
 to the last access of that URL.
 
 To open a browser with the CLOG manual (or in the builder it is under Help):
