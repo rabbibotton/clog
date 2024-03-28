@@ -88,7 +88,6 @@
   (server-file-dialog          function)
 
   "CLOG-GUI - Look and Feel"
-  (*menu-bar-class            variable)
   (*menu-bar-class*           variable)
   (*menu-bar-drop-down-class* variable)
   (*menu-item-class*          variable)

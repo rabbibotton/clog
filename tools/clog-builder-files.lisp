@@ -69,6 +69,7 @@
            (m-save   (create-gui-menu-item m-file :content "save (cmd/ctrl-s)"))
            (m-saveas (create-gui-menu-item m-file :content "save as.."))
            (m-emacs  (create-gui-menu-item m-file :content "open in emacs"))
+           (m-ntab   (create-gui-menu-item m-file :content "open in new tab"))
            (m-edit   (create-gui-menu-drop-down menu :content "Edit"))
            (m-undo   (create-gui-menu-item m-edit :content "undo (cmd/ctrl-z)"))
            (m-redo   (create-gui-menu-item m-edit :content "redo (shift cmd/ctrl-z)"))
@@ -232,9 +233,6 @@
                         (setf last-date (file-write-date file-name))
                         (sleep .5)
                         (remove-class btn-save "w3-animate-top"))))
-      (set-on-click m-emacs (lambda (obj)
-                              (declare (ignore obj))
-                              (swank:ed-in-emacs file-name)))
       (flet ((save (obj data &key save-as)
                (cond ((or (equal file-name "")
                           (getf data :shift-key)
@@ -273,6 +271,16 @@
                                                  (setf last-date (file-write-date file-name))
                                                  (sleep .5)
                                                  (remove-class btn-save "w3-animate-top"))))))))))
+        (set-on-click m-emacs (lambda (obj)
+                                (when is-dirty
+                                  (save obj nil))
+                                (swank:ed-in-emacs file-name)
+                                (window-close win)))
+        (set-on-click m-ntab (lambda (obj)
+                               (when is-dirty
+                                 (save obj nil))
+                               (on-open-file-ext obj :open-file file-name)
+                               (window-close win)))
         (set-on-window-can-close win
                                  (lambda (obj)
                                    (cond (is-dirty

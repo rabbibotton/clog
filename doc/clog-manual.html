@@ -6539,11 +6539,11 @@ clog-body. If main-menu add as main menu bar.</p></li>
 <p><a id="x-28CLOG-GUI-3ACREATE-GUI-MENU-WINDOW-SELECT-20GENERIC-FUNCTION-29"></a>
 <a id="CLOG-GUI:CREATE-GUI-MENU-WINDOW-SELECT%20GENERIC-FUNCTION"></a></p>
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-GUI:CREATE-GUI-MENU-WINDOW-SELECT%20GENERIC-FUNCTION" >CREATE-GUI-MENU-WINDOW-SELECT</a></span></span> <span class="locative-args">CLOG-OBJ &amp;KEY CLASS HTML-ID</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-GUI:CREATE-GUI-MENU-WINDOW-SELECT%20GENERIC-FUNCTION" >CREATE-GUI-MENU-WINDOW-SELECT</a></span></span> <span class="locative-args">CLOG-OBJ &amp;KEY CLASS HTML-ID CONTENT</span></span></p>
 
-<p>Attached a clog-select as a menu item that auto updates
-with open windows and maximizes them unless is a keep-on-top window or
-on-window-can-maximize returns nil. Only one instance allowed.</p></li>
+<p>Attaches a clog-select as a menu item that auto updates
+with open windows and focuses them unless is a keep-on-top window.
+Only one instance allowed.</p></li>
 </ul>
 <p><a id="x-28CLOG-GUI-3ACREATE-GUI-MENU-FULL-SCREEN-20GENERIC-FUNCTION-29"></a>
 <a id="CLOG-GUI:CREATE-GUI-MENU-FULL-SCREEN%20GENERIC-FUNCTION"></a></p>
@@ -6551,7 +6551,7 @@ on-window-can-maximize returns nil. Only one instance allowed.</p></li>
 <li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-GUI:CREATE-GUI-MENU-FULL-SCREEN%20GENERIC-FUNCTION" >CREATE-GUI-MENU-FULL-SCREEN</a></span></span> <span class="locative-args">CLOG-GUI-MENU-BAR &amp;KEY HTML-ID</span></span></p>
 
 <p>Add as last item in menu bar to allow for a full screen
-icon ⤢ and full screen mode.</p></li>
+icon ⤢ (<em>menu-full-screen-item</em> default) and full screen mode.</p></li>
 </ul>
 <p><a id="x-28CLOG-GUI-3ACREATE-GUI-MENU-ICON-20GENERIC-FUNCTION-29"></a>
 <a id="CLOG-GUI:CREATE-GUI-MENU-ICON%20GENERIC-FUNCTION"></a></p>
@@ -6669,7 +6669,7 @@ use jquery-ui to move/resize and will not work on mobile and touch events
 are limitted to clicks. When client-movement is t only on-window-move is fired
 once at start of drag and on-window-move-done at end of drag and
 on-window-resize at start of resize and on-window-resize-done at end of resize.
-If has-pinner a toggle wil appear on title bar to allow pinning the window in
+If has-pinner a toggle will appear on title bar to allow pinning the window in
 place, if keep-on-top t then when pinned also will keep-on-top. If had-pinned
 is nil and keep-on-top t then the window will be set to keep-on-top always.
 window-param is a general parameter for identifiying the window to use with
@@ -6742,12 +6742,22 @@ the browser.</p></li>
 
 <p>Toggle <code>CLOG-GUI-WINDOW</code> as maximize window.</p></li>
 </ul>
+<p><a id="x-28CLOG-GUI-3AWINDOW-TOGGLE-PINNED-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG-GUI:WINDOW-TOGGLE-PINNED%20GENERIC-FUNCTION"></a></p>
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-GUI:WINDOW-TOGGLE-PINNED%20GENERIC-FUNCTION" >WINDOW-TOGGLE-PINNED</a></span></span> <span class="locative-args">CLOG-GUI-WINDOW &amp;KEY STATE KEEP-ON-TOP</span></span></p>
+
+<p>Toggle the pinned state of a <code>CLOG-GUI-WINDOW</code>. A pinned
+window cannot be moved, closed, resized, maximized or normalized. A new
+window is always unpinned. If keep-on-top the keep-on-top state is toggled
+to match the pinned state. :state forces state. Returns new state</p></li>
+</ul>
 <p><a id="x-28CLOG-GUI-3AWINDOW-KEEP-ON-TOP-20GENERIC-FUNCTION-29"></a>
 <a id="CLOG-GUI:WINDOW-KEEP-ON-TOP%20GENERIC-FUNCTION"></a></p>
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-GUI:WINDOW-KEEP-ON-TOP%20GENERIC-FUNCTION" >WINDOW-KEEP-ON-TOP</a></span></span> <span class="locative-args">CLOG-GUI-WINDOW</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-GUI:WINDOW-KEEP-ON-TOP%20GENERIC-FUNCTION" >WINDOW-KEEP-ON-TOP</a></span></span> <span class="locative-args">CLOG-GUI-WINDOW &amp;KEY STATE</span></span></p>
 
-<p>Set <code>CLOG-GUI-WINDOW</code> to stay on top. Use window-focus to undue.</p></li>
+<p>Set <code>CLOG-GUI-WINDOW</code> to stay on top based on state (default t).</p></li>
 </ul>
 <p><a id="x-28CLOG-GUI-3AWINDOW-MAKE-MODAL-20GENERIC-FUNCTION-29"></a>
 <a id="CLOG-GUI:WINDOW-MAKE-MODAL%20GENERIC-FUNCTION"></a></p>
@@ -6927,6 +6937,58 @@ if confirmed or nil if canceled.</p></li>
 
 <p>Create a local file dialog box called <code>TITLE</code> using <code>INITIAL-DIR</code> on server
 machine, upon close <code>ON-FILE-NAME</code> called with filename or nil if failure.</p></li>
+</ul>
+<p><code>CLOG-GUI</code> - Look and Feel</p>
+<p><a id="x-28CLOG-GUI-3A-2AMENU-BAR-CLASS-2A-20VARIABLE-29"></a>
+<a id="CLOG-GUI:*MENU-BAR-CLASS*%20VARIABLE"></a></p>
+<ul>
+<li><span class=reference-bullet><span class=reference><span class="locative-type">[variable]</span> <span class="reference-object"><a href="#CLOG-GUI:*MENU-BAR-CLASS*%20VARIABLE" >*MENU-BAR-CLASS*</a></span></span> <span class="locative-args">&quot;w3-bar w3-black w3-card-4&quot;</span></span></li>
+</ul>
+<p><a id="x-28CLOG-GUI-3A-2AMENU-BAR-DROP-DOWN-CLASS-2A-20VARIABLE-29"></a>
+<a id="CLOG-GUI:*MENU-BAR-DROP-DOWN-CLASS*%20VARIABLE"></a></p>
+<ul>
+<li><span class=reference-bullet><span class=reference><span class="locative-type">[variable]</span> <span class="reference-object"><a href="#CLOG-GUI:*MENU-BAR-DROP-DOWN-CLASS*%20VARIABLE" >*MENU-BAR-DROP-DOWN-CLASS*</a></span></span> <span class="locative-args">&quot;w3-dropdown-content w3-bar-block w3-card-4&quot;</span></span></li>
+</ul>
+<p><a id="x-28CLOG-GUI-3A-2AMENU-ITEM-CLASS-2A-20VARIABLE-29"></a>
+<a id="CLOG-GUI:*MENU-ITEM-CLASS*%20VARIABLE"></a></p>
+<ul>
+<li><span class=reference-bullet><span class=reference><span class="locative-type">[variable]</span> <span class="reference-object"><a href="#CLOG-GUI:*MENU-ITEM-CLASS*%20VARIABLE" >*MENU-ITEM-CLASS*</a></span></span> <span class="locative-args">&quot;w3-bar-item w3-button&quot;</span></span></li>
+</ul>
+<p><a id="x-28CLOG-GUI-3A-2AMENU-WINDOW-SELECT-CLASS-2A-20VARIABLE-29"></a>
+<a id="CLOG-GUI:*MENU-WINDOW-SELECT-CLASS*%20VARIABLE"></a></p>
+<ul>
+<li><span class=reference-bullet><span class=reference><span class="locative-type">[variable]</span> <span class="reference-object"><a href="#CLOG-GUI:*MENU-WINDOW-SELECT-CLASS*%20VARIABLE" >*MENU-WINDOW-SELECT-CLASS*</a></span></span> <span class="locative-args">&quot;w3-bar-item w3-button&quot;</span></span></li>
+</ul>
+<p><a id="x-28CLOG-GUI-3A-2AMENU-FULL-SCREEN-ITEM-2A-20VARIABLE-29"></a>
+<a id="CLOG-GUI:*MENU-FULL-SCREEN-ITEM*%20VARIABLE"></a></p>
+<ul>
+<li><span class=reference-bullet><span class=reference><span class="locative-type">[variable]</span> <span class="reference-object"><a href="#CLOG-GUI:*MENU-FULL-SCREEN-ITEM*%20VARIABLE" >*MENU-FULL-SCREEN-ITEM*</a></span></span> <span class="locative-args">&quot;⤢&quot;</span></span></li>
+</ul>
+<p><a id="x-28CLOG-GUI-3A-2AMENU-ICON-IMAGE-CLASS-2A-20VARIABLE-29"></a>
+<a id="CLOG-GUI:*MENU-ICON-IMAGE-CLASS*%20VARIABLE"></a></p>
+<ul>
+<li><span class=reference-bullet><span class=reference><span class="locative-type">[variable]</span> <span class="reference-object"><a href="#CLOG-GUI:*MENU-ICON-IMAGE-CLASS*%20VARIABLE" >*MENU-ICON-IMAGE-CLASS*</a></span></span> <span class="locative-args">&quot;w3-button w3-bar-item&quot;</span></span></li>
+</ul>
+<p><a id="x-28CLOG-GUI-3A-2ATOP-BAR-HEIGHT-2A-20VARIABLE-29"></a>
+<a id="CLOG-GUI:*TOP-BAR-HEIGHT*%20VARIABLE"></a></p>
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[variable]</span> <span class="reference-object"><a href="#CLOG-GUI:*TOP-BAR-HEIGHT*%20VARIABLE" >*TOP-BAR-HEIGHT*</a></span></span> <span class="locative-args">20</span></span></p>
+
+<p>Overlap on new windows created with top set as nil</p></li>
+</ul>
+<p><a id="x-28CLOG-GUI-3A-2ADEFAULT-TITLE-CLASS-2A-20VARIABLE-29"></a>
+<a id="CLOG-GUI:*DEFAULT-TITLE-CLASS*%20VARIABLE"></a></p>
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[variable]</span> <span class="reference-object"><a href="#CLOG-GUI:*DEFAULT-TITLE-CLASS*%20VARIABLE" >*DEFAULT-TITLE-CLASS*</a></span></span> <span class="locative-args">&quot;w3-black&quot;</span></span></p>
+
+<p>Window title bar class</p></li>
+</ul>
+<p><a id="x-28CLOG-GUI-3A-2ADEFAULT-BORDER-CLASS-2A-20VARIABLE-29"></a>
+<a id="CLOG-GUI:*DEFAULT-BORDER-CLASS*%20VARIABLE"></a></p>
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[variable]</span> <span class="reference-object"><a href="#CLOG-GUI:*DEFAULT-BORDER-CLASS*%20VARIABLE" >*DEFAULT-BORDER-CLASS*</a></span></span> <span class="locative-args">&quot;w3-card-4 w3-white w3-border&quot;</span></span></p>
+
+<p>Window frame border</p></li>
 </ul>
 <p><a id="x-28CLOG-3A-40CLOG-WEB-20MGL-PAX-3ASECTION-29"></a>
 <a id="CLOG:@CLOG-WEB%20MGL-PAX:SECTION"></a></p>
@@ -7694,17 +7756,24 @@ replace the browser contents with <code>HTML</code>.</p></li>
 <p><span class="outer-navigation"><span class="navigation"> <a href="#CLOG:@CLOG-BODY%20MGL-PAX:SECTION" title="CLOG Body Objects">&#8592;</a> <a href="clog-manual.html" title="The CLOG manual">&#8593;</a> <a href="#CLOG:@CLOG-DOCUMENT%20MGL-PAX:SECTION" title="CLOG Document Objects">&#8594;</a> <a href="#CLOG:@CLOG-WINDOW%20MGL-PAX:SECTION" title="CLOG Window Objects">&#8634;</a></span></span></p>
 <h2><a href="#CLOG:@CLOG-WINDOW%20MGL-PAX:SECTION">24 CLOG Window Objects</a></h2>
 <p>CLOG Popups</p>
+<p><a id="x-28CLOG-3A-2ACLOG-POPUP-PATH-2A-20VARIABLE-29"></a>
+<a id="CLOG:*CLOG-POPUP-PATH*%20VARIABLE"></a></p>
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[variable]</span> <span class="reference-object"><a href="#CLOG:*CLOG-POPUP-PATH*%20VARIABLE" >*CLOG-POPUP-PATH*</a></span></span> <span class="locative-args">&quot;/clogwin&quot;</span></span></p>
+
+<p>Default <a href="#CLOG:URL%20GENERIC-FUNCTION" title="CLOG:URL GENERIC-FUNCTION"><code>URL</code></a> for popup windows</p></li>
+</ul>
 <p><a id="x-28CLOG-3AENABLE-CLOG-POPUP-20FUNCTION-29"></a>
 <a id="CLOG:ENABLE-CLOG-POPUP%20FUNCTION"></a></p>
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#CLOG:ENABLE-CLOG-POPUP%20FUNCTION" >ENABLE-CLOG-POPUP</a></span></span> <span class="locative-args">&amp;KEY (PATH <code>*CLOG-POPUP-PATH*</code>)</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#CLOG:ENABLE-CLOG-POPUP%20FUNCTION" >ENABLE-CLOG-POPUP</a></span></span> <span class="locative-args">&amp;KEY (PATH <a href="#CLOG:*CLOG-POPUP-PATH*%20VARIABLE" title="CLOG:*CLOG-POPUP-PATH* VARIABLE"><code>*CLOG-POPUP-PATH*</code></a>) (BOOT-FILE &quot;/boot.html&quot;)</span></span></p>
 
 <p>Enable handling of clog enabled popups</p></li>
 </ul>
 <p><a id="x-28CLOG-3AOPEN-CLOG-POPUP-20FUNCTION-29"></a>
 <a id="CLOG:OPEN-CLOG-POPUP%20FUNCTION"></a></p>
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#CLOG:OPEN-CLOG-POPUP%20FUNCTION" >OPEN-CLOG-POPUP</a></span></span> <span class="locative-args">OBJ &amp;KEY (PATH <code>*CLOG-POPUP-PATH*</code>) (ADD-SYNC-TO-PATH <code>T</code>) (SYNC-KEY (<a href="#CLOG-CONNECTION:RANDOM-HEX-STRING%20FUNCTION" title="CLOG-CONNECTION:RANDOM-HEX-STRING FUNCTION"><code>RANDOM-HEX-STRING</code></a>)) (NAME &quot;_blank&quot;) (SPECS &quot;&quot;) (WAIT-TIMEOUT 10)</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#CLOG:OPEN-CLOG-POPUP%20FUNCTION" >OPEN-CLOG-POPUP</a></span></span> <span class="locative-args">OBJ &amp;KEY (PATH <a href="#CLOG:*CLOG-POPUP-PATH*%20VARIABLE" title="CLOG:*CLOG-POPUP-PATH* VARIABLE"><code>*CLOG-POPUP-PATH*</code></a>) (ADD-SYNC-TO-PATH <code>T</code>) (SYNC-KEY (<a href="#CLOG-CONNECTION:RANDOM-HEX-STRING%20FUNCTION" title="CLOG-CONNECTION:RANDOM-HEX-STRING FUNCTION"><code>RANDOM-HEX-STRING</code></a>)) (NAME &quot;_blank&quot;) (SPECS &quot;&quot;) (WAIT-TIMEOUT 10)</span></span></p>
 
 <p>Open a new browser window/popup in most cases a tab. Since they are controlled
 by clog you have full control of the new popups and are more flexible than using
