@@ -94,7 +94,7 @@ To add UltraLisp to QuickLisp:
                       :prompt nil)
 ```
 
-You still need to often update the UltraLisp and QuicLisp distros with:
+You still need to often update the UltraLisp and QuickLisp distros with:
 
 ```
 (ql:update-all-dists)
