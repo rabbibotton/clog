@@ -303,10 +303,15 @@ clog-builder window.")
                        :title *preferances-file*)))
 
 (defun on-update-clog (body)
-  (alert-toast body
-               "Updating CLOG" "Results of update will apear when completed.
-                You may need to press ENTER on OS console window."
-               :color-class "w3-green" :time-out 3)
+  (if *app-mode*
+      (alert-dialog body
+                    "Results of update will apear when completed.
+                     You may need to press ENTER on OS console window."
+                   :title "CLOG Update")
+      (alert-toast body
+                   "CLOG Update"
+                   "Results of update will apear when completed."
+                   :color-class "w3-green" :time-out 2))
   (let ((results (capture-eval "(ql:update-all-dists)" :clog-obj body)))
     (if *app-mode*
         (on-open-file body :title "CLOG Updated - Close builder, rerun make.bat/make and rerun."
