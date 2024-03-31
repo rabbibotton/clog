@@ -302,6 +302,20 @@ clog-builder window.")
                        :text pref
                        :title *preferances-file*)))
 
+(defun on-update-clog (body)
+  (alert-toast body
+               "Updating CLOG" "Results of update will apear when completed.
+                You may need to press ENTER on OS console window."
+               :color-class "w3-green" :time-out 3)
+  (let ((results (capture-eval "(ql:update-all-dists)" :clog-obj body)))
+    (if *app-mode*
+        (on-open-file body :title "CLOG Updated - Close builder, rerun make.bat/make and rerun."
+                           :title-class "w3-green w3-animate-top"
+                           :text results)
+        (on-open-file body :title "CLOG Updated - Close builder, rerun (ql:quickload :clog/tools)(clog-tools:clog-builder)"
+                           :title-class "w3-green w3-animate-top"
+                           :text results))))
+
 (defun on-open-file-window (body)
   (on-new-builder body))
 
@@ -341,6 +355,7 @@ clog-builder window.")
            (win   (create-gui-menu-drop-down menu :content "Window"))
            (help  (create-gui-menu-drop-down menu :content "Help")))
       (declare (ignore icon))
+      ;; Menu -> File
       (let ((exter (create-button file :content "-" :class *builder-menu-button-class*)))
         (flet ((exter-text ()
                  (if *open-external*
@@ -364,11 +379,13 @@ clog-builder window.")
         (create-gui-menu-item file  :content "New CLOG Panel Popup Editor"             :on-click 'on-new-builder-page)
         (create-gui-menu-item file  :content "New HTML Panel Popup Editor"             :on-click 'on-new-builder-basic-page)
         (create-gui-menu-item file  :content "New Custom Boot Panel External Editor"   :on-click 'on-new-builder-custom-page))
+      ;; Menu -> Source
       (create-gui-menu-item src   :content "Project Window"               :on-click 'on-show-project)
       (create-gui-menu-item src   :content "Directory Window"             :on-click 'on-dir-win)
       (create-gui-menu-item src   :content "New Project Template"         :on-click 'on-new-app-template)
       (create-gui-menu-item src   :content "New System Browser"           :on-click 'on-new-sys-browser)
       (create-gui-menu-item src   :content "New ASDF System Browser"      :on-click 'on-new-asdf-browser)
+      ;; Menu -> Tools
       (create-gui-menu-item tools :content "List Callers"                :on-click 'on-show-callers)
       (create-gui-menu-item tools :content "List Callees"                :on-click 'on-show-callees)
       (create-gui-menu-item tools :content "Thread Viewer"               :on-click 'on-show-thread-viewer)
@@ -380,7 +397,8 @@ clog-builder window.")
                             (lambda (obj)
                               (declare (ignore obj))
                               (open-window (window body) "/dbadmin")))
-      (create-gui-menu-item opts :content "Edit preferences.lisp"  :on-click 'on-opts-edit)
+      ;; Menu -> Options
+      (create-gui-menu-item opts :content "Edit preferences.lisp"      :on-click 'on-opts-edit)
       (let ((exter (create-button opts :content "-" :class *builder-menu-button-class*)))
         (flet ((exter-text ()
                  (if *open-external-with-emacs*
@@ -391,6 +409,8 @@ clog-builder window.")
                                 (declare (ignore obj))
                                 (setf *open-external-with-emacs* (not *open-external-with-emacs*))
                                 (setf (text-value exter) (exter-text))))))
+      (create-gui-menu-item opts :content "Update CLOG Builder"       :on-click 'on-update-clog)
+      ;; Menu -> Windows
       (create-gui-menu-item win   :content "Maximize"           :on-click
 			    (lambda (obj)
 			      (when (current-window obj)
@@ -401,6 +421,7 @@ clog-builder window.")
 			        (window-normalize (current-window obj)))))
       (create-gui-menu-item win   :content "Maximize All"       :on-click #'maximize-all-windows)
       (create-gui-menu-item win   :content "Normalize All"      :on-click #'normalize-all-windows)
+      ;; Menu -> Help
       (create-gui-menu-item help  :content "CLOG Manual"          :on-click
                             (lambda (obj)
                               (declare (ignore obj))
