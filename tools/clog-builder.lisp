@@ -298,6 +298,7 @@ clog-builder window.")
     (unless pref
      (setf pref ";; No sample preferances file found"))
     (on-open-file body :open-file *preferances-file*
+                       :lisp-package "clog-tools"
                        :text pref
                        :title *preferances-file*)))
 

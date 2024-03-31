@@ -46,6 +46,7 @@
                            (title "New Source Editor")
                            text
                            (title-class *builder-title-class*)
+                           lisp-package
                            maximized)
   "Open a new text editor"
   (unless (window-to-top-by-title obj open-file)
@@ -158,7 +159,9 @@
       (set-geometry pac-line :units "" :top "20px" :left "0px"
                              :right "0px" :height "22px" :width "100%")
       (setf (place-holder pac-line) "Current Package")
-      (setf (text-value pac-line) "clog-user")
+      (if lisp-package
+        (setf (text-value pac-line) lisp-package)
+        (setf (text-value pac-line) "clog-user"))
       (setf (current-editor-is-lisp app) "clog-user")
       (set-geometry ace :units "" :width "" :height ""
                         :top "22px" :bottom "20px" :left "0px" :right "0px")
