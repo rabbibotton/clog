@@ -57,8 +57,14 @@ CLOG is developed with ECL, CCL and SBCL, it is tested fairly
 regulary on Linux, Windows, Android, Rasperry Pi, and Mac. It
 is also know to work with the commercial Common Lisps as well.
 
-CLOG is in QuickLisp (ql:quickload :clog), however I one should
-adding the UltraLisp distribution as QuickLisp is update
+For **Windows** users the easy install -
+https://github.com/rabbibotton/clog/releases/download/v2.0/clog2.0-win64.zip
+Unzip, double click make.bat and then drag the resulting builder.exe to your
+application bar or double click. Update regularly by running update.bat
+If you change directories you need to run make.bat or update.bat
+
+CLOG is in QuickLisp (ql:quickload :clog), however one should
+add the UltraLisp distribution as QuickLisp is updated very
 infrequenty (see below).
 
 However for the bleeding edge version and bug fixes clone
