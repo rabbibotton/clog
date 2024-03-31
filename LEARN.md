@@ -6,14 +6,21 @@ L    E    AAAAA R  R N   NN     C    L    O   O G   G
 LLLL EEEE A   A R  R N    N     CCCC LLLL OOOOO GGGGG
 ```
 
-COMMON-LISP "The Tutorial" Series (Google Doc Links)
+COMMON-LISP "The Tutorial" Series
 
 * [Install Common-Lisp for MacOS](MACOS.md)
 * [Install Common-Lisp for Win64](WINDOWS.md)
 * [Install Common-Lisp for Linux](https://lisp-lang.org/learn/getting-started/)
 * [Install Common-Lisp For Android (Termux)](ANDROID-TERMUX.md)
 
-The tutorial's goal is to get you writing real Lisp programs, quickly
+For **Windows** users there is an easy install for full CL and CLOG -
+https://github.com/rabbibotton/clog/releases/download/v2.0/clog2.0-win64.zip
+Unzip, double click make.bat and then drag the resulting builder.exe to your
+application bar or double click. Update regularly by running update.bat
+If you change directories you need to run make.bat or update.bat
+
+
+"The Tutorial"'s goal is to get you writing real Lisp programs, quickly
 (like in a day not weeks or years) and to give you the all important
 high level summary of the entire language that will let you fill in
 the many blanks and shortcuts with the solid books available, but
@@ -39,6 +46,7 @@ already being productive means having a bang up time doin' it all.
 
 CLOG Video Series
 
+- [CLOG Builder Master Classes](https://www.youtube.com/playlist?list=PLSUeblYuDUiPHuu5Fbw0tZdtZX3qiV7AJ)
 - [CLOG "Plunger" Video series use CLOG Builder to create a pro-app](https://www.youtube.com/playlist?list=PLSUeblYuDUiOucAaqkrVlmOG4p-q7lFU6)
 - [CLOG Extra - Learn tips on using CLOG](https://www.youtube.com/playlist?list=PLSUeblYuDUiNWHCf8xbHNlxPFQ5clF0YG)
 - [Common Lisp The Language 2ed Book Course](https://www.youtube.com/playlist?list=PLSUeblYuDUiNqagWU4NF4w5zsjs6Xo7H9)

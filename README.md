@@ -57,7 +57,14 @@ CLOG is developed with ECL, CCL and SBCL, it is tested fairly
 regulary on Linux, Windows, Android, Rasperry Pi, and Mac. It
 is also know to work with the commercial Common Lisps as well.
 
-For **Windows** users the easy install -
+To install CLOG - install Common Lisp:
+
+* [Install Common-Lisp for MacOS](MACOS.md)
+* [Install Common-Lisp for Linux](https://lisp-lang.org/learn/getting-started/)
+* [Install Common-Lisp For Android (Termux)](ANDROID-TERMUX.md)
+* [Install Common-Lisp for Win64](WINDOWS.md)
+
+For **Windows** users there is an easy install for full CL and CLOG -
 https://github.com/rabbibotton/clog/releases/download/v2.0/clog2.0-win64.zip
 Unzip, double click make.bat and then drag the resulting builder.exe to your
 application bar or double click. Update regularly by running update.bat
@@ -117,10 +124,6 @@ To get started load CLOG and then can load and run the builder:
 
 A list of plugins for CLOG are available at -
 https://ultralisp.org/tags/clog-plugin/
-
-Note: If using portacle for Windows you will need to copy the sqlite3 dll from
-https://www.sqlite.org/download.html to portacle\win\lib
-Consider a custom [install on windows](WINDOWS.md)
 
 1. Start emacs then M-x slime (or just run sbcl at the command line or use the
    CLOG Buider REPL Tools -> CLOG Builder Repl)
@@ -238,6 +241,7 @@ Other samples of CLOG on the web:
 - [CLOG + cl-collider](https://github.com/byulparan/clog-collider-experience)
 - [CLOG on iOS and Android](https://www.reddit.com/r/lisp/comments/tl46of/would_it_be_cool_to_run_a_clog_app_on_mobile_you/)
 - [Learn CLOG Dashboard](https://gist.github.com/mmontone/3a5a8a57675750e99ffb7fa64f40bc39#file-clog-learn-lisp)
+- [CLOGPower.com](http://clogpower.com)
 
 Get started learning CLOG and the CLOG Builder with
 * [Learn CLOG](LEARN.md)
