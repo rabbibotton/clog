@@ -277,22 +277,6 @@ clog-builder window.")
                                              :title-class "w3-red"
                                              :text c))))))))
 
-(defun on-dir-win (obj &key dir top left)
-  "Open dir window"
-  (let* ((*default-title-class*      *builder-title-class*)
-         (*default-border-class*     *builder-border-class*)
-         (win (create-gui-window obj :title "Directory Window"
-                                     :top top :left left
-                                     :width 600 :height 400
-                                     :has-pinner t
-                                     :client-movement *client-side-movement*))
-         (d   (create-dir-view (window-content win))))
-    (set-geometry d :top 0 :left 0 :right 0 :bottom 0 :width "" :height "")
-    (when *open-external*
-      (setf (checkedp (open-file-ext d)) t))
-    (when dir
-      (populate-dir-win d dir))))
-
 (defun on-opts-edit (body)
   (let ((pref (read-file (format nil "~A.sample" *preferances-file*))))
     (unless pref
@@ -431,10 +415,15 @@ clog-builder window.")
                             (lambda (obj)
                               (declare (ignore obj))
                               (open-window (window body) "https://rabbibotton.github.io/clog/clog-manual.html")))
-      (create-gui-menu-item help  :content "CLOG Tutorials"       :on-click
+      (create-gui-menu-item help  :content "Learn CLOG"           :on-click
                             (lambda (obj)
                               (declare (ignore obj))
                               (open-window (window body) "https://github.com/rabbibotton/clog/blob/main/LEARN.md")))
+      (create-gui-menu-item help  :content "Tutorials DIR"  :on-click
+                            (lambda (obj)
+                              (declare (ignore obj))
+                              (on-dir-win obj :dir (setf static-root (merge-pathnames "./tutorial/"
+                                                         (asdf:system-source-directory :clog))))))
       (create-gui-menu-item help  :content "ParenScript Reference" :on-click
                             (lambda (obj)
                               (declare (ignore obj))

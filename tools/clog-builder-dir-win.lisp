@@ -1,5 +1,21 @@
 (in-package :clog-tools)
 
+(defun on-dir-win (obj &key dir top left)
+  "Open dir window"
+  (let* ((*default-title-class*      *builder-title-class*)
+         (*default-border-class*     *builder-border-class*)
+         (win (create-gui-window obj :title "Directory Window"
+                                     :top top :left left
+                                     :width 600 :height 400
+                                     :has-pinner t
+                                     :client-movement *client-side-movement*))
+         (d   (create-dir-view (window-content win))))
+    (set-geometry d :top 0 :left 0 :right 0 :bottom 0 :width "" :height "")
+    (when *open-external*
+      (setf (checkedp (open-file-ext d)) t))
+    (when dir
+      (populate-dir-win d dir))))
+
 (defun on-setup-dir-win (panel)
   (populate-dir-win panel "./")
   (when *open-external*
