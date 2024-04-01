@@ -223,7 +223,7 @@ attribute/value pairs in the form attr= 'value'"))
   (when (or hidden style)
     (setf (getf args :style)
           (format nil "~@[~a~]~@[~a~]" (when hidden "visibility:hidden;") style)))
-  (dolist (key '(:name :html-id :auto-place))
+  (dolist (key '(:html-id :auto-place))
     (remf args key))
   (let* ((element (create-child
                    obj (format nil "<input type='~A' ~{~(~A~)= '~A'~^ ~}/>"
@@ -234,8 +234,6 @@ attribute/value pairs in the form attr= 'value'"))
     (when label
       (label-for label element))
     element))
-
-(escape-string :vslider :html t)
 
 ;;;;;;;;;;;;;;;;;;
 ;; autocomplete ;;
