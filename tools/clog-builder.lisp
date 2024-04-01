@@ -312,9 +312,9 @@ clog-builder window.")
                    "CLOG Update"
                    "Results of update will apear when completed."
                    :color-class "w3-green" :time-out 2))
-  (let ((results (capture-eval "(ql:update-all-dists)" :clog-obj body)))
+  (let ((results (capture-eval "(ql:update-all-dists :prompt nil)" :clog-obj body)))
     (if *app-mode*
-        (on-open-file body :title "CLOG Updated - Close builder, rerun make.bat/make and rerun."
+        (on-open-file body :title "CLOG Updated - Close builder, rerun make/update and rerun."
                            :title-class "w3-green w3-animate-top"
                            :text results)
         (on-open-file body :title "CLOG Updated - Close builder, rerun (ql:quickload :clog/tools)(clog-tools:clog-builder)"
