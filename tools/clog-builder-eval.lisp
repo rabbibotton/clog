@@ -16,6 +16,7 @@
                              (setf r (or result ""))
                              (bordeaux-threads:signal-semaphore sem))
                      :title title
+                     :modal nil
                      :width 640
                      :height 480)
        (bordeaux-threads:wait-on-semaphore sem)
