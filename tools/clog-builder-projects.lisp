@@ -58,7 +58,7 @@
   (let ((val (text-value (entry-point panel))))
     (unless (equal val "")
       (let ((result (capture-eval (format nil "(~A)" val) :clog-obj panel
-                                      :eval-in-package "clog-user")))
+                                                          :eval-in-package "clog-user")))
         (clog-web-alert (connection-body panel) "Result"
                         (format nil "~&result: ~A" result)
                         :color-class "w3-green"
