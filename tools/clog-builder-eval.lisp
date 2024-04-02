@@ -3,25 +3,25 @@
 ;; Lisp code evaluation utilities
 
 (defun one-of (obj pre choices &optional (title "Error") (prompt "Choice"))
- (let ((q  (format nil "<pre>~A</pre><p style='text-align:left'>" pre))
-       (n (length choices)) (i))
-   (do ((c choices (cdr c)) (i 1 (+ i 1)))
-       ((null c))
-     (setf q (format nil "~A~&[~D] ~A~%<br>" q i (car c))))
-   (do () ((typep i `(integer 1 ,n)))
-     (setf q (format nil "~A~&~A:" q prompt))
-     (let ((sem (bordeaux-threads:make-semaphore))
-           r)
-       (input-dialog obj q (lambda (result)
-                             (setf r (or result ""))
-                             (bordeaux-threads:signal-semaphore sem))
-                     :title title
-                     :modal nil
-                     :width 640
-                     :height 480)
-       (bordeaux-threads:wait-on-semaphore sem)
-       (setq i (read-from-string r))))
-     (nth (- i 1) choices)))
+  (let ((q  (format nil "<pre>~A</pre><p style='text-align:left'>" pre))
+        (n (length choices)) (i))
+    (do ((c choices (cdr c)) (i 1 (+ i 1)))
+        ((null c))
+      (setf q (format nil "~A~&[~D] ~A~%<br>" q i (car c))))
+    (do () ((typep i `(integer 1 ,n)))
+      (setf q (format nil "~A~&~A:" q prompt))
+      (let ((sem (bordeaux-threads:make-semaphore))
+            r)
+        (input-dialog obj q (lambda (result)
+                              (setf r (or result ""))
+                              (bordeaux-threads:signal-semaphore sem))
+                      :title title
+                      :modal nil
+                      :width 640
+                      :height 480)
+        (bordeaux-threads:wait-on-semaphore sem)
+        (setq i (read-from-string r))))
+    (nth (- i 1) choices)))
 
 (defun capture-eval (form &key (clog-obj nil) (eval-in-package "clog-user"))
   "Capture lisp evaluaton of FORM."
@@ -33,10 +33,9 @@
                  (if clog-obj
                      (let ((restart (one-of clog-obj condition (compute-restarts))))
                        (when restart
-                           (print restart)
-                           (let ((*debugger-hook* encapsulation))
-                             (invoke-restart-interactively restart))))
-                          (format t "Error - ~A~%" condition))))
+                         (let ((*debugger-hook* encapsulation))
+                           (invoke-restart-interactively restart))))
+                     (format t "Error - ~A~%" condition))))
         (unless (stringp form)
           (let ((r (make-array '(0) :element-type 'base-char
                                     :fill-pointer 0 :adjustable t)))
