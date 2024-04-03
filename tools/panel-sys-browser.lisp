@@ -18,75 +18,61 @@
   (let ((panel
          (change-class
           (clog:create-div clog-obj :content
-                           "<select style=\"box-sizing: content-box; position: absolute; left: 5px; top: 10px; width: 190px; height: 20px;\" id=\"CLOGB3921103967\" data-clog-name=\"type-box\"></select><select style=\"box-sizing: content-box; position: absolute; left: 205px; top: 10px; width: 300px; height: 20px; bottom: 335.028px;\" id=\"CLOGB3921103968\" data-clog-name=\"package-box\"></select><label for=\"CLOGB386795982312\" style=\"box-sizing: content-box; position: absolute; left: 535px; top: 9px;\" class=\"\" id=\"CLOGB3921103969\" data-clog-name=\"label-class-only\">pkg only</label><input type=\"CHECKBOX\" value=\"\" style=\"box-sizing: content-box; position: absolute; left: 516px; top: 15px;\" checked=\"checked\" id=\"CLOGB3921103970\" data-clog-name=\"class-only\"><input type=\"TEXT\" value=\"\" style=\"box-sizing: content-box; position: absolute; inset: 7px 5px 332.045px 605px; height: 22px;\" placeholder=\"search\" name=\"\" id=\"CLOGB3921103971\" data-clog-name=\"search-box\"><select size=\"4\" style=\"box-sizing: content-box; position: absolute; left: 5px; top: 40px; right: 5px; height: 125px;\" class=\"w3-small\" id=\"CLOGB3921103972\" data-clog-name=\"class-box\"></select><textarea name=\"\" cols=\"20\" rows=\"2\" style=\"box-sizing: content-box; position: absolute; right: 5px; height: 50px; resize: none; min-width: 0px; top: 175px; left: 5px;\" class=\"&nbsp;w3-small\" id=\"CLOGB3921103973\" data-clog-name=\"doc-box\"></textarea><input type=\"TEXT\" value=\"clog-user\" style=\"box-sizing: content-box; position: absolute; left: 5px; top: 239px; right: 5px; height: 18px;\" placeholder=\"Current Package\" class=\"w3-small\" id=\"CLOGB3921103974\" data-clog-name=\"pac-box\"><div class=\"ace_editor ace_hidpi ace-xcode ace-tm\" style=\"border: thin solid black; box-sizing: content-box; position: absolute; inset: 273px 5px 50px;\" id=\"CLOGB3921103975\" data-clog-name=\"src-box\"></div><input type=\"button\" style=\"box-sizing: content-box; position: absolute; left: 5px; bottom: 24px; right: 290px; text-align: left;\" class=\"w3-small\" id=\"CLOGB3921103976\" data-clog-name=\"file-name\"><input type=\"BUTTON\" value=\"Eval Form\" style=\"box-sizing: content-box; position: absolute; width: 50px; height: 15px; right: 215px; bottom: 24px;\" class=\"w3-tiny\" disabled=\"disabled\" id=\"CLOGB3921103977\" data-clog-name=\"eval-form-button\"><input type=\"BUTTON\" value=\"Eval Sel\" style=\"box-sizing: content-box; position: absolute; width: 50px; height: 15px; right: 145px; bottom: 25px;\" class=\"w3-tiny\" placeholder=\"\" disabled=\"disabled\" id=\"CLOGB3921103978\" data-clog-name=\"eval-sel-button\"><input type=\"BUTTON\" value=\"Eval File\" style=\"box-sizing: content-box; position: absolute; width: 50px; height: 15px; right: 75px; bottom: 25px;\" class=\"w3-tiny\" disabled=\"disabled\" id=\"CLOGB3921103979\" data-clog-name=\"eval-button\"><input type=\"BUTTON\" value=\"Save\" style=\"box-sizing: content-box; position: absolute; width: 50px; height: 15px; right: 5px; bottom: 25px;\" class=\"w3-tiny\" disabled=\"disabled\" id=\"CLOGB3921103980\" data-clog-name=\"save-button\"><div style=\"box-sizing: content-box; position: absolute; left: 5px; bottom: 5px; right: 5px;\" class=\"w3-tiny w3-border\" id=\"CLOGB3921103981\" data-clog-name=\"status-box\">status</div>"
+                           "<select style=\"box-sizing: content-box; position: absolute; left: 5px; top: 10px; width: 190px; height: 20px;\" id=\"CLOGB3921162225\" data-clog-name=\"type-box\"></select><select style=\"box-sizing: content-box; position: absolute; left: 205px; top: 10px; width: 300px; height: 20px; bottom: 335.028px;\" id=\"CLOGB3921162226\" data-clog-name=\"package-box\"></select><label for=\"CLOGB386795982312\" style=\"box-sizing: content-box; position: absolute; left: 535px; top: 9px;\" class=\"\" id=\"CLOGB3921162227\" data-clog-name=\"label-class-only\">pkg only</label><input type=\"CHECKBOX\" value=\"\" style=\"box-sizing: content-box; position: absolute; left: 516px; top: 15px;\" checked=\"checked\" id=\"CLOGB3921162228\" data-clog-name=\"class-only\"><input type=\"TEXT\" value=\"\" style=\"box-sizing: content-box; position: absolute; inset: 7px 5px 332.045px 605px; height: 22px;\" placeholder=\"search\" name=\"\" id=\"CLOGB3921162229\" data-clog-name=\"search-box\"><select size=\"4\" style=\"box-sizing: content-box; position: absolute; left: 5px; top: 40px; right: 5px; height: 125px;\" class=\"w3-small\" id=\"CLOGB3921162230\" data-clog-name=\"class-box\"></select><textarea name=\"\" cols=\"20\" rows=\"2\" style=\"box-sizing: content-box; position: absolute; right: 5px; height: 50px; resize: none; min-width: 0px; top: 175px; left: 5px;\" class=\"&nbsp;w3-small\" id=\"CLOGB3921162231\" data-clog-name=\"doc-box\"></textarea><input type=\"TEXT\" value=\"clog-user\" style=\"box-sizing: content-box; position: absolute; left: 5px; top: 239px; right: 5px; height: 18px;\" placeholder=\"Current Package\" class=\"w3-small\" id=\"CLOGB3921162232\" data-clog-name=\"pac-box\"><div class=\"ace_editor ace_hidpi ace-xcode ace-tm\" style=\"border: thin solid black; box-sizing: content-box; position: absolute; inset: 273px 5px 50px;\" id=\"CLOGB3921162233\" data-clog-name=\"src-box\"></div><input type=\"button\" style=\"box-sizing: content-box; position: absolute; left: 5px; bottom: 24px; right: 290px; text-align: left; height: 18px;\" class=\"w3-small\" id=\"CLOGB3921162234\" data-clog-name=\"file-name\"><input type=\"BUTTON\" value=\"Eval Form\" style=\"box-sizing: content-box; position: absolute; width: 50px; height: 15px; right: 215px; bottom: 24px;\" class=\"w3-tiny\" disabled=\"disabled\" id=\"CLOGB3921162235\" data-clog-name=\"eval-form-button\"><input type=\"BUTTON\" value=\"Eval Sel\" style=\"box-sizing: content-box; position: absolute; width: 50px; height: 15px; right: 145px; bottom: 25px;\" class=\"w3-tiny\" placeholder=\"\" disabled=\"disabled\" id=\"CLOGB3921162236\" data-clog-name=\"eval-sel-button\"><input type=\"BUTTON\" value=\"Eval File\" style=\"box-sizing: content-box; position: absolute; width: 50px; height: 15px; right: 75px; bottom: 25px;\" class=\"w3-tiny\" disabled=\"disabled\" id=\"CLOGB3921162237\" data-clog-name=\"eval-button\"><input type=\"BUTTON\" value=\"Save\" style=\"box-sizing: content-box; position: absolute; width: 50px; height: 15px; right: 5px; bottom: 25px;\" class=\"w3-tiny\" disabled=\"disabled\" id=\"CLOGB3921162238\" data-clog-name=\"save-button\"><div style=\"box-sizing: content-box; position: absolute; left: 5px; bottom: 5px; right: 5px;\" class=\"w3-tiny w3-border\" id=\"CLOGB3921162239\" data-clog-name=\"status-box\">status</div>"
                            :hidden hidden :class class :html-id html-id
                            :auto-place auto-place)
           'sys-browser)))
     (setf (slot-value panel 'status-box)
-            (attach-as-child clog-obj "CLOGB3921103981" :clog-type
+            (attach-as-child clog-obj "CLOGB3921162239" :clog-type
              'clog:clog-div :new-id t))
     (setf (slot-value panel 'save-button)
-            (attach-as-child clog-obj "CLOGB3921103980" :clog-type
+            (attach-as-child clog-obj "CLOGB3921162238" :clog-type
              'clog:clog-form-element :new-id t))
     (setf (slot-value panel 'eval-button)
-            (attach-as-child clog-obj "CLOGB3921103979" :clog-type
+            (attach-as-child clog-obj "CLOGB3921162237" :clog-type
              'clog:clog-form-element :new-id t))
     (setf (slot-value panel 'eval-sel-button)
-            (attach-as-child clog-obj "CLOGB3921103978" :clog-type
+            (attach-as-child clog-obj "CLOGB3921162236" :clog-type
              'clog:clog-form-element :new-id t))
     (setf (slot-value panel 'eval-form-button)
-            (attach-as-child clog-obj "CLOGB3921103977" :clog-type
+            (attach-as-child clog-obj "CLOGB3921162235" :clog-type
              'clog:clog-form-element :new-id t))
     (setf (slot-value panel 'file-name)
-            (attach-as-child clog-obj "CLOGB3921103976" :clog-type
+            (attach-as-child clog-obj "CLOGB3921162234" :clog-type
              'clog:clog-form-element :new-id t))
     (setf (slot-value panel 'src-box)
-            (attach-as-child clog-obj "CLOGB3921103975" :clog-type
+            (attach-as-child clog-obj "CLOGB3921162233" :clog-type
              'clog-ace:clog-ace-element :new-id t))
     (setf (slot-value panel 'pac-box)
-            (attach-as-child clog-obj "CLOGB3921103974" :clog-type
+            (attach-as-child clog-obj "CLOGB3921162232" :clog-type
              'clog:clog-form-element :new-id t))
     (setf (slot-value panel 'doc-box)
-            (attach-as-child clog-obj "CLOGB3921103973" :clog-type
+            (attach-as-child clog-obj "CLOGB3921162231" :clog-type
              'clog:clog-text-area :new-id t))
     (setf (slot-value panel 'class-box)
-            (attach-as-child clog-obj "CLOGB3921103972" :clog-type
+            (attach-as-child clog-obj "CLOGB3921162230" :clog-type
              'clog:clog-select :new-id t))
     (setf (slot-value panel 'search-box)
-            (attach-as-child clog-obj "CLOGB3921103971" :clog-type
+            (attach-as-child clog-obj "CLOGB3921162229" :clog-type
              'clog:clog-form-element :new-id t))
     (setf (slot-value panel 'class-only)
-            (attach-as-child clog-obj "CLOGB3921103970" :clog-type
+            (attach-as-child clog-obj "CLOGB3921162228" :clog-type
              'clog:clog-form-element :new-id t))
     (setf (slot-value panel 'label-class-only)
-            (attach-as-child clog-obj "CLOGB3921103969" :clog-type
+            (attach-as-child clog-obj "CLOGB3921162227" :clog-type
              'clog:clog-label :new-id t))
     (setf (slot-value panel 'package-box)
-            (attach-as-child clog-obj "CLOGB3921103968" :clog-type
+            (attach-as-child clog-obj "CLOGB3921162226" :clog-type
              'clog:clog-select :new-id t))
     (setf (slot-value panel 'type-box)
-            (attach-as-child clog-obj "CLOGB3921103967" :clog-type
+            (attach-as-child clog-obj "CLOGB3921162225" :clog-type
              'clog:clog-select :new-id t))
     (let ((target (type-box panel)))
       (declare (ignorable target))
-      (add-select-options target
-       '(alien-type callable class compiler-macro condition constant
-         declaration definition function generic-function global-definition
-         ir1-convert macro method method-combination optimizer setf-expander
-         source-transform special-operator structure symbol-macro transform
-         type type-definition variable vop))
-      (setf (value target) "GLOBAL-DEFINITION"))
+      (sys-browser-type-box-create panel target))
     (let ((target (package-box panel)))
       (declare (ignorable target))
-      (add-select-option target "All" "All")
-      (dolist
-          (p
-           (sort (list-all-packages)
-                 (lambda (a b)
-                   (string-lessp (package-name a) (package-name b)))))
-        (add-select-option target (package-name p) (package-name p)))
-      (setf (value target) "All")
-      (sys-browser-populate panel))
+      (sys-browser-package-box panel target))
     (let ((target (label-class-only panel)))
       (declare (ignorable target))
       (setf (attribute target "for")
@@ -114,11 +100,7 @@
     (clog:set-on-key-up (search-box panel)
                         (lambda (target data)
                           (declare (ignorable target data))
-                          (cond
-                           ((equal (text-value (package-box panel)) "All")
-                            (when (equalp "enter" (getf data :key))
-                              (sys-browser-populate panel)))
-                           (t (sys-browser-populate panel)))))
+                          (sys-browser-search-box-key-up panel target data)))
     (clog:set-on-click (class-box panel)
                        (lambda (target)
                          (declare (ignorable target))
@@ -130,73 +112,25 @@
     (clog:set-on-input (src-box panel)
                        (lambda (target)
                          (declare (ignorable target))
-                         (unless (state panel)
-                           (when (fname panel)
-                             (setf (state panel) t)
-                             (setf (disabledp (save-button panel)) nil)))))
+                         (sys-browser-src-box-on-input panel target)))
     (clog:set-on-click (file-name panel)
                        (lambda (target)
                          (declare (ignorable target))
-                         (on-open-file target :open-file (text-value target))))
+                         (sys-browser-file-name-on-click panel target)))
     (clog:set-on-click (eval-form-button panel)
                        (lambda (target)
                          (declare (ignorable target))
-                         (let ((p
-                                (parse-integer
-                                 (js-query panel
-                                  (format nil
-                                          "~A.session.doc.positionToIndex (~A.selection.getCursor(), 0);"
-                                          (clog-ace::js-ace (src-box panel))
-                                          (clog-ace::js-ace (src-box panel))))
-                                 :junk-allowed t))
-                               (tv (text-value (src-box panel)))
-                               (pk (text-value (pac-box panel)))
-                               (lf nil)
-                               (cp 0))
-                           (loop
-                            (setf (values lf cp)
-                                    (read-from-string tv nil nil :start cp))
-                            (unless lf (return nil))
-                            (when (> cp p) (return lf)))
-                           (when lf
-                             (let ((result
-                                    (capture-eval lf :clog-obj
-                                     (connection-body panel) :eval-in-package
-                                     (format nil "~A" pk))))
-                               (clog-web-alert (connection-body panel) "Result"
-                                (format nil "~&result: ~A" result) :color-class
-                                "w3-green" :time-out 3))))))
+                         (sys-browser-eval-form-button-on-click panel target)))
     (clog:set-on-click (eval-sel-button panel)
                        (lambda (target)
                          (declare (ignorable target))
-                         (let ((pac (text-value (pac-box panel)))
-                               (val (clog-ace:selected-text (src-box panel))))
-                           (unless (equal val "")
-                             (let ((result
-                                    (capture-eval val :clog-obj panel
-                                     :eval-in-package pac)))
-                               (clog-web-alert (connection-body panel) "Result"
-                                (format nil "~&result: ~A" result) :color-class
-                                "w3-green" :time-out 3))))))
+                         (sys-browser-eval-sel-button-on-click panel target)))
     (clog:set-on-click (eval-button panel)
                        (lambda (target)
                          (declare (ignorable target))
-                         (let ((pac (text-value (pac-box panel)))
-                               (val (clog-ace:selected-text (src-box panel))))
-                           (unless (equal val "")
-                             (let ((result
-                                    (capture-eval val :clog-obj panel
-                                     :eval-in-package
-                                     (text-value (package-box panel)))))
-                               (clog-web-alert (connection-body panel) "Result"
-                                (format nil "~&result: ~A" result) :color-class
-                                "w3-green" :time-out 3))))))
+                         (sys-browser-eval-button-on-click panel target)))
     (clog:set-on-click (save-button panel)
                        (lambda (target)
                          (declare (ignorable target))
-                         (when (fname panel)
-                           (write-file (text-value (src-box panel))
-                            (fname panel))
-                           (setf (state panel) nil)
-                           (setf (disabledp (save-button panel)) t))))
+                         (sys-browser-save-button-on-click panel-target)))
     panel))

@@ -15,6 +15,121 @@
                                    (declare (ignore obj))
                                    (clog-ace:resize (src-box panel))))))
 
+(defun sys-browser-type-box-create (panel target)
+  (declare (ignore panel))
+  (add-select-options target '(ALIEN-TYPE
+                               CALLABLE
+                               CLASS
+                               COMPILER-MACRO
+                               CONDITION
+                               CONSTANT
+                               DECLARATION
+                               DEFINITION
+                               FUNCTION
+                               GENERIC-FUNCTION
+                               GLOBAL-DEFINITION
+                               IR1-CONVERT
+                               MACRO
+                               METHOD
+                               METHOD-COMBINATION
+                               OPTIMIZER
+                               SETF-EXPANDER
+                               SOURCE-TRANSFORM
+                               SPECIAL-OPERATOR
+                               STRUCTURE
+                               SYMBOL-MACRO
+                               TRANSFORM
+                               TYPE
+                               TYPE-DEFINITION
+                               VARIABLE
+                               VOP))
+  (setf (value target) "GLOBAL-DEFINITION"))
+
+(defun sys-browser-package-box (panel target)
+  (add-select-option target "All"
+                            "All")
+  (dolist (p (sort (list-all-packages) (lambda (a b)
+                                         (string-lessp (package-name a)
+                                                       (package-name b)))))
+    (add-select-option target (package-name p)
+                              (package-name p)))
+  (setf (value target) "All")
+  (sys-browser-populate panel))
+
+(defun sys-browser-search-box-key-up (panel target data)
+  (declare (ignore target))
+  (cond ((equal (text-value (package-box panel)) "All")
+          (when (equalp "enter" (getf data :key))
+            (sys-browser-populate panel)))
+        (t
+         (sys-browser-populate panel))))
+
+(defun sys-browser-src-box-on-input (panel target)
+  (declare (ignore target))
+  (unless (state panel)
+    (when (fname panel)
+      (setf (state panel) t)
+      (setf (disabledp (save-button panel)) nil))))
+      
+(defun sys-browser-file-name-on-click (panel target)
+  (declare (ignore panel))
+  (on-open-file target :open-file (text-value target)))
+
+(defun sys-browser-eval-form-button-on-click (panel target)
+  (declare (ignore target))
+  (let ((p  (parse-integer 
+              (js-query panel
+                (format nil "~A.session.doc.positionToIndex (~A.selection.getCursor(), 0);"
+                            (clog-ace::js-ace (src-box panel))
+                            (clog-ace::js-ace (src-box panel))))
+            :junk-allowed t))
+        (tv (text-value (src-box panel)))
+        (pk (text-value (pac-box panel)))
+        (lf nil)
+        (cp 0))
+    (loop
+      (setf (values lf cp) (read-from-string tv nil nil :start cp))
+      (unless lf (return nil))
+      (when (> cp p) (return lf)))
+    (when lf
+      (let ((result (capture-eval lf
+                                  :clog-obj (connection-body panel)
+                                  :eval-in-package (format nil "~A" pk))))
+        (clog-web-alert (connection-body panel) "Result"
+                        (format nil "~&result: ~A" result)
+                        :color-class "w3-green"
+                        :time-out 3)))))
+
+(defun sys-browser-eval-sel-button-on-click (panel target)
+  (declare (ignore target))
+  (let ((pac (text-value (pac-box panel)))
+        (val (clog-ace:selected-text (src-box panel))))
+    (unless (equal val "")
+      (let ((result (capture-eval val :clog-obj panel
+                                      :eval-in-package pac)))
+        (clog-web-alert (connection-body panel) "Result"
+                        (format nil "~&result: ~A" result)
+                        :color-class "w3-green"
+                        :time-out 3)))))
+
+(defun sys-browser-eval-button-on-click (panel target)
+  (declare  (ignore target))
+  (let ((pac (text-value (pac-box panel)))
+        (val (clog-ace:text-value (src-box panel))))
+    (unless (equal val "")
+      (let ((result (capture-eval val :clog-obj panel
+                                      :eval-in-package pac)))
+        (clog-web-alert (connection-body panel) "Result"
+                        (format nil "~&result: ~A" result)
+                        :color-class "w3-green"
+                        :time-out 3)))))
+
+(defun sys-browser-save-button-on-click (panel target)
+  (when (fname panel)
+    (write-file (text-value (src-box panel)) (fname panel))
+    (setf (state panel) nil)
+    (setf (disabledp (save-button panel)) t)))
+
 (defun sys-browser-populate (panel)
   (ignore-errors ; ignore invalid searches
    (setf (inner-html (class-box panel)) "")
