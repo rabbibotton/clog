@@ -411,7 +411,7 @@ in on-resize, on-full-screen-change and on-orientation-change events."))
 
 (defmethod reorient-all-windows ((obj clog-obj))
   (let* ((app  (connection-data-item obj "clog-gui"))
-	 (body (connection-data-item obj "clog-body"))
+	 (body (connection-body obj))
 	 (mbh  (menu-bar-height obj))
 	 (bh   (height (html-document body)))
 	 (bw   (width  (html-document body)))
@@ -805,12 +805,12 @@ The on-window-change clog-obj received is the new window"))
     (set-on-pointer-up obj nil)
     (cond ((window-maximized-p (drag-obj app))
            (window-maximize (drag-obj app) :focus nil))
-	  (t
-	   (let* ((body      (connection-data-item (drag-obj app) "clog-body"))
-		  (mbh       (menu-bar-height (drag-obj app)))
-		  (bh        (height (html-document body)))
-		  (bw        (width  (html-document body))))
-	     (make-in-bounds (drag-obj app) mbh bh bw))))
+          (t
+           (let* ((body      (connection-body (drag-obj app)))
+                  (mbh       (menu-bar-height (drag-obj app)))
+                  (bh        (height (html-document body)))
+                  (bw        (width  (html-document body))))
+      (make-in-bounds (drag-obj app) mbh bh bw))))
     (cond ((equalp (in-drag app) "m")
            (fire-on-window-move-done (drag-obj app)))
           ((equalp (in-drag app) "s")
@@ -1235,7 +1235,7 @@ interactions. Use window-end-modal to undo."))
   (:documentation "Center CLOG-GUI-WINDOW in browser."))
 
 (defmethod window-center ((obj clog-gui-window))
-  (let ((body (connection-data-item obj "clog-body")))
+  (let ((body (connection-body obj)))
     (setf (top obj) (unit :px (- (/ (inner-height (window body)) 2.0)
                                  (/ (height obj) 2.0))))
     (setf (left obj) (unit :px (- (/ (inner-width (window body)) 2.0)
@@ -1461,7 +1461,7 @@ interactions. Use window-end-modal to undo."))
 is placed in DOM at top of html body instead of bottom of html body."
   (unless html-id
       (setf html-id (generate-id)))
-  (let* ((body   (connection-data-item obj "clog-body"))
+  (let* ((body   (connection-body obj))
          (win    (create-child body
                              (format nil
 "  <div class='w3-panel ~A w3-animate-right w3-display-container'>~
@@ -1500,7 +1500,7 @@ is placed in DOM at top of html body instead of bottom of html body."
   "Create an alert dialog box with CONTENT centered."
   (unless html-id
       (setf html-id (generate-id)))
-  (let* ((body (connection-data-item obj "clog-body"))
+  (let* ((body (connection-body obj))
          (win  (create-gui-window obj
                                   :title    title
                                   :content  (format nil
@@ -1553,7 +1553,7 @@ is placed in DOM at top of html body instead of bottom of html body."
 Calls on-input with input box contents or nil if canceled."
   (unless html-id
       (setf html-id (generate-id)))
-  (let* ((body (connection-data-item obj "clog-body"))
+  (let* ((body (connection-body obj))
          (inp  (if (eql rows 1)
                    (format nil "<input type='text' id='~A-input' size='~A' value='~A'>"
                            html-id
@@ -1635,7 +1635,7 @@ Calls on-input with input box contents or nil if canceled."
 Calls on-input with t if confirmed or nil if canceled."
   (unless html-id
       (setf html-id (generate-id)))
-  (let* ((body (connection-data-item obj "clog-body"))
+  (let* ((body (connection-body obj))
          (win  (create-gui-window obj
                                   :title          title
                                   :content        (format nil
@@ -1729,7 +1729,7 @@ Calls on-input after OK or Cancel with an a-list of field name to value
 if confirmed or nil if canceled."
   (unless html-id
     (setf html-id (generate-id)))
-  (let* ((body (connection-data-item obj "clog-body"))
+  (let* ((body (connection-body obj))
          (fls (format nil "~{~A~}"
                       (mapcar (lambda (l)
                                 (cond
@@ -1908,7 +1908,7 @@ if confirmed or nil if canceled."
                              (html-id nil))
   "Create a local file dialog box called TITLE using INITIAL-DIR on server
 machine, upon close ON-FILE-NAME called with filename or nil if failure."
-  (let* ((body (connection-data-item obj "clog-body"))
+  (let* ((body (connection-body obj))
          (win  (create-gui-window obj
                                   :title           title
                                   :maximize        maximize

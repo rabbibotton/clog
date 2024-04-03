@@ -2,13 +2,13 @@
 
 ;; dialog based streams
 
-(defclass dialog-in-str (trivial-gray-streams:fundamental-character-input-stream)
+(defclass dialog-in-stream (trivial-gray-streams:fundamental-character-input-stream)
   ((clog-obj :reader   obj       :initarg  :clog-obj)
    (outbuf   :reader   outbuf    :initarg  :source)
    (buffer   :accessor buffer-of :initform "")
    (index    :accessor index     :initform 0)))
 
-(defmethod trivial-gray-streams:stream-read-char ((stream dialog-in-str))
+(defmethod trivial-gray-streams:stream-read-char ((stream dialog-in-stream))
   (when (eql (index stream) (length (buffer-of stream)))
     (setf (buffer-of stream) "")
     (setf (index stream) 0))
@@ -23,25 +23,25 @@
         (char (buffer-of stream) (index stream))
       (incf (index stream)))))
 
-(defmethod trivial-gray-streams:stream-unread-char ((stream dialog-in-str) character)
+(defmethod trivial-gray-streams:stream-unread-char ((stream dialog-in-stream) character)
   (decf (index stream)))
 
-(defmethod trivial-gray-streams:stream-line-column ((stream dialog-in-str))
+(defmethod trivial-gray-streams:stream-line-column ((stream dialog-in-stream))
   nil)
 
-(defmethod add-line ((stream dialog-in-str) text)
+(defmethod add-line ((stream dialog-in-stream) text)
   (setf (buffer-of stream) (format nil "~A~A~%" (buffer-of stream) text)))
 
-(defclass dialog-out-str (trivial-gray-streams:fundamental-character-output-stream)
+(defclass dialog-out-stream (trivial-gray-streams:fundamental-character-output-stream)
   ((buffer :accessor buffer-of :initform "")))
 
-(defmethod trivial-gray-streams:stream-write-char ((stream dialog-out-str) character)
+(defmethod trivial-gray-streams:stream-write-char ((stream dialog-out-stream) character)
   (setf (buffer-of stream) (format nil "~A~A" (buffer-of stream) character)))
 
-(defmethod trivial-gray-streams:stream-line-column ((stream dialog-out-str))
+(defmethod trivial-gray-streams:stream-line-column ((stream dialog-out-stream))
   nil)
 
-(defmethod prompt ((stream dialog-out-str))
+(defmethod prompt ((stream dialog-out-stream))
   (prog1
       (buffer-of stream)
     (setf (buffer-of stream) "")))
@@ -74,30 +74,33 @@
                                  :fill-pointer 0 :adjustable t))
         eval-result)
     (with-output-to-string (stream result)
-      (with-open-stream (out-str (make-instance 'dialog-out-str))
-        (with-open-stream (in-str (make-instance 'dialog-in-str :clog-obj clog-obj :source out-str))
+      (with-open-stream (out-stream (make-instance 'dialog-out-stream))
+        (with-open-stream (in-stream (make-instance 'dialog-in-stream :clog-obj clog-obj :source out-stream))
           (labels ((my-debugger (condition encapsulation)
                      (if clog-obj
-                         (let ((restart (one-of clog-obj condition (compute-restarts))))
-                           (when restart
-                             (let ((*debugger-hook* encapsulation))
-                               (invoke-restart-interactively restart))))
-                   (format t "Error - ~A~%" condition))))
-        (unless (stringp form)
-          (let ((r (make-array '(0) :element-type 'base-char
-                                    :fill-pointer 0 :adjustable t)))
-            (with-output-to-string (s r)
-              (print form s))
-            (setf form r)))
-        (let* ((*query-io*        (make-two-way-stream in-str out-str))
-               (*standard-output* stream)
-               (*error-output*    stream)
-               (*debugger-hook*   #'my-debugger)
-               (*package*         (find-package (string-upcase eval-in-package))))
-          (setf eval-result (eval (read-from-string (format nil "(progn ~A)" form))))
-          (values
-           (format nil "~A~%=>~A~%" result eval-result)
-           *package*))))))))
+                         (ignore-errors
+                          (let ((restart (one-of clog-obj condition (compute-restarts))))
+                            (when restart
+                              (let ((*debugger-hook* encapsulation))
+                                (invoke-restart-interactively restart)))))
+                         (format t "Error - ~A~%" condition))))
+            (unless (stringp form)
+              (let ((r (make-array '(0) :element-type 'base-char
+                                        :fill-pointer 0 :adjustable t)))
+                (with-output-to-string (s r)
+                  (print form s))
+                (setf form r)))
+            (let* ((*query-io*        (make-two-way-stream in-stream out-stream))
+                   (*standard-output*      stream)
+                   (*error-output*         stream)
+                   (*debugger-hook*        #'my-debugger)
+                   (*default-title-class*  *builder-title-class*)
+                   (*default-border-class* *builder-border-class*)
+                   (*package*              (find-package (string-upcase eval-in-package))))
+              (setf eval-result (eval (read-from-string (format nil "(progn ~A)" form))))
+              (values
+               (format nil "~A~%=>~A~%" result eval-result)
+               *package*))))))))
 
 (defun do-eval (obj form-string cname &key (package "clog-user") (test t) custom-boot)
   "Render, evalute and run code for panel"
