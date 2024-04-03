@@ -47,6 +47,7 @@
                            text
                            (title-class *builder-title-class*)
                            lisp-package
+                           regex
                            maximized)
   "Open a new text editor"
   (unless (window-to-top-by-title obj open-file)
@@ -220,8 +221,12 @@
                                        (open-file-name fname)
                                        (setf is-dirty nil)))))
         (when (and open-file
-                   (not (equalp open-file " ")))
+                   (not (equalp open-file " "))
+                   (not (equalp open-file "")))
           (open-file-name open-file))
+        (when regex
+          (js-execute obj (format nil "~A.find('~A',{caseSensitive:false,regExp:true})"
+                                     (clog-ace::js-ace ace) regex)))
         (set-on-click btn-load (lambda (obj) (load-file obj)))
         (set-on-click m-load (lambda (obj) (load-file obj))))
       (set-on-input ace (lambda (obj)
