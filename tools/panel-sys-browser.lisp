@@ -18,54 +18,54 @@
   (let ((panel
          (change-class
           (clog:create-div clog-obj :content
-                           "<select style=\"box-sizing: content-box; position: absolute; left: 5px; top: 10px; width: 190px; height: 20px;\" id=\"CLOGB3920575640\" data-clog-name=\"type-box\"></select><select style=\"box-sizing: content-box; position: absolute; left: 205px; top: 10px; width: 300px; height: 20px; bottom: 335.028px;\" id=\"CLOGB3920575641\" data-clog-name=\"package-box\"></select><label for=\"CLOGB386795982312\" style=\"box-sizing: content-box; position: absolute; left: 535px; top: 9px;\" class=\"\" id=\"CLOGB3920575642\" data-clog-name=\"label-class-only\">pkg only</label><input type=\"CHECKBOX\" value=\"\" style=\"box-sizing: content-box; position: absolute; left: 516px; top: 15px;\" checked=\"checked\" id=\"CLOGB3920575643\" data-clog-name=\"class-only\"><input type=\"TEXT\" value=\"\" style=\"box-sizing: content-box; position: absolute; inset: 7px 5px 332.045px 605px; height: 22px;\" placeholder=\"search\" name=\"\" id=\"CLOGB3920575644\" data-clog-name=\"search-box\"><select size=\"4\" style=\"box-sizing: content-box; position: absolute; left: 5px; top: 40px; right: 5px; height: 125px;\" class=\"w3-small\" id=\"CLOGB3920575645\" data-clog-name=\"class-box\"></select><textarea name=\"\" cols=\"20\" rows=\"2\" style=\"box-sizing: content-box; position: absolute; right: 5px; height: 50px; resize: none; min-width: 0px; top: 175px; left: 5px;\" class=\"&nbsp;w3-small\" id=\"CLOGB3920575646\" data-clog-name=\"doc-box\"></textarea><input type=\"TEXT\" value=\"clog-user\" style=\"box-sizing: content-box; position: absolute; left: 5px; top: 239px; right: 5px; height: 18px;\" placeholder=\"Current Package\" class=\"w3-small\" id=\"CLOGB3920575647\" data-clog-name=\"pac-box\"><div class=\"ace_editor ace_hidpi ace-xcode ace-tm\" style=\"border: thin solid black; box-sizing: content-box; position: absolute; inset: 273px 5px 50px;\" id=\"CLOGB3920575648\" data-clog-name=\"src-box\"></div><div style=\"box-sizing: content-box; position: absolute; left: 5px; bottom: 27px; right: 290px;\" class=\"w3-small\" id=\"CLOGB3920575649\" data-clog-name=\"file-name\">&nbsp;</div><input type=\"BUTTON\" value=\"Eval Form\" style=\"box-sizing: content-box; position: absolute; width: 50px; height: 15px; right: 215px; bottom: 24px;\" class=\"w3-tiny\" disabled=\"disabled\" id=\"CLOGB3920575650\" data-clog-name=\"eval-form-button\"><input type=\"BUTTON\" value=\"Eval Sel\" style=\"box-sizing: content-box; position: absolute; width: 50px; height: 15px; right: 145px; bottom: 25px;\" class=\"w3-tiny\" placeholder=\"\" disabled=\"disabled\" id=\"CLOGB3920575651\" data-clog-name=\"eval-sel-button\"><input type=\"BUTTON\" value=\"Eval File\" style=\"box-sizing: content-box; position: absolute; width: 50px; height: 15px; right: 75px; bottom: 25px;\" class=\"w3-tiny\" disabled=\"disabled\" id=\"CLOGB3920575652\" data-clog-name=\"eval-button\"><input type=\"BUTTON\" value=\"Save\" style=\"box-sizing: content-box; position: absolute; width: 50px; height: 15px; right: 5px; bottom: 25px;\" class=\"w3-tiny\" disabled=\"disabled\" id=\"CLOGB3920575653\" data-clog-name=\"save-button\"><div style=\"box-sizing: content-box; position: absolute; left: 5px; bottom: 5px; right: 5px;\" class=\"w3-tiny w3-border\" id=\"CLOGB3920575654\" data-clog-name=\"status-box\">status</div>"
+                           "<select style=\"box-sizing: content-box; position: absolute; left: 5px; top: 10px; width: 190px; height: 20px;\" id=\"CLOGB3921103967\" data-clog-name=\"type-box\"></select><select style=\"box-sizing: content-box; position: absolute; left: 205px; top: 10px; width: 300px; height: 20px; bottom: 335.028px;\" id=\"CLOGB3921103968\" data-clog-name=\"package-box\"></select><label for=\"CLOGB386795982312\" style=\"box-sizing: content-box; position: absolute; left: 535px; top: 9px;\" class=\"\" id=\"CLOGB3921103969\" data-clog-name=\"label-class-only\">pkg only</label><input type=\"CHECKBOX\" value=\"\" style=\"box-sizing: content-box; position: absolute; left: 516px; top: 15px;\" checked=\"checked\" id=\"CLOGB3921103970\" data-clog-name=\"class-only\"><input type=\"TEXT\" value=\"\" style=\"box-sizing: content-box; position: absolute; inset: 7px 5px 332.045px 605px; height: 22px;\" placeholder=\"search\" name=\"\" id=\"CLOGB3921103971\" data-clog-name=\"search-box\"><select size=\"4\" style=\"box-sizing: content-box; position: absolute; left: 5px; top: 40px; right: 5px; height: 125px;\" class=\"w3-small\" id=\"CLOGB3921103972\" data-clog-name=\"class-box\"></select><textarea name=\"\" cols=\"20\" rows=\"2\" style=\"box-sizing: content-box; position: absolute; right: 5px; height: 50px; resize: none; min-width: 0px; top: 175px; left: 5px;\" class=\"&nbsp;w3-small\" id=\"CLOGB3921103973\" data-clog-name=\"doc-box\"></textarea><input type=\"TEXT\" value=\"clog-user\" style=\"box-sizing: content-box; position: absolute; left: 5px; top: 239px; right: 5px; height: 18px;\" placeholder=\"Current Package\" class=\"w3-small\" id=\"CLOGB3921103974\" data-clog-name=\"pac-box\"><div class=\"ace_editor ace_hidpi ace-xcode ace-tm\" style=\"border: thin solid black; box-sizing: content-box; position: absolute; inset: 273px 5px 50px;\" id=\"CLOGB3921103975\" data-clog-name=\"src-box\"></div><input type=\"button\" style=\"box-sizing: content-box; position: absolute; left: 5px; bottom: 24px; right: 290px; text-align: left;\" class=\"w3-small\" id=\"CLOGB3921103976\" data-clog-name=\"file-name\"><input type=\"BUTTON\" value=\"Eval Form\" style=\"box-sizing: content-box; position: absolute; width: 50px; height: 15px; right: 215px; bottom: 24px;\" class=\"w3-tiny\" disabled=\"disabled\" id=\"CLOGB3921103977\" data-clog-name=\"eval-form-button\"><input type=\"BUTTON\" value=\"Eval Sel\" style=\"box-sizing: content-box; position: absolute; width: 50px; height: 15px; right: 145px; bottom: 25px;\" class=\"w3-tiny\" placeholder=\"\" disabled=\"disabled\" id=\"CLOGB3921103978\" data-clog-name=\"eval-sel-button\"><input type=\"BUTTON\" value=\"Eval File\" style=\"box-sizing: content-box; position: absolute; width: 50px; height: 15px; right: 75px; bottom: 25px;\" class=\"w3-tiny\" disabled=\"disabled\" id=\"CLOGB3921103979\" data-clog-name=\"eval-button\"><input type=\"BUTTON\" value=\"Save\" style=\"box-sizing: content-box; position: absolute; width: 50px; height: 15px; right: 5px; bottom: 25px;\" class=\"w3-tiny\" disabled=\"disabled\" id=\"CLOGB3921103980\" data-clog-name=\"save-button\"><div style=\"box-sizing: content-box; position: absolute; left: 5px; bottom: 5px; right: 5px;\" class=\"w3-tiny w3-border\" id=\"CLOGB3921103981\" data-clog-name=\"status-box\">status</div>"
                            :hidden hidden :class class :html-id html-id
                            :auto-place auto-place)
           'sys-browser)))
     (setf (slot-value panel 'status-box)
-            (attach-as-child clog-obj "CLOGB3920575654" :clog-type
+            (attach-as-child clog-obj "CLOGB3921103981" :clog-type
              'clog:clog-div :new-id t))
     (setf (slot-value panel 'save-button)
-            (attach-as-child clog-obj "CLOGB3920575653" :clog-type
+            (attach-as-child clog-obj "CLOGB3921103980" :clog-type
              'clog:clog-form-element :new-id t))
     (setf (slot-value panel 'eval-button)
-            (attach-as-child clog-obj "CLOGB3920575652" :clog-type
+            (attach-as-child clog-obj "CLOGB3921103979" :clog-type
              'clog:clog-form-element :new-id t))
     (setf (slot-value panel 'eval-sel-button)
-            (attach-as-child clog-obj "CLOGB3920575651" :clog-type
+            (attach-as-child clog-obj "CLOGB3921103978" :clog-type
              'clog:clog-form-element :new-id t))
     (setf (slot-value panel 'eval-form-button)
-            (attach-as-child clog-obj "CLOGB3920575650" :clog-type
+            (attach-as-child clog-obj "CLOGB3921103977" :clog-type
              'clog:clog-form-element :new-id t))
     (setf (slot-value panel 'file-name)
-            (attach-as-child clog-obj "CLOGB3920575649" :clog-type
-             'clog:clog-div :new-id t))
+            (attach-as-child clog-obj "CLOGB3921103976" :clog-type
+             'clog:clog-form-element :new-id t))
     (setf (slot-value panel 'src-box)
-            (attach-as-child clog-obj "CLOGB3920575648" :clog-type
+            (attach-as-child clog-obj "CLOGB3921103975" :clog-type
              'clog-ace:clog-ace-element :new-id t))
     (setf (slot-value panel 'pac-box)
-            (attach-as-child clog-obj "CLOGB3920575647" :clog-type
+            (attach-as-child clog-obj "CLOGB3921103974" :clog-type
              'clog:clog-form-element :new-id t))
     (setf (slot-value panel 'doc-box)
-            (attach-as-child clog-obj "CLOGB3920575646" :clog-type
+            (attach-as-child clog-obj "CLOGB3921103973" :clog-type
              'clog:clog-text-area :new-id t))
     (setf (slot-value panel 'class-box)
-            (attach-as-child clog-obj "CLOGB3920575645" :clog-type
+            (attach-as-child clog-obj "CLOGB3921103972" :clog-type
              'clog:clog-select :new-id t))
     (setf (slot-value panel 'search-box)
-            (attach-as-child clog-obj "CLOGB3920575644" :clog-type
+            (attach-as-child clog-obj "CLOGB3921103971" :clog-type
              'clog:clog-form-element :new-id t))
     (setf (slot-value panel 'class-only)
-            (attach-as-child clog-obj "CLOGB3920575643" :clog-type
+            (attach-as-child clog-obj "CLOGB3921103970" :clog-type
              'clog:clog-form-element :new-id t))
     (setf (slot-value panel 'label-class-only)
-            (attach-as-child clog-obj "CLOGB3920575642" :clog-type
+            (attach-as-child clog-obj "CLOGB3921103969" :clog-type
              'clog:clog-label :new-id t))
     (setf (slot-value panel 'package-box)
-            (attach-as-child clog-obj "CLOGB3920575641" :clog-type
+            (attach-as-child clog-obj "CLOGB3921103968" :clog-type
              'clog:clog-select :new-id t))
     (setf (slot-value panel 'type-box)
-            (attach-as-child clog-obj "CLOGB3920575640" :clog-type
+            (attach-as-child clog-obj "CLOGB3921103967" :clog-type
              'clog:clog-select :new-id t))
     (let ((target (type-box panel)))
       (declare (ignorable target))
@@ -134,11 +134,10 @@
                            (when (fname panel)
                              (setf (state panel) t)
                              (setf (disabledp (save-button panel)) nil)))))
-    (clog:set-on-context-menu (file-name panel)
-                              (lambda (target)
-                                (declare (ignorable target))
-                                (on-open-file target :open-file
-                                 (text-value target))))
+    (clog:set-on-click (file-name panel)
+                       (lambda (target)
+                         (declare (ignorable target))
+                         (on-open-file target :open-file (text-value target))))
     (clog:set-on-click (eval-form-button panel)
                        (lambda (target)
                          (declare (ignorable target))
