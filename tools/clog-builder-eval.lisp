@@ -1,73 +1,6 @@
 (in-package :clog-tools)
 
-;; dialog based streams
-
-(defclass dialog-in-stream (trivial-gray-streams:fundamental-character-input-stream)
-  ((clog-obj :reader   obj       :initarg  :clog-obj)
-   (outbuf   :reader   outbuf    :initarg  :source)
-   (buffer   :accessor buffer-of :initform "")
-   (index    :accessor index     :initform 0)))
-
-(defmethod trivial-gray-streams:stream-read-char ((stream dialog-in-stream))
-  (when (eql (index stream) (length (buffer-of stream)))
-    (setf (buffer-of stream) "")
-    (setf (index stream) 0))
-  (when (eql (index stream) 0)
-    (let ((sem (bordeaux-threads:make-semaphore)))
-      (input-dialog (obj stream) (prompt (outbuf stream)) (lambda (result)
-                                                            (add-line stream result)
-                                                            (bordeaux-threads:signal-semaphore sem)))
-      (bordeaux-threads:wait-on-semaphore sem)))
-  (when (< (index stream) (length (buffer-of stream)))
-    (prog1
-        (char (buffer-of stream) (index stream))
-      (incf (index stream)))))
-
-(defmethod trivial-gray-streams:stream-unread-char ((stream dialog-in-stream) character)
-  (decf (index stream)))
-
-(defmethod trivial-gray-streams:stream-line-column ((stream dialog-in-stream))
-  nil)
-
-(defmethod add-line ((stream dialog-in-stream) text)
-  (setf (buffer-of stream) (format nil "~A~A~%" (buffer-of stream) text)))
-
-(defclass dialog-out-stream (trivial-gray-streams:fundamental-character-output-stream)
-  ((buffer :accessor buffer-of :initform "")))
-
-(defmethod trivial-gray-streams:stream-write-char ((stream dialog-out-stream) character)
-  (setf (buffer-of stream) (format nil "~A~A" (buffer-of stream) character)))
-
-(defmethod trivial-gray-streams:stream-line-column ((stream dialog-out-stream))
-  nil)
-
-(defmethod prompt ((stream dialog-out-stream))
-  (prog1
-      (buffer-of stream)
-    (setf (buffer-of stream) "")))
-
 ;; Lisp code evaluation utilities
-(defun one-of (obj pre choices &optional (title "Error") (prompt "Choice"))
-  (let ((q  (format nil "<pre>~A</pre><p style='text-align:left'>" pre))
-        (n (length choices)) (i))
-    (do ((c choices (cdr c)) (i 1 (+ i 1)))
-        ((null c))
-      (setf q (format nil "~A~&[~D] ~A~%<br>" q i (car c))))
-    (do () ((typep i `(integer 1 ,n)))
-      (setf q (format nil "~A~&~A:" q prompt))
-      (let ((sem (bordeaux-threads:make-semaphore))
-            r)
-        (input-dialog obj q (lambda (result)
-                              (setf r (or result ""))
-                              (bordeaux-threads:signal-semaphore sem))
-                      :title title
-                      :modal nil
-                      :width 640
-                      :height 480)
-        (bordeaux-threads:wait-on-semaphore sem)
-        (setq i (read-from-string r))))
-    (nth (- i 1) choices)))
-
 (defun capture-eval (form &key (clog-obj nil) (eval-in-package "clog-user"))
   "Capture lisp evaluaton of FORM."
   (let ((result (make-array '(0) :element-type 'base-char
@@ -79,7 +12,8 @@
           (labels ((my-debugger (condition encapsulation)
                      (if clog-obj
                          (ignore-errors
-                          (let ((restart (one-of clog-obj condition (compute-restarts))))
+                          (let ((restart (one-of-dialog clog-obj condition (compute-restarts)
+                                                        :title "Available Restarts")))
                             (when restart
                               (let ((*debugger-hook* encapsulation))
                                 (invoke-restart-interactively restart)))))
