@@ -69,6 +69,8 @@ https://github.com/rabbibotton/clog/releases/download/v2.0/clog2.0-win64.zip
 Unzip, double click make.bat and then drag the resulting builder.exe to your
 application bar or double click. Update regularly by running update.bat
 If you change directories you need to run make.bat or update.bat
+(or download https://github.com/rabbibotton/clog-win64-ez/releases/tag/v1.0a
+ to download the latest versions in UltraLisp)
 
 CLOG is in QuickLisp (ql:quickload :clog), however one should
 add the UltraLisp distribution as QuickLisp is updated very
