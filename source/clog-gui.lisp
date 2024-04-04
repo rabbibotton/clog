@@ -218,12 +218,16 @@
 (defun clog-gui-initialize (clog-body &key
                                         (body-left-offset 0)
                                         (body-right-offset 0)
+                                        (use-clog-debugger nil)
                                         (w3-css-url "/css/w3.css")
                                         (jquery-ui-css "/css/jquery-ui.css")
                                         (jquery-ui "/js/jquery-ui.js"))
   "Initializes clog-gui and installs a clog-gui object on connection.
 If W3-CSS-URL has not been loaded before is installed unless is nil.
-BODY-LEFT-OFFSET and BODY-RIGHT-OFFSET limit width on maximize."
+BODY-LEFT-OFFSET and BODY-RIGHT-OFFSET limit width on maximize. If
+use-clog-debugger then a graphical debugger is set for all events.
+NOTE: use-clog-debugger should not be set for security issues
+      on non-secure environments."
   (let ((app (create-clog-gui clog-body)))
     (setf (body-left-offset app) body-left-offset)
     (setf (body-right-offset app) body-right-offset))
@@ -237,7 +241,12 @@ BODY-LEFT-OFFSET and BODY-RIGHT-OFFSET limit width on maximize."
   (when jquery-ui-css
     (load-css (html-document clog-body) jquery-ui-css))
   (when jquery-ui
-    (load-script (html-document clog-body) jquery-ui)))
+    (load-script (html-document clog-body) jquery-ui))
+  (when use-clog-debugger
+    (setf (connection-data-item clog-body "clog-debug")
+      (lambda (event data)
+        (with-clog-debugger (clog-body)
+          (funcall event data))))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Implementation - Menus

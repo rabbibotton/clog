@@ -47,7 +47,9 @@
                                                     "Aborting this old connection since receiving a reconnection request.")
                (t (c)
                  (when *verbose-output*
-                   (format t "Failed to close the old connection when establishing reconnection. This can be normal: The old connection could probably don't work for the client, so the client is requesting to reconnect.~%Condition - ~A.~&"
+                   (format t "Failed to close the old connection when establishing reconnection. ~
+                              This can be normal: The old connection could probably don't work for the client, ~
+                              so the client is requesting to reconnect.~%Condition - ~A.~&"
                            c))))
              (setf (gethash id *connection-ids*) connection)
              (setf (gethash connection *connections*) id))
@@ -113,7 +115,10 @@
                                (event      (when event-hash
                                              (gethash event-id event-hash))))
                           (when event
-                            (funcall event data)))
+                            (let* ((debug-hook (gethash "clog-debug" event-hash)))
+                              (if debug-hook
+                                  (funcall debug-hook event data)
+                                  (funcall event data)))))
                         (handler-case
                             (let* ((event-hash (get-connection-data connection-id))
                                    (event      (when event-hash
