@@ -241,12 +241,7 @@ NOTE: use-clog-debugger should not be set for security issues
   (when jquery-ui-css
     (load-css (html-document clog-body) jquery-ui-css))
   (when jquery-ui
-    (load-script (html-document clog-body) jquery-ui))
-  (when use-clog-debugger
-    (setf (connection-data-item clog-body "clog-debug")
-      (lambda (event data)
-        (with-clog-debugger (clog-body)
-          (funcall event data))))))
+    (load-script (html-document clog-body) jquery-ui)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Implementation - Menus
