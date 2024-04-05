@@ -4,7 +4,7 @@
   (let ((app (connection-data-item obj "builder-app-data")))
     (if (console-win app)
         (window-focus (console-win app))
-        (let* ((win (on-open-file obj :title "Console")))
+        (let* ((win (on-open-file obj :title "CLOG Builder Console")))
           (set-on-window-close win (lambda (obj)
                                      (setf (console-win app) nil)))
           (setf (console-win app) win)))))

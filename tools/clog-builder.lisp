@@ -384,6 +384,7 @@ clog-builder window.")
         (create-gui-menu-item tools :content "List Callees"                :on-click 'on-show-callees)
         (create-gui-menu-item tools :content "Thread Viewer"               :on-click 'on-show-thread-viewer)
         (create-gui-menu-item tools :content "CLOG Builder REPL"           :on-click 'on-repl)
+        (create-gui-menu-item tools :content "CLOG Builder Console"        :on-click 'on-open-console)
         (create-gui-menu-item tools :content "Copy/Cut History"            :on-click 'on-show-copy-history-win)
         (unless *clogframe-mode*
           (create-gui-menu-item tools :content "Image to HTML Data"        :on-click 'on-image-to-data))
