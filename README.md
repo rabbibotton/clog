@@ -65,42 +65,14 @@ To install CLOG - install Common Lisp:
 * [Install Common-Lisp for Win64](WINDOWS.md)
 
 For **Windows** users there is an easy install for full CL and CLOG -
-https://github.com/rabbibotton/clog/releases/download/v2.0/clog2.0-win64.zip
-Unzip, double click make.bat and then drag the resulting builder.exe to your
+https://github.com/rabbibotton/clog-win64-ez/releases/tag/v1.0a
+Unzip, double click setup.bat and then drag the resulting builder.exe to your
 application bar or double click. Update regularly by running update.bat
 If you change directories you need to run make.bat or update.bat
-(or download https://github.com/rabbibotton/clog-win64-ez/releases/tag/v1.0a
- to download the latest versions in UltraLisp)
 
 CLOG is in QuickLisp (ql:quickload :clog), however one should
 add the UltraLisp distribution as QuickLisp is updated very
 infrequenty (see below).
-
-However for the bleeding edge version and bug fixes clone
-CLOG into ~/common-lisp or a findable source directory, i.e.
-[ ``(push #P"path/to/dir/of/projects" ql:*local-project-directories*)`` ]
-
-For git (you also need the clog builder plugins clog-ace and clog-terminal
-for the builder):
-
-```
-cd ~/common-lisp
-git clone https://github.com/rabbibotton/clog.git
-git clone https://github.com/rabbibotton/clog-ace.git
-git clone https://github.com/rabbibotton/clog-terminal.git
-```
-For now you should also clone my branch of fast-websockets as the maintainers
-version is broken for larger files so even if using UltraLisp:
-
-```
-git clone https://github.com/rabbibotton/fast-websocket.git
-```
-
-Update git clones with:
-
-```
-git pull
-```
 
 To add UltraLisp to QuickLisp:
 
@@ -124,8 +96,26 @@ To get started load CLOG and then can load and run the builder:
 
 ```
 
-A list of plugins for CLOG are available at -
-https://ultralisp.org/tags/clog-plugin/
+To use the git versions CLOG, place git clone into ~/common-lisp or
+a findable source directory, i.e.
+[ ``(push #P"path/to/dir/of/projects" ql:*local-project-directories*)`` ]
+
+For git (you also need the clog builder plugins clog-ace and clog-terminal
+for the builder):
+
+```
+cd ~/common-lisp
+git clone https://github.com/rabbibotton/clog.git
+git clone https://github.com/rabbibotton/clog-ace.git
+git clone https://github.com/rabbibotton/clog-terminal.git
+```
+
+Update git clones with:
+
+```
+git pull
+```
+
 
 1. Start emacs then M-x slime (or just run sbcl at the command line or use the
    CLOG Buider REPL Tools -> CLOG Builder Repl)
