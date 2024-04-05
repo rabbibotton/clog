@@ -36,6 +36,7 @@ script."
 
   (*verbose-output* variable)
   (*break-on-error* variable)
+  (*disable-clog-debugging* variable)
 
   (initialize             function)
   (random-port            function)
@@ -83,6 +84,7 @@ script."
 
 (defvar *verbose-output* nil "Verbose server output (default false)")
 (defvar *break-on-error* t   "Allow invoking debugger (default true)")
+(defvar *disable-clog-debugging* nil "When true turns off debug hooks")
 
 (defvar *on-connect-handler* nil "New connection event handler.")
 

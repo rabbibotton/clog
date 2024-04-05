@@ -36,6 +36,9 @@
  enableBasicAutocompletion: true,
  enableLiveAutocompletion : true")
 
+;; Disable clog gui debugging
+(setf clog-connection:*disable-clog-debugging* nil)
+
 ;; Builder Look and Feel
 
 (setf *builder-window-desktop-class* "w3-blue-grey")

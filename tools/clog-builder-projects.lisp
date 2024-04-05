@@ -60,12 +60,10 @@
       (setf clog:*clog-debug* (lambda (event data)
                                  (with-clog-debugger (panel :title val)
                                    (funcall event data))))
-      (let ((result (capture-eval (format nil "(~A)" val) :clog-obj panel
-                                                          :eval-in-package "clog-user")))
-        (clog-web-alert (connection-body panel) "Result"
-                        (format nil "~&result: ~A" result)
-                        :color-class "w3-green"
-                        :time-out 3)))))
+      (capture-eval (format nil "(~A)" val) :clog-obj panel
+                                            :capture-console nil
+                                            :capture-result nil
+                                            :eval-in-package "clog-user"))))
 
 (defun projects-entry-point-change (panel)
   (let* ((sys         (text-value (project-list panel)))
@@ -197,7 +195,7 @@
                           (setf (disabledp (run-button panel)) nil))
                          (t
                           (alert-toast panel "Warning" "Missing :defsystem-depends-on (:clog)"
-                                       :color-class "w3-yellow" :time-out 2))))
+                                       :color-class "w3-yellow" :time-out 1))))
                (t (c)
                  (declare (ignore c))
                  (add-select-option (designtime-list panel) "" "Missing /tools")

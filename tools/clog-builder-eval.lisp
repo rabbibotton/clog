@@ -1,7 +1,79 @@
 (in-package :clog-tools)
 
+(defun on-open-console (obj)
+  (let ((app (connection-data-item obj "builder-app-data")))
+    (if (console-win app)
+        (window-focus (console-win app))
+        (let* ((win (on-open-file obj :title "Console")))
+          (set-on-window-close win (lambda (obj)
+                                     (setf (console-win app) nil)))
+          (setf (console-win app) win)))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;
+;; console-out-stream ;;
+;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defclass console-out-stream (trivial-gray-streams:fundamental-character-output-stream)
+  ((clog-obj :reader   clog-obj  :initarg :clog-obj)
+   (win      :accessor win       :initform nil)
+   (ace      :accessor ace       :initform nil))
+  (:documentation "console-in-stream and console-out-stream when used together
+provide an interactive console.)"))
+
+(defmethod trivial-gray-streams:stream-write-char ((stream console-out-stream) character)
+  (unless (win stream)
+    (setf (win stream) (on-open-console (clog-obj stream))))
+  (unless (ace stream)
+    (setf (ace stream) (window-param (win stream))))
+  (js-execute (ace stream) (format nil "~A.insert(String.fromCharCode(~A))"
+                                   (clog-ace::js-ace (ace stream))
+                                   (char-code character)))
+  (js-execute (ace stream) (format nil "~A.renderer.scrollToLine(Number.POSITIVE_INFINITY)"
+                                   (clog-ace::js-ace (ace stream)))))
+
+                                          
+(defmethod trivial-gray-streams:stream-line-column ((stream console-out-stream))
+  nil)
+
+;;;;;;;;;;;;;;;;;;;;;;;
+;; console-in-stream ;;
+;;;;;;;;;;;;;;;;;;;;;;;
+
+(defclass console-in-stream (trivial-gray-streams:fundamental-character-input-stream)
+  ((clog-obj :reader   obj       :initarg  :clog-obj)
+   (buffer   :accessor buffer-of :initform "")
+   (index    :accessor index     :initform 0))
+  (:documentation "console-in-stream and console-out-stream when used together
+provide an interactive console.)"))
+
+(defmethod trivial-gray-streams:stream-read-char ((stream console-in-stream))
+  (when (eql (index stream) (length (buffer-of stream)))
+    (setf (buffer-of stream) "")
+    (setf (index stream) 0))
+  (when (eql (index stream) 0)
+    (let ((sem (bordeaux-threads:make-semaphore)))
+      (input-dialog (obj stream) "Console Input:"
+                    (lambda (result)
+                      (setf (buffer-of stream) (format nil "~A~A~%" (buffer-of stream) result))
+                      (bordeaux-threads:signal-semaphore sem))
+                    :modal nil)
+      (bordeaux-threads:wait-on-semaphore sem)))
+  (when (< (index stream) (length (buffer-of stream)))
+    (prog1
+        (char (buffer-of stream) (index stream))
+      (incf (index stream)))))
+
+(defmethod trivial-gray-streams:stream-unread-char ((stream console-in-stream) character)
+  (decf (index stream)))
+
+(defmethod trivial-gray-streams:stream-line-column ((stream console-in-stream))
+  nil)
+
 ;; Lisp code evaluation utilities
-(defun capture-eval (form &key (clog-obj nil) (eval-in-package "clog-user"))
+(defun capture-eval (form &key (capture-console t)
+                            (capture-result t)
+                            (clog-obj nil)
+                            (eval-in-package "clog-user"))
   "Capture lisp evaluaton of FORM."
   (let ((result (make-array '(0) :element-type 'base-char
                                  :fill-pointer 0 :adjustable t))
@@ -24,14 +96,22 @@
                 (with-output-to-string (s r)
                   (print form s))
                 (setf form r)))
-            (let* ((*query-io*        (make-two-way-stream in-stream out-stream))
-                   (*standard-output*      stream)
-                   (*error-output*         stream)
-                   (*debugger-hook*        #'my-debugger)
+            (let* ((st                     (if capture-console
+                                               stream
+                                               (make-instance 'console-out-stream :clog-obj clog-obj)))
+                   (*query-io*             (make-two-way-stream in-stream out-stream))
+                   (*standard-output*      st)
+                   (*standard-input*       (make-instance 'console-in-stream :clog-obj clog-obj))
+                   (*error-output*         st)
+                   (*debugger-hook*        (if clog-connection:*disable-clog-debugging*
+                                               *debugger-hook*
+                                               #'my-debugger))
                    (*default-title-class*  *builder-title-class*)
                    (*default-border-class* *builder-border-class*)
                    (*package*              (find-package (string-upcase eval-in-package))))
               (setf eval-result (eval (read-from-string (format nil "(progn ~A)" form))))
+              (unless capture-result
+                (format st "~%=>~A~%" eval-result))
               (values
                (format nil "~A~%=>~A~%" result eval-result)
                *package*))))))))

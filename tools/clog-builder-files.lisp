@@ -54,7 +54,8 @@
     (when win
       (when regex
         (js-execute win (format nil "~A.find('~A',{caseSensitive:false,regExp:true})"
-                                (clog-ace::js-ace (window-param win)) regex))))
+                                (clog-ace::js-ace (window-param win)) regex)))
+      win)
     (unless win
       (let* ((app (connection-data-item obj "builder-app-data"))
              (*menu-bar-class*           *builder-menu-bar-class*)
@@ -454,4 +455,5 @@
           (set-on-click btn-test (lambda (obj)
                                    (eval-file obj)))
           (set-on-click m-test (lambda (obj)
-                                 (eval-file obj))))))))
+                                 (eval-file obj))))
+        win))))

@@ -116,7 +116,7 @@
                                              (gethash event-id event-hash))))
                           (when event
                             (let* ((debug-hook (gethash "clog-debug" event-hash)))
-                              (if debug-hook
+                              (if (and debug-hook (not *disable-clog-debugging*))
                                   (funcall debug-hook event data)
                                   (funcall event data)))))
                         (handler-case

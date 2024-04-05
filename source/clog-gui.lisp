@@ -229,7 +229,9 @@
                       (let ((*debugger-hook* encapsulation))
                         (invoke-restart-interactively restart)))))))
         (let* ((*query-io*      (make-two-way-stream in-stream out-stream))
-               (*debugger-hook* #'my-debugger))
+               (*debugger-hook* (if clog-connection:*disable-clog-debugging*
+                                    *debugger-hook*
+                                    #'my-debugger)))
           ,@body)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -263,7 +265,7 @@ NOTE: use-clog-debugger should not be set for security issues
     (load-css (html-document clog-body) jquery-ui-css))
   (when jquery-ui
     (load-script (html-document clog-body) jquery-ui))
-  (when use-clog-debugger
+  (when (and use-clog-debugger (not clog-connection:*disable-clog-debugging*))
     (setf (connection-data-item clog-body "clog-debug") (lambda (event data)
                                                           (with-clog-debugger (clog-body)
                                                             (funcall event data))))))
@@ -1076,10 +1078,12 @@ window-to-top-by-param or window-by-param."))
 (defmethod window-focus ((obj clog-gui-window))
   (let ((app (connection-data-item obj "clog-gui")))
     (unless (keep-on-top obj)
-      (setf (z-index obj) (incf (last-z app))))
+      (when (last-z app)
+        (setf (z-index obj) (incf (last-z app)))))
     (when (window-select app)
       (setf (selectedp (window-select-item obj)) t))
-    (fire-on-window-change obj app)))
+    (fire-on-window-change obj app))
+  obj)
 
 ;;;;;;;;;;;;;;;;;;
 ;; window-close ;;
@@ -1098,7 +1102,8 @@ the browser."))
         (destroy (window-select-item obj)))
       (remove-from-dom obj)
       (fire-on-window-change nil app)
-      (fire-on-window-close obj))))
+      (fire-on-window-close obj)))
+  nil)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;
 ;; window-maximized-p ;;

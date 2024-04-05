@@ -32,6 +32,10 @@ clog-builder window.")
     :accessor copy-history-win
     :initform nil
     :documentation "Copy history window")
+   (console-win
+    :accessor console-win
+    :initform nil
+    :documentation "Console window")
    (next-panel-id
     :accessor next-panel-id
     :initform 0
@@ -333,7 +337,7 @@ clog-builder window.")
         (setf (z-index (create-panel body :positioning :fixed
                                           :bottom 0 :left 0
                                           :class *builder-window-show-static-root-class*
-                                          :content (format nil "static-root: ~A" clog::*static-root*)))
+                                          :content (format nil "static-root: ~A" clog:*static-root*)))
               -9999))
       (let* ((menu  (create-gui-menu-bar body))
              (icon  (create-gui-menu-icon menu :image-url img-clog-icon
@@ -422,9 +426,8 @@ clog-builder window.")
                                 (open-window (window body) "https://github.com/rabbibotton/clog/blob/main/LEARN.md")))
         (create-gui-menu-item help  :content "Tutorials DIR"  :on-click
                               (lambda (obj)
-                                (declare (ignore obj))
-                                (on-dir-win obj :dir (setf static-root (merge-pathnames "./tutorial/"
-                                                                                        (asdf:system-source-directory :clog))))))
+                                (on-dir-win obj :dir (merge-pathnames "./tutorial/"
+                                                                      (asdf:system-source-directory :clog)))))
         (create-gui-menu-item help  :content "ParenScript Reference" :on-click
                               (lambda (obj)
                                 (declare (ignore obj))
