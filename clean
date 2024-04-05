@@ -7,3 +7,4 @@ rm -r *.bak
 rm clogframe/builder
 rm clogframe/clogframe
 rm clogframe/snake
+rm builder

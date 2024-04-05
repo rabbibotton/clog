@@ -126,7 +126,6 @@
 (defparameter *default-border-class* "w3-card-4 w3-white w3-border"
   "Window frame border")
 
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Implementation - clog-gui - Desktop GUI abstraction
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -211,6 +210,25 @@
     (setf (body clog-gui) clog-body)
     clog-gui))
 
+;;;;;;;;;;;;;;;;;;;;;;;;
+;; with-clog-debugger ;;
+;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defmacro with-clog-debugger ((clog-obj) &body body)
+  "body uses a clog-gui based debugged instead of the console"
+  `(with-open-stream (out-stream (make-instance 'dialog-out-stream))
+    (with-open-stream (in-stream (make-instance 'dialog-in-stream :clog-obj ,clog-obj :source out-stream))
+      (labels ((my-debugger (condition encapsulation)
+                 (ignore-errors
+                  (let ((restart (one-of-dialog ,clog-obj condition (compute-restarts)
+                                 :title "Available Restarts")))
+                    (when restart
+                      (let ((*debugger-hook* encapsulation))
+                        (invoke-restart-interactively restart)))))))
+        (let* ((*query-io*      (make-two-way-stream in-stream out-stream))
+               (*debugger-hook* #'my-debugger))
+          ,@body)))))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; clog-gui-initialize ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -241,7 +259,11 @@ NOTE: use-clog-debugger should not be set for security issues
   (when jquery-ui-css
     (load-css (html-document clog-body) jquery-ui-css))
   (when jquery-ui
-    (load-script (html-document clog-body) jquery-ui)))
+    (load-script (html-document clog-body) jquery-ui))
+  (when use-clog-debugger
+    (setf (connection-data-item clog-body "clog-debug") (lambda (event data)
+                                                          (with-clog-debugger (clog-body)
+                                                            (funcall event data))))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Implementation - Menus
@@ -2102,25 +2124,6 @@ make-two-way-stream to provide a *query-io* using a clog-gui instead of console)
         (bordeaux-threads:wait-on-semaphore sem)
         (setq i (read-from-string r))))
     (nth (- i 1) choices)))
-
-;;;;;;;;;;;;;;;;;;;;;;;;
-;; with-clog-debugger ;;
-;;;;;;;;;;;;;;;;;;;;;;;;
-
-(defmacro with-clog-debugger ((clog-obj) &body body)
-  "body uses a clog-gui based debugged instead of the console"
-  `(with-open-stream (out-stream (make-instance 'dialog-out-stream))
-    (with-open-stream (in-stream (make-instance 'dialog-in-stream :clog-obj ,clog-obj :source out-stream))
-      (labels ((my-debugger (condition encapsulation)
-                 (ignore-errors
-                  (let ((restart (one-of-dialog ,clog-obj condition (compute-restarts)
-                                 :title "Available Restarts")))
-                    (when restart
-                      (let ((*debugger-hook* encapsulation))
-                        (invoke-restart-interactively restart)))))))
-        (let* ((*query-io*      (make-two-way-stream in-stream out-stream))
-               (*debugger-hook* #'my-debugger))
-          ,@body)))))
 
 (defparameter *default-icon*
   "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAcCAYAAAAAwr0iAAAAAXNSR0IArs4c6QAAAKZlWElmTU0A
