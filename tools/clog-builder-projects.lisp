@@ -57,6 +57,9 @@
 (defun projects-run (panel)
   (let ((val (text-value (entry-point panel))))
     (unless (equal val "")
+      (setf clog:*clog-debug* (lambda (event data)
+                                 (with-clog-debugger (panel :title val)
+                                   (funcall event data))))
       (let ((result (capture-eval (format nil "(~A)" val) :clog-obj panel
                                                           :eval-in-package "clog-user")))
         (clog-web-alert (connection-body panel) "Result"

@@ -214,14 +214,17 @@
 ;; with-clog-debugger ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defmacro with-clog-debugger ((clog-obj) &body body)
+(defmacro with-clog-debugger ((clog-obj &key title) &body body)
   "body uses a clog-gui based debugged instead of the console"
   `(with-open-stream (out-stream (make-instance 'dialog-out-stream))
     (with-open-stream (in-stream (make-instance 'dialog-in-stream :clog-obj ,clog-obj :source out-stream))
       (labels ((my-debugger (condition encapsulation)
                  (ignore-errors
                   (let ((restart (one-of-dialog ,clog-obj condition (compute-restarts)
-                                 :title "Available Restarts")))
+                                                :title (format nil "Available Restarts~A"
+                                                               (if ,title
+                                                                   (format nil " for ~A" ,title)
+                                                                   "")))))
                     (when restart
                       (let ((*debugger-hook* encapsulation))
                         (invoke-restart-interactively restart)))))))

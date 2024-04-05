@@ -77,6 +77,7 @@ embedded in a native template application.)"
   (initialize        function)
   (*static-root*     variable)
   (*clog-port*       variable)
+  (*clog-debug*      variable)
   (set-on-new-window function)
   (is-running-p      function)
   (shutdown          function)

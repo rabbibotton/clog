@@ -16,6 +16,10 @@
 
 (defvar *clog-running* nil "If clog running.")
 
+(defvar *clog-debug* nil
+  "Set a debug hook that is called for every event with (event data)
+that must be (funcall event data).")
+
 (defvar *overide-static-root* nil
   "Override the static-root settings. This is not normally a good idea, but if
 trying to run the tutorials or demos and unable to have your local directory
@@ -57,10 +61,10 @@ the same as the clog directy this overides the relative paths used in them.")
             (setf (connection-data-item body "clog-path") path)
             (setf (connection-data-item body "clog-body") body)
             (setf (connection-data-item body "clog-sync") (bordeaux-threads:make-lock))
-            ;; clog-debug is called for every with (event data)
-            ;; see clog-gui:clog-gui-initialize
-            (setf (connection-data-item body "clog-debug") nil)
-            (funcall on-new-window body))
+            (setf (connection-data-item body "clog-debug") *clog-debug*)
+            (if *clog-debug*
+                (funcall *clog-debug* on-new-window body)
+                (funcall on-new-window body)))
           (put-br (html-document body) "No route to on-new-window")))))
 
 (defun initialize
