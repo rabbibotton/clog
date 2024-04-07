@@ -39,6 +39,11 @@
  enableBasicAutocompletion: true,
  enableLiveAutocompletion : true")
 
+;; CLOG Builder REPL
+(defparameter *clog-repl-use-console* t)
+(defparameter *clog-repl-open-console-on-start* nil)
+(defparameter *clog-repl-send-result-to-console* t)
+
 ;; Builder Look and Feel
 
 (defparameter *builder-window-desktop-class* "w3-blue-grey")
