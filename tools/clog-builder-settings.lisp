@@ -18,6 +18,8 @@
 (defparameter *open-external-panels-in-popup* nil)
 ;; Open panels as popups by default
 (defparameter *open-panels-as-popups* nil)
+;; Use console for evals instead of capture
+(defparameter *editor-use-console-for-evals* nil)
 ;; Use emacs instead of the source-editor when openning external
 (defparameter *open-external-with-emacs* nil)
 ;; Best Light Theme for Lisp

@@ -1,7 +1,7 @@
 (in-package :clog-tools)
 
 ;; Add directories to use custom directoires for storing projects
-;; (pushnew #P"path/to/dir/of/projects" ql:*local-project-directories* :test #'equalp)
+;; (pushnew #P"/path/of/projects" ql:*local-project-directories* :test #'equalp)
 
 ;; Preferences loaded on next call to clog-tools:clog-builder or [Eval All]
 
@@ -9,10 +9,18 @@
 (setf *open-external* nil)
 ;; Open files in browser popups instead of tabs if browser allows
 (setf *open-external-in-popup* nil)
+
+;; CLOG Panels
+
 ;; Open panel editors in browser popus instead of tabs if browser allows
 (setf *open-external-panels-in-popup* nil)
 ;; Open panels as popups by default
 (setf *open-panels-as-popups* nil)
+
+;; CLOG Source Editor
+
+;; Use console for evals instead of capture
+(setf *editor-use-console-for-evals* nil)
 ;; Use emacs instead of the source-editor when opening external
 ;; must start builder for slime in emacs
 (setf *open-external-with-emacs* nil)

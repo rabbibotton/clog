@@ -48,6 +48,7 @@
                            (title-class *builder-title-class*)
                            lisp-package
                            regex
+                           (editor-use-console-for-evals *editor-use-console-for-evals*)
                            maximized)
   "Open a new text editor"
   (let ((win (window-to-top-by-title obj open-file)))
@@ -429,21 +430,33 @@
                        (when (> cp p) (return lf)))
                      (when lf
                        (let ((result (capture-eval lf
+                                                   :capture-console (not editor-use-console-for-evals)
+                                                   :capture-result  (not editor-use-console-for-evals)
                                                    :clog-obj (connection-body obj)
                                                    :eval-in-package (text-value pac-line))))
-                         (on-open-file obj :title-class "w3-blue" :title "form eval" :text result)))))
+                         (if editor-use-console-for-evals
+                           (on-open-console obj)
+                           (on-open-file obj :title-class "w3-blue" :title "form eval" :text result))))))
                  (eval-selection (obj)
                    (let ((val (clog-ace:selected-text ace)))
                      (unless (equal val "")
                        (let ((result (capture-eval val :clog-obj obj
+                                                       :capture-console (not editor-use-console-for-evals)
+                                                       :capture-result  (not editor-use-console-for-evals)
                                                        :eval-in-package (text-value pac-line))))
-                         (on-open-file obj :title-class "w3-blue" :title "selection eval" :text result)))))
+                         (if editor-use-console-for-evals
+                           (on-open-console obj)
+                           (on-open-file obj :title-class "w3-blue" :title "selection eval" :text result))))))
                  (eval-file (obj)
                    (let ((val (text-value ace)))
                      (unless (equal val "")
                        (let ((result (capture-eval val :clog-obj obj
+                                                       :capture-console (not editor-use-console-for-evals)
+                                                       :capture-result  (not editor-use-console-for-evals)
                                                        :eval-in-package (text-value pac-line))))
-                         (on-open-file obj :title-class "w3-blue" :title "file eval" :text result))))))
+                         (if editor-use-console-for-evals
+                           (on-open-console obj)
+                           (on-open-file obj :title-class "w3-blue" :title "file eval" :text result)))))))
           (set-on-click btn-esel (lambda (obj)
                                    (eval-selection obj)))
           (set-on-click m-esel (lambda (obj)

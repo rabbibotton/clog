@@ -4,8 +4,10 @@
   (let ((app (connection-data-item obj "builder-app-data")))
     (if (console-win app)
         (window-focus (console-win app))
-        (let* ((win (on-open-file obj :title "CLOG Builder Console")))
+        (let* ((win (on-open-file obj :title "CLOG Builder Console"
+                                      :editor-use-console-for-evals t)))
           (set-on-window-close win (lambda (obj)
+                                     (declare (ignore obj))
                                      (setf (console-win app) nil)))
           (setf (console-win app) win)))))
 
@@ -25,13 +27,14 @@ provide an interactive console.)"))
     (setf (win stream) (on-open-console (clog-obj stream))))
   (unless (ace stream)
     (setf (ace stream) (window-param (win stream))))
-  (js-execute (ace stream) (format nil "~A.insert(String.fromCharCode(~A))"
-                                   (clog-ace::js-ace (ace stream))
-                                   (char-code character)))
   (js-execute (ace stream) (format nil "~A.renderer.scrollToLine(Number.POSITIVE_INFINITY)"
-                                   (clog-ace::js-ace (ace stream)))))
+                                   (clog-ace::js-ace (ace stream))))
+  (js-execute (ace stream) (format nil "~A.navigateFileEnd()"
+                                   (clog-ace::js-ace (ace stream))))
+  (js-execute (ace stream) (format nil "~A.insert(String.fromCharCode(~A),true)"
+                                   (clog-ace::js-ace (ace stream))
+                                   (char-code character))))
 
-                                          
 (defmethod trivial-gray-streams:stream-line-column ((stream console-out-stream))
   nil)
 
@@ -138,4 +141,3 @@ provide an interactive console.)"))
           (open-browser :url (format nil "http://127.0.0.1:~A/test" *clog-port*))
           (open-window (window (connection-body obj)) "/test")))
     (on-open-file obj :title-class "w3-yellow" :title "test eval" :text result)))
-
