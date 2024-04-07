@@ -218,10 +218,12 @@
                       (clog:shutdown)
                       (uiop:quit))
                      (t
-                      (confirm-dialog panel "Load project?"
-                                      (lambda (answer)
-                                        (load-proj answer))
-                                      :title "System not loaded")))))))))
+                       (let* ((*default-title-class*      *builder-title-class*)
+                              (*default-border-class*     *builder-border-class*))
+                         (confirm-dialog panel "Load project?"
+                                         (lambda (answer)
+                                           (load-proj answer))
+                                         :title "System not loaded"))))))))))
 
 (defun projects-add-dep (panel sys)
   (Input-dialog panel "Enter system name:"
