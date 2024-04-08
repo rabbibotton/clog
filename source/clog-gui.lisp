@@ -80,18 +80,18 @@
   (set-on-window-size-done     generic-function)
 
   "CLOG-GUI - Dialog Boxes"
-  (alert-toast                 function)
-  (alert-dialog                function)
-  (input-dialog                function)
-  (confirm-dialog              function)
-  (form-dialog                 function)
-  (server-file-dialog          function)
-  (one-of-dialog               function)
-  (dialog-in-stream            class)
-  (dialog-out-stream           class)
+  (alert-toast        function)
+  (alert-dialog       function)
+  (input-dialog       function)
+  (confirm-dialog     function)
+  (form-dialog        function)
+  (server-file-dialog function)
 
   "CLOG-GUI - Debugger"
   (with-clog-debugger macro)
+  (one-of-dialog      function)
+  (dialog-in-stream   class)
+  (dialog-out-stream  class)
 
   "CLOG-GUI - Look and Feel"
   (*menu-bar-class*           variable)
@@ -1492,16 +1492,18 @@ interactions. Use window-end-modal to undo."))
 ;; alert-toast ;;
 ;;;;;;;;;;;;;;;;;
 
-(defun alert-toast (obj title content &key
-                                        (color-class "w3-red")
+(defun alert-toast (obj title content &key (color-class "w3-red")
                                         (time-out nil)
                                         (place-top nil)
                                         (html-id nil))
   "Create an alert toast with option :TIME-OUT. If place-top is t then alert
-is placed in DOM at top of html body instead of bottom of html body."
+is placed in DOM at top of html body instead of bottom of html body. Note,
+when time-out alert-toast blocks and the toast is displayed for time-out or
+until user closes the toast."
   (unless html-id
       (setf html-id (generate-id)))
-  (let* ((body   (connection-body obj))
+  (let* ((sem    (when time-out (bordeaux-threads:make-semaphore)))
+         (body   (connection-body obj))
          (win    (create-child body
                              (format nil
 "  <div class='w3-panel ~A w3-animate-right w3-display-container'>~
@@ -1522,10 +1524,14 @@ is placed in DOM at top of html body instead of bottom of html body."
      (attach-as-child obj (format nil "~A-close" html-id))
      (lambda (obj)
        (declare (ignore obj))
-       (destroy win)))
-    (when time-out
-      (sleep time-out)
-      (destroy win))))
+       (destroy win)
+       (setf win nil)
+       (when sem
+         (bordeaux-threads:signal-semaphore sem))))
+    (when sem
+      (bordeaux-threads:wait-on-semaphore sem :timeout time-out)
+      (when win
+        (destroy win)))))
 
 ;;;;;;;;;;;;;;;;;;
 ;; alert-dialog ;;
@@ -1533,14 +1539,17 @@ is placed in DOM at top of html body instead of bottom of html body."
 
 (defun alert-dialog (obj content &key (modal t)
                                    (title "About")
+                                   (time-out nil)
                                    (left nil) (top nil)
                                    (width 300) (height 200)
                                    (client-movement nil)
                                    (html-id nil))
-  "Create an alert dialog box with CONTENT centered."
+  "Create an alert dialog box with CONTENT centered. If time-out
+alert-dialog blocks till time-out reached or OK clicked."
   (unless html-id
       (setf html-id (generate-id)))
-  (let* ((body (connection-body obj))
+  (let* ((sem  (when time-out (bordeaux-threads:make-semaphore)))
+         (body (connection-body obj))
          (win  (create-gui-window obj
                                   :title    title
                                   :content  (format nil
@@ -1569,18 +1578,26 @@ is placed in DOM at top of html body instead of bottom of html body."
     (focus btn)
     (set-on-click btn (lambda (obj)
                         (declare (ignore obj))
-                        (window-end-modal win)
                         (window-close win)))
     (set-on-window-close win (lambda (obj)
                                (declare (ignore obj))
                                (when modal
-                                 (window-end-modal win))))))
+                                 (window-end-modal win)
+                                 (setf win nil)
+                                 (when sem
+                                   (bordeaux-threads:signal-semaphore sem)))))
+    (when sem
+      (bordeaux-threads:wait-on-semaphore sem :timeout time-out)
+      (when win
+        (window-close win)))))
+
 
 ;;;;;;;;;;;;;;;;;;
 ;; input-dialog ;;
 ;;;;;;;;;;;;;;;;;;
 
 (defun input-dialog (obj content on-input &key (modal t)
+                                            (time-out nil)
                                             (title "Input")
                                             (size 20)
                                             (rows 1)
@@ -1590,10 +1607,14 @@ is placed in DOM at top of html body instead of bottom of html body."
                                             (client-movement nil)
                                             (html-id nil))
   "Create an input dialog box with CONTENT centered and an input box.
-Calls on-input with input box contents or nil if canceled."
+Calls on-input with input box contents or nil if canceled. If time-out
+block time-out seconds for responce or cancels dialog box then returns
+result of on-input."
   (unless html-id
       (setf html-id (generate-id)))
-  (let* ((body (connection-body obj))
+  (let* ((sem  (when time-out (bordeaux-threads:make-semaphore)))
+         (result nil)
+         (body (connection-body obj))
          (inp  (if (eql rows 1)
                    (format nil "<input type='text' id='~A-input' size='~A' value='~A'>"
                            html-id
@@ -1651,13 +1672,23 @@ Calls on-input with input box contents or nil if canceled."
                        (when modal
                          (window-end-modal win))
                        (window-close win)
-                       (funcall on-input (value input)))
+                       (setf result (funcall on-input (value input)))
+                       (when sem
+                         (bordeaux-threads:signal-semaphore sem)))
                   :one-time t)
     (set-on-window-close win (lambda (obj)
                                (declare (ignore obj))
                                (when modal
                                  (window-end-modal win))
-                               (funcall on-input nil)))))
+                               (setf result (funcall on-input nil))
+                               (when sem
+                                 (bordeaux-threads:signal-semaphore sem))))
+    (when sem
+      (unless (bordeaux-threads:wait-on-semaphore sem :timeout time-out)
+        (setf sem nil)
+        (window-close win)))
+    result))
+
 
 ;;;;;;;;;;;;;;;;;;;;
 ;; confirm-dialog ;;
@@ -1667,6 +1698,7 @@ Calls on-input with input box contents or nil if canceled."
                                               (title "Confirm")
                                               (ok-text "OK")
                                               (cancel-text "Cancel")
+                                              (time-out nil)
                                               (left nil) (top nil)
                                               (width 300) (height 200)
                                               (client-movement nil)
@@ -1675,7 +1707,9 @@ Calls on-input with input box contents or nil if canceled."
 Calls on-input with t if confirmed or nil if canceled."
   (unless html-id
       (setf html-id (generate-id)))
-  (let* ((body (connection-body obj))
+  (let* ((sem  (when time-out (bordeaux-threads:make-semaphore)))
+         (result nil)
+         (body (connection-body obj))
          (win  (create-gui-window obj
                                   :title          title
                                   :content        (format nil
@@ -1710,10 +1744,7 @@ Calls on-input with t if confirmed or nil if canceled."
     (focus ok)
     (set-on-click cancel (lambda (obj)
                            (declare (ignore obj))
-                           (when modal
-                                 (window-end-modal win))
-                           (window-close win)
-                           (funcall on-input nil))
+                           (window-close win))
                   :one-time t)
     (set-on-click ok (lambda (obj)
                        (declare (ignore obj))
@@ -1721,13 +1752,22 @@ Calls on-input with t if confirmed or nil if canceled."
                        (when modal
                          (window-end-modal win))
                        (window-close win)
-                       (funcall on-input t))
+                       (setf result (funcall on-input t))
+                       (when sem
+                         (bordeaux-threads:signal-semaphore sem)))
                   :one-time t)
     (set-on-window-close win (lambda (obj)
                                (declare (ignore obj))
                                (when modal
                                  (window-end-modal win))
-                               (funcall on-input nil)))))
+                               (setf result (funcall on-input nil))
+                               (when sem
+                                 (bordeaux-threads:signal-semaphore sem))))
+    (when sem
+      (unless (bordeaux-threads:wait-on-semaphore sem :timeout time-out)
+        (setf sem nil)
+        (window-close win)))
+    result))
 
 ;;;;;;;;;;;;;;;;;
 ;; form-dialog ;;
@@ -1737,6 +1777,7 @@ Calls on-input with t if confirmed or nil if canceled."
                                                   (title "Form")
                                                   (ok-text "OK")
                                                   (cancel-text "Cancel")
+                                                  (time-out nil)
                                                   (left nil) (top nil)
                                                   (width 400) (height 500)
                                                   (size 40) (rows 4)
@@ -1745,8 +1786,8 @@ Calls on-input with t if confirmed or nil if canceled."
   "Create a form dialog box with CONTENT followed by FIELDS.
 FIELDS is a list of lists each list has:
 
-    (1) Field name         - Used for (name attribute)
-    (2) Field description  - Used for label
+    (1) Field description  - Used for label
+    (2) Field name         - Used for (name attribute)
     (3) Field type         - Optional (defaults to :text)
     (4) Field type options - Optional
 
@@ -1766,10 +1807,13 @@ Special field types
 The size of any texarea field is controled by the size and rows parameters
 
 Calls on-input after OK or Cancel with an a-list of field name to value
-if confirmed or nil if canceled."
+if confirmed or nil if canceled. If time-out is set the result of
+on-input returned after either ok or cancel or time elapses."
   (unless html-id
     (setf html-id (generate-id)))
-  (let* ((body (connection-body obj))
+  (let* ((sem  (when time-out (bordeaux-threads:make-semaphore)))
+         (result nil)
+         (body (connection-body obj))
          (fls (format nil "~{~A~}"
                       (mapcar (lambda (l)
                                 (cond
@@ -1911,29 +1955,38 @@ if confirmed or nil if canceled."
                        (set-on-window-close win nil)
                        (when modal
                          (window-end-modal win))
-                       (let ((result (mapcar
-                                      (lambda (l)
-                                        `(,(second l)
-                                          ,(let ((name (format nil "~A-~A" html-id (second l))))
-                                             (cond ((eq (third l) :select)
-                                                    (select-value win name))
-                                                   ((eq (third l) :radio)
-                                                    (radio-value win name))
-                                                   ((eq (third l) :checkbox)
-                                                    (checkbox-value win name))
-                                                   ((eq (third l) :textarea)
-                                                    (textarea-value win name))
-                                                   (t
-                                                    (name-value win name))))))
-                                      fields)))
-                         (window-close win)
-                         (funcall on-input result)))
+                       (setf result (mapcar
+                                     (lambda (l)
+                                       `(,(second l)
+                                         ,(let ((name (format nil "~A-~A" html-id (second l))))
+                                            (cond ((eq (third l) :select)
+                                                   (select-value win name))
+                                                  ((eq (third l) :radio)
+                                                   (radio-value win name))
+                                                  ((eq (third l) :checkbox)
+                                                   (checkbox-value win name))
+                                                  ((eq (third l) :textarea)
+                                                   (textarea-value win name))
+                                                  (t
+                                                   (name-value win name))))))
+                                     fields))
+                       (window-close win)
+                       (setf result (funcall on-input result))
+                       (when sem
+                         (bordeaux-threads:signal-semaphore sem)))
                   :one-time t)
     (set-on-window-close win (lambda (obj)
                                (declare (ignore obj))
                                (when modal
                                  (window-end-modal win))
-                               (funcall on-input nil)))))
+                               (setf result (funcall on-input nil))
+                               (when sem
+                                 (bordeaux-threads:signal-semaphore sem))))
+    (when sem
+      (unless (bordeaux-threads:wait-on-semaphore sem :timeout time-out)
+        (setf sem nil)
+        (window-close win)))
+    result))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;
 ;; server-file-dialog ;;
@@ -1941,14 +1994,18 @@ if confirmed or nil if canceled."
 
 (defun server-file-dialog (obj title initial-dir on-file-name
                            &key (modal t)
+                             (time-out nil)
                              (left nil) (top nil) (width 390) (height 425)
                              (maximize nil)
                              (initial-filename nil)
                              (client-movement nil)
                              (html-id nil))
   "Create a local file dialog box called TITLE using INITIAL-DIR on server
-machine, upon close ON-FILE-NAME called with filename or nil if failure."
-  (let* ((body (connection-body obj))
+machine, upon close ON-FILE-NAME called with filename or nil if failure.
+If time-out return result of on-file-name, cancels dialog if time runs out."
+  (let* ((sem  (when time-out (bordeaux-threads:make-semaphore)))
+         (result nil)
+         (body (connection-body obj))
          (win  (create-gui-window obj
                                   :title           title
                                   :maximize        maximize
@@ -2035,7 +2092,9 @@ machine, upon close ON-FILE-NAME called with filename or nil if failure."
                                (declare (ignore obj))
                                (when modal
                                  (window-end-modal win))
-                               (funcall on-file-name nil)))
+                               (setf result (funcall on-file-name nil))
+                               (when sem
+                                 (bordeaux-threads:signal-semaphore sem))))
     (set-on-click cancel (lambda (obj)
                            (declare (ignore obj))
                            (window-close win))
@@ -2046,8 +2105,16 @@ machine, upon close ON-FILE-NAME called with filename or nil if failure."
                        (when modal
                          (window-end-modal win))
                        (window-close win)
-                       (funcall on-file-name (value input)))
-                  :one-time t)))
+                       (setf result (funcall on-file-name (value input)))
+                       (when sem
+                         (bordeaux-threads:signal-semaphore sem)))
+                  :one-time t)
+    (when sem
+      (unless (bordeaux-threads:wait-on-semaphore sem :timeout time-out)
+        (setf sem nil)
+        (window-close win)))
+    result))
+
 
 
 ;;;;;;;;;;;;;;;;;;;;;;
@@ -2067,12 +2134,10 @@ make-two-way-stream to provide a *query-io* using a clog-gui instead of console)
     (setf (buffer-of stream) "")
     (setf (index stream) 0))
   (when (eql (index stream) 0)
-    (let ((sem (bordeaux-threads:make-semaphore)))
-      (input-dialog (obj stream) (prompt (outbuf stream)) (lambda (result)
-                                                            (add-line stream result)
-                                                            (bordeaux-threads:signal-semaphore sem))
-                    :modal nil)
-      (bordeaux-threads:wait-on-semaphore sem)))
+    (input-dialog (obj stream) (prompt (outbuf stream)) (lambda (result)
+                                                          (add-line stream result))
+                  :time-out 999
+                  :modal nil))
   (when (< (index stream) (length (buffer-of stream)))
     (prog1
         (char (buffer-of stream) (index stream))
@@ -2120,17 +2185,12 @@ make-two-way-stream to provide a *query-io* using a clog-gui instead of console)
       (setf q (format nil "~A~&[~D] ~A~%<br>" q i (car c))))
     (do () ((typep i `(integer 1 ,n)))
       (setf q (format nil "~A~&~A:" q prompt))
-      (let ((sem (bordeaux-threads:make-semaphore))
-            r)
-        (input-dialog obj q (lambda (result)
-                              (setf r (or result ""))
-                              (bordeaux-threads:signal-semaphore sem))
-                      :title title
-                      :modal nil
-                      :width 640
-                      :height 480)
-        (bordeaux-threads:wait-on-semaphore sem)
-        (setq i (read-from-string r))))
+      (setq i (read-from-string (input-dialog obj q (lambda (result) (or result ""))
+                                              :title title
+                                              :time-out 999
+                                              :modal nil
+                                              :width 640
+                                              :height 480))))
     (nth (- i 1) choices)))
 
 (defparameter *default-icon*

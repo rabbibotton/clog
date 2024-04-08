@@ -10,7 +10,7 @@
 (cl:in-package :clog)
 
 (defpackage #:clog-user
-  (:use #:cl #:clog)
+  (:use #:cl #:clog #:clog-gui #:clog-web)
   (:export :*body*))
 
 (defpackage #:clog-tools

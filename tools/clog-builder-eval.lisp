@@ -43,7 +43,7 @@ provide an interactive console.)"))
 ;;;;;;;;;;;;;;;;;;;;;;;
 
 (defclass console-in-stream (trivial-gray-streams:fundamental-character-input-stream)
-  ((clog-obj :reader   obj       :initarg  :clog-obj)
+  ((clog-obj :reader   clog-obj  :initarg  :clog-obj)
    (buffer   :accessor buffer-of :initform "")
    (index    :accessor index     :initform 0))
   (:documentation "console-in-stream and console-out-stream when used together
@@ -54,13 +54,11 @@ provide an interactive console.)"))
     (setf (buffer-of stream) "")
     (setf (index stream) 0))
   (when (eql (index stream) 0)
-    (let ((sem (bordeaux-threads:make-semaphore)))
-      (input-dialog (obj stream) "Console Input:"
-                    (lambda (result)
-                      (setf (buffer-of stream) (format nil "~A~A~%" (buffer-of stream) result))
-                      (bordeaux-threads:signal-semaphore sem))
-                    :modal nil)
-      (bordeaux-threads:wait-on-semaphore sem)))
+    (input-dialog (clog-obj stream) "Console Input:"
+                  (lambda (result)
+                    (setf (buffer-of stream) (format nil "~A~A~%" (buffer-of stream) result)))
+                  :time-out 999
+                  :modal nil))
   (when (< (index stream) (length (buffer-of stream)))
     (prog1
         (char (buffer-of stream) (index stream))
