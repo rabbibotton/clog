@@ -1780,6 +1780,8 @@ Calls on-input with t if confirmed or nil if canceled."
                                                   (time-out nil)
                                                   (left nil) (top nil)
                                                   (width 400) (height 500)
+                                            
+                                        
                                                   (size 40) (rows 4)
                                                   (client-movement nil)
                                                   (html-id nil))
@@ -2016,13 +2018,11 @@ If time-out return result of on-file-name, cancels dialog if time runs out."
                                   :hidden          t
                                   :client-movement client-movement
                                   :html-id         html-id))
-         (box    (create-div (window-content win) :class "w3-panel"))
-         (form   (create-form box))
+         (form   (create-form (window-content win)))
          (fname  (file-namestring initial-dir))
          (dirs   (create-select form))
          (files  (create-select form))
-         (input  (create-form-element form :input :label
-                                     (create-label form :content "File Name:")))
+         (input  (create-form-element form :input))
          (ok     (create-button form :content "OK"
                                      :class "w3-button w3-black w3-margin"))
          (cancel (create-button form :content "Cancel"
@@ -2033,15 +2033,20 @@ If time-out return result of on-file-name, cancels dialog if time runs out."
     (unless left
       (setf (left win) (unit :px (- (/ (inner-width (window body)) 2.0)
                                     (/ (width win) 2.0)))))
-    (setf (size dirs) 5)
-    (setf (box-width dirs) "100%")
-    (setf (size files) 7)
-    (setf (box-width files) "100%")
-    (setf (box-width input) "100%")
+    (setf (positioning dirs) :absolute)
+    (setf (positioning files) :absolute)
+    (setf (positioning input) :absolute)
+    (setf (positioning ok) :absolute)
+    (setf (positioning cancel) :absolute)
+    (setf (size dirs) 4)
+    (setf (size files) 4)
+    (set-geometry dirs :left 5 :right 5 :top 5 :height 75)
+    (set-geometry files :left 5 :right 5 :top 85 :bottom 90)
+    (set-geometry input :left 5 :right 5 :bottom 65 :height 20)
+    (set-geometry ok :right 95 :bottom 0  :width 85)
+    (set-geometry cancel :right 5 :bottom 0 :width 85)
     (setf (overflow files) :auto)
     (setf (overflow dirs) :auto)
-    (setf (width ok) "7em")
-    (setf (width cancel) "7em")
     (setf (visiblep win) t)
     (when modal
       (window-make-modal win))
