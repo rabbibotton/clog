@@ -32,27 +32,30 @@
 (defun on-open-file-ext (obj &key open-file popup)
   (if (and *open-external-with-emacs* open-file)
       (swank:ed-in-emacs open-file)
-      (if *open-external-using-clog-popups*
-          (let ((pop (open-clog-popup obj
-                                      :specs (if (or popup *open-external-source-in-popup*)
-                                                 "width=640,height=480"
-                                                 "")
-                                      :name "_blank")))
-            (if pop
-                (let ((app (connection-data-item obj "builder-app-data")))
-                  (setf (connection-data-item pop "builder-app-data") app)
-                  (clog-gui-initialize pop :parent-desktop-obj obj)
-                  (on-open-file pop :open-file open-file :maximized t))
-                (on-open-file obj :open-file open-file)))
-          (open-window (window (connection-body obj))
-                       (if open-file
-                           (format nil "/source-editor?open-file=~A"
-                                   open-file)
-                           "/source-editor?open-file=%20")
-                       :specs (if (or popup *open-external-source-in-popup*)
-                                  "width=800,height=600"
-                                  "")
-                       :name "_blank"))))
+      (let ((win (window-to-top-by-title obj open-file)))
+        (if win
+            (window-focus win)
+            (if *open-external-using-clog-popups*
+                (let ((pop (open-clog-popup obj
+                                            :specs (if (or popup *open-external-source-in-popup*)
+                                                       "width=640,height=480"
+                                                       "")
+                                            :name "_blank")))
+                  (if pop
+                      (let ((app (connection-data-item obj "builder-app-data")))
+                        (setf (connection-data-item pop "builder-app-data") app)
+                        (clog-gui-initialize pop :parent-desktop-obj obj)
+                        (on-open-file pop :open-file open-file :maximized t))
+                      (on-open-file obj :open-file open-file)))
+                (open-window (window (connection-body obj))
+                             (if open-file
+                                 (format nil "/source-editor?open-file=~A"
+                                         open-file)
+                                 "/source-editor?open-file=%20")
+                             :specs (if (or popup *open-external-source-in-popup*)
+                                        "width=800,height=600"
+                                        "")
+                             :name "_blank"))))))
 
 (defun on-open-file (obj &key open-file
                            (title "New Source Editor")
