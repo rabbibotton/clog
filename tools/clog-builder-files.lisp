@@ -65,6 +65,10 @@
   "Open a new text editor"
   (let ((win (window-to-top-by-title obj open-file)))
     (when win
+      (let ((pop (connection-data-item obj "clog-popup")))
+        (when pop
+          (close-window pop)
+          (window-focus win)))
       (when regex
         (js-execute win (format nil "~A.find('~A',{caseSensitive:false,regExp:true})"
                                 (clog-ace::js-ace (window-param win)) regex)))
