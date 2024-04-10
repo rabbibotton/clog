@@ -13,7 +13,7 @@
 ;; Open panels and files in new browser tabs by default
 (defparameter *open-external* nil)
 ;; Use clog-popup and extend desktop to popups
-(defparameter *open-external-using-clog-popups* nil)
+(defparameter *open-external-using-clog-popups* t)
 ;; Open files in browser popups instead of tabs if browser allows
 (defparameter *open-external-source-in-popup* nil)
 ;; Open panel editors in browser popus instead of tabs if browser allows
