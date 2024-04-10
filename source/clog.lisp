@@ -943,8 +943,9 @@ embedded in a native template application.)"
   "CLOG Popups"
   (*clog-popup-path*       variable)
   (enable-clog-popup       function)
-  (open-clog-popup         function)
-  (clog-popup-openned      function)
+  (open-clog-popup         generic-function)
+  (clog-popup-openned      generic-function)
+  (in-clog-popup-p         generic-function)
 
   "CLOG-Window - CLOG Window Objects"
   (clog-window class)

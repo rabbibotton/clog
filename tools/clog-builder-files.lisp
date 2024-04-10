@@ -45,7 +45,9 @@
                       (let ((app (connection-data-item obj "builder-app-data")))
                         (setf (connection-data-item pop "builder-app-data") app)
                         (clog-gui-initialize pop :parent-desktop-obj obj)
-                        (setf (title (html-document pop)) open-file)
+                        (if open-file
+                          (setf (title (html-document pop)) open-file)
+                          (setf (title (html-document pop)) "CLOG Builder Source Editor"))
                         (on-open-file pop :open-file open-file :maximized t))
                       (on-open-file obj :open-file open-file)))
                 (open-window (window (connection-body obj))
@@ -97,8 +99,10 @@
              (m-load   (create-gui-menu-item m-file :content "load"))
              (m-save   (create-gui-menu-item m-file :content "save (cmd/ctrl-s)"))
              (m-saveas (create-gui-menu-item m-file :content "save as.."))
-             (m-emacs  (create-gui-menu-item m-file :content "open in emacs"))
-             (m-ntab   (create-gui-menu-item m-file :content "open in new tab"))
+             (m-emacs  (unless (in-clog-popup-p obj)
+                         (create-gui-menu-item m-file :content "open in emacs")))
+             (m-ntab   (unless (in-clog-popup-p obj)
+                         (create-gui-menu-item m-file :content "open in new tab")))
              (m-edit   (create-gui-menu-drop-down menu :content "Edit"))
              (m-undo   (create-gui-menu-item m-edit :content "undo (cmd/ctrl-z)"))
              (m-redo   (create-gui-menu-item m-edit :content "redo (shift cmd/ctrl-z)"))
@@ -311,16 +315,18 @@
                                                    (setf last-date (file-write-date file-name))
                                                    (sleep .5)
                                                    (remove-class btn-save "w3-animate-top"))))))))))
-          (set-on-click m-emacs (lambda (obj)
-                                  (when is-dirty
-                                    (save obj nil))
-                                  (swank:ed-in-emacs file-name)
-                                  (window-close win)))
-          (set-on-click m-ntab (lambda (obj)
-                                 (when is-dirty
-                                   (save obj nil))
-                                 (window-close win)
-                                 (on-open-file-ext obj :open-file file-name)))
+          (when m-emacs
+            (set-on-click m-emacs (lambda (obj)
+                                    (when is-dirty
+                                      (save obj nil))
+                                    (swank:ed-in-emacs file-name)
+                                    (window-close win))))
+          (when m-ntab
+            (set-on-click m-ntab (lambda (obj)
+                                   (when is-dirty
+                                     (save obj nil))
+                                   (window-close win)
+                                   (on-open-file-ext obj :open-file file-name))))
           (set-on-window-can-close win
                                    (lambda (obj)
                                      (cond (is-dirty

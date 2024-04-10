@@ -10,7 +10,7 @@
 ;; Open panels and files in new browser tabs by default
 (setf *open-external* nil)
 ;; Use clog-popup and extend desktop to popups
-(setf *open-external-using-clog-popups* nil)
+(setf *open-external-using-clog-popups* t)
 
 ;; CLOG Panels
 
