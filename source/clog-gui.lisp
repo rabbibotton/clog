@@ -305,7 +305,9 @@ create-gui-menu-bar."))
 (defmethod menu-bar-height ((obj clog-obj))
   (let ((app (connection-data-item obj "clog-gui")))
     (if (and app (menu app))
-        (height (menu app))
+        (if (in-clog-popup-p obj)
+            0
+            (height (menu app)))
         0)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;
@@ -328,6 +330,7 @@ create-gui-menu-bar."))
 window or nil if not found"))
 
 (defmethod window-to-top-by-title ((obj clog-obj) title)
+  (window-clean-zombies obj)
   (when title
     (let ((app (connection-data-item obj "clog-gui"))
           (r   nil))
@@ -339,6 +342,22 @@ window or nil if not found"))
                               (setf r value)))))
                (windows app))
       r)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; window-clean-zombies ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric window-clean-zombies (clog-obj)
+  (:documentation "Clean zombie references to windows that can
+occur from browsers being closed or crashing. (private)"))
+
+(defmethod window-clean-zombies ((obj clog-obj))
+  (let ((app (connection-data-item obj "clog-gui")))
+    (maphash (lambda (key value)
+               (declare (ignore key))
+               (unless (window-valid-p value)
+                 (remhash key (windows app))))
+             (windows app))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; window-to-top-by-param ;;

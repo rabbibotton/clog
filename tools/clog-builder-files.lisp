@@ -44,7 +44,9 @@
                   (if pop
                       (let ((app (connection-data-item obj "builder-app-data")))
                         (setf (connection-data-item pop "builder-app-data") app)
+                        (set-html-on-close pop "Connection Lost")
                         (clog-gui-initialize pop :parent-desktop-obj obj)
+                        (add-class pop *builder-window-desktop-class*)
                         (if open-file
                           (setf (title (html-document pop)) open-file)
                           (setf (title (html-document pop)) "CLOG Builder Source Editor"))
