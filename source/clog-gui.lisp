@@ -1153,31 +1153,32 @@ it is removed."
 :focus (default t)."))
 
 (defmethod window-maximize ((obj clog-gui-window) &key (focus t))
-  (bordeaux-threads:with-lock-held ((window-size-mutex obj)) ; prevent race condition of maximize/normalize
-    (let ((app (connection-data-item obj "clog-gui")))
-      (when focus
-	(unless (keep-on-top obj)
-	  (window-focus obj)))
-      (when (fire-on-window-can-maximize obj)
-	(unless (window-maximized-p obj)
-          (setf (last-x obj) (left obj))
-          (setf (last-y obj) (top obj))
-          (setf (last-height obj) (height obj))
-          (setf (last-width obj) (width obj)))
-        (cond ((connection-data-item obj "clog-popup")
-               (setf (top obj) (unit :px 0))
-               (setf (height obj) (inner-height (window (connection-body obj)))))
-              (t
-               (setf (top obj) (unit :px (menu-bar-height obj)))
-	       (setf (height obj)
-                     (- (inner-height (window (connection-body obj))) (menu-bar-height obj)))))
-	(setf (left obj) (unit :px 0))
-	(setf (width obj) (unit :vw 100))
-	(setf (left obj) (unit :px (body-left-offset app)))
-	(setf (width obj) (- (width obj)
-                             (body-left-offset app)
-                             (body-right-offset app)))
-	(fire-on-window-size-done obj)))))
+  (when (window-valid-p obj)
+    (bordeaux-threads:with-lock-held ((window-size-mutex obj)) ; prevent race condition of maximize/normalize
+      (let ((app (connection-data-item obj "clog-gui")))
+        (when focus
+	  (unless (keep-on-top obj)
+	    (window-focus obj)))
+        (when (fire-on-window-can-maximize obj)
+	  (unless (window-maximized-p obj)
+            (setf (last-x obj) (left obj))
+            (setf (last-y obj) (top obj))
+            (setf (last-height obj) (height obj))
+            (setf (last-width obj) (width obj)))
+          (cond ((connection-data-item obj "clog-popup")
+                 (setf (top obj) (unit :px 0))
+                 (setf (height obj) (inner-height (window (connection-body obj)))))
+                (t
+                 (setf (top obj) (unit :px (menu-bar-height obj)))
+	         (setf (height obj)
+                       (- (inner-height (window (connection-body obj))) (menu-bar-height obj)))))
+	  (setf (left obj) (unit :px 0))
+	  (setf (width obj) (unit :vw 100))
+	  (setf (left obj) (unit :px (body-left-offset app)))
+	  (setf (width obj) (- (width obj)
+                               (body-left-offset app)
+                               (body-right-offset app)))
+	  (fire-on-window-size-done obj))))))
 
 ;;;;;;;;;;;;;;;;;;;;;;
 ;; window-normalize ;;
