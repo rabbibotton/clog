@@ -45,6 +45,7 @@
                       (let ((app (connection-data-item obj "builder-app-data")))
                         (setf (connection-data-item pop "builder-app-data") app)
                         (clog-gui-initialize pop :parent-desktop-obj obj)
+                        (setf (title (html-document pop)) open-file)
                         (on-open-file pop :open-file open-file :maximized t))
                       (on-open-file obj :open-file open-file)))
                 (open-window (window (connection-body obj))
