@@ -652,14 +652,19 @@ obj of the new window on the new connection or nil if failed within :WAIT-TIMEOU
     (setf (gethash sync-key *clog-popup-sync-hash*) sem)
     (bordeaux-threads:wait-on-semaphore sem :timeout wait-timeout)
     (setf sem (gethash sync-key *clog-popup-sync-hash*))
+    (remhash sync-key *clog-popup-sync-hash*)
     (if (typep sem 'clog-obj)
-        (values sem new-win)
+        (progn
+          (setf (connection-data-item sem "clog-popup") new-win)
+          (values sem new-win))
         nil)))
 
 (defun clog-popup-openned (obj sync-key)
   "Used to notify open-clog-popup the new popup window is ready for custom
 clog-popup handlers."
   (let ((sem (gethash sync-key *clog-popup-sync-hash*)))
-    (when sem
-      (setf (gethash sync-key *clog-popup-sync-hash*) (connection-body obj))
-      (bordeaux-threads:signal-semaphore sem))))
+    (cond (sem
+           (setf (gethash sync-key *clog-popup-sync-hash*) (connection-body obj))
+           (bordeaux-threads:signal-semaphore sem))
+          (t
+           (create-div obj :content "Invalid Sync")))))
