@@ -32,15 +32,27 @@
 (defun on-open-file-ext (obj &key open-file popup)
   (if (and *open-external-with-emacs* open-file)
       (swank:ed-in-emacs open-file)
-      (open-window (window (connection-body obj))
-                   (if open-file
-                       (format nil "/source-editor?open-file=~A"
-                               open-file)
-                       "/source-editor?open-file=%20")
-                   :specs (if (or popup *open-external-in-popup*)
-                              "width=800,height=600"
-                              "")
-                   :name "_blank")))
+      (if *open-external-using-clog-popups*
+          (let ((pop (open-clog-popup obj
+                                      :specs (if (or popup *open-external-source-in-popup*)
+                                                 "width=640,height=480"
+                                                 "")
+                                      :name "_blank")))
+            (if pop
+                (let ((app (connection-data-item obj "builder-app-data")))
+                  (setf (connection-data-item pop "builder-app-data") app)
+                  (clog-gui-initialize pop :parent-desktop-obj obj)
+                  (on-open-file pop :open-file open-file :maximized t))
+                (on-open-file obj :open-file open-file)))
+          (open-window (window (connection-body obj))
+                       (if open-file
+                           (format nil "/source-editor?open-file=~A"
+                                   open-file)
+                           "/source-editor?open-file=%20")
+                       :specs (if (or popup *open-external-source-in-popup*)
+                                  "width=800,height=600"
+                                  "")
+                       :name "_blank"))))
 
 (defun on-open-file (obj &key open-file
                            (title "New Source Editor")
@@ -299,8 +311,8 @@
           (set-on-click m-ntab (lambda (obj)
                                  (when is-dirty
                                    (save obj nil))
-                                 (on-open-file-ext obj :open-file file-name)
-                                 (window-close win)))
+                                 (window-close win)
+                                 (on-open-file-ext obj :open-file file-name)))
           (set-on-window-can-close win
                                    (lambda (obj)
                                      (cond (is-dirty

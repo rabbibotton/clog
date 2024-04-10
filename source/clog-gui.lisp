@@ -55,6 +55,7 @@
   (window-content              generic-function)
   (window-focus                generic-function)
   (window-close                generic-function)
+  (window-valid-p              function)
   (window-maximized-p          generic-function)
   (window-maximize             generic-function)
   (window-normalize            generic-function)
@@ -130,12 +131,8 @@
 ;; Implementation - clog-gui - Desktop GUI abstraction
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-
 (defclass clog-gui ()
-  ((body
-    :accessor body
-    :documentation "Top level access to browser window")
-   (current-win
+  ((current-win
     :accessor current-win
     :initform nil
     :documentation "The current window at front")
@@ -207,7 +204,6 @@
 \"clog-gui\". (Private)"
   (let ((clog-gui (make-instance 'clog-gui)))
     (setf (connection-data-item clog-body "clog-gui") clog-gui)
-    (setf (body clog-gui) clog-body)
     clog-gui))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;
@@ -242,6 +238,7 @@
                                         (body-left-offset 0)
                                         (body-right-offset 0)
                                         (use-clog-debugger nil)
+                                        (parent-desktop-obj nil)
                                         (w3-css-url "/css/w3.css")
                                         (jquery-ui-css "/css/jquery-ui.css")
                                         (jquery-ui "/js/jquery-ui.js"))
@@ -249,11 +246,16 @@
 If W3-CSS-URL has not been loaded before is installed unless is nil.
 BODY-LEFT-OFFSET and BODY-RIGHT-OFFSET limit width on maximize. If
 use-clog-debugger then a graphical debugger is set for all events.
+parent-desktop-obj is used if this window is a popup or otherwise a
+slave of another clog-gui page.
 NOTE: use-clog-debugger should not be set for security issues
       on non-secure environments."
-  (let ((app (create-clog-gui clog-body)))
-    (setf (body-left-offset app) body-left-offset)
-    (setf (body-right-offset app) body-right-offset))
+  (if parent-desktop-obj
+    (let ((app (connection-data-item parent-desktop-obj "clog-gui")))
+      (setf (connection-data-item clog-body "clog-gui") app))
+    (let ((app (create-clog-gui clog-body)))
+      (setf (body-left-offset app) body-left-offset)
+      (setf (body-right-offset app) body-right-offset)))
   (set-on-full-screen-change (html-document clog-body) 'reorient-all-windows)
   (set-on-orientation-change (window clog-body) 'reorient-all-windows)
   (set-on-resize (window clog-body) 'reorient-all-windows)
@@ -302,7 +304,7 @@ create-gui-menu-bar."))
 
 (defmethod menu-bar-height ((obj clog-obj))
   (let ((app (connection-data-item obj "clog-gui")))
-    (if (menu app)
+    (if (and app (menu app))
         (height (menu app))
         0)))
 
@@ -326,15 +328,16 @@ create-gui-menu-bar."))
 window or nil if not found"))
 
 (defmethod window-to-top-by-title ((obj clog-obj) title)
-  (let ((app (connection-data-item obj "clog-gui"))
-        (r   nil))
-    (maphash (lambda (key value)
-               (declare (ignore key))
-               (when (equalp (window-title value) title)
-                 (window-focus value)
-                 (setf r value)))
-             (windows app))
-    r))
+  (when title
+    (let ((app (connection-data-item obj "clog-gui"))
+          (r   nil))
+      (maphash (lambda (key value)
+                 (declare (ignore key))
+                 (when (and (equalp (window-title value) title)
+                            (window-focus value)
+                            (setf r value))))
+               (windows app))
+      r)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; window-to-top-by-param ;;
@@ -557,10 +560,12 @@ Only one instance allowed."))
     (setf (window-select app) window-select)
     (set-on-change window-select (lambda (obj)
                                    (let ((win (gethash (value obj) (windows app))))
-                                     (when win
+                                     (if (window-valid-p win)
                                        (unless (keep-on-top win)
                                          (setf (hiddenp win) nil)
-                                         (window-focus win))))))
+                                         (window-focus win))
+                                       (execute window-select (format nil "remove(~A.selectedIndex)"
+                                                                      (script-id window-select)))))))
     (when content
       (create-option window-select :content content))
     window-select))
@@ -897,9 +902,10 @@ window-to-top-by-param or window-by-param."))
                                                (border-class *default-border-class*)
                                                (title-class *default-title-class*)
                                                (html-id nil))
-  (let ((app (connection-data-item obj "clog-gui")))
+  (let ((app (connection-data-item obj "clog-gui"))
+        (body (connection-body obj)))
     (unless html-id
-      (setf html-id (generate-id)))
+      (setf html-id (format nil "~A" (generate-id))))
     (when (eql (hash-table-count (windows app)) 0)
       ;; If previously no open windows reset default position
       (setf (last-x app) 0)
@@ -914,10 +920,10 @@ window-to-top-by-param or window-by-param."))
         (setf (last-y app) (menu-bar-height obj)))
       (setf top (last-y app))
       (incf (last-y app) *top-bar-height*)
-      (when (> top (- (inner-height (window (body app))) (last-y app)))
+      (when (> top (- (inner-height (window body)) (last-y app)))
         (setf (last-y app) (menu-bar-height obj))))
-    (let ((win (create-child (body app)
-                            (format nil
+    (let ((win (create-child body
+                             (format nil
             "<div style='position:fixed;top:~Apx;left:~Apx;width:~Apx;height:~Apx;
                   z-index:~A;visibility:hidden'
                   class='~A'>
@@ -959,7 +965,7 @@ window-to-top-by-param or window-by-param."))
       (setf (closer win) (attach-as-child win (format nil "~A-closer" html-id)))
       (setf (sizer win) (attach-as-child win (format nil "~A-sizer" html-id)))
       (setf (content win) (attach-as-child win (format nil "~A-body"  html-id)))
-      (setf (gethash (format nil "~A" html-id) (windows app)) win)
+      (setf (gethash html-id (windows app)) win)
       (set-on-click win (lambda (obj)
                           (declare (ignore obj))
                           (unless (> (modal-count app) 0)
@@ -1076,13 +1082,17 @@ window-to-top-by-param or window-by-param."))
   (:documentation "Set CLOG-GUI-WINDOW as focused window."))
 
 (defmethod window-focus ((obj clog-gui-window))
-  (let ((app (connection-data-item obj "clog-gui")))
-    (unless (keep-on-top obj)
-      (when (last-z app)
-        (setf (z-index obj) (incf (last-z app)))))
-    (when (window-select app)
-      (setf (selectedp (window-select-item obj)) t))
-    (fire-on-window-change obj app))
+  (let ((app (connection-data-item obj "clog-gui"))
+        (pop (connection-data-item obj "clog-popup")))
+    (when app
+      (unless (keep-on-top obj)
+        (when (last-z app)
+          (setf (z-index obj) (incf (last-z app)))))
+      (when (window-select app)
+        (setf (selectedp (window-select-item obj)) t))
+      (when pop
+        (focus pop))
+      (fire-on-window-change obj app)))
   obj)
 
 ;;;;;;;;;;;;;;;;;;
@@ -1104,6 +1114,24 @@ the browser."))
       (fire-on-window-change nil app)
       (fire-on-window-close obj)))
   nil)
+
+;;;;;;;;;;;;;;;;;;;;
+;; window-valid-p ;;
+;;;;;;;;;;;;;;;;;;;;
+
+(defun window-valid-p (obj)
+  "Returns t if is a valid clog-gui-window. An invalid state
+can occur when a popup slave desktop is closed by the OS or the window has
+been previously closed. If the obj exists in the internal hash of windows
+it is removed."
+  (when obj
+    (when (typep obj 'clog-gui-window)
+      (let* ((app (connection-data-item obj "clog-gui"))
+             (win (when app
+                    (gethash (html-id obj) (windows app)))))
+        (when win
+          (when (connection-data-item win "clog-gui")
+                obj))))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;
 ;; window-maximized-p ;;
@@ -1135,15 +1163,19 @@ the browser."))
           (setf (last-y obj) (top obj))
           (setf (last-height obj) (height obj))
           (setf (last-width obj) (width obj)))
-	(setf (top obj) (unit :px (menu-bar-height obj)))
+        (cond ((connection-data-item obj "clog-popup")
+               (setf (top obj) (unit :px 0))
+               (setf (height obj) (inner-height (window (connection-body obj)))))
+              (t
+               (setf (top obj) (unit :px (menu-bar-height obj)))
+	       (setf (height obj)
+                     (- (inner-height (window (connection-body obj))) (menu-bar-height obj)))))
 	(setf (left obj) (unit :px 0))
 	(setf (width obj) (unit :vw 100))
 	(setf (left obj) (unit :px (body-left-offset app)))
 	(setf (width obj) (- (width obj)
                              (body-left-offset app)
                              (body-right-offset app)))
-	(setf (height obj)
-              (- (inner-height (window (body app))) (menu-bar-height obj)))
 	(fire-on-window-size-done obj)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;
@@ -1247,7 +1279,7 @@ interactions. Use window-end-modal to undo."))
   (let ((app (connection-data-item obj "clog-gui")))
     (when (and app
 	       (<= (modal-count app) 0))
-      (setf (modal-background app) (create-div (body app) :class "w3-overlay"))
+      (setf (modal-background app) (create-div (connection-body obj) :class "w3-overlay"))
       (setf (display (modal-background app)) :block))
     (incf (modal-count app))
     (setf (keep-on-top obj) t)
@@ -1780,8 +1812,8 @@ Calls on-input with t if confirmed or nil if canceled."
                                                   (time-out nil)
                                                   (left nil) (top nil)
                                                   (width 400) (height 500)
-                                            
-                                        
+
+
                                                   (size 40) (rows 4)
                                                   (client-movement nil)
                                                   (html-id nil))

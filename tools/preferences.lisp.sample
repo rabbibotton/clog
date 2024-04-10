@@ -5,10 +5,12 @@
 
 ;; Preferences loaded on next call to clog-tools:clog-builder or [Eval All]
 
+;; Builder Desktop
+
 ;; Open panels and files in new browser tabs by default
 (setf *open-external* nil)
-;; Open files in browser popups instead of tabs if browser allows
-(setf *open-external-in-popup* nil)
+;; Use clog-popup and extend desktop to popups
+(setf *open-external-using-clog-popups* nil)
 
 ;; CLOG Panels
 
@@ -19,6 +21,8 @@
 
 ;; CLOG Source Editor
 
+;; Open files in browser popups instead of tabs if browser allows
+(setf *open-external-source-in-popup* nil)
 ;; Use console for evals instead of capture
 (setf *editor-use-console-for-evals* nil)
 ;; Use emacs instead of the source-editor when opening external
