@@ -62,9 +62,11 @@
                              (:file "clog-helpers")))))
 
 (asdf:defsystem #:clog/docs
-  :depends-on (#:clog #:3BMD #:colorize)
+  :depends-on (#:clog #:3BMD #:colorize #:print-licenses)
   :pathname "source/"
   :components (;; CLOG documentation creation utils and additional documentation
+               ;; use (print-licenses:print-licenses :print-licenses) to check
+               ;; dependency licenses.
                (:file "clog-docs")))
 
 (asdf:defsystem #:clog/tools

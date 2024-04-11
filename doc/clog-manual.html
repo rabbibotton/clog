@@ -324,6 +324,14 @@ number is chosen.</p></li>
 
 <p>Port this instance of clog was started on</p></li>
 </ul>
+<p><a id="x-28CLOG-3A-2ACLOG-DEBUG-2A-20VARIABLE-29"></a>
+<a id="CLOG:*CLOG-DEBUG*%20VARIABLE"></a></p>
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[variable]</span> <span class="reference-object"><a href="#CLOG:*CLOG-DEBUG*%20VARIABLE" >*CLOG-DEBUG*</a></span></span> <span class="locative-args">NIL</span></span></p>
+
+<p>Set a debug hook that is called for every event with (event data)
+that must be (funcall event data).</p></li>
+</ul>
 <p><a id="x-28CLOG-3ASET-ON-NEW-WINDOW-20FUNCTION-29"></a>
 <a id="CLOG:SET-ON-NEW-WINDOW%20FUNCTION"></a></p>
 <ul>
@@ -6486,11 +6494,16 @@ is nil unbind the event.</p></li>
 <p><a id="x-28CLOG-GUI-3ACLOG-GUI-INITIALIZE-20FUNCTION-29"></a>
 <a id="CLOG-GUI:CLOG-GUI-INITIALIZE%20FUNCTION"></a></p>
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#CLOG-GUI:CLOG-GUI-INITIALIZE%20FUNCTION" >CLOG-GUI-INITIALIZE</a></span></span> <span class="locative-args">CLOG-BODY &amp;KEY (BODY-LEFT-OFFSET 0) (BODY-RIGHT-OFFSET 0) (W3-CSS-URL &quot;/css/w3.css&quot;) (JQUERY-UI-CSS &quot;/css/jquery-ui.css&quot;) (JQUERY-UI &quot;/js/jquery-ui.js&quot;)</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#CLOG-GUI:CLOG-GUI-INITIALIZE%20FUNCTION" >CLOG-GUI-INITIALIZE</a></span></span> <span class="locative-args">CLOG-BODY &amp;KEY (BODY-LEFT-OFFSET 0) (BODY-RIGHT-OFFSET 0) (USE-CLOG-DEBUGGER <code>NIL</code>) (PARENT-DESKTOP-OBJ <code>NIL</code>) (W3-CSS-URL &quot;/css/w3.css&quot;) (JQUERY-UI-CSS &quot;/css/jquery-ui.css&quot;) (JQUERY-UI &quot;/js/jquery-ui.js&quot;)</span></span></p>
 
 <p>Initializes clog-gui and installs a clog-gui object on connection.
 If <code>W3-CSS-URL</code> has not been loaded before is installed unless is nil.
-<code>BODY-LEFT-OFFSET</code> and <code>BODY-RIGHT-OFFSET</code> limit width on maximize.</p></li>
+<code>BODY-LEFT-OFFSET</code> and <code>BODY-RIGHT-OFFSET</code> limit width on maximize. If
+use-clog-debugger then a graphical debugger is set for all events.
+parent-desktop-obj is used if this window is a popup or otherwise a
+slave of another clog-gui page.
+NOTE: use-clog-debugger should not be set for security issues
+      on non-secure environments.</p></li>
 </ul>
 <p><code>CLOG-GUI</code> - Menus</p>
 <p><a id="x-28CLOG-GUI-3ACLOG-GUI-MENU-BAR-20CLASS-29"></a>
@@ -6539,11 +6552,11 @@ clog-body. If main-menu add as main menu bar.</p></li>
 <p><a id="x-28CLOG-GUI-3ACREATE-GUI-MENU-WINDOW-SELECT-20GENERIC-FUNCTION-29"></a>
 <a id="CLOG-GUI:CREATE-GUI-MENU-WINDOW-SELECT%20GENERIC-FUNCTION"></a></p>
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-GUI:CREATE-GUI-MENU-WINDOW-SELECT%20GENERIC-FUNCTION" >CREATE-GUI-MENU-WINDOW-SELECT</a></span></span> <span class="locative-args">CLOG-OBJ &amp;KEY CLASS HTML-ID CONTENT</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-GUI:CREATE-GUI-MENU-WINDOW-SELECT%20GENERIC-FUNCTION" >CREATE-GUI-MENU-WINDOW-SELECT</a></span></span> <span class="locative-args">CLOG-OBJ &amp;KEY CLASS CONTENT HTML-ID</span></span></p>
 
 <p>Attaches a clog-select as a menu item that auto updates
-with open windows and focuses them unless is a keep-on-top window.
-Only one instance allowed.</p></li>
+with open windows and focuses them unless is a keep-on-top window. The
+first menu-window-select will receive change window notices only.</p></li>
 </ul>
 <p><a id="x-28CLOG-GUI-3ACREATE-GUI-MENU-FULL-SCREEN-20GENERIC-FUNCTION-29"></a>
 <a id="CLOG-GUI:CREATE-GUI-MENU-FULL-SCREEN%20GENERIC-FUNCTION"></a></p>
@@ -6712,6 +6725,16 @@ window-to-top-by-param or window-by-param.</p></li>
 <code>CLOG-GUI-WINDOW</code> is removed from DOM but still present in the CLOG cache on
 the browser.</p></li>
 </ul>
+<p><a id="x-28CLOG-GUI-3AWINDOW-VALID-P-20FUNCTION-29"></a>
+<a id="CLOG-GUI:WINDOW-VALID-P%20FUNCTION"></a></p>
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#CLOG-GUI:WINDOW-VALID-P%20FUNCTION" >WINDOW-VALID-P</a></span></span> <span class="locative-args">OBJ</span></span></p>
+
+<p>Returns t if is a valid clog-gui-window. An invalid state
+can occur when a popup slave desktop is closed by the OS or the window has
+been previously closed. If the obj exists in the internal hash of windows
+it is removed.</p></li>
+</ul>
 <p><a id="x-28CLOG-GUI-3AWINDOW-MAXIMIZED-P-20GENERIC-FUNCTION-29"></a>
 <a id="CLOG-GUI:WINDOW-MAXIMIZED-P%20GENERIC-FUNCTION"></a></p>
 <ul>
@@ -6873,27 +6896,32 @@ interactions. Use window-end-modal to undo.</p></li>
 <li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#CLOG-GUI:ALERT-TOAST%20FUNCTION" >ALERT-TOAST</a></span></span> <span class="locative-args">OBJ TITLE CONTENT &amp;KEY (COLOR-CLASS &quot;w3-red&quot;) (TIME-OUT <code>NIL</code>) (PLACE-TOP <code>NIL</code>) (HTML-ID <code>NIL</code>)</span></span></p>
 
 <p>Create an alert toast with option <code>:TIME-OUT</code>. If place-top is t then alert
-is placed in DOM at top of html body instead of bottom of html body.</p></li>
+is placed in DOM at top of html body instead of bottom of html body. Note,
+when time-out alert-toast blocks and the toast is displayed for time-out or
+until user closes the toast.</p></li>
 </ul>
 <p><a id="x-28CLOG-GUI-3AALERT-DIALOG-20FUNCTION-29"></a>
 <a id="CLOG-GUI:ALERT-DIALOG%20FUNCTION"></a></p>
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#CLOG-GUI:ALERT-DIALOG%20FUNCTION" >ALERT-DIALOG</a></span></span> <span class="locative-args">OBJ CONTENT &amp;KEY (MODAL <code>T</code>) (TITLE &quot;About&quot;) (LEFT <code>NIL</code>) (TOP <code>NIL</code>) (WIDTH 300) (HEIGHT 200) (CLIENT-MOVEMENT <code>NIL</code>) (HTML-ID <code>NIL</code>)</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#CLOG-GUI:ALERT-DIALOG%20FUNCTION" >ALERT-DIALOG</a></span></span> <span class="locative-args">OBJ CONTENT &amp;KEY (MODAL <code>T</code>) (TITLE &quot;About&quot;) (TIME-OUT <code>NIL</code>) (LEFT <code>NIL</code>) (TOP <code>NIL</code>) (WIDTH 300) (HEIGHT 200) (CLIENT-MOVEMENT <code>NIL</code>) (HTML-ID <code>NIL</code>)</span></span></p>
 
-<p>Create an alert dialog box with <code>CONTENT</code> centered.</p></li>
+<p>Create an alert dialog box with <code>CONTENT</code> centered. If time-out
+alert-dialog blocks till time-out reached or OK clicked.</p></li>
 </ul>
 <p><a id="x-28CLOG-GUI-3AINPUT-DIALOG-20FUNCTION-29"></a>
 <a id="CLOG-GUI:INPUT-DIALOG%20FUNCTION"></a></p>
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#CLOG-GUI:INPUT-DIALOG%20FUNCTION" >INPUT-DIALOG</a></span></span> <span class="locative-args">OBJ CONTENT ON-INPUT &amp;KEY (MODAL <code>T</code>) (TITLE &quot;Input&quot;) (SIZE 20) (ROWS 1) (DEFAULT-VALUE &quot;&quot;) (LEFT <code>NIL</code>) (TOP <code>NIL</code>) (WIDTH 300) (HEIGHT 200) (CLIENT-MOVEMENT <code>NIL</code>) (HTML-ID <code>NIL</code>)</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#CLOG-GUI:INPUT-DIALOG%20FUNCTION" >INPUT-DIALOG</a></span></span> <span class="locative-args">OBJ CONTENT ON-INPUT &amp;KEY (MODAL <code>T</code>) (TIME-OUT <code>NIL</code>) (TITLE &quot;Input&quot;) (SIZE 20) (ROWS 1) (DEFAULT-VALUE &quot;&quot;) (LEFT <code>NIL</code>) (TOP <code>NIL</code>) (WIDTH 300) (HEIGHT 200) (CLIENT-MOVEMENT <code>NIL</code>) (HTML-ID <code>NIL</code>)</span></span></p>
 
 <p>Create an input dialog box with <code>CONTENT</code> centered and an input box.
-Calls on-input with input box contents or nil if canceled.</p></li>
+Calls on-input with input box contents or nil if canceled. If time-out
+block time-out seconds for responce or cancels dialog box then returns
+result of on-input.</p></li>
 </ul>
 <p><a id="x-28CLOG-GUI-3ACONFIRM-DIALOG-20FUNCTION-29"></a>
 <a id="CLOG-GUI:CONFIRM-DIALOG%20FUNCTION"></a></p>
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#CLOG-GUI:CONFIRM-DIALOG%20FUNCTION" >CONFIRM-DIALOG</a></span></span> <span class="locative-args">OBJ CONTENT ON-INPUT &amp;KEY (MODAL <code>T</code>) (TITLE &quot;Confirm&quot;) (OK-TEXT &quot;OK&quot;) (CANCEL-TEXT &quot;Cancel&quot;) (LEFT <code>NIL</code>) (TOP <code>NIL</code>) (WIDTH 300) (HEIGHT 200) (CLIENT-MOVEMENT <code>NIL</code>) (HTML-ID <code>NIL</code>)</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#CLOG-GUI:CONFIRM-DIALOG%20FUNCTION" >CONFIRM-DIALOG</a></span></span> <span class="locative-args">OBJ CONTENT ON-INPUT &amp;KEY (MODAL <code>T</code>) (TITLE &quot;Confirm&quot;) (OK-TEXT &quot;OK&quot;) (CANCEL-TEXT &quot;Cancel&quot;) (TIME-OUT <code>NIL</code>) (LEFT <code>NIL</code>) (TOP <code>NIL</code>) (WIDTH 300) (HEIGHT 200) (CLIENT-MOVEMENT <code>NIL</code>) (HTML-ID <code>NIL</code>)</span></span></p>
 
 <p>Create a confirmation dialog box with <code>CONTENT</code> centered.
 Calls on-input with t if confirmed or nil if canceled.</p></li>
@@ -6901,13 +6929,13 @@ Calls on-input with t if confirmed or nil if canceled.</p></li>
 <p><a id="x-28CLOG-GUI-3AFORM-DIALOG-20FUNCTION-29"></a>
 <a id="CLOG-GUI:FORM-DIALOG%20FUNCTION"></a></p>
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#CLOG-GUI:FORM-DIALOG%20FUNCTION" >FORM-DIALOG</a></span></span> <span class="locative-args">OBJ CONTENT FIELDS ON-INPUT &amp;KEY (MODAL <code>T</code>) (TITLE &quot;Form&quot;) (OK-TEXT &quot;OK&quot;) (CANCEL-TEXT &quot;Cancel&quot;) (LEFT <code>NIL</code>) (TOP <code>NIL</code>) (WIDTH 400) (HEIGHT 500) (SIZE 40) (ROWS 4) (CLIENT-MOVEMENT <code>NIL</code>) (HTML-ID <code>NIL</code>)</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#CLOG-GUI:FORM-DIALOG%20FUNCTION" >FORM-DIALOG</a></span></span> <span class="locative-args">OBJ CONTENT FIELDS ON-INPUT &amp;KEY (MODAL <code>T</code>) (TITLE &quot;Form&quot;) (OK-TEXT &quot;OK&quot;) (CANCEL-TEXT &quot;Cancel&quot;) (TIME-OUT <code>NIL</code>) (LEFT <code>NIL</code>) (TOP <code>NIL</code>) (WIDTH 400) (HEIGHT 500) (SIZE 40) (ROWS 4) (CLIENT-MOVEMENT <code>NIL</code>) (HTML-ID <code>NIL</code>)</span></span></p>
 
 <p>Create a form dialog box with <code>CONTENT</code> followed by <code>FIELDS</code>.
 <code>FIELDS</code> is a list of lists each list has:</p>
 
-<pre><code>(1) Field name         - Used for (name attribute)
-(2) Field description  - Used for label
+<pre><code>(1) Field description  - Used for label
+(2) Field name         - Used for (name attribute)
 (3) Field type         - Optional (defaults to :text)
 (4) Field type options - Optional
 </code></pre>
@@ -6928,15 +6956,48 @@ Calls on-input with t if confirmed or nil if canceled.</p></li>
 <p>The size of any texarea field is controled by the size and rows parameters</p>
 
 <p>Calls on-input after OK or Cancel with an a-list of field name to value
-if confirmed or nil if canceled.</p></li>
+if confirmed or nil if canceled. If time-out is set the result of
+on-input returned after either ok or cancel or time elapses.</p></li>
 </ul>
 <p><a id="x-28CLOG-GUI-3ASERVER-FILE-DIALOG-20FUNCTION-29"></a>
 <a id="CLOG-GUI:SERVER-FILE-DIALOG%20FUNCTION"></a></p>
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#CLOG-GUI:SERVER-FILE-DIALOG%20FUNCTION" >SERVER-FILE-DIALOG</a></span></span> <span class="locative-args">OBJ TITLE INITIAL-DIR ON-FILE-NAME &amp;KEY (MODAL <code>T</code>) (LEFT <code>NIL</code>) (TOP <code>NIL</code>) (WIDTH 390) (HEIGHT 425) (MAXIMIZE <code>NIL</code>) (INITIAL-FILENAME <code>NIL</code>) (CLIENT-MOVEMENT <code>NIL</code>) (HTML-ID <code>NIL</code>)</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#CLOG-GUI:SERVER-FILE-DIALOG%20FUNCTION" >SERVER-FILE-DIALOG</a></span></span> <span class="locative-args">OBJ TITLE INITIAL-DIR ON-FILE-NAME &amp;KEY (MODAL <code>T</code>) (TIME-OUT <code>NIL</code>) (LEFT <code>NIL</code>) (TOP <code>NIL</code>) (WIDTH 390) (HEIGHT 425) (MAXIMIZE <code>NIL</code>) (INITIAL-FILENAME <code>NIL</code>) (CLIENT-MOVEMENT <code>NIL</code>) (HTML-ID <code>NIL</code>)</span></span></p>
 
 <p>Create a local file dialog box called <code>TITLE</code> using <code>INITIAL-DIR</code> on server
-machine, upon close <code>ON-FILE-NAME</code> called with filename or nil if failure.</p></li>
+machine, upon close <code>ON-FILE-NAME</code> called with filename or nil if failure.
+If time-out return result of on-file-name, cancels dialog if time runs out.</p></li>
+</ul>
+<p><code>CLOG-GUI</code> - Debugger</p>
+<p><a id="x-28CLOG-GUI-3AWITH-CLOG-DEBUGGER-20MGL-PAX-3AMACRO-29"></a>
+<a id="CLOG-GUI:WITH-CLOG-DEBUGGER%20MGL-PAX:MACRO"></a></p>
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[macro]</span> <span class="reference-object"><a href="#CLOG-GUI:WITH-CLOG-DEBUGGER%20MGL-PAX:MACRO" >WITH-CLOG-DEBUGGER</a></span></span> <span class="locative-args">(CLOG-OBJ &amp;KEY TITLE) &amp;BODY BODY</span></span></p>
+
+<p>body uses a clog-gui based debugged instead of the console</p></li>
+</ul>
+<p><a id="x-28CLOG-GUI-3AONE-OF-DIALOG-20FUNCTION-29"></a>
+<a id="CLOG-GUI:ONE-OF-DIALOG%20FUNCTION"></a></p>
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#CLOG-GUI:ONE-OF-DIALOG%20FUNCTION" >ONE-OF-DIALOG</a></span></span> <span class="locative-args">OBJ INTRO CHOICES &amp;KEY (TITLE &quot;Please choose one&quot;) (PROMPT &quot;Choice&quot;)</span></span></p>
+
+<p>Prompt a dialog box with <code>TITLE</code> and <code>INTRO</code> using list of <code>CHOICES</code> and <code>PROMPT</code></p></li>
+</ul>
+<p><a id="x-28CLOG-GUI-3ADIALOG-IN-STREAM-20CLASS-29"></a>
+<a id="CLOG-GUI:DIALOG-IN-STREAM%20CLASS"></a></p>
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[class]</span> <span class="reference-object"><a href="#CLOG-GUI:DIALOG-IN-STREAM%20CLASS" >DIALOG-IN-STREAM</a></span></span> <span class="locative-args">TRIVIAL-GRAY-STREAMS:FUNDAMENTAL-CHARACTER-INPUT-STREAM</span></span></p>
+
+<p>dialog-in-stream and dialog-out-stream can be combined with
+make-two-way-stream to provide a <em>query-io</em> using a clog-gui instead of console)</p></li>
+</ul>
+<p><a id="x-28CLOG-GUI-3ADIALOG-OUT-STREAM-20CLASS-29"></a>
+<a id="CLOG-GUI:DIALOG-OUT-STREAM%20CLASS"></a></p>
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[class]</span> <span class="reference-object"><a href="#CLOG-GUI:DIALOG-OUT-STREAM%20CLASS" >DIALOG-OUT-STREAM</a></span></span> <span class="locative-args">TRIVIAL-GRAY-STREAMS:FUNDAMENTAL-CHARACTER-OUTPUT-STREAM</span></span></p>
+
+<p>dialog-in-stream and dialog-out-stream can be combined with
+make-two-way-stream to provide a <em>query-io</em> using a clog-gui instead of console)</p></li>
 </ul>
 <p><code>CLOG-GUI</code> - Look and Feel</p>
 <p><a id="x-28CLOG-GUI-3A-2AMENU-BAR-CLASS-2A-20VARIABLE-29"></a>
@@ -7770,23 +7831,31 @@ replace the browser contents with <code>HTML</code>.</p></li>
 
 <p>Enable handling of clog enabled popups</p></li>
 </ul>
-<p><a id="x-28CLOG-3AOPEN-CLOG-POPUP-20FUNCTION-29"></a>
-<a id="CLOG:OPEN-CLOG-POPUP%20FUNCTION"></a></p>
+<p><a id="x-28CLOG-3AOPEN-CLOG-POPUP-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG:OPEN-CLOG-POPUP%20GENERIC-FUNCTION"></a></p>
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#CLOG:OPEN-CLOG-POPUP%20FUNCTION" >OPEN-CLOG-POPUP</a></span></span> <span class="locative-args">OBJ &amp;KEY (PATH <a href="#CLOG:*CLOG-POPUP-PATH*%20VARIABLE" title="CLOG:*CLOG-POPUP-PATH* VARIABLE"><code>*CLOG-POPUP-PATH*</code></a>) (ADD-SYNC-TO-PATH <code>T</code>) (SYNC-KEY (<a href="#CLOG-CONNECTION:RANDOM-HEX-STRING%20FUNCTION" title="CLOG-CONNECTION:RANDOM-HEX-STRING FUNCTION"><code>RANDOM-HEX-STRING</code></a>)) (NAME &quot;_blank&quot;) (SPECS &quot;&quot;) (WAIT-TIMEOUT 10)</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:OPEN-CLOG-POPUP%20GENERIC-FUNCTION" >OPEN-CLOG-POPUP</a></span></span> <span class="locative-args">CLOG-OBJ &amp;KEY PATH ADD-SYNC-TO-PATH SYNC-KEY NAME SPECS WAIT-TIMEOUT</span></span></p>
 
-<p>Open a new browser window/popup in most cases a tab. Since they are controlled
-by clog you have full control of the new popups and are more flexible than using
-open-windo. Returns the clog-body and the clog-window in the same connnection as
-obj of the new window on the new connection or nil if failed within <code>:WAIT-TIMEOUT</code></p></li>
+<p>Open a new browser window/popup in most cases a tab.
+Since they are controlled by clog you have full control of the new popups
+and are more flexible than using open-windo. Returns the clog-body and the
+clog-window in the same connnection as obj of the new window on the new
+connection or nil if failed within <code>:WAIT-TIMEOUT</code></p></li>
 </ul>
-<p><a id="x-28CLOG-3ACLOG-POPUP-OPENNED-20FUNCTION-29"></a>
-<a id="CLOG:CLOG-POPUP-OPENNED%20FUNCTION"></a></p>
+<p><a id="x-28CLOG-3ACLOG-POPUP-OPENNED-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG:CLOG-POPUP-OPENNED%20GENERIC-FUNCTION"></a></p>
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#CLOG:CLOG-POPUP-OPENNED%20FUNCTION" >CLOG-POPUP-OPENNED</a></span></span> <span class="locative-args">OBJ SYNC-KEY</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:CLOG-POPUP-OPENNED%20GENERIC-FUNCTION" >CLOG-POPUP-OPENNED</a></span></span> <span class="locative-args">CLOG-OBJ SYNC-KEY</span></span></p>
 
-<p>Used to notify open-clog-popup the new popup window is ready for custom
-clog-popup handlers.</p></li>
+<p>Used to notify open-clog-popup the new popup window
+is ready used for custom clog-popup handlers.</p></li>
+</ul>
+<p><a id="x-28CLOG-3AIN-CLOG-POPUP-P-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG:IN-CLOG-POPUP-P%20GENERIC-FUNCTION"></a></p>
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:IN-CLOG-POPUP-P%20GENERIC-FUNCTION" >IN-CLOG-POPUP-P</a></span></span> <span class="locative-args">CLOG-OBJ</span></span></p>
+
+<p>Returns obj if clog-gui-window is a in a clog-popup window</p></li>
 </ul>
 <p>CLOG-Window - CLOG Window Objects</p>
 <p><a id="x-28CLOG-3ACLOG-WINDOW-20CLASS-29"></a>
@@ -8588,7 +8657,7 @@ set (logging to browser console) in the default debug.html boot-file.</p></li>
 <p><a id="x-28CLOG-3ASAVE-BODY-TO-FILE-20FUNCTION-29"></a>
 <a id="CLOG:SAVE-BODY-TO-FILE%20FUNCTION"></a></p>
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#CLOG:SAVE-BODY-TO-FILE%20FUNCTION" >SAVE-BODY-TO-FILE</a></span></span> <span class="locative-args">FILE-NAME &amp;KEY (BODY <code>CLOG-USER::*BODY*</code>) (IF-EXISTS <code>:ERROR</code>) IF-DOES-NOT-EXIST EXTERNAL-FORMAT</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#CLOG:SAVE-BODY-TO-FILE%20FUNCTION" >SAVE-BODY-TO-FILE</a></span></span> <span class="locative-args">FILE-NAME &amp;KEY (BODY <code>CLOG-USER:*BODY*</code>) (IF-EXISTS <code>:ERROR</code>) IF-DOES-NOT-EXIST EXTERNAL-FORMAT</span></span></p>
 
 <p>Save the current html of <code>BODY</code> in the current state to <code>FILE-NAME</code></p></li>
 </ul>
