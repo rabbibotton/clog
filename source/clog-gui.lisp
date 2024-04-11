@@ -132,7 +132,10 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defclass clog-gui ()
-  ((current-win
+  ((body
+    :accessor body
+    :documentation "The body of the main window")
+   (current-win
     :accessor current-win
     :initform nil
     :documentation "The current window at front")
@@ -204,6 +207,7 @@
 \"clog-gui\". (Private)"
   (let ((clog-gui (make-instance 'clog-gui)))
     (setf (connection-data-item clog-body "clog-gui") clog-gui)
+    (setf (body clog-gui) (connection-body clog-body))
     clog-gui))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;
@@ -318,6 +322,7 @@ create-gui-menu-bar."))
   (:documentation "Get hash table of open windows"))
 
 (defmethod window-collection ((obj clog-obj))
+  (window-clean-zombies obj)
   (let ((app (connection-data-item obj "clog-gui")))
     (windows app)))
 
@@ -347,19 +352,19 @@ window or nil if not found"))
 ;; window-clean-zombies ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defgeneric window-clean-zombies (clog-obj)
+(defgeneric window-clean-zombies (clog-obj &key use-select)
   (:documentation "Clean zombie references to windows that can
 occur from browsers being closed or crashing. (private)"))
 
-(defmethod window-clean-zombies ((obj clog-obj))
+(defmethod window-clean-zombies ((obj clog-obj) &key use-select)
   (let ((app (connection-data-item obj "clog-gui")))
-    (when (window-select app)
-      (setf (inner-html (window-select app)) ""))
+    (when use-select
+      (setf (inner-html use-select) ""))
     (maphash (lambda (key value)
                (if (window-valid-p value)
-                   (when (window-select app)
+                   (when use-select
                      (setf (window-select-item value)
-                           (create-option (window-select app)
+                           (create-option use-select
                                           :content (window-title value)
                                           :selected t
                                           :value key)))
@@ -375,6 +380,7 @@ occur from browsers being closed or crashing. (private)"))
 window or nil if not found"))
 
 (defmethod window-to-top-by-param ((obj clog-obj) param)
+  (window-clean-zombies obj)
   (let ((app (connection-data-item obj "clog-gui"))
         (r   nil))
     (maphash (lambda (key value)
@@ -395,6 +401,7 @@ window or nil if not found"))
 window or nil if not found"))
 
 (defmethod window-by-title ((obj clog-obj) title)
+  (window-clean-zombies obj)
   (let ((app (connection-data-item obj "clog-gui"))
         (r   nil))
     (maphash (lambda (key value)
@@ -414,6 +421,7 @@ window or nil if not found"))
 window or nil if not found"))
 
 (defmethod window-by-param ((obj clog-obj) param)
+  (window-clean-zombies obj)
   (let ((app (connection-data-item obj "clog-gui"))
         (r   nil))
     (maphash (lambda (key value)
@@ -432,6 +440,7 @@ window or nil if not found"))
   (:documentation "Maximize all windows"))
 
 (defmethod maximize-all-windows ((obj clog-obj))
+  (window-clean-zombies obj)
   (let ((app (connection-data-item obj "clog-gui")))
     (maphash (lambda (key value)
                (declare (ignore key))
@@ -447,6 +456,7 @@ window or nil if not found"))
   (:documentation "Normalize all windows"))
 
 (defmethod normalize-all-windows ((obj clog-obj))
+  (window-clean-zombies obj)
   (let ((app (connection-data-item obj "clog-gui")))
     (maphash (lambda (key value)
                (declare (ignore key))
@@ -482,6 +492,7 @@ and leave any normalized windows as normalized. This is called by default
 in on-resize, on-full-screen-change and on-orientation-change events."))
 
 (defmethod reorient-all-windows ((obj clog-obj))
+  (window-clean-zombies obj)
   (let* ((app  (connection-data-item obj "clog-gui"))
 	 (body (connection-body obj))
 	 (mbh  (menu-bar-height obj))
@@ -577,30 +588,31 @@ clog-body. If main-menu add as main menu bar."))
 
 (defgeneric create-gui-menu-window-select (clog-obj
                                            &key class
+                                             content
                                              html-id)
   (:documentation "Attaches a clog-select as a menu item that auto updates
-with open windows and focuses them unless is a keep-on-top window.
-Only one instance allowed."))
+with open windows and focuses them unless is a keep-on-top window. The
+first menu-window-select will receive change window notices only."))
 
-(defmethod create-gui-menu-window-select
-    ((obj clog-obj)
-     &key (class *menu-window-select-class*)
-       content
-       (html-id nil))
+(defmethod create-gui-menu-window-select ((obj clog-obj)
+                                          &key (class *menu-window-select-class*)
+                                            (content "Select Window")
+                                            (html-id nil))
   (let ((window-select (create-select obj :html-id html-id :class class))
         (app           (connection-data-item obj "clog-gui")))
     (change-class window-select 'clog-gui-menu-window-select)
-    (setf (window-select app) window-select)
+    (unless (window-select app)
+      (setf (window-select app) window-select))
     (set-on-click window-select (lambda (obj)
-                                  (window-clean-zombies obj)))
+                                  (window-clean-zombies obj :use-select window-select)
+                                  (when content
+                                    (setf (selectedp (create-option window-select :content content)) t))))
     (set-on-change window-select (lambda (obj)
                                    (let ((win (gethash (value obj) (windows app))))
-                                     (if (window-valid-p win)
+                                     (when win
                                        (unless (keep-on-top win)
                                          (setf (hiddenp win) nil)
-                                         (window-focus win))
-                                       (execute window-select (format nil "remove(~A.selectedIndex)"
-                                                                      (script-id window-select)))))))
+                                         (window-focus win))))))
     (when content
       (create-option window-select :content content))
     window-select))
