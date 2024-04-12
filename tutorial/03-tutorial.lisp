@@ -26,7 +26,7 @@
 ;;; This means that appropriate precautions to thread protect data should be taken
 ;;; and that events do not wait for previous event handlers to complete. To change
 ;;; this behavior just add at start of event WITH-SYNC-EVENT and then all events
-;;; will be serialized like in "traditional" GUIs to that event, events using
+;;; will be serialized like in "traditional" GUIs so that event, events using
 ;;; WITH-SYNC-EVENT will be on same queue of incoming events and syncronized.
 ;;; But... notice what happens once syncing is on the next event doesn't hit until
 ;;; SLEEP returns.
