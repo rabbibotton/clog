@@ -37,7 +37,8 @@
               (setf (text-value (package-div panel)) (uiop:getcwd))))
           (uiop:with-current-directory ((text-value (package-div panel)))
             (multiple-value-bind (result new-package new-dir)
-              (capture-eval (format nil "(uiop:run-program \"~A\" :output *standard-output*)(uiop:getcwd)" data)
+              (capture-eval (format nil "(uiop:run-program \"~A\" :output *standard-output*)(uiop:getcwd)"
+                                    (ppcre:regex-replace-all "\\" data "\\\\\\"))
                             :clog-obj            panel
                             :eval-form           "~A"
                             :capture-result-form ""

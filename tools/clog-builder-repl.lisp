@@ -28,7 +28,7 @@
       (multiple-value-bind (result new-package)
         (capture-eval data :clog-obj        panel
                            :capture-console (not *clog-repl-use-console*)
-                           :capture-result (not *clog-repl-send-result-to-console*)
+                           :capture-result  (not *clog-repl-send-result-to-console*)
                            :eval-in-package (text-value (package-div panel)))
         (setf (text-value (package-div panel))
               (string-downcase (package-name new-package)))
