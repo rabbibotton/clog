@@ -21,10 +21,18 @@
   (handler-case
     (if (and (> (length data) 3)
              (equalp (subseq data 0 3) "cd "))
-          (uiop:with-current-directory ((format nil "~A~A"
-                                                (subseq data 3 (length data))
-                                                (uiop:directory-separator-for-host)))
-            (setf (text-value (package-div panel)) (uiop:getcwd)))
+          (let* ((dir (subseq data 3 (length data)))
+                 (sw  (char dir 0)))
+            (uiop:with-current-directory ((format nil "~A~A"
+                                                  (if (or (equal sw (uiop:directory-separator-for-host))
+                                                          (equal sw  #\~))
+                                                      dir
+                                                      (format nil "~A~A~A"
+                                                              (text-value (package-div panel))
+                                                              (uiop:directory-separator-for-host)
+                                                              dir)) 
+                                                  (uiop:directory-separator-for-host)))
+              (setf (text-value (package-div panel)) (uiop:getcwd))))
           (uiop:with-current-directory ((text-value (package-div panel)))
             (multiple-value-bind (result new-package new-dir)
               (capture-eval (format nil "(uiop:run-program \"~A\" :output *standard-output*)(uiop:getcwd)" data)
