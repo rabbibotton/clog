@@ -22,9 +22,11 @@
     (if (and (> (length data) 3)
              (equalp (subseq data 0 3) "cd "))
           (let* ((dir (subseq data 3 (length data)))
+                 (wc  (when (> (length dir) 2) (char dir 1)))
                  (sw  (char dir 0)))
             (uiop:with-current-directory ((format nil "~A~A"
-                                                  (if (or (equal sw (uiop:directory-separator-for-host))
+                                                  (if (or (equal wc #\:)
+                                                          (equal sw (uiop:directory-separator-for-host))
                                                           (equal sw  #\~))
                                                       dir
                                                       (format nil "~A~A~A"
