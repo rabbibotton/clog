@@ -35,11 +35,22 @@ See macro with-connection-cache.")
    (html-id
     :reader html-id
     :initarg :html-id)
+   (parent
+    :accessor parent
+    :initform nil)
    (connection-data-mutex
     :reader connection-data-mutex
     :initform (bordeaux-threads:make-lock)))
   (:documentation "CLOG objects (clog-obj) encapsulate the connection between
 lisp and an HTML DOM element."))
+
+;;;;;;;;;;;;;;;;;;;
+;; create-parent ;;
+;;;;;;;;;;;;;;;;;;;
+
+(defgeneric parent (clog-obj)
+  (:documentation "Returns the clog-obj of the obj that was used as creation
+parent if was set or nil. This is not per se the parent in the DOM."))
 
 ;;;;;;;;;;;;;;;;;;;
 ;; connection-id ;;

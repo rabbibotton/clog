@@ -121,6 +121,7 @@ CLOG-OBJ. If HTML-ID is nil one will be generated."))
   (let ((child (create-with-html (connection-id obj) (escape-string html)
                                  :clog-type clog-type
                                  :html-id   html-id)))
+    (setf (parent child) obj)
     (if auto-place
         (case auto-place
 	  (:bottom (place-inside-bottom-of obj child))
@@ -149,7 +150,9 @@ after attachment is changed to one unique to this session."))
         (setf html-id id))
       (js-execute obj (format nil "clog['~A']=$('#~A').get(0)"
                               html-id html-id)))
-  (make-clog-element (connection-id obj) html-id :clog-type clog-type))
+  (let ((child (make-clog-element (connection-id obj) html-id :clog-type clog-type)))
+    (setf (parent child) obj)
+    child))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; General Properties - clog-element

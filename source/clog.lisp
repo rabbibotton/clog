@@ -118,7 +118,8 @@ embedded in a native template application.)"
 
 (defsection @clog-obj (:title "CLOG Objects")
   "CLOG-Obj - Base class for CLOG Objects"
-  (clog-obj class)
+  (clog-obj      class)
+  (parent        generic-function)
 
   "CLOG-Obj - General Properties"
   (property  generic-function)
