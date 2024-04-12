@@ -73,6 +73,8 @@ provide an interactive console.)"))
 ;; Lisp code evaluation utilities
 (defun capture-eval (form &key (capture-console t)
                             (capture-result t)
+                            (capture-result-form "=>~A~%")
+                            (eval-form "~A~%=>~A~%")
                             (clog-obj nil)
                             (eval-in-package "clog-user"))
   "Capture lisp evaluaton of FORM."
@@ -112,10 +114,11 @@ provide an interactive console.)"))
                    (*package*              (find-package (string-upcase eval-in-package))))
               (setf eval-result (eval (read-from-string (format nil "(progn ~A)" form))))
               (unless capture-result
-                (format st "~%=>~A~%" eval-result))
+                (format st capture-result-form eval-result))
               (values
-               (format nil "~A~%=>~A~%" result eval-result)
-               *package*))))))))
+               (format nil eval-form result eval-result)
+               *package*
+               eval-result))))))))
 
 (defun do-eval (obj form-string cname &key (package "clog-user") (test t) custom-boot)
   "Render, evalute and run code for panel"

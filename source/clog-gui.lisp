@@ -2270,6 +2270,12 @@ make-two-way-stream to provide a *query-io* using a clog-gui instead of console)
         ((null c))
       (setf q (format nil "~A~&[~D] ~A~%<br>" q i (car c))))
     (do () ((typep i `(integer 1 ,n)))
+      (let ((trc (make-array '(0) :element-type 'base-char
+                                  :fill-pointer 0 :adjustable t)))
+        (with-output-to-string (s trc)
+          (uiop:print-condition-backtrace intro :stream s))
+        (when trc
+          (format t "~A" trc)))
       (setf q (format nil "~A~&~A:" q prompt))
       (setq i (read-from-string (input-dialog obj q (lambda (result) (or result ""))
                                               :title title

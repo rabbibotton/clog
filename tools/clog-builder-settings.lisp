@@ -46,7 +46,7 @@
 ;; CLOG Builder REPL
 (defparameter *clog-repl-use-console* t)
 (defparameter *clog-repl-open-console-on-start* nil)
-(defparameter *clog-repl-send-result-to-console* t)
+(defparameter *clog-repl-send-result-to-console* nil)
 
 ;; Builder Look and Feel
 
