@@ -48,7 +48,7 @@
                         (clog-gui-initialize pop :parent-desktop-obj obj)
                         (add-class pop *builder-window-desktop-class*)
                         (if open-file
-                          (setf (title (html-document pop)) open-file)
+                          (setf (title (html-document pop)) (file-namestring open-file))
                           (setf (title (html-document pop)) "CLOG Builder Source Editor"))
                         (on-open-file pop :open-file open-file :maximized t))
                       (on-open-file obj :open-file open-file)))
