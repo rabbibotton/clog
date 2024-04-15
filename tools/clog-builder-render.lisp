@@ -124,8 +124,9 @@
                                 :fill-pointer 0 :adjustable t)))
         (with-output-to-string (s r)
           (with-input-from-string (n result)
-            (let ((*standard-output* s)
-                  (*print-case*      :downcase))
+            (let ((*standard-output*    s)
+                  (*print-right-margin* 80)
+                  (*print-case*         :downcase))
               (format t ";;;; CLOG Builder generated code - modify original .clog file and rerender")
               (loop
                 (let ((l (read n nil)))
