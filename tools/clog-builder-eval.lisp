@@ -18,8 +18,8 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defclass console-out-stream (trivial-gray-streams:fundamental-character-output-stream)
-  ((clog-obj :reader   clog-obj  :initarg :clog-obj)
-   (win      :accessor win       :initform nil)
+  ((clog-obj :reader   clog-obj                :initarg :clog-obj)
+   (win      :accessor win       :initform nil :initarg :win)
    (ace      :accessor ace       :initform nil)
    (col      :accessor col       :initform 0))
   (:documentation "console-in-stream and console-out-stream when used together
@@ -83,6 +83,7 @@ provide an interactive console.)"))
                             (capture-result-form "=>~A~%")
                             (eval-form "~A~%=>~A~%")
                             (clog-obj nil)
+                            (private-console-win nil)
                             (eval-in-package "clog-user"))
   "Capture lisp evaluaton of FORM."
   (let (console
@@ -116,7 +117,7 @@ provide an interactive console.)"))
                 (setf form r)))
             (setf console (if capture-console
                               stream
-                              (make-instance 'console-out-stream :clog-obj clog-obj)))
+                              (make-instance 'console-out-stream :clog-obj clog-obj :win private-console-win)))
             (let* ((*query-io*             (make-two-way-stream in-stream out-stream))
                    (*standard-output*      console)
                    (*standard-input*       (make-instance 'console-in-stream :clog-obj clog-obj))

@@ -55,6 +55,7 @@
 (setf *clog-repl-use-console* t)
 (setf *clog-repl-open-console-on-start* nil)
 (setf *clog-repl-send-result-to-console* nil)
+(setf *clog-repl-private-console* nil)
 
 ;; Builder Look and Feel
 
