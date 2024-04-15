@@ -18,7 +18,8 @@
 (defclass console-out-stream (trivial-gray-streams:fundamental-character-output-stream)
   ((clog-obj :reader   clog-obj  :initarg :clog-obj)
    (win      :accessor win       :initform nil)
-   (ace      :accessor ace       :initform nil))
+   (ace      :accessor ace       :initform nil)
+   (col      :accessor col       :initform 0))
   (:documentation "console-in-stream and console-out-stream when used together
 provide an interactive console.)"))
 
@@ -26,17 +27,21 @@ provide an interactive console.)"))
   (unless (win stream)
     (setf (win stream) (on-open-console (clog-obj stream))))
   (unless (ace stream)
-    (setf (ace stream) (window-param (win stream))))
+    (setf (ace stream) (window-param (win stream)))
+    (setf (clog-ace:mode (ace stream)) "ace/mode/plain_text")) ; mode turns off autoindent
   (js-execute (ace stream) (format nil "~A.renderer.scrollToLine(Number.POSITIVE_INFINITY)"
                                    (clog-ace::js-ace (ace stream))))
   (js-execute (ace stream) (format nil "~A.navigateFileEnd()"
                                    (clog-ace::js-ace (ace stream))))
   (js-execute (ace stream) (format nil "~A.insert(String.fromCharCode(~A),true)"
                                    (clog-ace::js-ace (ace stream))
-                                   (char-code character))))
+                                   (char-code character)))
+  (if (eql character #\linefeed)
+      (setf (col stream) 0)
+      (incf (col stream))))
 
 (defmethod trivial-gray-streams:stream-line-column ((stream console-out-stream))
-  nil)
+  (col stream))
 
 ;;;;;;;;;;;;;;;;;;;;;;;
 ;; console-in-stream ;;
@@ -78,20 +83,28 @@ provide an interactive console.)"))
                             (clog-obj nil)
                             (eval-in-package "clog-user"))
   "Capture lisp evaluaton of FORM."
-  (let ((result (make-array '(0) :element-type 'base-char
+  (let (console
+        (result (make-array '(0) :element-type 'base-char
                                  :fill-pointer 0 :adjustable t))
         eval-result)
     (with-output-to-string (stream result)
       (with-open-stream (out-stream (make-instance 'dialog-out-stream))
         (with-open-stream (in-stream (make-instance 'dialog-in-stream :clog-obj clog-obj :source out-stream))
-          (labels ((my-debugger (condition encapsulation)
+          (labels ((reset-ace ()
+                     (when (typep console 'console-out-stream)
+                       (setf (clog-ace:mode (ace console)) "ace/mode/lisp")
+                       (setf (ace console) nil)))
+                   (my-debugger (condition encapsulation)
                      (if clog-obj
-                         (ignore-errors
-                          (let ((restart (one-of-dialog clog-obj condition (compute-restarts)
-                                                        :title "Available Restarts")))
-                            (when restart
-                              (let ((*debugger-hook* encapsulation))
-                                (invoke-restart-interactively restart)))))
+                         (handler-case
+                             (let ((restart (one-of-dialog clog-obj condition (compute-restarts)
+                                                           :title "Available Restarts")))
+                               (when restart
+                                 (reset-ace)
+                                 (let ((*debugger-hook* encapsulation))
+                                   (invoke-restart-interactively restart))))
+                           (end-of-file () ; cancel was pressed
+                             (reset-ace)))
                          (format t "Error - ~A~%" condition))))
             (unless (stringp form)
               (let ((r (make-array '(0) :element-type 'base-char
@@ -99,13 +112,13 @@ provide an interactive console.)"))
                 (with-output-to-string (s r)
                   (print form s))
                 (setf form r)))
-            (let* ((st                     (if capture-console
-                                               stream
-                                               (make-instance 'console-out-stream :clog-obj clog-obj)))
-                   (*query-io*             (make-two-way-stream in-stream out-stream))
-                   (*standard-output*      st)
+            (setf console (if capture-console
+                              stream
+                              (make-instance 'console-out-stream :clog-obj clog-obj)))
+            (let* ((*query-io*             (make-two-way-stream in-stream out-stream))
+                   (*standard-output*      console)
                    (*standard-input*       (make-instance 'console-in-stream :clog-obj clog-obj))
-                   (*error-output*         st)
+                   (*error-output*         console)
                    (*debugger-hook*        (if clog-connection:*disable-clog-debugging*
                                                *debugger-hook*
                                                #'my-debugger))
@@ -114,7 +127,10 @@ provide an interactive console.)"))
                    (*package*              (find-package (string-upcase eval-in-package))))
               (setf eval-result (eval (read-from-string (format nil "(progn ~A)" form))))
               (unless capture-result
-                (format st capture-result-form eval-result))
+                (format console capture-result-form eval-result))
+              (when (typep console 'console-out-stream)
+                (close console))
+              (close *query-io*)
               (values
                (format nil eval-form result eval-result)
                *package*
