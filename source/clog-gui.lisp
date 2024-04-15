@@ -2264,26 +2264,31 @@ make-two-way-stream to provide a *query-io* using a clog-gui instead of console)
 
 (defun one-of-dialog (obj intro choices &key (title "Please choose one") (prompt "Choice"))
   "Prompt a dialog box with TITLE and INTRO using list of CHOICES and PROMPT"
-  (let ((q  (format nil "<pre>~A</pre><p style='text-align:left'>" intro))
-        (n (length choices)) (i))
-    (do ((c choices (cdr c)) (i 1 (+ i 1)))
-        ((null c))
-      (setf q (format nil "~A~&[~D] ~A~%<br>" q i (car c))))
-    (do () ((typep i `(integer 1 ,n)))
-      (let ((trc (make-array '(0) :element-type 'base-char
-                                  :fill-pointer 0 :adjustable t)))
-        (with-output-to-string (s trc)
-          (uiop:print-condition-backtrace intro :stream s))
-        (when trc
-          (format t "~A" trc)))
-      (setf q (format nil "~A~&~A:" q prompt))
-      (setq i (read-from-string (input-dialog obj q (lambda (result) (or result ""))
-                                              :title title
-                                              :time-out 999
-                                              :modal nil
-                                              :width 640
-                                              :height 480))))
-    (nth (- i 1) choices)))
+  (flet ((qb (q)
+           (setf q (format nil "~A" q))
+           (setf q (ppcre:regex-replace-all "<" q "&lt;"))
+           (setf q (ppcre:regex-replace-all ">" q "&gt;"))
+           q))
+    (let ((q  (format nil "<pre>~A</pre><p style='text-align:left'>" (qb intro)))
+          (n (length choices)) (i))
+      (do ((c choices (cdr c)) (i 1 (+ i 1)))
+          ((null c))
+        (setf q (format nil "~A~&[~D] ~A~%<br>" q i (qb (car c)))))
+      (do () ((typep i `(integer 1 ,n)))
+        (let ((trc (make-array '(0) :element-type 'base-char
+                                    :fill-pointer 0 :adjustable t)))
+          (with-output-to-string (s trc)
+            (uiop:print-condition-backtrace intro :stream s))
+          (when trc
+            (format t "~A" trc)))
+        (setf q (format nil "~A~&~A:" q prompt))
+        (setq i (read-from-string (input-dialog obj q (lambda (result) (or result ""))
+                                                :title title
+                                                :time-out 999
+                                                :modal nil
+                                                :width 640
+                                                :height 480))))
+      (nth (- i 1) choices))))
 
 (defparameter *default-icon*
   "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAcCAYAAAAAwr0iAAAAAXNSR0IArs4c6QAAAKZlWElmTU0A
