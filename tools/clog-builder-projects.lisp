@@ -150,7 +150,6 @@
     (setf (disabledp (design-del-dep panel)) t)
     (setf (disabledp (design-plugin panel)) t)
     (setf (disabledp (entry-point panel)) t)
-    (setf (disabledp (run-button panel)) t)
     (setf (current-project app) (if (equal sel "None")
                                     nil
                                     sel))
@@ -159,9 +158,8 @@
 	     (let ((fs (asdf:find-system sel)))
                ;; entry point
                (setf (text-value (entry-point panel))
-                     (or (asdf/system:component-entry-point
-                          fs)
-			 ""))
+                     (or (asdf/system:component-entry-point fs)
+                          ""))
                (setf (current-project-dir app)
                      (asdf:component-pathname
                       fs))
