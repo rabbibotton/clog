@@ -214,24 +214,28 @@
 ;; with-clog-debugger ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defmacro with-clog-debugger ((clog-obj &key title) &body body)
-  "body uses a clog-gui based debugged instead of the console"
+(defmacro with-clog-debugger ((clog-obj &key title standard-output) &body body)
+  "body uses a clog-gui based debugger instead of the console"
   `(with-open-stream (out-stream (make-instance 'dialog-out-stream))
     (with-open-stream (in-stream (make-instance 'dialog-in-stream :clog-obj ,clog-obj :source out-stream))
       (labels ((my-debugger (condition encapsulation)
-                 (ignore-errors
-                  (let ((restart (one-of-dialog ,clog-obj condition (compute-restarts)
-                                                :title (format nil "Available Restarts~A"
-                                                               (if ,title
-                                                                   (format nil " for ~A" ,title)
-                                                                   "")))))
-                    (when restart
-                      (let ((*debugger-hook* encapsulation))
-                        (invoke-restart-interactively restart)))))))
-        (let* ((*query-io*      (make-two-way-stream in-stream out-stream))
-               (*debugger-hook* (if clog-connection:*disable-clog-debugging*
-                                    *debugger-hook*
-                                    #'my-debugger)))
+                 (handler-case
+                     (let ((restart (one-of-dialog ,clog-obj condition (compute-restarts)
+                                                   :title (format nil "Available Restarts~A"
+                                                                  (if ,title
+                                                                      (format nil " for ~A" ,title)
+                                                                      "")))))
+                       (when restart
+                         (let ((*debugger-hook* encapsulation))
+                           (invoke-restart-interactively restart))))
+                   (end-of-file () ; no reset chosen
+                     nil))))
+        (let* ((*standard-output* (or ,standard-output
+                                      *standard-output*))
+               (*query-io*        (make-two-way-stream in-stream out-stream))
+               (*debugger-hook*   (if clog-connection:*disable-clog-debugging*
+                                      *debugger-hook*
+                                      #'my-debugger)))
           ,@body)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -242,6 +246,7 @@
                                         (body-left-offset 0)
                                         (body-right-offset 0)
                                         (use-clog-debugger nil)
+                                        (standard-output nil)
                                         (parent-desktop-obj nil)
                                         (w3-css-url "/css/w3.css")
                                         (jquery-ui-css "/css/jquery-ui.css")
@@ -272,9 +277,10 @@ NOTE: use-clog-debugger should not be set for security issues
   (when jquery-ui
     (load-script (html-document clog-body) jquery-ui))
   (when (and use-clog-debugger (not clog-connection:*disable-clog-debugging*))
-    (setf (connection-data-item clog-body "clog-debug") (lambda (event data)
-                                                          (with-clog-debugger (clog-body)
-                                                            (funcall event data))))))
+    (setf (connection-data-item clog-body "clog-debug")
+          (lambda (event data)
+            (with-clog-debugger (clog-body :standard-output standard-output)
+              (funcall event data))))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Implementation - Menus
@@ -1137,7 +1143,8 @@ window-to-top-by-param or window-by-param."))
         (when (last-z app)
           (setf (z-index obj) (incf (last-z app)))))
       (when (window-select app)
-        (setf (selectedp (window-select-item obj)) t))
+        (when (window-select-item obj)
+          (setf (selectedp (window-select-item obj)) t)))
       (when pop
         (focus pop))
       (fire-on-window-change obj app)))
@@ -2282,7 +2289,7 @@ make-two-way-stream to provide a *query-io* using a clog-gui instead of console)
           (with-output-to-string (s trc)
             (uiop:print-condition-backtrace intro :stream s))
           (when trc
-            (format t "~A" trc)))
+            (format t "~%~A~%" trc)))
         (setf q (format nil "~A~&~A:" q prompt))
         (setq i (read-from-string (input-dialog obj q (lambda (result)
                                                         (cond ((or (eq result nil)

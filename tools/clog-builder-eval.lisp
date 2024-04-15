@@ -3,12 +3,14 @@
 (defun on-open-console (obj)
   (let ((app (connection-data-item obj "builder-app-data")))
     (if (console-win app)
-        (window-focus (console-win app))
+        (progn
+          (setf (hiddenp (console-win app)) nil)
+          (window-focus (console-win app)))
         (let* ((win (on-open-file obj :title "CLOG Builder Console"
                                       :editor-use-console-for-evals t)))
-          (set-on-window-close win (lambda (obj)
-                                     (declare (ignore obj))
-                                     (setf (console-win app) nil)))
+          (set-on-window-can-close win (lambda (obj)
+                                         (setf (hiddenp obj) t)
+                                         nil))
           (setf (console-win app) win)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;
@@ -103,7 +105,7 @@ provide an interactive console.)"))
                                (when restart
                                  (let ((*debugger-hook* encapsulation))
                                    (invoke-restart-interactively restart))))
-                           (end-of-file () ; cancel was pressed
+                           (end-of-file () ; no reset chosen
                              (reset-ace)))
                          (format t "Error - ~A~%" condition))))
             (unless (stringp form)

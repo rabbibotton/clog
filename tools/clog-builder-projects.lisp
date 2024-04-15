@@ -55,11 +55,15 @@
           (on-dir-win panel :dir (asdf:system-source-directory sys))))))
 
 (defun projects-run (panel)
-  (let ((val (text-value (entry-point panel))))
+  (let ((app (connection-data-item panel "builder-app-data"))
+        (val (text-value (entry-point panel))))
     (unless (equal val "")
-      (setf clog:*clog-debug* (lambda (event data)
-                                 (with-clog-debugger (panel :title val)
-                                   (funcall event data))))
+      (setf clog:*clog-debug*
+        (lambda (event data)
+          (with-clog-debugger (panel
+                              :title val
+                              :standard-output (stdout app))
+           (funcall event data))))
       (capture-eval (format nil "(~A)" val) :clog-obj panel
                                             :capture-console nil
                                             :capture-result nil

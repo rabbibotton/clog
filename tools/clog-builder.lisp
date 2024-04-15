@@ -24,7 +24,11 @@ clog-builder window.")
 ;; Per instance app data
 
 (defclass builder-app-data ()
-  ((copy-buf
+  ((stdout
+    :accessor stdout
+    :initform nil
+    :documentation "The standard-output for this instance")
+   (copy-buf
     :accessor copy-buf
     :initform nil
     :documentation "Copy buffer")
@@ -316,9 +320,12 @@ clog-builder window.")
         (open-ext   (form-data-item (form-get-data body) "open-ext")))
     (setf (connection-data-item body "builder-app-data") app)
     (setf (title (html-document body)) "CLOG Builder")
-    (clog-gui-initialize body :use-clog-debugger t)
+    (setf (stdout app) (if clog-connection:*disable-clog-debugging*
+                           *standard-output*
+                           (make-instance 'console-out-stream :clog-obj body)))
+    (clog-gui-initialize body :use-clog-debugger t :standard-output (stdout app))
     (add-class body *builder-window-desktop-class*)
-    (with-clog-debugger (body)
+    (with-clog-debugger (body :standard-output (stdout app))
       (when *builder-window-show-static-root-class*
         (setf (z-index (create-panel body :positioning :fixed
                                           :bottom 0 :left 0
