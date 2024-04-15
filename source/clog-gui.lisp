@@ -1682,6 +1682,7 @@ alert-dialog blocks till time-out reached or OK clicked."
                                             (title "Input")
                                             (size 20)
                                             (rows 1)
+                                            (placeholder-value "")
                                             (default-value "")
                                             (left nil) (top nil)
                                             (width 300) (height 200)
@@ -1697,10 +1698,11 @@ result of on-input."
          (result nil)
          (body (connection-body obj))
          (inp  (if (eql rows 1)
-                   (format nil "<input type='text' id='~A-input' size='~A' value='~A'>"
+                   (format nil "<input type='text' id='~A-input' size='~A' value='~A' placeholder='~A'>"
                            html-id
                            size
-                           (escape-string default-value :html t))
+                           (escape-string default-value :html t)
+                           (escape-string placeholder-value :html t))
                    (format nil "<textarea id='~A-input' cols='~A' rows='~A'>~A</textarea>"
                            html-id
                            size
@@ -2282,8 +2284,14 @@ make-two-way-stream to provide a *query-io* using a clog-gui instead of console)
           (when trc
             (format t "~A" trc)))
         (setf q (format nil "~A~&~A:" q prompt))
-        (setq i (read-from-string (input-dialog obj q (lambda (result) (or result ""))
+        (setq i (read-from-string (input-dialog obj q (lambda (result)
+                                                        (cond ((or (eq result nil)
+                                                                   (equal result ""))
+                                                               (format nil "~A" n))
+                                                              (t
+                                                               result)))
                                                 :title title
+                                                :placeholder-value (format nil "~A" n)
                                                 :time-out 999
                                                 :modal nil
                                                 :width 640

@@ -99,8 +99,8 @@ provide an interactive console.)"))
                          (handler-case
                              (let ((restart (one-of-dialog clog-obj condition (compute-restarts)
                                                            :title "Available Restarts")))
+                               (reset-ace)
                                (when restart
-                                 (reset-ace)
                                  (let ((*debugger-hook* encapsulation))
                                    (invoke-restart-interactively restart))))
                            (end-of-file () ; cancel was pressed
