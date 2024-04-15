@@ -1162,7 +1162,7 @@ the browser."))
 (defmethod window-close ((obj clog-gui-window))
   (let ((app (connection-data-item obj "clog-gui")))
     (when app
-      (remhash (format nil "~A" (html-id obj)) (windows app))
+      (remhash (html-id obj) (windows app))
       (when (window-select app)
         (destroy (window-select-item obj)))
       (remove-from-dom obj)
