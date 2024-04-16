@@ -57,6 +57,10 @@
 (setf *clog-repl-send-result-to-console* nil)
 (setf *clog-repl-private-console* nil)
 
+;; Panel Builder
+(setf *builder-render-right-margin* 80)
+(setf *builder-render-case* :downcase)
+
 ;; Builder Look and Feel
 
 (setf *builder-window-desktop-class* "w3-blue-grey")

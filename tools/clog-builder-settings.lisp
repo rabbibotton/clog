@@ -49,6 +49,10 @@
 (defparameter *clog-repl-send-result-to-console* nil)
 (defparameter *clog-repl-private-console* nil)
 
+;; Panel Builder
+
+(defparameter *builder-render-right-margin* 80)
+
 ;; Builder Look and Feel
 
 (defparameter *builder-window-desktop-class* "w3-blue-grey")

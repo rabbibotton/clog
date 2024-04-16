@@ -125,8 +125,8 @@
         (with-output-to-string (s r)
           (with-input-from-string (n result)
             (let ((*standard-output*    s)
-                  (*print-right-margin* 80)
-                  (*print-case*         :downcase))
+                  (*print-right-margin* *builder-render-right-margin* )
+                  (*print-case*         *builder-render-case*))
               (format t ";;;; CLOG Builder generated code - modify original .clog file and rerender")
               (loop
                 (let ((l (read n nil)))
