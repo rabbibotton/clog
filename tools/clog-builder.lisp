@@ -308,6 +308,10 @@ clog-builder window.")
 (defun on-new-builder (body)
   "Launch instance of the CLOG Builder"
   (set-html-on-close body "Connection Lost")
+  (indentify:load-templates +common-lisp-templates+
+                            +asdf-templates+
+                            +uiop-templates+
+                            +alexandria-templates+)
   (let ((app        (make-instance 'builder-app-data))
         (*menu-bar-class*           *builder-menu-bar-class*)
         (*menu-bar-drop-down-class* *builder-menu-bar-drop-down-class*)
@@ -353,16 +357,16 @@ clog-builder window.")
                                   (declare (ignore obj))
                                   (setf *open-external* (not *open-external*))
                                   (setf (text-value exter) (exter-text)))))
-          (create-gui-menu-item file  :content "New CLOG Panel Editor"                   :on-click
-                                (lambda (obj)
-                                  (if *open-external*
-                                      (on-new-builder-panel-ext obj)
-                                      (on-new-builder-panel obj))))
           (create-gui-menu-item file  :content "New Source Editor"                       :on-click
                                 (lambda (obj)
                                   (if *open-external*
                                       (on-open-file-ext obj)
                                       (on-open-file obj))))
+          (create-gui-menu-item file  :content "New CLOG Panel Editor"                   :on-click
+                                (lambda (obj)
+                                  (if *open-external*
+                                      (on-new-builder-panel-ext obj)
+                                      (on-new-builder-panel obj))))
           (create-gui-menu-item file  :content "New CLOG Panel Popup Editor"             :on-click 'on-new-builder-page)
           (create-gui-menu-item file  :content "New HTML Panel Popup Editor"             :on-click 'on-new-builder-basic-page)
           (create-gui-menu-item file  :content "New Custom Boot Panel External Editor"   :on-click 'on-new-builder-custom-page))

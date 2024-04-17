@@ -52,6 +52,7 @@
 ;; Panel Builder
 
 (defparameter *builder-render-right-margin* 80)
+(defparameter *builder-render-case* :downcase)
 
 ;; Builder Look and Feel
 
