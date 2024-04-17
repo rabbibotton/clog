@@ -115,6 +115,12 @@
     (multiple-value-bind :count 2 :sub (nil
                                         (:style :list)
                                         nil nil))
+    (prog1 :count 1 :sub (nil
+                          (:style :list)
+                          nil nil))
+    (prog2 :count 2 :sub (nil
+                          (:style :list)
+                          nil nil))
     (prog :style :tag :count 1 :sub (nil
                                      (:style :list :sub ((:count 0)))
                                      nil))
@@ -122,10 +128,6 @@
                                       (:style :list :sub ((:count 0)))
                                       nil))
     (progv :count 2)
-    (prog1 :style :tag :count 2 :sub (nil
-                                      (:style :list :sub ((:count 0)))
-                                      (:count 0)
-                                      nil))
     (quote :count 0 :sub (nil
                           (:style :quote)))
     (:shadowing-import-from :count 1)
