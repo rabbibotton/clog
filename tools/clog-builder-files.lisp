@@ -474,7 +474,7 @@
                                   (let ((r (make-array '(0) :element-type 'base-char
                                                        :fill-pointer 0 :adjustable t)))
                                     (with-output-to-string (s r)
-                                      (with-input-from-string (n data)
+                                      (with-input-from-string (n (format nil "~A|" data))
                                         (let ((*standard-output* s))
                                           (indentify:indentify n))))
                                     (loop
@@ -485,6 +485,7 @@
                                         (setf r (subseq r end))))
                                     (unless (or (eq r nil)
                                                 (equal r ""))
+                                      (setf r (subseq r 0 (1- (length r))))
                                       (js-execute ace (format nil "~A.insert('~A',true)"
                                                               (clog-ace::js-ace ace)
                                                               (escape-string r)))
