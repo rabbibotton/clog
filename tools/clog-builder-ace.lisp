@@ -89,7 +89,7 @@
                 (format nil
                         "~A.commands.addCommand({
     name: 'adjust-tabs',
-    bindKey: {win: 'Alt-t',  mac: 'Command-t'},
+    bindKey: {win: 'Alt-t',  mac: 'Ctrl-t'},
     exec: function(editor) {
         var row = editor.selection.getCursor().row;
         var column = editor.selection.getCursor().column;

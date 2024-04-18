@@ -117,11 +117,12 @@
              (m-efrm   (create-gui-menu-item m-lisp :content "evaluate form (cmd/alt-[)"))
              (m-esel   (create-gui-menu-item m-lisp :content "evaluate selection"))
              (m-test   (create-gui-menu-item m-lisp :content "evaluate all"))
-             (m-brwsp  (create-gui-menu-item m-lisp :content "system browse at point"))
+             (m-brwsp  (create-gui-menu-item m-lisp :content "system browse at point (cmd/alt-.)"))
              (m-brws   (create-gui-menu-item m-lisp :content "system browse selection"))
              (m-desc   (create-gui-menu-item m-lisp :content "describe selection"))
              (m-doc    (create-gui-menu-item m-lisp :content "documentation on selection"))
              (m-apro   (create-gui-menu-item m-lisp :content "apropos on selection"))
+             (m-pprt   (create-gui-menu-item m-lisp :content "adjust tabs at point (ctrl/alt-t)"))
              (m-ppr    (create-gui-menu-item m-lisp :content "adjust tabs file"))
              (m-pprs   (create-gui-menu-item m-lisp :content "adjust tabs selection"))
              (m-help   (create-gui-menu-drop-down menu :content "Help"))
@@ -219,8 +220,8 @@
   <tr><td>cmd/alt-.</td><td>Launch system browser</td></tr>
   <tr><td>cmd/alt-[</td><td>Evaluate form</td></tr>
   <tr><td>cmd/ctrl-s</td><td>Save</td></tr>
-  <tr><td>cmd/alt-t</td><td>Adjust tabs at cursor</td></tr>
-  <tr><td>ctl/alt-=</td><td>Expand region</td></tr>
+  <tr><td>ctrl/alt-t</td><td>Adjust tabs at cursor</td></tr>
+  <tr><td>ctrl/alt-=</td><td>Expand region</td></tr>
   <tr><td>opt/alt-m</td><td>Macroexpand</td></tr>
   </table><p><a target='_blank' href='https://github.com/ajaxorg/ace/wiki/Default-Keyboard-Shortcuts'>Default Keybindings</a>"
                                  :width 400 :height 400
@@ -435,6 +436,9 @@
                               (open-window (window (connection-body obj))
                                            (format nil "http://l1sp.org/search?q=~A"
                                                    (clog-ace:selected-text ace)))))
+        (set-on-click m-pprt (lambda (obj)
+                               (declare (ignore obj))
+                               (clog-ace:execute-command ace "adjust-tabs")))
         (set-on-click m-ppr (lambda (obj)
                               (declare (ignore obj))
                               (let ((r (make-array '(0) :element-type 'base-char
