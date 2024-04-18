@@ -25,6 +25,8 @@
 (setf *open-external-source-in-popup* nil)
 ;; Use console for evals instead of capture
 (setf *editor-use-console-for-evals* nil)
+;; Use TAB key as in emacs (can always use ctl/alt-t)
+(setf *editor-use-tab-as-tabbify* nil)
 ;; Use emacs instead of the source-editor when opening external
 ;; must start builder for slime in emacs
 (setf *open-external-with-emacs* nil)

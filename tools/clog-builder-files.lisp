@@ -471,25 +471,27 @@
         (set-on-event-with-data ace "clog-adjust-tabs"
                                 (lambda (obj data)
                                   (declare (ignore obj))
-                                  (let ((r (make-array '(0) :element-type 'base-char
-                                                       :fill-pointer 0 :adjustable t)))
-                                    (with-output-to-string (s r)
-                                      (with-input-from-string (n (format nil "~A|" data))
-                                        (let ((*standard-output* s))
-                                          (indentify:indentify n))))
-                                    (loop
-                                      (multiple-value-bind (start end)
-                                                           (ppcre:scan "(^.*)\\n" r)
-                                        (unless start
-                                          (return))
-                                        (setf r (subseq r end))))
-                                    (unless (or (eq r nil)
-                                                (equal r ""))
-                                      (setf r (subseq r 0 (1- (length r))))
-                                      (js-execute ace (format nil "~A.insert('~A',true)"
-                                                              (clog-ace::js-ace ace)
-                                                              (escape-string r)))
-                                      (set-is-dirty t)))))
+                                  (unless (equal data "")
+                                    (setf data (format nil "~A(" data))
+                                    (let ((r (make-array '(0) :element-type 'base-char
+                                                         :fill-pointer 0 :adjustable t)))
+                                      (with-output-to-string (s r)
+                                        (with-input-from-string (n data)
+                                          (let ((*standard-output* s))
+                                            (indentify:indentify n))))
+                                      (loop
+                                        (multiple-value-bind (start end)
+                                                             (ppcre:scan "(^.*)\\n" r)
+                                          (unless start
+                                            (return))
+                                          (setf r (subseq r end))))
+                                      (unless (or (eq r nil)
+                                                  (equal r ""))
+                                        (setf r (subseq r 0 (1- (length r))))
+                                        (js-execute ace (format nil "~A.insert('~A',true)"
+                                                                (clog-ace::js-ace ace)
+                                                                (escape-string r)))
+                                        (set-is-dirty t))))))
         (labels ((eval-form (obj)
                    (let ((p  (parse-integer
                                (js-query obj

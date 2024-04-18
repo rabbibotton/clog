@@ -89,7 +89,7 @@
                 (format nil
                         "~A.commands.addCommand({
     name: 'adjust-tabs',
-    bindKey: {win: 'Alt-t',  mac: 'Ctrl-t'},
+    bindKey: {win: '~A',  mac: '~A'},
     exec: function(editor) {
         var row = editor.selection.getCursor().row;
         var column = editor.selection.getCursor().column;
@@ -113,6 +113,12 @@
     readOnly: true,
 });"
                         (clog-ace::js-ace editor)
+                        (if *editor-use-tab-as-tabbify*
+                            "Alt-t|Tab"
+                            "Alt-t")
+                        (if *editor-use-tab-as-tabbify*
+                            "Ctrl-t|Tab"
+                            "Ctrl-t")
                         (jquery editor)))
     ;; eval form
     (js-execute editor
