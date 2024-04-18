@@ -19,7 +19,7 @@
 (defun write-file (string outfile &key clog-obj (action-if-exists :rename))
   "Write local file named OUTFILE"
   (check-type action-if-exists (member nil :error :new-version :rename :rename-and-delete
-                                           :overwrite :append :supersede))
+                                       :overwrite :append :supersede))
   (handler-case
       (with-open-file (outstream outfile :direction :output :if-exists action-if-exists)
         (when outstream
@@ -48,8 +48,8 @@
                         (clog-gui-initialize pop :parent-desktop-obj obj)
                         (add-class pop *builder-window-desktop-class*)
                         (if open-file
-                          (setf (title (html-document pop)) (file-namestring open-file))
-                          (setf (title (html-document pop)) "CLOG Builder Source Editor"))
+                            (setf (title (html-document pop)) (file-namestring open-file))
+                            (setf (title (html-document pop)) "CLOG Builder Source Editor"))
                         (on-open-file pop :open-file open-file :maximized t))
                       (on-open-file obj :open-file open-file)))
                 (open-window (window (connection-body obj))
@@ -63,13 +63,13 @@
                              :name "_blank"))))))
 
 (defun on-open-file (obj &key open-file
-                           (title "New Source Editor")
-                           text
-                           (title-class *builder-title-class*)
-                           lisp-package
-                           regex
-                           (editor-use-console-for-evals *editor-use-console-for-evals*)
-                           maximized)
+                     (title "New Source Editor")
+                     text
+                     (title-class *builder-title-class*)
+                     lisp-package
+                     regex
+                     (editor-use-console-for-evals *editor-use-console-for-evals*)
+                     maximized)
   "Open a new text editor"
   (let ((win (window-to-top-by-title obj open-file)))
     (when win
@@ -90,9 +90,9 @@
              (*default-title-class*      *builder-title-class*)
              (*default-border-class*     *builder-border-class*)
              (win (create-gui-window obj :title title
-                                         :title-class title-class
-                                         :width 700 :height 480
-                                         :client-movement *client-side-movement*))
+                                     :title-class title-class
+                                     :width 700 :height 480
+                                     :client-movement *client-side-movement*))
              (box (create-panel-box-layout (window-content win)
                                            :left-width 0 :right-width 0
                                            :top-height 66 :bottom-height 0))
@@ -199,17 +199,17 @@
         (setf (positioning ace) :absolute)
         (setf (positioning status) :absolute)
         (set-geometry pac-line :units "" :top "20px" :left "0px"
-                               :right "0px" :height "22px" :width "100%")
+                      :right "0px" :height "22px" :width "100%")
         (setf (place-holder pac-line) "Current Package")
         (if lisp-package
             (setf (text-value pac-line) lisp-package)
             (setf (text-value pac-line) "clog-user"))
         (setf (current-editor-is-lisp app) "clog-user")
         (set-geometry ace :units "" :width "" :height ""
-                          :top "22px" :bottom "20px" :left "0px" :right "0px")
+                      :top "22px" :bottom "20px" :left "0px" :right "0px")
         (clog-ace:resize ace)
         (set-geometry status :units "" :width "" :height "20px"
-                             :bottom "0px" :left "0px" :right "0px")
+                      :bottom "0px" :left "0px" :right "0px")
         (setup-lisp-ace ace status)
         (labels ((on-help (obj)
                    (declare (ignore obj))
@@ -232,7 +232,14 @@
                                  (lambda (obj)
                                    (declare (ignore obj))
                                    (clog-ace:resize ace)))
-        (labels ((open-file-name (fname)
+        (labels ((set-is-dirty (status)
+                   (cond (status
+                           (setf is-dirty t)
+                           (set-outline btn-save :yellow :solid :thin))
+                         (t
+                           (setf is-dirty nil)
+                           (set-outline btn-save :green :solid :thin))))
+                 (open-file-name (fname)
                    (window-focus win)
                    (handler-case
                        (when fname
@@ -242,14 +249,14 @@
                          (let ((c (or (read-file fname :clog-obj obj) "")))
                            (cond ((or (equalp (pathname-type fname) "lisp")
                                       (equalp (pathname-type fname) "asd"))
-                                  (setf (clog-ace:mode ace) "ace/mode/lisp")
-                                  (setf (text-value pac-line) (get-package-from-string c))
-                                  (setf lisp-file t)
-                                  (setf (current-editor-is-lisp app) (text-value pac-line)))
+                                   (setf (clog-ace:mode ace) "ace/mode/lisp")
+                                   (setf (text-value pac-line) (get-package-from-string c))
+                                   (setf lisp-file t)
+                                   (setf (current-editor-is-lisp app) (text-value pac-line)))
                                  (t
-                                  (setf lisp-file nil)
-                                  (setf (current-editor-is-lisp app) nil)
-                                  (setf (clog-ace:mode ace) (clog-ace:get-mode-from-extension ace fname))))
+                                   (setf lisp-file nil)
+                                   (setf (current-editor-is-lisp app) nil)
+                                   (setf (clog-ace:mode ace) (clog-ace:get-mode-from-extension ace fname))))
                            (setf (clog-ace:text-value ace) c)))
                      (error (condition)
                        (unless text
@@ -261,7 +268,7 @@
                                                                                    file-name))
                                        (lambda (fname)
                                          (open-file-name fname)
-                                         (setf is-dirty nil)))))
+                                         (set-is-dirty nil)))))
           (when (and open-file
                      (not (equalp open-file " "))
                      (not (equalp open-file "")))
@@ -273,17 +280,17 @@
           (set-on-click m-load (lambda (obj) (load-file obj)))
           (set-on-click m-revert (lambda (obj)
                                    (declare (ignore obj))
-                                   (setf is-dirty nil)
-                                   (open-file-name file-name))))
+                                   (set-is-dirty nil)
+                                   (open-file-name file-name)))
         (set-on-input ace (lambda (obj)
                             (declare (ignore obj))
-                            (setf is-dirty t)))
+                            (set-is-dirty t)))
         (set-on-event ace "clog-save-ace"
                       (lambda (obj)
                         (unless (equal file-name "")
                           (add-class btn-save "w3-animate-top")
                           (write-file (text-value ace) file-name :clog-obj obj)
-                          (setf is-dirty nil)
+                          (set-is-dirty nil)
                           (setf last-date (file-write-date file-name))
                           (sleep .5)
                           (remove-class btn-save "w3-animate-top"))))
@@ -291,40 +298,40 @@
                  (cond ((or (equal file-name "")
                             (getf data :shift-key)
                             save-as)
-                        (server-file-dialog obj "Save Source As.." (if (equal file-name "")
-                                                                       (current-project-dir app)
-                                                                       file-name)
-                                            (lambda (fname)
-                                              (window-focus win)
-                                              (when fname
-                                                (setf file-name fname)
-                                                (setf (window-title win) fname)
-                                                (add-class btn-save "w3-animate-top")
-                                                (write-file (text-value ace) fname :clog-obj obj)
-                                                (setf is-dirty nil)
-                                                (setf last-date (file-write-date fname))
-                                                (sleep .5)
-                                                (remove-class btn-save "w3-animate-top"))
-                                              :initial-filename file-name)))
+                         (server-file-dialog obj "Save Source As.." (if (equal file-name "")
+                                                                        (current-project-dir app)
+                                                                        file-name)
+                                             (lambda (fname)
+                                               (window-focus win)
+                                               (when fname
+                                                 (setf file-name fname)
+                                                 (setf (window-title win) fname)
+                                                 (add-class btn-save "w3-animate-top")
+                                                 (write-file (text-value ace) fname :clog-obj obj)
+                                                 (set-is-dirty nil)
+                                                 (setf last-date (file-write-date fname))
+                                                 (sleep .5)
+                                                 (remove-class btn-save "w3-animate-top"))
+                                               :initial-filename file-name)))
                        (t
-                        (cond ((or (not (probe-file file-name))
-                                   (eql last-date (file-write-date file-name)))
-                               (add-class btn-save "w3-animate-top")
-                               (write-file (text-value ace) file-name :clog-obj obj)
-                               (setf is-dirty nil)
-                               (setf last-date (file-write-date file-name))
-                               (sleep .5)
-                               (remove-class btn-save "w3-animate-top"))
-                              (t
-                               (confirm-dialog obj "File changed on file system. Save?"
-                                               (lambda (result)
-                                                 (when result
-                                                   (add-class btn-save "w3-animate-top")
-                                                   (write-file (text-value ace) file-name :clog-obj obj)
-                                                   (setf is-dirty nil)
-                                                   (setf last-date (file-write-date file-name))
-                                                   (sleep .5)
-                                                   (remove-class btn-save "w3-animate-top"))))))))))
+                         (cond ((or (not (probe-file file-name))
+                                    (eql last-date (file-write-date file-name)))
+                                 (add-class btn-save "w3-animate-top")
+                                 (write-file (text-value ace) file-name :clog-obj obj)
+                                 (set-is-dirty nil)
+                                 (setf last-date (file-write-date file-name))
+                                 (sleep .5)
+                                 (remove-class btn-save "w3-animate-top"))
+                               (t
+                                 (confirm-dialog obj "File changed on file system. Save?"
+                                                 (lambda (result)
+                                                   (when result
+                                                     (add-class btn-save "w3-animate-top")
+                                                     (write-file (text-value ace) file-name :clog-obj obj)
+                                                     (set-is-dirty nil)
+                                                     (setf last-date (file-write-date file-name))
+                                                     (sleep .5)
+                                                     (remove-class btn-save "w3-animate-top"))))))))))
           (when m-emacs
             (set-on-click m-emacs (lambda (obj)
                                     (when is-dirty
@@ -340,16 +347,16 @@
           (set-on-window-can-close win
                                    (lambda (obj)
                                      (cond (is-dirty
-                                            (confirm-dialog obj "Save File?"
-                                                            (lambda (result)
-                                                              (setf is-dirty nil)
-                                                              (when result
-                                                                (save obj nil))
-                                                              (window-close win))
-                                                            :ok-text "Yes" :cancel-text "No")
-                                            nil)
+                                             (confirm-dialog obj "Save File?"
+                                                             (lambda (result)
+                                                               (set-is-dirty nil)
+                                                               (when result
+                                                                 (save obj nil))
+                                                               (window-close win))
+                                                             :ok-text "Yes" :cancel-text "No")
+                                             nil)
                                            (t
-                                            t))))
+                                             t))))
           (set-on-mouse-click btn-save (lambda (obj data)
                                          (save obj data)))
           (set-on-click m-saveas (lambda (obj)
@@ -408,21 +415,21 @@
                                (clog-ace:execute-command ace "redo")))
         (set-on-click m-desc (lambda (obj)
                                (let ((r (make-array '(0) :element-type 'base-char
-                                                         :fill-pointer 0 :adjustable t)))
+                                                    :fill-pointer 0 :adjustable t)))
                                  (with-output-to-string (s r)
                                    (let ((*standard-output* s))
                                      (describe (find-symbol (string-upcase (clog-ace:selected-text ace))
                                                             (string-upcase (text-value pac-line)))))
                                    (on-open-file obj :title-class "w3-purple" :title "describe selection"
-                                                     :text r)))))
+                                                 :text r)))))
         (set-on-click m-apro (lambda (obj)
                                (let ((r (make-array '(0) :element-type 'base-char
-                                                         :fill-pointer 0 :adjustable t)))
+                                                    :fill-pointer 0 :adjustable t)))
                                  (with-output-to-string (s r)
                                    (let ((*standard-output* s))
                                      (apropos (clog-ace:selected-text ace)))
                                    (on-open-file obj :title-class "w3-purple" :title "apropos selection"
-                                                     :text r)))))
+                                                 :text r)))))
         (set-on-click m-brws (lambda (obj)
                                (declare (ignore obj))
                                (on-new-sys-browser ace :search (clog-ace:selected-text ace))))
@@ -442,17 +449,17 @@
         (set-on-click m-ppr (lambda (obj)
                               (declare (ignore obj))
                               (let ((r (make-array '(0) :element-type 'base-char
-                                                        :fill-pointer 0 :adjustable t)))
+                                                   :fill-pointer 0 :adjustable t)))
                                 (with-output-to-string (s r)
                                   (with-input-from-string (n (text-value ace))
                                     (let ((*standard-output* s))
                                       (indentify:indentify n))))
                                 (setf (text-value ace) r)
-                                (setf is-dirty t))))
+                                (set-is-dirty t))))
         (set-on-click m-pprs (lambda (obj)
                                (declare (ignore obj))
                                (let ((r (make-array '(0) :element-type 'base-char
-                                                         :fill-pointer 0 :adjustable t)))
+                                                    :fill-pointer 0 :adjustable t)))
                                  (with-output-to-string (s r)
                                    (with-input-from-string (n (clog-ace:selected-text ace))
                                      (let ((*standard-output* s))
@@ -460,19 +467,19 @@
                                  (js-execute ace (format nil "~A.insert('~A',true)"
                                                          (clog-ace::js-ace ace)
                                                          (escape-string r)))
-                                 (setf is-dirty t))))
+                                 (set-is-dirty t))))
         (set-on-event-with-data ace "clog-adjust-tabs"
                                 (lambda (obj data)
                                   (declare (ignore obj))
                                   (let ((r (make-array '(0) :element-type 'base-char
-                                                            :fill-pointer 0 :adjustable t)))
+                                                       :fill-pointer 0 :adjustable t)))
                                     (with-output-to-string (s r)
                                       (with-input-from-string (n data)
                                         (let ((*standard-output* s))
                                           (indentify:indentify n))))
                                     (loop
                                       (multiple-value-bind (start end)
-                                          (ppcre:scan "(^.*)\\n" r)
+                                                           (ppcre:scan "(^.*)\\n" r)
                                         (unless start
                                           (return))
                                         (setf r (subseq r end))))
@@ -481,14 +488,14 @@
                                       (js-execute ace (format nil "~A.insert('~A',true)"
                                                               (clog-ace::js-ace ace)
                                                               (escape-string r)))
-                                      (setf is-dirty t)))))
+                                      (set-is-dirty t)))))
         (labels ((eval-form (obj)
                    (let ((p  (parse-integer
-                              (js-query obj
-                                        (format nil "~A.session.doc.positionToIndex (~A.selection.getCursor(), 0);"
-                                                (clog-ace::js-ace ace)
-                                                (clog-ace::js-ace ace)))
-                              :junk-allowed t))
+                               (js-query obj
+                                         (format nil "~A.session.doc.positionToIndex (~A.selection.getCursor(), 0);"
+                                                 (clog-ace::js-ace ace)
+                                                 (clog-ace::js-ace ace)))
+                               :junk-allowed t))
                          (tv (text-value ace))
                          (lf nil)
                          (cp 0))
@@ -503,28 +510,28 @@
                                                    :clog-obj (connection-body obj)
                                                    :eval-in-package (text-value pac-line))))
                          (if editor-use-console-for-evals
-                           (on-open-console obj)
-                           (on-open-file obj :title-class "w3-blue" :title "form eval" :text result))))))
+                             (on-open-console obj)
+                             (on-open-file obj :title-class "w3-blue" :title "form eval" :text result))))))
                  (eval-selection (obj)
                    (let ((val (clog-ace:selected-text ace)))
                      (unless (equal val "")
                        (let ((result (capture-eval val :clog-obj obj
-                                                       :capture-console (not editor-use-console-for-evals)
-                                                       :capture-result  (not editor-use-console-for-evals)
-                                                       :eval-in-package (text-value pac-line))))
+                                                   :capture-console (not editor-use-console-for-evals)
+                                                   :capture-result  (not editor-use-console-for-evals)
+                                                   :eval-in-package (text-value pac-line))))
                          (if editor-use-console-for-evals
-                           (on-open-console obj)
-                           (on-open-file obj :title-class "w3-blue" :title "selection eval" :text result))))))
+                             (on-open-console obj)
+                             (on-open-file obj :title-class "w3-blue" :title "selection eval" :text result))))))
                  (eval-file (obj)
                    (let ((val (text-value ace)))
                      (unless (equal val "")
                        (let ((result (capture-eval val :clog-obj obj
-                                                       :capture-console (not editor-use-console-for-evals)
-                                                       :capture-result  (not editor-use-console-for-evals)
-                                                       :eval-in-package (text-value pac-line))))
+                                                   :capture-console (not editor-use-console-for-evals)
+                                                   :capture-result  (not editor-use-console-for-evals)
+                                                   :eval-in-package (text-value pac-line))))
                          (if editor-use-console-for-evals
-                           (on-open-console obj)
-                           (on-open-file obj :title-class "w3-blue" :title "file eval" :text result)))))))
+                             (on-open-console obj)
+                             (on-open-file obj :title-class "w3-blue" :title "file eval" :text result)))))))
           (set-on-click btn-esel (lambda (obj)
                                    (eval-selection obj)))
           (set-on-click m-esel (lambda (obj)
@@ -537,4 +544,4 @@
                                    (eval-file obj)))
           (set-on-click m-test (lambda (obj)
                                  (eval-file obj))))
-        win))))
+        win)))))
