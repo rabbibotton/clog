@@ -609,10 +609,10 @@ first menu-window-select will receive change window notices only."))
     (change-class window-select 'clog-gui-menu-window-select)
     (unless (window-select app)
       (setf (window-select app) window-select))
-    (set-on-click window-select (lambda (obj)
-                                  (window-clean-zombies obj :use-select window-select)
-                                  (when content
-                                    (setf (selectedp (create-option window-select :content content)) t))))
+    (set-on-mouse-enter window-select (lambda (obj)
+                                        (window-clean-zombies obj :use-select window-select)
+                                        (when content
+                                          (setf (selectedp (create-option window-select :content content)) t))))
     (set-on-change window-select (lambda (obj)
                                    (let ((win (gethash (value obj) (windows app))))
                                      (when win
