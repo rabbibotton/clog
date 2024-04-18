@@ -470,16 +470,20 @@
                                  (set-is-dirty t))))
         (set-on-event-with-data ace "clog-adjust-tabs"
                                 (lambda (obj data)
-                                  ; (declare (ignore obj))
+                                  (declare (ignore obj))
                                   (unless (equal data "")
                                     (setf data (format nil "~A;" data))
-                                    (let ((o  (clog-ace:selected-text ace))
-                                          (r (make-array '(0) :element-type 'base-char
-                                                         :fill-pointer 0 :adjustable t)))
-                                      (with-output-to-string (s r)
-                                        (with-input-from-string (n data)
-                                          (let ((*standard-output* s))
-                                            (indentify:indentify n))))
+                                    (let* ((o (clog-ace:selected-text ace))
+                                           (p (ppcre:scan "\\S" o))
+                                           (r (make-array '(0) :element-type 'base-char
+                                                          :fill-pointer 0 :adjustable t)))
+                                      (handler-case
+                                          (with-output-to-string (s r)
+                                            (with-input-from-string (n data)
+                                              (let ((*standard-output* s))
+                                                (indentify:indentify n))))
+                                        (error ()
+                                           nil))
                                       (loop
                                         (multiple-value-bind (start end)
                                                              (ppcre:scan "(^.*)\\n" r)
@@ -487,8 +491,9 @@
                                             (return))
                                           (setf r (subseq r end))))
                                       (setf r (subseq r 0 (ppcre:scan "\\S" r)))
-                                      (setf o (subseq o (ppcre:scan "\\S" o) (length o)))
-                                      (setf r (format nil "~A~A" r o))
+                                      (when p
+                                        (setf o (subseq o (ppcre:scan "\\S" o) (length o)))
+                                        (setf r (format nil "~A~A" r o)))
                                       (unless (or (eq r nil)
                                                   (equal r ""))
                                         (js-execute ace (format nil "~A.insert('~A',true)"
