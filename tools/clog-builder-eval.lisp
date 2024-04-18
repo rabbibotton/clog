@@ -95,7 +95,6 @@ provide an interactive console.)"))
         (with-open-stream (in-stream (make-instance 'dialog-in-stream :clog-obj clog-obj :source out-stream))
           (labels ((reset-ace ()
                      (when (typep console 'console-out-stream)
-                       (setf (clog-ace:mode (ace console)) "ace/mode/lisp")
                        (setf (ace console) nil)))
                    (my-debugger (condition encapsulation)
                      (if clog-obj

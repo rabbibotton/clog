@@ -101,6 +101,7 @@
              (m-load   (create-gui-menu-item m-file :content "load"))
              (m-save   (create-gui-menu-item m-file :content "save (cmd/ctrl-s)"))
              (m-saveas (create-gui-menu-item m-file :content "save as.."))
+             (m-revert (create-gui-menu-item m-file :content "revert"))
              (m-emacs  (unless (in-clog-popup-p obj)
                          (create-gui-menu-item m-file :content "open in emacs")))
              (m-ntab   (unless (in-clog-popup-p obj)
@@ -215,13 +216,14 @@
                                  "<table>
   <tr><td>cmd/ctrl-,</td><td>Configure editor</td></tr>
   <tr><td>F1</td><td>Command Palette</td></tr>
-  <tr><td>cmd/alt-.</td><td> Launch system browser</td></tr>
-  <tr><td>cmd/alt-[</td><td> Evaluate form</td></tr>
-  <tr><td>cmd/ctrl-s</td><td> Save</td></tr>
-  <tr><td>ctl-=</td><td>Expand region</td></tr>
+  <tr><td>cmd/alt-.</td><td>Launch system browser</td></tr>
+  <tr><td>cmd/alt-[</td><td>Evaluate form</td></tr>
+  <tr><td>cmd/ctrl-s</td><td>Save</td></tr>
+  <tr><td>cmd/alt-t</td><td>Adjust tabs at cursor</td></tr>
+  <tr><td>ctl/alt-=</td><td>Expand region</td></tr>
   <tr><td>opt/alt-m</td><td>Macroexpand</td></tr>
   </table><p><a target='_blank' href='https://github.com/ajaxorg/ace/wiki/Default-Keyboard-Shortcuts'>Default Keybindings</a>"
-                                 :width 400 :height 350
+                                 :width 400 :height 400
                                  :title "Help")))
           (set-on-click btn-help #'on-help)
           (set-on-click m-helpk #'on-help))
@@ -267,7 +269,11 @@
             (js-execute obj (format nil "~A.find('~A',{caseSensitive:false,regExp:true})"
                                     (clog-ace::js-ace ace) regex)))
           (set-on-click btn-load (lambda (obj) (load-file obj)))
-          (set-on-click m-load (lambda (obj) (load-file obj))))
+          (set-on-click m-load (lambda (obj) (load-file obj)))
+          (set-on-click m-revert (lambda (obj)
+                                   (declare (ignore obj))
+                                   (setf is-dirty nil)
+                                   (open-file-name file-name))))
         (set-on-input ace (lambda (obj)
                             (declare (ignore obj))
                             (setf is-dirty t)))
@@ -451,6 +457,27 @@
                                                          (clog-ace::js-ace ace)
                                                          (escape-string r)))
                                  (setf is-dirty t))))
+        (set-on-event-with-data ace "clog-adjust-tabs"
+                                (lambda (obj data)
+                                  (declare (ignore obj))
+                                  (let ((r (make-array '(0) :element-type 'base-char
+                                                            :fill-pointer 0 :adjustable t)))
+                                    (with-output-to-string (s r)
+                                      (with-input-from-string (n data)
+                                        (let ((*standard-output* s))
+                                          (indentify:indentify n))))
+                                    (loop
+                                      (multiple-value-bind (start end)
+                                          (ppcre:scan "(^.*)\\n" r)
+                                        (unless start
+                                          (return))
+                                        (setf r (subseq r end))))
+                                    (unless (or (eq r nil)
+                                                (equal r ""))
+                                      (js-execute ace (format nil "~A.insert('~A',true)"
+                                                              (clog-ace::js-ace ace)
+                                                              (escape-string r)))
+                                      (setf is-dirty t)))))
         (labels ((eval-form (obj)
                    (let ((p  (parse-integer
                               (js-query obj

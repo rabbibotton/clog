@@ -84,6 +84,36 @@
 });"
                         (clog-ace::js-ace editor)
                         (jquery editor)))
+    ;; setup adjust tab key
+    (js-execute editor
+                (format nil
+                        "~A.commands.addCommand({
+    name: 'adjust-tabs',
+    bindKey: {win: 'Alt-t',  mac: 'Command-t'},
+    exec: function(editor) {
+        var row = editor.selection.getCursor().row;
+        var column = editor.selection.getCursor().column;
+        var c;
+        var sr=row;
+        var bp=0;
+        row--;
+        column=500;
+        while (row > 0) {
+          c=editor.session.getTextRange(new ace.Range(row, column-1, row, column));
+          if (c==')') { bp++; }
+          if (c=='(') { bp--; }
+          if (bp < 0) { break; }
+          column--;
+          if (column < 0) { row--; column=500;}
+        }
+        c = editor.session.getTextRange(new ace.Range(row, 0, sr, 500));
+        editor.session.selection.setSelectionRange(new ace.Range(sr, 0, sr, 500));
+        ~A.trigger('clog-adjust-tabs',c);
+    },
+    readOnly: true,
+});"
+                        (clog-ace::js-ace editor)
+                        (jquery editor)))
     ;; eval form
     (js-execute editor
                 (format nil
@@ -154,7 +184,7 @@
                 (format nil
                         "~A.commands.addCommand({
     name: 'expand-region',
-    bindKey: {win: 'Ctrl-=',  mac: 'Control-='},
+    bindKey: {win: 'Alt-=',  mac: 'Control-='},
     exec: function(editor) {
         var currentRange = editor.selection.getAllRanges()[0];
         var start = editor.session.doc.positionToIndex(currentRange.start);
