@@ -609,10 +609,21 @@ first menu-window-select will receive change window notices only."))
     (change-class window-select 'clog-gui-menu-window-select)
     (unless (window-select app)
       (setf (window-select app) window-select))
-    (set-on-mouse-enter window-select (lambda (obj)
-                                        (window-clean-zombies obj :use-select window-select)
-                                        (when content
-                                          (setf (selectedp (create-option window-select :content content)) t))))
+    ; on mac on-click after a refill doesn't work
+    ; on pc mouse-enter fires as long as in the control, so..
+    (flet ((refill (obj)
+             (set-on-mouse-enter obj nil)
+             (with-sync-event (obj)
+               (window-clean-zombies obj :use-select window-select))
+             (when content
+               (setf (selectedp (create-option window-select :content content)) t))))
+      (set-on-mouse-enter window-select (lambda (obj)
+                                          (refill obj)))
+      (set-on-mouse-leave window-select (lambda (obj)
+                                          (declare (ignore obj))
+                                          (sleep .5)
+                                          (set-on-mouse-enter window-select (lambda (obj)
+                                                                              (refill obj))))))
     (set-on-change window-select (lambda (obj)
                                    (let ((win (gethash (value obj) (windows app))))
                                      (when win
