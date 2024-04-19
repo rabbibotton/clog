@@ -26,7 +26,7 @@
 ;; Use console for evals instead of capture
 (setf *editor-use-console-for-evals* nil)
 ;; Use TAB key as in emacs (can always use ctl/alt-t)
-(setf *editor-use-tab-as-tabbify* nil)
+(setf *editor-use-tab-as-tabbify* t)
 ;; Use emacs instead of the source-editor when opening external
 ;; must start builder for slime in emacs
 (setf *open-external-with-emacs* nil)
@@ -57,7 +57,7 @@
 (setf *clog-repl-use-console* t)
 (setf *clog-repl-open-console-on-start* nil)
 (setf *clog-repl-send-result-to-console* nil)
-(setf *clog-repl-private-console* nil)
+(setf *clog-repl-private-console* t)
 
 ;; Panel Builder
 (setf *builder-render-right-margin* 80)

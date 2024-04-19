@@ -23,7 +23,7 @@
 ;; Use console for evals instead of capture
 (defparameter *editor-use-console-for-evals* nil)
 ;; Use TAB key as in emacs (can always use ctl/alt-t)
-(defparameter *editor-use-tab-as-tabbify* nil)
+(defparameter *editor-use-tab-as-tabbify* t)
 ;; Use emacs instead of the source-editor when openning external
 (defparameter *open-external-with-emacs* nil)
 ;; Best Light Theme for Lisp
@@ -49,7 +49,7 @@
 (defparameter *clog-repl-use-console* t)
 (defparameter *clog-repl-open-console-on-start* nil)
 (defparameter *clog-repl-send-result-to-console* nil)
-(defparameter *clog-repl-private-console* nil)
+(defparameter *clog-repl-private-console* t)
 
 ;; Panel Builder
 

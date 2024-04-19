@@ -1,6 +1,6 @@
 (in-package :clog-tools)
 
-(defun setup-lisp-ace (editor status &key (package "CLOG-USER"))
+(defun setup-lisp-ace (editor status)
   (let ((app (connection-data-item editor "builder-app-data")))
     ;; currently there is only one auto complete event for page
     (unless (auto-complete-configured app)
@@ -259,7 +259,7 @@ var endRange = ~:*~A.session.doc.indexToPosition(endIndex);
                                (setf r (swank::autodoc `(,ms swank::%CURSOR-MARKER%))))
                               (if r
                                   (setf r (car r))
-                                  (setf r (swank:operator-arglist ms package)))
+                                  (setf r (swank:operator-arglist ms *PACKAGE*)))
                               (when status
                                 (setf (advisory-title status) (documentation (find-symbol ms) 'function)))
                               (when r

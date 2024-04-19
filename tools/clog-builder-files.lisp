@@ -163,6 +163,10 @@
           (window-maximize win))
         (when text
           (setf (text-value ace) text))
+        (set-on-change pac-line
+                       (lambda (obj)
+                         (declare (ignore obj))
+                         (setf (current-editor-is-lisp app) (text-value pac-line))))
         (set-on-window-focus win
                              (lambda (obj)
                                (declare (ignore obj))
@@ -205,7 +209,7 @@
         (if lisp-package
             (setf (text-value pac-line) lisp-package)
             (setf (text-value pac-line) "clog-user"))
-        (setf (current-editor-is-lisp app) "clog-user")
+        (setf (current-editor-is-lisp app) (text-value pac-line))
         (set-geometry ace :units "" :width "" :height ""
                       :top "22px" :bottom "20px" :left "0px" :right "0px")
         (clog-ace:resize ace)

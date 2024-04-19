@@ -12,7 +12,8 @@
 
 (defun on-repl (obj)
   "Open a REPL"
-  (let* ((*default-title-class*      *builder-title-class*)
+  (let* ((app (connection-data-item obj "builder-app-data"))
+         (*default-title-class*      *builder-title-class*)
          (*default-border-class*     *builder-border-class*)
          (win (create-gui-window obj :title "CLOG Builder REPL"
                                      :top 40 :left 225
@@ -27,6 +28,14 @@
                                    (window-close pcon))))
       (window-focus win))
     (setup-lisp-ace (playground repl) (status repl))
+    (setf (advisory-title (send-to-repl repl))
+          "Click to send the editor contents to the REPL.")
+    (flet ((update-pac (obj)
+             (declare (ignore obj))
+             (setf (current-editor-is-lisp app) (text-value (package-div repl)))))
+      (set-on-window-focus win #'update-pac)
+      (set-on-change (package-div repl) #'update-pac)
+      (update-pac nil))
     (setf (clog-ace:theme (playground repl)) "ace/theme/terminal")
     (set-geometry repl :units "%" :width 100 :height 100)))
 
@@ -34,6 +43,12 @@
   (declare (ignore target))
   (when *clog-repl-open-console-on-start*
     (on-open-console panel)))
+
+(defun repl-on-send-to-repl (panel target)
+  (declare (ignore target))
+  (let ((cmd (text-value (playground panel))))
+    (clog-terminal:echo (terminal panel) cmd)
+    (repl-on-commmand panel (terminal panel) cmd)))
 
 (defun repl-on-commmand (panel target data)
   (cond ((or (equalp data ":e")
