@@ -68,6 +68,7 @@
                      (title-class *builder-title-class*)
                      lisp-package
                      regex
+                     is-console
                      (editor-use-console-for-evals *editor-use-console-for-evals*)
                      maximized)
   "Open a new text editor"
@@ -211,6 +212,10 @@
         (set-geometry status :units "" :width "" :height "20px"
                       :bottom "0px" :left "0px" :right "0px")
         (setup-lisp-ace ace status)
+        (when is-console
+          (setf (clog-ace:mode ace) "ace/mode/plain_text")
+          (clog-ace:set-auto-completion ace nil)
+          (set-on-change ace nil))
         (labels ((on-help (obj)
                    (declare (ignore obj))
                    (alert-dialog win

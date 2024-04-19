@@ -1,8 +1,8 @@
 (in-package :clog-tools)
 
 (defun on-open-repl-console (obj repl)
-  (let* ((app (connection-data-item obj "builder-app-data"))
-         (win (on-open-file obj :title "CLOG REPL Console"
+  (let* ((win (on-open-file obj :title "CLOG REPL Console"
+                                :is-console t
                                 :editor-use-console-for-evals t)))
     (set-on-window-can-close win (lambda (obj)
                                    (declare (ignore obj))

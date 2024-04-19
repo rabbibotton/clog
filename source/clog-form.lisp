@@ -1014,7 +1014,8 @@ optionally fill in with contents of data-list."))
 
 (defgeneric create-select (clog-obj &key name multiple label
                                       style hidden class html-id auto-place)
-  (:documentation "Create a new clog-select as child of CLOG-OBJ."))
+  (:documentation "Create a new clog-select as child of CLOG-OBJ. Use SIZE and
+set to greater than 1 for select to act as a listbox."))
 
 (defmethod create-select ((obj clog-obj)
                           &key (name nil)
