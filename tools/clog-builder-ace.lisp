@@ -9,8 +9,8 @@
                                        (declare (ignore obj))
                                        (when (current-editor-is-lisp app)
                                          ;; we needed to modify Ace's lisp mode to treat : as part of symbol
-                                         ;; otherwise lookups do not consider the symbols package. I did
-                                         ;; using code mathod but then the automatic replace is only on the symbol
+                                         ;; otherwise lookups do not consider the symbols package. I did try
+                                         ;; using a code method but then the automatic replace was only on the symbol
                                          (let* ((p (when (current-control app)
                                                      (attribute (get-placer (current-control app)) "data-panel-id")))
                                                 (s (if (eq (current-editor-is-lisp app) t)

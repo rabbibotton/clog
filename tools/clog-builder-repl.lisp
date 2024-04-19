@@ -17,7 +17,8 @@
          (win (create-gui-window obj :title "CLOG Builder REPL"
                                      :top 40 :left 225
                                      :width 600 :height 400
-                                     :client-movement *client-side-movement*)))
+                                     :client-movement *client-side-movement*))
+         (repl (create-clog-builder-repl (window-content win))))
     (when *clog-repl-private-console*
       (let ((pcon (on-open-repl-console obj win)))
         (setf (window-param win) pcon)
@@ -25,8 +26,9 @@
                                    (declare (ignore obj))
                                    (window-close pcon))))
       (window-focus win))
-    (set-geometry (create-clog-builder-repl (window-content win))
-                  :units "%" :width 100 :height 100)))
+    (setup-lisp-ace (playground repl) (status repl))
+    (setf (clog-ace:theme (playground repl)) "ace/theme/terminal")
+    (set-geometry repl :units "%" :width 100 :height 100)))
 
 (defun repl-on-create (panel target)
   (declare (ignore target))
