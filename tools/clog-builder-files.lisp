@@ -70,6 +70,7 @@
                      regex
                      is-console
                      (editor-use-console-for-evals *editor-use-console-for-evals*)
+                     has-time-out
                      maximized)
   "Open a new text editor"
   (let ((win (window-to-top-by-title obj open-file)))
@@ -159,6 +160,17 @@
         (add-class menu "w3-small")
         (setf (overflow (top-panel box)) :visible) ; let menus leave the top panel
         (setf (z-index m-file) 10) ; fix for ace editor gutter overlapping menu
+        (when has-time-out
+          (bordeaux-threads:make-thread
+            (lambda ()
+              (loop
+                (setf (window-title win)
+                      (format nil "~A - window closes in ~A seconds" title has-time-out))
+                (cond ((< (decf has-time-out) 0)
+                        (window-close win)
+                        (return))
+                      (t
+                        (sleep 1)))))))
         (when maximized
           (window-maximize win))
         (when text
@@ -531,7 +543,8 @@
                                                    :eval-in-package (text-value pac-line))))
                          (if editor-use-console-for-evals
                              (on-open-console obj)
-                             (on-open-file obj :title-class "w3-blue" :title "form eval" :text result))))))
+                             (on-open-file obj :title-class "w3-blue" :title "form eval"
+                                           :has-time-out *editor-delay-on-eval-form* :text result))))))
                  (eval-selection (obj)
                    (let ((val (clog-ace:selected-text ace)))
                      (unless (equal val "")
@@ -541,7 +554,8 @@
                                                    :eval-in-package (text-value pac-line))))
                          (if editor-use-console-for-evals
                              (on-open-console obj)
-                             (on-open-file obj :title-class "w3-blue" :title "selection eval" :text result))))))
+                             (on-open-file obj :title-class "w3-blue" :title "selection eval"
+                                           :has-time-out *editor-delay-on-eval-sel* :text result))))))
                  (eval-file (obj)
                    (let ((val (text-value ace)))
                      (unless (equal val "")
@@ -551,7 +565,8 @@
                                                    :eval-in-package (text-value pac-line))))
                          (if editor-use-console-for-evals
                              (on-open-console obj)
-                             (on-open-file obj :title-class "w3-blue" :title "file eval" :text result)))))))
+                             (on-open-file obj :title-class "w3-blue" :title "file eval"
+                                           :has-time-out *editor-delay-on-eval-file* :text result)))))))
           (set-on-click btn-esel (lambda (obj)
                                    (eval-selection obj)))
           (set-on-click m-esel (lambda (obj)

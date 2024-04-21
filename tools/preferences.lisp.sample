@@ -49,6 +49,10 @@
  showGutter : true,
  enableBasicAutocompletion: true,
  enableLiveAutocompletion : true")
+;; Delay to automaticly close result windows
+(setf *editor-delay-on-eval-sel* 15)
+(setf *editor-delay-on-eval-form* 30)
+(setf *editor-delay-on-eval-file* 60)
 
 ;; Disable clog gui debugging
 (setf clog-connection:*disable-clog-debugging* nil)

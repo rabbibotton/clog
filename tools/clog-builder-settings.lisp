@@ -44,6 +44,9 @@
  showGutter : true,
  enableBasicAutocompletion: true,
  enableLiveAutocompletion : true")
+(defparameter *editor-delay-on-eval-sel* 15)
+(defparameter *editor-delay-on-eval-form* 30)
+(defparameter *editor-delay-on-eval-file* 60)
 
 ;; CLOG Builder REPL
 (defparameter *clog-repl-use-console* t)

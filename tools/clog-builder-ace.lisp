@@ -152,10 +152,8 @@
                                   (let ((result (capture-eval lf
                                                               :clog-obj (connection-body editor)
                                                               :eval-in-package (format nil "~A" pk))))
-                                    (clog-web-alert (connection-body editor) "Result"
-                                                    (format nil "~&result: ~A" result)
-                                                    :color-class "w3-green"
-                                                    :time-out 3))))))
+                                    (on-open-file obj :title-class "w3-blue" :title "selection eval"
+                                                  :has-time-out *editor-delay-on-eval-sel* :text result))))))
     ;; macroexpand
     (js-execute editor
                 (format nil
