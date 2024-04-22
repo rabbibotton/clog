@@ -935,6 +935,7 @@ The on-window-change clog-obj received is the new window"))
                                           left top width height
                                           maximize
                                           hide-title-bar
+                                          drag-client-area
                                           has-pinner
                                           keep-on-top
                                           window-param
@@ -961,7 +962,8 @@ window-to-top-by-param or window-by-param."))
                                                (width 300)
                                                (height 200)
                                                (maximize nil)
-                                               hide-title-bar
+                                               (hide-title-bar nil)
+                                               (drag-client-area nil)
                                                (has-pinner nil)
                                                (keep-on-top nil)
                                                (window-param nil)
@@ -1003,7 +1005,7 @@ window-to-top-by-param or window-by-param."))
                     <span id='~A-closer'
                       style='position:absolute;top:0;right:5px;cursor:pointer;user-select:none;'>&times;</span>
                   </div>
-                  <div id='~A-body' style='position:absolute;top:25px;left:0;right:0;bottom:3px;overflow:auto'>~A</div>
+                  <div id='~A-body' ~A style='position:absolute;top:25px;left:0;right:0;bottom:3px;overflow:auto'>~A</div>
                   <div id='~A-sizer' style='position:absolute;right:0;bottom:0;left:0;user-select:none;height:3px;
                        cursor:se-resize;opacity:0'
                        class='w3-right' data-drag-obj='~A' data-drag-type='s'>+</div>
@@ -1019,7 +1021,11 @@ window-to-top-by-param or window-by-param."))
                  ☐</span><span>&nbsp;&nbsp;&nbsp;</span>" html-id)
               "")
             html-id                                     ; closer
-            html-id content                             ; body
+            html-id
+            (if drag-client-area
+                (format nil "data-drag-obj='~A' data-drag-type='m'" html-id)
+                "")
+            content                                     ; body
             html-id html-id)                            ; size
                             :clog-type 'clog-gui-window
                             :html-id html-id)))
@@ -1064,38 +1070,63 @@ window-to-top-by-param or window-by-param."))
                                    (when (fire-on-window-can-close win)
                                      (window-close win))))
       (cond (client-movement
-             (clog::jquery-execute win
-                             (format nil "draggable({handle:'#~A-title-bar'})" html-id))
-             (clog::jquery-execute win "resizable({handles:'se'})")
-	     (set-on-touch-start (win-title win) (lambda (obj data) (declare (ignore obj data)) nil) :cancel-event t)
-             (set-on-pointer-down (win-title win)
-                                  (lambda (obj data)
-                                    (declare (ignore obj data))
-				    (unless (keep-on-top win)
-                                      (setf (z-index win) (incf (last-z app)))
-                                      (fire-on-window-change win app)))
-				  :capture-pointer t)
-             (clog::set-on-event win "dragstart"
-                                 (lambda (obj)
-                                   (declare (ignore obj))
-                                   (fire-on-window-move win)))
-             (clog::set-on-event win "dragstop"
-                                 (lambda (obj)
-                                   (declare (ignore obj))
-                                   (fire-on-window-move-done win)))
-             (clog::set-on-event win "resizestart"
-                                 (lambda (obj)
-                                   (declare (ignore obj))
-                                   (fire-on-window-size win)))
-             (clog::set-on-event win "resizestop"
-                                 (lambda (obj)
-                                   (declare (ignore obj))
-                                   (fire-on-window-size-done win))))
+             (if drag-client-area
+                 (progn
+                   (jquery-execute win "draggable()")
+                   (set-on-touch-start win (lambda (obj data)
+                                             (declare (ignore obj data)) nil)
+                                       :cancel-event t)
+                   (set-on-pointer-down win
+                                        (lambda (obj data)
+                                          (declare (ignore obj data))
+                                          (unless (keep-on-top win)
+                                            (setf (z-index win) (incf (last-z app)))
+                                            (fire-on-window-change win app)))
+                                        :capture-pointer t))
+                 (progn
+                   (jquery-execute win
+                                   (format nil "draggable({handle:'#~A-title-bar'})" html-id))
+                   (set-on-touch-start (win-title win) (lambda (obj data)
+                                                         (declare (ignore obj data)) nil)
+                                       :cancel-event t)
+                   (set-on-pointer-down (win-title win)
+                                        (lambda (obj data)
+                                          (declare (ignore obj data))
+                                          (unless (keep-on-top win)
+                                            (setf (z-index win) (incf (last-z app)))
+                                            (fire-on-window-change win app)))
+                                        :capture-pointer t)))
+             (jquery-execute win "resizable({handles:'se'})")
+             (set-on-event win "dragstart"
+                           (lambda (obj)
+                             (declare (ignore obj))
+                             (fire-on-window-move win)))
+             (set-on-event win "dragstop"
+                           (lambda (obj)
+                             (declare (ignore obj))
+                             (fire-on-window-move-done win)))
+             (set-on-event win "resizestart"
+                           (lambda (obj)
+                             (declare (ignore obj))
+                             (fire-on-window-size win)))
+             (set-on-event win "resizestop"
+                           (lambda (obj)
+                             (declare (ignore obj))
+                             (fire-on-window-size-done win))))
             (t
-	     (set-on-touch-start (win-title win) (lambda (obj data) (declare (ignore obj data)) nil) :cancel-event t)
-             (set-on-pointer-down
-              (win-title win) 'on-gui-drag-down :capture-pointer t)
-	     (set-on-touch-start (sizer win) (lambda (obj data) (declare (ignore obj data)) nil) :cancel-event t)
+             (set-on-touch-start (win-title win) (lambda (obj data) 
+                                                   (declare (ignore obj data)) nil) 
+                                 :cancel-event t)
+             (set-on-pointer-down (win-title win) 'on-gui-drag-down :capture-pointer t)
+             (if drag-client-area
+                 (progn
+                   (set-on-touch-start (content win) (lambda (obj data) 
+                                                       (declare (ignore obj data)) nil)
+                                       :cancel-event t)
+                   (set-on-pointer-down (content win) 'on-gui-drag-down :capture-pointer t)))
+             (set-on-touch-start (sizer win) (lambda (obj data)
+                                               (declare (ignore obj data)) nil)
+                                 :cancel-event t)
              (set-on-pointer-down
               (sizer win) 'on-gui-drag-down :capture-pointer t)))
       win)))
