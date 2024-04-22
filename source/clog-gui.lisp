@@ -60,6 +60,7 @@
   (window-maximize             generic-function)
   (window-normalize            generic-function)
   (window-toggle-maximize      generic-function)
+  (window-toggle-title-bar     generic-function)
   (window-toggle-pinned        generic-function)
   (window-keep-on-top          generic-function)
   (window-make-modal           generic-function)
@@ -933,6 +934,7 @@ The on-window-change clog-obj received is the new window"))
                                           content
                                           left top width height
                                           maximize
+                                          hide-title-bar
                                           has-pinner
                                           keep-on-top
                                           window-param
@@ -959,6 +961,7 @@ window-to-top-by-param or window-by-param."))
                                                (width 300)
                                                (height 200)
                                                (maximize nil)
+                                               hide-title-bar
                                                (has-pinner nil)
                                                (keep-on-top nil)
                                                (window-param nil)
@@ -1025,6 +1028,8 @@ window-to-top-by-param or window-by-param."))
       (setf (win-param win) window-param)
       (setf (title-bar win)
             (attach-as-child win (format nil "~A-title-bar" html-id)))
+      (when hide-title-bar
+        (setf (hiddenp (title-bar win)) t))
       (when has-pinner
         (setf (pinner win) (attach-as-child win (format nil "~A-pinner" html-id))))
       (setf (closer win) (attach-as-child win (format nil "~A-closer" html-id)))
@@ -1333,6 +1338,24 @@ to match the pinned state. :state forces state. Returns new state"))
         (t
          (setf (keep-on-top obj) nil)
          (window-focus obj))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; window-toggle-title-bar ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric window-toggle-title-bar (clog-gui-window &key state)
+  (:documentation "Set CLOG-GUI-WINDOW title bar to visible or not (default t)."))
+
+(defmethod window-toggle-title-bar ((obj clog-gui-window) &key (state :toggle))
+  (when (eq state :toggle)
+    (if (hiddenp (title-bar obj))
+        (setf state t)
+        (setf state nil)))
+  (cond (state
+         (setf (hiddenp (title-bar obj)) nil))
+        (t
+         (setf (hiddenp (title-bar obj)) t)))
+  state)
 
 ;;;;;;;;;;;;;;;;;;;;;;;
 ;; window-make-modal ;;
