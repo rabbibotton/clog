@@ -538,6 +538,14 @@ unit added unless value is empty string or nil.</p></li>
 <p>CLOG objects (clog-obj) encapsulate the connection between
 lisp and an <code>HTML</code> DOM element.</p></li>
 </ul>
+<p><a id="x-28CLOG-3APARENT-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG:PARENT%20GENERIC-FUNCTION"></a></p>
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:PARENT%20GENERIC-FUNCTION" >PARENT</a></span></span> <span class="locative-args">CLOG-OBJ</span></span></p>
+
+<p>Returns the clog-obj of the obj that was used as creation
+parent if was set or nil. This is not per se the parent in the DOM.</p></li>
+</ul>
 <p>CLOG-Obj - General Properties</p>
 <p><a id="x-28CLOG-3APROPERTY-20GENERIC-FUNCTION-29"></a>
 <a id="CLOG:PROPERTY%20GENERIC-FUNCTION"></a></p>
@@ -4259,7 +4267,8 @@ virtual keyboards.</p></li>
 <ul>
 <li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:CREATE-SELECT%20GENERIC-FUNCTION" >CREATE-SELECT</a></span></span> <span class="locative-args">CLOG-OBJ &amp;KEY NAME MULTIPLE LABEL STYLE HIDDEN CLASS HTML-ID AUTO-PLACE</span></span></p>
 
-<p>Create a new clog-select as child of <code>CLOG-OBJ</code>.</p></li>
+<p>Create a new clog-select as child of <code>CLOG-OBJ</code>. Use <a href="#CLOG:SIZE%20GENERIC-FUNCTION" title="CLOG:SIZE GENERIC-FUNCTION"><code>SIZE</code></a> and
+set to greater than 1 for select to act as a listbox.</p></li>
 </ul>
 <p><a id="x-28CLOG-3ACLOG-OPTION-20CLASS-29"></a>
 <a id="CLOG:CLOG-OPTION%20CLASS"></a></p>
@@ -6494,7 +6503,7 @@ is nil unbind the event.</p></li>
 <p><a id="x-28CLOG-GUI-3ACLOG-GUI-INITIALIZE-20FUNCTION-29"></a>
 <a id="CLOG-GUI:CLOG-GUI-INITIALIZE%20FUNCTION"></a></p>
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#CLOG-GUI:CLOG-GUI-INITIALIZE%20FUNCTION" >CLOG-GUI-INITIALIZE</a></span></span> <span class="locative-args">CLOG-BODY &amp;KEY (BODY-LEFT-OFFSET 0) (BODY-RIGHT-OFFSET 0) (USE-CLOG-DEBUGGER <code>NIL</code>) (PARENT-DESKTOP-OBJ <code>NIL</code>) (W3-CSS-URL &quot;/css/w3.css&quot;) (JQUERY-UI-CSS &quot;/css/jquery-ui.css&quot;) (JQUERY-UI &quot;/js/jquery-ui.js&quot;)</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#CLOG-GUI:CLOG-GUI-INITIALIZE%20FUNCTION" >CLOG-GUI-INITIALIZE</a></span></span> <span class="locative-args">CLOG-BODY &amp;KEY (BODY-LEFT-OFFSET 0) (BODY-RIGHT-OFFSET 0) (USE-CLOG-DEBUGGER <code>NIL</code>) (STANDARD-OUTPUT <code>NIL</code>) (PARENT-DESKTOP-OBJ <code>NIL</code>) (W3-CSS-URL &quot;/css/w3.css&quot;) (JQUERY-UI-CSS &quot;/css/jquery-ui.css&quot;) (JQUERY-UI &quot;/js/jquery-ui.js&quot;)</span></span></p>
 
 <p>Initializes clog-gui and installs a clog-gui object on connection.
 If <code>W3-CSS-URL</code> has not been loaded before is installed unless is nil.
@@ -6911,7 +6920,7 @@ alert-dialog blocks till time-out reached or OK clicked.</p></li>
 <p><a id="x-28CLOG-GUI-3AINPUT-DIALOG-20FUNCTION-29"></a>
 <a id="CLOG-GUI:INPUT-DIALOG%20FUNCTION"></a></p>
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#CLOG-GUI:INPUT-DIALOG%20FUNCTION" >INPUT-DIALOG</a></span></span> <span class="locative-args">OBJ CONTENT ON-INPUT &amp;KEY (MODAL <code>T</code>) (TIME-OUT <code>NIL</code>) (TITLE &quot;Input&quot;) (SIZE 20) (ROWS 1) (DEFAULT-VALUE &quot;&quot;) (LEFT <code>NIL</code>) (TOP <code>NIL</code>) (WIDTH 300) (HEIGHT 200) (CLIENT-MOVEMENT <code>NIL</code>) (HTML-ID <code>NIL</code>)</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#CLOG-GUI:INPUT-DIALOG%20FUNCTION" >INPUT-DIALOG</a></span></span> <span class="locative-args">OBJ CONTENT ON-INPUT &amp;KEY (MODAL <code>T</code>) (TIME-OUT <code>NIL</code>) (TITLE &quot;Input&quot;) (SIZE 20) (ROWS 1) (PLACEHOLDER-VALUE &quot;&quot;) (DEFAULT-VALUE &quot;&quot;) (LEFT <code>NIL</code>) (TOP <code>NIL</code>) (WIDTH 300) (HEIGHT 200) (CLIENT-MOVEMENT <code>NIL</code>) (HTML-ID <code>NIL</code>)</span></span></p>
 
 <p>Create an input dialog box with <code>CONTENT</code> centered and an input box.
 Calls on-input with input box contents or nil if canceled. If time-out
@@ -6972,9 +6981,9 @@ If time-out return result of on-file-name, cancels dialog if time runs out.</p><
 <p><a id="x-28CLOG-GUI-3AWITH-CLOG-DEBUGGER-20MGL-PAX-3AMACRO-29"></a>
 <a id="CLOG-GUI:WITH-CLOG-DEBUGGER%20MGL-PAX:MACRO"></a></p>
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[macro]</span> <span class="reference-object"><a href="#CLOG-GUI:WITH-CLOG-DEBUGGER%20MGL-PAX:MACRO" >WITH-CLOG-DEBUGGER</a></span></span> <span class="locative-args">(CLOG-OBJ &amp;KEY TITLE) &amp;BODY BODY</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[macro]</span> <span class="reference-object"><a href="#CLOG-GUI:WITH-CLOG-DEBUGGER%20MGL-PAX:MACRO" >WITH-CLOG-DEBUGGER</a></span></span> <span class="locative-args">(CLOG-OBJ &amp;KEY TITLE STANDARD-OUTPUT) &amp;BODY BODY</span></span></p>
 
-<p>body uses a clog-gui based debugged instead of the console</p></li>
+<p>body uses a clog-gui based debugger instead of the console</p></li>
 </ul>
 <p><a id="x-28CLOG-GUI-3AONE-OF-DIALOG-20FUNCTION-29"></a>
 <a id="CLOG-GUI:ONE-OF-DIALOG%20FUNCTION"></a></p>
