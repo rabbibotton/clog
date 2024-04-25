@@ -757,6 +757,7 @@ The on-window-change clog-obj received is the new window"))
     :documentation "Window closer clog-element")
    (sizer
     :accessor sizer
+    :initform nil
     :documentation "Window sizer clog-element")
    (last-width
     :accessor last-width
@@ -941,6 +942,7 @@ The on-window-change clog-obj received is the new window"))
                                           window-param
                                           hidden
                                           client-movement
+                                          no-sizer
                                           border-class
                                           title-class
                                           html-id)
@@ -969,6 +971,7 @@ window-to-top-by-param or window-by-param."))
                                                (window-param nil)
                                                (hidden nil)
                                                (client-movement nil)
+                                               (no-sizer nil)
                                                (border-class *default-border-class*)
                                                (title-class *default-title-class*)
                                                (html-id nil))
@@ -1007,7 +1010,7 @@ window-to-top-by-param or window-by-param."))
                   </div>
                   <div id='~A-body' ~A style='position:absolute;top:25px;left:0;right:0;bottom:3px;overflow:auto'>~A</div>
                   <div id='~A-sizer' style='position:absolute;right:0;bottom:0;left:0;user-select:none;height:3px;
-                       cursor:se-resize;opacity:0'
+                       ~Aopacity:0'
                        class='w3-right' data-drag-obj='~A' data-drag-type='s'>+</div>
              </div>"
             top left width height (incf (last-z app))   ; outer div
@@ -1015,18 +1018,22 @@ window-to-top-by-param or window-by-param."))
             html-id title-class html-id html-id         ; title bar
             title                                       ; title
             (if has-pinner                              ; pinner
-              (format nil "<span id='~A-pinner'
+                (format nil "<span id='~A-pinner'
                  style='position:absolute;top:0;right:20px;
                         cursor:pointer;user-select:none;'>
-                 ☐</span><span>&nbsp;&nbsp;&nbsp;</span>" html-id)
-              "")
+                 ~A</span><span>&nbsp;&nbsp;&nbsp;</span>" html-id (code-char 9744))
+                "")
             html-id                                     ; closer
             html-id
             (if drag-client-area
                 (format nil "data-drag-obj='~A' data-drag-type='m'" html-id)
                 "")
             content                                     ; body
-            html-id html-id)                            ; size
+            html-id                                     ; sizer
+            (if no-sizer
+                ""
+                "cursor:se-resize;")
+            html-id)
                             :clog-type 'clog-gui-window
                             :html-id html-id)))
       (setf (win-title win)
@@ -1039,7 +1046,8 @@ window-to-top-by-param or window-by-param."))
       (when has-pinner
         (setf (pinner win) (attach-as-child win (format nil "~A-pinner" html-id))))
       (setf (closer win) (attach-as-child win (format nil "~A-closer" html-id)))
-      (setf (sizer win) (attach-as-child win (format nil "~A-sizer" html-id)))
+      (unless no-sizer
+        (setf (sizer win) (attach-as-child win (format nil "~A-sizer" html-id))))
       (setf (content win) (attach-as-child win (format nil "~A-body"  html-id)))
       (setf (gethash html-id (windows app)) win)
       (set-on-click win (lambda (obj)
@@ -1124,11 +1132,12 @@ window-to-top-by-param or window-by-param."))
                                                        (declare (ignore obj data)) nil)
                                        :cancel-event t)
                    (set-on-pointer-down (content win) 'on-gui-drag-down :capture-pointer t)))
-             (set-on-touch-start (sizer win) (lambda (obj data)
-                                               (declare (ignore obj data)) nil)
-                                 :cancel-event t)
-             (set-on-pointer-down
-              (sizer win) 'on-gui-drag-down :capture-pointer t)))
+             (unless no-sizer
+               (set-on-touch-start (sizer win) (lambda (obj data)
+                                                 (declare (ignore obj data)) nil)
+                                   :cancel-event t)
+               (set-on-pointer-down
+                (sizer win) 'on-gui-drag-down :capture-pointer t))))
       win)))
 
 ;;;;;;;;;;;;;;;;;;
@@ -1332,7 +1341,7 @@ to match the pinned state. :state forces state. Returns new state"))
                (pinnedp win)))
       (progn
         (when (pinner win)
-          (setf (inner-html (pinner win)) "☐"))
+          (setf (inner-html (pinner win)) (format nil "~A" (code-char 9744))))
         (when keep-on-top
           (window-keep-on-top win :state nil))
         (setf (pinnedp win) nil)
@@ -1344,7 +1353,7 @@ to match the pinned state. :state forces state. Returns new state"))
         nil)
       (flet ((no-op (obj) (declare (ignore obj)) nil))
         (when (pinner win)
-          (setf (inner-html (pinner win)) "☑"))
+          (setf (inner-html (pinner win)) (format nil "~A" (code-char 9745))))
         (when keep-on-top
           (window-keep-on-top win))
         (setf (pinnedp win) t)
