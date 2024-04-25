@@ -155,77 +155,75 @@
                                     sel))
     (when (current-project app)
       (cond ((member sel already :test #'equal)
-	     (let ((fs (asdf:find-system sel)))
-               ;; entry point
-               (setf (text-value (entry-point panel))
-                     (or (asdf/system:component-entry-point fs)
+              (let ((fs (asdf:find-system sel)))
+                ;; entry point
+                (setf (text-value (entry-point panel))
+                      (or (asdf/system:component-entry-point fs)
                           ""))
-               (setf (current-project-dir app)
-                     (asdf:component-pathname
-                      fs))
-               ;; fill runtime
-               (dolist (n (asdf:component-children
-                           fs))
-		 (let ((name (asdf:component-relative-pathname n))
-                       (path (asdf:component-pathname n)))
-                   (add-select-option (runtime-list panel) path name)))
-               (dolist (n (asdf:system-depends-on
-                           fs))
-		 (add-select-option (runtime-deps panel) n n)))
-             ;; fill designtime)
-             (handler-case
-                 (let ((sys (asdf:find-system (format nil "~A/tools" sel))))
-                   (dolist (n (asdf:component-children sys))
-                     (let ((name (asdf:component-relative-pathname n))
-                           (path (asdf:component-pathname n)))
-                       (add-select-option (designtime-list panel) path name)))
-                   (dolist (n (asdf:system-depends-on
-                               (asdf:find-system sys)))
-                     (add-select-option (design-deps panel) n n))
-                   (cond ((member "clog" (asdf:system-defsystem-depends-on sys) :test #'equal)
-                          (setf (disabledp (runtime-add-lisp panel)) nil)
-                          (setf (disabledp (runtime-delete panel)) nil)
-                          (setf (disabledp (designtime-add-lisp panel)) nil)
-                          (setf (disabledp (designtime-add-clog panel)) nil)
-                          (setf (disabledp (designtime-delete panel)) nil)
-                          (setf (disabledp (runtime-add-dep panel)) nil)
-                          (setf (disabledp (runtime-del-dep panel)) nil)
-                          (setf (disabledp (design-add-dep panel)) nil)
-                          (setf (disabledp (design-del-dep panel)) nil)
-                          (setf (disabledp (design-plugin panel)) nil)
-                          (setf (disabledp (entry-point panel)) nil)
-                          (setf (disabledp (run-button panel)) nil))
-                         (t
-                          (alert-toast panel "Warning" "Missing :defsystem-depends-on (:clog)"
-                                       :color-class "w3-yellow" :time-out 1))))
-               (t (c)
-                 (declare (ignore c))
-                 (add-select-option (designtime-list panel) "" "Missing /tools")
-                 (add-select-option (design-deps panel) "" "Missing /tools"))))
+                (setf (current-project-dir app)
+                      (asdf:component-pathname
+                        fs))
+                ;; fill runtime
+                (dolist (n (asdf:component-children
+                             fs))
+                  (let ((name (asdf:component-relative-pathname n))
+                        (path (asdf:component-pathname n)))
+                    (add-select-option (runtime-list panel) path name)))
+                (dolist (n (asdf:system-depends-on fs))
+                  (add-select-option (runtime-deps panel) n n)))
+              ;; fill designtime
+              (handler-case
+                  (let ((sys (asdf:find-system (format nil "~A/tools" sel))))
+                    (dolist (n (asdf:component-children sys))
+                      (let ((name (asdf:component-relative-pathname n))
+                            (path (asdf:component-pathname n)))
+                        (add-select-option (designtime-list panel) path name)))
+                    (dolist (n (asdf:system-depends-on sys))
+                      (add-select-option (design-deps panel) n n))
+                    (cond ((member "clog" (asdf:system-defsystem-depends-on sys) :test #'equal)
+                            (setf (disabledp (runtime-add-lisp panel)) nil)
+                            (setf (disabledp (runtime-delete panel)) nil)
+                            (setf (disabledp (designtime-add-lisp panel)) nil)
+                            (setf (disabledp (designtime-add-clog panel)) nil)
+                            (setf (disabledp (designtime-delete panel)) nil)
+                            (setf (disabledp (runtime-add-dep panel)) nil)
+                            (setf (disabledp (runtime-del-dep panel)) nil)
+                            (setf (disabledp (design-add-dep panel)) nil)
+                            (setf (disabledp (design-del-dep panel)) nil)
+                            (setf (disabledp (design-plugin panel)) nil)
+                            (setf (disabledp (entry-point panel)) nil)
+                            (setf (disabledp (run-button panel)) nil))
+                          (t
+                            (alert-toast panel "Warning" "Missing :defsystem-depends-on (:clog)"
+                                         :color-class "w3-yellow" :time-out 1))))
+                (t (c)
+                  (declare (ignore c))
+                  (add-select-option (designtime-list panel) "" "Missing /tools")
+                  (add-select-option (design-deps panel) "" "Missing /tools"))))
             (t
-             (flet ((load-proj (answer)
-                      (cond (answer
-                             (projects-load sel)
-                             (ignore-errors
-			      (progn
-				(projects-load (format nil "~A/tools" sel))))
-                             (projects-load sel)
-                             (projects-populate panel))
-                            (t
-                             (setf (current-project app) nil)
-                             (setf (text-value (project-list panel)) "None")))))
-               (cond ((eq *app-mode* :batch)
-                      (load-proj t)
-                      (projects-rerender panel)
-                      (clog:shutdown)
-                      (uiop:quit))
-                     (t
-                       (let* ((*default-title-class*      *builder-title-class*)
-                              (*default-border-class*     *builder-border-class*))
-                         (confirm-dialog panel "Load project?"
-                                         (lambda (answer)
-                                           (load-proj answer))
-                                         :title "System not loaded"))))))))))
+              (flet ((load-proj (answer)
+                       (cond (answer
+                               (projects-load sel)
+                               (ignore-errors
+                                 (progn
+                                   (projects-load (format nil "~A/tools" sel))))
+                               (projects-load sel)
+                               (projects-populate panel))
+                             (t
+                               (setf (current-project app) nil)
+                               (setf (text-value (project-list panel)) "None")))))
+                (cond ((eq *app-mode* :batch)
+                        (load-proj t)
+                        (projects-rerender panel)
+                        (clog:shutdown)
+                        (uiop:quit))
+                      (t
+                        (let* ((*default-title-class*      *builder-title-class*)
+                               (*default-border-class*     *builder-border-class*))
+                          (confirm-dialog panel "Load project?"
+                                          (lambda (answer)
+                                            (load-proj answer))
+                                          :title "System not loaded"))))))))))
 
 (defun projects-add-dep (panel sys)
   (Input-dialog panel "Enter system name:"
