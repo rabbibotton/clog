@@ -370,12 +370,12 @@ clog-builder window.")
                             (create-gui-menu-item file  :content "New CLOG Panel Popup Editor"             :on-click 'on-new-builder-page)
                             (create-gui-menu-item file  :content "New HTML Panel Popup Editor"             :on-click 'on-new-builder-basic-page)
                             (create-gui-menu-item file  :content "New Custom Boot Panel External Editor"   :on-click 'on-new-builder-custom-page))
-                          ;; Menu -> Source
-                          (create-gui-menu-item src   :content "Project Window"               :on-click 'on-show-project)
-                          (create-gui-menu-item src   :content "Directory Window"             :on-click 'on-dir-win)
-                          (create-gui-menu-item src   :content "New Project Template"         :on-click 'on-new-app-template)
-                          (create-gui-menu-item src   :content "New System Browser"           :on-click 'on-new-sys-browser)
-                          (create-gui-menu-item src   :content "New ASDF System Browser"      :on-click 'on-new-asdf-browser)
+                          ;; Menu -> Project
+                          (create-gui-menu-item src   :content "Project Window"                 :on-click 'on-show-project)
+                          (create-gui-menu-item src   :content "New Project from template"      :on-click 'on-new-app-template)
+                          (create-gui-menu-item src   :content "New OS Directory Browser"       :on-click 'on-dir-win)
+                          (create-gui-menu-item src   :content "New System Source Browser"      :on-click 'on-new-sys-browser)
+                          (create-gui-menu-item src   :content "New Loaded ASDF System Browser" :on-click 'on-new-asdf-browser)
                           ;; Menu -> Tools
                           (create-gui-menu-item tools :content "List Callers"                :on-click 'on-show-callers)
                           (create-gui-menu-item tools :content "List Callees"                :on-click 'on-show-callees)
@@ -544,7 +544,7 @@ instead of the project window will be displayed."
   (setf *clogframe-mode* clogframe)
   (when clogframe
     (setf *open-external-with-emacs* nil)
-    (setf *open-external-in-popup* nil)
+    (setf *open-external-source-in-popup* nil)
     (setf *open-panels-as-popups* nil)
     (setf *open-external-panels-in-popup* nil)
     (setf *open-external* nil)
