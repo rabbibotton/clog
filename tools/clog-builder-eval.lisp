@@ -9,6 +9,7 @@
         (let* ((win (on-open-file obj :title "CLOG Builder Console"
                                       :is-console t
                                       :editor-use-console-for-evals t)))
+          (setf (clog-ace:mode (window-param win)) "ace/mode/plain_text")
           (set-on-window-can-close win (lambda (obj)
                                          (setf (hiddenp obj) t)
                                          nil))
