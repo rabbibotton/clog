@@ -203,11 +203,10 @@
             (t
               (flet ((load-proj (answer)
                        (cond (answer
-                               (projects-load sel)
-                               (ignore-errors
-                                 (progn
-                                   (projects-load (format nil "~A/tools" sel))))
-                               (projects-load sel)
+                               (handler-case
+                                   (projects-load (format nil "~A/tools" sel))
+                                 (error ()
+                                   (projects-load sel)))
                                (projects-populate panel))
                              (t
                                (setf (current-project app) nil)
