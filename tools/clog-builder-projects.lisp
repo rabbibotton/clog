@@ -47,6 +47,27 @@
           (setf (text-value (project-list panel)) "None")
           (projects-populate panel)))))
 
+(defun projects-edit-asd (panel target)
+  (declare (ignore target))
+  (let ((sel (text-value (project-list panel))))
+    (on-open-file panel :open-file (asdf:system-source-file
+                                     (asdf:find-system sel)))))
+
+(defun projects-unload (panel target)
+  (declare (ignore target))
+  (let ((sel (text-value (project-list panel))))
+    (unless (equal sel "None")
+      (asdf:clear-system sel)
+      (setf (text-value (project-list panel)) "None")
+      (projects-populate panel))))
+
+(defun projects-reload (panel target)
+  (declare (ignore target))
+  (let ((sel (text-value (project-list panel))))
+    (unless (equal sel "None")
+      (asdf:clear-system sel)
+      (projects-populate panel))))
+
 (defun projects-view-dir (panel)
   (let* ((sel (text-value (project-list panel))))
     (if (equal sel "None")
