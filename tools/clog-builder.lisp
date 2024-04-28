@@ -548,10 +548,18 @@ instead of the project window will be displayed."
     (setf *open-panels-as-popups* nil)
     (setf *open-external-panels-in-popup* nil)
     (setf *open-external* nil)
-    (uiop:run-program (list "./clogframe"
-                            "CLOG Builder"
-                            (format nil "~A/builder" port)
-                            (format nil "~A" 1280) (format nil "~A" 840))))
+    (handler-case
+        (uiop:run-program (list "./clogframe"
+                                "CLOG Builder"
+                                (format nil "~A/builder" port)
+                                (format nil "~A" 1280) (format nil "~A" 840)))
+      (error ()
+        (format t "~%Unable to load ./clogframe, trying clogframe.exe also.")
+        (ignore-errors
+          (uiop:run-program (list "clogframe.exe"
+                                  "CLOG Builder"
+                                  (format nil "~A/builder" port)
+                                  (format nil "~A" 1280) (format nil "~A" 840)))))))
   (when start-browser
     (format t "~%If browser does not start go to http://127.0.0.1:~A/builder~%~%" port)
     (open-browser :url (format nil "http://127.0.0.1:~A/builder" port))))
