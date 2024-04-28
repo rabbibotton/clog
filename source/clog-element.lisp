@@ -113,7 +113,8 @@ possible tag and keywords."))
 (defgeneric create-child (clog-obj html &key html-id auto-place clog-type)
   (:documentation "Create a new CLOG-ELEMENT or sub-type of CLOG-TYPE from HTML
 as child of CLOG-OBJ and if :AUTO-PLACE (default t) place-inside-bottom-of
-CLOG-OBJ. If HTML-ID is nil one will be generated."))
+CLOG-OBJ, you can also set auto-place to :bottom or :top. If HTML-ID is nil one
+will be generated."))
 
 (defmethod create-child ((obj clog-obj) html &key (html-id nil)
                                                (auto-place t)
@@ -124,9 +125,9 @@ CLOG-OBJ. If HTML-ID is nil one will be generated."))
     (setf (parent child) obj)
     (if auto-place
         (case auto-place
-	  (:bottom (place-inside-bottom-of obj child))
-	  (:top (place-inside-top-of obj child))
-	  (t (place-inside-bottom-of obj child)))
+          (:bottom (place-inside-bottom-of obj child))
+          (:top (place-inside-top-of obj child))
+          (t (place-inside-bottom-of obj child)))
         child)))
 
 ;;;;;;;;;;;;;;;;;;;;;

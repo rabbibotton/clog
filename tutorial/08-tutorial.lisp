@@ -19,10 +19,10 @@
 
 (defun on-mouse-down (obj data)
   (let* ((app (connection-data-item obj "app-data"))
-	 (mouse-x  (getf data :screen-x))  ; Use the screen coordinates not
-	 (mouse-y  (getf data :screen-y))  ; the coordinates relative to the obj
-	 (obj-top  (parse-integer (top obj) :junk-allowed t))
-	 (obj-left (parse-integer (left obj) :junk-allowed t)))
+         (mouse-x  (getf data :screen-x))  ; Use the screen coordinates not
+         (mouse-y  (getf data :screen-y))  ; the coordinates relative to the obj
+         (obj-top  (position-top obj))
+         (obj-left (position-left obj)))
     (setf (drag-x app) (- mouse-x obj-left))
     (setf (drag-y app) (- mouse-y obj-top))
     (set-on-pointer-move obj 'on-mouse-move)
@@ -30,8 +30,8 @@
   
 (defun on-mouse-move (obj data)
   (let* ((app (connection-data-item obj "app-data"))
-	 (x   (getf data :screen-x))
-	 (y   (getf data :screen-y)))
+         (x   (getf data :screen-x))
+         (y   (getf data :screen-y)))
     (setf (top obj) (unit :px (- y (drag-y app))))
     (setf (left obj) (unit :px (- x (drag-x app))))))
 
@@ -44,9 +44,9 @@
     (setf (connection-data-item body "app-data") app))   ; of our App.
   (setf (title (html-document body)) "Tutorial 08")
   (let* ((div1 (create-div body))
-	 (div2 (create-div div1))
-	 (div3 (create-div div2))
-	 (dir  (create-div div1 :content "<b>Click and drag the boxes</b>")))
+         (div2 (create-div div1))
+         (div3 (create-div div2))
+         (dir  (create-div div1 :content "<b>Click and drag the boxes</b>")))
     ;; Absolute allows fixed positioning relative to parent
     (setf (positioning dir) :absolute)
     (setf (bottom dir) 0)
@@ -65,6 +65,7 @@
     ;; to the entire window.
     (setf (positioning div1) :fixed)        ; Its location relative to window
     (setf (overflow div1) :hidden)          ; Clip the contents
+    (setf (positioning div1) :fixed)        ; Its location relative to window
     (setf (positioning div2) :absolute)     ; Its location relative to its parent container
     (setf (overflow div2) :hidden)
     (setf (positioning div3) :absolute)
