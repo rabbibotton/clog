@@ -11,10 +11,10 @@
 ;; Global Internal Config
 
 (defparameter *app-mode* nil
-                         "If *app-mode* is t terminates the clog-builder process on exit of the all
+  "If *app-mode* is t terminates the clog-builder process on exit of the all
 clog-builder window.")
 (defparameter *clogframe-mode* nil
-                               "If *clogframe-mode* is t no popup or tabs possible.")
+              "If *clogframe-mode* is t no popup or tabs possible.")
 (defparameter *preferances-file* nil "Location of the preferance file")
 
 (defparameter *start-project* nil "Set the project to start with")
@@ -144,9 +144,10 @@ clog-builder window.")
         (progn
           (setf (hiddenp (copy-history-win app)) nil)
           (window-focus (copy-history-win app)))
-        (let* ((win          (create-gui-window obj :title "Copy History"
-                                                :height 400 :width 600
-                                                :has-pinner t :client-movement *client-side-movement*)))
+        (let* ((win (create-gui-window obj :title "Copy History"
+                                       :height 400 :width 600
+                                       :has-pinner t
+                                       :client-movement *client-side-movement*)))
           (window-center win)
           (setf (hiddenp win) t)
           (setf (overflow (window-content win)) :scroll)

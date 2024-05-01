@@ -13,8 +13,9 @@ COMMON-LISP "The Tutorial" Series
 * [Install Common-Lisp for Linux](https://lisp-lang.org/learn/getting-started/)
 * [Install Common-Lisp For Android (Termux)](ANDROID-TERMUX.md)
 
-For **Windows** users there is an easy install for full CL and CLOG -
-https://github.com/rabbibotton/clog/releases/download/v2.0/clog2.0-win64.zip
+For **Windows** users there is an easy install for full CL environment using
+the CLOG Builder
+https://github.com/rabbibotton/clog-win64-ez/releases
 Unzip, double click make.bat and then drag the resulting builder.exe to your
 application bar or double click. Update regularly by running update.bat
 If you change directories you need to run make.bat or update.bat
