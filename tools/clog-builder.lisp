@@ -402,6 +402,19 @@ clog-builder window.")
                                                     (declare (ignore obj))
                                                     (setf *open-external-with-emacs* (not *open-external-with-emacs*))
                                                     (setf (text-value exter) (exter-text))))))
+                          (create-gui-menu-item opts :content "Start SWANK Server Once"        :on-click
+                                                (lambda (obj)
+                                                  (let ((*default-title-class*      *builder-title-class*)
+                                                        (*default-border-class*     *builder-border-class*))
+                                                    (input-dialog obj "Port ID" 
+                                                                  (lambda (result)
+                                                                    (swank:create-server :port (js-to-integer result) :dont-close nil)
+                                                                    (let ((*default-title-class*      *builder-title-class*)
+                                                                          (*default-border-class*     *builder-border-class*))
+                                                                      (alert-dialog obj (format nil "Use slime-connect on emacs or on a REPL to port ~A"
+                                                                                                result)
+                                                                                    :title "SWANK Started (One time connect)")))
+                                                                  :placeholder-value "4005" :default-value "4005" :title "Start SWANK Server"))))
                           (create-gui-menu-item opts :content "Update CLOG Builder"       :on-click 'on-update-clog)
                           ;; Menu -> Windows
                           (create-gui-menu-item win   :content "Maximize"           :on-click
