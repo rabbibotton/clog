@@ -53,23 +53,26 @@
 (defun repl-on-commmand (panel target data)
   (cond ((or (equalp data ":e")
              (equalp data ":q"))
-         (window-close (parent (parent panel))))
+          (window-close (parent (parent panel))))
         ((equalp data "(clog-builder-repl)")
          (let* ((*default-title-class*      *builder-title-class*)
                 (*default-border-class*     *builder-border-class*)
                 (win (create-gui-window panel :title "CLOG Builder REPL GUI Window"
-                                              :height 400 :width 600
-                                              :has-pinner t
-                                              :client-movement *client-side-movement*)))
+                                        :height 400 :width 600
+                                        :has-pinner t
+                                        :client-movement *client-side-movement*)))
            (setf clog-user::*body* (window-content win))))
         (t
-         (multiple-value-bind (result new-package)
-             (capture-eval data :clog-obj        panel
-                                :private-console-win (when *clog-repl-private-console*
-                                                       (window-param (parent (parent panel))))
-                                :capture-console (not *clog-repl-use-console*)
-                                :capture-result  (not *clog-repl-send-result-to-console*)
-                                :eval-in-package (text-value (package-div panel)))
-           (setf (text-value (package-div panel))
-                 (string-downcase (package-name new-package)))
-           (clog-terminal:echo target result)))))
+          (setf data (format nil "(let ((tmp ~A))
+                                    (setf /// //) (setf // /) (setf / (list tmp))
+                                    (setf *** **) (setf ** *) (setf * tmp))" data))
+          (multiple-value-bind (result new-package)
+                               (capture-eval data :clog-obj        panel
+                                             :private-console-win (when *clog-repl-private-console*
+                                                                    (window-param (parent (parent panel))))
+                                             :capture-console (not *clog-repl-use-console*)
+                                             :capture-result  (not *clog-repl-send-result-to-console*)
+                                             :eval-in-package (text-value (package-div panel)))
+            (setf (text-value (package-div panel))
+                  (string-downcase (package-name new-package)))
+            (clog-terminal:echo target result)))))
