@@ -10,7 +10,8 @@
 ;;; does not require additional components outside of the css file. In addition
 ;;; clog-gui uses jQueryUI and its default css file to provide client side
 ;;; movement when needed, if client side movement is not used it is possible
-;;; to pass nil to the initilization function for both the js and css.
+;;; to pass nil to the initilization function for both the jquery-ui-js and
+;;;  jquery-ui-css options.
 
 (mgl-pax:define-package :clog-gui
   (:documentation "CLOG-GUI a desktop GUI abstraction for CLOG")
@@ -252,12 +253,18 @@
                                         (w3-css-url "/css/w3.css")
                                         (jquery-ui-css "/css/jquery-ui.css")
                                         (jquery-ui "/js/jquery-ui.js"))
-  "Initializes clog-gui and installs a clog-gui object on connection.
-If W3-CSS-URL has not been loaded before is installed unless is nil.
-BODY-LEFT-OFFSET and BODY-RIGHT-OFFSET limit width on maximize. If
-use-clog-debugger then a graphical debugger is set for all events.
+  "Initializes clog-gui and installs a clog-gui object on the connection body.
+If W3-CSS-URL has not been loaded before it is installed unless set to nil.
+clog-gui uses jQueryUI and its default css file to provide client side
+movement when needed, if client side movement is not used it is possible
+to pass nil to the initilization function for both the jquery-ui-js and
+jquery-ui-css options and there is no need to deliver the jQueryUI it with your
+application. BODY-LEFT-OFFSET and BODY-RIGHT-OFFSET limit width on maximize.
 parent-desktop-obj is used if this window is a popup or otherwise a
 slave of another clog-gui page.
+If use-clog-debugger then a graphical debugger is set for all events. If
+standard-output is set *standard-output* for every event is redirected
+to it.
 NOTE: use-clog-debugger should not be set for security issues
       on non-secure environments."
   (if parent-desktop-obj
