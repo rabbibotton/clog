@@ -94,6 +94,7 @@
                (:file "clog-builder-asdf-browser")               
                (:file "clog-builder-sys-browser")
                (:file "clog-builder-dir-win")
+               (:file "clog-builder-project-tree")
                (:file "clog-builder-repl")
                (:file "clog-builder-shell")
                (:file "clog-builder-images")

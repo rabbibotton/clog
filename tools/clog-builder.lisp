@@ -64,10 +64,14 @@ clog-builder window.")
      :accessor current-project-dir
      :initform ""
      :documentation "Current Project")
+   (project-tree-win
+     :accessor project-tree-win
+     :initform nil
+     :documentation "Project Tree window")
    (project-win
      :accessor project-win
      :initform nil
-     :documentation "Project window")
+     :documentation "ASD Project window")
    (control-properties-win
      :accessor control-properties-win
      :initform nil
@@ -370,9 +374,14 @@ clog-builder window.")
                                                         (on-new-builder-panel obj))))
                             (create-gui-menu-item file  :content "New CLOG Panel Popup Editor"             :on-click 'on-new-builder-page)
                             (create-gui-menu-item file  :content "New HTML Panel Popup Editor"             :on-click 'on-new-builder-basic-page)
-                            (create-gui-menu-item file  :content "New Custom Boot Panel External Editor"   :on-click 'on-new-builder-custom-page))
+                            (create-gui-menu-item file  :content "New Custom Boot Panel External Editor"   :on-click 'on-new-builder-custom-page)
+                            (create-gui-menu-item file  :content "New CLOG Builder Window"                 :on-click
+                                                  (lambda (obj)
+                                                    (declare (ignore obj))
+                                                    (open-window (window body) "/builder"))))
                           ;; Menu -> Project
-                          (create-gui-menu-item src   :content "Project Window"                 :on-click 'on-show-project)
+                          (create-gui-menu-item src   :content "Project Tree"                   :on-click 'on-project-tree)
+                          (create-gui-menu-item src   :content "ASD Project Window"             :on-click 'on-show-project)
                           (create-gui-menu-item src   :content "New Project from template"      :on-click 'on-new-app-template)
                           (create-gui-menu-item src   :content "New OS Directory Browser"       :on-click 'on-dir-win)
                           (create-gui-menu-item src   :content "New System Source Browser"      :on-click 'on-new-sys-browser)
@@ -488,6 +497,7 @@ clog-builder window.")
                             (when *start-project*
                               (projects-load *start-project*))
                             (on-show-project body :project *start-project*)
+                            (on-project-tree body :project *start-project*)
                             (when *start-dir*
                               (when *start-project*
                                 (set-geometry (current-window body) :top 38 :left 5 :right "" :height "" :bottom 22)

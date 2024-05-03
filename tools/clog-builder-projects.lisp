@@ -8,8 +8,8 @@
         (window-focus (project-win app))
         (let* ((*default-title-class*      *builder-title-class*)
                (*default-border-class*     *builder-border-class*)
-               (win (create-gui-window obj :title "Project Window"
-                                           :top 60 :left 232
+               (win (create-gui-window obj :title "ASD Project Window"
+                                           :top 60 :left 325
                                            :width 643 :height 625
                                            :has-pinner t :client-movement *client-side-movement*)))
           (create-projects (window-content win))
@@ -153,7 +153,7 @@
         (already (asdf:already-loaded-systems))
         (sel (text-value (project-list panel))))
     (setf (window-title (parent (parent panel)))
-          (format nil "Project - ~A" sel))
+          (format nil "ASD Project - ~A" sel))
     (reset-control-pallete panel)
     (setf (inner-html (runtime-list panel)) "")
     (setf (inner-html (designtime-list panel)) "")
