@@ -83,13 +83,24 @@ on the tree-root or other clog-tree's."))
   (unless (equal item "")
     (cond ((and (> (length item) 5)
                 (equal (subseq item (- (length item) 5)) ".clog"))
-            (if t
+            (if *open-external*
                 (on-new-builder-panel-ext panel :open-file item) ;; need ext for both
                 (on-new-builder-panel panel :open-file item)))
           (t
-            (if nil
+            (if *open-external*
                 (on-open-file-ext panel :open-file item)
-                (on-open-file panel :open-file item))))))
+                (progn
+                  (let ((win (on-open-file panel :open-file item)))
+                    (when win
+                      (set-geometry win
+                                    :top (menu-bar-height win)
+                                    :left 300
+                                    :height "" :width ""
+                                    :bottom 5 :right 0)
+                      (clog-ace:resize (window-param win))
+                      (set-on-window-move win (lambda (obj)
+                                                (setf (width obj) (width obj))
+                                                (setf (height obj) (height obj))))))))))))
 
 (defun project-tree-dir-select (panel dir)
   (dolist (item (uiop:subdirectories dir))
@@ -131,6 +142,9 @@ on the tree-root or other clog-tree's."))
           (set-geometry win :top (menu-bar-height win) :left 0 :height "" :bottom 5 :right "")
           (set-on-window-move win (lambda (obj)
                                     (setf (height obj) (height obj))))
+          (set-on-window-close win (lambda (obj)
+                                     (declare (ignore obj))
+                                     (setf (project-tree-win app) nil)))
           (setf (positioning projects) :absolute)
           (set-geometry projects :height 27 :width "" :top 0 :left 0 :right 0)
           (add-class dir-loc "w3-tiny")
