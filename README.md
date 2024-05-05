@@ -275,6 +275,8 @@ High Order Extensions to CLOG
 
 - clog-panels - Quick application layouts
 
+- clog-tree - Collapsable tree control
+
 - clog-presentations - bi-directional linking of Lisp Objects and CLOG
                        Objects
 

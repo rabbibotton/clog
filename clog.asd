@@ -49,6 +49,7 @@
                              (:file "clog-webgl")
                              ;; CLOG Extensions
                              (:file "clog-panel")
+                             (:file "clog-tree")
                              (:file "clog-presentations")
                              (:file "clog-data")
                              (:file "clog-dbi")

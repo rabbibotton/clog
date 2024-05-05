@@ -1,84 +1,5 @@
 (in-package :clog-tools)
 
-(defclass clog-tree (clog-div)
-  ((tree-root    :accessor tree-root)
-   (indent-level :accessor indent-level))
-  (:documentation "CLOG-Tree object - a collapsible tree component"))
-
-(defgeneric tree-root (clog-tree)
-  (:documentation "Accessor for clog-tree root, create clog-tree-items
-on the tree-root or other clog-tree's."))
-
-(defmethod create-clog-tree ((obj clog-obj) &key (content "")
-                                                 (indent-level 0)
-                                                 (node-html "&#128193;")
-                                                 (fill-function nil)
-                                                 (visible t)
-                                                 (class nil)
-                                                 (html-id nil)
-                                                 (auto-place t))
-  (let* ((new-obj (create-div obj :content (format nil "~A&nbsp;" node-html)
-                              :class class
-                              :html-id html-id
-                              :auto-place auto-place))
-         (header  (create-span new-obj :content content)))
-    (change-class new-obj 'clog-tree)
-    (setf (indent-level new-obj) indent-level)
-    (setf (tree-root new-obj) (create-span header))
-    (dotimes (n indent-level)
-      (create-span new-obj :content "&nbsp;&nbsp;" :auto-place :top))
-    (flet ((toggle-tree ()
-             (cond (fill-function
-                     (if visible
-                         (setf (text (tree-root new-obj)) "")
-                         (funcall fill-function new-obj))
-                     (setf visible (not visible)))
-                   (t
-                     (if visible
-                         (setf (hiddenp (tree-root new-obj)) t)
-                         (setf (hiddenp (tree-root new-obj)) nil))
-                     (setf visible (not visible))))))
-      (setf visible (not visible))
-      (toggle-tree)
-      (set-on-mouse-down new-obj
-                         (lambda (obj data)
-                           (declare (ignore obj data))
-                           (toggle-tree))
-                         :cancel-event t)) ; prevent event bubble up tree
-    new-obj))
-
-(defclass clog-tree-item (clog-div)
-  ((tree-item :accessor tree-item)
-   (indent-level :accessor indent-level))
-  (:documentation "CLOG-tree-item object - a tree list item"))
-
-(defgeneric tree-item (clog-tree-item)
-  (:documentation "Accessor for clog-tree-item item."))
-
-(defmethod create-clog-tree-item ((obj clog-obj) &key (content "")
-                                                      (indent-level 0)
-                                                      (node-html "&#128196;")
-                                                      (on-click nil)
-                                                      (class nil)
-                                                      (html-id nil)
-                                                      (auto-place t))
-  (let* ((new-obj (create-div obj :content (format nil "~A&nbsp;" node-html)
-                               :class class
-                               :html-id html-id
-                               :auto-place auto-place))
-         (header  (create-span new-obj :content content)))
-    (change-class new-obj 'clog-tree-item)
-    (dotimes (n indent-level)
-      (create-span new-obj :content "&nbsp;&nbsp;" :auto-place :top))
-    (setf (indent-level new-obj) indent-level)
-    (setf (tree-item new-obj) (create-span header))
-    (when on-click
-      (set-on-mouse-down new-obj (lambda (obj data)
-                                   (declare (ignore data))
-                                   (funcall on-click obj))
-                         :cancel-event t))
-    new-obj))
-
 (defun project-tree-select (panel item)
   (unless (equal item "")
     (cond ((and (> (length item) 5)
@@ -91,16 +12,17 @@ on the tree-root or other clog-tree's."))
                 (on-open-file-ext panel :open-file item)
                 (progn
                   (let ((win (on-open-file panel :open-file item)))
-                    (when win
-                      (set-geometry win
-                                    :top (menu-bar-height win)
-                                    :left 300
-                                    :height "" :width ""
-                                    :bottom 5 :right 0)
-                      (clog-ace:resize (window-param win))
-                      (set-on-window-move win (lambda (obj)
-                                                (setf (width obj) (width obj))
-                                                (setf (height obj) (height obj))))))))))))
+                    (when *project-tree-sticky-open*
+                      (when win
+                        (set-geometry win
+                                      :top (menu-bar-height win)
+                                      :left 300
+                                      :height "" :width ""
+                                      :bottom 5 :right 0)
+                        (clog-ace:resize (window-param win))
+                        (set-on-window-move win (lambda (obj)
+                                                  (setf (width obj) (width obj))
+                                                  (setf (height obj) (height obj)))))))))))))
 
 (defun project-tree-dir-select (panel dir)
   (dolist (item (uiop:subdirectories dir))
@@ -114,7 +36,7 @@ on the tree-root or other clog-tree's."))
     (create-clog-tree-item (tree-root panel)
                            :on-click (lambda (obj)
                                        (project-tree-select obj (format nil "~A" item)))
-                           :indent-level (1+ (indent-level panel))
+                           ; :indent-level (1+ (indent-level panel))
                            :content (file-namestring item))))
 
 (defun on-project-tree (obj &key project)

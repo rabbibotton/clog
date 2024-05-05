@@ -52,6 +52,7 @@ embedded in a native template application.)"
   (@clog-data            section)
   (@clog-dbi             section)
   (@clog-panels          section)
+  (@clog-tree            section)
   (@clog-style-block     section)
   (@clog-form            section)
   (@clog-canvas          section)
@@ -646,6 +647,17 @@ embedded in a native template application.)"
   (right-panel             generic-function)
   (bottom-panel            generic-function)
   (fit-layout              generic-function))
+
+(defsection @clog-tree (:title "CLOG Tree")
+  "CLOG-Tree - CLOG Trees"
+  (clog-tree             class)
+  (create-clog-tree      generic-function)
+  (tree-root             generic-function)
+  (indent-level          generic-function)
+
+  (clog-tree-item        class)
+  (create-clog-tree-item generic-function)
+  (tree-item             generic-function))
 
 (defsection @clog-style-block (:title "CLOG Style Blocks")
   "CLOG-Style-Block - CLOG Style Blocks"

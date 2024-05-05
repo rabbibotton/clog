@@ -48,6 +48,9 @@
 (defparameter *editor-delay-on-eval-form* 30)
 (defparameter *editor-delay-on-eval-file* 60)
 
+;; CLOG Panels
+(defparameter *project-tree-sticky-open* t)
+
 ;; CLOG Builder REPL
 (defparameter *clog-repl-use-console* t)
 (defparameter *clog-repl-open-console-on-start* nil)

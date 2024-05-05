@@ -5,7 +5,7 @@
 
 ;; Preferences loaded on next call to clog-tools:clog-builder or [Eval All]
 
-;; Builder Desktop
+;; CLOG Builder Desktop
 
 ;; Open panels and files in new browser tabs by default
 (setf *open-external* nil)
@@ -14,10 +14,14 @@
 
 ;; CLOG Panels
 
-;; Open panel editors in browser popus instead of tabs if browser allows
+;; Open panel editors in browser popups instead of tabs if browser allows
 (setf *open-external-panels-in-popup* nil)
-;; Open panels as popups by default
-(setf *open-panels-as-popups* nil)
+
+;; CLOG Project Tree
+
+;; When opennning source editors not external, open to fill right of tree to
+;; browser edge
+(setf *project-tree-sticky-open* t)
 
 ;; CLOG Source Editor
 
@@ -63,12 +67,13 @@
 (setf *clog-repl-send-result-to-console* nil)
 (setf *clog-repl-private-console* t)
 
-;; Panel Builder
+;; CLOG Panel Builder
 (setf *builder-render-right-margin* 80)
 (setf *builder-render-case* :downcase)
 
-;; Builder Look and Feel
+;; CLOG Builder Look and Feel
 
+;; General
 (setf *builder-window-desktop-class* "w3-blue-grey")
 (setf *builder-window-show-static-root-class* "w3-grey")
 (setf *builder-show-callers-class* "w3-orange")
