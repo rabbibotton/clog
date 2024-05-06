@@ -6,7 +6,10 @@
     (unless (control-properties-win app)
       (let* ((*default-title-class*      *builder-title-class*)
              (*default-border-class*     *builder-border-class*)
-             (win (create-gui-window obj :title "Properties" :has-pinner t :width 400))
+             (win (create-gui-window obj :title "Properties"
+                                     :has-pinner t
+                                     :keep-on-top t
+                                     :width 400))
              (content (window-content win))
              (control-list (create-table content)))
         (add-class content *builder-pallete-class*)

@@ -50,6 +50,8 @@
 
 ;; CLOG Panels
 (defparameter *project-tree-sticky-open* t)
+(defparameter *project-tree-dir-filter* "(\\\\|\\/)\\..*(\\\\|\\/)$")
+(defparameter *project-tree-file-filter* "(^\\..*)|(.*~$)|(.*\\.bak$)")
 
 ;; CLOG Builder REPL
 (defparameter *clog-repl-use-console* t)

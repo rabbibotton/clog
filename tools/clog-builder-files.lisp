@@ -94,6 +94,8 @@
              (win (create-gui-window obj :title title
                                      :title-class title-class
                                      :width 700 :height 480
+                                     :has-pinner is-console
+                                     :keep-on-top is-console
                                      :client-movement *client-side-movement*))
              (box (create-panel-box-layout (window-content win)
                                            :left-width 0 :right-width 0
@@ -104,9 +106,11 @@
              (m-save   (create-gui-menu-item m-file :content "save (cmd/ctrl-s)"))
              (m-saveas (create-gui-menu-item m-file :content "save as.."))
              (m-revert (create-gui-menu-item m-file :content "revert"))
-             (m-emacs  (unless (in-clog-popup-p obj)
+             (m-emacs  (unless (or (in-clog-popup-p obj)
+                                    is-console)
                          (create-gui-menu-item m-file :content "open in emacs")))
-             (m-ntab   (unless (in-clog-popup-p obj)
+             (m-ntab   (unless (or (in-clog-popup-p obj)
+                                    is-console)
                          (create-gui-menu-item m-file :content "open in new tab")))
              (m-edit   (create-gui-menu-drop-down menu :content "Edit"))
              (m-undo   (create-gui-menu-item m-edit :content "undo (cmd/ctrl-z)"))

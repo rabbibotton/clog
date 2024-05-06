@@ -11,7 +11,9 @@
                (win (create-gui-window obj :title "ASD Project Window"
                                            :top 60 :left 325
                                            :width 643 :height 625
-                                           :has-pinner t :client-movement *client-side-movement*)))
+                                           :has-pinner t
+                                           :keep-on-top t
+                                           :client-movement *client-side-movement*)))
           (create-projects (window-content win))
           (setf (project-win app) win)
           (set-on-window-close win (lambda (obj)

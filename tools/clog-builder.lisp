@@ -337,7 +337,7 @@ clog-builder window.")
     (with-clog-debugger (body :standard-output (stdout app))
                         (when *builder-window-show-static-root-class*
                           (setf (z-index (create-panel body :positioning :fixed
-                                                       :bottom 0 :left 0
+                                                       :bottom 0 :right 0
                                                        :class *builder-window-show-static-root-class*
                                                        :content (format nil "static-root: ~A" clog:*static-root*)))
                                 -9999))
@@ -392,7 +392,7 @@ clog-builder window.")
                           (create-gui-menu-item tools :content "Thread Viewer"               :on-click 'on-show-thread-viewer)
                           (create-gui-menu-item tools :content "CLOG Builder REPL"           :on-click 'on-repl)
                           (create-gui-menu-item tools :content "CLOG Builder Console"        :on-click 'on-open-console)
-                          (create-gui-menu-item tools :content "OS Shell"                    :on-click 'on-shell)
+                          (create-gui-menu-item tools :content "OS Pseudo Shell"                    :on-click 'on-shell)
                           (create-gui-menu-item tools :content "Copy/Cut History"            :on-click 'on-show-copy-history-win)
                           (unless *clogframe-mode*
                             (create-gui-menu-item tools :content "Image to HTML Data"        :on-click 'on-image-to-data))
@@ -496,7 +496,6 @@ clog-builder window.")
                           (t
                             (when *start-project*
                               (projects-load *start-project*))
-                            (on-show-project body :project *start-project*)
                             (on-project-tree body :project *start-project*)
                             (when *start-dir*
                               (when *start-project*

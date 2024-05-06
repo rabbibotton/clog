@@ -46,7 +46,10 @@
     (unless (controls-win app)
       (let* ((*default-title-class*      *builder-title-class*)
              (*default-border-class*     *builder-border-class*)
-             (win (create-gui-window obj :title "Controls" :has-pinner t :width 220))
+             (win (create-gui-window obj :title "Controls"
+                                     :has-pinner t
+                                     :keep-on-top t
+                                     :width 220))
              (content (window-content win))
              (sheight      (floor (/ (height content) 2)))
              (swidth       (floor (width content)))

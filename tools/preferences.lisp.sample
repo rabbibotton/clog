@@ -22,6 +22,9 @@
 ;; When opennning source editors not external, open to fill right of tree to
 ;; browser edge
 (setf *project-tree-sticky-open* t)
+;; Regex filters to use when set to remove from project directories
+(setf *project-tree-dir-filter* "(\\\\|\\/)\\..*(\\\\|\\/)$")
+(setf *project-tree-file-filter* "(^\\..*)|(.*~$)|(.*\\.bak$)")
 
 ;; CLOG Source Editor
 

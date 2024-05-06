@@ -8,6 +8,7 @@
                                      :top top :left left
                                      :width 600 :height 400
                                      :has-pinner t
+                                     :keep-on-top t
                                      :client-movement *client-side-movement*))
          (d   (create-dir-view (window-content win))))
     (set-geometry d :top 0 :left 0 :right 0 :bottom 0 :width "" :height "")
