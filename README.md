@@ -6,8 +6,6 @@
 
 - [Learn to program Common Lisp and CLOG here - LEARN.md](LEARN.md)
 
-- [Video of CLOG Builder in action](https://youtu.be/CgTJMxsz3EY)
-
 ---
 
 ![Image of CLOG](https://rabbibotton.github.io/images/clog.png)
@@ -21,16 +19,19 @@ embedded in a native application.)
 
 - [CLOG - Reference Manual](https://rabbibotton.github.io/clog/clog-manual.html)
 
-STATUS: CLOG and CLOG Builder 2.0 released.
+STATUS: CLOG and CLOG Builder 2.0 released. CLOG API Stable 4 years
 
-CLOG is actually based on GNOGA, a framework I wrote for Ada in 2013
-and used in commercial production code for the last 10+ years. CLOG
-itself is already used in commerical products, corporate websites,
-and other opensource projects.
+The CLOG Builder is in 100% portable Common Lisp using the CLOG Framework.
+
+CLOG tech was invented (first in Ada) and has been running in commercial
+production code and productss since 2013 and in Common Lisp since 2022. CLOG
+is used in commerical products, websites, and other opensource projects.
 
 CLOG is being actively extended, however the core API is stable and proven,
-the CLOG Builder is rich in features. Check the github discussion boards for
-the latest on the project.
+the CLOG Builder is rich in features and is a full featured IDE for Common Lisp
+and web development and includes a GUI Builder for the CLOG Framework.
+
+Check the github discussion boards for the latest on the project and support.
 
 Consider sponsoring work on CLOG at https://github.com/sponsors/rabbibotton
 
@@ -69,10 +70,12 @@ https://github.com/rabbibotton/clog-win64-ez/releases/tag/v1.0a
 Unzip, double click setup.bat and then drag the resulting builder.exe to your
 application bar or double click. Update regularly by running update.bat
 If you change directories you need to run make.bat or update.bat
+You can also run frame.bat to produce a version of builder that does not use
+the browser.
 
-CLOG is in QuickLisp (ql:quickload :clog), however one should
-add the UltraLisp distribution as QuickLisp is updated very
-infrequenty (see below).
+CLOG v1 is in QuickLisp (ql:quickload :clog), therefore one should
+add the UltraLisp distribution to use CLOG v2
+(alternatively use git or https://github.com/ocicl/ocicl)
 
 To add UltraLisp to QuickLisp:
 
@@ -81,27 +84,30 @@ To add UltraLisp to QuickLisp:
                       :prompt nil)
 ```
 
-You still need to often update the UltraLisp and QuickLisp distros with:
+You still need to update often the UltraLisp and QuickLisp distros with:
 
 ```
 (ql:update-all-dists)
 ```
+If using the CLOG Builder Options -> Update CLOG Builder will do this for you.
+
 
 To get started load CLOG and then can load and run the builder:
 
 ```
-(ql:quickload :clog)
 (ql:quickload :clog/tools)
 (clog-tools:clog-builder)
 
 ```
+
+You can also just run from the command line run-builder or run-builder.bat
 
 To use the git versions CLOG, place git clone into ~/common-lisp or
 a findable source directory, i.e.
 [ ``(push #P"path/to/dir/of/projects" ql:*local-project-directories*)`` ]
 
 For git (you also need the clog builder plugins clog-ace and clog-terminal
-for the builder):
+for the builder or use the UltraLisp versions):
 
 ```
 cd ~/common-lisp
@@ -169,7 +175,6 @@ CL-USER> (clog:open-manual)
 
 Work your way through the tutorials. You will see how quick and easy it is
 to be a CLOGer.
-
 
 ![Image of clog-builder](https://rabbibotton.github.io/images/clog-builder.png)
 ![Image of clog-builder-web](https://rabbibotton.github.io/images/cb-web.png)
