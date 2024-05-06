@@ -63,7 +63,7 @@
                                         :client-movement *client-side-movement*)))
            (setf clog-user::*body* (window-content win))))
         (t
-          (setf data (format nil "(let ((tmp ~A))
+          (setf data (format nil "(let ((tmp (progn ~A)))
                                     (setf /// //) (setf // /) (setf / (list tmp))
                                     (setf *** **) (setf ** *) (setf * tmp))" data))
           (multiple-value-bind (result new-package)
