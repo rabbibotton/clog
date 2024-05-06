@@ -69,6 +69,7 @@
                      lisp-package
                      regex
                      is-console
+                     left top
                      (editor-use-console-for-evals *editor-use-console-for-evals*)
                      has-time-out
                      maximized)
@@ -93,6 +94,7 @@
              (*default-border-class*     *builder-border-class*)
              (win (create-gui-window obj :title title
                                      :title-class title-class
+                                     :left left :top top
                                      :width 700 :height 480
                                      :has-pinner is-console
                                      :keep-on-top is-console

@@ -7,6 +7,7 @@
           (setf (hiddenp (console-win app)) nil)
           (window-focus (console-win app)))
         (let* ((win (on-open-file obj :title "CLOG Builder Console"
+                                      :left 305 :top (menu-bar-height obj)
                                       :is-console t
                                       :editor-use-console-for-evals t)))
           (setf (clog-ace:mode (window-param win)) "ace/mode/plain_text")
