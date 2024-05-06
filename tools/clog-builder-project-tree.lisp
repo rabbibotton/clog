@@ -79,6 +79,7 @@
                 (input-dialog obj "Run form:"
                               (lambda (result)
                                 (when result
+                                  (setf entry-point result)
                                   (setf clog:*clog-debug*
                                         (lambda (event data)
                                           (with-clog-debugger (panel :standard-output (stdout app))
