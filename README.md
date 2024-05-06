@@ -66,7 +66,7 @@ To install CLOG - install Common Lisp:
 * [Install Common-Lisp for Win64](WINDOWS.md)
 
 For **Windows** users there is an easy install for full CL and CLOG -
-https://github.com/rabbibotton/clog-win64-ez/releases/tag/v1.0a
+https://github.com/rabbibotton/clog-win64-ez/releases
 Unzip, double click setup.bat and then drag the resulting builder.exe to your
 application bar or double click. Update regularly by running update.bat
 If you change directories you need to run make.bat or update.bat
