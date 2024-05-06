@@ -117,13 +117,14 @@
                               (window-focus win))
                    (on-change (obj)
                      (declare (ignore obj))
+                     (setf (text-value load-btn) "loading")
+                     (setf (text tree) "")
                      (let* ((sel  (value projects))
                             (root (quicklisp:where-is-system sel))
                             (dir  (directory-namestring (uiop:truename* root))))
                        (cond (root
                                (setf (current-project app) sel)
                                (setf (text-value load-btn) "not loaded")
-                               (setf (text tree) "")
                                (create-clog-tree tree
                                                  :fill-function (lambda (obj)
                                                                   (project-tree-dir-select obj dir))
