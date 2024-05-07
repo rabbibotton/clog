@@ -16,7 +16,6 @@
                        #:bordeaux-threads #:trivial-open-browser #:parse-float #:quri
                        #:lack-middleware-static #:lack-request #:lack-util-writer-stream
                        #:trivial-gray-streams #:closer-mop #:mgl-pax #:cl-template #:atomics
-                       #:cl-indentify
                        #:sqlite #:cl-dbi #:cl-pass #-(or mswindows win32 cormanlisp) #:cl-isaac)
   :components ((:module "static-files"
                 :components ((:static-file "js/boot.js")))
@@ -72,8 +71,8 @@
                (:file "clog-docs")))
 
 (asdf:defsystem #:clog/tools
-  :depends-on (#:clog #:clog-ace #:clog-terminal #:s-base64 #:swank
-               #:definitions #:parenscript)
+  :depends-on (#:clog #:clog-ace #:clog-terminal #:s-base64 #:swank #:cl-indentify
+               #:definitions #:parenscript #:trivial-main-thread)
   :pathname "tools/"
   :components (;; clog-db-admin app
                (:file "clog-db-admin")

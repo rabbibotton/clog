@@ -58,6 +58,8 @@
 (defparameter *clog-repl-open-console-on-start* nil)
 (defparameter *clog-repl-send-result-to-console* nil)
 (defparameter *clog-repl-private-console* t)
+;; eval on main thread so (break) works for sbcl.
+(defparameter *clog-repl-eval-on-main-thread* nil)
 
 ;; Panel Builder
 

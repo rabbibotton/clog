@@ -81,68 +81,74 @@ provide an interactive console.)"))
   nil)
 
 ;; Lisp code evaluation utilities
+
 (defun capture-eval (form &key (capture-console t)
-                            (capture-result t)
-                            (capture-result-form "=>~A~%")
-                            (eval-form "~A~%=>~A~%")
-                            (clog-obj nil)
-                            (private-console-win nil)
-                            (eval-in-package "clog-user"))
+                     (capture-result t)
+                     (capture-result-form "=>~A~%")
+                     (eval-form "~A~%=>~A~%")
+                     (clog-obj nil)
+                     (private-console-win nil)
+                     (eval-in-package "clog-user"))
   "Capture lisp evaluaton of FORM."
-  (let (console
-        (result (make-array '(0) :element-type 'base-char
-                                 :fill-pointer 0 :adjustable t))
-        eval-result)
-    (with-output-to-string (stream result)
-      (with-open-stream (out-stream (make-instance 'dialog-out-stream))
-        (with-open-stream (in-stream (make-instance 'dialog-in-stream :clog-obj clog-obj :source out-stream))
-          (labels ((reset-ace ()
-                     (when (typep console 'console-out-stream)
-                       (setf (ace console) nil)))
-                   (my-debugger (condition encapsulation)
-                     (if clog-obj
-                         (handler-case
-                             (let ((restart (one-of-dialog clog-obj condition (compute-restarts)
-                                                           :title "Available Restarts")))
-                               (reset-ace)
-                               (when restart
-                                 (let ((*debugger-hook* encapsulation))
-                                   (invoke-restart-interactively restart))))
-                           (end-of-file () ; no reset chosen
-                             (reset-ace)))
-                         (format t "Error - ~A~%" condition))))
-            (unless (stringp form)
-              (let ((r (make-array '(0) :element-type 'base-char
-                                        :fill-pointer 0 :adjustable t)))
-                (with-output-to-string (s r)
-                  (print form s))
-                (setf form r)))
-            (setf console (if capture-console
-                              stream
-                              (make-instance 'console-out-stream :clog-obj clog-obj :win private-console-win)))
-            (let* ((*query-io*             (make-two-way-stream in-stream out-stream))
-                   (*standard-output*      console)
-                   (*standard-input*       (make-instance 'console-in-stream :clog-obj clog-obj))
-                   (*terminal-io*          (make-two-way-stream *standard-input* *standard-output*))
-                   (*debug-io*             *terminal-io*)
-                   (*error-output*         console)
-                   (*trace-output*         console)
-                   (*debugger-hook*        (if clog-connection:*disable-clog-debugging*
-                                               *debugger-hook*
-                                               #'my-debugger))
-                   (*default-title-class*  *builder-title-class*)
-                   (*default-border-class* *builder-border-class*)
-                   (*package*              (find-package (string-upcase eval-in-package))))
-              (setf eval-result (eval (read-from-string (format nil "(progn ~A)" form))))
-              (unless capture-result
-                (format console capture-result-form eval-result))
-              (when (typep console 'console-out-stream)
-                (close console))
-              (close *query-io*)
-              (values
-               (format nil eval-form result eval-result)
-               *package*
-               eval-result))))))))
+  (let ((cef
+          (lambda ()
+            (let (console
+                  (result (make-array '(0) :element-type 'base-char
+                                      :fill-pointer 0 :adjustable t))
+                  eval-result)
+              (with-output-to-string (stream result)
+                (with-open-stream (out-stream (make-instance 'dialog-out-stream))
+                  (with-open-stream (in-stream (make-instance 'dialog-in-stream :clog-obj clog-obj :source out-stream))
+                    (labels ((reset-ace ()
+                               (when (typep console 'console-out-stream)
+                                 (setf (ace console) nil)))
+                             (my-debugger (condition encapsulation)
+                               (if clog-obj
+                                   (handler-case
+                                       (let ((restart (one-of-dialog clog-obj condition (compute-restarts)
+                                                                     :title "Available Restarts")))
+                                         (reset-ace)
+                                         (when restart
+                                           (let ((*debugger-hook* encapsulation))
+                                             (invoke-restart-interactively restart))))
+                                     (end-of-file () ; no reset chosen
+                                       (reset-ace)))
+                                   (format t "Error - ~A~%" condition))))
+                      (unless (stringp form)
+                        (let ((r (make-array '(0) :element-type 'base-char
+                                             :fill-pointer 0 :adjustable t)))
+                          (with-output-to-string (s r)
+                            (print form s))
+                          (setf form r)))
+                      (setf console (if capture-console
+                                        stream
+                                        (make-instance 'console-out-stream :clog-obj clog-obj :win private-console-win)))
+                      (let* ((*query-io*             (make-two-way-stream in-stream out-stream))
+                             (*standard-output*      console)
+                             (*standard-input*       (make-instance 'console-in-stream :clog-obj clog-obj))
+                             (*terminal-io*          (make-two-way-stream *standard-input* *standard-output*))
+                             (*debug-io*             *terminal-io*)
+                             (*error-output*         console)
+                             (*trace-output*         console)
+                             (*debugger-hook*        (if clog-connection:*disable-clog-debugging*
+                                                         *debugger-hook*
+                                                         #'my-debugger))
+                             (*default-title-class*  *builder-title-class*)
+                             (*default-border-class* *builder-border-class*)
+                             (*package*              (find-package (string-upcase eval-in-package))))
+                        (setf eval-result (eval (read-from-string (format nil "(progn ~A)" form))))
+                    (unless capture-result
+                      (format console capture-result-form eval-result))
+                    (when (typep console 'console-out-stream)
+                      (close console))
+                    (close *query-io*)
+                    (values
+                      (format nil eval-form result eval-result)
+                      *package*
+                      eval-result))))))))))
+    (if *clog-repl-eval-on-main-thread*
+        (trivial-main-thread:call-in-main-thread cef :blocking t)
+        (funcall cef))))
 
 (defun do-eval (obj form-string cname &key (package "clog-user") (test t) custom-boot)
   "Render, evalute and run code for panel"

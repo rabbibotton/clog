@@ -69,6 +69,8 @@
 (setf *clog-repl-open-console-on-start* nil)
 (setf *clog-repl-send-result-to-console* nil)
 (setf *clog-repl-private-console* t)
+;; eval on main thread so (break) works for sbcl.
+(setf *clog-repl-eval-on-main-thread* nil)
 
 ;; CLOG Panel Builder
 (setf *builder-render-right-margin* 80)
