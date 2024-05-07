@@ -123,7 +123,10 @@ provide an interactive console.)"))
             (let* ((*query-io*             (make-two-way-stream in-stream out-stream))
                    (*standard-output*      console)
                    (*standard-input*       (make-instance 'console-in-stream :clog-obj clog-obj))
+                   (*terminal-io*          (make-two-way-stream *standard-input* *standard-output*))
+                   (*debug-io*             *terminal-io*)
                    (*error-output*         console)
+                   (*trace-output*         console)
                    (*debugger-hook*        (if clog-connection:*disable-clog-debugging*
                                                *debugger-hook*
                                                #'my-debugger))

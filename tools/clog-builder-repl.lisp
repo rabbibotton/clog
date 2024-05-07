@@ -16,9 +16,11 @@
          (*default-title-class*      *builder-title-class*)
          (*default-border-class*     *builder-border-class*)
          (win (create-gui-window obj :title "CLOG Builder REPL"
-                                     :top 40 :left 225
-                                     :width 600 :height 400
-                                     :client-movement *client-side-movement*))
+                                 :has-pinner t
+                                 :keep-on-top t
+                                 :top 40 :left 225
+                                 :width 600 :height 400
+                                 :client-movement *client-side-movement*))
          (repl (create-clog-builder-repl (window-content win))))
     (when *clog-repl-private-console*
       (let ((pcon (on-open-repl-console obj win)))
