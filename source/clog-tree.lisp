@@ -15,7 +15,8 @@
 
 (defclass clog-tree (clog-div)
   ((tree-root    :accessor tree-root)
-   (indent-level :accessor indent-level))
+   (indent-level :accessor indent-level)
+   (content      :accessor content))
   (:documentation "CLOG-Tree object - a collapsible tree component"))
 
 (defgeneric tree-root (clog-tree)
@@ -29,6 +30,7 @@ on the tree-root or other clog-tree's."))
 (defmethod create-clog-tree ((obj clog-obj) &key (content "")
                                                  (indent-level 0)
                                                  (node-html "&#128193;") ; folder icon
+                                                 (on-context-menu nil)
                                                  (fill-function nil)
                                                  (visible t)
                                                  (class nil)
@@ -43,6 +45,7 @@ and when not visible (such as clicked to close) the children are destroyed."
                               :auto-place auto-place))
          (header  (create-span new-obj :content content)))
     (change-class new-obj 'clog-tree)
+    (setf (content new-obj) header)
     (setf (indent-level new-obj) indent-level)
     (setf (tree-root new-obj) (create-span header))
     (dotimes (n indent-level)
@@ -60,16 +63,20 @@ and when not visible (such as clicked to close) the children are destroyed."
                      (setf visible (not visible))))))
       (setf visible (not visible))
       (toggle-tree)
-      (set-on-mouse-down new-obj
-                         (lambda (obj data)
-                           (declare (ignore obj data))
-                           (toggle-tree))
-                         :cancel-event t)) ; prevent event bubble up tree
+      (when on-context-menu
+        (set-on-context-menu new-obj (lambda (obj)
+                                       (declare (ignore))
+                                       (funcall on-context-menu obj))))
+      (set-on-click new-obj (lambda (obj)
+                              (declare (ignore obj))
+                              (toggle-tree))
+                    :cancel-event t)) ; prevent event bubble up tree
     new-obj))
 
 (defclass clog-tree-item (clog-div)
   ((tree-item    :accessor tree-item)
-   (indent-level :accessor indent-level))
+   (indent-level :accessor indent-level)
+   (content      :accessor content))
   (:documentation "CLOG-tree-item object - a tree list item"))
 
 (defgeneric tree-item (clog-tree-item)
@@ -79,6 +86,7 @@ and when not visible (such as clicked to close) the children are destroyed."
                                                       (indent-level nil)
                                                       (node-html "&#128196;") ; file icon
                                                       (on-click nil)
+                                                      (on-context-menu nil)
                                                       (class nil)
                                                       (html-id nil)
                                                       (auto-place t))
@@ -90,6 +98,7 @@ icon. If INDENT-LEVEL is nil get parent's INDENT-LEVEL from obj if is a clog-tre
                                :auto-place auto-place))
          (header  (create-span new-obj :content content)))
     (change-class new-obj 'clog-tree-item)
+    (setf (content new-obj) header)
     (unless indent-level
       (when (parent obj)
         (when (parent obj)
@@ -100,9 +109,13 @@ icon. If INDENT-LEVEL is nil get parent's INDENT-LEVEL from obj if is a clog-tre
       (create-span new-obj :content "&nbsp;&nbsp;" :auto-place :top))
     (setf (indent-level new-obj) indent-level)
     (setf (tree-item new-obj) (create-span header))
+    (when on-context-menu
+      (set-on-context-menu new-obj (lambda (obj)
+                                     (declare (ignore))
+                                     (funcall on-context-menu obj))))
     (when on-click
-      (set-on-mouse-down new-obj (lambda (obj data)
-                                   (declare (ignore data))
-                                   (funcall on-click obj))
-                         :cancel-event t))
+      (set-on-click new-obj (lambda (obj)
+                              (declare (ignore))
+                              (funcall on-click obj))
+                    :cancel-event t))
     new-obj))

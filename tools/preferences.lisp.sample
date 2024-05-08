@@ -93,6 +93,7 @@
 (setf *builder-menu-bar-drop-down-class* "w3-dropdown-content w3-bar-block w3-card-4")
 (setf *builder-menu-item-class* "w3-bar-item w3-blue-grey w3-button")
 (setf *builder-menu-window-select-class* "w3-grey w3-bar-item w3-button")
+(setf *builder-menu-context-item-class* "w3-button w3-bar")
 
 ;; Window treatements
 (setf *builder-title-class* "w3-blue-grey w3-round")

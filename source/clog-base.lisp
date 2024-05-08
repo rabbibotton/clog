@@ -16,7 +16,7 @@
 (pushnew :clog *features*)
 
 (defvar *connection-cache* nil
-  "Dynamic variable containing optional cache. Every thread has its
+"Dynamic variable containing optional cache. Every thread has its
 own context and therefore its own copy of this variable when
 dynamically bound. As a result no thread protection is needed to
 access. To use dynamically bind the *connection-cache* and set it
@@ -30,17 +30,17 @@ See macro with-connection-cache.")
 
 (defclass clog-obj ()
   ((connection-id
-    :reader connection-id
-    :initarg :connection-id)
+     :reader connection-id
+     :initarg :connection-id)
    (html-id
-    :reader html-id
-    :initarg :html-id)
+     :reader html-id
+     :initarg :html-id)
    (parent
-    :accessor parent
-    :initform nil)
+     :accessor parent
+     :initform nil)
    (connection-data-mutex
-    :reader connection-data-mutex
-    :initform (bordeaux-threads:make-lock)))
+     :reader connection-data-mutex
+     :initform (bordeaux-threads:make-lock)))
   (:documentation "CLOG objects (clog-obj) encapsulate the connection between
 lisp and an HTML DOM element."))
 
@@ -128,7 +128,7 @@ CLOG-OBJ us used to obtain the connection the script should run on. (Internal)")
 (defmethod js-query ((obj clog-obj) script &key (default-answer nil))
   (flush-connection-cache obj)
   (clog-connection:query (connection-id obj) script
-			 :default-answer default-answer))
+                         :default-answer default-answer))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; with-connection-cache ;;
@@ -150,7 +150,7 @@ flushed with FLUSH-CONNECTION-CACHE or a query is made."
   (when *connection-cache*
     (dolist (script (reverse *connection-cache*))
       (unless (eq script :cache)
-	(clog-connection:execute (connection-id clog-obj) script)))
+        (clog-connection:execute (connection-id clog-obj) script)))
     (setf *connection-cache* (list :cache))))
 
 ;;;;;;;;;;;;;
@@ -174,7 +174,7 @@ result or if time out DEFAULT-ANSWER. see JQUERY-QUERY (Internal)"))
 
 (defmethod query ((obj clog-obj) method &key (default-answer nil))
   (js-query obj (format nil "~A.~A" (script-id obj) method)
-	    :default-answer default-answer))
+            :default-answer default-answer))
 
 ;;;;;;;;;;;;;;;;;;;;;;;
 ;; bind-event-script ;;
@@ -186,7 +186,7 @@ result or if time out DEFAULT-ANSWER. see JQUERY-QUERY (Internal)"))
 
 (defmethod bind-event-script ((obj clog-obj) event call-back)
   (jquery-execute obj (format nil "on('~A',function (e, data){~A})"
-			      event call-back)))
+                              event call-back)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; unbind-event-script ;;
@@ -217,20 +217,20 @@ result or if time out DEFAULT-ANSWER. see JQUERY-QUERY (Internal)"))
 (defun parse-mouse-event (data)
   (let ((f (ppcre:split ":" data)))
     (list
-     :event-type   :mouse
-     :x            (js-to-integer (nth 0 f))
-     :y            (js-to-integer (nth 1 f))
-     :screen-x     (js-to-integer (nth 2 f))
-     :screen-y     (js-to-integer (nth 3 f))
-     :which-button (js-to-integer (nth 4 f))
-     :alt-key      (js-true-p (nth 5 f))
-     :ctrl-key     (js-true-p (nth 6 f))
-     :shift-key    (js-true-p (nth 7 f))
-     :meta-key     (js-true-p (nth 8 f))
-     :client-x     (js-to-integer (nth 9 f))
-     :client-Y     (js-to-integer (nth 10 f))
-     :page-x       (js-to-integer (nth 11 f))
-     :page-Y       (js-to-integer (nth 12 f)))))
+      :event-type   :mouse
+      :x            (js-to-integer (nth 0 f))
+      :y            (js-to-integer (nth 1 f))
+      :screen-x     (js-to-integer (nth 2 f))
+      :screen-y     (js-to-integer (nth 3 f))
+      :which-button (js-to-integer (nth 4 f))
+      :alt-key      (js-true-p (nth 5 f))
+      :ctrl-key     (js-true-p (nth 6 f))
+      :shift-key    (js-true-p (nth 7 f))
+      :meta-key     (js-true-p (nth 8 f))
+      :client-x     (js-to-integer (nth 9 f))
+      :client-Y     (js-to-integer (nth 10 f))
+      :page-x       (js-to-integer (nth 11 f))
+      :page-Y       (js-to-integer (nth 12 f)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;
 ;; parse-touch-event ;;
@@ -250,25 +250,25 @@ result or if time out DEFAULT-ANSWER. see JQUERY-QUERY (Internal)"))
      e.metaKey + ':' +
      e.touches[0].clientX + ':' + e.touches[0].clientY + ':' +
      e.touches[0].pageX + ':' + e.touches[0].pageY"
-    "JavaScript to collect touch event data from browser.")
+  "JavaScript to collect touch event data from browser.")
 
 (defun parse-touch-event (data)
   (let ((f (ppcre:split ":" data)))
     (list
-     :event-type     :touch
-     :x              (js-to-integer (nth 0 f))
-     :y              (js-to-integer (nth 1 f))
-     :screen-x       (js-to-integer (nth 2 f))
-     :screen-y       (js-to-integer (nth 3 f))
-     :number-fingers (js-to-integer (nth 4 f))
-     :alt-key        (js-true-p (nth 5 f))
-     :ctrl-key       (js-true-p (nth 6 f))
-     :shift-key      (js-true-p (nth 7 f))
-     :meta-key       (js-true-p (nth 8 f))
-     :client-x       (js-to-integer (nth 9 f))
-     :client-Y       (js-to-integer (nth 10 f))
-     :page-x         (js-to-integer (nth 11 f))
-     :page-Y         (js-to-integer (nth 12 f)))))
+      :event-type     :touch
+      :x              (js-to-integer (nth 0 f))
+      :y              (js-to-integer (nth 1 f))
+      :screen-x       (js-to-integer (nth 2 f))
+      :screen-y       (js-to-integer (nth 3 f))
+      :number-fingers (js-to-integer (nth 4 f))
+      :alt-key        (js-true-p (nth 5 f))
+      :ctrl-key       (js-true-p (nth 6 f))
+      :shift-key      (js-true-p (nth 7 f))
+      :meta-key       (js-true-p (nth 8 f))
+      :client-x       (js-to-integer (nth 9 f))
+      :client-Y       (js-to-integer (nth 10 f))
+      :page-x         (js-to-integer (nth 11 f))
+      :page-Y         (js-to-integer (nth 12 f)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; parse-pointer-event ;;
@@ -285,20 +285,20 @@ result or if time out DEFAULT-ANSWER. see JQUERY-QUERY (Internal)"))
 (defun parse-pointer-event (data)
   (let ((f (ppcre:split ":" data)))
     (list
-     :event-type   :pointer
-     :x            (js-to-integer (nth 0 f))
-     :y            (js-to-integer (nth 1 f))
-     :screen-x     (js-to-integer (nth 2 f))
-     :screen-y     (js-to-integer (nth 3 f))
-     :which-button (js-to-integer (nth 4 f))
-     :alt-key      (js-true-p (nth 5 f))
-     :ctrl-key     (js-true-p (nth 6 f))
-     :shift-key    (js-true-p (nth 7 f))
-     :meta-key     (js-true-p (nth 8 f))
-     :client-x     (js-to-integer (nth 9 f))
-     :client-Y     (js-to-integer (nth 10 f))
-     :page-x       (js-to-integer (nth 11 f))
-     :page-Y       (js-to-integer (nth 12 f)))))
+      :event-type   :pointer
+      :x            (js-to-integer (nth 0 f))
+      :y            (js-to-integer (nth 1 f))
+      :screen-x     (js-to-integer (nth 2 f))
+      :screen-y     (js-to-integer (nth 3 f))
+      :which-button (js-to-integer (nth 4 f))
+      :alt-key      (js-true-p (nth 5 f))
+      :ctrl-key     (js-true-p (nth 6 f))
+      :shift-key    (js-true-p (nth 7 f))
+      :meta-key     (js-true-p (nth 8 f))
+      :client-x     (js-to-integer (nth 9 f))
+      :client-Y     (js-to-integer (nth 10 f))
+      :page-x       (js-to-integer (nth 11 f))
+      :page-Y       (js-to-integer (nth 12 f)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; parse-keyboard-event ;;
@@ -313,16 +313,16 @@ result or if time out DEFAULT-ANSWER. see JQUERY-QUERY (Internal)"))
 (defun parse-keyboard-event (data)
   (let ((f (ppcre:split ":" data)))
     (list
-     :event-type :keyboard
-     :key-code   (js-to-integer (nth 0 f))
-     :char-code  (js-to-integer (nth 1 f))
-     :alt-key    (js-true-p (nth 2 f))
-     :ctrl-key   (js-true-p (nth 3 f))
-     :shift-key  (js-true-p (nth 4 f))
-     :meta-key   (js-true-p (nth 5 f))
-     :key        (if (equal (nth 6 f) "colon")
-		     ":"
-		     (nth 6 f)))))
+      :event-type :keyboard
+      :key-code   (js-to-integer (nth 0 f))
+      :char-code  (js-to-integer (nth 1 f))
+      :alt-key    (js-true-p (nth 2 f))
+      :ctrl-key   (js-true-p (nth 3 f))
+      :shift-key  (js-true-p (nth 4 f))
+      :meta-key   (js-true-p (nth 5 f))
+      :key        (if (equal (nth 6 f) "colon")
+                      ":"
+                      (nth 6 f)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;
 ;; parse-drop-event ;;
@@ -338,57 +338,57 @@ result or if time out DEFAULT-ANSWER. see JQUERY-QUERY (Internal)"))
 (defun parse-drop-event (data)
   (let ((f (ppcre:split ":" data)))
     (list
-     :event-type   :drop
-     :x            (js-to-integer (nth 0 f))
-     :y            (js-to-integer (nth 1 f))
-     :which-button (js-to-integer (nth 2 f))
-     :alt-key      (js-true-p (nth 3 f))
-     :ctrl-key     (js-true-p (nth 4 f))
-     :shift-key    (js-true-p (nth 5 f))
-     :meta-key     (js-true-p (nth 6 f))
-     :drag-data    (quri:url-decode (or (nth 7 f) "")))))
+      :event-type   :drop
+      :x            (js-to-integer (nth 0 f))
+      :y            (js-to-integer (nth 1 f))
+      :which-button (js-to-integer (nth 2 f))
+      :alt-key      (js-true-p (nth 3 f))
+      :ctrl-key     (js-true-p (nth 4 f))
+      :shift-key    (js-true-p (nth 5 f))
+      :meta-key     (js-true-p (nth 6 f))
+      :drag-data    (quri:url-decode (or (nth 7 f) "")))))
 
 ;;;;;;;;;;;;;;;
 ;; set-event ;;
 ;;;;;;;;;;;;;;;
 
 (defgeneric set-event (clog-obj event handler
-		       &key call-back-script
-			 pre-eval
-			 eval-script
-			 post-eval
-			 cancel-event
-			 one-time)
+                       &key call-back-script
+                       pre-eval
+                       eval-script
+                       post-eval
+                       cancel-event
+                       one-time)
   (:documentation "Create the low-level hook for incoming events. (Private)"))
 
 (defmethod set-event ((obj clog-obj) event handler
-		      &key (call-back-script "")
-		        (pre-eval "")
-			(eval-script "")
-			(post-eval "")
-			(cancel-event nil)
-			(one-time nil))
+                      &key (call-back-script "")
+                      (pre-eval "")
+                      (eval-script "")
+                      (post-eval "")
+                      (cancel-event nil)
+                      (one-time nil))
   (let ((hook (format nil "~A:~A" (html-id obj) event))
-	(cd   (connection-data obj)))
+        (cd   (connection-data obj)))
     (if cd
-	(cond (handler
-	       (bind-event-script
-		obj event (format nil "~A~Aws.send('E:~A '~A)~A~@[~A~]~@[~A~]"
-				  pre-eval
-				  eval-script
-				  hook
-				  call-back-script
-				  post-eval
-				  (when one-time
-				    (format nil "; ~A.off('~A')"
-					    (jquery obj)
-					    event))
-				  (when cancel-event "; return false")))
-	       (setf (gethash hook cd) handler))
-	      (t
-	       (unbind-event-script obj event)
-	       (remhash hook cd)))
-	(format t "Attempt to set event on non-existant connection.~%"))))
+        (cond (handler
+                (bind-event-script
+                  obj event (format nil "~A~Aws.send('E:~A '~A)~A~@[~A~]~@[~A~]"
+                                    pre-eval
+                                    eval-script
+                                    hook
+                                    call-back-script
+                                    post-eval
+                                    (when one-time
+                                      (format nil "; ~A.off('~A')"
+                                              (jquery obj)
+                                              event))
+                                    (when cancel-event "; return false")))
+                (setf (gethash hook cd) handler))
+              (t
+                (unbind-event-script obj event)
+                (remhash hook cd)))
+        (format t "Attempt to set event on non-existant connection.~%"))))
 
 ;;;;;;;;;;;;;;
 ;; property ;;
@@ -399,15 +399,15 @@ result or if time out DEFAULT-ANSWER. see JQUERY-QUERY (Internal)"))
 
 (defmethod property ((obj clog-obj) property-name &key (default-answer nil))
   (jquery-query obj (format nil "prop('~A')" property-name)
-		:default-answer default-answer))
+                :default-answer default-answer))
 
 (defgeneric (setf property) (value clog-obj property-name)
   (:documentation "Set html property."))
 
 (defmethod (setf property) (value (obj clog-obj) property-name)
   (jquery-execute obj (format nil "prop('~A','~A')"
-			      property-name
-			      (escape-string value)))
+                              property-name
+                              (escape-string value)))
   value)
 
 ;;;;;;;;;;;;
@@ -502,15 +502,15 @@ The following default keys are set:
 
 (defmethod connection-data-item ((obj clog-obj) item-name)
   (ignore-errors
-   (gethash item-name (connection-data obj))))
+    (gethash item-name (connection-data obj))))
 
 (defgeneric (setf connection-data-item) (value clog-obj item-name)
   (:documentation "Set connection-data item-name with value."))
 
 (defmethod (setf connection-data-item) (value (obj clog-obj) item-name)
   (bordeaux-threads:with-lock-held ((connection-data-mutex obj))
-    (ignore-errors
-     (setf (gethash item-name (connection-data obj)) value)))
+                                   (ignore-errors
+                                     (setf (gethash item-name (connection-data obj)) value)))
   value)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -522,8 +522,8 @@ The following default keys are set:
 
 (defmethod remove-connection-data-item ((obj clog-obj) item-name)
   (bordeaux-threads:with-lock-held ((connection-data-mutex obj))
-    (ignore-errors
-     (remhash item-name (connection-data obj)))))
+                                   (ignore-errors
+                                     (remhash item-name (connection-data obj)))))
 
 ;;;;;;;;;;;;;;;;;;;;;
 ;; connection-body ;;
@@ -563,51 +563,51 @@ The following default keys are set:
   "Place at start of event to serialize access to the event. All events in
 an application share per connection the same queue of serialized events."
   `(bordeaux-threads:with-lock-held (,`(connection-sync ,clog-obj))
-     ,@body))
+                                    ,@body))
 
 ;;;;;;;;;;;;;;;;;;
 ;; set-on-event ;;
 ;;;;;;;;;;;;;;;;;;
 
 (defgeneric set-on-event (clog-obj event-name handler
-			  &key cancel-event one-time)
+                          &key cancel-event one-time)
   (:documentation "Set a HANDLER for EVENT-NAME on CLOG-OBJ. If handler is
 nil unbind all event handlers. (Internal)"))
 
 (defmethod set-on-event ((obj clog-obj) event-name handler
-			 &key
-			   (cancel-event nil)
-			   (one-time nil))
+                         &key
+                         (cancel-event nil)
+                         (one-time nil))
   (set-event obj event-name
-	     (when handler
-	       (lambda (data)
-		 (declare (ignore data))
-		 (funcall handler obj)))
-	     :cancel-event cancel-event
-	     :one-time     one-time))
+             (when handler
+               (lambda (data)
+                 (declare (ignore data))
+                 (funcall handler obj)))
+             :cancel-event cancel-event
+             :one-time     one-time))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; set-on-event-with-data ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defgeneric set-on-event-with-data (clog-obj event-name handler
-				    &key cancel-event one-time)
+                                    &key cancel-event one-time)
   (:documentation "Set a HANDLER for EVENT-NAME on CLOG-OBJ.
  If handler is nil unbind all event handlers. Handler is called with a data
 option passed from javascript calling the jQuery custom event mechanism
 .trigger('event_name', data) (Internal)"))
 
 (defmethod set-on-event-with-data ((obj clog-obj) event-name handler
-				   &key
-				     (cancel-event nil)
-				     (one-time     nil))
+                                   &key
+                                   (cancel-event nil)
+                                   (one-time     nil))
   (set-event obj event-name
-	     (when handler
-	       (lambda (data)
-		 (funcall handler obj data)))
-	     :call-back-script "+data"
-	     :cancel-event cancel-event
-	     :one-time     one-time))
+             (when handler
+               (lambda (data)
+                 (funcall handler obj data)))
+             :call-back-script "+data"
+             :cancel-event cancel-event
+             :one-time     one-time))
 
 ;;;;;;;;;;;;;;;;;;;
 ;; set-on-resize ;;
@@ -670,21 +670,21 @@ is nil unbind the event."))
 ;;;;;;;;;;;;;;;;;;;;;;;
 
 (defgeneric set-on-drag-start (clog-obj on-drag-start-handler
-			       &key drag-data drag-type)
+                               &key drag-data drag-type)
   (:documentation "Set the ON-DRAG-START-HANDLER for CLOG-OBJ.
 If ON-DRAG-START-HANDLER is nil unbind the event."))
 
 (defmethod set-on-drag-start ((obj clog-obj) handler
-			      &key (drag-data "") (drag-type "text/plain"))
+                              &key (drag-data "") (drag-type "text/plain"))
   (set-event obj "dragstart"
-	     (when handler
-	       (lambda (data)
-		 (declare (ignore data))
-		 (funcall handler obj)))
-	     :eval-script (format nil
-		 "e.originalEvent.dataTransfer.setData('~A','~A'); "
-				  drag-type
-				  drag-data)))
+             (when handler
+               (lambda (data)
+                 (declare (ignore data))
+                 (funcall handler obj)))
+             :eval-script (format nil
+                                  "e.originalEvent.dataTransfer.setData('~A','~A'); "
+                                  drag-type
+                                  drag-data)))
 
 ;;;;;;;;;;;;;;;;;
 ;; set-on-drag ;;
@@ -740,12 +740,12 @@ is nil unbind the event."))
 
 (defmethod set-on-drag-over ((obj clog-obj) handler)
   (set-event obj "dragover"
-	     (when handler
-	       (lambda (data)
-		 (declare (ignore data))
-		 (funcall handler obj)))
-	     :cancel-event t
-	     :eval-script "e.preventDefault(); "))
+             (when handler
+               (lambda (data)
+                 (declare (ignore data))
+                 (funcall handler obj)))
+             :cancel-event t
+             :eval-script "e.preventDefault(); "))
 
 ;;;;;;;;;;;;;;;;;
 ;; set-on-drop ;;
@@ -757,12 +757,12 @@ is nil unbind the event."))
 
 (defmethod set-on-drop ((obj clog-obj) handler &key (drag-type "text/plain"))
   (set-event obj "drop"
-	     (when handler
-	       (lambda (data)
-		 (funcall handler obj (parse-drop-event data))))
-	     :call-back-script (format nil drop-event-script drag-type)
-	     :eval-script "e.preventDefault(); "
-	     :cancel-event t))
+             (when handler
+               (lambda (data)
+                 (funcall handler obj (parse-drop-event data))))
+             :call-back-script (format nil drop-event-script drag-type)
+             :eval-script "e.preventDefault(); "
+             :cancel-event t))
 
 ;;;;;;;;;;;;;;;;;;;;;
 ;; set-on-focus-in ;;
@@ -797,11 +797,11 @@ this event is bound, you must call the form reset manually."))
 
 (defmethod set-on-reset ((obj clog-obj) handler)
   (set-event obj "reset"
-	     (when handler
-	       (lambda (data)
-		 (declare (ignore data))
-		 (funcall handler obj)))
-	     :cancel-event t))
+             (when handler
+               (lambda (data)
+                 (declare (ignore data))
+                 (funcall handler obj)))
+             :cancel-event t))
 
 ;;;;;;;;;;;;;;;;;;;
 ;; set-on-search ;;
@@ -837,31 +837,30 @@ form action to be run. See CLOG-Form SUBMIT for more details."))
 
 (defmethod set-on-submit ((obj clog-obj) handler)
   (set-event obj "submit"
-	     (when handler
-	       (lambda (data)
-		 (declare (ignore data))
-		 (funcall handler obj)))
-	     :cancel-event t))
+             (when handler
+               (lambda (data)
+                 (declare (ignore data))
+                 (funcall handler obj)))
+             :cancel-event t))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; set-on-context-menu ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defgeneric set-on-context-menu (clog-obj on-context-menu-handler
-				 &key one-time)
+(defgeneric set-on-context-menu (clog-obj on-context-menu-handler &key one-time)
   (:documentation "Set the ON-CONTEXT-MENU-HANDLER for CLOG-OBJ. If
 ON-CONTEXT-MENU-HANDLER is nil unbind the event. Setting
 on-mouse-right-click will replace this handler. If :ONE-TIME unbind
 event on right click."))
 
-(defmethod set-on-context-menu ((obj clog-obj) handler &key (one-time nil))
+(defmethod set-on-context-menu ((obj clog-obj) handler &key one-time)
   (set-event obj "contextmenu"
-	     (when handler
-	       (lambda (data)
-		 (declare (ignore data))
-		 (funcall handler obj)))
-	     :one-time one-time
-	     :cancel-event t))
+             (when handler
+               (lambda (data)
+                 (declare (ignore data))
+                 (funcall handler obj)))
+             :one-time one-time
+             :cancel-event t))
 
 ;;;;;;;;;;;;;;;;;;
 ;; set-on-click ;;
@@ -874,31 +873,31 @@ set. If :ONE-TIME unbind event on click."))
 
 (defmethod set-on-click ((obj clog-obj) handler &key one-time cancel-event)
   (set-event obj "click"
-	     (when handler
-	       (lambda (data)
-		 (declare (ignore data))
-		 (funcall handler obj)))
-	     :one-time one-time
-	     :cancel-event cancel-event))
+             (when handler
+               (lambda (data)
+                 (declare (ignore data))
+                 (funcall handler obj)))
+             :one-time one-time
+             :cancel-event cancel-event))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; set-on-double-click ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defgeneric set-on-double-click (clog-obj on-double-click-handler
-				 &key one-time cancel-event)
+                                 &key one-time cancel-event)
   (:documentation "Set the ON-DOUBLE-CLICK-HANDLER for CLOG-OBJ. If
 ON-DOUBLE-CLICK-HANDLER is nil unbind the event. Setting the
 on-mouse-double-click event will replace this handler."))
 
 (defmethod set-on-double-click ((obj clog-obj) handler &key one-time cancel-event)
   (set-event obj "dblclick"
-	     (when handler
-	       (lambda (data)
-		 (declare (ignore data))
-		 (funcall handler obj)))
-	     :one-time one-time
-	     :cancel-event cancel-event))
+             (when handler
+               (lambda (data)
+                 (declare (ignore data))
+                 (funcall handler obj)))
+             :one-time one-time
+             :cancel-event cancel-event))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;
 ;; set-on-mouse-click ;;
@@ -911,50 +910,50 @@ on an on-click event."))
 
 (defmethod set-on-mouse-click ((obj clog-obj) handler &key one-time cancel-event)
   (set-event obj "click"
-	     (when handler
-	       (lambda (data)
-		 (funcall handler obj (parse-mouse-event data))))
-	     :one-time one-time
-	     :cancel-event cancel-event
-	     :call-back-script mouse-event-script))
+             (when handler
+               (lambda (data)
+                 (funcall handler obj (parse-mouse-event data))))
+             :one-time one-time
+             :cancel-event cancel-event
+             :call-back-script mouse-event-script))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; set-on-mouse-double-click ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defgeneric set-on-mouse-double-click (clog-obj on-mouse-double-click-handler
-				       &key one-time)
+                                       &key one-time)
   (:documentation "Set the ON-MOUSE-DOUBLE-CLICK-HANDLER for CLOG-OBJ. If
 ON-MOUSE-DOUBLE-CLICK-HANDLER is nil unbind the event. Setting this event will
 replace on an on-double-click event."))
 
 (defmethod set-on-mouse-double-click ((obj clog-obj) handler &key (one-time nil))
   (set-event obj "dblclick"
-	     (when handler
-	       (lambda (data)
-		 (funcall handler obj (parse-mouse-event data))))
-	     :one-time one-time
-	     :call-back-script mouse-event-script))
+             (when handler
+               (lambda (data)
+                 (funcall handler obj (parse-mouse-event data))))
+             :one-time one-time
+             :call-back-script mouse-event-script))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; set-on-mouse-right-click ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defgeneric set-on-mouse-right-click (clog-obj on-mouse-right-click-handler
-				       &key one-time)
+                                      &key one-time)
   (:documentation "Set the ON-MOUSE-RIGHT-CLICK-HANDLER for CLOG-OBJ. If
 ON-MOUSE-RIGHT-CLICK-HANDLER is nil unbind the event. Setting this event will
 replace on an on-context-menu event."))
 
 (defmethod set-on-mouse-right-click ((obj clog-obj) handler
-				     &key (one-time nil))
+                                     &key (one-time nil))
   (set-event obj "contextmenu"
-	     (when handler
-	       (lambda (data)
-		 (funcall handler obj (parse-mouse-event data))))
-	     :one-time one-time
-	     :call-back-script mouse-event-script
-	     :cancel-event t))
+             (when handler
+               (lambda (data)
+                 (funcall handler obj (parse-mouse-event data))))
+             :one-time one-time
+             :call-back-script mouse-event-script
+             :cancel-event t))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;
 ;; set-on-mouse-enter ;;
@@ -1005,58 +1004,58 @@ If ON-MOUSE-OVER-HANDLER is nil unbind the event."))
 ;;;;;;;;;;;;;;;;;;;;;;;
 
 (defgeneric set-on-mouse-down (clog-obj on-mouse-down-handler
-			       &key one-time cancel-event)
+                               &key one-time cancel-event)
   (:documentation "Set the ON-MOUSE-DOWN-HANDLER for CLOG-OBJ. If
 ON-MOUSE-DOWN-HANDLER is nil unbind the event. If cancel-event is true event
 does not bubble."))
 
 (defmethod set-on-mouse-down ((obj clog-obj) handler
-			      &key (one-time nil) (cancel-event nil))
+                              &key (one-time nil) (cancel-event nil))
   (set-event obj "mousedown"
-	     (when handler
-	       (lambda (data)
-		 (funcall handler obj (parse-mouse-event data))))
-	     :one-time one-time
-	     :cancel-event cancel-event
-	     :call-back-script mouse-event-script))
+             (when handler
+               (lambda (data)
+                 (funcall handler obj (parse-mouse-event data))))
+             :one-time one-time
+             :cancel-event cancel-event
+             :call-back-script mouse-event-script))
 
 ;;;;;;;;;;;;;;;;;;;;;
 ;; set-on-mouse-up ;;
 ;;;;;;;;;;;;;;;;;;;;;
 
 (defgeneric set-on-mouse-up (clog-obj on-mouse-up-handler
-			     &key one-time cancel-event)
+                             &key one-time cancel-event)
   (:documentation "Set the ON-MOUSE-UP-HANDLER for CLOG-OBJ. If
 ON-MOUSE-UP-HANDLER is nil unbind the event."))
 
 (defmethod set-on-mouse-up ((obj clog-obj) handler
-			    &key (one-time nil) (cancel-event nil))
+                            &key (one-time nil) (cancel-event nil))
   (set-event obj "mouseup"
-	     (when handler
-	       (lambda (data)
-		 (funcall handler obj (parse-mouse-event data))))
-	     :one-time one-time
-	     :cancel-event cancel-event
-	     :call-back-script mouse-event-script))
+             (when handler
+               (lambda (data)
+                 (funcall handler obj (parse-mouse-event data))))
+             :one-time one-time
+             :cancel-event cancel-event
+             :call-back-script mouse-event-script))
 
 ;;;;;;;;;;;;;;;;;;;;;;;
 ;; set-on-mouse-move ;;
 ;;;;;;;;;;;;;;;;;;;;;;;
 
 (defgeneric set-on-mouse-move (clog-obj on-mouse-move-handler
-			       &key one-time cancel-event)
+                               &key one-time cancel-event)
   (:documentation "Set the ON-MOUSE-MOVE-HANDLER for CLOG-OBJ. If
 ON-MOUSE-MOVE-HANDLER is nil unbind the event."))
 
 (defmethod set-on-mouse-move ((obj clog-obj) handler
-			    &key (one-time nil) (cancel-event nil))
+                              &key (one-time nil) (cancel-event nil))
   (set-event obj "mousemove"
-	     (when handler
-	       (lambda (data)
-		 (funcall handler obj (parse-mouse-event data))))
-	     :one-time one-time
-	     :cancel-event cancel-event
-	     :call-back-script mouse-event-script))
+             (when handler
+               (lambda (data)
+                 (funcall handler obj (parse-mouse-event data))))
+             :one-time one-time
+             :cancel-event cancel-event
+             :call-back-script mouse-event-script))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; set-on-pointer-enter ;;
@@ -1107,132 +1106,132 @@ ON-MOUSE-MOVE-HANDLER is nil unbind the event."))
 ;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defgeneric set-on-pointer-down (clog-obj on-pointer-down-handler
-				 &key capture-pointer one-time cancel-event)
+                                 &key capture-pointer one-time cancel-event)
   (:documentation "Set the ON-POINTER-DOWN-HANDLER for CLOG-OBJ. If
 ON-POINTER-DOWN-HANDLER is nil unbind the event. If cancel event is t the
 even does not bubble."))
 
 (defmethod set-on-pointer-down ((obj clog-obj) handler
-				&key (capture-pointer nil)
-				  (one-time nil)
-				  (cancel-event nil))
+                                &key (capture-pointer nil)
+                                (one-time nil)
+                                (cancel-event nil))
   (set-event obj "pointerdown"
-	     (when handler
-	       (lambda (data)
-		 (funcall handler obj (parse-pointer-event data))))
-	     :post-eval (if capture-pointer
-			    (format nil "; ~A.setPointerCapture(e.pointerId)"
-				    (script-id obj))
-			    "")
-	     :one-time one-time
-	     :cancel-event cancel-event
-	     :call-back-script pointer-event-script))
+             (when handler
+               (lambda (data)
+                 (funcall handler obj (parse-pointer-event data))))
+             :post-eval (if capture-pointer
+                            (format nil "; ~A.setPointerCapture(e.pointerId)"
+                                    (script-id obj))
+                            "")
+             :one-time one-time
+             :cancel-event cancel-event
+             :call-back-script pointer-event-script))
 
 ;;;;;;;;;;;;;;;;;;;;;;;
 ;; set-on-pointer-up ;;
 ;;;;;;;;;;;;;;;;;;;;;;;
 
 (defgeneric set-on-pointer-up (clog-obj on-pointer-up-handler
-			       &key one-time cancel-event)
+                               &key one-time cancel-event)
   (:documentation "Set the ON-POINTER-UP-HANDLER for CLOG-OBJ. If
 ON-POINTER-UP-HANDLER is nil unbind the event."))
 
 (defmethod set-on-pointer-up ((obj clog-obj) handler
-			      &key (one-time nil) (cancel-event nil))
+                              &key (one-time nil) (cancel-event nil))
   (set-event obj "pointerup"
-	     (when handler
-	       (lambda (data)
-		 (funcall handler obj (parse-pointer-event data))))
-	     :post-eval (format nil "; ~A.releasePointerCapture(e.pointerId)"
-				(script-id obj))
-	     :one-time one-time
-	     :cancel-event cancel-event
-	     :call-back-script pointer-event-script))
+             (when handler
+               (lambda (data)
+                 (funcall handler obj (parse-pointer-event data))))
+             :post-eval (format nil "; ~A.releasePointerCapture(e.pointerId)"
+                                (script-id obj))
+             :one-time one-time
+             :cancel-event cancel-event
+             :call-back-script pointer-event-script))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; set-on-pointer-cancel ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defgeneric set-on-pointer-cancel (clog-obj on-pointer-cancel-handler
-				   &key one-time cancel-event)
+                                   &key one-time cancel-event)
   (:documentation "Set the ON-POINTER-CANCEL-HANDLER for CLOG-OBJ. If
 ON-POINTER-CANCEL-HANDLER is nil unbind the event."))
 
 (defmethod set-on-pointer-cancel ((obj clog-obj) handler
-			      &key (one-time nil) (cancel-event nil))
+                                  &key (one-time nil) (cancel-event nil))
   (set-event obj "pointercancel"
-	     (when handler
-	       (lambda (data)
-		 (funcall handler obj (parse-pointer-event data))))
-	     :post-eval (format nil "; ~A.releasePointerCapture(e.pointerId)"
-				(script-id obj))
-	     :one-time one-time
-	     :cancel-event cancel-event
-	     :call-back-script pointer-event-script))
+             (when handler
+               (lambda (data)
+                 (funcall handler obj (parse-pointer-event data))))
+             :post-eval (format nil "; ~A.releasePointerCapture(e.pointerId)"
+                                (script-id obj))
+             :one-time one-time
+             :cancel-event cancel-event
+             :call-back-script pointer-event-script))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; set-on-pointer-move ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defgeneric set-on-pointer-move (clog-obj on-pointer-move-handler
-				 &key one-time cancel-event)
+                                 &key one-time cancel-event)
   (:documentation "Set the ON-POINTER-MOVE-HANDLER for CLOG-OBJ. If
 ON-POINTER-MOVE-HANDLER is nil unbind the event."))
 
 (defmethod set-on-pointer-move ((obj clog-obj) handler
-				&key (one-time nil) (cancel-event nil))
+                                &key (one-time nil) (cancel-event nil))
   (set-event obj "pointermove"
-	     (when handler
-	       (lambda (data)
-		 (funcall handler obj (parse-pointer-event data))))
-	     :one-time one-time
-	     :cancel-event cancel-event
-	     :call-back-script pointer-event-script))
+             (when handler
+               (lambda (data)
+                 (funcall handler obj (parse-pointer-event data))))
+             :one-time one-time
+             :cancel-event cancel-event
+             :call-back-script pointer-event-script))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;
 ;; set-on-touch-start ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defgeneric set-on-touch-start (clog-obj on-touch-start-handler
-				&key one-time cancel-event)
+                                &key one-time cancel-event)
   (:documentation "Set the ON-TOUCH-START-HANDLER for CLOG-OBJ. If
 ON-TOUCH-START-HANDLER is nil unbind the event."))
 
 (defmethod set-on-touch-start ((obj clog-obj) handler
-			       &key (one-time nil) (cancel-event nil))
+                               &key (one-time nil) (cancel-event nil))
   (set-event obj "touchstart"
-	     (when handler
-	       (lambda (data)
-		 (funcall handler obj (parse-touch-event data))))
-	     :one-time one-time
-	     :cancel-event cancel-event
-	     :call-back-script touch-event-script))
+             (when handler
+               (lambda (data)
+                 (funcall handler obj (parse-touch-event data))))
+             :one-time one-time
+             :cancel-event cancel-event
+             :call-back-script touch-event-script))
 
 ;;;;;;;;;;;;;;;;;;;;;;;
 ;; set-on-touch-move ;;
 ;;;;;;;;;;;;;;;;;;;;;;;
 
 (defgeneric set-on-touch-move (clog-obj on-touch-move-handler
-			       &key one-time cancel-event)
+                               &key one-time cancel-event)
   (:documentation "Set the ON-TOUCH-MOVE-HANDLER for CLOG-OBJ. If
 ON-TOUCH-MOVE-HANDLER is nil unbind the event."))
 
 (defmethod set-on-touch-move ((obj clog-obj) handler
-			      &key (one-time nil) (cancel-event nil))
+                              &key (one-time nil) (cancel-event nil))
   (set-event obj "touchmove"
-	     (when handler
-	       (lambda (data)
-		 (funcall handler obj (parse-touch-event data))))
-	     :one-time one-time
-	     :cancel-event cancel-event
-	     :call-back-script touch-event-script))
+             (when handler
+               (lambda (data)
+                 (funcall handler obj (parse-touch-event data))))
+             :one-time one-time
+             :cancel-event cancel-event
+             :call-back-script touch-event-script))
 
 ;;;;;;;;;;;;;;;;;;;;;;
 ;; set-on-touch-end ;;
 ;;;;;;;;;;;;;;;;;;;;;;
 
 (defgeneric set-on-touch-end (clog-obj on-touch-end-handler
-			      &key one-time cancel-event)
+                              &key one-time cancel-event)
   (:documentation "Set the ON-TOUCH-END-HANDLER for CLOG-OBJ. If
 ON-TOUCH-END-HANDLER is nil unbind the event."))
 
@@ -1256,52 +1255,52 @@ ON-TOUCH-CANCEL-HANDLER is nil unbind the event."))
 
 (defmethod set-on-touch-cancel ((obj clog-obj) handler)
   (set-event obj "touchcancel"
-	     (when handler
-	       (lambda (data)
-		 (declare (ignore data))
-		 (funcall handler obj)))))
+             (when handler
+               (lambda (data)
+                 (declare (ignore data))
+                 (funcall handler obj)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;
 ;; set-on-character ;;
 ;;;;;;;;;;;;;;;;;;;;;;
 
 (defgeneric set-on-character (clog-obj on-character-handler
-			      &key one-time disable-default)
+                              &key one-time disable-default)
   (:documentation "Set the ON-CHARACTER-HANDLER for CLOG-OBJ. If
 ON-CHARACTER-HANDLER is nil unbind the event. If disable-default is t
 default key bindings in browser will not occur. Setting this event to
 nil will unbind on-key-press also."))
 
 (defmethod set-on-character ((obj clog-obj) handler
-			     &key (one-time nil) (disable-default nil))
+                             &key (one-time nil) (disable-default nil))
   (set-event obj "keypress"
-	     (when handler
-	       (lambda (data)
-	       (let ((f (parse-keyboard-event data)))
-		 (funcall handler obj (code-char (getf f :char-code))))))
-	     :one-time one-time
-	     :cancel-event disable-default
-	     :call-back-script keyboard-event-script))
+             (when handler
+               (lambda (data)
+                 (let ((f (parse-keyboard-event data)))
+                   (funcall handler obj (code-char (getf f :char-code))))))
+             :one-time one-time
+             :cancel-event disable-default
+             :call-back-script keyboard-event-script))
 
 ;;;;;;;;;;;;;;;;;;;;;
 ;; set-on-key-down ;;
 ;;;;;;;;;;;;;;;;;;;;;
 
 (defgeneric set-on-key-down (clog-obj on-key-down-handler
-			     &key one-time disable-default)
+                             &key one-time disable-default)
   (:documentation "Set the ON-KEY-DOWN-HANDLER for CLOG-OBJ. If
 disable-default is t default key bindings in browser will not occur.
 If ON-KEY-DOWN-HANDLER is nil unbind the event."))
 
 (defmethod set-on-key-down ((obj clog-obj) handler
-			    &key (one-time nil) (disable-default nil))
+                            &key (one-time nil) (disable-default nil))
   (set-event obj "keydown"
-	     (when handler
-	       (lambda (data)
-		 (funcall handler obj (parse-keyboard-event data))))
-	     :one-time one-time
-	     :cancel-event disable-default
-	     :call-back-script keyboard-event-script))
+             (when handler
+               (lambda (data)
+                 (funcall handler obj (parse-keyboard-event data))))
+             :one-time one-time
+             :cancel-event disable-default
+             :call-back-script keyboard-event-script))
 
 ;;;;;;;;;;;;;;;;;;;
 ;; set-on-key-up ;;
@@ -1313,30 +1312,30 @@ ON-KEY-UP-HANDLER is nil unbind the event."))
 
 (defmethod set-on-key-up ((obj clog-obj) handler &key (one-time nil))
   (set-event obj "keyup"
-	     (when handler
-	       (lambda (data)
-		 (funcall handler obj (parse-keyboard-event data))))
-	     :one-time one-time
-	     :call-back-script keyboard-event-script))
+             (when handler
+               (lambda (data)
+                 (funcall handler obj (parse-keyboard-event data))))
+             :one-time one-time
+             :call-back-script keyboard-event-script))
 
 ;;;;;;;;;;;;;;;;;;;;;;
 ;; set-on-key-press ;;
 ;;;;;;;;;;;;;;;;;;;;;;
 
 (defgeneric set-on-key-press (clog-obj on-key-press-handler
-			      &key one-time disable-default)
+                              &key one-time disable-default)
   (:documentation "Set the ON-KEY-PRESS-HANDLER for CLOG-OBJ. If
 ON-KEY-PRESS-HANDLER is nil unbind the event."))
 
 (defmethod set-on-key-press ((obj clog-obj) handler
-			     &key (one-time nil) (disable-default nil))
+                             &key (one-time nil) (disable-default nil))
   (set-event obj "keypress"
-	     (when handler
-	       (lambda (data)
-		 (funcall handler obj (parse-keyboard-event data))))
-	     :one-time one-time
-	     :cancel-event disable-default
-	     :call-back-script keyboard-event-script))
+             (when handler
+               (lambda (data)
+                 (funcall handler obj (parse-keyboard-event data))))
+             :one-time one-time
+             :cancel-event disable-default
+             :call-back-script keyboard-event-script))
 
 ;;;;;;;;;;;;;;;;;
 ;; set-on-copy ;;

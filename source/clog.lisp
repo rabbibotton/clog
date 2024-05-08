@@ -654,6 +654,7 @@ embedded in a native template application.)"
   (create-clog-tree      generic-function)
   (tree-root             generic-function)
   (indent-level          generic-function)
+  (content               generic-function)
 
   (clog-tree-item        class)
   (create-clog-tree-item generic-function)

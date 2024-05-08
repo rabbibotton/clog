@@ -82,6 +82,7 @@
 (defparameter *builder-menu-bar-drop-down-class* "w3-dropdown-content w3-bar-block w3-card-4")
 (defparameter *builder-menu-item-class* "w3-bar-item w3-blue-grey w3-button")
 (defparameter *builder-menu-window-select-class* "w3-grey w3-bar-item w3-button")
+(defparameter *builder-menu-context-item-class* "w3-button w3-bar")
 
 ;; Window treatements
 (defparameter *builder-title-class* "w3-blue-grey w3-round")
