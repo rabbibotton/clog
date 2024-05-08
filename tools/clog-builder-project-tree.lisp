@@ -124,6 +124,7 @@
                                                              (title (create-div menu :content disp))
                                                              (op    (create-div menu :content "Open" :class *builder-menu-context-item-class*))
                                                              (del   (create-div menu :content "Delete" :class *builder-menu-context-item-class*)))
+                                                        (declare (ignore title op))
                                                         (set-on-click menu (lambda (i)
                                                                              (declare (ignore i))
                                                                              (project-tree-select obj (format nil "~A" item)))
@@ -132,6 +133,7 @@
                                                                             (confirm-dialog i (format nil "Delete ~A?" disp)
                                                                                             (lambda (result)
                                                                                               (when result
+                                                                                                (uiop:delete-file-if-exists item)
                                                                                                 (destroy obj)))))
                                                                       :cancel-event t)
                                                         (set-on-mouse-leave menu (lambda (obj) (destroy obj)))))
