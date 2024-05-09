@@ -12,6 +12,7 @@
 (defun on-new-window (body)
   (handler-case   ; Disconnects from the browser can be handled gracefully using the condition system.
       (progn
+        (format t "Starting Game~%")
         (setf (title (html-document body)) "Tutorial 07")
         ;; Show a "splash" screen
         (setf (hiddenp (prog1
@@ -72,7 +73,8 @@
               (setf mover-y 0))
             (when (> mover-y bounds-y)
               (setf mover-y bounds-y))
-            (sleep .02))))
+            (sleep .02)))
+        (format t "Normal Disconnect~%"))
     (error (c)
       (format t "Lost connection.~%~%~A" c))))
 
