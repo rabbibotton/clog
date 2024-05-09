@@ -83,6 +83,7 @@ embedded in a native template application.)"
   (is-running-p      function)
   (shutdown          function)
   (debug-mode        function)
+  (open-file-with-os function)
   (open-browser      function))
 
 (defsection @clog-utilities (:title "CLOG Utilities")

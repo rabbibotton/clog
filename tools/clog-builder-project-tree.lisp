@@ -1,28 +1,32 @@
 (in-package :clog-tools)
 
-(defun project-tree-select (panel item)
+(defun project-tree-select (panel item &key method)
   (unless (equal item "")
     (cond ((and (> (length item) 5)
                 (equal (subseq item (- (length item) 5)) ".clog"))
-            (if *open-external*
+            (if (or (eq method :tab)
+                 (and (not (eq method :here)) *open-external*))
                 (on-new-builder-panel-ext panel :open-file item) ;; need ext for both
                 (on-new-builder-panel panel :open-file item)))
           (t
-            (if *open-external*
-                (on-open-file-ext panel :open-file item)
-                (progn
-                  (let ((win (on-open-file panel :open-file item)))
-                    (when *project-tree-sticky-open*
-                      (when win
-                        (set-geometry win
-                                      :top (menu-bar-height win)
-                                      :left 300
-                                      :height "" :width ""
-                                      :bottom 5 :right 0)
-                        (clog-ace:resize (window-param win))
-                        (set-on-window-move win (lambda (obj)
-                                                  (setf (width obj) (width obj))
-                                                  (setf (height obj) (height obj)))))))))))))
+            (if (eq method :emacs)
+                (swank:ed-in-emacs item)
+                (if (or (eq method :tab)
+                     (and (not (eq method :here)) *open-external*))
+                    (on-open-file-ext panel :open-file item)
+                    (progn
+                      (let ((win (on-open-file panel :open-file item)))
+                        (when *project-tree-sticky-open*
+                          (when win
+                            (set-geometry win
+                                          :top (menu-bar-height win)
+                                          :left 300
+                                          :height "" :width ""
+                                          :bottom 5 :right 0)
+                            (clog-ace:resize (window-param win))
+                            (set-on-window-move win (lambda (obj)
+                                                      (setf (width obj) (width obj))
+                                                      (setf (height obj) (height obj))))))))))))))
 
 (defun on-project-tree (obj &key project)
   (let ((app (connection-data-item obj "builder-app-data")))
@@ -123,11 +127,31 @@
                                                                                  :class *builder-window-desktop-class*))
                                                              (title (create-div menu :content disp))
                                                              (op    (create-div menu :content "Open" :class *builder-menu-context-item-class*))
+                                                             (oph   (create-div menu :content "Open this tab" :class *builder-menu-context-item-class*))
+                                                             (opt   (create-div menu :content "Open new tab" :class *builder-menu-context-item-class*))
+                                                             (ope   (create-div menu :content "Open emacs" :class *builder-menu-context-item-class*))
+                                                             (opo   (create-div menu :content "Open OS default" :class *builder-menu-context-item-class*))
                                                              (del   (create-div menu :content "Delete" :class *builder-menu-context-item-class*)))
                                                         (declare (ignore title op))
                                                         (set-on-click menu (lambda (i)
                                                                              (declare (ignore i))
                                                                              (project-tree-select obj (format nil "~A" item)))
+                                                                      :cancel-event t)
+                                                        (set-on-click oph (lambda (i)
+                                                                             (declare (ignore i))
+                                                                             (project-tree-select obj (format nil "~A" item) :method :here))
+                                                                      :cancel-event t)
+                                                        (set-on-click opt (lambda (i)
+                                                                             (declare (ignore i))
+                                                                             (project-tree-select obj (format nil "~A" item) :method :tab))
+                                                                      :cancel-event t)
+                                                        (set-on-click ope (lambda (i)
+                                                                             (declare (ignore i))
+                                                                             (project-tree-select obj (format nil "~A" item) :method :emacs))
+                                                                      :cancel-event t)
+                                                        (set-on-click opo (lambda (i)
+                                                                             (declare (ignore i))
+                                                                             (open-file-with-os item))
                                                                       :cancel-event t)
                                                         (set-on-click del (lambda (i)
                                                                             (confirm-dialog i (format nil "Delete ~A?" disp)

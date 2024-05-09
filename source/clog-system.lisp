@@ -180,6 +180,19 @@ BOOT-FILE will be used. If BOOT-FILE is nil path is removed."
   "Turn on browser console debugging for OBJ's connection."
   (clog-connection:debug-mode (connection-id obj)))
 
+;;;;;;;;;;;;;;;;;;;;;;;
+;; open-file-with-os ;;
+;;;;;;;;;;;;;;;;;;;;;;;
+
+(defun open-file-with-os (path)
+  "Open PATH using OS"
+  #+windows
+  (uiop:launch-program (list "explorer.exe" (uiop:native-namestring path)))
+  #+linux
+  (uiop:launch-program (list "xdg-open" (uiop:native-namestring path)))
+  #+darwin
+  (uiop:launch-program (list "open" (uiop:native-namestring path))))
+
 ;;;;;;;;;;;;;;;;;;
 ;; open-browser ;;
 ;;;;;;;;;;;;;;;;;;
@@ -187,7 +200,10 @@ BOOT-FILE will be used. If BOOT-FILE is nil path is removed."
 (defun open-browser (&key (url (format nil "http://127.0.0.1:~A" *clog-port*)))
   "Launch on os a web browser on local machine to URL. See OPEN-WINDOW
 for openning windows on remote machines."
-  (handler-case
-      (trivial-open-browser:open-browser url)
-    (error (c)
-      (format t "Unable to open browser.~%~%~A" c))))
+  #+windows
+  (uiop:launch-program (list "rundll32" "url.dll,FileProtocolHandler" url))
+  #+linux
+  (uiop:launch-program (list "xdg-open" url))
+  #+darwin
+  (uiop:launch-program (list "open" url)))
+
