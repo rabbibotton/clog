@@ -4,7 +4,7 @@
   "Open a shell"
   (let* ((*default-title-class*      *builder-title-class*)
          (*default-border-class*     *builder-border-class*)
-         (win (create-gui-window obj :title (format nil "OS Shell - ~A - ~A"
+         (win (create-gui-window obj :title (format nil "OS Pseudo Shell - ~A - ~A"
                                                     (uiop:operating-system)
                                                     (uiop:hostname))
                                      :top 40 :left 225

@@ -107,6 +107,22 @@
                                                               (project-tree-dir-select obj (format nil "~A" item)))
                                              :indent-level (1+ (indent-level node))
                                              :visible nil
+                                             :on-context-menu
+                                               (lambda (obj)
+                                                 (let* ((disp (text-value (content obj)))
+                                                        (menu (create-panel obj
+                                                                            :left (left obj) :top (top obj)
+                                                                            :width (width obj)
+                                                                            :class *builder-window-desktop-class*))
+                                                        (title (create-div menu :content disp))
+                                                        (op    (create-div menu :content "Toggle Open" :class *builder-menu-context-item-class*))
+                                                        (opo   (create-div menu :content "Open in OS" :class *builder-menu-context-item-class*)))
+                                                   (declare (ignore title op))
+                                                   (set-on-click opo (lambda (i)
+                                                                       (declare (ignore i))
+                                                                       (open-file-with-os item))
+                                                                 :cancel-event t)
+                                                   (set-on-mouse-leave menu (lambda (obj) (destroy obj)))))
                                              :content (first (last (pathname-directory item))))))
                        (dolist (item (sort (uiop:directory-files (directory-namestring dir))
                                            (lambda (a b)
