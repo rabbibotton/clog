@@ -10,7 +10,7 @@ COMMON-LISP "The Tutorial" Series
 
 * [Install Common-Lisp for MacOS](MACOS.md)
 * [Install Common-Lisp for Win64](WINDOWS.md)
-* [Install Common-Lisp for Linux](https://lisp-lang.org/learn/getting-started/)
+* [Install Common-Lisp for Linux](LINUX.md)
 * [Install Common-Lisp For Android (Termux)](ANDROID-TERMUX.md)
 
 For **Windows** users there is an easy install for full CL environment using

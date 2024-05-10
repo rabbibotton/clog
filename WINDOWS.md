@@ -1,6 +1,6 @@
 ## Installing Common Lisp on Windows 64bit from Scratch
 
-(For a simple non-emacs install see:
+(For a simple "one step" non-emacs install see:
    https://github.com/rabbibotton/clog-win64-ez/releases)
 
 1. Download and install rho-emacs:
@@ -88,6 +88,12 @@
 ```
    (ql:quickload :clog/tools)
    (clog-tools:clog-builder)
+```
+
+or at the command line:
+
+```
+run-builder
 ```
 
    [Learn about CLOG](README.md)

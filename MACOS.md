@@ -1,5 +1,8 @@
 ## Installing Common Lisp + Emacs + Slime on MacOS (all platforms)
 
+(If you do not want emacs skip steps 1,2,6,7 and 8 and just use the
+ CLOG Builder)
+
 1. Install Emacs for Mac OS from - https://emacsformacosx.com/
 
 2. [optional] Add Emacs to your system's path by creating a
@@ -55,6 +58,11 @@ using emacs (and if desire terminal version use emacs -nw) and then use M-x slim
    (clog-tools:clog-builder)
 ```
 
+or at the command line:
+
+```
+run-builder
+```
 
 Tip: If use emacs graphically, you may find it easier to set the
 apple command key to also act as a Meta key:

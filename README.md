@@ -61,7 +61,7 @@ is also know to work with the commercial Common Lisps as well.
 To install CLOG - install Common Lisp:
 
 * [Install Common-Lisp for MacOS](MACOS.md)
-* [Install Common-Lisp for Linux](https://lisp-lang.org/learn/getting-started/)
+* [Install Common-Lisp for Linux](LINUX.md)
 * [Install Common-Lisp For Android (Termux)](ANDROID-TERMUX.md)
 * [Install Common-Lisp for Win64](WINDOWS.md)
 
