@@ -60,6 +60,16 @@ Add to ~/.emacs.d/init.el
 start emacs
 
 M-x slime
+
+Install the UltraLisp distro for recent software for quicklisp:
+
+```
+(ql-dist:install-dist "http://dist.ultralisp.org/"
+                      :prompt nil)
+(ql:update-all-dists) ; run newest updates
+```
+
+Of course install CLOG an CLOG Builder for a rich GUI Lisp IDE
 ```
 (ql:quickload :clog)
 ```

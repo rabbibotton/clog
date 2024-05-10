@@ -1,5 +1,8 @@
 ## Installing Common Lisp on Windows 64bit from Scratch
 
+(For a simple non-emacs install see:
+   https://github.com/rabbibotton/clog-win64-ez/releases)
+
 1. Download and install rho-emacs:
 
    https://gchristensen.github.io/rho-emacs/
@@ -73,11 +76,18 @@
 ```
    Run Slime - M-x slime
 
-7. Install CLOG:
-8. 
+8. Install the UltraLisp distro for recent software for quicklisp:
+
 ```
-   (ql:quickload :clog)
-   (clog:run-demo 1)
+(ql-dist:install-dist "http://dist.ultralisp.org/"
+                      :prompt nil)
+(ql:update-all-dists) ; run newest updates
+```
+
+9. Of course install CLOG an CLOG Builder for a rich GUI Lisp IDE
+```
+   (ql:quickload :clog/tools)
+   (clog-tools:clog-builder)
 ```
 
    [Learn about CLOG](README.md)

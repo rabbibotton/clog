@@ -41,11 +41,20 @@ sbcl --eval '(ql:quickload :quicklisp-slime-helper)' --quit
 8. You can now start emacs graphically or if did option 2 from terminal
 using emacs (and if desire terminal version use emacs -nw) and then use M-x slime
 
-9. Install using slime CLOG:
+9. Install the UltraLisp distro for recent software for quicklisp:
+
 ```
-   (ql:quickload :clog)
-   (clog:run-demo 1)
+(ql-dist:install-dist "http://dist.ultralisp.org/"
+                      :prompt nil)
+(ql:update-all-dists) ; run newest updates
 ```
+
+10. Of course install CLOG an CLOG Builder for a rich GUI Lisp IDE
+```
+   (ql:quickload :clog/tools)
+   (clog-tools:clog-builder)
+```
+
 
 Tip: If use emacs graphically, you may find it easier to set the
 apple command key to also act as a Meta key:
