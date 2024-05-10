@@ -76,7 +76,7 @@ CLOG "The Framework" (Code Tutorials)
 - [04-tutorial.lisp](tutorial/04-tutorial.lisp) - The event target, reusing event handlers
 - [05-tutorial.lisp](tutorial/05-tutorial.lisp) - Using connection-data-item
 - [06-tutorial.lisp](tutorial/06-tutorial.lisp) - Tasking and events
-- [07-tutorial.lisp](tutorial/07-tutorial.lisp) - My first CLOG video game (and handling disconnects)
+- [07-tutorial.lisp](tutorial/07-tutorial.lisp) - My first CLOG video game
 - [08-tutorial.lisp](tutorial/08-tutorial.lisp) - Mice Love Containers
 - [09-tutorial.lisp](tutorial/09-tutorial.lisp) - Tabs, panels, and forms
 - [10-tutorial.lisp](tutorial/10-tutorial.lisp) - Canvas

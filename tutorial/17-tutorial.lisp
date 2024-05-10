@@ -7,7 +7,7 @@
 ;;; In this tutorial we will use a CSS only alternative to bootstrap -
 ;;;   https://www.w3schools.com/w3css/default.asp
 ;;;
-;;; It is also a demonstration of how various ways to use HTML Forms
+;;; It is also a demonstration of various ways to use HTML Forms
 (defun on-index (body)
   ;; Load css files
   (load-css (html-document body) "https://www.w3schools.com/w3css/4/w3.css")
@@ -29,7 +29,7 @@
                                           (create-label form1 :content "Enter name:")))
          (fsubmit    (create-form-element form1 :submit))
          (tmp        (create-br fcontainer))
-         (tmp (create-hr data-area))
+         (tmp        (create-hr data-area))
          ;; This is a traditional "get" form that will submit data
          ;; to a server.
          (fcontainer (create-div data-area :class "w3-container"))
@@ -40,7 +40,7 @@
                                           (create-label form2 :content "Enter name:")))
          (fsubmit    (create-form-element form2 :submit))
          (tmp        (create-br fcontainer))
-         (tmp (create-hr data-area))
+         (tmp        (create-hr data-area))
          ;; This is a file upload form that will submit data and files
          ;; to a server.
          (fcontainer (create-div data-area :class "w3-container"))
@@ -52,7 +52,7 @@
          (finput     (create-form-element form4 :file :name "filename"))
          (fsubmit    (create-form-element form4 :submit))
          (tmp        (create-br fcontainer))
-         (tmp (create-hr data-area))
+         (tmp        (create-hr data-area))
          ;; This is a CLOG style form, instead of submitting data
          ;; to another page it is dealt with in place.
          (fcontainer (create-div data-area :class "w3-container"))
@@ -63,9 +63,9 @@
                                           (create-label form3 :content "Enter name:")))
          (fsubmit3   (create-form-element form3 :submit))
          (tmp        (create-br fcontainer))
-         (tmp (create-hr data-area))
-         (footer (create-section body :footer :class "w3-container w3-theme"))
-         (tmp    (create-section footer :p :content "(c) All's well that ends well")))
+         (tmp        (create-hr data-area))
+         (footer     (create-section body :footer :class "w3-container w3-theme"))
+         (tmp        (create-section footer :p :content "(c) All's well that ends well")))
     (declare (ignore tmp) (ignore finput) (ignore fsubmit))
 
     (set-on-click fsubmit3

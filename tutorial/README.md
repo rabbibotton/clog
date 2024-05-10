@@ -32,7 +32,7 @@ Tutorial Summary
 - 04-tutorial.lisp - The event target, reusing event handlers
 - 05-tutorial.lisp - Using connection-data-item
 - 06-tutorial.lisp - Tasking and events
-- 07-tutorial.lisp - My first CLOG video game (and handling disconnects)
+- 07-tutorial.lisp - My first CLOG video game
 - 08-tutorial.lisp - Mice Love Containers
 - 09-tutorial.lisp - Tabs, pannels and forms
 - 10-tutorial.lisp - Canvas
