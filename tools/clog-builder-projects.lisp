@@ -21,7 +21,7 @@
                                      (setf (project-win app) nil)))))))
 
 (defun projects-load (fname)
-  (funcall (read-from-string "ql:quickload") fname))
+  (funcall (read-from-string "asdf:load-system") fname))
 
 (defun projects-list-local-systems ()
   (funcall (read-from-string "ql:list-local-systems")))
