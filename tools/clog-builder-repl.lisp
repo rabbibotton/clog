@@ -11,7 +11,7 @@
                                    nil))
     win))
 
-(defun on-repl (obj)
+(defun on-repl (obj &key package)
   "Open a REPL"
   (let* ((app (connection-data-item obj "builder-app-data"))
          (*default-title-class*      *builder-title-class*)
@@ -23,6 +23,8 @@
                                  :width 700 :height 480
                                  :client-movement *client-side-movement*))
          (repl (create-clog-builder-repl (window-content win))))
+    (when package
+      (setf (text-value (package-div repl)) package))
     (when *clog-repl-private-console*
       (let ((pcon (on-open-repl-console obj win)))
         (setf (window-param win) pcon)

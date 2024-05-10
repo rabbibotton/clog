@@ -1,6 +1,6 @@
 (in-package :clog-tools)
 
-(defun on-shell (obj)
+(defun on-shell (obj &key dir)
   "Open a shell"
   (let* ((*default-title-class*      *builder-title-class*)
          (*default-border-class*     *builder-border-class*)
@@ -10,6 +10,8 @@
                                      :top 40 :left 225
                                      :width 600 :height 400
                                      :client-movement *client-side-movement*)))
+    (when dir
+        (uiop:chdir (uiop:native-namestring dir)))
     (set-geometry (create-clog-builder-shell (window-content win))
                                             :units "%" :width 100 :height 100)))
 
