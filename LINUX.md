@@ -2,7 +2,7 @@
 
 (For emacs based Linux install - https://lisp-lang.org/learn/getting-started/)
 
-1. Install sbcl, emacs, sqlite and openssh (modify for your OS)
+1. Install sbcl, sqlite and openssh (modify for your OS)
 
 sudo apt-get install sbcl openssh-client libsqlite3-dev
 
