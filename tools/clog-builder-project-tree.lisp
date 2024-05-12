@@ -288,7 +288,7 @@
                                              (setf (text-value load-btn) "not loaded"))
                                            ((equalp (text-value load-btn) "not loaded")
                                             (load-proj (value projects))))))
-            (dolist (n (quicklisp:list-local-systems))
+            (dolist (n (sort (quicklisp:list-local-systems) #'string-lessp))
               (add-select-option projects n n :selected (equalp n project))
               (when (equalp n project)
                 (on-change projects)))
