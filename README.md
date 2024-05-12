@@ -132,7 +132,7 @@ CL-USER> (ql:quickload :clog) ; if not already loaded
 CL-USER> (clog:run-tutorial 1)
 ```
 
-Tip for Windows WSL linux user. Install "sudo apt install xdg-utils" to
+Tip for Windows WSL linux user. Install "sudo apt install xdg-utils wslu" to
 install xdg-open so that run-tutorial uses the windows browser.
 
 To see where the source, tutorial and demo files are:

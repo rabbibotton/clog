@@ -16,6 +16,7 @@
 (defpackage #:clog-tools
   (:use #:cl #:clog #:clog-gui #:clog-web)
   (:export :clog-builder
+           :clog-open
            :add-supported-controls
            :control-info
            :clog-db-admin))

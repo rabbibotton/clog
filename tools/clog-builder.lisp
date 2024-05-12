@@ -498,10 +498,6 @@ clog-builder window.")
                               (projects-load *start-project*))
                             (on-project-tree body :project *start-project*)
                             (when *start-dir*
-                              (when *start-project*
-                                (set-geometry (current-window body) :top 38 :left 5 :right "" :height "" :bottom 22)
-                                (set-geometry (current-window body) :height (height (current-window body))
-                                              :bottom (bottom (current-window body))))
                               (handler-case
                                   (on-dir-win body :dir *start-dir*)
                                 (error (msg)
@@ -509,7 +505,7 @@ clog-builder window.")
                                   (setf *start-dir* nil)))
                               (set-geometry (current-window body) :top 38 :left "" :right 5 :height "" :bottom 22)
                               (set-geometry (current-window body) :height (height (current-window body))
-                                            :bottom (bottom (current-window body))))))
+                                                                  :bottom (bottom (current-window body))))))
                         (set-on-before-unload (window body) (lambda(obj)
                                                               (declare (ignore obj))
                                                               ;; return empty string to prevent nav off page
@@ -522,6 +518,22 @@ clog-builder window.")
     (when (<= *app-mode* 0)
       (clog:shutdown)
       (uiop:quit))))
+
+(defun clog-open (&optional open-file)
+  (unless (is-running-p)
+    (clog-builder :app t :port 0 :start-browser nil)
+    (sleep 1))
+  (let* ((open-loc (if (and (> (length open-file) 5)
+                            (equal (subseq open-file (- (length open-file) 5)) ".clog"))
+                       "/panel-editor?open-panel"
+                       "/source-editor?open-file"))
+         (open-url  (format nil "~A=~A"
+                            open-loc (if (or (eq open-file nil)
+                                             (equal open-file ""))
+                                         "%20"
+                                         open-file))))
+    (format t "~%If browser does not start go to http://127.0.0.1:~A~A" clog:*clog-port* open-url)
+    (open-browser :url (format nil "http://127.0.0.1:~A~A" clog:*clog-port* open-url))))
 
 (defun clog-builder (&key (port 8080) (start-browser t)
                      app project dir static-root system clogframe)
