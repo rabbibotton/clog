@@ -289,7 +289,7 @@ clog-builder window.")
   (if *app-mode*
       (alert-dialog body
                     "Results of update will apear when completed.
-                     You may need to press ENTER on OS console window."
+                     You will need to close and update the build when done."
                     :title "CLOG Update")
       (alert-toast body
                    "CLOG Update"
