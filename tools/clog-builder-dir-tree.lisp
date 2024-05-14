@@ -9,15 +9,10 @@
                                          :keep-on-top t
                                          :client-movement *client-side-movement*))
          (root-dir    (create-form-element (window-content win) :text))
-         (panel       (create-panel (window-content win) :background-color :silver
-                                    :style "text-align:center;"
-                                    :class "w3-tiny"
-                                    :height 27 :top 30 :left 0 :right 0))
          (tree       (create-panel (window-content win)
                                    :class "w3-small"
                                    :overflow :scroll
-                                   :top 60 :bottom 0 :left 0 :right 0)))
-    (declare (ignore panel))
+                                   :top 30 :bottom 0 :left 0 :right 0)))
     (set-geometry win :top (menu-bar-height win) :left 0 :height "" :bottom 5 :right "")
     (setf (positioning root-dir) :absolute)
     (set-geometry root-dir :height 27 :width "100%" :top 0 :left 0 :right 0)
