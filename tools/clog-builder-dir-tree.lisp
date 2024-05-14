@@ -177,9 +177,9 @@
                (setf (text tree) "")
                (let* ((root (text-value root-dir))
                       (tname (truename root))
-                      (dir   (format nil "~A" (uiop:native-namestring (directory-namestring (if tname
-                                                                        tname
-                                                                        ""))))))
+                      (dir   (format nil "~A" (uiop:native-namestring (if tname
+                                                                          tname
+                                                                          "")))))
                  (setf (text-value root-dir) dir)
                  (create-clog-tree tree
                                    :fill-function (lambda (obj)
