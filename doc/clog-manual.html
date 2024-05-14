@@ -363,6 +363,13 @@ static file matching the requested path <code>ON-NEW-WINDOW-HANDLER</code> and
 
 <p>Turn on browser console debugging for <code>OBJ</code>'s connection.</p></li>
 </ul>
+<p><a id="x-28CLOG-3AOPEN-FILE-WITH-OS-20FUNCTION-29"></a>
+<a id="CLOG:OPEN-FILE-WITH-OS%20FUNCTION"></a></p>
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#CLOG:OPEN-FILE-WITH-OS%20FUNCTION" >OPEN-FILE-WITH-OS</a></span></span> <span class="locative-args">PATH</span></span></p>
+
+<p>Open <code>PATH</code> using OS</p></li>
+</ul>
 <p><a id="x-28CLOG-3AOPEN-BROWSER-20FUNCTION-29"></a>
 <a id="CLOG:OPEN-BROWSER%20FUNCTION"></a></p>
 <ul>
@@ -3808,7 +3815,7 @@ if <code>:HTML-ID</code> &quot;myid&quot; then the <code>HTML-ID</code> for cent
 <p><a id="x-28CLOG-3ACREATE-CLOG-TREE-20GENERIC-FUNCTION-29"></a>
 <a id="CLOG:CREATE-CLOG-TREE%20GENERIC-FUNCTION"></a></p>
 <ul>
-<li><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:CREATE-CLOG-TREE%20GENERIC-FUNCTION" >CREATE-CLOG-TREE</a></span></span> <span class="locative-args">OBJ &amp;KEY CONTENT INDENT-LEVEL NODE-HTML FILL-FUNCTION VISIBLE CLASS HTML-ID AUTO-PLACE</span></span></li>
+<li><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:CREATE-CLOG-TREE%20GENERIC-FUNCTION" >CREATE-CLOG-TREE</a></span></span> <span class="locative-args">OBJ &amp;KEY CONTENT INDENT-LEVEL NODE-HTML ON-CONTEXT-MENU FILL-FUNCTION VISIBLE CLASS HTML-ID AUTO-PLACE</span></span></li>
 </ul>
 <p><a id="x-28CLOG-3ATREE-ROOT-20GENERIC-FUNCTION-29"></a>
 <a id="CLOG:TREE-ROOT%20GENERIC-FUNCTION"></a></p>
@@ -3818,6 +3825,18 @@ if <code>:HTML-ID</code> &quot;myid&quot; then the <code>HTML-ID</code> for cent
 <p>Accessor for clog-tree root, create clog-tree-items
 on the tree-root or other clog-tree's.</p></li>
 </ul>
+<p><a id="x-28CLOG-3ATOGGLE-TREE-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG:TOGGLE-TREE%20GENERIC-FUNCTION"></a></p>
+<ul>
+<li><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:TOGGLE-TREE%20GENERIC-FUNCTION" >TOGGLE-TREE</a></span></span> <span class="locative-args">CLOG-TREE</span></span></li>
+</ul>
+<p><a id="x-28CLOG-3ATOGGLE-STATE-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG:TOGGLE-STATE%20GENERIC-FUNCTION"></a></p>
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:TOGGLE-STATE%20GENERIC-FUNCTION" >TOGGLE-STATE</a></span></span> <span class="locative-args">CLOG-TREE</span></span></p>
+
+<p>True if node is open.</p></li>
+</ul>
 <p><a id="x-28CLOG-3AINDENT-LEVEL-20GENERIC-FUNCTION-29"></a>
 <a id="CLOG:INDENT-LEVEL%20GENERIC-FUNCTION"></a></p>
 <ul>
@@ -3825,6 +3844,11 @@ on the tree-root or other clog-tree's.</p></li>
 
 <p>Accessor for clog-tree root, create clog-tree-items
 on the tree-root or other clog-tree's.</p></li>
+</ul>
+<p><a id="x-28CLOG-3ACONTENT-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG:CONTENT%20GENERIC-FUNCTION"></a></p>
+<ul>
+<li><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:CONTENT%20GENERIC-FUNCTION" >CONTENT</a></span></span> <span class="locative-args">OBJECT</span></span></li>
 </ul>
 <p><a id="x-28CLOG-3ACLOG-TREE-ITEM-20CLASS-29"></a>
 <a id="CLOG:CLOG-TREE-ITEM%20CLASS"></a></p>
@@ -3836,7 +3860,7 @@ on the tree-root or other clog-tree's.</p></li>
 <p><a id="x-28CLOG-3ACREATE-CLOG-TREE-ITEM-20GENERIC-FUNCTION-29"></a>
 <a id="CLOG:CREATE-CLOG-TREE-ITEM%20GENERIC-FUNCTION"></a></p>
 <ul>
-<li><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:CREATE-CLOG-TREE-ITEM%20GENERIC-FUNCTION" >CREATE-CLOG-TREE-ITEM</a></span></span> <span class="locative-args">OBJ &amp;KEY CONTENT INDENT-LEVEL NODE-HTML ON-CLICK CLASS HTML-ID AUTO-PLACE</span></span></li>
+<li><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:CREATE-CLOG-TREE-ITEM%20GENERIC-FUNCTION" >CREATE-CLOG-TREE-ITEM</a></span></span> <span class="locative-args">OBJ &amp;KEY CONTENT INDENT-LEVEL NODE-HTML ON-CLICK ON-CONTEXT-MENU CLASS HTML-ID AUTO-PLACE</span></span></li>
 </ul>
 <p><a id="x-28CLOG-3ATREE-ITEM-20GENERIC-FUNCTION-29"></a>
 <a id="CLOG:TREE-ITEM%20GENERIC-FUNCTION"></a></p>

@@ -73,9 +73,9 @@
 (defun projects-view-dir (panel)
   (let* ((sel (text-value (project-list panel))))
     (if (equal sel "None")
-        (on-dir-win panel)
+        (on-dir-tree panel)
         (let ((sys (asdf:find-system (format nil "~A" sel))))
-          (on-dir-win panel :dir (asdf:system-source-directory sys))))))
+          (on-dir-tree panel :dir (asdf:system-source-directory sys))))))
 
 (defun projects-run (panel)
   (let ((app (connection-data-item panel "builder-app-data"))

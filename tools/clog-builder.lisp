@@ -382,8 +382,8 @@ clog-builder window.")
                           ;; Menu -> Project
                           (create-gui-menu-item src   :content "Project Tree"                   :on-click 'on-project-tree)
                           (create-gui-menu-item src   :content "ASD Project Window"             :on-click 'on-show-project)
+                          (create-gui-menu-item src   :content "New Directory Tree"             :on-click 'on-dir-tree)
                           (create-gui-menu-item src   :content "New Project from template"      :on-click 'on-new-app-template)
-                          (create-gui-menu-item src   :content "New OS Directory Browser"       :on-click 'on-dir-win)
                           (create-gui-menu-item src   :content "New System Source Browser"      :on-click 'on-new-sys-browser)
                           (create-gui-menu-item src   :content "New Loaded ASDF System Browser" :on-click 'on-new-asdf-browser)
                           ;; Menu -> Tools
@@ -448,7 +448,7 @@ clog-builder window.")
                                                   (open-window (window body) "https://github.com/rabbibotton/clog/blob/main/LEARN.md")))
                           (create-gui-menu-item help  :content "Tutorials DIR"  :on-click
                                                 (lambda (obj)
-                                                  (on-dir-win obj :dir (merge-pathnames "./tutorial/"
+                                                  (on-dir-tree obj :dir (merge-pathnames "./tutorial/"
                                                                                         (asdf:system-source-directory :clog)))))
                           (create-gui-menu-item help  :content "ParenScript Reference" :on-click
                                                 (lambda (obj)
@@ -499,13 +499,10 @@ clog-builder window.")
                             (on-project-tree body :project *start-project*)
                             (when *start-dir*
                               (handler-case
-                                  (on-dir-win body :dir *start-dir*)
+                                  (on-dir-tree body :dir *start-dir*)
                                 (error (msg)
                                   (alert-toast body "Directory Error" (format nil "Unable to open directory ~A. ~A" *start-dir* msg))
-                                  (setf *start-dir* nil)))
-                              (set-geometry (current-window body) :top 38 :left "" :right 5 :height "" :bottom 22)
-                              (set-geometry (current-window body) :height (height (current-window body))
-                                                                  :bottom (bottom (current-window body))))))
+                                  (setf *start-dir* nil))))))
                         (set-on-before-unload (window body) (lambda(obj)
                                                               (declare (ignore obj))
                                                               ;; return empty string to prevent nav off page
@@ -537,12 +534,15 @@ clog-builder window.")
 
 (defun clog-builder (&key (port 8080) (start-browser t)
                      app project dir static-root system clogframe)
-  "Start clog-builder. When PORT is 0 choose a random port. When APP is
-t, shutdown applicatoin on termination of first window. If APP eq :BATCH then
-must specific default project :PROJECT and it will be batch rerendered
-and shutdown application. You can set the specific STATIC-ROOT or set SYSTEM
-to use that asdf system's static root. if DIR then the directory window
-instead of the project window will be displayed."
+  "Start clog-builder.
+  :PROJECT     - load ASDF Project, start its static root and set as current
+  :DIR         - Start with directory tree set to dir
+  :PORT        - default 8080, use 0 for random open port
+  :APP         - start in app mode shutdown application on termination
+                 If APP eq :BATCH then must specify the default project :PROJECT
+                   and it will be batch rerendered and shutdown after.
+  :STATIC-ROOT - set static-root dir manually.
+  :SYSTEM      - Use projects's asdf system's static root."
   (setf *preferances-file*
         (format nil "~A/preferences.lisp"
                 (merge-pathnames "tools"
@@ -555,8 +555,7 @@ instead of the project window will be displayed."
   (if project
       (progn
         (setf *start-project* (string-downcase (format nil "~A" project)))
-        (setf *start-dir* (format nil "~A" (asdf:system-source-directory project)))
-        (setf static-root (merge-pathnames "./www/" *start-dir*)))
+        (setf static-root (merge-pathnames "./www/" (format nil "~A" (asdf:system-source-directory project)))))
       (setf *start-project* nil))
   (when dir
     (setf *start-dir* dir))
@@ -598,7 +597,8 @@ instead of the project window will be displayed."
   (when start-browser
     (format t "~%If browser does not start go to http://127.0.0.1:~A/builder~%~%" port)
     (open-browser :url (format nil "http://127.0.0.1:~A/builder" port))))
-    
+
+#+windows    
 (in-package #:quicklisp-client)
 
 ;; patch, if-exists of :rename-and-delete does not work well on windows

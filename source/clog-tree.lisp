@@ -16,7 +16,9 @@
 (defclass clog-tree (clog-div)
   ((tree-root    :accessor tree-root)
    (indent-level :accessor indent-level)
-   (content      :accessor content))
+   (content      :accessor content)
+   (toggle-state :accessor toggle-state)
+   (toggle-func  :accessor toggle-func))
   (:documentation "CLOG-Tree object - a collapsible tree component"))
 
 (defgeneric tree-root (clog-tree)
@@ -26,6 +28,9 @@ on the tree-root or other clog-tree's."))
 (defgeneric indent-level (clog-tree)
   (:documentation "Accessor for clog-tree root, create clog-tree-items
 on the tree-root or other clog-tree's."))
+
+(defgeneric toggle-state (clog-tree)
+  (:documentation "True if node is open."))
 
 (defmethod create-clog-tree ((obj clog-obj) &key (content "")
                                                  (indent-level 0)
@@ -50,7 +55,7 @@ and when not visible (such as clicked to close) the children are destroyed."
     (setf (tree-root new-obj) (create-span header))
     (dotimes (n indent-level)
       (create-span new-obj :content "&nbsp;&nbsp;" :auto-place :top))
-    (flet ((toggle-tree ()
+    (flet ((toggle-me ()
              (cond (fill-function
                      (if visible
                          (setf (text (tree-root new-obj)) "")
@@ -60,18 +65,26 @@ and when not visible (such as clicked to close) the children are destroyed."
                      (if visible
                          (setf (hiddenp (tree-root new-obj)) t)
                          (setf (hiddenp (tree-root new-obj)) nil))
-                     (setf visible (not visible))))))
+                     (setf visible (not visible))))
+             (setf (toggle-state new-obj) visible)))
       (setf visible (not visible))
-      (toggle-tree)
+      (toggle-me)
+      (setf (toggle-func new-obj) #'toggle-me)
       (when on-context-menu
         (set-on-context-menu new-obj (lambda (obj)
                                        (declare (ignore))
                                        (funcall on-context-menu obj))))
       (set-on-click new-obj (lambda (obj)
                               (declare (ignore obj))
-                              (toggle-tree))
+                              (toggle-me))
                     :cancel-event t)) ; prevent event bubble up tree
     new-obj))
+
+(defmethod toggle-tree (clog-tree)
+  (:documentation "Toggle state of tree node"))
+
+(defmethod toggle-tree ((obj clog-tree))
+  (funcall (toggle-func obj)))
 
 (defclass clog-tree-item (clog-div)
   ((tree-item    :accessor tree-item)

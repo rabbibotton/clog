@@ -155,7 +155,7 @@
     (clog:set-on-click (dir-button panel)
                        (lambda (target)
                          (declare (ignorable target))
-                         (on-dir-win panel :dir
+                         (on-dir-tree panel :dir
                           (asdf:system-source-directory
                            (text-value (loaded-systems panel))))))
     panel))
