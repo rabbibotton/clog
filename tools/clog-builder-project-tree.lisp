@@ -184,11 +184,13 @@
                                                                              (open-file-with-os item))
                                                                       :cancel-event t)
                                                         (set-on-click del (lambda (i)
-                                                                            (confirm-dialog i (format nil "Delete ~A?" disp)
-                                                                                            (lambda (result)
-                                                                                              (when result
-                                                                                                (uiop:delete-file-if-exists item)
-                                                                                                (destroy obj)))))
+                                                                            (let* ((*default-title-class*      *builder-title-class*)
+                                                                                   (*default-border-class*     *builder-border-class*))
+                                                                              (confirm-dialog i (format nil "Delete ~A?" disp)
+                                                                                              (lambda (result)
+                                                                                                (when result
+                                                                                                  (uiop:delete-file-if-exists item)
+                                                                                                  (destroy obj))))))
                                                                       :cancel-event t)
                                                         (set-on-mouse-leave menu (lambda (obj) (destroy obj)))))
                                                   :on-click (lambda (obj)
@@ -268,12 +270,14 @@
                                               (let* ((*default-title-class*      *builder-title-class*)
                                                      (*default-border-class*     *builder-border-class*))
                                                 (setf (text-value load-btn) "loading")
-                                                (confirm-dialog win "Load project?"
-                                                                (lambda (answer)
-                                                                  (if answer
-                                                                      (load-proj sel)
-                                                                      (setf (text-value load-btn) "not loaded")))
-                                                                :title "System not loaded"))))
+                                                (let* ((*default-title-class*      *builder-title-class*)
+                                                       (*default-border-class*     *builder-border-class*))
+                                                  (confirm-dialog win "Load project?"
+                                                                  (lambda (answer)
+                                                                    (if answer
+                                                                        (load-proj sel)
+                                                                        (setf (text-value load-btn) "not loaded")))
+                                                                  :title "System not loaded")))))
                                         (setf entry-point (format nil "(~A)"
                                                                   (or (asdf/system:component-entry-point (asdf:find-system sel))
                                                                       ""))))
