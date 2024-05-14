@@ -181,10 +181,10 @@
                (declare (ignore obj))
                (setf (text tree) "")
                (let* ((root (text-value root-dir))
-                      (tname (uiop:truename* root))
-                      (dir   (format nil "~A" (directory-namestring (if tname
+                      (tname (truename root))
+                      (dir   (format nil "~A" (uiop:native-namestring (directory-namestring (if tname
                                                                         tname
-                                                                        "")))))
+                                                                        ""))))))
                  (setf (text-value root-dir) dir)
                  (create-clog-tree tree
                                    :fill-function (lambda (obj)
