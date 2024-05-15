@@ -58,7 +58,7 @@ CLOG is developed with ECL, CCL and SBCL, it is tested fairly
 regulary on Linux, Windows, Android, Rasperry Pi, and Mac. It
 is also know to work with the commercial Common Lisps as well.
 
-To install CLOG - install Common Lisp:
+To install Common Lisp and CLOG:
 
 * [Install Common-Lisp for MacOS](MACOS.md)
 * [Install Common-Lisp for Linux](LINUX.md)
