@@ -91,10 +91,11 @@
   (server-file-dialog function)
 
   "CLOG-GUI - Debugger"
-  (with-clog-debugger macro)
-  (one-of-dialog      function)
-  (dialog-in-stream   class)
-  (dialog-out-stream  class)
+  (with-clog-debugger    macro)
+  (one-of-dialog         function)
+  (dialog-in-stream      class)
+  (dialog-out-stream     class)
+  (*clog-debug-instance* variable)
 
   "CLOG-GUI - Look and Feel"
   (*menu-bar-class*           variable)
@@ -110,6 +111,10 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Default Settings
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; CLOG GUI based ebugger settings
+(defparameter *clog-debug-instance* nil
+              "Default location to open debugger windows")
 
 ;; Menus
 (defparameter *menu-bar-class* "w3-bar w3-black w3-card-4")
@@ -285,6 +290,8 @@ NOTE: use-clog-debugger should not be set for security issues
   (when jquery-ui
     (load-script (html-document clog-body) jquery-ui))
   (when (and use-clog-debugger (not clog-connection:*disable-clog-debugging*))
+    (unless *clog-debug-instance*
+      (setf *clog-debug-instance* clog-body))
     (setf (connection-data-item clog-body "clog-debug")
           (lambda (event data)
             (with-clog-debugger (clog-body :standard-output standard-output)

@@ -95,11 +95,15 @@
 
 (defun clog-repl (&key (clog-gui-initialize t)
 		    (clog-web-initialize t)
+		    (use-clog-debugger nil)
 		    (boot-file "/debug.html")
 		    (port 8080))
   "Set a path /repl that opens a blank page and sets the global
 clog-user:*body* to last window openned to /repl. Debug mode is
-set (logging to browser console) in the default debug.html boot-file."
+set (logging to browser console) in the default debug.html boot-file.
+clog-web and clog-gui are initialized and if use-clog-debugger it set to
+true it is initialized and this repl window used as default clog debug display
+and debugger display for clog events."
   (unless *clog-running*
     (initialize nil :boot-file boot-file :port port))
   (set-on-new-window (lambda (body)
@@ -107,7 +111,8 @@ set (logging to browser console) in the default debug.html boot-file."
                        (when clog-web-initialize
                          (clog-web:clog-web-initialize body))
                        (when clog-gui-initialize
-                         (clog-gui:clog-gui-initialize body))
+                         (clog-gui:clog-gui-initialize body :use-clog-debugger
+                                                             use-clog-debugger))
                        (setf clog-user::*body* body))
                      :path "/repl")
   (open-browser :url (format nil "http://127.0.0.1:~A/repl" *clog-port*))

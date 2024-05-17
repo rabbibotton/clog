@@ -510,6 +510,8 @@ clog-builder window.")
     (when *app-mode*
       (incf *app-mode*))
     (run body))
+  (when (eq *clog-debug-instance* body)
+    (setf *clog-debug-instance* nil))
   (when *app-mode*
     (decf *app-mode*)
     (when (<= *app-mode* 0)
