@@ -1,6 +1,6 @@
 ## Installing Common Lisp + Emacs + Slime on MacOS (all platforms)
 
-(If you do not want emacs skip steps 1,2,6,7 and 8 and just use the
+(If you do not want emacs skip steps 1,2,6, and 7 and just use the
  CLOG Builder)
 
 1. Install Emacs for Mac OS from - https://emacsformacosx.com/
@@ -41,28 +41,20 @@ sbcl --eval '(ql:quickload :quicklisp-slime-helper)' --quit
 (setq inferior-lisp-program "sbcl")
 ```
 
-8. You can now start emacs graphically or if did option 2 from terminal
+8. Install the UltraLisp distro for recent software for quicklisp:
+
+```
+sbcl --eval '(ql-dist:install-dist "http://dist.ultralisp.org/" :prompt nil)' --eval '(ql:update-all-dists)' --quit
+```
+
+9. Install CLOG and run CLOG Builder for a rich GUI Lisp IDE that works with emacs also:
+
+```
+sbcl --eval '(ql:quickload :clog/tools)' --eval '(clog-tools:clog-builder)'
+```
+
+10. You can now start emacs graphically or if did option 2 from terminal
 using emacs (and if desire terminal version use emacs -nw) and then use M-x slime
-
-9. Install the UltraLisp distro for recent software for quicklisp:
-
-```
-(ql-dist:install-dist "http://dist.ultralisp.org/"
-                      :prompt nil)
-(ql:update-all-dists) ; run newest updates
-```
-
-10. Of course install CLOG an CLOG Builder for a rich GUI Lisp IDE
-```
-   (ql:quickload :clog/tools)
-   (clog-tools:clog-builder)
-```
-
-or at the command line:
-
-```
-run-builder
-```
 
 Tip: If use emacs graphically, you may find it easier to set the
 apple command key to also act as a Meta key:

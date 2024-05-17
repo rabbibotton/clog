@@ -65,7 +65,19 @@
   (setq inferior-lisp-program "sbcl")
 ```
 
-7. Restart Emacs
+9. Install the UltraLisp distro for recent software for quicklisp:
+
+```
+sbcl --eval '(ql-dist:install-dist "http://dist.ultralisp.org/" :prompt nil)' --eval '(ql:update-all-dists)' --quit
+```
+
+10. Install CLOG and run CLOG Builder for a rich GUI Lisp IDE that works with emacs also:
+
+```
+sbcl --eval '(ql:quickload :clog/tools)' --eval '(clog-tools:clog-builder)'
+```
+
+11. Restart Emacs
 
    Quit emacs - C-x C-y
 
@@ -76,25 +88,6 @@
 ```
    Run Slime - M-x slime
 
-8. Install the UltraLisp distro for recent software for quicklisp:
-
-```
-(ql-dist:install-dist "http://dist.ultralisp.org/"
-                      :prompt nil)
-(ql:update-all-dists) ; run newest updates
-```
-
-9. Of course install CLOG an CLOG Builder for a rich GUI Lisp IDE
-```
-   (ql:quickload :clog/tools)
-   (clog-tools:clog-builder)
-```
-
-or at the command line:
-
-```
-run-builder
-```
 
    [Learn about CLOG](README.md)
    [Learn Common-Lisp](LEARN.md)

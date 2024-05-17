@@ -57,27 +57,27 @@ Add to ~/.emacs.d/init.el
 (setq inferior-lisp-program "sbcl")
 ```
 
+Install the UltraLisp distro for recent software for quicklisp:
+
+```
+sbcl --eval '(ql-dist:install-dist "http://dist.ultralisp.org/" :prompt nil)' --eval '(ql:update-all-dists)' --quit
+```
+
+Install CLOG and CLOG Builder for a rich GUI Lisp IDE that works with emacs
+and on Android also:
+
+```
+sbcl --eval '(ql:quickload :clog/tools)' --quit
+```
+
 start emacs
 
 M-x slime
 
-Install the UltraLisp distro for recent software for quicklisp:
-
+Run builder with CLOG Builder for a rich GUI Lisp IDE
 ```
-(ql-dist:install-dist "http://dist.ultralisp.org/"
-                      :prompt nil)
-(ql:update-all-dists) ; run newest updates
+(ql:quickload :clog/tools) (clog-tools:clog-builder)
 ```
 
-Of course install CLOG an CLOG Builder for a rich GUI Lisp IDE
-```
-(ql:quickload :clog)
-```
-
-A failure will occur for sqlite on sbcl, choose {use-value}
+A failure will occur for sqlite on sbcl, either ignore or choose {use-value}
 ("/data/data/com.termux/files/usr/lib/libsqlite3.so")
-
-```
-(ql:quickload :clog/tools)
-(clog-tools:clog-builder)
-```

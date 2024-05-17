@@ -18,22 +18,13 @@ sbcl --no-sysinit --no-userinit --load /tmp/ql.lisp \
 3. Run SBCL and install the UltraLisp distro for recent software for quicklisp:
 
 ```
-(ql-dist:install-dist "http://dist.ultralisp.org/"
-                      :prompt nil)
-(ql:update-all-dists) ; run newest updates
+sbcl --eval '(ql-dist:install-dist "http://dist.ultralisp.org/" :prompt nil)' --eval '(ql:update-all-dists)'
 ```
 
-4. Install and run CLOG Builder for a rich GUI Lisp IDE either with:
+4. Install and run CLOG Builder for a rich GUI Lisp IDE with:
 
 ```
-   (ql:quickload :clog/tools)
-   (clog-tools:clog-builder)
-```
-
-or at the command line:
-
-```
-run-builder
+sbcl --eval '(ql:quickload :clog/tools)' --eval '(clog-tools:clog-builder)'
 ```
 
 -  [Learn about CLOG](README.md)
