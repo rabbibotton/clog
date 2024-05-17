@@ -290,7 +290,9 @@ NOTE: use-clog-debugger should not be set for security issues
   (when jquery-ui
     (load-script (html-document clog-body) jquery-ui))
   (when (and use-clog-debugger (not clog-connection:*disable-clog-debugging*))
-    (unless *clog-debug-instance*
+    (unless (or *clog-debug-instance*
+                (when (and (typep *clog-debug-instance* 'clog-obj)
+                           (validp *clog-debug-instance*))))
       (setf *clog-debug-instance* clog-body))
     (setf (connection-data-item clog-body "clog-debug")
           (lambda (event data)
