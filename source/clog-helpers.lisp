@@ -11,7 +11,7 @@
 
 (defpackage #:clog-user
   (:use #:cl #:clog #:clog-gui #:clog-web)
-  (:export :*body*))
+  (:export :*body* :clog-repl))
 
 (defpackage #:clog-tools
   (:use #:cl #:clog #:clog-gui #:clog-web)
