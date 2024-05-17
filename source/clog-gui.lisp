@@ -95,6 +95,7 @@
   (one-of-dialog         function)
   (dialog-in-stream      class)
   (dialog-out-stream     class)
+  (clog-break            function)
   (*clog-debug-instance* variable)
 
   "CLOG-GUI - Look and Feel"
@@ -244,6 +245,29 @@
                                       *debugger-hook*
                                       #'my-debugger)))
           ,@body)))))
+
+;;;;;;;;;;;;;;;;
+;; clog-break ;;
+;;;;;;;;;;;;;;;;
+
+(defun clog-break (&key clog-body run (modal t))
+  "Stop execution, funcall run with CLOG-BODY. If CLOG-BODY not set use
+*clog-debug-instance*. Then confirm continue execution on current thread."
+  (unless clog-body
+    (setf clog-body *clog-debug-instance*))
+  (when run
+    (funcall run clog-body))
+  (when (validp clog-body)
+    (confirm-dialog clog-body
+                    (format nil "Continue thread ~A ?"
+                            (bordeaux-threads:thread-name
+                              (bordeaux-threads:current-thread)))
+                    (lambda (result)
+                      (unless result
+                        (break)))
+                    :time-out 600
+                    :modal modal
+                    :title "clog-break in execution")))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; clog-gui-initialize ;;
