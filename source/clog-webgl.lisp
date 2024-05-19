@@ -632,7 +632,7 @@ be executed as quickly as possible"))
 
 (defmethod frame-buffer-texture-2d ((obj clog-webgl) target attachment
                                     textarget texture level)
-    (execute obj (format nil "framebufferTexture2D(~A.~A,~A.~A,~A.~A,~A~A)"
+    (execute obj (format nil "framebufferTexture2D(~A.~A,~A.~A,~A.~A,~A,~A)"
                        (script-id obj) target
                        (script-id obj) attachment
                        (script-id obj) textarget
