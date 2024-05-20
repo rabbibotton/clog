@@ -72,7 +72,8 @@
                      left top
                      (editor-use-console-for-evals *editor-use-console-for-evals*)
                      has-time-out
-                     maximized)
+                     maximized
+                     (closer-html "&times;"))
   "Open a new text editor"
   (let ((win (window-to-top-by-title obj open-file)))
     (when win
@@ -98,6 +99,7 @@
                                      :width 700 :height 480
                                      :has-pinner is-console
                                      :keep-on-top is-console
+                                     :closer-html closer-html
                                      :client-movement *client-side-movement*))
              (box (create-panel-box-layout (window-content win)
                                            :left-width 0 :right-width 0

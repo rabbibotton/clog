@@ -269,6 +269,7 @@
                     :modal modal
                     :title "clog-break in execution")))
 
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; clog-gui-initialize ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -978,6 +979,7 @@ The on-window-change clog-obj received is the new window"))
                                           hide-title-bar
                                           drag-client-area
                                           has-pinner
+                                          closer-html
                                           keep-on-top
                                           window-param
                                           hidden
@@ -1007,6 +1009,7 @@ window-to-top-by-param or window-by-param."))
                                                (hide-title-bar nil)
                                                (drag-client-area nil)
                                                (has-pinner nil)
+                                               (closer-html "&times;")
                                                (keep-on-top nil)
                                                (window-param nil)
                                                (hidden nil)
@@ -1046,7 +1049,7 @@ window-to-top-by-param or window-by-param."))
                       style='position:absolute;top:0;right:20px;left:5px;
                              user-select:none;cursor:move;'>~A</span>~A
                     <span id='~A-closer'
-                      style='position:absolute;top:0;right:5px;cursor:pointer;user-select:none;'>&times;</span>
+                      style='position:absolute;top:0;right:5px;cursor:pointer;user-select:none;'>~A</span>
                   </div>
                   <div id='~A-body' ~A style='position:absolute;top:25px;left:0;right:0;bottom:3px;overflow:auto'>~A</div>
                   <div id='~A-sizer' style='position:absolute;right:0;bottom:0;left:0;user-select:none;height:3px;
@@ -1064,6 +1067,7 @@ window-to-top-by-param or window-by-param."))
                  ~A</span><span>&nbsp;&nbsp;&nbsp;</span>" html-id (code-char 9744))
                 "")
             html-id                                     ; closer
+            closer-html
             html-id
             (if drag-client-area
                 (format nil "data-drag-obj='~A' data-drag-type='m'" html-id)
