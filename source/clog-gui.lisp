@@ -972,11 +972,11 @@ The on-window-change clog-obj received is the new window"))
           (setf (drag-y app) (- pointer-y obj-top))
           (setf (drag-x app) (- pointer-x obj-left)))
         (cond (perform-drag
-               (set-on-pointer-move obj 'on-gui-drag-move)
-	       (set-on-pointer-cancel obj 'on-gui-drag-stop)
-               (set-on-pointer-up obj 'on-gui-drag-stop))
+                (set-on-pointer-move obj 'on-gui-drag-move)
+                (set-on-pointer-cancel obj 'on-gui-drag-stop)
+                (set-on-pointer-up obj 'on-gui-drag-stop))
               (t
-               (setf (in-drag app) nil)))))))
+                (setf (in-drag app) nil)))))))
 
 ;;;;;;;;;;;;;;;;;;;;;;
 ;; on-gui-drag-move ;;
@@ -1076,8 +1076,9 @@ window-to-top-by-param or window-by-param."))
                                                (html-id nil))
   (let ((app (connection-data-item obj "clog-gui"))
         (body (connection-body obj)))
-    (unless html-id
-      (setf html-id (format nil "~A" (generate-id))))
+    (if html-id
+        (setf html-id (format nil "~A" html-id))
+        (setf html-id (format nil "~A" (generate-id))))
     (when (eql (hash-table-count (windows app)) 0)
       ;; If previously no open windows reset default position
       (setf (last-x app) 0)
