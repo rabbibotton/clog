@@ -281,18 +281,20 @@
 ;;;;;;;;;;;;;;;;
 
 (defmacro clog-probe (symbol &key clog-body
-                                  (symbol-title "")
+                                  (title "")
                                   (time-out 600)
+                                  auto-probe
                                   (modal t))
   "Pause thread of execution for time-out numnber of seconds or nil to not
 block execution, display symbol's value, value is changed if OK pressed at
 the moment pressed. When time-out is nil, :q quits the probe and cancel
 repeats the probe with out changing value. When time-out is nil modal is
-always nil."
+always nil. If auto-probe is set, modal and time-out is set to nil and the
+probe is run again in auto-probe seconds."
   `(let ((body (or ,clog-body
                    *clog-debug-instance*)))
      (when (validp body)
-       (if ,time-out
+       (if (and ,time-out (not ,auto-probe))
            (input-dialog body
                          (format nil "Probe in thread ~A : ~A New Value?"
                                  (bordeaux-threads:thread-name
@@ -305,7 +307,7 @@ always nil."
                          :width 400
                          :height 300
                          :modal ,modal
-                         :title (format nil "clog-probe ~A" ,symbol-title))
+                         :title (format nil "clog-probe ~A" ,title))
            (bordeaux-threads:make-thread
              (lambda ()
                (loop
@@ -317,14 +319,14 @@ always nil."
                                              (if (equalp result ":q")
                                                  :q
                                                  (setf ,symbol (eval (read-from-string result))))))
-                                         :time-out 999
+                                         :time-out (or ,auto-probe 999)
                                          :width 400
                                          :height 300
                                          :modal nil
-                                         :title (format nil "clog-probe ~A" ,symbol-title))
+                                         :title (format nil "clog-probe ~A" ,title))
                            :q)
                    (return))))
-             :name (format nil "clog-probe ~A" ,symbol-title))))))
+             :name (format nil "clog-probe ~A" ,title))))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; clog-gui-initialize ;;
