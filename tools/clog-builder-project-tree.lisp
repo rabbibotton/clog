@@ -40,6 +40,7 @@
         (window-focus (project-tree-win app))
         (let* ((*default-title-class*      *builder-title-class*)
                (*default-border-class*     *builder-border-class*)
+               (entry-point "")
                (win         (create-gui-window obj :title "Project Tree"
                                                :width 300
                                                :has-pinner t
@@ -51,10 +52,10 @@
                                           :class "w3-tiny"
                                           :height 27 :top 30 :left 0 :right 0))
                (load-btn    (create-button panel :content "no project" :style "height:27px;width:72px"))
-               (run-btn     (create-button panel :content "run" :style "height:27px;width:72px"))
-               (entry-point "")
-               (filter-btn (create-button panel :content "filter" :style "height:27px;width:72px"))
-               (asd-btn    (create-button panel :content "asd edit" :style "height:27px;width:72px"))
+               (run-btn     (create-button panel :content "run" :style "height:27px;width:67px"))
+               (filter-btn  (create-button panel :content "filter" :style "height:27px;width:67px"))
+               (asd-btn     (create-button panel :content "asd edit" :style "height:27px;width:67px"))
+               (refresh-btn (create-button panel :content "&#8635;" :style "height:27px;width:22px"))
                (tree       (create-panel (window-content win)
                                          :class "w3-small"
                                          :overflow :scroll
@@ -285,7 +286,14 @@
                                       (t
                                         (setf entry-point "")
                                         (setf (current-project app) nil)
-                                        (setf (text-value load-btn) "no project")))))))))
+                                        (setf (text-value load-btn) "no project"))))))))
+                   (fill-projects ()
+                     (setf (text projects) "")
+                     (dolist (n (sort (quicklisp:list-local-systems) #'string-lessp))
+                       (add-select-option projects n n :selected (equalp n (current-project app)))
+                       (when (equalp n (current-project app))
+                         (on-change (current-project app))))
+                     (add-select-option projects "" "Select Project" :selected (not (current-project app)))))
             (set-on-click load-btn (lambda (obj)
                                      (declare (ignore obj))
                                      (cond ((equalp (text-value load-btn) "loaded")
@@ -293,9 +301,8 @@
                                              (setf (text-value load-btn) "not loaded"))
                                            ((equalp (text-value load-btn) "not loaded")
                                             (load-proj (value projects))))))
-            (dolist (n (sort (quicklisp:list-local-systems) #'string-lessp))
-              (add-select-option projects n n :selected (equalp n project))
-              (when (equalp n project)
-                (on-change projects)))
-            (add-select-option projects "" "Select Project" :selected (not project))
+            (set-on-click refresh-btn (lambda (obj)
+                                        (declare (ignore obj))
+                                        (fill-projects)))
+            (fill-projects)
             (set-on-change projects #'on-change))))))
