@@ -96,6 +96,7 @@
   (dialog-in-stream      class)
   (dialog-out-stream     class)
   (clog-break            function)
+  (clog-probe            function)
   (*clog-debug-instance* variable)
 
   "CLOG-GUI - Look and Feel"
@@ -222,7 +223,10 @@
 ;; with-clog-debugger ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defmacro with-clog-debugger ((clog-obj &key title standard-output) &body body)
+(defmacro with-clog-debugger ((clog-obj &key title
+                                             standard-output
+                                             standard-input)
+                              &body body)
   "body uses a clog-gui based debugger instead of the console"
   `(with-open-stream (out-stream (make-instance 'dialog-out-stream))
     (with-open-stream (in-stream (make-instance 'dialog-in-stream :clog-obj ,clog-obj :source out-stream))
@@ -240,6 +244,8 @@
                      nil))))
         (let* ((*standard-output* (or ,standard-output
                                       *standard-output*))
+               (*standard-input* (or ,standard-input
+                                      *standard-input*))
                (*query-io*        (make-two-way-stream in-stream out-stream))
                (*debugger-hook*   (if clog-connection:*disable-clog-debugging*
                                       *debugger-hook*
@@ -265,10 +271,60 @@
                     (lambda (result)
                       (unless result
                         (break)))
+                    :width 400
                     :time-out 600
                     :modal modal
                     :title "clog-break in execution")))
 
+;;;;;;;;;;;;;;;;
+;; clog-probe ;;
+;;;;;;;;;;;;;;;;
+
+(defmacro clog-probe (symbol &key clog-body
+                                  (symbol-title "")
+                                  (time-out 600)
+                                  (modal t))
+  "Pause thread of execution for time-out numnber of seconds or nil to not
+block execution, display symbol's value, value is changed if OK pressed at
+the moment pressed. When time-out is nil, :q quits the probe and cancel
+repeats the probe with out changing value. When time-out is nil modal is
+always nil."
+  `(let ((body (or ,clog-body
+                   *clog-debug-instance*)))
+     (when (validp body)
+       (if ,time-out
+           (input-dialog body
+                         (format nil "Probe in thread ~A : ~A New Value?"
+                                 (bordeaux-threads:thread-name
+                                   (bordeaux-threads:current-thread))
+                                 ,symbol)
+                         (lambda (result)
+                           (when result
+                             (setf ,symbol (eval (read-from-string result)))))
+                         :time-out ,time-out
+                         :width 400
+                         :height 300
+                         :modal ,modal
+                         :title (format nil "clog-probe ~A" ,symbol-title))
+           (bordeaux-threads:make-thread
+             (lambda ()
+               (loop
+                 (when (eq (input-dialog body
+                                         (format nil "Probe result ~A - New Value or :q to quit?"
+                                                 ,symbol)
+                                         (lambda (result)
+                                           (when result
+                                             (if (equalp result ":q")
+                                                 :q
+                                                 (setf ,symbol (eval (read-from-string result))))))
+                                         :time-out 999
+                                         :width 400
+                                         :height 300
+                                         :modal nil
+                                         :title (format nil "clog-probe ~A" ,symbol-title))
+                           :q)
+                   (return))))
+             :name (format nil "clog-probe ~A" ,symbol-title))))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; clog-gui-initialize ;;

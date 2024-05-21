@@ -86,7 +86,8 @@
                                   (setf entry-point result)
                                   (setf clog:*clog-debug*
                                         (lambda (event data)
-                                          (with-clog-debugger (panel :standard-output (stdout app))
+                                          (with-clog-debugger (panel :standard-output (stdout app)
+                                                                     :standard-input (stdin app))
                                                               (funcall event data))))
                                   (capture-eval result
                                                 :clog-obj        obj

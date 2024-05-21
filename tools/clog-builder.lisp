@@ -28,6 +28,10 @@ clog-builder window.")
      :accessor stdout
      :initform nil
      :documentation "The standard-output for this instance")
+   (stdin
+     :accessor stdin
+     :initform nil
+     :documentation "The standard-input for this instance")
    (copy-buf
      :accessor copy-buf
      :initform nil
@@ -332,6 +336,9 @@ clog-builder window.")
     (setf (stdout app) (if clog-connection:*disable-clog-debugging*
                            *standard-output*
                            (make-instance 'console-out-stream :clog-obj body)))
+    (setf (stdin app) (if clog-connection:*disable-clog-debugging*
+                           *standard-input*
+                           (make-instance 'console-in-stream :clog-obj body)))
     (clog-gui-initialize body :use-clog-debugger t :standard-output (stdout app))
     (add-class body *builder-window-desktop-class*)
     (with-clog-debugger (body :standard-output (stdout app))
