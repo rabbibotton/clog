@@ -352,15 +352,17 @@
                                  (sleep .5)
                                  (remove-class btn-save "w3-animate-top"))
                                (t
-                                 (confirm-dialog obj "File changed on file system. Save?"
-                                                 (lambda (result)
-                                                   (when result
-                                                     (add-class btn-save "w3-animate-top")
-                                                     (write-file (text-value ace) file-name :clog-obj obj)
-                                                     (set-is-dirty nil)
-                                                     (setf last-date (file-write-date file-name))
-                                                     (sleep .5)
-                                                     (remove-class btn-save "w3-animate-top"))))))))))
+                                 (let ((*default-title-class*      *builder-title-class*)
+                                       (*default-border-class*     *builder-border-class*))
+                                   (confirm-dialog obj "File changed on file system. Save?"
+                                                   (lambda (result)
+                                                     (when result
+                                                       (add-class btn-save "w3-animate-top")
+                                                       (write-file (text-value ace) file-name :clog-obj obj)
+                                                       (set-is-dirty nil)
+                                                       (setf last-date (file-write-date file-name))
+                                                       (sleep .5)
+                                                       (remove-class btn-save "w3-animate-top")))))))))))
           (when m-emacs
             (set-on-click m-emacs (lambda (obj)
                                     (when is-dirty
@@ -376,13 +378,15 @@
           (set-on-window-can-close win
                                    (lambda (obj)
                                      (cond (is-dirty
-                                             (confirm-dialog obj "Save File?"
-                                                             (lambda (result)
-                                                               (set-is-dirty nil)
-                                                               (when result
-                                                                 (save obj nil))
-                                                               (window-close win))
-                                                             :ok-text "Yes" :cancel-text "No")
+                                             (let ((*default-title-class*      *builder-title-class*)
+                                                   (*default-border-class*     *builder-border-class*))
+                                               (confirm-dialog obj "Save File?"
+                                                               (lambda (result)
+                                                                 (set-is-dirty nil)
+                                                                 (when result
+                                                                   (save obj nil))
+                                                                 (window-close win))
+                                                               :ok-text "Yes" :cancel-text "No"))
                                              nil)
                                            (t
                                              t))))
