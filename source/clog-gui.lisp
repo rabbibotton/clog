@@ -257,24 +257,26 @@
 ;;;;;;;;;;;;;;;;
 
 (defun clog-break (&key clog-body run (modal t))
-  "Stop execution, funcall run with CLOG-BODY. If CLOG-BODY not set use
-*clog-debug-instance*. Then confirm continue execution on current thread."
+  "Stop execution, funcall RUN with CLOG-BODY if set, if run returns :continue,
+the execution continues. If CLOG-BODY not set use *clog-debug-instance*. Then
+confirm continue execution on current thread or (break)."
   (unless clog-body
     (setf clog-body *clog-debug-instance*))
-  (when run
-    (funcall run clog-body))
-  (when (validp clog-body)
-    (confirm-dialog clog-body
-                    (format nil "Continue thread ~A ?"
-                            (bordeaux-threads:thread-name
-                              (bordeaux-threads:current-thread)))
-                    (lambda (result)
-                      (unless result
-                        (break)))
-                    :width 400
-                    :time-out 600
-                    :modal modal
-                    :title "clog-break in execution")))
+  (let ((continue (when run
+                    (funcall run clog-body))))
+    (when (and (validp clog-body)
+               (not (eq continue :continue)))
+      (confirm-dialog clog-body
+                      (format nil "Continue thread ~A ?"
+                              (bordeaux-threads:thread-name
+                                (bordeaux-threads:current-thread)))
+                      (lambda (result)
+                        (unless result
+                          (break)))
+                      :width 400
+                      :time-out 600
+                      :modal modal
+                      :title "clog-break in execution"))))
 
 ;;;;;;;;;;;;;;;;
 ;; clog-probe ;;
