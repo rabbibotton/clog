@@ -285,6 +285,8 @@ confirm continue execution on current thread or (break)."
 (defmacro clog-probe (symbol &key clog-body
                                   (title "")
                                   (time-out 600)
+                                  top left
+                                  (width 400) (height 300)
                                   auto-probe
                                   (modal t))
   "Pause thread of execution for time-out numnber of seconds or nil to not
@@ -306,8 +308,9 @@ probe is run again in auto-probe seconds."
                            (when result
                              (setf ,symbol (eval (read-from-string result)))))
                          :time-out ,time-out
-                         :width 400
-                         :height 300
+                         :top ,top :left ,left
+                         :width ,width
+                         :height ,height
                          :modal ,modal
                          :title (format nil "clog-probe ~A" ,title))
            (bordeaux-threads:make-thread
