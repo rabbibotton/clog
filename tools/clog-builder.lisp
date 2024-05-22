@@ -432,6 +432,13 @@ clog-builder window.")
                                                                                                 result)
                                                                                     :title "SWANK Started (One time connect)")))
                                                                   :placeholder-value "4005" :default-value "4005" :title "Start SWANK Server"))))
+                          (create-gui-menu-item opts :content "Set *clog-debug-instance*"
+                                                :on-click (lambda (obj)
+                                                            (setf *clog-debug-instance* (connection-body obj))
+                                                            (alert-toast obj "*clog-debug-instance*"
+                                                                         "This window will be used for future default debug alerts."
+                                                                         :color-class "w3-green"
+                                                                         :time-out 2)))
                           (create-gui-menu-item opts :content "Update CLOG Builder"       :on-click 'on-update-clog)
                           ;; Menu -> Windows
                           (create-gui-menu-item win   :content "Maximize"           :on-click
