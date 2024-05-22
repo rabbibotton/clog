@@ -325,8 +325,9 @@ probe is run again in auto-probe seconds."
                                                  :q
                                                  (setf ,symbol (eval (read-from-string result))))))
                                          :time-out (or ,auto-probe 999)
-                                         :width 400
-                                         :height 300
+                                         :top ,top :left ,left
+                                         :width ,width
+                                         :height ,height
                                          :modal nil
                                          :title (format nil "clog-probe ~A" ,title))
                            :q)
