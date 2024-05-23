@@ -8,6 +8,7 @@
                                 :editor-use-console-for-evals t)))
     (set-on-window-can-close win (lambda (obj)
                                    (declare (ignore obj))
+                                   (window-focus win)
                                    (window-focus repl)
                                    nil))
     win))
