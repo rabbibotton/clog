@@ -615,7 +615,7 @@ STORAGE-TYPE. (local = persistant or session)"))
 ;; Implementation - clog popup windows
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defparameter *clog-popup-sync-hash* (make-hash-table :test 'equalp)
+(defparameter *clog-popup-sync-hash* (make-hash-table* :test 'equalp)
   "Used for syncing clog popup window creation with the thread creating
 them.")
 
