@@ -52,6 +52,7 @@
   (clog-gui-window             class)
   (create-gui-window           generic-function)
   (window-title                generic-function)
+  (window-icon-area            generic-function)
   (window-param                generic-function)
   (window-content              generic-function)
   (window-focus                generic-function)
@@ -524,6 +525,17 @@ window or nil if not found"))
              (windows app))
     r))
 
+;;;;;;;;;;;;;;;;;;;;;;
+;; window-icon-area ;;
+;;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric window-icon-area (clog-obj)
+  (:documentation "Return the clog-obj for the icon-area to allow adding
+custom icons on the title bar to the right of the close icon"))
+
+(defmethod window-icon-area ((obj clog-obj))
+  (icon-area obj))
+
 ;;;;;;;;;;;;;;;;;;;;;
 ;; window-by-param ;;
 ;;;;;;;;;;;;;;;;;;;;;
@@ -857,6 +869,9 @@ The on-window-change clog-obj received is the new window"))
     :accessor pinner
     :initform nil
     :documentation "Window pinner clog-element if created with has-pinner")
+   (icon-area
+     :accessor icon-area
+     :documentation "Window icon area for adding icons to menu bar")
    (closer
     :accessor closer
     :documentation "Window closer clog-element")
@@ -1112,7 +1127,9 @@ window-to-top-by-param or window-by-param."))
                        style='position:absolute;top:0;right:0;left:0;height:25px'>
                     <span data-drag-obj='~A' data-drag-type='m' id='~A-title'
                       style='position:absolute;top:0;right:20px;left:5px;
-                             user-select:none;cursor:move;'>~A</span>~A
+                             user-select:none;cursor:move;'>~A</span>
+                    <span id='~a-icons' style='position:absolute;top:0;right:15px;
+                        cursor:pointer;user-select:none;'>~A</span>
                     <span id='~A-closer'
                       style='position:absolute;top:0;right:5px;cursor:pointer;user-select:none;'>~A</span>
                   </div>
@@ -1125,11 +1142,10 @@ window-to-top-by-param or window-by-param."))
             border-class
             html-id title-class html-id html-id         ; title bar
             title                                       ; title
+            html-id                                     ; icons area
             (if has-pinner                              ; pinner
-                (format nil "<span id='~A-pinner'
-                 style='position:absolute;top:0;right:20px;
-                        cursor:pointer;user-select:none;'>
-                 ~A</span><span>&nbsp;&nbsp;&nbsp;</span>" html-id (code-char 9744))
+                (format nil "<span id='~A-pinner'>~A</span>&nbsp;"
+                        html-id (code-char 9744))
                 "")
             html-id                                     ; closer
             closer-html
@@ -1155,6 +1171,7 @@ window-to-top-by-param or window-by-param."))
       (when has-pinner
         (setf (pinner win) (attach-as-child win (format nil "~A-pinner" html-id))))
       (setf (closer win) (attach-as-child win (format nil "~A-closer" html-id)))
+      (setf (icon-area win) (attach-as-child win (format nil "~A-icons" html-id)))
       (unless no-sizer
         (setf (sizer win) (attach-as-child win (format nil "~A-sizer" html-id))))
       (setf (content win) (attach-as-child win (format nil "~A-body"  html-id)))

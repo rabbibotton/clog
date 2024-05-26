@@ -16,7 +16,6 @@ clog-builder window.")
 (defparameter *clogframe-mode* nil
               "If *clogframe-mode* is t no popup or tabs possible.")
 (defparameter *preferances-file* nil "Location of the preferance file")
-
 (defparameter *start-project* nil "Set the project to start with")
 (defparameter *start-dir* nil "Set the directory the dir win should start with")
 (defparameter *client-side-movement* nil "Use javascript for window movement")

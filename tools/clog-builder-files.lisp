@@ -166,6 +166,27 @@
         (declare (ignore spacer1 spacer2))
         (setf (window-param win) ace)
         (add-class menu "w3-small")
+        (set-on-click (create-span (window-icon-area win)
+                                   :content (format nil "~A&nbsp;" (code-char #x26F6))
+                                   :auto-place :top)
+                      (lambda (obj)
+                        (declare (ignore obj))
+                        (set-geometry win
+                                      :top (menu-bar-height win)
+                                      :left 300
+                                      :height "" :width ""
+                                      :bottom 5 :right 0)
+                        (clog-ace:resize (window-param win))
+                        (set-on-window-move win nil)
+                        (set-on-window-move win (lambda (obj)
+                                                  (setf (width obj) (width obj))
+                                                  (setf (height obj) (height obj))))))
+        (set-on-click (create-span (window-icon-area win)
+                                   :content "-&nbsp;"
+                                   :auto-place :top)
+                      (lambda (obj)
+                        (declare (ignore obj))
+                        (setf (hiddenp win) t)))
         (setf (overflow (top-panel box)) :visible) ; let menus leave the top panel
         (setf (z-index m-file) 10) ; fix for ace editor gutter overlapping menu
         (when has-time-out
