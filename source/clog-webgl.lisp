@@ -762,16 +762,31 @@ Sets the behavior. The default value is :DONT_CARE. The possible values are:
 
 ;; WebGLRenderingContext.texImage2D()
 
+(defgeneric texture-parameter-integer (clog-webgl glenum-target
+                                       glenum-pname value)
+  (:documentation "Set integer texture parameters."))
+
 (defmethod texture-parameter-integer ((obj clog-webgl) glenum-target
                                       glenum-pname value)
-  (execute obj (format nil "textParameteri(~A.~A,~A.~A,~A)"
+  (execute obj (format nil "texParameteri(~A.~A,~A.~A,~A)"
                        (script-id obj) glenum-target
                        (script-id obj) glenum-pname
                        value)))
 
+(defmethod texture-parameter-integer ((obj clog-webgl) glenum-target
+                                      glenum-pname (value symbol))
+  (execute obj (format nil "texParameteri(~A.~A,~A.~A,~A.~A)"
+                       (script-id obj) glenum-target
+                       (script-id obj) glenum-pname
+                       (script-id obj) value)))
+
+(defgeneric texture-parameter-float (clog-webgl glenum-target
+                                     glenum-pname value)
+  (:documentation "Set float texture parameters."))
+
 (defmethod texture-parameter-float ((obj clog-webgl) glenum-target
                                     glenum-pname value)
-  (execute obj (format nil "textParameterf(~A.~A,~A.~A,~A)"
+  (execute obj (format nil "texParameterf(~A.~A,~A.~A,~A)"
                        (script-id obj) glenum-target
                        (script-id obj) glenum-pname
                        value)))
