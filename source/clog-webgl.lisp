@@ -113,6 +113,8 @@
   (active-attribute        generic-function)
   (active-uniform          generic-function)
   (uniform                 generic-function)
+  (uniform-float           generic-function)
+  (uniform-integer         generic-function)
   (program-info-log        generic-function)
   (link-program            generic-function)
   (use-program             generic-function)
@@ -1037,6 +1039,30 @@ Returns a GLint indicating the number of uniform blocks containing active unifor
 (defmethod uniform ((obj clog-webgl-program) location)
   (query (gl obj) (format nil "getUniform(~A, ~A)"
                           (script-id obj) (script-id location))))
+
+(defgeneric uniform-float (clog-webgl location x &optional y z w)
+  (:documentation "Sets the value of uniform at LOCATION."))
+
+(defmethod uniform-float ((webgl clog-webgl) location x &optional y z w)
+  (execute webgl (cond
+                   (w (format nil "uniform4fv(~A, new Float32Array([~F,~F,~F,~F]))" (script-id location)
+                              (float x) (float y) (float z) (float w)))
+                   (z (format nil "uniform3fv(~A, new Float32Array([~F,~F,~F]))" (script-id location)
+                              (float x) (float y) (float z)))
+                   (y (format nil "uniform2fv(~A, new Float32Array([~F,~F]))" (script-id location)
+                              (float x) (float y)))
+                   (x (format nil "uniform1fv(~A, new Float32Array([~F]))" (script-id location)
+                              (float x))))))
+
+(defgeneric uniform-integer (clog-webgl location x &optional y z w)
+  (:documentation "Sets the value of uniform at LOCATION."))
+
+(defmethod uniform-integer ((webgl clog-webgl) location x &optional y z w)
+  (execute webgl (cond
+                   (w (format nil "uniform4iv(~A, new Int32Array([~D,~D,~D,~D]))" (script-id location) x y z w))
+                   (z (format nil "uniform3iv(~A, new Int32Array([~D,~D,~D]))" (script-id location) x y z))
+                   (y (format nil "uniform2iv(~A, new Int32Array([~D,~D]))" (script-id location) x y))
+                   (x (format nil "uniform1iv(~A, new Int32Array([~D]))" (script-id location) x)))))
 
 (defgeneric program-info-log (clog-webgl-program)
     (:documentation "Contains errors that occurred during failed linking or
