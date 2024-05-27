@@ -14,11 +14,10 @@
                                    :overflow :scroll
                                    :top 30 :bottom 0 :left 0 :right 0)))
     (set-geometry win :top (menu-bar-height win) :left 0 :height "" :bottom 5 :right "")
-    (set-on-click (create-span (window-icon-area win) :content "&larr;&nbsp;")
+    (set-on-click (create-span (window-icon-area win) :content "&larr;&nbsp;" :auto-place :top)
                   (lambda (obj)
                     (declare (ignore obj))
-                    (set-geometry win :top (menu-bar-height win) :left 0 :height "" :bottom 5 :right "")
-                    :auto-place :top))
+                    (set-geometry win :top (menu-bar-height win) :left 0 :height "" :bottom 5 :right "")))
     (setf (positioning root-dir) :absolute)
     (set-geometry root-dir :height 27 :width "100%" :top 0 :left 0 :right 0)
     (setf (text-value root-dir) (format nil "~A" (or dir (uiop:getcwd))))
