@@ -1129,7 +1129,7 @@ window-to-top-by-param or window-by-param."))
                       style='position:absolute;top:0;right:20px;left:5px;
                              user-select:none;cursor:move;'>~A</span>
                     <span id='~a-icons' style='position:absolute;top:0;right:15px;
-                        cursor:pointer;user-select:none;'>~A</span>
+                        cursor:pointer;user-select:none;'></span>
                     <span id='~A-closer'
                       style='position:absolute;top:0;right:5px;cursor:pointer;user-select:none;'>~A</span>
                   </div>
@@ -1143,10 +1143,6 @@ window-to-top-by-param or window-by-param."))
             html-id title-class html-id html-id         ; title bar
             title                                       ; title
             html-id                                     ; icons area
-            (if has-pinner                              ; pinner
-                (format nil "<span id='~A-pinner'>~A</span>&nbsp;"
-                        html-id (code-char 9744))
-                "")
             html-id                                     ; closer
             closer-html
             html-id
@@ -1168,10 +1164,12 @@ window-to-top-by-param or window-by-param."))
             (attach-as-child win (format nil "~A-title-bar" html-id)))
       (when hide-title-bar
         (setf (hiddenp (title-bar win)) t))
-      (when has-pinner
-        (setf (pinner win) (attach-as-child win (format nil "~A-pinner" html-id))))
-      (setf (closer win) (attach-as-child win (format nil "~A-closer" html-id)))
       (setf (icon-area win) (attach-as-child win (format nil "~A-icons" html-id)))
+      (when has-pinner
+        (setf (pinner win) (create-span (icon-area win)
+                                        :content (format nil "~A&nbsp;</span>"
+                                                         (code-char 9744)))))
+      (setf (closer win) (attach-as-child win (format nil "~A-closer" html-id)))
       (unless no-sizer
         (setf (sizer win) (attach-as-child win (format nil "~A-sizer" html-id))))
       (setf (content win) (attach-as-child win (format nil "~A-body"  html-id)))
@@ -1467,7 +1465,7 @@ to match the pinned state. :state forces state. Returns new state"))
                (pinnedp win)))
       (progn
         (when (pinner win)
-          (setf (inner-html (pinner win)) (format nil "~A" (code-char 9744))))
+          (setf (inner-html (pinner win)) (format nil "~A&nbsp;" (code-char 9744))))
         (when keep-on-top
           (window-keep-on-top win :state nil))
         (setf (pinnedp win) nil)
@@ -1479,7 +1477,7 @@ to match the pinned state. :state forces state. Returns new state"))
         nil)
       (flet ((no-op (obj) (declare (ignore obj)) nil))
         (when (pinner win)
-          (setf (inner-html (pinner win)) (format nil "~A" (code-char 9745))))
+          (setf (inner-html (pinner win)) (format nil "~A&nbsp;" (code-char 9745))))
         (when keep-on-top
           (window-keep-on-top win))
         (setf (pinnedp win) t)
