@@ -181,11 +181,14 @@ clog-builder window.")
                                                  <p>
                                                  <center>
                                            <a target=_blank href='https://github.com/sponsors/rabbibotton'>Sponsor CLOG</a>
-                                           </center>
+                                           </center><br>
+                                           <center class='w3-tiny'>Programming is a pain, so let's make it easier on the programmers<br>
+                                           --- this is at the very heart of Lisp philosophy.<br>
+                                           (\"Lisp philosophy\" TANAKA Tomoyuki)</center>
                                                  </div>"
                                                    img-clog-icon)
                                   :width   400
-                                  :height  250
+                                  :height  300
                                   :hidden  t)))
     (add-class about "w3-animate-opacity")
     (window-center about)
