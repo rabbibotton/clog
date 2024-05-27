@@ -113,7 +113,10 @@ and debugger display for clog events."
                        (when clog-gui-initialize
                          (clog-gui:clog-gui-initialize body :use-clog-debugger
                                                              use-clog-debugger))
-                       (setf clog-user::*body* body))
+                       (setf clog-user:*body* body)
+                       (run body)
+                       (when (eq clog-user:*body* body)
+                         (setf clog-user:*body* nil)))
                      :path "/repl")
   (open-browser :url (format nil "http://127.0.0.1:~A/repl" *clog-port*))
   (format t "Use clog-user:*body* to access the clog-repl window."))
