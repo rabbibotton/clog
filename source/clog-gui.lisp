@@ -297,7 +297,10 @@ repeats the probe with out changing value. When time-out is nil modal is
 always nil. If auto-probe is set, modal and time-out is set to nil and the
 probe is run again in auto-probe seconds."
   `(let ((body (or ,clog-body
-                   *clog-debug-instance*)))
+                   *clog-debug-instance*))
+         (title (if (equal ,title "")
+                    (format nil "~s" ',symbol) 
+                    ,title)))
      (when (validp body)
        (if (and ,time-out (not ,auto-probe))
            (input-dialog body
@@ -313,7 +316,7 @@ probe is run again in auto-probe seconds."
                          :width ,width
                          :height ,height
                          :modal ,modal
-                         :title (format nil "clog-probe ~A" ,title))
+                         :title (format nil "clog-probe ~A" title))
            (bordeaux-threads:make-thread
              (lambda ()
                (loop
@@ -330,10 +333,10 @@ probe is run again in auto-probe seconds."
                                          :width ,width
                                          :height ,height
                                          :modal nil
-                                         :title (format nil "clog-probe ~A" ,title))
+                                         :title (format nil "clog-probe ~A" title))
                            :q)
                    (return))))
-             :name (format nil "clog-probe ~A" ,title))))))
+             :name (format nil "clog-probe ~A" title))))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; clog-gui-initialize ;;
