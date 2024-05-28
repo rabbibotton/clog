@@ -295,7 +295,8 @@ block execution, display symbol's value, value is changed if OK pressed at
 the moment pressed. When time-out is nil, :q quits the probe and cancel
 repeats the probe with out changing value. When time-out is nil modal is
 always nil. If auto-probe is set, modal and time-out is set to nil and the
-probe is run again in auto-probe seconds."
+probe is run again in auto-probe seconds. If not tile is set, the symbol is
+used for title."
   `(let ((body (or ,clog-body
                    *clog-debug-instance*))
          (title (if (equal ,title "")
@@ -303,39 +304,47 @@ probe is run again in auto-probe seconds."
                     ,title)))
      (when (validp body)
        (if (and ,time-out (not ,auto-probe))
-           (input-dialog body
-                         (format nil "Probe in thread ~A : ~A New Value?"
-                                 (bordeaux-threads:thread-name
-                                   (bordeaux-threads:current-thread))
-                                 ,symbol)
-                         (lambda (result)
-                           (when result
-                             (setf ,symbol (eval (read-from-string result)))))
-                         :time-out ,time-out
-                         :top ,top :left ,left
-                         :width ,width
-                         :height ,height
-                         :modal ,modal
-                         :title (format nil "clog-probe ~A" title))
+           (let ((value (format nil "~A" ,symbol)))
+             (setf value (ppcre:regex-replace-all "<" value "&lt;"))
+             (setf value (ppcre:regex-replace-all ">" value "&gt;"))
+             (input-dialog body
+                           (format nil "Probe in thread ~A :<br><code>~A</code> New Value?"
+                                   (bordeaux-threads:thread-name
+                                     (bordeaux-threads:current-thread))
+                                   value)
+                           (lambda (result)
+                             (when (and result
+                                        (not (equal result "")))
+                               (setf ,symbol (eval (read-from-string result)))))
+                           :time-out ,time-out
+                           :top ,top :left ,left
+                           :width ,width
+                           :height ,height
+                           :modal ,modal
+                           :title (format nil "clog-probe ~A" title)))
            (bordeaux-threads:make-thread
              (lambda ()
                (loop
-                 (when (eq (input-dialog body
-                                         (format nil "Probe result ~A - New Value or :q to quit?"
-                                                 ,symbol)
-                                         (lambda (result)
-                                           (when result
-                                             (if (equalp result ":q")
-                                                 :q
-                                                 (setf ,symbol (eval (read-from-string result))))))
-                                         :time-out (or ,auto-probe 999)
-                                         :top ,top :left ,left
-                                         :width ,width
-                                         :height ,height
-                                         :modal nil
-                                         :title (format nil "clog-probe ~A" title))
-                           :q)
-                   (return))))
+                 (let ((value (format nil "~A" ,symbol)))
+                   (setf value (ppcre:regex-replace-all "<" value "&lt;"))
+                   (setf value (ppcre:regex-replace-all ">" value "&gt;"))
+                   (when (eq (input-dialog body
+                                           (format nil "Probe result <code>~A</code> - New Value or :q to quit?"
+                                                   value)
+                                           (lambda (result)
+                                             (when (and result
+                                                        (not (equalp result "")))
+                                               (if (equalp result ":q")
+                                                   :q
+                                                   (setf ,symbol (eval (read-from-string result))))))
+                                           :time-out (or ,auto-probe 999)
+                                           :top ,top :left ,left
+                                           :width ,width
+                                           :height ,height
+                                           :modal nil
+                                           :title (format nil "clog-probe ~A" title))
+                             :q)
+                     (return)))))
              :name (format nil "clog-probe ~A" title))))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;
