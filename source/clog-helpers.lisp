@@ -19,6 +19,7 @@
            :clog-open
            :add-supported-controls
            :control-info
+           :clog-builder-probe
            :clog-db-admin))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

@@ -71,6 +71,10 @@ clog-builder window.")
      :accessor project-tree-win
      :initform nil
      :documentation "Project Tree window")
+   (probe-win
+     :accessor probe-win
+     :initform nil
+     :documentation "Probe window")
    (project-win
      :accessor project-win
      :initform nil
@@ -396,12 +400,13 @@ clog-builder window.")
                           (create-gui-menu-item src   :content "New System Source Browser"      :on-click 'on-new-sys-browser)
                           (create-gui-menu-item src   :content "New Loaded ASDF System Browser" :on-click 'on-new-asdf-browser)
                           ;; Menu -> Tools
+                          (create-gui-menu-item tools :content "CLOG Builder REPL"           :on-click 'on-repl)
+                          (create-gui-menu-item tools :content "CLOG Builder Console"        :on-click 'on-open-console)
+                          (create-gui-menu-item tools :content "CLOG Probe Panel"            :on-click 'on-probe-panel)
+                          (create-gui-menu-item tools :content "OS Pseudo Shell"             :on-click 'on-shell)
                           (create-gui-menu-item tools :content "List Callers"                :on-click 'on-show-callers)
                           (create-gui-menu-item tools :content "List Callees"                :on-click 'on-show-callees)
                           (create-gui-menu-item tools :content "Thread Viewer"               :on-click 'on-show-thread-viewer)
-                          (create-gui-menu-item tools :content "CLOG Builder REPL"           :on-click 'on-repl)
-                          (create-gui-menu-item tools :content "CLOG Builder Console"        :on-click 'on-open-console)
-                          (create-gui-menu-item tools :content "OS Pseudo Shell"                    :on-click 'on-shell)
                           (create-gui-menu-item tools :content "Copy/Cut History"            :on-click 'on-show-copy-history-win)
                           (unless *clogframe-mode*
                             (create-gui-menu-item tools :content "Image to HTML Data"        :on-click 'on-image-to-data))
