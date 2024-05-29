@@ -1,6 +1,6 @@
 (in-package :clog-tools)
 
-;; Control Record Utilities / Plugin API for controls
+;; Control Record Utilities / Plugin APIs
 
 (defun control-info (control-type-name)
   "Return the control-record for CONTROL-TYPE-NAME from supported controls. (Exported)"
@@ -33,6 +33,10 @@ replaced. (Exported)"
                              *supported-controls*)
                   (list r)))))
 
+(defun add-inspector (name func)
+  "Add a custom inspector with NAME and (FUNC symbol title value clog-obj)"
+  (push (list :name name :func func) *inspectors*))
+
 (defun reset-control-pallete (panel)
   (let* ((app (connection-data-item panel "builder-app-data"))
          (pallete (select-tool app)))
@@ -42,4 +46,3 @@ replaced. (Exported)"
         (if (equal (getf control :name) "group")
             (add-select-optgroup pallete (getf control :description))
             (add-select-option pallete (getf control :name) (getf control :description)))))))
-

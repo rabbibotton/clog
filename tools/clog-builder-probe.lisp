@@ -1,5 +1,21 @@
 (in-package :clog-tools)
 
+(defparameter *inspectors*
+  `((:name "Print to Console"
+     :func ,(lambda (symbol title value clog-obj)
+              (declare (ignore symbol))
+              (on-open-console clog-obj)
+              (print title)
+              (print value)))
+    (:name "Console Inspector"
+     :func ,(lambda (symbol title value clog-obj)
+              (declare (ignore title value))
+              (on-open-console clog-obj)
+              (let ((*default-title-class*      *builder-title-class*)
+                    (*default-border-class*     *builder-border-class*)
+                    (*standard-input* (make-instance 'console-in-stream :clog-obj clog-obj)))
+                (inspect symbol))))))
+
 (defun on-probe-panel (obj)
   (let ((app (connection-data-item obj "builder-app-data")))
     (let* ((*default-title-class*      *builder-title-class*)
@@ -71,9 +87,21 @@ used for title."
        (set-on-click (create-button probe :content "Inspect")
                      (lambda (obj)
                        (declare (ignore obj))
-                       (on-open-console body)
-                       (let ((*standard-input* (make-instance 'console-in-stream :clog-obj body)))
-                         (inspect ,symbol))))
+                       (let* ((menu (create-panel probe
+                                                  :left (left probe) :top (top probe)
+                                                  :width (width probe)
+                                                  :class *builder-window-desktop-class*
+                                                  :auto-place :bottom)))
+                         (set-on-mouse-leave menu (lambda (obj) (destroy obj)))
+                         (mapcar (lambda (inspector)
+                                   (set-on-click (create-div menu :content (getf inspector :name) :class *builder-menu-context-item-class*)
+                                                 (lambda (obj)
+                                                   (declare (ignore obj))
+                                                   (destroy menu)
+                                                   (funcall (getf inspector :func)
+                                                            ,symbol title (format nil "~A" ,symbol)
+                                                            body))))
+                                 *inspectors*))))
        (set-on-click (create-button probe :content "Remove")
                      (lambda (obj)
                        (declare (ignore obj))

@@ -9,18 +9,20 @@
 
 (cl:in-package :clog)
 
-(defpackage #:clog-user
-  (:use #:cl #:clog #:clog-gui #:clog-web)
-  (:export :*body* :clog-repl))
-
 (defpackage #:clog-tools
   (:use #:cl #:clog #:clog-gui #:clog-web)
   (:export :clog-builder
            :clog-open
            :add-supported-controls
            :control-info
+           :add-inspector
            :clog-builder-probe
            :clog-db-admin))
+
+(defpackage #:clog-user
+  (:use #:cl #:clog #:clog-gui #:clog-web)
+  (:import-from :clog-tools #:clog-builder-probe)
+  (:export :*body* :clog-repl))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Implementation - CLOG Utilities
