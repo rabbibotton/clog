@@ -53,29 +53,33 @@ used for title."
                      *clog-debug-instance*))
           (app   (connection-data-item body "builder-app-data"))
           (title (if (equal ,title "")
-                     (format nil "~s" ',symbol) 
+                     (format nil "~s" ',symbol)
                      ,title))
           (freq   ,auto-probe)
           probe
+          row
           entry)
      (unless (probe-win app)
        (on-probe-panel body))
      (setf probe (create-div (window-content (probe-win app))
                              :style "border-style:solid;overflow:auto;"
                              :class "w3-small"))
-     (setf entry (create-div probe
-                             :class "w3-small;"))
+     (setf row (create-table-row (create-table probe)))
+     (create-table-column row :content (format nil "<b>~A</b> = " title))
+     (setf entry (create-table-column row
+                                      :class "w3-small"))
      (flet ((refresh ()
               (let ((value (format nil "~A" ,symbol)))
-                (setf (text entry) (format nil "~A : ~A"
-                                           title
+                (setf (text entry) (format nil "~A"
                                            value)))))
        (refresh)
-       (set-on-click (create-button probe :content "Refresh")
+       (set-on-click (create-button probe :content "Refresh"
+                                    :class "w3-tiny" :style "width:58px")
                      (lambda (obj)
                        (declare (ignore obj))
                        (refresh)))
-       (set-on-click (create-button probe :content "Change")
+       (set-on-click (create-button probe :content "Change"
+                                    :class "w3-tiny" :style "width:58px")
                      (lambda (obj)
                        (declare (ignore obj))
                        (input-dialog body (format nil "New value for ~A?" title)
@@ -84,7 +88,8 @@ used for title."
                                                   (not (equal result "")))
                                          (setf ,symbol (eval (read-from-string result))))
                                        (refresh)))))
-       (set-on-click (create-button probe :content "Inspect")
+       (set-on-click (create-button probe :content "Inspect"
+                                    :class "w3-tiny" :style "width:58px")
                      (lambda (obj)
                        (declare (ignore obj))
                        (let* ((menu (create-panel probe
@@ -102,17 +107,25 @@ used for title."
                                                             ,symbol title (format nil "~A" ,symbol)
                                                             body))))
                                  *inspectors*))))
-       (set-on-click (create-button probe :content "Remove")
+       (set-on-click (create-button probe :content "Remove"
+                                    :class "w3-tiny" :style "width:58px")
                      (lambda (obj)
                        (declare (ignore obj))
                        (setf (hiddenp probe) t)))
        (when freq
+         (set-on-click (create-button probe :content "Probing"
+                                      :class "w3-tiny" :style "width:58px")
+                       (lambda (obj)
+                         (setf freq nil)
+                         (destroy obj)))
          (bordeaux-threads:make-thread
            (lambda ()
              (loop
-               (sleep freq)
+               (when freq
+                 (sleep freq))
                (when (or (not (validp probe))
                          (hiddenp probe)
+                         (not freq)
                          (not (visiblep probe)))
                  (return))
                (refresh)))
