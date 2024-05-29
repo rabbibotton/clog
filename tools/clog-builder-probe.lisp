@@ -20,7 +20,7 @@
   (let ((app (connection-data-item obj "builder-app-data")))
     (let* ((*default-title-class*      *builder-title-class*)
            (*default-border-class*     *builder-border-class*)
-           (win         (create-gui-window obj :title "CLOG Probe Table"
+           (win         (create-gui-window obj :title "CLOG Probe Panel"
                                            :width 300
                                            :has-pinner t
                                            :keep-on-top t
