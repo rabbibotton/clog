@@ -29,6 +29,12 @@
       (setf (text-value (package-div repl)) package))
     (when *clog-repl-private-console*
       (let ((pcon (on-open-repl-console obj win)))
+        (set-on-click (create-span (window-icon-area win)
+                                   :content "&#10752;&nbsp;"
+                                   :auto-place :top)
+                      (lambda (obj)
+                        (declare (ignore obj))
+                        (window-focus pcon)))
         (setf (window-param win) pcon)
         (set-on-window-close win (lambda (obj)
                                    (declare (ignore obj))
