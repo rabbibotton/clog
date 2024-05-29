@@ -27,6 +27,26 @@
          (repl (create-clog-builder-repl (window-content win))))
     (when package
       (setf (text-value (package-div repl)) package))
+    (set-on-click (create-span (window-icon-area win)
+                               :content (format nil "~A&nbsp;" (code-char #x26F6))
+                               :auto-place :top)
+                  (lambda (obj)
+                    (declare (ignore obj))
+                    (set-geometry win
+                                  :top (menu-bar-height win)
+                                  :left 300
+                                  :height "" :width ""
+                                  :bottom 5 :right 0)
+                    (set-on-window-move win nil)
+                    (set-on-window-move win (lambda (obj)
+                                              (setf (width obj) (width obj))
+                                              (setf (height obj) (height obj))))))
+        (set-on-click (create-span (window-icon-area win)
+                                   :content "-&nbsp;"
+                                   :auto-place :top)
+                      (lambda (obj)
+                        (declare (ignore obj))
+                        (setf (hiddenp win) t)))
     (when *clog-repl-private-console*
       (let ((pcon (on-open-repl-console obj win)))
         (set-on-click (create-span (window-icon-area win)
@@ -34,6 +54,7 @@
                                    :auto-place :top)
                       (lambda (obj)
                         (declare (ignore obj))
+                        (window-focus win)
                         (window-focus pcon)))
         (setf (window-param win) pcon)
         (set-on-window-close win (lambda (obj)
