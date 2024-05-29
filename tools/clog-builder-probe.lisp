@@ -14,30 +14,38 @@
               (let ((*default-title-class*      *builder-title-class*)
                     (*default-border-class*     *builder-border-class*)
                     (*standard-input* (make-instance 'console-in-stream :clog-obj clog-obj)))
-                (inspect symbol))))))
+                (inspect symbol))))
+    (:name "Emacs Inspect"
+     :func ,(lambda (symbol title value clog-obj)
+              (declare (ignore title value clog-obj))
+              (let ((SWANK::*BUFFER-PACKAGE* (find-package (string-upcase "clog-user")))
+                    (SWANK::*BUFFER-READTABLE* *READTABLE*))
+                (swank:inspect-in-emacs symbol))))))
 
 (defun on-probe-panel (obj)
   (let ((app (connection-data-item obj "builder-app-data")))
-    (let* ((*default-title-class*      *builder-title-class*)
-           (*default-border-class*     *builder-border-class*)
-           (win         (create-gui-window obj :title "CLOG Probe Panel"
-                                           :width 300
-                                           :has-pinner t
-                                           :keep-on-top t
-                                           :client-movement *client-side-movement*)))
-      (create-div (window-content win) :style "left:0px;right:0px" :class "w3-tiny w3-center"
-                  :content "use CLOG-TOOL:CLOG-BUILDER-PROBE to add probes")
-      (setf (probe-win app) win)
-      (set-geometry win :top (menu-bar-height win) :left 0 :height "" :bottom 5 :right "")
-      (set-on-window-move win (lambda (obj)
-                                (setf (height obj) (height obj))))
-      (set-on-window-close win (lambda (obj)
-                                 (declare (ignore obj))
-                                 (setf (probe-win app) nil)))
-      (set-on-click (create-span (window-icon-area win) :content "&larr;&nbsp;" :auto-place :top)
-                    (lambda (obj)
-                      (declare (ignore obj))
-                      (set-geometry win :top (menu-bar-height win) :left 0 :height "" :bottom 5 :right ""))))))
+    (if (probe-win app)
+        (window-focus (probe-win app))
+        (let* ((*default-title-class*      *builder-title-class*)
+               (*default-border-class*     *builder-border-class*)
+               (win         (create-gui-window obj :title "CLOG Probe Panel"
+                                               :width 300
+                                               :has-pinner t
+                                               :keep-on-top t
+                                               :client-movement *client-side-movement*)))
+          (create-div (window-content win) :style "left:0px;right:0px" :class "w3-tiny w3-center"
+                      :content "use CLOG-TOOL:CLOG-BUILDER-PROBE to add probes")
+          (setf (probe-win app) win)
+          (set-geometry win :top (menu-bar-height win) :left 0 :height "" :bottom 5 :right "")
+          (set-on-window-move win (lambda (obj)
+                                    (setf (height obj) (height obj))))
+          (set-on-window-close win (lambda (obj)
+                                     (declare (ignore obj))
+                                     (setf (probe-win app) nil)))
+          (set-on-click (create-span (window-icon-area win) :content "&larr;&nbsp;" :auto-place :top)
+                        (lambda (obj)
+                          (declare (ignore obj))
+                          (set-geometry win :top (menu-bar-height win) :left 0 :height "" :bottom 5 :right "")))))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;
 ;; clog-builder-probe ;;
@@ -57,19 +65,14 @@ used for title."
                      ,title))
           (freq   ,auto-probe)
           probe
-          row
           entry)
-     (unless (probe-win app)
-       (on-probe-panel body))
+     (on-probe-panel body)
      (setf probe (create-div (window-content (probe-win app))
                              :style "border-style:solid;overflow:auto;"
                              :class "w3-small"))
-     (setf row (create-table-row (create-table probe)))
-     (create-table-column row :content (format nil "<b>~A</b> = " title))
-     (setf entry (create-table-column row
-                                      :class "w3-small"))
+     (setf entry (create-div probe :class "w3-small"))
      (flet ((refresh ()
-              (let ((value (format nil "~A" ,symbol)))
+              (let ((value (format nil "~A = ~A" title ,symbol)))
                 (setf (text entry) (format nil "~A"
                                            value)))))
        (refresh)
