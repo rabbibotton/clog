@@ -228,11 +228,8 @@
                                              standard-output
                                              standard-input)
                               &body body)
-  "body uses a clog-gui based debugger instead of the console, if clog-obj is
-nil uses *clog-debug-instance*"
+  "body uses a clog-gui based debugger instead of the console"
   `(with-open-stream (out-stream (make-instance 'dialog-out-stream))
-     (unless clog-body
-       (setf clog-body *clog-debug-instance*))
      (with-open-stream (in-stream (make-instance 'dialog-in-stream :clog-obj ,clog-obj :source out-stream))
        (labels ((my-debugger (condition encapsulation)
                   (handler-case
