@@ -122,7 +122,7 @@ and debugger display for clog events."
                          (setf clog-user:*body* nil)))
                      :path "/repl")
   (open-browser :url (format nil "http://127.0.0.1:~A/repl" *clog-port*))
-  (format t "Use clog-user:*body* to access the clog-repl window."))
+  (format nil "Use clog-user:*body* to access the clog-repl window."))
 
 ;;;;;;;;;;;;;;;;;;;;;;;
 ;; save-body-to-file ;;
