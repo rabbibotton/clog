@@ -2,10 +2,10 @@
 
 (defun on-open-repl-console (obj repl)
   (let* ((win (on-open-file obj :title "CLOG REPL Console"
-                                :is-console t
-                                :top 520 :left 300
-                                :closer-html "&#10752;"
-                                :editor-use-console-for-evals t)))
+                            :is-console t
+                            :top 520 :left 300
+                            :closer-html "&#10752;"
+                            :editor-use-console-for-evals t)))
     (set-on-window-can-close win (lambda (obj)
                                    (declare (ignore obj))
                                    (window-focus win)
@@ -27,6 +27,10 @@
          (repl (create-clog-builder-repl (window-content win))))
     (when package
       (setf (text-value (package-div repl)) package))
+    (clog-ace:resize (playground repl))
+    (set-on-window-size-done win (lambda (obj)
+                                   (declare (ignore obj))
+                                   (clog-ace:resize (playground repl))))
     (set-on-click (create-span (window-icon-area win)
                                :content (format nil "~A&nbsp;" (code-char #x26F6))
                                :auto-place :top)
@@ -41,12 +45,12 @@
                     (set-on-window-move win (lambda (obj)
                                               (setf (width obj) (width obj))
                                               (setf (height obj) (height obj))))))
-        (set-on-click (create-span (window-icon-area win)
-                                   :content "-&nbsp;"
-                                   :auto-place :top)
-                      (lambda (obj)
-                        (declare (ignore obj))
-                        (setf (hiddenp win) t)))
+    (set-on-click (create-span (window-icon-area win)
+                               :content "-&nbsp;"
+                               :auto-place :top)
+                  (lambda (obj)
+                    (declare (ignore obj))
+                    (setf (hiddenp win) t)))
     (when *clog-repl-private-console*
       (let ((pcon (on-open-repl-console obj win)))
         (set-on-click (create-span (window-icon-area win)
@@ -89,18 +93,18 @@
              (equalp data ":q"))
           (window-close (parent (parent panel))))
         ((equalp data "(clog-builder-repl)")
-         (let* ((*default-title-class*      *builder-title-class*)
-                (*default-border-class*     *builder-border-class*)
-                (win (create-gui-window panel :title "CLOG Builder REPL GUI Window"
-                                        :height 400 :width 600
-                                        :has-pinner t
-                                        :client-movement *client-side-movement*)))
-           (setf clog-user::*body* (window-content win))
-           (set-on-window-close win
-                                (lambda (obj)
-                                  (when (eq obj clog-user::*body*)
-                                    (setf clog-user::*body* nil))))
-           (clog-terminal:echo target "Use clog-user:*body* to access the clog-builder-repl window.")))
+          (let* ((*default-title-class*      *builder-title-class*)
+                 (*default-border-class*     *builder-border-class*)
+                 (win (create-gui-window panel :title "CLOG Builder REPL GUI Window"
+                                         :height 400 :width 600
+                                         :has-pinner t
+                                         :client-movement *client-side-movement*)))
+            (setf clog-user::*body* (window-content win))
+            (set-on-window-close win
+                                 (lambda (obj)
+                                   (when (eq obj clog-user::*body*)
+                                     (setf clog-user::*body* nil))))
+            (clog-terminal:echo target "Use clog-user:*body* to access the clog-builder-repl window.")))
         (t
           (setf data (format nil "(let ((tmp (progn ~A)))
                                     (setf /// //) (setf // /) (setf / (list tmp))
