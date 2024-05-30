@@ -228,30 +228,33 @@
                                              standard-output
                                              standard-input)
                               &body body)
-  "body uses a clog-gui based debugger instead of the console"
+  "body uses a clog-gui based debugger instead of the console, if clog-obj is
+nil uses *clog-debug-instance*"
   `(with-open-stream (out-stream (make-instance 'dialog-out-stream))
-    (with-open-stream (in-stream (make-instance 'dialog-in-stream :clog-obj ,clog-obj :source out-stream))
-      (labels ((my-debugger (condition encapsulation)
-                 (handler-case
-                     (let ((restart (one-of-dialog ,clog-obj condition (compute-restarts)
-                                                   :title (format nil "Available Restarts~A"
-                                                                  (if ,title
-                                                                      (format nil " for ~A" ,title)
-                                                                      "")))))
-                       (when restart
-                         (let ((*debugger-hook* encapsulation))
-                           (invoke-restart-interactively restart))))
-                   (end-of-file () ; no reset chosen
-                     nil))))
-        (let* ((*standard-output* (or ,standard-output
-                                      *standard-output*))
-               (*standard-input* (or ,standard-input
+     (unless clog-body
+       (setf clog-body *clog-debug-instance*))
+     (with-open-stream (in-stream (make-instance 'dialog-in-stream :clog-obj ,clog-obj :source out-stream))
+       (labels ((my-debugger (condition encapsulation)
+                  (handler-case
+                      (let ((restart (one-of-dialog ,clog-obj condition (compute-restarts)
+                                                    :title (format nil "Available Restarts~A"
+                                                                   (if ,title
+                                                                       (format nil " for ~A" ,title)
+                                                                       "")))))
+                        (when restart
+                          (let ((*debugger-hook* encapsulation))
+                            (invoke-restart-interactively restart))))
+                    (end-of-file () ; no reset chosen
+                                 nil))))
+         (let* ((*standard-output* (or ,standard-output
+                                       *standard-output*))
+                (*standard-input* (or ,standard-input
                                       *standard-input*))
-               (*query-io*        (make-two-way-stream in-stream out-stream))
-               (*debugger-hook*   (if clog-connection:*disable-clog-debugging*
-                                      *debugger-hook*
-                                      #'my-debugger)))
-          ,@body)))))
+                (*query-io*        (make-two-way-stream in-stream out-stream))
+                (*debugger-hook*   (if clog-connection:*disable-clog-debugging*
+                                       *debugger-hook*
+                                       #'my-debugger)))
+           ,@body)))))
 
 ;;;;;;;;;;;;;;;;
 ;; clog-break ;;
