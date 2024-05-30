@@ -54,9 +54,9 @@
 (defmacro clog-builder-probe (symbol &key clog-body
                                           (title "")
                                           auto-probe)
-  "Display symbol's value in Probe Table in Builder, value is changed when OK
-pressed. Probe again in auto-probe seconds. If not tile is set, the symbol is
-used for title."
+  "Display symbol's value in a CLOG Probe Panel in Builder, value is changed
+when OK pressed. Probe again in auto-probe seconds. If no tile is set, the
+symbol is used for title."
   `(let* ((body  (or ,clog-body
                      *clog-debug-instance*))
           (app   (connection-data-item body "builder-app-data"))

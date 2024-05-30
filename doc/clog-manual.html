@@ -5706,12 +5706,16 @@ https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/isEnabled
 <p><a id="x-28CLOG-WEBGL-3ATEXTURE-PARAMETER-FLOAT-20GENERIC-FUNCTION-29"></a>
 <a id="CLOG-WEBGL:TEXTURE-PARAMETER-FLOAT%20GENERIC-FUNCTION"></a></p>
 <ul>
-<li><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-WEBGL:TEXTURE-PARAMETER-FLOAT%20GENERIC-FUNCTION" >TEXTURE-PARAMETER-FLOAT</a></span></span> <span class="locative-args">OBJ GLENUM-TARGET GLENUM-PNAME VALUE</span></span></li>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-WEBGL:TEXTURE-PARAMETER-FLOAT%20GENERIC-FUNCTION" >TEXTURE-PARAMETER-FLOAT</a></span></span> <span class="locative-args">CLOG-WEBGL GLENUM-TARGET GLENUM-PNAME VALUE</span></span></p>
+
+<p>Set float texture parameters.</p></li>
 </ul>
 <p><a id="x-28CLOG-WEBGL-3ATEXTURE-PARAMETER-INTEGER-20GENERIC-FUNCTION-29"></a>
 <a id="CLOG-WEBGL:TEXTURE-PARAMETER-INTEGER%20GENERIC-FUNCTION"></a></p>
 <ul>
-<li><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-WEBGL:TEXTURE-PARAMETER-INTEGER%20GENERIC-FUNCTION" >TEXTURE-PARAMETER-INTEGER</a></span></span> <span class="locative-args">OBJ GLENUM-TARGET GLENUM-PNAME VALUE</span></span></li>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-WEBGL:TEXTURE-PARAMETER-INTEGER%20GENERIC-FUNCTION" >TEXTURE-PARAMETER-INTEGER</a></span></span> <span class="locative-args">CLOG-WEBGL GLENUM-TARGET GLENUM-PNAME VALUE</span></span></p>
+
+<p>Set integer texture parameters.</p></li>
 </ul>
 <p><a id="x-28CLOG-WEBGL-3AUNIFORM-MATRIX-20GENERIC-FUNCTION-29"></a>
 <a id="CLOG-WEBGL:UNIFORM-MATRIX%20GENERIC-FUNCTION"></a></p>
@@ -5942,6 +5946,20 @@ Returns a GLint indicating the number of uniform blocks containing active unifor
 <li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-WEBGL:UNIFORM%20GENERIC-FUNCTION" >UNIFORM</a></span></span> <span class="locative-args">CLOG-WEBGL-PROGRAM LOCATION</span></span></p>
 
 <p>Returns the value of uniform at <code>LOCATION</code> in clog-webgl-program</p></li>
+</ul>
+<p><a id="x-28CLOG-WEBGL-3AUNIFORM-FLOAT-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG-WEBGL:UNIFORM-FLOAT%20GENERIC-FUNCTION"></a></p>
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-WEBGL:UNIFORM-FLOAT%20GENERIC-FUNCTION" >UNIFORM-FLOAT</a></span></span> <span class="locative-args">CLOG-WEBGL LOCATION X &amp;OPTIONAL Y Z W</span></span></p>
+
+<p>Sets the value of uniform at <code>LOCATION</code>.</p></li>
+</ul>
+<p><a id="x-28CLOG-WEBGL-3AUNIFORM-INTEGER-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG-WEBGL:UNIFORM-INTEGER%20GENERIC-FUNCTION"></a></p>
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-WEBGL:UNIFORM-INTEGER%20GENERIC-FUNCTION" >UNIFORM-INTEGER</a></span></span> <span class="locative-args">CLOG-WEBGL LOCATION X &amp;OPTIONAL Y Z W</span></span></p>
+
+<p>Sets the value of uniform at <code>LOCATION</code>.</p></li>
 </ul>
 <p><a id="x-28CLOG-WEBGL-3APROGRAM-INFO-LOG-20GENERIC-FUNCTION-29"></a>
 <a id="CLOG-WEBGL:PROGRAM-INFO-LOG%20GENERIC-FUNCTION"></a></p>
@@ -6768,7 +6786,7 @@ The on-window-change clog-obj received is the new window</p></li>
 <p><a id="x-28CLOG-GUI-3ACREATE-GUI-WINDOW-20GENERIC-FUNCTION-29"></a>
 <a id="CLOG-GUI:CREATE-GUI-WINDOW%20GENERIC-FUNCTION"></a></p>
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-GUI:CREATE-GUI-WINDOW%20GENERIC-FUNCTION" >CREATE-GUI-WINDOW</a></span></span> <span class="locative-args">CLOG-OBJ &amp;KEY TITLE CONTENT LEFT TOP WIDTH HEIGHT MAXIMIZE HIDE-TITLE-BAR DRAG-CLIENT-AREA HAS-PINNER KEEP-ON-TOP WINDOW-PARAM HIDDEN CLIENT-MOVEMENT NO-SIZER BORDER-CLASS TITLE-CLASS HTML-ID</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-GUI:CREATE-GUI-WINDOW%20GENERIC-FUNCTION" >CREATE-GUI-WINDOW</a></span></span> <span class="locative-args">CLOG-OBJ &amp;KEY TITLE CONTENT LEFT TOP WIDTH HEIGHT MAXIMIZE HIDE-TITLE-BAR DRAG-CLIENT-AREA HAS-PINNER CLOSER-HTML KEEP-ON-TOP WINDOW-PARAM HIDDEN CLIENT-MOVEMENT NO-SIZER BORDER-CLASS TITLE-CLASS HTML-ID</span></span></p>
 
 <p>Create a clog-gui-window. If client-movement is t then
 use jquery-ui to move/resize and will not work on mobile and touch events
@@ -6787,6 +6805,14 @@ window-to-top-by-param or window-by-param.</p></li>
 <li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-GUI:WINDOW-TITLE%20GENERIC-FUNCTION" >WINDOW-TITLE</a></span></span> <span class="locative-args">CLOG-GUI-WINDOW</span></span></p>
 
 <p>Get/setf window title</p></li>
+</ul>
+<p><a id="x-28CLOG-GUI-3AWINDOW-ICON-AREA-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG-GUI:WINDOW-ICON-AREA%20GENERIC-FUNCTION"></a></p>
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-GUI:WINDOW-ICON-AREA%20GENERIC-FUNCTION" >WINDOW-ICON-AREA</a></span></span> <span class="locative-args">CLOG-OBJ</span></span></p>
+
+<p>Return the clog-obj for the icon-area to allow adding
+custom icons on the title bar to the right of the close icon</p></li>
 </ul>
 <p><a id="x-28CLOG-GUI-3AWINDOW-PARAM-20GENERIC-FUNCTION-29"></a>
 <a id="CLOG-GUI:WINDOW-PARAM%20GENERIC-FUNCTION"></a></p>
@@ -7072,7 +7098,7 @@ If time-out return result of on-file-name, cancels dialog if time runs out.</p><
 <p><a id="x-28CLOG-GUI-3AWITH-CLOG-DEBUGGER-20MGL-PAX-3AMACRO-29"></a>
 <a id="CLOG-GUI:WITH-CLOG-DEBUGGER%20MGL-PAX:MACRO"></a></p>
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[macro]</span> <span class="reference-object"><a href="#CLOG-GUI:WITH-CLOG-DEBUGGER%20MGL-PAX:MACRO" >WITH-CLOG-DEBUGGER</a></span></span> <span class="locative-args">(CLOG-OBJ &amp;KEY TITLE STANDARD-OUTPUT) &amp;BODY BODY</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[macro]</span> <span class="reference-object"><a href="#CLOG-GUI:WITH-CLOG-DEBUGGER%20MGL-PAX:MACRO" >WITH-CLOG-DEBUGGER</a></span></span> <span class="locative-args">(CLOG-OBJ &amp;KEY TITLE STANDARD-OUTPUT STANDARD-INPUT) &amp;BODY BODY</span></span></p>
 
 <p>body uses a clog-gui based debugger instead of the console</p></li>
 </ul>
@@ -7098,6 +7124,35 @@ make-two-way-stream to provide a <em>query-io</em> using a clog-gui instead of c
 
 <p>dialog-in-stream and dialog-out-stream can be combined with
 make-two-way-stream to provide a <em>query-io</em> using a clog-gui instead of console)</p></li>
+</ul>
+<p><a id="x-28CLOG-GUI-3ACLOG-BREAK-20FUNCTION-29"></a>
+<a id="CLOG-GUI:CLOG-BREAK%20FUNCTION"></a></p>
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#CLOG-GUI:CLOG-BREAK%20FUNCTION" >CLOG-BREAK</a></span></span> <span class="locative-args">&amp;KEY CLOG-BODY RUN (MODAL <code>T</code>)</span></span></p>
+
+<p>Stop execution, funcall <code>RUN</code> with <code>CLOG-BODY</code> if set, if run returns :continue,
+the execution continues. If <code>CLOG-BODY</code> not set use <em>clog-debug-instance</em>. Then
+confirm continue execution on current thread or (break).</p></li>
+</ul>
+<p><a id="x-28CLOG-GUI-3ACLOG-PROBE-20MGL-PAX-3AMACRO-29"></a>
+<a id="CLOG-GUI:CLOG-PROBE%20MGL-PAX:MACRO"></a></p>
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[macro]</span> <span class="reference-object"><a href="#CLOG-GUI:CLOG-PROBE%20MGL-PAX:MACRO" >CLOG-PROBE</a></span></span> <span class="locative-args">SYMBOL &amp;KEY CLOG-BODY (TITLE &quot;&quot;) (TIME-OUT 600) TOP LEFT (WIDTH 400) (HEIGHT 300) AUTO-PROBE (MODAL <code>T</code>)</span></span></p>
+
+<p>Pause thread of execution for time-out numnber of seconds or nil to not
+block execution, display symbol's value, value is changed if OK pressed at
+the moment pressed. When time-out is nil, :q quits the probe and cancel
+repeats the probe with out changing value. When time-out is nil modal is
+always nil. If auto-probe is set, modal and time-out is set to nil and the
+probe is run again in auto-probe seconds. If not tile is set, the symbol is
+used for title.</p></li>
+</ul>
+<p><a id="x-28CLOG-GUI-3A-2ACLOG-DEBUG-INSTANCE-2A-20VARIABLE-29"></a>
+<a id="CLOG-GUI:*CLOG-DEBUG-INSTANCE*%20VARIABLE"></a></p>
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[variable]</span> <span class="reference-object"><a href="#CLOG-GUI:*CLOG-DEBUG-INSTANCE*%20VARIABLE" >*CLOG-DEBUG-INSTANCE*</a></span></span> <span class="locative-args">NIL</span></span></p>
+
+<p>Default location to open debugger windows</p></li>
 </ul>
 <p><code>CLOG-GUI</code> - Look and Feel</p>
 <p><a id="x-28CLOG-GUI-3A-2AMENU-BAR-CLASS-2A-20VARIABLE-29"></a>
@@ -8748,11 +8803,14 @@ result or <code>DEFAULT-ANSWER</code> on time out.</p></li>
 <p><a id="x-28CLOG-3ACLOG-REPL-20FUNCTION-29"></a>
 <a id="CLOG:CLOG-REPL%20FUNCTION"></a></p>
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#CLOG:CLOG-REPL%20FUNCTION" >CLOG-REPL</a></span></span> <span class="locative-args">&amp;KEY (CLOG-GUI-INITIALIZE <code>T</code>) (CLOG-WEB-INITIALIZE <code>T</code>) (BOOT-FILE &quot;/debug.html&quot;) (PORT 8080)</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#CLOG:CLOG-REPL%20FUNCTION" >CLOG-REPL</a></span></span> <span class="locative-args">&amp;KEY (CLOG-GUI-INITIALIZE <code>T</code>) (CLOG-WEB-INITIALIZE <code>T</code>) (USE-CLOG-DEBUGGER <code>NIL</code>) (BOOT-FILE &quot;/debug.html&quot;) (PORT 8080)</span></span></p>
 
 <p>Set a path /repl that opens a blank page and sets the global
 clog-user:*body* to last window openned to /repl. Debug mode is
-set (logging to browser console) in the default debug.html boot-file.</p></li>
+set (logging to browser console) in the default debug.html boot-file.
+clog-web and clog-gui are initialized and if use-clog-debugger it set to
+true it is initialized and this repl window used as default clog debug display
+and debugger display for clog events.</p></li>
 </ul>
 <p><a id="x-28CLOG-3ASAVE-BODY-TO-FILE-20FUNCTION-29"></a>
 <a id="CLOG:SAVE-BODY-TO-FILE%20FUNCTION"></a></p>

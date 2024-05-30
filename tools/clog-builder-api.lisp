@@ -34,7 +34,7 @@ replaced. (Exported)"
                   (list r)))))
 
 (defun add-inspector (name func)
-  "Add a custom inspector with NAME and (FUNC symbol title value clog-obj)"
+  "Add a custom inspector with NAME and (FUNC object title value clog-obj)"
   (push (list :name name :func func) *inspectors*))
 
 (defun reset-control-pallete (panel)

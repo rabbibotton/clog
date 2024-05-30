@@ -97,7 +97,7 @@
   (dialog-in-stream      class)
   (dialog-out-stream     class)
   (clog-break            function)
-  (clog-probe            function)
+  (clog-probe            macro)
   (*clog-debug-instance* variable)
 
   "CLOG-GUI - Look and Feel"
