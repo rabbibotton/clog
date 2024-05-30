@@ -6,7 +6,7 @@
          (win (create-gui-window obj :title "ASDF System Browser"
                                      :top 40 :left 225
                                      :width 592 :height 435
-                                     :client-movement t))
+                                     :client-movement *client-side-movement*))
          (panel (create-asdf-systems (window-content win))))
     (when *open-external*
       (setf (checkedp (ext-open-source panel)) t))

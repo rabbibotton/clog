@@ -6,7 +6,7 @@
          (win (create-gui-window obj :title "System Browser"
                                      :top 40 :left 225
                                      :width 685 :height 530
-                                     :client-movement t))
+                                     :client-movement *client-side-movement*))
          (panel (create-sys-browser (window-content win))))
     (when search
       (setf (text-value (search-box panel)) search)
