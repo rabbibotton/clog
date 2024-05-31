@@ -3,7 +3,6 @@
 (defun on-open-repl-console (obj repl)
   (let* ((win (on-open-file obj :title "CLOG REPL Console"
                             :is-console t
-                            :top 520 :left 300
                             :closer-html "&#10752;"
                             :editor-use-console-for-evals t)))
     (set-on-window-can-close win (lambda (obj)
@@ -21,7 +20,6 @@
          (win (create-gui-window obj :title "CLOG Builder REPL"
                                  :has-pinner t
                                  :keep-on-top t
-                                 :top 40 :left 300
                                  :width 700 :height 480
                                  :client-movement *client-side-movement*))
          (repl (create-clog-builder-repl (window-content win))))

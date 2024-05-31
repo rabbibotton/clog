@@ -7,7 +7,6 @@
          (win (create-gui-window obj :title (format nil "OS Pseudo Shell - ~A - ~A"
                                                     (uiop:operating-system)
                                                     (uiop:hostname))
-                                     :top 40 :left 225
                                      :width 600 :height 400
                                      :client-movement *client-side-movement*)))
     (when dir

@@ -4,7 +4,6 @@
   (let* ((*default-title-class*      *builder-title-class*)
          (*default-border-class*     *builder-border-class*)
          (win (create-gui-window obj :title "System Browser"
-                                     :top 40 :left 225
                                      :width 685 :height 530
                                      :client-movement *client-side-movement*))
          (panel (create-sys-browser (window-content win))))
