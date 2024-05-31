@@ -39,6 +39,7 @@
                                   :left 300
                                   :height "" :width ""
                                   :bottom 5 :right 0)
+                    (clog-ace:resize (playground repl))
                     (set-on-window-move win nil)
                     (set-on-window-move win (lambda (obj)
                                               (setf (width obj) (width obj))

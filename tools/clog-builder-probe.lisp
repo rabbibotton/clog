@@ -1,7 +1,11 @@
 (in-package :clog-tools)
 
 (defparameter *inspectors*
-  `((:name "Print to Console"
+  `((:name "Set object to clog-user:*probed*"
+     :func ,(lambda (symbol title value clog-obj)
+              (declare (ignore title value clog-obj))
+              (setf clog-user:*probe* symbol)))
+    (:name "Print to Console"
      :func ,(lambda (symbol title value clog-obj)
               (declare (ignore symbol))
               (on-open-console clog-obj)
@@ -21,6 +25,20 @@
               (let ((SWANK::*BUFFER-PACKAGE* (find-package (string-upcase "clog-user")))
                     (SWANK::*BUFFER-READTABLE* *READTABLE*))
                 (swank:inspect-in-emacs symbol))))))
+
+(defun inspect-class (symbol title value clog-obj)
+  (declare (ignore clog-obj))
+  (let ((class (class-of symbol)))
+    (format t "~%Inspecting ~A = ~A~%" title value)
+    (format t "Class of : ~A~%" class)
+    (format t "Class Name : ~A~%" (class-name class))
+    (format t "Class Precedence List : ~A~%" (closer-mop:class-precedence-list class))
+    (format t "Class Slots : ~A~%" (mapcar (lambda (obj)
+                                             (closer-mop:slot-definition-name obj))
+                                           (closer-mop:class-slots class)))
+    ))
+  
+(add-inspector "Class Inspector" 'inspect-class)
 
 (defun on-probe-panel (obj)
   (let ((app (connection-data-item obj "builder-app-data")))

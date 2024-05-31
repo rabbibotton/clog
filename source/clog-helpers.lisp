@@ -22,13 +22,14 @@
 (defpackage #:clog-user
   (:use #:cl #:clog #:clog-gui #:clog-web)
   (:import-from :clog-tools #:clog-builder-probe)
-  (:export :*body* :clog-repl))
+  (:export :*body* :*probe* :clog-repl))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Implementation - CLOG Utilities
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defvar clog-user::*body* nil "clog-repl access to body")
+(defvar clog-user:*body* nil "clog-repl access to body")
+(defvar clog-user:*probe* nil "Used by probes to return value of symbol")
 
 ;;;;;;;;;;;;;;;;;;;;;;
 ;; clog-install-dir ;;
