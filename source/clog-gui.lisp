@@ -1121,9 +1121,13 @@ window-to-top-by-param or window-by-param."))
     (unless left
       ;; Generate sensible initial x location
       (setf left (last-x app))
+      (when (> (last-x app) 600)
+        (setf (last-x app) 0))
       (incf (last-x app) 10))
     (unless top
       ;; Generate sensible initial y location
+      (when (> (last-y app) 400)
+        (setf (last-y app) 0))
       (when (eql (last-y app) 0)
         (setf (last-y app) (menu-bar-height obj)))
       (setf top (last-y app))
