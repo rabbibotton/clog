@@ -11,6 +11,20 @@
     (when search
       (setf (text-value (search-box panel)) search)
       (sys-browser-populate panel))
+    (set-on-click (create-span (window-icon-area win)
+                               :content (format nil "~A&nbsp;" (code-char #x26F6))
+                               :auto-place :top)
+                  (lambda (obj)
+                    (declare (ignore obj))
+                    (set-geometry win
+                                  :top (menu-bar-height win)
+                                  :left 300
+                                  :height "" :width ""
+                                  :bottom 5 :right 0)
+                    (set-on-window-move win nil)
+                    (set-on-window-move win (lambda (obj)
+                                              (setf (width obj) (width obj))
+                                              (setf (height obj) (height obj))))))
     (set-on-window-size-done win (lambda (obj)
                                    (declare (ignore obj))
                                    (clog-ace:resize (src-box panel))))))
