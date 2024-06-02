@@ -35,7 +35,10 @@ replaced. (Exported)"
 
 (defun add-inspector (name func)
   "Add a custom inspector with NAME and (FUNC object title value clog-obj)"
-  (pushnew (list :name name :func func) *inspectors*))
+  (setf *inspectors* (remove-if (lambda (x)
+                                  (equalp name (getf x :name)))
+                                *inspectors*))
+  (push (list :name name :func func) *inspectors*))
 
 (defun reset-control-pallete (panel)
   (let* ((app (connection-data-item panel "builder-app-data"))
