@@ -2360,7 +2360,7 @@ to no actual HTML element."))
 (defgeneric next-sibling (clog-element)
   (:documentation "Traverse to next sibling element. If Child does not have an
 html id than Element_Type will have an ID of undefined and therefore attached
-to no actual HTML elemen."))
+to no actual HTML element."))
 
 (defmethod next-sibling ((obj clog-element))
   (attach-as-child obj (jquery-query obj "next().prop('id')")))
