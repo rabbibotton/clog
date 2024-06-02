@@ -98,6 +98,7 @@
   (dialog-out-stream     class)
   (clog-break            function)
   (clog-probe            macro)
+  (*probe*               variable)
   (*clog-debug-instance* variable)
 
   "CLOG-GUI - Look and Feel"
@@ -118,6 +119,7 @@
 ;; CLOG GUI based ebugger settings
 (defparameter *clog-debug-instance* nil
               "Default location to open debugger windows")
+(defvar *probe* nil "Result value of a probe")
 
 ;; Menus
 (defparameter *menu-bar-class* "w3-bar w3-black w3-card-4")
@@ -297,7 +299,7 @@ the moment pressed. When time-out is nil, :q quits the probe and cancel
 repeats the probe with out changing value. When time-out is nil modal is
 always nil. If auto-probe is set, modal and time-out is set to nil and the
 probe is run again in auto-probe seconds. If not tile is set, the symbol is
-used for title. If save-value is true clog-user:*probe* is set to value of
+used for title. If save-value is true clog-gui:*probe* is set to value of
 symbol before any change is made by dialog."
   `(let ((body (or ,clog-body
                    *clog-debug-instance*))
@@ -311,7 +313,7 @@ symbol before any change is made by dialog."
              (setf value (ppcre:regex-replace-all "<" value "&lt;"))
              (setf value (ppcre:regex-replace-all ">" value "&gt;"))
              (when ,save-value
-               (setf clog-user:*probe* ovalue))
+               (setf clog-gui:*probe* ovalue))
              (input-dialog body
                            (format nil "Probe in thread ~A :<br><code>~A</code> New Value?"
                                    (bordeaux-threads:thread-name
@@ -351,7 +353,7 @@ symbol before any change is made by dialog."
                                            :title (format nil "clog-probe ~A" title))
                              :q)
                      (when ,save-value
-                       (setf clog-user:*probe* ovalue))
+                       (setf clog-gui:*probe* ovalue))
                      (return)))))
              :name (format nil "clog-probe ~A" title))))))
 

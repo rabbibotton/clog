@@ -1,10 +1,10 @@
 (in-package :clog-tools)
 
 (defparameter *inspectors*
-  `((:name "Set object to clog-user:*probe*"
+  `((:name "Set object to clog-gui:*probe*"
      :func ,(lambda (symbol title value clog-obj)
               (declare (ignore title value clog-obj))
-              (setf clog-user:*probe* symbol)))
+              (setf clog-gui:*probe* symbol)))
     (:name "Print to Console"
      :func ,(lambda (symbol title value clog-obj)
               (declare (ignore symbol))
