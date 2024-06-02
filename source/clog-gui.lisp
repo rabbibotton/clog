@@ -289,6 +289,7 @@ confirm continue execution on current thread or (break)."
                                   top left
                                   (width 400) (height 300)
                                   auto-probe
+                                  save-value
                                   (modal t))
   "Pause thread of execution for time-out numnber of seconds or nil to not
 block execution, display symbol's value, value is changed if OK pressed at
@@ -296,7 +297,8 @@ the moment pressed. When time-out is nil, :q quits the probe and cancel
 repeats the probe with out changing value. When time-out is nil modal is
 always nil. If auto-probe is set, modal and time-out is set to nil and the
 probe is run again in auto-probe seconds. If not tile is set, the symbol is
-used for title."
+used for title. If save-value is true clog-user:*probe* is set to value of
+symbol before any change is made by dialog."
   `(let ((body (or ,clog-body
                    *clog-debug-instance*))
          (title (if (equal ,title "")
@@ -304,9 +306,12 @@ used for title."
                     ,title)))
      (when (validp body)
        (if (and ,time-out (not ,auto-probe))
-           (let ((value (format nil "~A" ,symbol)))
+           (let* ((ovalue ,symbol)
+                  (value (format nil "~A" ovalue)))
              (setf value (ppcre:regex-replace-all "<" value "&lt;"))
              (setf value (ppcre:regex-replace-all ">" value "&gt;"))
+             (when ,save-value
+               (setf clog-user:*probe* ovalue))
              (input-dialog body
                            (format nil "Probe in thread ~A :<br><code>~A</code> New Value?"
                                    (bordeaux-threads:thread-name
@@ -325,7 +330,8 @@ used for title."
            (bordeaux-threads:make-thread
              (lambda ()
                (loop
-                 (let ((value (format nil "~A" ,symbol)))
+                 (let* ((ovalue ,symbol)
+                        (value (format nil "~A" ovalue)))
                    (setf value (ppcre:regex-replace-all "<" value "&lt;"))
                    (setf value (ppcre:regex-replace-all ">" value "&gt;"))
                    (when (eq (input-dialog body
@@ -344,6 +350,8 @@ used for title."
                                            :modal nil
                                            :title (format nil "clog-probe ~A" title))
                              :q)
+                     (when ,save-value
+                       (setf clog-user:*probe* ovalue))
                      (return)))))
              :name (format nil "clog-probe ~A" title))))))
 
