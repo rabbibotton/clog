@@ -1,30 +1,34 @@
 (in-package :clog-tools)
 
 (defparameter *inspectors*
-  `((:name "Set object to clog-gui:*probe*"
-     :func ,(lambda (symbol title value clog-obj)
+  `((:name "CLOG Object Scope"
+     :func ,(lambda (object title value clog-obj)
+              (declare (ignore value))
+              (on-object-scope clog-obj :object object :title title)))
+    (:name "Set object to clog-gui:*probe*"
+     :func ,(lambda (object title value clog-obj)
               (declare (ignore title value clog-obj))
-              (setf clog-gui:*probe* symbol)))
+              (setf clog-gui:*probe* object)))
     (:name "Print to Console"
-     :func ,(lambda (symbol title value clog-obj)
-              (declare (ignore symbol))
+     :func ,(lambda (object title value clog-obj)
+              (declare (ignore object))
               (on-open-console clog-obj)
               (print title)
               (print value)))
     (:name "Console Inspector"
-     :func ,(lambda (symbol title value clog-obj)
+     :func ,(lambda (object title value clog-obj)
               (declare (ignore title value))
               (on-open-console clog-obj)
               (let ((*default-title-class*      *builder-title-class*)
                     (*default-border-class*     *builder-border-class*)
                     (*standard-input* (make-instance 'console-in-stream :clog-obj clog-obj)))
-                (inspect symbol))))
+                (inspect object))))
     (:name "Emacs Inspect"
-     :func ,(lambda (symbol title value clog-obj)
+     :func ,(lambda (object title value clog-obj)
               (declare (ignore title value clog-obj))
               (let ((SWANK::*BUFFER-PACKAGE* (find-package (string-upcase "clog-user")))
                     (SWANK::*BUFFER-READTABLE* *READTABLE*))
-                (swank:inspect-in-emacs symbol))))))
+                (swank:inspect-in-emacs object))))))
 
 (defun inspect-class (symbol title value clog-obj)
   (declare (ignore clog-obj))
@@ -36,6 +40,13 @@
     (format t "Class Slots : ~A~%" (mapcar (lambda (obj)
                                              (closer-mop:slot-definition-name obj))
                                            (closer-mop:class-slots class)))
+    (format t "Direct Generic Functions : ~A~%" (mapcar (lambda (obj)
+                                                          (list obj
+                                                            (closer-mop:generic-function-name obj)
+                                                            (closer-mop:generic-function-lambda-list obj)
+                                                            ))
+                                                        (closer-mop:specializer-direct-generic-functions class)))
+    (format t "Direct Methods : ~A~%" (closer-mop:specializer-direct-methods class))
     ))
   
 (add-inspector "Class Inspector" 'inspect-class)
