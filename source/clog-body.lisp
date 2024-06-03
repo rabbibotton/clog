@@ -46,8 +46,11 @@
 ;;;;;;;;;
 
 (defgeneric run (clog-body)
-  (:documentation "Keeps a connection thread alive to allow post
-user close of connection / browser."))
+  (:documentation "Keeps the original connection thread alive to allow post
+user close of connection / browser. Run returns when the browser
+connection has been severed, acting like an on-close event, only lisp objects
+still exist at this point and no queries can be made to browser or
+DOM elements."))
 (defmethod run ((obj clog-body))
   (loop
     (if (validp obj)
