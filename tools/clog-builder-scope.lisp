@@ -48,6 +48,7 @@
                         (class-tree (create-clog-tree (if is-root
                                                           node
                                                           (tree-root node))
+                                                      :node-html "<span style='color:orange'>&#9673;</a>"
                                                       :visible is-root
                                                       :indent-level (if is-root
                                                                         0
@@ -58,28 +59,28 @@
                                                       :content (format nil "<b>Class: ~A</b> : Object Value ~A"
                                                                        (get-name (class-name class)) (escape-lisp object)))))
                    (create-clog-tree (tree-root class-tree)
-                                     :node-html "&#x1F46A;"
+                                     :node-html "<span style='color:red'>&#9282;</a>"
                                      :content "Precedence List"
                                      :visible is-root
                                      :indent-level (1+ (indent-level class-tree))
                                      :fill-function (lambda (obj)
                                                       (on-precedences obj class object)))
                    (create-clog-tree (tree-root class-tree)
-                                     :node-html "&#x1F56E;"
+                                     :node-html "<span style='color:red'>&#9776;</a>"
                                      :content "Slots"
                                      :visible is-root
                                      :indent-level (1+ (indent-level class-tree))
                                      :fill-function (lambda (obj)
                                                       (on-slots obj class object)))
                    (create-clog-tree (tree-root class-tree)
-                                     :node-html "&#x1F528;"
+                                     :node-html "<span style='color:red'>&#9689;</a>"
                                      :content "Direct Generic Functions"
                                      :visible is-root
                                      :indent-level (1+ (indent-level class-tree))
                                      :fill-function (lambda (obj)
                                                       (on-generic obj class)))
                    (create-clog-tree (tree-root class-tree)
-                                     :node-html "&#x1F45E;"
+                                     :node-html "<span style='color:red'>&#9649;</a>"
                                      :content "Direct Methods"
                                      :visible is-root
                                      :indent-level (1+ (indent-level class-tree))
@@ -98,7 +99,7 @@
                  (mapcar (lambda (item)
                            (create-clog-tree (tree-root obj)
                                              :indent-level (1+ (indent-level obj))
-                                             :node-html "&#x1F527;"
+                                             :node-html "<span style='color:black'>&#9688;</a>"
                                              :visible nil
                                              :on-context-menu (lambda (obj)
                                                                 (on-new-sys-browser obj
@@ -111,7 +112,7 @@
                  (mapcar (lambda (item)
                            (create-clog-tree (tree-root obj)
                                              :indent-level (1+ (indent-level obj))
-                                             :node-html "&#x1F45F;"
+                                             :node-html "<span style='color:black'>&#9648;</a>"
                                              :visible nil
                                              :on-context-menu (lambda (obj)
                                                                 (on-new-sys-browser obj
@@ -131,7 +132,7 @@
                  (mapcar (lambda (slot)
                            (create-clog-tree (tree-root obj)
                                              :indent-level (1+ (indent-level obj))
-                                             :node-html "&#x1F588;"
+                                             :node-html "<span style='color:black'>&#9644;</a>"
                                              :visible nil
                                              :on-context-menu (lambda (obj)
                                                                 (on-new-sys-browser obj
