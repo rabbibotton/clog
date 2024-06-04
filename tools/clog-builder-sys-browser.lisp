@@ -1,12 +1,14 @@
 (in-package :clog-tools)
 
-(defun on-new-sys-browser (obj &key (search nil))
+(defun on-new-sys-browser (obj &key (search nil) (package nil))
   (let* ((*default-title-class*      *builder-title-class*)
          (*default-border-class*     *builder-border-class*)
          (win (create-gui-window obj :title "System Browser"
                                      :width 685 :height 530
                                      :client-movement *client-side-movement*))
          (panel (create-sys-browser (window-content win))))
+    (when package
+      (setf (text-value (package-box panel)) (string-upcase package)))
     (when search
       (setf (text-value (search-box panel)) search)
       (sys-browser-populate panel))
