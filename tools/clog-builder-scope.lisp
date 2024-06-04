@@ -5,6 +5,7 @@
            (*default-border-class*     *builder-border-class*)
            (win         (create-gui-window obj :title "CLOG Object Scope"
                                            :width 640
+                                           :height 480
                                            :has-pinner t
                                            :keep-on-top t
                                            :client-movement *client-side-movement*))
@@ -38,19 +39,70 @@
                    (setf value (ppcre:regex-replace-all "<" value "&lt;"))
                    (setf value (ppcre:regex-replace-all ">" value "&gt;"))))
                (add-class (node class object)
-                 (let* ((class-tree (create-clog-tree node
-                                                      :indent-level (if (typep node 'clog-panel)
+                 (let* ((is-root    (typep node 'clog-panel))
+                        (class-tree (create-clog-tree (if is-root
+                                                          node
+                                                          (tree-root node))
+                                                      :visible is-root
+                                                      :indent-level (if is-root
                                                                         0
                                                                         (1+ (indent-level node)))
-                                                      :content (format nil "Class Name: ~A : Object Value ~A"
-                                                                       (escape-lisp class) (escape-lisp object)))))
+                                                      :content (format nil "<b>Class: ~A</b> : Object Value ~A"
+                                                                       (escape-lisp (class-name class)) (escape-lisp object)))))
+                   (create-clog-tree (tree-root class-tree)
+                                     :node-html "&#x1F46A;"
+                                     :content "Precedence List"
+                                     :visible is-root
+                                     :indent-level (1+ (indent-level class-tree))
+                                     :fill-function (lambda (obj)
+                                                      (on-precedences obj class object)))
                    (create-clog-tree (tree-root class-tree)
                                      :node-html "&#x1F56E;"
                                      :content "Slots"
-                                     :visible nil
+                                     :visible is-root
                                      :indent-level (1+ (indent-level class-tree))
                                      :fill-function (lambda (obj)
-                                                      (on-slots obj class object)))))
+                                                      (on-slots obj class object)))
+                   (create-clog-tree (tree-root class-tree)
+                                     :node-html "&#x1F528;"
+                                     :content "Direct Generic Functions"
+                                     :visible is-root
+                                     :indent-level (1+ (indent-level class-tree))
+                                     :fill-function (lambda (obj)
+                                                      (on-generic obj class)))
+                   (create-clog-tree (tree-root class-tree)
+                                     :node-html "&#x1F45E;"
+                                     :content "Direct Methods"
+                                     :visible is-root
+                                     :indent-level (1+ (indent-level class-tree))
+                                     :fill-function (lambda (obj)
+                                                      (on-method obj class)))
+                   ))
+               (on-generic (obj class)
+                 (mapcar (lambda (item)
+                           (create-clog-tree (tree-root obj)
+                                             :indent-level (1+ (indent-level obj))
+                                             :node-html "&#x1F527;"
+                                             :visible nil
+                                             :content (format nil "<b>~A</b> ~A"
+                                                              (escape-lisp (closer-mop:generic-function-name item))
+                                                              (escape-lisp (closer-mop:generic-function-lambda-list item)))))
+                         (closer-mop:specializer-direct-generic-functions class)))
+               (on-method (obj class)
+                 (mapcar (lambda (item)
+                           (create-clog-tree (tree-root obj)
+                                             :indent-level (1+ (indent-level obj))
+                                             :node-html "&#x1F45F;"
+                                             :visible nil
+                                             :content (format nil "<b>~A</b> ~A"
+                                                              (escape-lisp (closer-mop:generic-function-name (closer-mop:method-generic-function item)))
+                                                              (escape-lisp (closer-mop:method-lambda-list item)))))
+                         (closer-mop:specializer-direct-methods class)))
+               (on-precedences (obj class object)
+                 (mapcar (lambda (item)
+                           (unless (eq item class)
+                             (add-class obj item object)))
+                         (closer-mop:class-precedence-list class)))
                (on-slots (obj class object)
                  (mapcar (lambda (slot)
                            (create-clog-tree (tree-root obj)
@@ -61,8 +113,8 @@
                                                               (let* ((object (slot-value object (closer-mop:slot-definition-name slot)))
                                                                      (class (class-of object)))
                                                                 (add-class obj class object)))
-                                             :content (format nil "Slot Name ~A : Slot Value = ~A"
-                                                              (closer-mop:slot-definition-name slot)
+                                             :content (format nil "<b>~A</b> Object Value = ~A"
+                                                              (escape-lisp (closer-mop:slot-definition-name slot))
                                                               (escape-lisp (slot-value object (closer-mop:slot-definition-name slot))))))
                          (closer-mop:class-slots class)))
                (on-change (object)

@@ -30,27 +30,6 @@
                     (SWANK::*BUFFER-READTABLE* *READTABLE*))
                 (swank:inspect-in-emacs object))))))
 
-(defun inspect-class (symbol title value clog-obj)
-  (declare (ignore clog-obj))
-  (let ((class (class-of symbol)))
-    (format t "~%Inspecting ~A = ~A~%" title value)
-    (format t "Class of : ~A~%" class)
-    (format t "Class Name : ~A~%" (class-name class))
-    (format t "Class Precedence List : ~A~%" (closer-mop:class-precedence-list class))
-    (format t "Class Slots : ~A~%" (mapcar (lambda (obj)
-                                             (closer-mop:slot-definition-name obj))
-                                           (closer-mop:class-slots class)))
-    (format t "Direct Generic Functions : ~A~%" (mapcar (lambda (obj)
-                                                          (list obj
-                                                            (closer-mop:generic-function-name obj)
-                                                            (closer-mop:generic-function-lambda-list obj)
-                                                            ))
-                                                        (closer-mop:specializer-direct-generic-functions class)))
-    (format t "Direct Methods : ~A~%" (closer-mop:specializer-direct-methods class))
-    ))
-  
-(add-inspector "Class Inspector" 'inspect-class)
-
 (defun on-probe-panel (obj)
   (let ((app (connection-data-item obj "builder-app-data")))
     (if (probe-win app)
