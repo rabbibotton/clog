@@ -38,6 +38,11 @@
                  (let ((value (format nil "~A" object)))
                    (setf value (ppcre:regex-replace-all "<" value "&lt;"))
                    (setf value (ppcre:regex-replace-all ">" value "&gt;"))))
+               (get-package (sym)
+                  (handler-case
+                      (escape-lisp (package-name (symbol-package sym)))
+                    (error ()
+                      (escape-lisp sym))))
                (add-class (node class object)
                  (let* ((is-root    (typep node 'clog-panel))
                         (class-tree (create-clog-tree (if is-root
@@ -47,8 +52,11 @@
                                                       :indent-level (if is-root
                                                                         0
                                                                         (1+ (indent-level node)))
+                                                      :on-context-menu (lambda (obj)
+                                                                         (on-new-sys-browser obj
+                                                                           :search (get-name (class-name class))))
                                                       :content (format nil "<b>Class: ~A</b> : Object Value ~A"
-                                                                       (escape-lisp (class-name class)) (escape-lisp object)))))
+                                                                       (get-name (class-name class)) (escape-lisp object)))))
                    (create-clog-tree (tree-root class-tree)
                                      :node-html "&#x1F46A;"
                                      :content "Precedence List"
@@ -76,16 +84,27 @@
                                      :visible is-root
                                      :indent-level (1+ (indent-level class-tree))
                                      :fill-function (lambda (obj)
-                                                      (on-method obj class)))
-                   ))
+                                                      (on-method obj class)))))
+               (get-name (sym)
+                 (escape-lisp (if (typep sym 'cons)
+                                  (format nil "(~A ~A:~A)"
+                                          (first sym)
+                                          (get-package (second sym))
+                                          (second sym))
+                                  (format nil "~A:~A"
+                                          (get-package sym)
+                                          sym))))
                (on-generic (obj class)
                  (mapcar (lambda (item)
                            (create-clog-tree (tree-root obj)
                                              :indent-level (1+ (indent-level obj))
                                              :node-html "&#x1F527;"
                                              :visible nil
+                                             :on-context-menu (lambda (obj)
+                                                                (on-new-sys-browser obj
+                                                                  :search (get-name (closer-mop:generic-function-name item))))
                                              :content (format nil "<b>~A</b> ~A"
-                                                              (escape-lisp (closer-mop:generic-function-name item))
+                                                              (get-name (closer-mop:generic-function-name item))
                                                               (escape-lisp (closer-mop:generic-function-lambda-list item)))))
                          (closer-mop:specializer-direct-generic-functions class)))
                (on-method (obj class)
@@ -94,8 +113,13 @@
                                              :indent-level (1+ (indent-level obj))
                                              :node-html "&#x1F45F;"
                                              :visible nil
+                                             :on-context-menu (lambda (obj)
+                                                                (on-new-sys-browser obj
+                                                                  :search (get-name
+                                                                            (closer-mop:generic-function-name
+                                                                              (closer-mop:method-generic-function item)))))
                                              :content (format nil "<b>~A</b> ~A"
-                                                              (escape-lisp (closer-mop:generic-function-name (closer-mop:method-generic-function item)))
+                                                              (get-name (closer-mop:generic-function-name (closer-mop:method-generic-function item)))
                                                               (escape-lisp (closer-mop:method-lambda-list item)))))
                          (closer-mop:specializer-direct-methods class)))
                (on-precedences (obj class object)
@@ -109,12 +133,15 @@
                                              :indent-level (1+ (indent-level obj))
                                              :node-html "&#x1F588;"
                                              :visible nil
+                                             :on-context-menu (lambda (obj)
+                                                                (on-new-sys-browser obj
+                                                                  :search (get-name (closer-mop:slot-definition-name slot))))
                                              :fill-function (lambda (obj)
                                                               (let* ((object (slot-value object (closer-mop:slot-definition-name slot)))
                                                                      (class (class-of object)))
                                                                 (add-class obj class object)))
                                              :content (format nil "<b>~A</b> Object Value = ~A"
-                                                              (escape-lisp (closer-mop:slot-definition-name slot))
+                                                              (get-name (closer-mop:slot-definition-name slot))
                                                               (escape-lisp (slot-value object (closer-mop:slot-definition-name slot))))))
                          (closer-mop:class-slots class)))
                (on-change (object)
