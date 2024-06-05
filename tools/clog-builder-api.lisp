@@ -40,6 +40,13 @@ replaced. (Exported)"
                                 *inspectors*))
   (push (list :name name :func func) *inspectors*))
 
+(defun add-file-extension (name func)
+  "Add a custom file extension with NAME and (FUNC file dir project clog-obj)"
+  (setf *file-extensions* (remove-if (lambda (x)
+                                  (equalp name (getf x :name)))
+                                *file-extensions*))
+  (push (list :name name :func func) *file-extensions*))
+
 (defun reset-control-pallete (panel)
   (let* ((app (connection-data-item panel "builder-app-data"))
          (pallete (select-tool app)))

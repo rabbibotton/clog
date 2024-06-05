@@ -1,5 +1,8 @@
 (in-package :clog-tools)
 
+(defparameter *file-extensions*
+  '())
+
 (defun on-dir-tree (obj &key dir)
   (let* ((*default-title-class*      *builder-title-class*)
          (*default-border-class*     *builder-border-class*)
@@ -48,6 +51,15 @@
                                             (ren   (create-div menu :content "Rename Director" :class *builder-menu-context-item-class*))
                                             (del   (create-div menu :content "Delete Directory" :class *builder-menu-context-item-class*)))
                                        (declare (ignore title op))
+                                       (mapcar (lambda (file-extension)
+                                                 (set-on-click (create-div menu :content (getf file-extension :name) :class *builder-menu-context-item-class*)
+                                                               (lambda (obj)
+                                                                 (destroy menu)
+                                                                 (funcall (getf file-extension :func)
+                                                                          nil item nil
+                                                                          obj))
+                                                               :cancel-event t))
+                                               *file-extensions*)
                                        (set-on-click menu (lambda (i)
                                                             (declare (ignore i))
                                                             (destroy menu)))
@@ -132,6 +144,15 @@
                                                  (ren   (create-div menu :content "Rename" :class *builder-menu-context-item-class*))
                                                  (del   (create-div menu :content "Delete" :class *builder-menu-context-item-class*)))
                                             (declare (ignore title op))
+                                            (mapcar (lambda (file-extension)
+                                                      (set-on-click (create-div menu :content (getf file-extension :name) :class *builder-menu-context-item-class*)
+                                                                    (lambda (obj)
+                                                                      (destroy menu)
+                                                                      (funcall (getf file-extension :func)
+                                                                               item nil nil
+                                                                               obj))
+                                                                    :cancel-event t))
+                                                    *file-extensions*)
                                             (set-on-click menu (lambda (i)
                                                                  (declare (ignore i))
                                                                  (destroy menu)))

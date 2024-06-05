@@ -16,6 +16,7 @@
            :add-supported-controls
            :control-info
            :add-inspector
+	   :add-file-extension
            :clog-builder-probe
            :clog-db-admin))
 
