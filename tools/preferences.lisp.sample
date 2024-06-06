@@ -5,6 +5,22 @@
 
 ;; Preferences loaded on next call to clog-tools:clog-builder or [Eval All]
 
+;; Load extensions to CLOG Builder and Plugins
+;;
+;; CLOG Builder Extensions
+;;------------------------
+;; clog-moldable-inspector -
+;; https://codeberg.org/khinsen/clog-moldable-inspector
+;; (ql:quickload :clog-moldable-inspector/tools)
+;;
+;; CLOG Plugins
+;;-------------
+;; ACE editor
+;; (ql:quickload :clog-ace/tools)
+;;
+;; jTerminal
+;; (ql:quickload :clog-terminal/tools)
+
 ;; CLOG Builder Desktop
 
 ;; Open panels and files in new browser tabs by default
