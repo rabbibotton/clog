@@ -40,9 +40,26 @@
                                                :width 300
                                                :has-pinner t
                                                :keep-on-top t
-                                               :client-movement *client-side-movement*)))
-          (create-div (window-content win) :style "left:0px;right:0px" :class "w3-tiny w3-center"
-                      :content "use CLOG-TOOL:CLOG-BUILDER-PROBE to add probes")
+                                               :client-movement *client-side-movement*))
+               (npanel      (create-div (window-content win) :class "w3-small"))
+               (evaltxt     (create-form-element npanel :text))
+               (pac-line    (create-form-element npanel :text :value "clog-user")))
+          (setf (positioning evaltxt) :absolute)
+          (setf (positioning pac-line) :absolute)
+          (setf (height npanel) "57px")
+          (set-geometry evaltxt :height 27 :width "100%" :top 0 :left 0 :right 0)
+          (set-geometry pac-line :height 27 :width "100%" :top 27 :left 0 :right 0)
+          (setf (place-holder evaltxt) "Enter a form to evaluate to a probe")
+          (set-on-change evaltxt (lambda (obj)
+                                   (declare (ignore obj))
+                                   (let ((txt (text-value evaltxt)))
+                                     (when (not (equal txt ""))
+                                       (let* ((*package* (find-package (string-upcase (text-value pac-line))))
+                                              (aprobe    (format nil "(clog-builder-probe ~A :title \"~A\")"
+                                                                 txt txt)))
+                                         (eval (read-from-string aprobe)))))))
+          (create-div (window-content win) :class "w3-tiny w3-center"
+                      :content "or use CLOG-TOOL:CLOG-BUILDER-PROBE to add probes")
           (setf (probe-win app) win)
           (set-geometry win :top (menu-bar-height win) :left 0 :height "" :bottom 5 :right "")
           (set-on-window-move win (lambda (obj)
