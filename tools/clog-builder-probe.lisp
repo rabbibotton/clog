@@ -141,7 +141,7 @@ symbol is used for title."
                                               (result (eval (read-from-string txt))))
                                          (clog-builder-probe result :title txt))))))
           (create-div (window-content win) :class "w3-tiny w3-center"
-                      :content "or use CLOG-TOOL:CLOG-BUILDER-PROBE to add probes")
+                      :content "or use CLOG-TOOLS:CLOG-BUILDER-PROBE to add probes")
           (setf (probe-win app) win)
           (set-geometry win :top (menu-bar-height win) :left 0 :height "" :bottom 5 :right "")
           (set-on-window-move win (lambda (obj)

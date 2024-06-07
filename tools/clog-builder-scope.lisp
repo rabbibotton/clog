@@ -1,5 +1,12 @@
 (in-package :clog-tools)
 
+(defun clog-builder-scope (object &key title clog-body)
+  "Load a new CLOG Object Scope with OBJECT, use TITLE if set for the object
+name. If CLOG-BODY not set use *clog-debug-instance*"
+  (unless clog-body
+    (setf clog-body *clog-debug-instance*))
+  (on-object-scope clog-body :object object :title title))
+
 (defun on-object-scope (obj &key object title)
   (let* ((*default-title-class*      *builder-title-class*)
          (*default-border-class*     *builder-border-class*)
@@ -31,6 +38,8 @@
                                               (setf (width obj) (width obj))
                                               (setf (height obj) (height obj))))))
     (setf (place-holder root-obj) "Enter a form to evaluate")
+    (create-div tree :class "w3-tiny w3-center"
+                :content "or use CLOG-TOOLS:CLOG-BUILDER-SCOPE to create new scope")
     (when object
       (if title
           (setf (text-value root-obj) title)

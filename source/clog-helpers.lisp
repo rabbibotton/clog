@@ -16,13 +16,14 @@
            :add-supported-controls
            :control-info
            :add-inspector
-	   :add-file-extension
+           :add-file-extension
            :clog-builder-probe
+           :clog-builder-scope
            :clog-db-admin))
 
 (defpackage #:clog-user
   (:use #:cl #:clog #:clog-gui #:clog-web)
-  (:import-from :clog-tools #:clog-builder-probe)
+  (:import-from :clog-tools #:clog-builder-probe #:clog-builder-scope)
   (:export :*body* :clog-repl))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
