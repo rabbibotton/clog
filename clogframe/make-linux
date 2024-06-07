@@ -1,1 +1,1 @@
-c++ clogframe.cpp `pkg-config --cflags --libs gtk+-3.0 webkit2gtk-4.0` -o clogframe
+c++ clogframe.cpp -ldl `pkg-config --cflags --libs gtk+-3.0 webkit2gtk-4.0` -o clogframe
