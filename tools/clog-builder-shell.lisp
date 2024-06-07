@@ -9,6 +9,20 @@
                                                     (uiop:hostname))
                                      :width 600 :height 400
                                      :client-movement *client-side-movement*)))
+    (set-on-click (create-span (window-icon-area win)
+                               :content (format nil "~A&nbsp;" (code-char #x26F6))
+                               :auto-place :top)
+                  (lambda (obj)
+                    (declare (ignore obj))
+                    (set-geometry win
+                                  :top (menu-bar-height win)
+                                  :left 300
+                                  :height "" :width ""
+                                  :bottom 5 :right 0)
+                    (set-on-window-move win nil)
+                    (set-on-window-move win (lambda (obj)
+                                              (setf (width obj) (width obj))
+                                              (setf (height obj) (height obj))))))
     (when dir
         (uiop:chdir (uiop:native-namestring dir)))
     (set-geometry (create-clog-builder-shell (window-content win))

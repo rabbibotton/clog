@@ -1,81 +1,5 @@
 (in-package :clog-tools)
 
-(defparameter *inspectors*
-  `((:name "CLOG Object Scope"
-     :func ,(lambda (object title value clog-obj)
-              (declare (ignore value))
-              (on-object-scope clog-obj :object object :title title)))
-    (:name "Set object to clog-gui:*probe*"
-     :func ,(lambda (object title value clog-obj)
-              (declare (ignore title value clog-obj))
-              (setf clog-gui:*probe* object)))
-    (:name "Print to Console"
-     :func ,(lambda (object title value clog-obj)
-              (declare (ignore object))
-              (on-open-console clog-obj)
-              (print title)
-              (print value)))
-    (:name "Console Inspector"
-     :func ,(lambda (object title value clog-obj)
-              (declare (ignore title value))
-              (on-open-console clog-obj)
-              (let ((*default-title-class*      *builder-title-class*)
-                    (*default-border-class*     *builder-border-class*)
-                    (*standard-input* (make-instance 'console-in-stream :clog-obj clog-obj)))
-                (inspect object))))
-    (:name "Emacs Inspect"
-     :func ,(lambda (object title value clog-obj)
-              (declare (ignore title value clog-obj))
-              (let ((SWANK::*BUFFER-PACKAGE* (find-package (string-upcase "clog-user")))
-                    (SWANK::*BUFFER-READTABLE* *READTABLE*))
-                (swank:inspect-in-emacs object))))))
-
-(defun on-probe-panel (obj)
-  (let ((app (connection-data-item obj "builder-app-data")))
-    (if (probe-win app)
-        (window-focus (probe-win app))
-        (let* ((*default-title-class*      *builder-title-class*)
-               (*default-border-class*     *builder-border-class*)
-               (win         (create-gui-window obj :title "CLOG Probe Panel"
-                                               :width 300
-                                               :has-pinner t
-                                               :keep-on-top t
-                                               :client-movement *client-side-movement*))
-               (npanel      (create-div (window-content win) :class "w3-small"))
-               (evaltxt     (create-form-element npanel :text))
-               (pac-line    (create-form-element npanel :text :value "clog-user")))
-          (setf (positioning evaltxt) :absolute)
-          (setf (positioning pac-line) :absolute)
-          (setf (height npanel) "57px")
-          (set-geometry evaltxt :height 27 :width "100%" :top 0 :left 0 :right 0)
-          (set-geometry pac-line :height 27 :width "100%" :top 27 :left 0 :right 0)
-          (setf (place-holder evaltxt) "Enter a form to evaluate to a probe")
-          (set-on-change evaltxt (lambda (obj)
-                                   (declare (ignore obj))
-                                   (let ((txt (text-value evaltxt)))
-                                     (when (not (equal txt ""))
-                                       (let* ((*package* (find-package (string-upcase (text-value pac-line))))
-                                              (aprobe    (format nil "(clog-builder-probe ~A :title \"~A\")"
-                                                                 txt txt)))
-                                         (eval (read-from-string aprobe)))))))
-          (create-div (window-content win) :class "w3-tiny w3-center"
-                      :content "or use CLOG-TOOL:CLOG-BUILDER-PROBE to add probes")
-          (setf (probe-win app) win)
-          (set-geometry win :top (menu-bar-height win) :left 0 :height "" :bottom 5 :right "")
-          (set-on-window-move win (lambda (obj)
-                                    (setf (height obj) (height obj))))
-          (set-on-window-close win (lambda (obj)
-                                     (declare (ignore obj))
-                                     (setf (probe-win app) nil)))
-          (set-on-click (create-span (window-icon-area win) :content "&larr;&nbsp;" :auto-place :top)
-                        (lambda (obj)
-                          (declare (ignore obj))
-                          (set-geometry win :top (menu-bar-height win) :left 0 :height "" :bottom 5 :right "")))))))
-
-;;;;;;;;;;;;;;;;;;;;;;;;
-;; clog-builder-probe ;;
-;;;;;;;;;;;;;;;;;;;;;;;;
-
 (defmacro clog-builder-probe (symbol &key clog-body
                                           (title "")
                                           auto-probe)
@@ -159,3 +83,73 @@ symbol is used for title."
                (refresh)))
          :name (format nil "clog-builder-probe ~A" title))))))
 
+(defparameter *inspectors*
+  `((:name "CLOG Object Scope"
+     :func ,(lambda (object title value clog-obj)
+              (declare (ignore value))
+              (on-object-scope clog-obj :object object :title title)))
+    (:name "Set object to clog-gui:*probe*"
+     :func ,(lambda (object title value clog-obj)
+              (declare (ignore title value clog-obj))
+              (setf clog-gui:*probe* object)))
+    (:name "Print to Console"
+     :func ,(lambda (object title value clog-obj)
+              (declare (ignore object))
+              (on-open-console clog-obj)
+              (print title)
+              (print value)))
+    (:name "Console Inspector"
+     :func ,(lambda (object title value clog-obj)
+              (declare (ignore title value))
+              (on-open-console clog-obj)
+              (let ((*default-title-class*      *builder-title-class*)
+                    (*default-border-class*     *builder-border-class*)
+                    (*standard-input* (make-instance 'console-in-stream :clog-obj clog-obj)))
+                (inspect object))))
+    (:name "Emacs Inspect"
+     :func ,(lambda (object title value clog-obj)
+              (declare (ignore title value clog-obj))
+              (let ((SWANK::*BUFFER-PACKAGE* (find-package (string-upcase "clog-user")))
+                    (SWANK::*BUFFER-READTABLE* *READTABLE*))
+                (swank:inspect-in-emacs object))))))
+
+(defun on-probe-panel (obj)
+  (let ((app (connection-data-item obj "builder-app-data")))
+    (if (probe-win app)
+        (window-focus (probe-win app))
+        (let* ((*default-title-class*      *builder-title-class*)
+               (*default-border-class*     *builder-border-class*)
+               (win         (create-gui-window obj :title "CLOG Probe Panel"
+                                               :width 300
+                                               :has-pinner t
+                                               :keep-on-top t
+                                               :client-movement *client-side-movement*))
+               (npanel      (create-div (window-content win) :class "w3-small"))
+               (evaltxt     (create-form-element npanel :text))
+               (pac-line    (create-form-element npanel :text :value "clog-user")))
+          (setf (positioning evaltxt) :absolute)
+          (setf (positioning pac-line) :absolute)
+          (setf (height npanel) "57px")
+          (set-geometry evaltxt :height 27 :width "100%" :top 0 :left 0 :right 0)
+          (set-geometry pac-line :height 27 :width "100%" :top 27 :left 0 :right 0)
+          (setf (place-holder evaltxt) "Enter a form to evaluate to a probe")
+          (set-on-change evaltxt (lambda (obj)
+                                   (declare (ignore obj))
+                                   (let ((txt (text-value evaltxt)))
+                                     (when (not (equal txt ""))
+                                       (let* ((*package* (find-package (string-upcase (text-value pac-line))))
+                                              (result (eval (read-from-string txt))))
+                                         (clog-builder-probe result :title txt))))))
+          (create-div (window-content win) :class "w3-tiny w3-center"
+                      :content "or use CLOG-TOOL:CLOG-BUILDER-PROBE to add probes")
+          (setf (probe-win app) win)
+          (set-geometry win :top (menu-bar-height win) :left 0 :height "" :bottom 5 :right "")
+          (set-on-window-move win (lambda (obj)
+                                    (setf (height obj) (height obj))))
+          (set-on-window-close win (lambda (obj)
+                                     (declare (ignore obj))
+                                     (setf (probe-win app) nil)))
+          (set-on-click (create-span (window-icon-area win) :content "&larr;&nbsp;" :auto-place :top)
+                        (lambda (obj)
+                          (declare (ignore obj))
+                          (set-geometry win :top (menu-bar-height win) :left 0 :height "" :bottom 5 :right "")))))))

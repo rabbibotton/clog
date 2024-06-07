@@ -190,7 +190,8 @@
                (add-class tree class object)))
       (set-on-change root-obj (lambda (obj)
                                 (declare (ignore obj))
-                                (on-change (let ((*package* (find-package (string-upcase (text-value pac-line)))))
-                                             (eval (read-from-string (text-value root-obj)))))))
+                                (when (not (equal (text-value root-obj) ""))
+                                  (on-change (let ((*package* (find-package (string-upcase (text-value pac-line)))))
+                                               (eval (read-from-string (text-value root-obj))))))))
       (when object
         (on-change object)))))

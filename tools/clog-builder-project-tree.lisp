@@ -222,7 +222,7 @@
                                                               (project-tree-select obj (format nil "~A" item)))
                                                   :content (file-namestring item))))))
                    (load-proj (sel)
-                     (setf (text-value load-btn) "loading")
+                     (setf (text-value load-btn) "working")
                      (setf (background-color load-btn) :yellow)
                      (handler-case
                          (projects-load (format nil "~A/tools" sel))
@@ -241,7 +241,7 @@
                                (setf (background-color load-btn) load-np)
                                (setf (current-project app) nil))
                              (t
-                              (setf (text-value load-btn) "loading")
+                              (setf (text-value load-btn) "working")
                               (setf (background-color load-btn) :yellow)
                               (let* ((root (quicklisp:where-is-system sel))
                                      (dir  (directory-namestring (uiop:truename* root))))
