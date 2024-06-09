@@ -38,6 +38,7 @@ name. If CLOG-BODY not set use *clog-debug-instance*"
                                               (setf (width obj) (width obj))
                                               (setf (height obj) (height obj))))))
     (setf (place-holder root-obj) "Enter a form to evaluate")
+    (setf (spellcheckp root-obj) nil)
     (create-div tree :class "w3-tiny w3-center"
                 :content "or use CLOG-TOOLS:CLOG-BUILDER-SCOPE to create new scope")
     (when object
@@ -82,24 +83,41 @@ name. If CLOG-BODY not set use *clog-debug-instance*"
                  (create-clog-tree (tree-root class-tree)
                                    :node-html "<span style='color:red'>&#9776;</a>"
                                    :content "Direct Slots"
-                                   :visible is-root
+                                   :visible nil
                                    :indent-level (1+ (indent-level class-tree))
                                    :fill-function (lambda (obj)
                                                     (on-slots obj class object)))
                  (create-clog-tree (tree-root class-tree)
                                    :node-html "<span style='color:red'>&#9689;</a>"
                                    :content "Direct Generic Functions"
-                                   :visible is-root
+                                   :visible nil
                                    :indent-level (1+ (indent-level class-tree))
                                    :fill-function (lambda (obj)
                                                     (on-generic obj class)))
                  (create-clog-tree (tree-root class-tree)
                                    :node-html "<span style='color:red'>&#9649;</a>"
                                    :content "Direct Methods"
-                                   :visible is-root
+                                   :visible nil
                                    :indent-level (1+ (indent-level class-tree))
                                    :fill-function (lambda (obj)
-                                                    (on-method obj class)))))
+                                                    (on-method obj class)))
+                 (when is-root
+                   (create-br class-tree)
+                   (create-clog-tree class-tree
+                                     :node-html "<span style='color:red'>&#9776;</a>"
+                                     :content "<b>Class Slots</b>"
+                                     :visible is-root
+                                     :indent-level 0
+                                     :fill-function (lambda (obj)
+                                                      (on-calc-slots obj class object)))
+                   (create-br class-tree)
+                   (create-clog-tree class-tree
+                                     :node-html "<span style='color:red'>&#9649;</a>"
+                                     :content "<b>Class Methods</b>"
+                                     :visible is-root
+                                     :indent-level 0
+                                     :fill-function (lambda (obj)
+                                                      (on-calc-methods obj class))))))
              (get-name (sym)
                (escape-lisp (if (typep sym 'cons)
                                 (format nil "(~A ~A:~A)"
@@ -133,6 +151,29 @@ name. If CLOG-BODY not set use *clog-debug-instance*"
                                                             (get-name (closer-mop:generic-function-name item))
                                                             (escape-lisp (closer-mop:generic-function-lambda-list item)))))
                        (closer-mop:specializer-direct-generic-functions class)))
+             (on-calc-methods (obj class)
+               (dolist (dclass (closer-mop:class-precedence-list class))
+                 (when (or (equalp (get-name (class-name dclass)) "common-lisp:standard-object")
+                           (equalp (get-name (class-name dclass)) "common-lisp:structure-object"))
+                   (return))
+                 (create-div (tree-root obj) :content (format nil "&nbsp;&nbsp;<u>~A</u>" (get-name (class-name dclass)))
+                             :class "w3-tiny")
+                 (mapcar (lambda (item)
+                           (create-clog-tree (tree-root obj)
+                                             :indent-level (1+ (indent-level obj))
+                                             :node-html "<span style='color:black'>&#9648;</a>"
+                                             :visible nil
+                                             :on-context-menu (lambda (obj)
+                                                                (let ((sys (get-name-cons
+                                                                             (closer-mop:generic-function-name
+                                                                               (closer-mop:method-generic-function item)))))
+                                                                  (on-new-sys-browser obj
+                                                                                      :search (first sys)
+                                                                                      :package (second sys))))
+                                             :content (format nil "<b>~A</b> ~A"
+                                                              (get-name (closer-mop:generic-function-name (closer-mop:method-generic-function item)))
+                                                              (escape-lisp (closer-mop:method-lambda-list item)))))
+                         (closer-mop:specializer-direct-methods dclass))))
              (on-method (obj class)
                (mapcar (lambda (item)
                          (create-clog-tree (tree-root obj)
@@ -175,7 +216,7 @@ name. If CLOG-BODY not set use *clog-debug-instance*"
                                                                    (escape-lisp (closer-mop:slot-definition-initargs slot))))
                            (create-clog-tree-item (tree-root sltt)
                                                   :content (format nil "slot-definition-initform = ~A"
-                                                                   (escape-lisp (closer-mop:slot-definition-initform slot))))
+                                                                   (escape-lisp   (closer-mop:slot-definition-initform slot))))
                            (create-clog-tree-item (tree-root sltt)
                                                   :content (format nil "slot-definition-initfunction = ~A"
                                                                    (escape-lisp (closer-mop:slot-definition-initfunction slot))))
@@ -190,17 +231,63 @@ name. If CLOG-BODY not set use *clog-debug-instance*"
                                                                    (escape-lisp (closer-mop:slot-definition-type slot))))
                            (create-clog-tree-item (tree-root sltt)
                                                   :content (format nil "slot-definition-allocation = ~A"
-                                                                   (escape-lisp (closer-mop:slot-definition-allocation slot))))
-                           ))
+                                                                   (escape-lisp (closer-mop:slot-definition-allocation slot))))))
                        (closer-mop:class-direct-slots class)))
+             (on-calc-slots (obj class object)
+               (dolist (dclass (closer-mop:class-precedence-list class))
+                 (when (or (equalp (get-name (class-name dclass)) "common-lisp:standard-object")
+                           (equalp (get-name (class-name dclass)) "common-lisp:structure-object"))
+                   (return))
+                 (create-div (tree-root obj) :content (format nil "&nbsp;&nbsp;<u>~A</u>" (get-name (class-name dclass)))
+                             :class "w3-tiny")
+                 (mapcar (lambda (slot)
+                           (let ((sltt (create-clog-tree (tree-root obj)
+                                                         :indent-level (1+ (indent-level obj))
+                                                         :node-html "<span style='color:black'>&#9644;</a>"
+                                                         :visible nil
+                                                         :on-context-menu (lambda (obj)
+                                                                            (on-new-sys-browser obj
+                                                                                                :search (get-name (closer-mop:slot-definition-name slot))))
+                                                         :content (format nil "<b>~A</b> Object Value = ~A"
+                                                                          (get-name (closer-mop:slot-definition-name slot))
+                                                                          (escape-lisp (slot-value object (closer-mop:slot-definition-name slot)))))))
+                             (let* ((object (slot-value object (closer-mop:slot-definition-name slot)))
+                                    (class (class-of object)))
+                               (add-class sltt class object))
+                             (create-clog-tree-item (tree-root sltt)
+                                                    :content (format nil "slot-definition-initargs = ~A"
+                                                                     (escape-lisp (closer-mop:slot-definition-initargs slot))))
+                             (create-clog-tree-item (tree-root sltt)
+                                                    :content (format nil "slot-definition-initform = ~A"
+                                                                     (escape-lisp (closer-mop:slot-definition-initform slot))))
+                             (create-clog-tree-item (tree-root sltt)
+                                                    :content (format nil "slot-definition-initfunction = ~A"
+                                                                     (escape-lisp (closer-mop:slot-definition-initfunction slot))))
+                             (create-clog-tree-item (tree-root sltt)
+                                                    :content (format nil "slot-definition-readers = ~A"
+                                                                     (escape-lisp (closer-mop:slot-definition-readers slot))))
+                             (create-clog-tree-item (tree-root sltt)
+                                                    :content (format nil "slot-definition-writers = ~A"
+                                                                     (escape-lisp (closer-mop:slot-definition-writers slot))))
+                             (create-clog-tree-item (tree-root sltt)
+                                                    :content (format nil "slot-type = ~A"
+                                                                     (escape-lisp (closer-mop:slot-definition-type slot))))
+                             (create-clog-tree-item (tree-root sltt)
+                                                    :content (format nil "slot-definition-allocation = ~A"
+                                                                     (escape-lisp (closer-mop:slot-definition-allocation slot))))))
+                         (closer-mop:class-direct-slots dclass))))
              (on-change (object)
                (setf (text tree) "")
                (setf class (class-of object))
+               (create-div tree :class "w3-tiny w3-center"
+                           :content "left-click - drill down / right-click - system browse")
                (add-class tree class object)))
       (set-on-change root-obj (lambda (obj)
                                 (declare (ignore obj))
                                 (when (not (equal (text-value root-obj) ""))
-                                  (on-change (let ((*package* (find-package (string-upcase (text-value pac-line)))))
+                                  (on-change (let* ((*default-title-class*      *builder-title-class*)
+                                                    (*default-border-class*     *builder-border-class*)
+                                                    (*package* (find-package (string-upcase (text-value pac-line)))))
                                                (eval (read-from-string (text-value root-obj))))))))
       (when object
         (on-change object)))))

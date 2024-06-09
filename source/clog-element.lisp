@@ -2334,8 +2334,9 @@ CLOG-ELEMENT and set CLOG-ELEMENT to html-id. Returns CLOG-ELEMENT"))
 ;;;;;;;;;;;;;;;;;;;;
 
 (defgeneric parent-element (clog-element)
-  (:documentation "Return a new clog-element represeting the parent of
-CLOG-ELEMENT."))
+  (:documentation "Return a _new_ clog-element represeting the parent of
+CLOG-ELEMENT. In most cases use PARENT, this creates an alias lisp object
+used for DOM tree walking or other throw away purposes."))
 
 (defmethod parent-element ((obj clog-element))
   (attach-as-child obj (jquery-query obj (format nil "parent().prop('id')"))))
