@@ -71,8 +71,11 @@ name. If CLOG-BODY not set use *clog-debug-instance*"
                                                     :on-context-menu (lambda (obj)
                                                                        (on-new-sys-browser obj
                                                                                            :search (get-name (class-name class))))
-                                                    :content (format nil "<b>Class: ~A</b> : Object Value ~A"
-                                                                     (get-name (class-name class)) (escape-lisp object)))))
+                                                    :content (format nil "<b>Class: ~A</b>~A"
+                                                                     (get-name (class-name class))
+                                                                     (if (typep object class)
+                                                                         (format nil " : Object Value ~A" (escape-lisp object))
+                                                                         "")))))
                  (create-clog-tree (tree-root class-tree)
                                    :node-html "<span style='color:red'>&#9282;</a>"
                                    :content "Precedence List"
@@ -80,6 +83,20 @@ name. If CLOG-BODY not set use *clog-debug-instance*"
                                    :indent-level (1+ (indent-level class-tree))
                                    :fill-function (lambda (obj)
                                                     (on-precedences obj class object)))
+                 (create-clog-tree (tree-root class-tree)
+                                   :node-html "<span style='color:red'>&#9282;</a>"
+                                   :content "Superclass List"
+                                   :visible nil
+                                   :indent-level (1+ (indent-level class-tree))
+                                   :fill-function (lambda (obj)
+                                                    (on-super obj class object)))
+                 (create-clog-tree (tree-root class-tree)
+                                   :node-html "<span style='color:red'>&#9282;</a>"
+                                   :content "Subclass List"
+                                   :visible nil
+                                   :indent-level (1+ (indent-level class-tree))
+                                   :fill-function (lambda (obj)
+                                                    (on-sub obj class object)))
                  (create-clog-tree (tree-root class-tree)
                                    :node-html "<span style='color:red'>&#9776;</a>"
                                    :content "Direct Slots"
@@ -102,20 +119,18 @@ name. If CLOG-BODY not set use *clog-debug-instance*"
                                    :fill-function (lambda (obj)
                                                     (on-method obj class)))
                  (when is-root
-                   (create-br class-tree)
-                   (create-clog-tree class-tree
-                                     :node-html "<span style='color:red'>&#9776;</a>"
+                   (create-clog-tree (tree-root class-tree)
+                                     :node-html "<b><span style='color:red'>&#9776;</span></b>"
                                      :content "<b>Class Slots</b>"
                                      :visible is-root
-                                     :indent-level 0
+                                     :indent-level (1+ (indent-level class-tree))
                                      :fill-function (lambda (obj)
                                                       (on-calc-slots obj class object)))
-                   (create-br class-tree)
-                   (create-clog-tree class-tree
-                                     :node-html "<span style='color:red'>&#9649;</a>"
+                   (create-clog-tree (tree-root class-tree)
+                                     :node-html "<b><span style='color:red'>&#9649;</span></b>"
                                      :content "<b>Class Methods</b>"
                                      :visible is-root
-                                     :indent-level 0
+                                     :indent-level (1+ (indent-level class-tree))
                                      :fill-function (lambda (obj)
                                                       (on-calc-methods obj class))))))
              (get-name (sym)
@@ -196,6 +211,16 @@ name. If CLOG-BODY not set use *clog-debug-instance*"
                          (unless (eq item class)
                            (add-class obj item object)))
                        (closer-mop:class-precedence-list class)))
+             (on-super (obj class object)
+               (mapcar (lambda (item)
+                         (unless (eq item class)
+                           (add-class obj item object)))
+                       (closer-mop:class-direct-superclasses class)))
+             (on-sub (obj class object)
+               (mapcar (lambda (item)
+                         (unless (eq item class)
+                           (add-class obj item object)))
+                       (closer-mop:class-direct-subclasses class)))
              (on-slots (obj class object)
                (mapcar (lambda (slot)
                          (let ((sltt (create-clog-tree (tree-root obj)
@@ -205,12 +230,16 @@ name. If CLOG-BODY not set use *clog-debug-instance*"
                                                        :on-context-menu (lambda (obj)
                                                                           (on-new-sys-browser obj
                                                                                               :search (get-name (closer-mop:slot-definition-name slot))))
-                                                       :content (format nil "<b>~A</b> Object Value = ~A"
+                                                       :content (format nil "<b>~A</b>~A"
                                                                         (get-name (closer-mop:slot-definition-name slot))
-                                                                        (escape-lisp (slot-value object (closer-mop:slot-definition-name slot)))))))
-                           (let* ((object (slot-value object (closer-mop:slot-definition-name slot)))
-                                  (class (class-of object)))
-                             (add-class sltt class object))
+                                                                        (if (typep object class)
+                                                                            (format nil " Object Value = ~A"
+                                                                                    (escape-lisp (slot-value object (closer-mop:slot-definition-name slot))))
+                                                                            "")))))
+                           (when (typep object class)
+                             (let* ((object (slot-value object (closer-mop:slot-definition-name slot)))
+                                    (class (class-of object)))
+                               (add-class sltt class object)))
                            (create-clog-tree-item (tree-root sltt)
                                                   :content (format nil "slot-definition-initargs = ~A"
                                                                    (escape-lisp (closer-mop:slot-definition-initargs slot))))
@@ -248,12 +277,16 @@ name. If CLOG-BODY not set use *clog-debug-instance*"
                                                          :on-context-menu (lambda (obj)
                                                                             (on-new-sys-browser obj
                                                                                                 :search (get-name (closer-mop:slot-definition-name slot))))
-                                                         :content (format nil "<b>~A</b> Object Value = ~A"
+                                                         :content (format nil "<b>~A</b>~A"
                                                                           (get-name (closer-mop:slot-definition-name slot))
-                                                                          (escape-lisp (slot-value object (closer-mop:slot-definition-name slot)))))))
-                             (let* ((object (slot-value object (closer-mop:slot-definition-name slot)))
-                                    (class (class-of object)))
-                               (add-class sltt class object))
+                                                                          (if (typep object class)
+                                                                              (format nil " Object Value = ~A"
+                                                                                      (escape-lisp (slot-value object (closer-mop:slot-definition-name slot))))
+                                                                              "")))))
+                             (when (typep object class)
+                               (let* ((object (slot-value object (closer-mop:slot-definition-name slot)))
+                                      (class (class-of object)))
+                                 (add-class sltt class object)))
                              (create-clog-tree-item (tree-root sltt)
                                                     :content (format nil "slot-definition-initargs = ~A"
                                                                      (escape-lisp (closer-mop:slot-definition-initargs slot))))
@@ -280,7 +313,7 @@ name. If CLOG-BODY not set use *clog-debug-instance*"
                (setf (text tree) "")
                (setf class (class-of object))
                (create-div tree :class "w3-tiny w3-center"
-                           :content "left-click - drill down / right-click - system browse")
+                           :content "left-click - drill down / right-click - system browse<br><br>")
                (add-class tree class object)))
       (set-on-change root-obj (lambda (obj)
                                 (declare (ignore obj))
