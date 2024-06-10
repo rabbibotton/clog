@@ -58,6 +58,10 @@ name. If CLOG-BODY not set use *clog-debug-instance*"
                    (escape-lisp (package-name (symbol-package sym)))
                  (error ()
                    (escape-lisp sym))))
+             (add-list (node lst)
+               (mapcar (lambda (object)
+                         (add-class node (class-of object) object))
+                       lst))
              (add-class (node class object)
                (let* ((is-root    (typep node 'clog-panel))
                       (class-tree (create-clog-tree (if is-root
@@ -76,10 +80,12 @@ name. If CLOG-BODY not set use *clog-debug-instance*"
                                                                      (if (typep object class)
                                                                          (format nil " : Object Value ~A" (escape-lisp object))
                                                                          "")))))
+                 (when (consp object)
+                   (add-list class-tree object))
                  (create-clog-tree (tree-root class-tree)
                                    :node-html "<span style='color:red'>&#9282;</a>"
                                    :content "Precedence List"
-                                   :visible is-root
+                                   :visible nil
                                    :indent-level (1+ (indent-level class-tree))
                                    :fill-function (lambda (obj)
                                                     (on-precedences obj class object)))
@@ -122,14 +128,14 @@ name. If CLOG-BODY not set use *clog-debug-instance*"
                    (create-clog-tree (tree-root class-tree)
                                      :node-html "<b><span style='color:red'>&#9776;</span></b>"
                                      :content "<b>Class Slots</b>"
-                                     :visible is-root
+                                     :visible nil
                                      :indent-level (1+ (indent-level class-tree))
                                      :fill-function (lambda (obj)
                                                       (on-calc-slots obj class object)))
                    (create-clog-tree (tree-root class-tree)
                                      :node-html "<b><span style='color:red'>&#9649;</span></b>"
                                      :content "<b>Class Methods</b>"
-                                     :visible is-root
+                                     :visible nil
                                      :indent-level (1+ (indent-level class-tree))
                                      :fill-function (lambda (obj)
                                                       (on-calc-methods obj class))))))
@@ -311,9 +317,9 @@ name. If CLOG-BODY not set use *clog-debug-instance*"
                          (closer-mop:class-direct-slots dclass))))
              (on-change (object)
                (setf (text tree) "")
-               (setf class (class-of object))
                (create-div tree :class "w3-tiny w3-center"
                            :content "left-click - drill down / right-click - system browse<br><br>")
+               (setf class (class-of object))
                (add-class tree class object)))
       (set-on-change root-obj (lambda (obj)
                                 (declare (ignore obj))
