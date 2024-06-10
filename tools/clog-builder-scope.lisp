@@ -315,18 +315,22 @@ name. If CLOG-BODY not set use *clog-debug-instance*"
                                                     :content (format nil "slot-definition-allocation = ~A"
                                                                      (escape-lisp (closer-mop:slot-definition-allocation slot))))))
                          (closer-mop:class-direct-slots dclass))))
-             (on-change (object)
+             (on-change (object &key is-list)
                (setf (text tree) "")
                (create-div tree :class "w3-tiny w3-center"
                            :content "left-click - drill down / right-click - system browse<br><br>")
-               (setf class (class-of object))
-               (add-class tree class object)))
+               (if is-list
+                   (add-list tree object)
+                   (progn
+                     (setf class (class-of object))
+                     (add-class tree class object)))))
       (set-on-change root-obj (lambda (obj)
                                 (declare (ignore obj))
                                 (when (not (equal (text-value root-obj) ""))
-                                  (on-change (let* ((*default-title-class*      *builder-title-class*)
-                                                    (*default-border-class*     *builder-border-class*)
-                                                    (*package* (find-package (string-upcase (text-value pac-line)))))
-                                               (eval (read-from-string (text-value root-obj))))))))
+                                  (let* ((*default-title-class*      *builder-title-class*)
+                                         (*default-border-class*     *builder-border-class*)
+                                         (*package* (find-package (string-upcase (text-value pac-line)))))
+                                    (on-change (multiple-value-list (eval (read-from-string (text-value root-obj))))
+                                               :is-list t)))))
       (when object
         (on-change object)))))
