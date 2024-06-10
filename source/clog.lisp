@@ -383,6 +383,7 @@ embedded in a native template application.)"
   (remove-from-dom    generic-function)
   (remove-from-clog   generic-function)
   (destroy            generic-function)
+  (browser-gc         generic-function)
   (click              generic-function)
   (replace-element    generic-function)
   (replace-children   generic-function)

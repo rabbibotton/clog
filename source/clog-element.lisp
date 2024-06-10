@@ -2271,6 +2271,22 @@ on browser."))
   (remove-from-dom obj)
   (remove-from-clog obj))
 
+;;;;;;;;;;;;;;;;
+;; browser-gc ;;
+;;;;;;;;;;;;;;;;
+
+(defgeneric browser-gc (clog-element)
+  (:documentation "Remove any clog cache items on browser not in DOM.
+This gc is generally done during websocket pings. When clearing out
+large amounts of DOM objects not using CLOG would be the main reason
+to consider running this earlier."))
+
+(defmethod browser-gc ((obj clog-element))
+  (js-execute obj
+            "Object.entries(clog).forEach(function(c,i,a)
+               {if ((c[1] !== null) && (typeof c[1] === 'object') && (c[1].nodeType===1))
+                  {if (c[1].isConnected===false) {delete clog[c[0]]}}})"))
+
 ;;;;;;;;;;;
 ;; click ;;
 ;;;;;;;;;;;
