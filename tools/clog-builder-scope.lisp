@@ -180,9 +180,12 @@ name. If CLOG-BODY not set use *clog-debug-instance*"
                                                                 (on-new-sys-browser obj
                                                                                     :search (first sys)
                                                                                     :package (second sys))))
-                                           :content (format nil "<b>~A</b> ~A"
-                                                            (get-name (closer-mop:generic-function-name item))
-                                                            (escape-lisp (closer-mop:generic-function-lambda-list item)))))
+                                           :content (handler-case
+                                                        (format nil "<b>~A</b> ~A"
+                                                                (get-name (closer-mop:generic-function-name item))
+                                                                (escape-lisp (closer-mop:generic-function-lambda-list item)))
+                                                      (error ()
+                                                        ""))))
                        (closer-mop:specializer-direct-generic-functions class)))
              (on-calc-methods (obj class)
                (dolist (dclass (closer-mop:class-precedence-list class))
@@ -251,13 +254,17 @@ name. If CLOG-BODY not set use *clog-debug-instance*"
                                                        :content (format nil "<b>~A</b>~A"
                                                                         (get-name (closer-mop:slot-definition-name slot))
                                                                         (if (typep object class)
-                                                                            (format nil " Object Value = ~A"
-                                                                                    (escape-lisp (slot-value object (closer-mop:slot-definition-name slot))))
+                                                                            (handler-case
+                                                                                (format nil " Object Value = ~A"
+                                                                                        (escape-lisp (slot-value object (closer-mop:slot-definition-name slot))))
+                                                                              (error () " Unbound"))
                                                                             "")))))
                            (when (typep object class)
-                             (let* ((object (slot-value object (closer-mop:slot-definition-name slot)))
-                                    (class (class-of object)))
-                               (add-class sltt class object)))
+                             (handler-case
+                                 (let* ((object (slot-value object (closer-mop:slot-definition-name slot)))
+                                        (class (class-of object)))
+                                   (add-class sltt class object))
+                               (error () nil)))
                            (create-clog-tree-item (tree-root sltt)
                                                   :content (format nil "slot-definition-initargs = ~A"
                                                                    (escape-lisp (closer-mop:slot-definition-initargs slot))))
@@ -282,51 +289,60 @@ name. If CLOG-BODY not set use *clog-debug-instance*"
                        (closer-mop:class-direct-slots class)))
              (on-calc-slots (obj class object)
                (dolist (dclass (closer-mop:class-precedence-list class))
-                 (when (or (equalp (get-name (class-name dclass)) "common-lisp:standard-object")
-                           (equalp (get-name (class-name dclass)) "common-lisp:structure-object"))
-                   (return))
-                 (create-div (tree-root obj) :content (format nil "&nbsp;&nbsp;<u>~A</u>" (get-name (class-name dclass)))
-                             :class "w3-tiny")
-                 (mapcar (lambda (slot)
-                           (let ((sltt (create-clog-tree (tree-root obj)
-                                                         :indent-level (1+ (indent-level obj))
-                                                         :node-html "<span style='color:black'>&#9644;</a>"
-                                                         :visible nil
-                                                         :on-context-menu (lambda (obj)
-                                                                            (on-new-sys-browser obj
-                                                                                                :search (get-name (closer-mop:slot-definition-name slot))))
-                                                         :content (format nil "<b>~A</b>~A"
-                                                                          (get-name (closer-mop:slot-definition-name slot))
-                                                                          (if (typep object class)
-                                                                              (format nil " Object Value = ~A"
-                                                                                      (escape-lisp (slot-value object (closer-mop:slot-definition-name slot))))
-                                                                              "")))))
-                             (when (typep object class)
-                               (let* ((object (slot-value object (closer-mop:slot-definition-name slot)))
-                                      (class (class-of object)))
-                                 (add-class sltt class object)))
-                             (create-clog-tree-item (tree-root sltt)
-                                                    :content (format nil "slot-definition-initargs = ~A"
-                                                                     (escape-lisp (closer-mop:slot-definition-initargs slot))))
-                             (create-clog-tree-item (tree-root sltt)
-                                                    :content (format nil "slot-definition-initform = ~A"
-                                                                     (escape-lisp (closer-mop:slot-definition-initform slot))))
-                             (create-clog-tree-item (tree-root sltt)
-                                                    :content (format nil "slot-definition-initfunction = ~A"
-                                                                     (escape-lisp (closer-mop:slot-definition-initfunction slot))))
-                             (create-clog-tree-item (tree-root sltt)
-                                                    :content (format nil "slot-definition-readers = ~A"
-                                                                     (escape-lisp (closer-mop:slot-definition-readers slot))))
-                             (create-clog-tree-item (tree-root sltt)
-                                                    :content (format nil "slot-definition-writers = ~A"
-                                                                     (escape-lisp (closer-mop:slot-definition-writers slot))))
-                             (create-clog-tree-item (tree-root sltt)
-                                                    :content (format nil "slot-type = ~A"
-                                                                     (escape-lisp (closer-mop:slot-definition-type slot))))
-                             (create-clog-tree-item (tree-root sltt)
-                                                    :content (format nil "slot-definition-allocation = ~A"
-                                                                     (escape-lisp (closer-mop:slot-definition-allocation slot))))))
-                         (closer-mop:class-direct-slots dclass))))
+                 (handler-case
+                     (progn
+                       (when (or (equalp (get-name (class-name dclass)) "common-lisp:standard-object")
+                                 (equalp (get-name (class-name dclass)) "common-lisp:structure-object")
+                                 (equalp (get-name (class-name dclass)) "common-lisp:standard-class"))
+                         (return))
+                       (create-div (tree-root obj) :content (format nil "&nbsp;&nbsp;<u>~A</u>" (get-name (class-name dclass)))
+                                   :class "w3-tiny")
+                       (mapcar (lambda (slot)
+                                 (let ((sltt (create-clog-tree (tree-root obj)
+                                                               :indent-level (1+ (indent-level obj))
+                                                               :node-html "<span style='color:black'>&#9644;</a>"
+                                                               :visible nil
+                                                               :on-context-menu (lambda (obj)
+                                                                                  (on-new-sys-browser obj
+                                                                                                      :search (get-name (closer-mop:slot-definition-name slot))))
+                                                               :content (format nil "<b>~A</b>~A"
+                                                                                (get-name (closer-mop:slot-definition-name slot))
+                                                                                (if (typep object class)
+                                                                                    (handler-case
+                                                                                        (format nil " Object Value = ~A"
+                                                                                                (escape-lisp (slot-value object (closer-mop:slot-definition-name slot))))
+                                                                                      (error () " Unbound"))
+                                                                                    "")))))
+                                   (when (typep object class)
+                                     (handler-case
+                                         (let* ((object (slot-value object (closer-mop:slot-definition-name slot)))
+                                                (class (class-of object)))
+                                           (add-class sltt class object))
+                                       (error () nil)))
+                                   (create-clog-tree-item (tree-root sltt)
+                                                          :content (format nil "slot-definition-initargs = ~A"
+                                                                           (escape-lisp (closer-mop:slot-definition-initargs slot))))
+                                   (create-clog-tree-item (tree-root sltt)
+                                                          :content (format nil "slot-definition-initform = ~A"
+                                                                           (escape-lisp (closer-mop:slot-definition-initform slot))))
+                                   (create-clog-tree-item (tree-root sltt)
+                                                          :content (format nil "slot-definition-initfunction = ~A"
+                                                                           (escape-lisp (closer-mop:slot-definition-initfunction slot))))
+                                   (create-clog-tree-item (tree-root sltt)
+                                                          :content (format nil "slot-definition-readers = ~A"
+                                                                           (escape-lisp (closer-mop:slot-definition-readers slot))))
+                                   (create-clog-tree-item (tree-root sltt)
+                                                          :content (format nil "slot-definition-writers = ~A"
+                                                                           (escape-lisp (closer-mop:slot-definition-writers slot))))
+                                   (create-clog-tree-item (tree-root sltt)
+                                                          :content (format nil "slot-type = ~A"
+                                                                           (escape-lisp (closer-mop:slot-definition-type slot))))
+                                   (create-clog-tree-item (tree-root sltt)
+                                                          :content (format nil "slot-definition-allocation = ~A"
+                                                                           (escape-lisp (closer-mop:slot-definition-allocation slot))))))
+                               (closer-mop:class-direct-slots dclass))
+                       (error ()
+                              (return))))))
              (on-change (object &key is-list)
                (setf (text tree) "")
                (browser-gc obj)
