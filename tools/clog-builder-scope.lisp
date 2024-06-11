@@ -23,6 +23,8 @@ name. If CLOG-BODY not set use *clog-debug-instance*"
                                     :class "w3-small"
                                     :overflow :scroll
                                     :top 60 :bottom 0 :left 0 :right 0)))
+    (set-on-window-close win (lambda (obj)
+                               (browser-gc obj)))
     (set-on-click (create-span (window-icon-area win)
                                :content (format nil "~A&nbsp;" (code-char #x26F6))
                                :auto-place :top)
@@ -62,6 +64,12 @@ name. If CLOG-BODY not set use *clog-debug-instance*"
                (mapcar (lambda (object)
                          (add-class node (class-of object) object))
                        lst))
+             (add-hash (node hsh)
+               (maphash (lambda (k v)
+                          (create-clog-tree-item (tree-root node) :content "Key/Value:" :node-html "")
+                          (add-class node (class-of k) k)
+                          (add-class node (class-of v) v))
+                        hsh))
              (add-class (node class object)
                (let* ((is-root    (typep node 'clog-panel))
                       (class-tree (create-clog-tree (if is-root
@@ -81,7 +89,11 @@ name. If CLOG-BODY not set use *clog-debug-instance*"
                                                                          (format nil " : Object Value ~A" (escape-lisp object))
                                                                          "")))))
                  (when (consp object)
+                   (create-clog-tree-item (tree-root class-tree) :content "<u>List</u>" :node-html "")
                    (add-list class-tree object))
+                 (when (hash-table-p object)
+                   (create-clog-tree-item (tree-root class-tree) :content "<u>Hash Table</u>" :node-html "")
+                   (add-hash class-tree object))
                  (create-clog-tree (tree-root class-tree)
                                    :node-html "<span style='color:red'>&#9282;</a>"
                                    :content "Precedence List"
@@ -317,7 +329,7 @@ name. If CLOG-BODY not set use *clog-debug-instance*"
                          (closer-mop:class-direct-slots dclass))))
              (on-change (object &key is-list)
                (setf (text tree) "")
-               (browser-gc object)
+               (browser-gc obj)
                (create-div tree :class "w3-tiny w3-center"
                            :content "left-click - drill down / right-click - system browse<br><br>")
                (if is-list
