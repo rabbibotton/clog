@@ -989,39 +989,38 @@ The on-window-change clog-obj received is the new window"))
 (defun on-gui-drag-down (obj data)
   "Handle mouse down on drag items"
   (let ((app (connection-data-item obj "clog-gui")))
-    (unless (in-drag app)
-      (setf (in-drag app) (attribute obj "data-drag-type"))
-      (let* ((target (gethash (attribute obj "data-drag-obj") (windows app)))
-             (pointer-x (getf data ':screen-x))
-             (pointer-y (getf data ':screen-y))
-             (obj-top)
-             (obj-left)
-             (perform-drag nil))
-        (when target
-          (setf (drag-obj app) target)
-          (cond ((equalp (in-drag app) "m")
-                 (setf obj-top
-                       (js-to-integer (top (drag-obj app))))
-                 (setf obj-left
-                       (js-to-integer (left (drag-obj app))))
-                 (setf perform-drag (fire-on-window-can-move (drag-obj app))))
-                ((equalp (in-drag app) "s")
-                 (setf obj-top  (height (drag-obj app)))
-                 (setf obj-left (width (drag-obj app)))
-                 (setf perform-drag (fire-on-window-can-size (drag-obj app))))
-                (t
-                 (format t "Warning - invalid data-drag-type attribute")))
-          (unless (keep-on-top (drag-obj app))
-            (setf (z-index (drag-obj app)) (incf (last-z app))))
-          (fire-on-window-change (drag-obj app) app)
-          (setf (drag-y app) (- pointer-y obj-top))
-          (setf (drag-x app) (- pointer-x obj-left)))
-        (cond (perform-drag
-                (set-on-pointer-move obj 'on-gui-drag-move)
-                (set-on-pointer-cancel obj 'on-gui-drag-stop)
-                (set-on-pointer-up obj 'on-gui-drag-stop))
+    (setf (in-drag app) (attribute obj "data-drag-type"))
+    (let* ((target (gethash (attribute obj "data-drag-obj") (windows app)))
+           (pointer-x (getf data ':screen-x))
+           (pointer-y (getf data ':screen-y))
+           (obj-top)
+           (obj-left)
+           (perform-drag nil))
+      (when target
+        (setf (drag-obj app) target)
+        (cond ((equalp (in-drag app) "m")
+                (setf obj-top
+                      (js-to-integer (top (drag-obj app))))
+                (setf obj-left
+                      (js-to-integer (left (drag-obj app))))
+                (setf perform-drag (fire-on-window-can-move (drag-obj app))))
+              ((equalp (in-drag app) "s")
+                (setf obj-top  (height (drag-obj app)))
+                (setf obj-left (width (drag-obj app)))
+                (setf perform-drag (fire-on-window-can-size (drag-obj app))))
               (t
-                (setf (in-drag app) nil)))))))
+                (format t "Warning - invalid data-drag-type attribute")))
+        (unless (keep-on-top (drag-obj app))
+          (setf (z-index (drag-obj app)) (incf (last-z app))))
+        (fire-on-window-change (drag-obj app) app)
+        (setf (drag-y app) (- pointer-y obj-top))
+        (setf (drag-x app) (- pointer-x obj-left)))
+      (cond (perform-drag
+              (set-on-pointer-move obj 'on-gui-drag-move)
+              (set-on-pointer-cancel obj 'on-gui-drag-stop)
+              (set-on-pointer-up obj 'on-gui-drag-stop))
+            (t
+              (setf (in-drag app) nil))))))
 
 ;;;;;;;;;;;;;;;;;;;;;;
 ;; on-gui-drag-move ;;
