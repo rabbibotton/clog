@@ -35,6 +35,7 @@ script."
   "CLOG system startup and shutdown"
 
   (*verbose-output* variable)
+  (*browser-gc-on-ping* variable)
   (*break-on-error* variable)
   (*disable-clog-debugging* variable)
 
@@ -83,6 +84,7 @@ script."
   #-(or sbcl ecl mezzano) (apply #'make-hash-table args))
 
 (defvar *verbose-output* nil "Verbose server output (default false)")
+(defvar *browser-gc-on-ping* nil "Run a browser-gc on every ping")
 (defvar *break-on-error* t   "Allow invoking debugger (default true)")
 (defvar *disable-clog-debugging* nil "When true turns off debug hooks")
 

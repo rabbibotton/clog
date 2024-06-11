@@ -114,7 +114,8 @@ possible tag and keywords."))
   (:documentation "Create a new CLOG-ELEMENT or sub-type of CLOG-TYPE from HTML
 as child of CLOG-OBJ and if :AUTO-PLACE (default t) place-inside-bottom-of
 CLOG-OBJ, you can also set auto-place to :bottom or :top. If HTML-ID is nil one
-will be generated."))
+will be generated. If auto-place is nil, note that if browser-gc is called
+or clog-connect:*browser-gc-on-ping* is t the browser side will be destroyed."))
 
 (defmethod create-child ((obj clog-obj) html &key (html-id nil)
                                                (auto-place t)
@@ -2277,9 +2278,11 @@ on browser."))
 
 (defgeneric browser-gc (clog-element)
   (:documentation "Remove any clog cache items on browser not in DOM.
-This gc is generally done during websocket pings. When clearing out
-large amounts of DOM objects not using CLOG would be the main reason
-to consider running this earlier."))
+If clog-connect:*browser-gc-on-ping* is set this is done during websocket pings.
+Care should be taken as any clog-element not placed in the DOM will be deleted
+on the browser side (for examle :auto-place nil set and not later placed.)
+The main use is when clearing out large amounts of DOM objects not using CLOG
+destroy."))
 
 (defmethod browser-gc ((obj clog-element))
   (js-execute obj

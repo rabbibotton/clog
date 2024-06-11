@@ -317,6 +317,7 @@ name. If CLOG-BODY not set use *clog-debug-instance*"
                          (closer-mop:class-direct-slots dclass))))
              (on-change (object &key is-list)
                (setf (text tree) "")
+               (browser-gc object)
                (create-div tree :class "w3-tiny w3-center"
                            :content "left-click - drill down / right-click - system browse<br><br>")
                (if is-list

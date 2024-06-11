@@ -35,6 +35,7 @@
                                    :visible nil
                                    :on-context-menu
                                    (lambda (obj)
+                                     (browser-gc obj)
                                      (let* ((disp (text-value (content obj)))
                                             (menu (create-panel obj
                                                                 :left (left obj) :top (top obj)
@@ -129,6 +130,7 @@
                  (create-clog-tree-item (tree-root node)
                                         :on-context-menu
                                         (lambda (obj)
+                                          (browser-gc obj)
                                           (let* ((disp (text-value (content obj)))
                                                  (menu (create-panel obj
                                                                      :left (left obj) :top (top obj)
@@ -198,8 +200,8 @@
                                                     (project-tree-select obj (format nil "~A" item)))
                                         :content (file-namestring item))))
              (on-change (obj)
-               (declare (ignore obj))
                (setf (text tree) "")
+               (browser-gc obj)
                (let* ((root (text-value root-dir))
                       (tname (truename root))
                       (dir   (format nil "~A" (uiop:native-namestring (if tname

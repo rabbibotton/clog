@@ -68,7 +68,7 @@
           (set-on-window-move win (lambda (obj)
                                     (setf (height obj) (height obj))))
           (set-on-window-close win (lambda (obj)
-                                     (declare (ignore obj))
+                                     (browser-gc obj)
                                      (setf (project-tree-win app) nil)))
           (setf (positioning projects) :absolute)
           (set-geometry projects :height 27 :width "100%" :top 0 :left 0 :right 0)
@@ -116,6 +116,7 @@
                                              :visible nil
                                              :on-context-menu
                                                (lambda (obj)
+                                                 (browser-gc obj)
                                                  (let* ((disp (text-value (content obj)))
                                                         (menu (create-panel obj
                                                                             :left (left obj) :top (top obj)
@@ -166,6 +167,7 @@
                            (create-clog-tree-item (tree-root node)
                                                   :on-context-menu
                                                     (lambda (obj)
+                                                      (browser-gc obj)
                                                       (let* ((disp (text-value (content obj)))
                                                              (menu (create-panel obj
                                                                                  :left (left obj) :top (top obj)
@@ -232,8 +234,8 @@
                               (setf (background-color load-btn) load-np)
                               (window-focus win))
                    (on-change (obj)
-                     (declare (ignore obj))
                      (setf (text tree) "")
+                     (browser-gc obj)
                      (let* ((sel (value projects)))
                        (setf entry-point "")
                        (cond ((equal sel "")
@@ -256,6 +258,7 @@
                                                           :content root
                                                           :on-context-menu
                                                           (lambda (obj)
+                                                            (browser-gc obj)
                                                             (let* ((disp sel)
                                                                    (item root)
                                                                    (menu (create-panel obj

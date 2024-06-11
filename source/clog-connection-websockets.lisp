@@ -97,11 +97,13 @@
                          connection))
                (websocket-driver:close-connection connection)) ; don't send the reason for better security
               ((equal (first ml) "0")
-               ;; a ping - run browser gc
-               (execute connection-id
+               ;; a ping
+               (when *browser-gc-on-ping*
+                 ;; run browser gc
+                 (execute connection-id
                         "Object.entries(clog).forEach(function(c,i,a)
                              {if ((c[1] !== null) && (typeof c[1] === 'object') && (c[1].nodeType===1))
-                             {if (c[1].isConnected===false) {delete clog[c[0]]}}})")
+                             {if (c[1].isConnected===false) {delete clog[c[0]]}}})"))
                (when *verbose-output*
                  (format t "Connection ~A    Ping~%" connection-id)))
               ((equal (first ml) "E")
