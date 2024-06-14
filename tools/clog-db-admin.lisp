@@ -175,6 +175,13 @@
     (setf (title (html-document body)) "CLOG DB Admin")
     (clog-gui-initialize body)
     (add-class body "w3-blue-grey")
+    (when *password-protect*
+      (input-dialog body "Enter password:" (lambda (result)
+                                             (unless (equal result (if (functionp *password-protect*)
+                                                                       (funcall *password-protect* body)
+                                                                       *password-protect*))
+                                               (close-connection (window body))))
+                    :time-out 360 :title "Password"))
     (let* ((menu  (create-gui-menu-bar body))
            (icon  (create-gui-menu-icon menu :on-click #'on-help-about))
            (file  (create-gui-menu-drop-down menu :content "Database"))

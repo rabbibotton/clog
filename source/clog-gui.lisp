@@ -1914,6 +1914,7 @@ alert-dialog blocks till time-out reached or OK clicked."
                                             (rows 1)
                                             (placeholder-value "")
                                             (default-value "")
+                                            is-password
                                             (left nil) (top nil)
                                             (width 300) (height 200)
                                             (client-movement nil)
@@ -1928,7 +1929,10 @@ result of on-input."
          (result nil)
          (body (connection-body obj))
          (inp  (if (eql rows 1)
-                   (format nil "<input type='text' id='~A-input' size='~A' value='~A' placeholder='~A'>"
+                   (format nil "<input type='~A' id='~A-input' size='~A' value='~A' placeholder='~A'>"
+                           (if is-password
+                               "password"
+                               "text")
                            html-id
                            size
                            (escape-string default-value :html t)

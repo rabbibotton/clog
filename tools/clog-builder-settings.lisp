@@ -10,6 +10,9 @@
 ;; These are defaults, if the file preferences.lisp exists
 ;; the values set there will be used instead
 
+;; To passowrod protect use of the IDE set to a password or a function that
+;; returns a password.
+(defparameter *password-protect* nil)
 ;; Open panels and files in new browser tabs by default
 (defparameter *open-external* nil)
 ;; Use clog-popup and extend desktop to popups

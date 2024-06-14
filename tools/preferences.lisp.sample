@@ -23,6 +23,10 @@
 
 ;; CLOG Builder Desktop
 
+;; To password protect use of the IDE set to a password or a function that
+;; returns a password (lambda clog-body)
+(setf *password-protect* nil)
+
 ;; Open panels and files in new browser tabs by default
 (setf *open-external* nil)
 ;; Use clog-popup and extend desktop to popups

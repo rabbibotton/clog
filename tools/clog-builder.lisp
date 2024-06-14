@@ -11,10 +11,10 @@
 ;; Global Internal Config
 
 (defparameter *app-mode* nil
-  "If *app-mode* is t terminates the clog-builder process on exit of the all
+                         "If *app-mode* is t terminates the clog-builder process on exit of the all
 clog-builder window.")
 (defparameter *clogframe-mode* nil
-              "If *clogframe-mode* is t no popup or tabs possible.")
+                               "If *clogframe-mode* is t no popup or tabs possible.")
 (defparameter *preferances-file* nil "Location of the preferance file")
 (defparameter *start-project* nil "Set the project to start with")
 (defparameter *start-dir* nil "Set the directory the dir win should start with")
@@ -334,6 +334,7 @@ clog-builder window.")
         (*menu-window-select-class* *builder-menu-window-select-class*)
         (*default-title-class*      *builder-title-class*)
         (*default-border-class*     *builder-border-class*)
+        (safe t)
         (open-file  (form-data-item (form-get-data body) "open-file"))
         (open-panel (form-data-item (form-get-data body) "open-panel"))
         (open-ext   (form-data-item (form-get-data body) "open-ext")))
@@ -343,195 +344,204 @@ clog-builder window.")
                            *standard-output*
                            (make-instance 'console-out-stream :clog-obj body)))
     (setf (stdin app) (if clog-connection:*disable-clog-debugging*
-                           *standard-input*
-                           (make-instance 'console-in-stream :clog-obj body)))
+                          *standard-input*
+                          (make-instance 'console-in-stream :clog-obj body)))
     (clog-gui-initialize body :use-clog-debugger t :standard-output (stdout app))
     (add-class body *builder-window-desktop-class*)
-    (with-clog-debugger (body :standard-output (stdout app))
-                        (when *builder-window-show-static-root-class*
-                          (setf (z-index (create-panel body :positioning :fixed
-                                                       :bottom 0 :right 0
-                                                       :class *builder-window-show-static-root-class*
-                                                       :content (format nil "static-root: ~A" clog:*static-root*)))
-                                -9999))
-                        (let* ((menu  (create-gui-menu-bar body))
-                               (icon  (create-gui-menu-icon menu :image-url img-clog-icon
-                                                            :on-click  #'on-help-about-builder))
-                               (file  (create-gui-menu-drop-down menu :content "Builder"))
-                               (src   (create-gui-menu-drop-down menu :content "Project"))
-                               (tools (create-gui-menu-drop-down menu :content "Tools"))
-                               (opts  (create-gui-menu-drop-down menu :content "Options"))
-                               (win   (create-gui-menu-drop-down menu :content "Window"))
-                               (help  (create-gui-menu-drop-down menu :content "Help")))
-                          (declare (ignore icon))
-                          ;; Menu -> File
-                          (let ((exter (create-button file :content "-" :class *builder-menu-button-class*)))
-                            (flet ((exter-text ()
-                                     (if *open-external*
-                                         "open external tab"
-                                         "open this tab")))
-                              (setf (text-value exter) (exter-text))
-                              (set-on-click exter (lambda (obj)
-                                                    (declare (ignore obj))
-                                                    (setf *open-external* (not *open-external*))
-                                                    (setf (text-value exter) (exter-text)))))
-                            (create-gui-menu-item file  :content "New Source Editor"                       :on-click
+    (when *password-protect*
+      (input-dialog body "Enter password:" (lambda (result)
+                                             (unless (equal result (if (functionp *password-protect*)
+                                                                       (funcall *password-protect* body)
+                                                                       *password-protect*))
+                                               (setf safe nil)
+                                               (close-connection (window body))))
+                    :time-out 360 :title "Password"))
+    (when safe
+      (with-clog-debugger (body :standard-output (stdout app))
+                          (when *builder-window-show-static-root-class*
+                            (setf (z-index (create-panel body :positioning :fixed
+                                                         :bottom 0 :right 0
+                                                         :class *builder-window-show-static-root-class*
+                                                         :content (format nil "static-root: ~A" clog:*static-root*)))
+                                  -9999))
+                          (let* ((menu  (create-gui-menu-bar body))
+                                 (icon  (create-gui-menu-icon menu :image-url img-clog-icon
+                                                              :on-click  #'on-help-about-builder))
+                                 (file  (create-gui-menu-drop-down menu :content "Builder"))
+                                 (src   (create-gui-menu-drop-down menu :content "Project"))
+                                 (tools (create-gui-menu-drop-down menu :content "Tools"))
+                                 (opts  (create-gui-menu-drop-down menu :content "Options"))
+                                 (win   (create-gui-menu-drop-down menu :content "Window"))
+                                 (help  (create-gui-menu-drop-down menu :content "Help")))
+                            (declare (ignore icon))
+                            ;; Menu -> File
+                            (let ((exter (create-button file :content "-" :class *builder-menu-button-class*)))
+                              (flet ((exter-text ()
+                                       (if *open-external*
+                                           "open external tab"
+                                           "open this tab")))
+                                (setf (text-value exter) (exter-text))
+                                (set-on-click exter (lambda (obj)
+                                                      (declare (ignore obj))
+                                                      (setf *open-external* (not *open-external*))
+                                                      (setf (text-value exter) (exter-text)))))
+                              (create-gui-menu-item file  :content "New Source Editor"                       :on-click
+                                                    (lambda (obj)
+                                                      (if *open-external*
+                                                          (on-open-file-ext obj)
+                                                          (on-open-file obj))))
+                              (create-gui-menu-item file  :content "New CLOG Panel Editor"                   :on-click
+                                                    (lambda (obj)
+                                                      (if *open-external*
+                                                          (on-new-builder-panel-ext obj)
+                                                          (on-new-builder-panel obj))))
+                              (create-gui-menu-item file  :content "New CLOG Panel Popup Editor"             :on-click 'on-new-builder-page)
+                              (create-gui-menu-item file  :content "New HTML Panel Popup Editor"             :on-click 'on-new-builder-basic-page)
+                              (create-gui-menu-item file  :content "New Custom Boot Panel External Editor"   :on-click 'on-new-builder-custom-page)
+                              (create-gui-menu-item file  :content "New CLOG Builder Window"                 :on-click
+                                                    (lambda (obj)
+                                                      (declare (ignore obj))
+                                                      (open-window (window body) "/builder"))))
+                            ;; Menu -> Project
+                            (create-gui-menu-item src   :content "Project Tree"                   :on-click 'on-project-tree)
+                            (create-gui-menu-item src   :content "ASD Project Window"             :on-click 'on-show-project)
+                            (create-gui-menu-item src   :content "New Directory Tree"             :on-click 'on-dir-tree)
+                            (create-gui-menu-item src   :content "New Project from template"      :on-click 'on-new-app-template)
+                            (create-gui-menu-item src   :content "New System Source Browser"      :on-click 'on-new-sys-browser)
+                            (create-gui-menu-item src   :content "New Loaded ASDF System Browser" :on-click 'on-new-asdf-browser)
+                            ;; Menu -> Tools
+                            (create-gui-menu-item tools :content "CLOG Builder REPL"           :on-click 'on-repl)
+                            (create-gui-menu-item tools :content "CLOG Builder Console"        :on-click 'on-open-console)
+                            (create-gui-menu-item tools :content "CLOG Probe Panel"            :on-click 'on-probe-panel)
+                            (create-gui-menu-item tools :content "CLOG Object Scope"           :on-click 'on-object-scope)
+                            (create-gui-menu-item tools :content "OS Pseudo Shell"             :on-click 'on-shell)
+                            (create-gui-menu-item tools :content "List Callers"                :on-click 'on-show-callers)
+                            (create-gui-menu-item tools :content "List Callees"                :on-click 'on-show-callees)
+                            (create-gui-menu-item tools :content "Thread Viewer"               :on-click 'on-show-thread-viewer)
+                            (create-gui-menu-item tools :content "Copy/Cut History"            :on-click 'on-show-copy-history-win)
+                            (unless *clogframe-mode*
+                              (create-gui-menu-item tools :content "Image to HTML Data"        :on-click 'on-image-to-data))
+                            (create-gui-menu-item tools :content "Launch DB Admin"           :on-click
                                                   (lambda (obj)
-                                                    (if *open-external*
-                                                        (on-open-file-ext obj)
-                                                        (on-open-file obj))))
-                            (create-gui-menu-item file  :content "New CLOG Panel Editor"                   :on-click
+                                                    (declare (ignore obj))
+                                                    (open-window (window body) "/dbadmin")))
+                            ;; Menu -> Options
+                            (create-gui-menu-item opts :content "Edit preferences.lisp"      :on-click 'on-opts-edit)
+                            (let ((exter (create-button opts :content "-" :class *builder-menu-button-class*)))
+                              (flet ((exter-text ()
+                                       (if *open-external-with-emacs*
+                                           "open external files in emacs"
+                                           "open all files in builder")))
+                                (setf (text-value exter) (exter-text))
+                                (set-on-click exter (lambda (obj)
+                                                      (declare (ignore obj))
+                                                      (setf *open-external-with-emacs* (not *open-external-with-emacs*))
+                                                      (setf (text-value exter) (exter-text))))))
+                            (create-gui-menu-item opts :content "Start SWANK Server Once"        :on-click
                                                   (lambda (obj)
-                                                    (if *open-external*
-                                                        (on-new-builder-panel-ext obj)
-                                                        (on-new-builder-panel obj))))
-                            (create-gui-menu-item file  :content "New CLOG Panel Popup Editor"             :on-click 'on-new-builder-page)
-                            (create-gui-menu-item file  :content "New HTML Panel Popup Editor"             :on-click 'on-new-builder-basic-page)
-                            (create-gui-menu-item file  :content "New Custom Boot Panel External Editor"   :on-click 'on-new-builder-custom-page)
-                            (create-gui-menu-item file  :content "New CLOG Builder Window"                 :on-click
+                                                    (let ((*default-title-class*      *builder-title-class*)
+                                                          (*default-border-class*     *builder-border-class*))
+                                                      (input-dialog obj "Port ID"
+                                                                    (lambda (result)
+                                                                      (swank:create-server :port (js-to-integer result) :dont-close nil)
+                                                                      (let ((*default-title-class*      *builder-title-class*)
+                                                                            (*default-border-class*     *builder-border-class*))
+                                                                        (alert-dialog obj (format nil "Use slime-connect on emacs or on a REPL to port ~A"
+                                                                                                  result)
+                                                                                      :title "SWANK Started (One time connect)")))
+                                                                    :placeholder-value "4005" :default-value "4005" :title "Start SWANK Server"))))
+                            (create-gui-menu-item opts :content "Set *clog-debug-instance*"
+                                                  :on-click (lambda (obj)
+                                                              (setf *clog-debug-instance* (connection-body obj))
+                                                              (alert-toast obj "*clog-debug-instance*"
+                                                                           "This window will be used for future default debug alerts."
+                                                                           :color-class "w3-green"
+                                                                           :time-out 2)))
+                            (create-gui-menu-item opts :content "Update CLOG Builder"       :on-click 'on-update-clog)
+                            ;; Menu -> Windows
+                            (create-gui-menu-item win   :content "Maximize"           :on-click
+                                                  (lambda (obj)
+                                                    (when (current-window obj)
+                                                      (window-maximize (current-window obj)))))
+                            (create-gui-menu-item win   :content "Normalize"          :on-click
+                                                  (lambda (obj)
+                                                    (when (current-window obj)
+                                                      (window-normalize (current-window obj)))))
+                            (create-gui-menu-item win   :content "Maximize All"       :on-click #'maximize-all-windows)
+                            (create-gui-menu-item win   :content "Normalize All"      :on-click #'normalize-all-windows)
+                            ;; Menu -> Help
+                            (create-gui-menu-item help  :content "CLOG Manual"          :on-click
                                                   (lambda (obj)
                                                     (declare (ignore obj))
-                                                    (open-window (window body) "/builder"))))
-                          ;; Menu -> Project
-                          (create-gui-menu-item src   :content "Project Tree"                   :on-click 'on-project-tree)
-                          (create-gui-menu-item src   :content "ASD Project Window"             :on-click 'on-show-project)
-                          (create-gui-menu-item src   :content "New Directory Tree"             :on-click 'on-dir-tree)
-                          (create-gui-menu-item src   :content "New Project from template"      :on-click 'on-new-app-template)
-                          (create-gui-menu-item src   :content "New System Source Browser"      :on-click 'on-new-sys-browser)
-                          (create-gui-menu-item src   :content "New Loaded ASDF System Browser" :on-click 'on-new-asdf-browser)
-                          ;; Menu -> Tools
-                          (create-gui-menu-item tools :content "CLOG Builder REPL"           :on-click 'on-repl)
-                          (create-gui-menu-item tools :content "CLOG Builder Console"        :on-click 'on-open-console)
-                          (create-gui-menu-item tools :content "CLOG Probe Panel"            :on-click 'on-probe-panel)
-                          (create-gui-menu-item tools :content "CLOG Object Scope"           :on-click 'on-object-scope)
-                          (create-gui-menu-item tools :content "OS Pseudo Shell"             :on-click 'on-shell)
-                          (create-gui-menu-item tools :content "List Callers"                :on-click 'on-show-callers)
-                          (create-gui-menu-item tools :content "List Callees"                :on-click 'on-show-callees)
-                          (create-gui-menu-item tools :content "Thread Viewer"               :on-click 'on-show-thread-viewer)
-                          (create-gui-menu-item tools :content "Copy/Cut History"            :on-click 'on-show-copy-history-win)
-                          (unless *clogframe-mode*
-                            (create-gui-menu-item tools :content "Image to HTML Data"        :on-click 'on-image-to-data))
-                          (create-gui-menu-item tools :content "Launch DB Admin"           :on-click
-                                                (lambda (obj)
-                                                  (declare (ignore obj))
-                                                  (open-window (window body) "/dbadmin")))
-                          ;; Menu -> Options
-                          (create-gui-menu-item opts :content "Edit preferences.lisp"      :on-click 'on-opts-edit)
-                          (let ((exter (create-button opts :content "-" :class *builder-menu-button-class*)))
-                            (flet ((exter-text ()
-                                     (if *open-external-with-emacs*
-                                         "open external files in emacs"
-                                         "open all files in builder")))
-                              (setf (text-value exter) (exter-text))
-                              (set-on-click exter (lambda (obj)
+                                                    (open-window (window body) "https://rabbibotton.github.io/clog/clog-manual.html")))
+                            (create-gui-menu-item help  :content "Learn CLOG"           :on-click
+                                                  (lambda (obj)
                                                     (declare (ignore obj))
-                                                    (setf *open-external-with-emacs* (not *open-external-with-emacs*))
-                                                    (setf (text-value exter) (exter-text))))))
-                          (create-gui-menu-item opts :content "Start SWANK Server Once"        :on-click
-                                                (lambda (obj)
-                                                  (let ((*default-title-class*      *builder-title-class*)
-                                                        (*default-border-class*     *builder-border-class*))
-                                                    (input-dialog obj "Port ID" 
-                                                                  (lambda (result)
-                                                                    (swank:create-server :port (js-to-integer result) :dont-close nil)
-                                                                    (let ((*default-title-class*      *builder-title-class*)
-                                                                          (*default-border-class*     *builder-border-class*))
-                                                                      (alert-dialog obj (format nil "Use slime-connect on emacs or on a REPL to port ~A"
-                                                                                                result)
-                                                                                    :title "SWANK Started (One time connect)")))
-                                                                  :placeholder-value "4005" :default-value "4005" :title "Start SWANK Server"))))
-                          (create-gui-menu-item opts :content "Set *clog-debug-instance*"
-                                                :on-click (lambda (obj)
-                                                            (setf *clog-debug-instance* (connection-body obj))
-                                                            (alert-toast obj "*clog-debug-instance*"
-                                                                         "This window will be used for future default debug alerts."
-                                                                         :color-class "w3-green"
-                                                                         :time-out 2)))
-                          (create-gui-menu-item opts :content "Update CLOG Builder"       :on-click 'on-update-clog)
-                          ;; Menu -> Windows
-                          (create-gui-menu-item win   :content "Maximize"           :on-click
-                                                (lambda (obj)
-                                                  (when (current-window obj)
-                                                    (window-maximize (current-window obj)))))
-                          (create-gui-menu-item win   :content "Normalize"          :on-click
-                                                (lambda (obj)
-                                                  (when (current-window obj)
-                                                    (window-normalize (current-window obj)))))
-                          (create-gui-menu-item win   :content "Maximize All"       :on-click #'maximize-all-windows)
-                          (create-gui-menu-item win   :content "Normalize All"      :on-click #'normalize-all-windows)
-                          ;; Menu -> Help
-                          (create-gui-menu-item help  :content "CLOG Manual"          :on-click
-                                                (lambda (obj)
-                                                  (declare (ignore obj))
-                                                  (open-window (window body) "https://rabbibotton.github.io/clog/clog-manual.html")))
-                          (create-gui-menu-item help  :content "Learn CLOG"           :on-click
-                                                (lambda (obj)
-                                                  (declare (ignore obj))
-                                                  (open-window (window body) "https://github.com/rabbibotton/clog/blob/main/LEARN.md")))
-                          (create-gui-menu-item help  :content "Tutorials DIR"  :on-click
-                                                (lambda (obj)
-                                                  (on-dir-tree obj :dir (merge-pathnames "./tutorial/"
-                                                                                        (asdf:system-source-directory :clog)))))
-                          (create-gui-menu-item help  :content "ParenScript Reference" :on-click
-                                                (lambda (obj)
-                                                  (declare (ignore obj))
-                                                  (open-window (window body) "https://parenscript.common-lisp.dev/")))
-                          (create-gui-menu-item help  :content "L1sp Search"       :on-click
-                                                (lambda (obj)
-                                                  (declare (ignore obj))
-                                                  (open-window (window body) "http://l1sp.org/html/")))
-                          (create-gui-menu-item help  :content "Lisp in Y Minutes"    :on-click
-                                                (lambda (obj)
-                                                  (declare (ignore obj))
-                                                  (open-window (window body) "https://learnxinyminutes.com/docs/common-lisp/")))
-                          (create-gui-menu-item help  :content "Simplified Reference" :on-click
-                                                (lambda (obj)
-                                                  (declare (ignore obj))
-                                                  (open-window (window body) "https://jtra.cz/stuff/lisp/sclr/index.html")))
-                          (create-gui-menu-item help  :content "Common Lisp Manual"   :on-click
-                                                (lambda (obj)
-                                                  (declare (ignore obj))
-                                                  (open-window (window body) "http://clhs.lisp.se/")))
-                          (create-gui-menu-item help  :content "W3.CSS Manual"        :on-click
-                                                (lambda (obj)
-                                                  (declare (ignore obj))
-                                                  (open-window (window body) "https://www.w3schools.com/w3css/")))
-                          (create-gui-menu-item help  :content "About CLOG Builder"   :on-click #'on-help-about-builder)
-                          (create-gui-menu-window-select menu)
-                          (create-gui-menu-full-screen menu))
-                        (on-show-copy-history-win body)
-                        (cond
-                          (open-panel
-                            (if (equal open-panel " ")
-                                (setf open-panel nil)
-                                (setf (title (html-document body)) (file-namestring open-panel)))
-                            (cond ((equalp open-ext "t")
-                                    (setf open-ext t))
-                                  ((equalp open-ext "custom")
-                                    (setf open-ext :custom)))
-                            (on-new-builder-panel body :open-file open-panel :open-ext open-ext))
-                          (open-file
-                            (if (equal open-file " ")
-                                (setf open-file nil)
-                                (setf (title (html-document body)) (file-namestring open-file)))
-                            (on-open-file body :open-file open-file :maximized t))
-                          (t
-                            (when *start-project*
-                              (projects-load *start-project*))
-                            (on-project-tree body :project *start-project*)
-                            (when *start-dir*
-                              (handler-case
-                                  (on-dir-tree body :dir *start-dir*)
-                                (error (msg)
-                                  (alert-toast body "Directory Error" (format nil "Unable to open directory ~A. ~A" *start-dir* msg))
-                                  (setf *start-dir* nil))))))
-                        (set-on-before-unload (window body) (lambda(obj)
-                                                              (declare (ignore obj))
-                                                              ;; return empty string to prevent nav off page
-                                                              "")))
-    (when *app-mode*
-      (incf *app-mode*))
-    (run body))
+                                                    (open-window (window body) "https://github.com/rabbibotton/clog/blob/main/LEARN.md")))
+                            (create-gui-menu-item help  :content "Tutorials DIR"  :on-click
+                                                  (lambda (obj)
+                                                    (on-dir-tree obj :dir (merge-pathnames "./tutorial/"
+                                                                                           (asdf:system-source-directory :clog)))))
+                            (create-gui-menu-item help  :content "ParenScript Reference" :on-click
+                                                  (lambda (obj)
+                                                    (declare (ignore obj))
+                                                    (open-window (window body) "https://parenscript.common-lisp.dev/")))
+                            (create-gui-menu-item help  :content "L1sp Search"       :on-click
+                                                  (lambda (obj)
+                                                    (declare (ignore obj))
+                                                    (open-window (window body) "http://l1sp.org/html/")))
+                            (create-gui-menu-item help  :content "Lisp in Y Minutes"    :on-click
+                                                  (lambda (obj)
+                                                    (declare (ignore obj))
+                                                    (open-window (window body) "https://learnxinyminutes.com/docs/common-lisp/")))
+                            (create-gui-menu-item help  :content "Simplified Reference" :on-click
+                                                  (lambda (obj)
+                                                    (declare (ignore obj))
+                                                    (open-window (window body) "https://jtra.cz/stuff/lisp/sclr/index.html")))
+                            (create-gui-menu-item help  :content "Common Lisp Manual"   :on-click
+                                                  (lambda (obj)
+                                                    (declare (ignore obj))
+                                                    (open-window (window body) "http://clhs.lisp.se/")))
+                            (create-gui-menu-item help  :content "W3.CSS Manual"        :on-click
+                                                  (lambda (obj)
+                                                    (declare (ignore obj))
+                                                    (open-window (window body) "https://www.w3schools.com/w3css/")))
+                            (create-gui-menu-item help  :content "About CLOG Builder"   :on-click #'on-help-about-builder)
+                            (create-gui-menu-window-select menu)
+                            (create-gui-menu-full-screen menu))
+                          (on-show-copy-history-win body)
+                          (cond
+                            (open-panel
+                              (if (equal open-panel " ")
+                                  (setf open-panel nil)
+                                  (setf (title (html-document body)) (file-namestring open-panel)))
+                              (cond ((equalp open-ext "t")
+                                      (setf open-ext t))
+                                    ((equalp open-ext "custom")
+                                      (setf open-ext :custom)))
+                              (on-new-builder-panel body :open-file open-panel :open-ext open-ext))
+                            (open-file
+                              (if (equal open-file " ")
+                                  (setf open-file nil)
+                                  (setf (title (html-document body)) (file-namestring open-file)))
+                              (on-open-file body :open-file open-file :maximized t))
+                            (t
+                              (when *start-project*
+                                (projects-load *start-project*))
+                              (on-project-tree body :project *start-project*)
+                              (when *start-dir*
+                                (handler-case
+                                    (on-dir-tree body :dir *start-dir*)
+                                  (error (msg)
+                                    (alert-toast body "Directory Error" (format nil "Unable to open directory ~A. ~A" *start-dir* msg))
+                                    (setf *start-dir* nil))))))
+                          (set-on-before-unload (window body) (lambda(obj)
+                                                                (declare (ignore obj))
+                                                                ;; return empty string to prevent nav off page
+                                                                "")))
+      (when *app-mode*
+        (incf *app-mode*))
+      (run body)))
   (when (eq *clog-debug-instance* body)
     (setf *clog-debug-instance* nil))
   (when *app-mode*
@@ -545,12 +555,12 @@ clog-builder window.")
     (clog-builder :app t :port 0 :start-browser nil)
     (sleep 1))
   (let* ((open-loc (if (and (> (length open-file) 5)
-                            (equal (subseq open-file (- (length open-file) 5)) ".clog"))
+                        (equal (subseq open-file (- (length open-file) 5)) ".clog"))
                        "/panel-editor?open-panel"
                        "/source-editor?open-file"))
          (open-url  (format nil "~A=~A"
                             open-loc (if (or (eq open-file nil)
-                                             (equal open-file ""))
+                                          (equal open-file ""))
                                          "%20"
                                          open-file))))
     (format t "~%If browser does not start go to http://127.0.0.1:~A~A" clog:*clog-port* open-url)
@@ -622,7 +632,7 @@ clog-builder window.")
     (format t "~%If browser does not start go to http://127.0.0.1:~A/builder~%~%" port)
     (open-browser :url (format nil "http://127.0.0.1:~A/builder" port))))
 
-#+windows    
+#+windows
 (in-package #:quicklisp-client)
 
 ;; patch, if-exists of :rename-and-delete does not work well on windows
@@ -633,9 +643,10 @@ PATHNAME. Current format is one native namestring per line."
   (setf pathname (truename pathname))
   (with-open-file (stream (system-index-file pathname)
                           :direction :output
-                          :if-exists :overwrite)
-    (dolist (system-file (local-project-system-files pathname))
-      (let ((system-path (enough-namestring system-file pathname)))
-        (write-line (native-namestring system-path) stream)))
-    (probe-file stream)))
+                          :if-exists :nil)
+    (when stream
+      (dolist (system-file (local-project-system-files pathname))
+        (let ((system-path (enough-namestring system-file pathname)))
+          (write-line (native-namestring system-path) stream)))
+      (probe-file stream))))
 
