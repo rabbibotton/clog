@@ -19,11 +19,12 @@
            :add-file-extension
            :clog-builder-probe
            :clog-builder-scope
-           :clog-db-admin))
+           :clog-db-admin
+           :*scope*))
 
 (defpackage #:clog-user
   (:use #:cl #:clog #:clog-gui #:clog-web)
-  (:import-from :clog-tools #:clog-builder-probe #:clog-builder-scope)
+  (:import-from :clog-tools :*scope* #:clog-builder-probe #:clog-builder-scope)
   (:export :*body* :clog-repl))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

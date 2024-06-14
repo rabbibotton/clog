@@ -20,6 +20,8 @@ clog-builder window.")
 (defparameter *start-dir* nil "Set the directory the dir win should start with")
 (defparameter *client-side-movement* nil "Use javascript for window movement")
 
+(defvar *scope* nil "The last evaluated scope object")
+
 ;; Per instance app data
 
 (defclass builder-app-data ()

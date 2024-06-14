@@ -346,8 +346,11 @@ name. If CLOG-BODY not set use *clog-debug-instance*"
              (on-change (object &key is-list)
                (setf (text tree) "")
                (browser-gc obj)
+               (if is-list
+                   (setf *scope* (first object))
+                   (setf *scope* object))
                (create-div tree :class "w3-tiny w3-center"
-                           :content "left-click - drill down / right-click - system browse<br><br>")
+                           :content "left-click - drill down / right-click - system browse - clog-tools:*scope* current object<br><br>")
                (if is-list
                    (add-list tree object)
                    (progn
