@@ -643,7 +643,7 @@ PATHNAME. Current format is one native namestring per line."
   (setf pathname (truename pathname))
   (with-open-file (stream (system-index-file pathname)
                           :direction :output
-                          :if-exists :nil)
+                          :if-exists nil)
     (when stream
       (dolist (system-file (local-project-system-files pathname))
         (let ((system-path (enough-namestring system-file pathname)))
