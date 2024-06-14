@@ -631,22 +631,3 @@ clog-builder window.")
   (when start-browser
     (format t "~%If browser does not start go to http://127.0.0.1:~A/builder~%~%" port)
     (open-browser :url (format nil "http://127.0.0.1:~A/builder" port))))
-
-#+windows
-(in-package #:quicklisp-client)
-
-;; patch, if-exists of :rename-and-delete does not work well on windows
-#+windows
-(defun make-system-index (pathname)
-  "Create a system index file for all system files under
-PATHNAME. Current format is one native namestring per line."
-  (setf pathname (truename pathname))
-  (with-open-file (stream (system-index-file pathname)
-                          :direction :output
-                          :if-exists nil)
-    (when stream
-      (dolist (system-file (local-project-system-files pathname))
-        (let ((system-path (enough-namestring system-file pathname)))
-          (write-line (native-namestring system-path) stream)))
-      (probe-file stream))))
-
