@@ -99,6 +99,7 @@
 ;; CLOG Builder Look and Feel
 
 ;; General
+(setf *builder-left-panel-size* 300)
 (setf *builder-window-desktop-class* "w3-blue-grey")
 (setf *builder-window-show-static-root-class* "w3-grey")
 (setf *builder-show-callers-class* "w3-orange")

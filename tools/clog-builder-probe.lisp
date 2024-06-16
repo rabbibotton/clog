@@ -120,7 +120,7 @@ symbol is used for title."
         (let* ((*default-title-class*      *builder-title-class*)
                (*default-border-class*     *builder-border-class*)
                (win         (create-gui-window obj :title "CLOG Probe Panel"
-                                               :width 300
+                                               :width *builder-left-panel-size*
                                                :has-pinner t
                                                :keep-on-top t
                                                :client-movement *client-side-movement*))

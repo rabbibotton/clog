@@ -20,7 +20,7 @@
              (declare (ignore obj))
                     (set-geometry win
                                   :top (menu-bar-height win)
-                                  :left 300
+                                  :left *builder-left-panel-size*
                                   :height "" :width ""
                                   :bottom 5 :right 0)
                     (clog-ace:resize (src-box panel))

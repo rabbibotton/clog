@@ -20,7 +20,7 @@
                           (when win
                             (set-geometry win
                                           :top (menu-bar-height win)
-                                          :left 300
+                                          :left *builder-left-panel-size*
                                           :height "" :width ""
                                           :bottom 5 :right 0)
                             (clog-ace:resize (window-param win))
@@ -42,7 +42,7 @@
                (*default-border-class*     *builder-border-class*)
                (entry-point "")
                (win         (create-gui-window obj :title "Project Tree"
-                                               :width 300
+                                               :width *builder-left-panel-size*
                                                :has-pinner t
                                                :keep-on-top t
                                                :client-movement *client-side-movement*))

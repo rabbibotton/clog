@@ -7,7 +7,7 @@
   (let* ((*default-title-class*      *builder-title-class*)
          (*default-border-class*     *builder-border-class*)
          (win         (create-gui-window obj :title "Directory Tree"
-                                         :width 300
+                                         :width *builder-left-panel-size*
                                          :has-pinner t
                                          :keep-on-top t
                                          :client-movement *client-side-movement*))

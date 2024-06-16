@@ -71,6 +71,8 @@
 
 ;; Builder Look and Feel
 
+;; Builder Interface
+(defparameter *builder-left-panel-size* 300)
 (defparameter *builder-window-desktop-class* "w3-blue-grey")
 (defparameter *builder-window-show-static-root-class* "w3-grey")
 (defparameter *builder-show-callers-class* "w3-orange")

@@ -16,13 +16,19 @@
                     (declare (ignore obj))
                     (set-geometry win
                                   :top (menu-bar-height win)
-                                  :left 300
+                                  :left *builder-left-panel-size*
                                   :height "" :width ""
                                   :bottom 5 :right 0)
                     (set-on-window-move win nil)
                     (set-on-window-move win (lambda (obj)
                                               (setf (width obj) (width obj))
                                               (setf (height obj) (height obj))))))
+    (set-on-click (create-span (window-icon-area win)
+                               :content "-&nbsp;"
+                               :auto-place :top)
+                  (lambda (obj)
+                    (declare (ignore obj))
+                    (setf (hiddenp win) t)))
     (when dir
         (uiop:chdir (uiop:native-namestring dir)))
     (set-geometry (create-clog-builder-shell (window-content win))
