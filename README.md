@@ -39,7 +39,7 @@ Some potential applications for CLOG:
 
 * Cross-platform GUIs and Reports
 * Secure websites and complex interactive web applications
-* Desktop buisiness software (CLOG Runs native on Windows, Mac and Linux)
+* Desktop business software (CLOG Runs native on Windows, Mac and Linux)
 * Mobile software (CLOG Runs native on Android and iOS)
 * Massive multiplayer online games
 * Monitoring software for embedded systems
