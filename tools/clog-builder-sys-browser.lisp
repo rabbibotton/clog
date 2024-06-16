@@ -1,6 +1,6 @@
 (in-package :clog-tools)
 
-(defun on-new-sys-browser (obj &key (search nil) (package nil))
+(defun on-new-sys-browser (obj &key (search nil) (package nil) (doc-maximize nil))
   (let* ((*default-title-class*      *builder-title-class*)
          (*default-border-class*     *builder-border-class*)
          (win (create-gui-window obj :title "System Browser"
@@ -10,13 +10,14 @@
     (when package
       (setf (text-value (package-box panel)) (string-upcase package)))
     (when search
+      (when (> (length search) 1)
+        (when (equal (char search 0) #\')
+          (setf search (subseq search 1))))
       (setf (text-value (search-box panel)) search)
       (sys-browser-populate panel))
-    (set-on-click (create-span (window-icon-area win)
-                               :content (format nil "~A&nbsp;" (code-char #x26F6))
-                               :auto-place :top)
-                  (lambda (obj)
-                    (declare (ignore obj))
+    (setf (text-value (file-name panel)) "click to open file in source editor")
+    (flet ((doc-max (obj)
+             (declare (ignore obj))
                     (set-geometry win
                                   :top (menu-bar-height win)
                                   :left 300
@@ -27,6 +28,18 @@
                     (set-on-window-move win (lambda (obj)
                                               (setf (width obj) (width obj))
                                               (setf (height obj) (height obj))))))
+      (when doc-maximize
+        (doc-max obj))
+      (set-on-click (create-span (window-icon-area win)
+                                 :content (format nil "~A&nbsp;" (code-char #x26F6))
+                                 :auto-place :top)
+                    #'doc-max))
+    (set-on-click (create-span (window-icon-area win)
+                               :content "-&nbsp;"
+                               :auto-place :top)
+                  (lambda (obj)
+                    (declare (ignore obj))
+                    (setf (hiddenp win) t)))
     (set-on-window-size-done win (lambda (obj)
                                    (declare (ignore obj))
                                    (clog-ace:resize (src-box panel))))))
@@ -88,8 +101,8 @@
       (setf (disabledp (save-button panel)) nil))))
 
 (defun sys-browser-file-name-on-click (panel target)
-  (declare (ignore panel))
-  (unless (equal (text-value target) "")
+  (unless (or (equal (text-value target) "")
+              (equal (text-value target) "click to open file in source editor"))
     (on-open-file target :open-file (text-value target) :regex (search-js panel))))
 
 (defun sys-browser-eval-form-button-on-click (panel target)
@@ -130,7 +143,7 @@
                         :time-out 3)))))
 
 (defun sys-browser-eval-button-on-click (panel target)
-  (declare  (ignore target))
+  (declare (ignore target))
   (let ((pac (text-value (pac-box panel)))
         (val (clog-ace:text-value (src-box panel))))
     (unless (equal val "")
@@ -142,6 +155,7 @@
                         :time-out 3)))))
 
 (defun sys-browser-save-button-on-click (panel target)
+  (declare (ignore target))
   (when (fname panel)
     (write-file (text-value (src-box panel)) (fname panel))
     (setf (state panel) nil)
