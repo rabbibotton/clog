@@ -476,7 +476,7 @@ clog-builder window.")
                                                   (lambda (obj)
                                                     (declare (ignore obj))
                                                     (open-window (window body) "https://rabbibotton.github.io/clog/clog-manual.html")))
-                            (create-gui-menu-item help  :content "Learn CLOG"           :on-click
+                            (create-gui-menu-item help  :content "Learn Lisp & CLOG"   :on-click
                                                   (lambda (obj)
                                                     (declare (ignore obj))
                                                     (open-window (window body) "https://github.com/rabbibotton/clog/blob/main/LEARN.md")))
@@ -484,10 +484,6 @@ clog-builder window.")
                                                   (lambda (obj)
                                                     (on-dir-tree obj :dir (merge-pathnames "./tutorial/"
                                                                                            (asdf:system-source-directory :clog)))))
-                            (create-gui-menu-item help  :content "ParenScript Reference" :on-click
-                                                  (lambda (obj)
-                                                    (declare (ignore obj))
-                                                    (open-window (window body) "https://parenscript.common-lisp.dev/")))
                             (create-gui-menu-item help  :content "L1sp Search"       :on-click
                                                   (lambda (obj)
                                                     (declare (ignore obj))
@@ -508,6 +504,10 @@ clog-builder window.")
                                                   (lambda (obj)
                                                     (declare (ignore obj))
                                                     (open-window (window body) "https://www.w3schools.com/w3css/")))
+                            (create-gui-menu-item help  :content "ParenScript Reference" :on-click
+                                                  (lambda (obj)
+                                                    (declare (ignore obj))
+                                                    (open-window (window body) "https://parenscript.common-lisp.dev/")))
                             (create-gui-menu-item help  :content "About CLOG Builder"   :on-click #'on-help-about-builder)
                             (create-gui-menu-window-select menu)
                             (create-gui-menu-full-screen menu))
