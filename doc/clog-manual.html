@@ -1203,7 +1203,8 @@ possible tag and keywords.</p></li>
 <p>Create a new <a href="#CLOG:CLOG-ELEMENT%20CLASS" title="CLOG:CLOG-ELEMENT CLASS"><code>CLOG-ELEMENT</code></a> or sub-type of <code>CLOG-TYPE</code> from <code>HTML</code>
 as child of <code>CLOG-OBJ</code> and if <code>:AUTO-PLACE</code> (default t) place-inside-bottom-of
 <code>CLOG-OBJ</code>, you can also set auto-place to :bottom or :top. If <code>HTML-ID</code> is nil one
-will be generated.</p></li>
+will be generated. If auto-place is nil, note that if browser-gc is called
+or clog-connect:*browser-gc-on-ping* is t the browser side will be destroyed.</p></li>
 </ul>
 <p><a id="x-28CLOG-3AATTACH-AS-CHILD-20GENERIC-FUNCTION-29"></a>
 <a id="CLOG:ATTACH-AS-CHILD%20GENERIC-FUNCTION"></a></p>
@@ -2434,6 +2435,18 @@ is set to :table-cell or for labels on form elements.</p></li>
 <p>Remove CLOG-Element from the DOM on browser and clog cache
 on browser.</p></li>
 </ul>
+<p><a id="x-28CLOG-3ABROWSER-GC-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG:BROWSER-GC%20GENERIC-FUNCTION"></a></p>
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:BROWSER-GC%20GENERIC-FUNCTION" >BROWSER-GC</a></span></span> <span class="locative-args">CLOG-ELEMENT</span></span></p>
+
+<p>Remove any clog cache items on browser not in DOM.
+If clog-connect:*browser-gc-on-ping* is set this is done during websocket pings.
+Care should be taken as any clog-element not placed in the DOM will be deleted
+on the browser side (for examle :auto-place nil set and not later placed.)
+The main use is when clearing out large amounts of DOM objects not using CLOG
+destroy.</p></li>
+</ul>
 <p><a id="x-28CLOG-3ACLICK-20GENERIC-FUNCTION-29"></a>
 <a id="CLOG:CLICK%20GENERIC-FUNCTION"></a></p>
 <ul>
@@ -2475,8 +2488,9 @@ Returns <code>CLOG-ELEMENT</code></p></li>
 <ul>
 <li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:PARENT-ELEMENT%20GENERIC-FUNCTION" >PARENT-ELEMENT</a></span></span> <span class="locative-args">CLOG-ELEMENT</span></span></p>
 
-<p>Return a new clog-element represeting the parent of
-<code>CLOG-ELEMENT</code>.</p></li>
+<p>Return a <em>new</em> clog-element represeting the parent of
+<code>CLOG-ELEMENT</code>. In most cases use <a href="#CLOG:PARENT%20GENERIC-FUNCTION" title="CLOG:PARENT GENERIC-FUNCTION"><code>PARENT</code></a>, this creates an alias lisp object
+used for DOM tree walking or other throw away purposes.</p></li>
 </ul>
 <p><a id="x-28CLOG-3AFIRST-CHILD-20GENERIC-FUNCTION-29"></a>
 <a id="CLOG:FIRST-CHILD%20GENERIC-FUNCTION"></a></p>
@@ -2503,7 +2517,7 @@ undefined and therefore attached to no actual <code>HTML</code> elemen.</p></li>
 
 <p>Traverse to next sibling element. If Child does not have an
 html id than Element_Type will have an ID of undefined and therefore attached
-to no actual <code>HTML</code> elemen.</p></li>
+to no actual <code>HTML</code> element.</p></li>
 </ul>
 <p><a id="x-28CLOG-3A-40CLOG-ELEMENT-COMMON-20MGL-PAX-3ASECTION-29"></a>
 <a id="CLOG:@CLOG-ELEMENT-COMMON%20MGL-PAX:SECTION"></a></p>
@@ -7037,7 +7051,7 @@ alert-dialog blocks till time-out reached or OK clicked.</p></li>
 <p><a id="x-28CLOG-GUI-3AINPUT-DIALOG-20FUNCTION-29"></a>
 <a id="CLOG-GUI:INPUT-DIALOG%20FUNCTION"></a></p>
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#CLOG-GUI:INPUT-DIALOG%20FUNCTION" >INPUT-DIALOG</a></span></span> <span class="locative-args">OBJ CONTENT ON-INPUT &amp;KEY (MODAL <code>T</code>) (TIME-OUT <code>NIL</code>) (TITLE &quot;Input&quot;) (SIZE 20) (ROWS 1) (PLACEHOLDER-VALUE &quot;&quot;) (DEFAULT-VALUE &quot;&quot;) (LEFT <code>NIL</code>) (TOP <code>NIL</code>) (WIDTH 300) (HEIGHT 200) (CLIENT-MOVEMENT <code>NIL</code>) (HTML-ID <code>NIL</code>)</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#CLOG-GUI:INPUT-DIALOG%20FUNCTION" >INPUT-DIALOG</a></span></span> <span class="locative-args">OBJ CONTENT ON-INPUT &amp;KEY (MODAL <code>T</code>) (TIME-OUT <code>NIL</code>) (TITLE &quot;Input&quot;) (SIZE 20) (ROWS 1) (PLACEHOLDER-VALUE &quot;&quot;) (DEFAULT-VALUE &quot;&quot;) IS-PASSWORD (LEFT <code>NIL</code>) (TOP <code>NIL</code>) (WIDTH 300) (HEIGHT 200) (CLIENT-MOVEMENT <code>NIL</code>) (HTML-ID <code>NIL</code>)</span></span></p>
 
 <p>Create an input dialog box with <code>CONTENT</code> centered and an input box.
 Calls on-input with input box contents or nil if canceled. If time-out
@@ -7137,7 +7151,7 @@ confirm continue execution on current thread or (break).</p></li>
 <p><a id="x-28CLOG-GUI-3ACLOG-PROBE-20MGL-PAX-3AMACRO-29"></a>
 <a id="CLOG-GUI:CLOG-PROBE%20MGL-PAX:MACRO"></a></p>
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[macro]</span> <span class="reference-object"><a href="#CLOG-GUI:CLOG-PROBE%20MGL-PAX:MACRO" >CLOG-PROBE</a></span></span> <span class="locative-args">SYMBOL &amp;KEY CLOG-BODY (TITLE &quot;&quot;) (TIME-OUT 600) TOP LEFT (WIDTH 400) (HEIGHT 300) AUTO-PROBE (MODAL <code>T</code>)</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[macro]</span> <span class="reference-object"><a href="#CLOG-GUI:CLOG-PROBE%20MGL-PAX:MACRO" >CLOG-PROBE</a></span></span> <span class="locative-args">SYMBOL &amp;KEY CLOG-BODY (TITLE &quot;&quot;) (TIME-OUT 600) TOP LEFT (WIDTH 400) (HEIGHT 300) AUTO-PROBE SAVE-VALUE (MODAL <code>T</code>)</span></span></p>
 
 <p>Pause thread of execution for time-out numnber of seconds or nil to not
 block execution, display symbol's value, value is changed if OK pressed at
@@ -7145,7 +7159,15 @@ the moment pressed. When time-out is nil, :q quits the probe and cancel
 repeats the probe with out changing value. When time-out is nil modal is
 always nil. If auto-probe is set, modal and time-out is set to nil and the
 probe is run again in auto-probe seconds. If not tile is set, the symbol is
-used for title.</p></li>
+used for title. If save-value is true clog-gui:*probe* is set to value of
+symbol before any change is made by dialog.</p></li>
+</ul>
+<p><a id="x-28CLOG-GUI-3A-2APROBE-2A-20VARIABLE-29"></a>
+<a id="CLOG-GUI:*PROBE*%20VARIABLE"></a></p>
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[variable]</span> <span class="reference-object"><a href="#CLOG-GUI:*PROBE*%20VARIABLE" >*PROBE*</a></span></span> <span class="locative-args">NIL</span></span></p>
+
+<p>Result value of a probe</p></li>
 </ul>
 <p><a id="x-28CLOG-GUI-3A-2ACLOG-DEBUG-INSTANCE-2A-20VARIABLE-29"></a>
 <a id="CLOG-GUI:*CLOG-DEBUG-INSTANCE*%20VARIABLE"></a></p>
@@ -7928,8 +7950,11 @@ Page properties:
 <ul>
 <li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:RUN%20GENERIC-FUNCTION" >RUN</a></span></span> <span class="locative-args">CLOG-BODY</span></span></p>
 
-<p>Keeps a connection thread alive to allow post
-user close of connection / browser.</p></li>
+<p>Keeps the original connection thread alive to allow post
+user close of connection / browser. Run returns when the browser
+connection has been severed, acting like an on-close event, only lisp objects
+still exist at this point and no queries can be made to browser or
+DOM elements.</p></li>
 </ul>
 <p><a id="x-28CLOG-3ASET-HTML-ON-CLOSE-20GENERIC-FUNCTION-29"></a>
 <a id="CLOG:SET-HTML-ON-CLOSE%20GENERIC-FUNCTION"></a></p>

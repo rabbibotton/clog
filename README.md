@@ -19,7 +19,7 @@ embedded in a native application.)
 
 - [CLOG - Reference Manual](https://rabbibotton.github.io/clog/clog-manual.html)
 
-STATUS: CLOG and CLOG Builder 2.1 released. CLOG API Stable 4 years
+STATUS: CLOG and CLOG Builder 2.2 released. CLOG API Stable 4 years
 
 The CLOG Builder is in 100% portable Common Lisp using the CLOG Framework.
 
