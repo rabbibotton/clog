@@ -212,8 +212,8 @@
   "Setup CONTROL by creating pacer and setting up events for manipulation"
   (let ((app      (connection-data-item content "builder-app-data"))
         (panel-id (html-id content))
-	(touch-x  0)
-	(touch-y  0)
+        (touch-x  0)
+        (touch-y  0)
         (placer   (create-div control :auto-place nil
                                       :class "placer"
                                       :html-id (format nil "p-~A" (html-id control)))))

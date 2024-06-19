@@ -103,6 +103,12 @@
                  (execute connection-id
                         "Object.entries(clog).forEach(function(c,i,a)
                              {if ((c[1] !== null) && (typeof c[1] === 'object') && (c[1].nodeType===1))
+                             {if (c[1].isConnected===false) {$(clog['body']).trigger('gc', c[0])}}})"))
+               (when *browser-clean-on-ping*
+                 ;; run browser clean
+                 (execute connection-id
+                        "Object.entries(clog).forEach(function(c,i,a)
+                             {if ((c[1] !== null) && (typeof c[1] === 'object') && (c[1].nodeType===1))
                              {if (c[1].isConnected===false) {delete clog[c[0]]}}})"))
                (when *verbose-output*
                  (format t "Connection ~A    Ping~%" connection-id)))

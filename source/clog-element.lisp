@@ -114,8 +114,8 @@ possible tag and keywords."))
   (:documentation "Create a new CLOG-ELEMENT or sub-type of CLOG-TYPE from HTML
 as child of CLOG-OBJ and if :AUTO-PLACE (default t) place-inside-bottom-of
 CLOG-OBJ, you can also set auto-place to :bottom or :top. If HTML-ID is nil one
-will be generated. If auto-place is nil, note that if browser-gc is called
-or clog-connect:*browser-gc-on-ping* is t the browser side will be destroyed."))
+will be generated. If auto-place is nil, note that if browser-clean is called
+or clog-connect:*browser-clean-on-ping* is t the browser side will be destroyed."))
 
 (defmethod create-child ((obj clog-obj) html &key (html-id nil)
                                                (auto-place t)
@@ -2257,6 +2257,12 @@ is set to :table-cell or for labels on form elements."))
   (:documentation "Remove CLOG-Element from the clog cache on browser."))
 
 (defmethod remove-from-clog ((obj clog-element))
+  (let ((s (format nil "^~A\\:" (html-id obj))))
+    (maphash (lambda (k v)
+               (declare (ignore v))
+               (when (ppcre:scan s k)
+                 (remhash k (connection-data obj))))
+             (connection-data obj)))
   (remove-connection-data-item obj (html-id obj))
   (js-execute obj (format nil "~A=null;" (script-id obj))))
 
@@ -2276,15 +2282,43 @@ on browser."))
 ;; browser-gc ;;
 ;;;;;;;;;;;;;;;;
 
+(defmethod perform-gc (obj id)
+  ;; check if pinned
+  (let ((s (format nil "^~A\\:" id)))
+    (maphash (lambda (k v)
+               (declare (ignore v))
+               (when (ppcre:scan s k)
+                 (remhash k (connection-data obj))))
+             (connection-data obj)))
+  (remove-connection-data-item obj id)
+  (js-execute obj (format nil "clog['~A']=null;" id)))
+
 (defgeneric browser-gc (clog-element)
-  (:documentation "Remove any clog cache items on browser not in DOM.
+  (:documentation "Finalize any clog cache items on browser not in DOM.
 If clog-connect:*browser-gc-on-ping* is set this is done during websocket pings.
-Care should be taken as any clog-element not placed in the DOM will be deleted
-on the browser side (for examle :auto-place nil set and not later placed.)
 The main use is when clearing out large amounts of DOM objects not using CLOG
 destroy."))
 
 (defmethod browser-gc ((obj clog-element))
+  (js-execute obj
+            "Object.entries(clog).forEach(function(c,i,a)
+               {if ((c[1] !== null) && (typeof c[1] === 'object') && (c[1].nodeType===1))
+                  {if (c[1].isConnected===false) {$(clog['window']).trigger('gc', c[0])}}})"))
+
+;;;;;;;;;;;;;;;;;;;
+;; browser-clean ;;
+;;;;;;;;;;;;;;;;;;;
+
+(defgeneric browser-clean (clog-element)
+  (:documentation "Remove any clog cache items on browser not in DOM.
+If clog-connect:*browser-clean-on-ping* is set this is done during websocket pings.
+Care should be taken as any clog-element not placed in the DOM will be deleted
+on the browser side (for examle :auto-place nil set and not later placed.)
+The main use is when clearing out large amounts of DOM objects not using CLOG
+destroy. This has the advantage that no events are fired, but will leave
+some lingering data on the Lisp side unless connection until closed."))
+
+(defmethod browser-clean ((obj clog-element))
   (js-execute obj
             "Object.entries(clog).forEach(function(c,i,a)
                {if ((c[1] !== null) && (typeof c[1] === 'object') && (c[1].nodeType===1))

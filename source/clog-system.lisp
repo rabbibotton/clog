@@ -62,6 +62,9 @@ the same as the clog directy this overides the relative paths used in them.")
             (setf (connection-data-item body "clog-body") body)
             (setf (connection-data-item body "clog-sync") (bordeaux-threads:make-lock))
             (setf (connection-data-item body "clog-debug") *clog-debug*)
+	    (set-on-event-with-data (window body) "gc"
+                                    (lambda (obj data)
+                                      (perform-gc obj data)))
             (if *clog-debug*
                 (funcall *clog-debug* on-new-window body)
                 (funcall on-new-window body)))
