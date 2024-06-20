@@ -30,6 +30,7 @@
   "Populate the control properties for the current control"
   ;; obj if current-control is nil must be content
   (when obj
+    (browser-gc obj)
     (let ((app (connection-data-item obj "builder-app-data")))
       (if clear
           (setf (inner-html (properties-list app)) "")
