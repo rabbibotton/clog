@@ -33,7 +33,9 @@
     (browser-gc obj)
     (let ((app (connection-data-item obj "builder-app-data")))
       (if clear
-          (setf (inner-html (properties-list app)) "")
+          (progn
+            (setf (inner-html (properties-list app)) "")
+            (browser-gc obj))
           (with-sync-event (obj)
             (bordeaux-threads:make-thread (lambda () (on-populate-control-events-win obj)))
             (let* ((prop-win (control-properties-win app))

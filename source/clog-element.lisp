@@ -2384,34 +2384,43 @@ used for DOM tree walking or other throw away purposes."))
 ;; first-child ;;
 ;;;;;;;;;;;;;;;;;
 
-(defgeneric first-child (clog-element)
+(defgeneric first-child (clog-element &key no-attach)
   (:documentation "Traverse to first child element. If Child does not have an
 html id than Element_Type will have an ID of undefined and therefore attached
 to no actual HTML element."))
 
-(defmethod first-child ((obj clog-element))
-  (attach-as-child obj (jquery-query obj "children().first().prop('id')")))
+(defmethod first-child ((obj clog-element) &key no-attach)
+  (let ((id (jquery-query obj "children().first().prop('id')")))
+    (if (or no-attach (equalp id "undefined"))
+        (make-clog-element (connection-id obj) id :clog-type 'clog-element))
+    (attach-as-child obj id)))
 
 ;;;;;;;;;;;;;;;;;;
 ;; next-sibling ;;
 ;;;;;;;;;;;;;;;;;;
 
-(defgeneric next-sibling (clog-element)
+(defgeneric next-sibling (clog-element &key no-attach)
   (:documentation "Traverse to next sibling element. If Child does not have an
 html id than Element_Type will have an ID of undefined and therefore attached
 to no actual HTML element."))
 
-(defmethod next-sibling ((obj clog-element))
-  (attach-as-child obj (jquery-query obj "next().prop('id')")))
+(defmethod next-sibling ((obj clog-element) &key no-attach)
+  (let ((id (jquery-query obj "next().prop('id')")))
+    (if (or no-attach (equalp id "undefined"))
+        (make-clog-element (connection-id obj) id :clog-type 'clog-element))
+    (attach-as-child obj id)))
 
 ;;;;;;;;;;;;;;;;;;;;;;
 ;; previous-sibling ;;
 ;;;;;;;;;;;;;;;;;;;;;;
 
-(defgeneric previous-sibling (clog-element)
+(defgeneric previous-sibling (clog-element &key no-attach)
   (:documentation "Traverse to previous sibling element.
 If Child does not have an html id than Element_Type will have an ID of
 undefined and therefore attached to no actual HTML elemen."))
 
-(defmethod previous-sibling ((obj clog-element))
-  (attach-as-child obj (jquery-query obj "previous().prop('id')")))
+(defmethod previous-sibling ((obj clog-element) &key no-attach)
+  (let ((id (jquery-query obj "previous().prop('id')")))
+    (if (or no-attach (equalp id "undefined"))
+        (make-clog-element (connection-id obj) id :clog-type 'clog-element))
+    (attach-as-child obj id)))
