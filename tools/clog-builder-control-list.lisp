@@ -14,8 +14,8 @@
   "Rerieve the control-list hash table on PANEL-ID"
   (let ((h (gethash panel-id (control-lists app))))
     (if h
-	h
-	(make-hash-table* :test #'equalp)))) ;; return empty hash to avoid map fails
+        h
+        (make-hash-table* :test #'equalp)))) ;; return empty hash to avoid map fails
 
 (defun add-to-control-list (app panel-id control)
   "Add a CONTROL on to control-list on PANEL-ID"
@@ -119,13 +119,15 @@ of controls and double click to select control."
     (let ((app (connection-data-item content "builder-app-data")))
       (if clear
           (when (control-list-win app)
-            (setf (inner-html (control-list-win app)) ""))
+            (setf (inner-html (control-list-win app)) "")
+            (browser-gc content))
           (with-sync-event (content)
             (let ((panel-id (html-id content))
                   (last-ctl nil))
               (when (control-list-win app)
                 (let ((lwin (control-list-win app)))
                   (setf (inner-html lwin) "")
+                  (browser-gc content)
                   (set-on-mouse-click (create-div lwin :content (attribute content "data-clog-name"))
                                       (lambda (obj data)
                                         (declare (ignore obj data))
@@ -135,11 +137,12 @@ of controls and double click to select control."
                   (labels ((add-siblings (control sim)
                              (let (dln dcc)
                                (loop
-                                 (when (equal (html-id control) "undefined") (return))
-                                 (setf dcc (attribute control "data-clog-composite-control"))
+                                 (when (equalp (html-id control) "undefined")
+                                   (return))
                                  (setf dln (attribute control "data-clog-name"))
                                  (unless (or (equal dln "undefined")
                                              (eq dln nil))
+                                  (setf dcc (attribute control "data-clog-composite-control"))
                                    (let ((list-item (create-div lwin :content (format nil "&#8597; ~A~A" sim dln)))
                                          (status    (hiddenp (get-placer control))))
                                      (if status
@@ -206,6 +209,6 @@ of controls and double click to select control."
                                      (set-on-drag-start list-item (lambda (obj)(declare (ignore obj))())
                                                         :drag-data (html-id control))
                                      (when (equal dcc "undefined") ; when t is not a composite control
-                                       (add-siblings (first-child control) (format nil "~A&#8594;" sim)))))
-                                 (setf control (next-sibling control))))))
-                    (add-siblings (first-child content) ""))))))))))
+                                       (add-siblings (first-child control :no-attach t) (format nil "~A&#8594;" sim)))))
+                                 (setf control (next-sibling control :no-attach t))))))
+                    (add-siblings (first-child content :no-attach t) ""))))))))))
