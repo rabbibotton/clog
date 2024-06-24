@@ -137,6 +137,10 @@ clog-builder window.")
      :accessor control-list-win
      :initform nil
      :documentation "Current control list window")
+   (last-panel-editor
+     :accessor last-panel-editor
+     :initform nil
+     :documentation "Last editor panel focused, to avoid recalculations")
    (control-pallete-win
      :accessor control-pallete-win
      :initform nil

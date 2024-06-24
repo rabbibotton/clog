@@ -87,7 +87,7 @@
                                        (p (attribute (parent-element v) "data-clog-name")))
                                    (unless (or (equal cname n)
                                                (equal cname p))
-			             (push n panel-controls))))
+                                     (push n panel-controls))))
                                (get-control-list app panel-id))
                       (push (attribute panel "data-clog-name") panel-controls)
                       (push
@@ -128,6 +128,7 @@
                                           (when (equal (subseq vname 0 1) "(")
                                             (setf vname (format nil "|~A|" vname)))
                                           (setf (attribute control "data-clog-name") vname)
+                                          (on-populate-control-list-win panel :win win)
                                           (when (equal (getf info :name) "clog-data")
                                             (when win
                                               (setf (window-title win) vname)))))))

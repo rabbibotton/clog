@@ -49,10 +49,9 @@
              (win (create-gui-window obj :title "Controls"
                                      :has-pinner t
                                      :keep-on-top t
-                                     :width 220))
+                                     :width *builder-left-panel-size*))
              (content (window-content win))
              (sheight      (floor (/ (height content) 2)))
-             (swidth       (floor (width content)))
              (divider      (create-panel content :top sheight :height 10 :left 0 :right 10
                                                  :class *builder-title-class*))
              (control-list (create-panel content :height (- sheight 10) :left 0 :bottom 0 :right 10))
@@ -63,6 +62,7 @@
         (setf (control-list-win app) control-list)
         (setf (select-tool app) pallete)
         (set-on-window-close win (lambda (obj)
+                                   (declare (ignore obj))
                                    (setf (controls-win app) nil)
                                    (setf (select-tool app) nil)
                                    (setf (control-list-win app) nil)))

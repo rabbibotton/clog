@@ -8,7 +8,7 @@
         (let* ((*default-title-class*      *builder-title-class*)
                (*default-border-class*     *builder-border-class*)
                (win     (create-gui-window obj :title "Control CLOG Events"
-                                               :left 225
+                                               :left (+ *builder-left-panel-size* 5)
                                                :height 200 :width 645
                                                :has-pinner t :client-movement *client-side-movement*))
                (content (window-content win))
@@ -59,7 +59,7 @@
         (let* ((*default-title-class*      *builder-title-class*)
                (*default-border-class*     *builder-border-class*)
                (win     (create-gui-window obj :title "Control Client JavaScript Events"
-                                               :left 225
+                                               :left (+ *builder-left-panel-size* 5)
                                                :height 200 :width 645
                                                :has-pinner t :client-movement *client-side-movement*))
                (content (window-content win))
@@ -112,7 +112,7 @@
         (let* ((*default-title-class*      *builder-title-class*)
                (*default-border-class*     *builder-border-class*)
                (win     (create-gui-window obj :title "Control Client ParenScript Events"
-                                               :left 225
+                                               :left (+ *builder-left-panel-size* 5)
                                                :height 200 :width 645
                                                :has-pinner t :client-movement *client-side-movement*))
                (content (window-content win))
