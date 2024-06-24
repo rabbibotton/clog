@@ -765,7 +765,7 @@ first menu-window-select will receive change window notices only."))
                                           (set-on-mouse-enter window-select (lambda (obj)
                                                                               (refill obj))))))
     (set-on-change window-select (lambda (obj)
-                                   (let ((win (gethash (value obj) (windows app))))
+                                   (let ((win (gethash (text-value obj) (windows app))))
                                      (when win
                                        (unless (keep-on-top win)
                                          (setf (hiddenp win) nil)
@@ -1967,7 +1967,9 @@ result of on-input."
                                   :client-movement client-movement
                                   :html-id         html-id))
          (input  (attach-as-child win (format nil "~A-input" html-id)
-                                  :clog-type 'clog:clog-form-element))
+                                  :clog-type (if (eql rows 1)
+                                                 `clog:clog-form-element
+                                                 'clog:clog-text-area)))
          (ok     (attach-as-child win (format nil "~A-ok" html-id)))
          (cancel (attach-as-child win (format nil "~A-cancel" html-id))))
     (unless top
@@ -1986,13 +1988,14 @@ result of on-input."
                   :one-time t)
     (set-on-click ok (lambda (obj)
                        (declare (ignore obj))
-                       (set-on-window-close win nil)
-                       (when modal
-                         (window-end-modal win))
-                       (window-close win)
-                       (setf result (funcall on-input (value input)))
-                       (when sem
-                         (bordeaux-threads:signal-semaphore sem)))
+                       (let ((r (text-value input)))
+                         (set-on-window-close win nil)
+                         (when modal
+                           (window-end-modal win))
+                         (window-close win)
+                         (setf result (funcall on-input r))
+                         (when sem
+                           (bordeaux-threads:signal-semaphore sem))))
                   :one-time t)
     (set-on-window-close win (lambda (obj)
                                (declare (ignore obj))
@@ -2261,7 +2264,7 @@ on-input returned after either ok or cancel or time elapses."
                                       (declare (ignore obj))
                                       (server-file-dialog body (first l) (fourth l)
                                                           (lambda (fname)
-                                                            (setf (value fld) fname))))))))
+                                                            (setf (text-value fld) fname))))))))
             fields)
     (js-execute obj (format nil "$('[name=~A-~A]').focus()"
                             html-id
@@ -2372,9 +2375,9 @@ If time-out return result of on-file-name, cancels dialog if time runs out."
              (let ((dir (directory-namestring d)))
                (setf (inner-html dirs) "")
                (add-select-option dirs (format nil "~A" dir) ".")
-               (setf (value input) (if (equal fname "")
-                                       (truename dir)
-                                       (format nil "~A~A" (truename dir) fname)))
+               (setf (text-value input) (if (equal fname "")
+                                            (truename dir)
+                                            (format nil "~A~A" (truename dir) fname)))
                (unless (or (equalp dir "/") (equalp dir #P"/"))
                  (add-select-option dirs (format nil "~A../" dir) ".."))
                (dolist (item (uiop:subdirectories dir))
@@ -2393,21 +2396,21 @@ If time-out return result of on-file-name, cancels dialog if time runs out."
       (populate-files initial-dir)
       (when initial-filename
         (ignore-errors
-         (setf (value input) (truename initial-filename)))
+         (setf (text-value input) (truename initial-filename)))
         (caret-at-end))
       (set-on-change files (lambda (obj)
                              (declare (ignore obj))
-                             (setf (value input) (truename (value files)))
+                             (setf (text-value input) (truename (text-value files)))
                              (caret-at-end)))
       (set-on-change dirs (lambda (obj)
                             (declare (ignore obj))
-                            (setf (value input) (value dirs))
+                            (setf (text-value input) (text-value dirs))
                             (caret-at-end)
-                            (populate-files (value dirs))))
+                            (populate-files (text-value dirs))))
       (set-on-double-click dirs
                            (lambda (obj)
                              (declare (ignore obj))
-                             (populate-dirs (truename (value dirs)))))
+                             (populate-dirs (truename (text-value dirs)))))
       (set-on-double-click files (lambda (obj)
                                    (declare (ignore obj))
                                    (click ok))))
@@ -2428,7 +2431,7 @@ If time-out return result of on-file-name, cancels dialog if time runs out."
                        (when modal
                          (window-end-modal win))
                        (window-close win)
-                       (setf result (funcall on-file-name (value input)))
+                       (setf result (funcall on-file-name (text-value input)))
                        (when sem
                          (bordeaux-threads:signal-semaphore sem)))
                   :one-time t)

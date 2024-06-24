@@ -393,7 +393,8 @@ embedded in a native template application.)"
   (parent-element   generic-function)
   (first-child      generic-function)
   (previous-sibling generic-function)
-  (next-sibling     generic-function))
+  (next-sibling     generic-function)
+  (list-of-children generic-function))
 
 (defsection @clog-jquery (:title "CLOG jQuery Objects")
   "CLOG-jQuery - Base class for CLOG jQuery Objects"

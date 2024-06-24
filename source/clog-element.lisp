@@ -2379,6 +2379,39 @@ used for DOM tree walking or other throw away purposes."))
 (defmethod parent-element ((obj clog-element))
   (attach-as-child obj (jquery-query obj (format nil "parent().prop('id')"))))
 
+;;;;;;;;;;;;;;;;;;;;;;
+;; list-of-children ;;
+;;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric list-of-children (clog-element &key no-attach)
+  (:documentation "Returns a list of child clog-element objects. If no-attach
+is t they are only functional if there previously was an attach or was created
+by CLOG, i.e. if just walking the DOM of existing clog-objects these are
+like pointers."))
+
+(defmethod list-of-children ((obj clog-element) &key no-attach)
+  (let ((result (read-from-string (js-query obj (format nil
+"const tmpf=function(obj) {
+              var tmp='(' + obj.prop('id');
+              obj.children().each(function() {
+                                    if ( $(this).children().first() ) {
+                                      tmp=tmp + tmpf( $(this) );
+                                    } else {
+                                      tmp=tmp + $(this).prop('id') + ' '; } } );
+              return tmp+')';}
+ tmpf(~A);"
+                                                        (jquery obj))))))
+    (labels ((tr (item)
+               (if no-attach
+                   (make-clog-element (connection-id obj) item :clog-type 'clog-element)
+                   (attach-as-child obj item)))
+             (ll (lst)
+                 (mapcar (lambda (l)
+                           (if (listp l)
+                               (ll l)
+                               (tr l)))
+                         lst)))
+      (rest (ll result)))))
 
 ;;;;;;;;;;;;;;;;;
 ;; first-child ;;
