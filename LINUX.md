@@ -29,3 +29,13 @@ sbcl --eval '(ql:quickload :clog/tools)' --eval '(clog-tools:clog-builder)'
 
 -  [Learn about CLOG](README.md)
 -  [Learn Common-Lisp](LEARN.md)
+
+TIPS:
+Install "sudo apt install xdg-utils wslu" to install xdg-open so that wsl
+uses the windows browser. Also create or add to your %UserProfile% (home dir) a
+file .wslconfig with below or networking though nat and even localhost access
+is dog slow. (Windows 11 on)
+```
+[wsl2]
+networkingMode=mirrored
+```
