@@ -829,10 +829,11 @@ not a temporarily attached one when using select-control."
                  (setf is-dirty nil)
                  (clrhash (get-control-list app panel-id))
                  (on-populate-loaded-window content :win win)
-                 (setf (window-title win) (attribute content "data-clog-name"))
                  (when ext-panel
                    (setf (title (html-document ext-panel)) (attribute content "data-clog-name")))
                  (setf (window-param win) fname)
+                 (setf (window-title win) (attribute content "data-clog-name"))
+                 (on-populate-control-properties-win content :win win)
                  (on-populate-control-list-win content :win win))
                (load-file (obj)
                  (server-file-dialog obj "Load Panel" (directory-namestring (if (equal file-name "")
