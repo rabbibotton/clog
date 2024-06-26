@@ -137,6 +137,10 @@ clog-builder window.")
      :accessor control-list-win
      :initform nil
      :documentation "Current control list window")
+   (last-panel-editor
+     :accessor last-panel-editor
+     :initform nil
+     :documentation "Last editor panel focused, to avoid recalculations")
    (control-pallete-win
      :accessor control-pallete-win
      :initform nil
@@ -575,7 +579,7 @@ clog-builder window.")
     (format t "~%If browser does not start go to http://127.0.0.1:~A~A" clog:*clog-port* open-url)
     (open-browser :url (format nil "http://127.0.0.1:~A~A" clog:*clog-port* open-url))))
 
-(defun clog-builder (&key (port 8080) (start-browser t)
+(defun clog-builder (&key (host "0.0.0.0") (port 8080) (start-browser t)
                      app project dir static-root system clogframe)
   "Start clog-builder.
   :PROJECT     - load ASDF Project, start its static root and set as current
@@ -609,8 +613,8 @@ clog-builder window.")
     (unless *app-mode*
       (setf *app-mode* 0)))
   (if static-root
-      (initialize nil :port port :static-root static-root)
-      (initialize nil :port port))
+      (initialize nil :host host :port port :static-root static-root)
+      (initialize nil :host host :port port))
   (setf port clog:*clog-port*)
   (set-on-new-window 'on-new-builder :path "/builder")
   (set-on-new-window 'on-open-panel-window :path "/panel-editor")

@@ -44,6 +44,10 @@
                                  obj))
                    (placer   (when control
                                (get-placer control)))
+                   (panel-id (attribute placer "data-panel-id"))
+                   (panel    (if (current-control app)
+                                 (attach-as-child obj panel-id)
+                                 obj))
                    (table    (properties-list app)))
               (when prop-win
                 (setf (inner-html table) "")
@@ -76,19 +80,31 @@
                                       (setf (attribute control (getf prop :attr)) (text obj))))
                                  props))
                           (t (print "Configuration error."))))
+                  (when (equal (getf info :name) "clog-data")
+                    (push
+                      `("panel name"    ,(attribute control "data-clog-name")
+                                        nil
+                                        ,(lambda (obj)
+                                           (let ((vname (text obj)))
+                                             (unless (equal vname "")
+                                               (when (equal (subseq vname 0 1) "(")
+                                                 (setf vname (format nil "|~A|" vname)))
+                                               (setf (attribute control "data-clog-name") vname)
+                                               (on-populate-control-list-win panel :win win)
+                                               (when win
+                                                 (setf (window-title win) vname))))))
+                      props))
                   (when (current-control app)
                     (let* (panel-controls
                            (cname    (attribute control "data-clog-name"))
-                           (ctype    (attribute control "data-clog-type"))
-                           (panel-id (attribute placer "data-panel-id"))
-                           (panel    (attach-as-child obj panel-id)))
+                           (ctype    (attribute control "data-clog-type")))
                       (maphash (lambda (k v)
                                  (declare (ignore k))
                                  (let ((n (attribute v "data-clog-name"))
                                        (p (attribute (parent-element v) "data-clog-name")))
                                    (unless (or (equal cname n)
                                                (equal cname p))
-			             (push n panel-controls))))
+                                     (push n panel-controls))))
                                (get-control-list app panel-id))
                       (push (attribute panel "data-clog-name") panel-controls)
                       (push
@@ -129,6 +145,7 @@
                                           (when (equal (subseq vname 0 1) "(")
                                             (setf vname (format nil "|~A|" vname)))
                                           (setf (attribute control "data-clog-name") vname)
+                                          (on-populate-control-list-win panel :win win)
                                           (when (equal (getf info :name) "clog-data")
                                             (when win
                                               (setf (window-title win) vname)))))))

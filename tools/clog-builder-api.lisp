@@ -8,9 +8,7 @@
        `(:name           "clog-data"
          :description    "Panel Properties"
          :events         nil
-         :properties     ((:name "panel name"
-                           :attr "data-clog-name")
-                          (:name "in-package"
+         :properties     ((:name "in-package"
                            :attr "data-in-package")
                           (:name "custom slots"
                            :attr "data-custom-slots")

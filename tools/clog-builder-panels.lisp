@@ -510,7 +510,7 @@ not a temporarily attached one when using select-control."
            (*default-title-class*      *builder-title-class*)
            (*default-border-class*     *builder-border-class*)
            ext-panel
-           (win (create-gui-window obj :top 40 :left 225
+           (win (create-gui-window obj :top 40 :left (+ *builder-left-panel-size* 5)
                                    :width 645 :height 430
                                    :client-movement *client-side-movement*))
            (box (create-panel-box-layout (window-content win)
@@ -536,15 +536,14 @@ not a temporarily attached one when using select-control."
            (m-lisp   (create-gui-menu-drop-down menu :content "Lisp"))
            (m-rndr   (create-gui-menu-item m-lisp :content "render form to lisp"))
            (m-rndras (create-gui-menu-item m-lisp :content "render form to lisp as..."))
-           (m-rndr   (create-gui-menu-item m-lisp :content "render form to lisp"))
            (m-eval   (create-gui-menu-item m-lisp :content "evaluate"))
            (m-test   (create-gui-menu-item m-lisp :content "evaluate and test"))
            (m-events (create-gui-menu-drop-down menu :content "controls"))
-           (tmp      (create-gui-menu-item m-events :content "show control properties"  :on-click 'on-show-control-properties-win))
-           (tmp      (create-gui-menu-item m-events :content "show controls window"     :on-click 'on-show-control-list-win))
-           (tmp      (create-gui-menu-item m-events :content "show CLOG events"         :on-click 'on-show-control-events-win))
-           (tmp      (create-gui-menu-item m-events :content "show JavaScript events"   :on-click 'on-show-control-js-events-win))
-           (tmp      (create-gui-menu-item m-events :content "show ParenScript events"  :on-click 'on-show-control-ps-events-win))
+           (tmp1     (create-gui-menu-item m-events :content "show control properties"  :on-click 'on-show-control-properties-win))
+           (tmp2     (create-gui-menu-item m-events :content "show controls window"     :on-click 'on-show-control-list-win))
+           (tmp3     (create-gui-menu-item m-events :content "show CLOG events"         :on-click 'on-show-control-events-win))
+           (tmp4     (create-gui-menu-item m-events :content "show JavaScript events"   :on-click 'on-show-control-js-events-win))
+           (tmp5     (create-gui-menu-item m-events :content "show ParenScript events"  :on-click 'on-show-control-ps-events-win))
            (m-help   (create-gui-menu-drop-down menu :content "Help"))
            (m-helpk  (create-gui-menu-item m-help :content "quick start"))
            (tool-bar  (create-div (top-panel box) :class *builder-title-class*))
@@ -564,7 +563,6 @@ not a temporarily attached one when using select-control."
            (spacer    (create-span tool-bar :content "&nbsp;&nbsp;&nbsp;"))
            (btn-help  (create-span tool-bar :content "?" :class "w3-tiny w3-ripple"))
            (content   (center-panel box))
-           (in-simulation    nil)
            (undo-chain       nil)
            (redo-chain       nil)
            (is-dirty         nil)
@@ -572,7 +570,7 @@ not a temporarily attached one when using select-control."
            (file-name        "")
            (render-file-name "")
            (panel-id  (html-id content)))
-      (declare (ignore spacer))
+      (declare (ignore spacer tmp1 tmp2 tmp3 tmp4 tmp5))
       (add-class menu "w3-small")
       (setf (overflow (top-panel box)) :visible) ; let menus leave the top panel
       (add-class (top-panel box) *builder-title-class*)
@@ -644,7 +642,7 @@ not a temporarily attached one when using select-control."
                                       (on-populate-control-properties-win content :win win :clear t)
                                       (setf content nil)
                                       (setf ext-panel nil)
-                                      (Window-close win)))
+                                      (window-close win)))
               (set-on-click (create-gui-menu-item m-file :content "export as a boot html")
                             (lambda (obj)
                               (server-file-dialog obj "Export as a Boot HTML" "./"
@@ -685,8 +683,11 @@ not a temporarily attached one when using select-control."
       (set-on-window-focus win
                            (lambda (obj)
                              (declare (ignore obj))
-                             (on-populate-control-properties-win content :win win)
-                             (on-populate-control-list-win content :win win)))
+                             (unless (eq (last-panel-editor app) win)
+                               (progn
+                                 (on-populate-control-properties-win content :win win)
+                                 (on-populate-control-list-win content :win win)
+                                 (setf (last-panel-editor app) win)))))
       (set-on-window-close win
                            (lambda (obj)
                              (declare (ignore obj))
@@ -828,10 +829,11 @@ not a temporarily attached one when using select-control."
                  (setf is-dirty nil)
                  (clrhash (get-control-list app panel-id))
                  (on-populate-loaded-window content :win win)
-                 (setf (window-title win) (attribute content "data-clog-name"))
                  (when ext-panel
                    (setf (title (html-document ext-panel)) (attribute content "data-clog-name")))
                  (setf (window-param win) fname)
+                 (setf (window-title win) (attribute content "data-clog-name"))
+                 (on-populate-control-properties-win content :win win)
                  (on-populate-control-list-win content :win win))
                (load-file (obj)
                  (server-file-dialog obj "Load Panel" (directory-namestring (if (equal file-name "")
