@@ -84,8 +84,8 @@ provide an interactive console.)"))
 
 (defun capture-eval (form &key (capture-console t)
                      (capture-result t)
-                     (capture-result-form "=>~A~%")
-                     (eval-form "~A~%=>~A~%")
+                     (capture-result-form "=>~S~%")
+                     (eval-form "~A~%=>~S~%")
                      (clog-obj nil)
                      (private-console-win nil)
                      (eval-in-package "clog-user"))
@@ -136,16 +136,23 @@ provide an interactive console.)"))
                              (*default-title-class*  *builder-title-class*)
                              (*default-border-class* *builder-border-class*)
                              (*package*              (find-package (string-upcase eval-in-package))))
-                        (setf eval-result (eval (read-from-string (format nil "(progn ~A)" form))))
-                    (unless capture-result
-                      (format console capture-result-form eval-result))
-                    (when (typep console 'console-out-stream)
-                      (close console))
-                    (close *query-io*)
-                    (values
-                      (format nil eval-form result eval-result)
-                      *package*
-                      eval-result))))))))))
+                        (setf eval-result (multiple-value-list (eval (read-from-string (format nil "(progn ~A)" form)))))
+                        (unless capture-result
+                          (mapcar (lambda (r)
+                                    (format console capture-result-form r))
+                                  eval-result))
+                      (when (typep console 'console-out-stream)
+                        (close console))
+                      (close *query-io*)
+                      (let ((res ""))
+                        (mapcar (lambda (r)
+                                  (setf res (format nil "~A~A" res (format nil eval-form result r))))
+                                eval-result)
+                        (values
+                          res
+                          *package*
+                          (first eval-result)
+                          eval-result)))))))))))
     (if *clog-repl-eval-on-main-thread*
         (trivial-main-thread:call-in-main-thread cef :blocking t)
         (funcall cef))))

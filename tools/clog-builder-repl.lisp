@@ -105,10 +105,7 @@
                                      (setf clog-user::*body* nil))))
             (clog-terminal:echo target "Use clog-user:*body* to access the clog-builder-repl window.")))
         (t
-          (setf data (format nil "(let ((tmp (progn ~A)))
-                                    (setf /// //) (setf // /) (setf / (list tmp))
-                                    (setf *** **) (setf ** *) (setf * tmp))" data))
-          (multiple-value-bind (result new-package)
+          (multiple-value-bind (result new-package first-eval-result)
                                (capture-eval data :clog-obj        panel
                                              :private-console-win (when *clog-repl-private-console*
                                                                     (window-param (parent (parent panel))))
@@ -117,4 +114,8 @@
                                              :eval-in-package (text-value (package-div panel)))
             (setf (text-value (package-div panel))
                   (string-downcase (package-name new-package)))
+            (let ((*package* new-package))
+              (eval `(let ((tmp ',first-eval-result))
+                       (setf /// //) (setf // /) (setf / (list tmp))
+                       (setf *** **) (setf ** *) (setf * tmp))))
             (clog-terminal:echo target result)))))
