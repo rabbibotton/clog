@@ -48,6 +48,7 @@
  enableBasicAutocompletion: true,
  enableLiveAutocompletion : true")
 (defparameter *editor-delay-on-eval-sel* 15)
+(defparameter *editor-delay-on-eval-panels* 30)
 (defparameter *editor-delay-on-eval-form* 30)
 (defparameter *editor-delay-on-eval-file* 60)
 

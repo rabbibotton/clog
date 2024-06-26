@@ -93,13 +93,13 @@
   \(let \(\(panel \(change-class \(clog:create-div clog-obj :content \"~A\"
          :hidden hidden :class class :html-id html-id :auto-place auto-place\) \'~A\)\)\)
 ~{~A~}~{~A~}~{~A~}    panel\)\)~%"
-                           (string-downcase package)
+                          (string-downcase package)
                           cname     ;;defclass
                           cmembers
                           cname     ;;defun
                           (ppcre:regex-replace-all "\""
-                                                    (js-query content
-                                                              (format nil
+                                                   (js-query content
+                                                             (format nil
                                                                       "var z=~a.clone();~
     z.find('*').each(function(){~
       var m=$(this).attr('data-clog-name');

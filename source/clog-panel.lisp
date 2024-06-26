@@ -9,6 +9,7 @@
 
 ;;; CLOG-PANELs are for doing layouts, base class for pluggins and custom
 ;;; widgets and is the base class for CLOG Builder's panels.
+;;; Various layout functions for use on panels and divs
 ;;; CLOG-PANEL-BOXes are to layout a classic 5 panel layout in a panel
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -139,6 +140,27 @@ nil. Resizable only works if overflow is set to :SCROLL"))
      :html-id    html-id
      :auto-place auto-place))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Implementation - Layout tools for panels, divs, etc
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;;;;;;;;;;;;;;;;;;;;
+;; envelope-panel ;;
+;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric envelope-panel (clog-element panel width height &key units)
+  (:documentation "Create a panel of WIDTH and HEIGHT with :relative
+positioning to envelope PANEL. This allows any type of clog-panel (including
+those created by CLOG Builder, to be positioned within :flex layouts or
+otherwise treat the panel as an inline object."))
+
+(defmethod envelope-panel ((obj clog-element) (panel clog-element)
+                           width height &key (units :px))
+  (place-inside-top-of
+    (create-div obj :style (format nil "position:relative;width:~A~A;height:~A~A"
+                                   width units height units))
+    panel))
+
 ;;;;;;;;;;;;;;;;;;;;;
 ;; center-children ;;
 ;;;;;;;;;;;;;;;;;;;;;
@@ -146,13 +168,15 @@ nil. Resizable only works if overflow is set to :SCROLL"))
 (defgeneric center-children (clog-element &key vertical horizontal)
   (:documentation "Align children of CLOG-ELEMENT VERTICAL (default t)
 and/or HORIZONTAL (default t). This will set the DISPLAY property of
-CLOG-ELEMENT to :FLEX. Note: if children of clog-element are using
-:absolute positioning they will not flow with flex and will not be
-centered. Using :relative wrapped in div with :static positioning will
-work. For example in CLOG Builder the panel is created in a static
-positioning panel, if all the contents are positioning in a div
-aboslute and that div is relative the expected bahvior of a centered
-panel will happen."))
+CLOG-ELEMENT to :FLEX.
+
+Note: if children of CLOG-ELEMENT are using :absolute positioning they will
+not flow with flex and will not be centered. Instead use :relative positioning.
+
+Note: to use with CLOG Buider Panels - use ENVELOPE-PANEL or in the builder
+create a div at top:0 left:0 and size the div to be the boundaries of your panel
+to be centered, then set the positioning on the panel to :relative.
+Add all controls as child of that div."))
 
 (defmethod center-children ((obj clog-element) &key (vertical t) (horizontal t))
   (set-styles obj `(("display" "flex")

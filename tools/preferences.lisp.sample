@@ -76,8 +76,10 @@
  showGutter : true,
  enableBasicAutocompletion: true,
  enableLiveAutocompletion : true")
-;; Delay to automaticly close result windows
+
+;; Delay to automaticly close result windows - nil no auto close
 (setf *editor-delay-on-eval-sel* 15)
+(setf *editor-delay-on-eval-panels* 30)
 (setf *editor-delay-on-eval-form* 30)
 (setf *editor-delay-on-eval-file* 60)
 
@@ -92,7 +94,7 @@
 ;; eval on main thread so (break) works for sbcl.
 (setf *clog-repl-eval-on-main-thread* nil)
 
-;; CLOG Panel Builder
+;; CLOG Panel Rendering
 (setf *builder-render-right-margin* 80)
 (setf *builder-render-case* :downcase)
 

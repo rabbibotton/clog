@@ -178,4 +178,4 @@ provide an interactive console.)"))
       (if *clogframe-mode*
           (open-browser :url (format nil "http://127.0.0.1:~A/test" *clog-port*))
           (open-window (window (connection-body obj)) "/test")))
-    (on-open-file obj :title-class "w3-yellow" :title "test eval" :text result)))
+    (on-open-file obj :title-class "w3-yellow" :title "Eval Results" :text result :has-time-out *editor-delay-on-eval-panels*)))
