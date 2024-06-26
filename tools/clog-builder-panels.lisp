@@ -231,7 +231,6 @@
                                    (html-id control)))
     ;; setup placer events
     (setf (tab-index placer) "-1") ; must have a tab-index to accept keyboard input
-    (focus placer)
     (set-on-key-down placer
                      (lambda (obj data)
                        (declare (ignore obj))
