@@ -48,7 +48,7 @@
                (t (c)
                  (when *verbose-output*
                    (format t "Failed to close the old connection when establishing reconnection. ~
-                              This can be normal: The old connection could probably don't work for the client, ~
+                              This can be normal: The old connection could not work for the client, ~
                               so the client is requesting to reconnect.~%Condition - ~A.~&"
                            c))))
              (setf (gethash id *connection-ids*) connection)
@@ -215,10 +215,13 @@
                                    (values 0 c)))))
         (lambda (responder)
           (declare (ignore responder))
-          (websocket-driver:start-connection ws)))
+          (handler-case
+              (websocket-driver:start-connection ws)
+            (t (c)
+               (format t "Condition caught in websocket-driver:start-connection - ~A.~&" c)))))
     (t (c)
       (format t "Condition caught in clog-server start-up - ~A.~&" c)
-      (values 0 c))))
+      (values '(400 nil) c))))
 
 ;;;;;;;;;;;;;;;;
 ;; initialize ;;

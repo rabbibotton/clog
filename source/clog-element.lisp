@@ -1127,6 +1127,22 @@ flex-basis (default :auto = use width or height) for CLOG-ELEMENT"))
 (defmethod (setf grid-auto-flow) (value (obj clog-element))
   (setf (style obj "grid-auto-flow") value))
 
+;;;;;;;;;;;;;;;;;
+;; grid-column ;;
+;;;;;;;;;;;;;;;;;
+
+(defgeneric grid-column (clog-element)
+  (:documentation "Get/Setf grid-column."))
+
+(defmethod grid-column ((obj clog-element))
+  (style obj "grid-column"))
+
+(defgeneric (setf grid-column) (value clog-element)
+  (:documentation "Set grid-column VALUE for CLOG-ELEMENT"))
+
+(defmethod (setf grid-column) (value (obj clog-element))
+  (setf (style obj "grid-column") value))
+
 ;;;;;;;;;;;;;;;;;;;;;;;
 ;; grid-column-start ;;
 ;;;;;;;;;;;;;;;;;;;;;;;
@@ -1158,6 +1174,22 @@ flex-basis (default :auto = use width or height) for CLOG-ELEMENT"))
 
 (defmethod (setf grid-column-end) (value (obj clog-element))
   (setf (style obj "grid-column-end") value))
+
+;;;;;;;;;;;;;;
+;; grid-row ;;
+;;;;;;;;;;;;;;
+
+(defgeneric grid-row (clog-element)
+  (:documentation "Get/Setf grid-row."))
+
+(defmethod grid-row ((obj clog-element))
+  (style obj "grid-row"))
+
+(defgeneric (setf grid-row) (value clog-element)
+  (:documentation "Set grid-row VALUE for CLOG-ELEMENT"))
+
+(defmethod (setf grid-row) (value (obj clog-element))
+  (setf (style obj "grid-row") value))
 
 ;;;;;;;;;;;;;;;;;;;;
 ;; grid-row-start ;;
