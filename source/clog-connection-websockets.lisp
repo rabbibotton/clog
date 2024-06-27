@@ -105,7 +105,8 @@
                              {if ((c[1] !== null) && (typeof c[1] === 'object') && (c[1].nodeType===1))
                              {if (c[1].isConnected===false) {$(clog['body']).trigger('gc', c[0])}}})"))
                (when *verbose-output*
-                 (format t "Connection ~A    Ping~%" connection-id)))
+                 (format t "Connection ~A    Ping~%" connection-id)
+                 (execute connection-id "null")))
               ((equal (first ml) "E")
                ;; an event
                (let* ((em (ppcre:split " " (second ml) :limit 2))
