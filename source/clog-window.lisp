@@ -76,13 +76,8 @@ no redirection of browser takes place. REWRITE-URL must be same domain."))
 ;; inner-height ;;
 ;;;;;;;;;;;;;;;;;;
 
-(defgeneric inner-height (clog-window)
-  (:documentation "Get/Setf inner height of browser window."))
-
 (defmethod inner-height ((obj clog-window))
   (js-to-integer (query obj "innerHeight")))
-
-(defgeneric (setf inner-height) (value clog-window))
 
 (defmethod (setf inner-height) (value (obj clog-window))
   (execute obj (format nil "innerHeight='~A'" (escape-string value)))
@@ -92,13 +87,8 @@ no redirection of browser takes place. REWRITE-URL must be same domain."))
 ;; inner-width ;;
 ;;;;;;;;;;;;;;;;;
 
-(defgeneric inner-width (clog-window)
-  (:documentation "Get/Setf inner width of browser window."))
-
 (defmethod inner-width ((obj clog-window))
   (js-to-integer (query obj "innerWidth")))
-
-(defgeneric (setf inner-width) (value clog-window))
 
 (defmethod (setf inner-width) (value (obj clog-window))
   (execute obj (format nil "innerWidth='~A'" (escape-string value)))
@@ -108,13 +98,8 @@ no redirection of browser takes place. REWRITE-URL must be same domain."))
 ;; outer-height ;;
 ;;;;;;;;;;;;;;;;;;
 
-(defgeneric outer-height (clog-window)
-  (:documentation "Get/Setf outer height of browser window."))
-
 (defmethod outer-height ((obj clog-window))
   (js-to-integer (query obj "outerHeight")))
-
-(defgeneric (setf outer-height) (value clog-window))
 
 (defmethod (setf outer-height) (value (obj clog-window))
   (execute obj (format nil "outerHeight='~A'" (escape-string value)))
@@ -124,13 +109,8 @@ no redirection of browser takes place. REWRITE-URL must be same domain."))
 ;; outer-width ;;
 ;;;;;;;;;;;;;;;;;
 
-(defgeneric outer-width (clog-window)
-  (:documentation "Get/Setf outer width of browser window."))
-
 (defmethod outer-width ((obj clog-window))
   (js-to-integer (query obj "outerWidth")))
-
-(defgeneric (setf outer-width) (value clog-window))
 
 (defmethod (setf outer-width) (value (obj clog-window))
   (execute obj (format nil "outerWidth='~A'" (escape-string value)))
@@ -172,13 +152,8 @@ no redirection of browser takes place. REWRITE-URL must be same domain."))
 ;; top ;;
 ;;;;;;;;;
 
-(defgeneric top (clog-window)
-  (:documentation "Get/Setf browser y postion."))
-
 (defmethod top ((obj clog-window))
   (js-to-integer (query obj "screenY")))
-
-(defgeneric (setf top) (value clog-window))
 
 (defmethod (setf top) (value (obj clog-window))
   (execute obj (format nil "screenY='~A'" (escape-string value)))
@@ -188,13 +163,8 @@ no redirection of browser takes place. REWRITE-URL must be same domain."))
 ;; left ;;
 ;;;;;;;;;;
 
-(defgeneric left (clog-window)
-  (:documentation "Get/Setf browser x position."))
-
 (defmethod left ((obj clog-window))
   (js-to-integer (query obj "screenX")))
-
-(defgeneric (setf left) (value clog-window))
 
 (defmethod (setf left) (value (obj clog-window))
   (execute obj (format nil "screenX='~A'" (escape-string value)))

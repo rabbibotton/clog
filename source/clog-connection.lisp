@@ -83,10 +83,10 @@ script."
   (apply #'make-hash-table :synchronized t args)
   #-(or sbcl ecl mezzano) (apply #'make-hash-table args))
 
-(defvar *verbose-output* nil "Verbose server output (default false)")
-(defvar *browser-gc-on-ping* nil "Run a browser-gc on every ping")
-(defvar *break-on-error* t   "Allow invoking debugger (default true)")
-(defvar *disable-clog-debugging* nil "When true turns off debug hooks")
+(defvar *verbose-output* nil "Verbose server output (default nil)")
+(defvar *browser-gc-on-ping* nil "Run a browser-gc on every ping (default nil)")
+(defvar *break-on-error* t   "Allow invoking debugger (default t)")
+(defvar *disable-clog-debugging* nil "When true turns off debug hooks (default nil)")
 
 (defvar *on-connect-handler* nil "New connection event handler.")
 

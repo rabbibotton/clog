@@ -152,14 +152,14 @@ nil. Resizable only works if overflow is set to :SCROLL"))
   (:documentation "Create a panel of WIDTH and HEIGHT with :relative
 positioning to envelope PANEL. This allows any type of clog-panel (including
 those created by CLOG Builder, to be positioned within :flex layouts or
-otherwise treat the panel as an inline object."))
+otherwise treat the panel as an inline object. Returns envelope-panel"))
 
 (defmethod envelope-panel ((obj clog-element) (panel clog-element)
                            width height &key (units :px))
-  (place-inside-top-of
-    (create-div obj :style (format nil "position:relative;width:~A~A;height:~A~A"
-                                   width units height units))
-    panel))
+  (let ((e (create-div obj :style (format nil "position:relative;width:~A~A;height:~A~A"
+                                          width units height units))))
+    (place-inside-top-of e panel)
+    e))
 
 ;;;;;;;;;;;;;;;;;;;;;
 ;; center-children ;;

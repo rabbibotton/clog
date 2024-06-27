@@ -295,6 +295,7 @@ embedded in a native template application.)"
   (grid-row                   generic-function)
   (grid-row-start             generic-function)
   (grid-row-end               generic-function)
+  (grid-area                  generic-function)
   (align-items-type           type)
   (align-items                generic-function)
   (align-self-type            type)

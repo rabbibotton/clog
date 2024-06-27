@@ -846,7 +846,7 @@ elements wrap around it."))
 ;;;;;;;;;;;;;
 
 (deftype display-type () '(member :none :block :inline :inline-block :flex
-                           :grid :inline-grid))
+                           :grid :inline-grid :contents))
 
 (defgeneric display (clog-element)
   (:documentation "Get/Setf display. Display sets the CSS Display property that
@@ -889,9 +889,14 @@ handles how elements are treated by the browser layout engine.
                    :space-around  ( -   -   - )
                    :space-evenly  ( - - - )
 
+    For info on using grids see:
+    https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_grid_layout
+
     grid         - Turn this item in to a grid container block level. The grid
                    properties to adjust for container are:
 
+                      Tip - 1 1 1 1 = repeat(4,1fr) also minmax()
+                      
                       grid-template-columns
                       grid-template-rows
                       grid-template-areas
@@ -907,10 +912,15 @@ handles how elements are treated by the browser layout engine.
 
                     The properties to adjust for grid items is:
 
+                      Tip - 1 / 4 means from 1 to 4
+
+                      grid-column
                       grid-column-start
                       grid-column-end
+                      grid-row
                       grid-row-start
                       grid-row-end
+                      grid-area
                       align-self
                       justify-self
 
@@ -1126,6 +1136,26 @@ flex-basis (default :auto = use width or height) for CLOG-ELEMENT"))
 
 (defmethod (setf grid-auto-flow) (value (obj clog-element))
   (setf (style obj "grid-auto-flow") value))
+
+;;;;;;;;;;;;;;;
+;; grid-area ;;
+;;;;;;;;;;;;;;;
+
+(defgeneric grid-area (clog-element)
+  (:documentation "Get/Setf grid-area named or as
+grid-row-start / grid-column-start / grid-row-end / grid-column-end
+
+e.g. 1 / 1 / 4 / 2"))
+
+(defmethod grid-area ((obj clog-element))
+  (style obj "grid-area"))
+
+(defgeneric (setf grid-area) (value clog-element)
+  (:documentation "Set grid-area VALUE for CLOG-ELEMENT"))
+
+(defmethod (setf grid-area) (value (obj clog-element))
+  (setf (style obj "grid-area") value))
+
 
 ;;;;;;;;;;;;;;;;;
 ;; grid-column ;;
@@ -1990,6 +2020,12 @@ auto | w h | % = cover of parent | contain"))
 
 (defmethod border ((obj clog-element))
   (style obj "border"))
+
+(defgeneric (setf border) (value clog-element)
+  (:documentation "Set border VALUE for CLOG-ELEMENT"))
+
+(defmethod (setf border) (value (obj clog-element))
+  (setf (style obj "border") value))
 
 ;;;;;;;;;;;;;;;;
 ;; set-border ;;
