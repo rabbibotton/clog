@@ -151,8 +151,9 @@ nil. Resizable only works if overflow is set to :SCROLL"))
 (defgeneric envelope-panel (clog-element panel width height &key units)
   (:documentation "Create a panel of WIDTH and HEIGHT with :relative
 positioning to envelope PANEL. This allows any type of clog-panel (including
-those created by CLOG Builder, to be positioned within :flex layouts or
-otherwise treat the panel as an inline object. Returns envelope-panel"))
+those created by CLOG Builder, to be positioned within DISPLAY :flex or
+:grid layouts or otherwise treat the panel as an inline object.
+Returns envelope-panel"))
 
 (defmethod envelope-panel ((obj clog-element) (panel clog-element)
                            width height &key (units :px))
