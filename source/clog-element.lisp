@@ -896,7 +896,8 @@ handles how elements are treated by the browser layout engine.
                    properties to adjust for container are:
 
                       Tip - 1 1 1 1 = repeat(4,1fr) also minmax()
-                      
+
+                      grid-template
                       grid-template-columns
                       grid-template-rows
                       grid-template-areas
@@ -1008,6 +1009,22 @@ flex-basis (default :auto = use width or height) for CLOG-ELEMENT"))
 
 (defmethod (setf flex-direction) (value (obj clog-element))
   (setf (style obj "flex-direction") value))
+
+;;;;;;;;;;;;;;;;;;;
+;; grid-template ;;
+;;;;;;;;;;;;;;;;;;;
+
+(defgeneric grid-template (clog-element)
+  (:documentation "Get/Setf grid-template."))
+
+(defmethod grid-template ((obj clog-element))
+  (style obj "grid-template"))
+
+(defgeneric (setf grid-template) (value clog-element)
+  (:documentation "Set grid-template VALUE for CLOG-ELEMENT"))
+
+(defmethod (setf grid-template) (value (obj clog-element))
+  (setf (style obj "grid-template") value))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; grid-template-columns ;;

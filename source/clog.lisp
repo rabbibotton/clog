@@ -281,6 +281,7 @@ embedded in a native template application.)"
   (flex-wrap                  generic-function)
   (flex-direction-type        type)
   (flex-direction             generic-function)
+  (grid-template              generic-function)
   (grid-template-columns      generic-function)
   (grid-template-rows         generic-function)
   (grid-template-areas        generic-function)
