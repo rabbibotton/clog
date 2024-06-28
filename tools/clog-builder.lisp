@@ -320,6 +320,30 @@ clog-builder window.")
                       :title-class "w3-green w3-animate-top"
                       :text results))))
 
+(defun hide-panel-windows (app)
+  (when (control-events-win app)
+    (setf (hiddenp (control-events-win app)) t))
+  (when (control-js-events-win app)
+    (setf (hiddenp (control-js-events-win app)) t))
+  (when (control-ps-events-win app)
+    (setf (hiddenp (control-ps-events-win app)) t))
+  (when (controls-win app)
+    (setf (hiddenp (controls-win app)) t))
+  (when (control-properties-win app)
+    (setf (hiddenp (control-properties-win app)) t)))
+
+(defun show-panel-windows (app)
+  (when (control-events-win app)
+    (setf (hiddenp (control-events-win app)) nil))
+  (when (control-js-events-win app)
+    (setf (hiddenp (control-js-events-win app)) nil))
+  (when (control-ps-events-win app)
+    (setf (hiddenp (control-ps-events-win app)) nil))
+  (when (controls-win app)
+    (setf (hiddenp (controls-win app)) nil))
+  (when (control-properties-win app)
+    (setf (hiddenp (control-properties-win app)) nil)))
+
 (defun on-open-file-window (body)
   (on-new-builder body))
 
@@ -477,6 +501,14 @@ clog-builder window.")
                                                       (window-normalize (current-window obj)))))
                             (create-gui-menu-item win   :content "Maximize All"       :on-click #'maximize-all-windows)
                             (create-gui-menu-item win   :content "Normalize All"      :on-click #'normalize-all-windows)
+                            (create-gui-menu-item win   :content "Hide Panel Editor Panels" :on-click
+                                                  (lambda (obj)
+                                                    (declare (ignore obj))
+                                                    (hide-panel-windows app)))
+                            (create-gui-menu-item win   :content "Show Panel Editor Panels" :on-click
+                                                  (lambda (obj)
+                                                    (declare (ignore obj))
+                                                    (show-panel-windows app)))
                             ;; Menu -> Help
                             (create-gui-menu-item help  :content "CLOG Manual"          :on-click
                                                   (lambda (obj)
