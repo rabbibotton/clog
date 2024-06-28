@@ -41,42 +41,46 @@
   "Handle new incoming websocket CONNECTIONS with ID from boot page. (Private)"
   (handler-case
       (cond ((and id (gethash id *connection-data*))
-             (format t "Reconnection id - ~A to ~A~%" id connection)
-             (handler-case
-                 (websocket-driver:close-connection (gethash id *connection-ids*)
-                                                    "Aborting this old connection since receiving a reconnection request.")
-               (t (c)
-                 (when *verbose-output*
-                   (format t "Failed to close the old connection when establishing reconnection. ~
-                              This can be normal: The old connection could not work for the client, ~
-                              so the client is requesting to reconnect.~%Condition - ~A.~&"
-                           c))))
-             (setf (gethash id *connection-ids*) connection)
-             (setf (gethash connection *connections*) id))
+              (format t "Reconnection id - ~A to ~A~%" id connection)
+              (let ((old (gethash id *connection-ids*)))
+                (when *verbose-output*
+                  (format t "Transfer id - ~A => ~A" old connection))
+                (setf (gethash old *connections*) nil)
+                (setf (gethash connection *connections*) id)
+                (setf (gethash id *connection-ids*) connection)
+                (handler-case
+                    (websocket-driver:close-connection old
+                      "Aborting this old connection since receiving a reconnection request.")
+                  (t (c)
+                     (when *verbose-output*
+                       (format t "Failed to close the old connection when establishing reconnection. ~
+                                  This can be normal: The old connection could not work for the client, ~
+                                so the client is requesting to reconnect.~%Condition - ~A.~&"
+                               c))))))
             (id
-             (format t "Reconnection id ~A not found. Closing the connection.~%" id)
-             (websocket-driver:close-connection connection)) ; Don't send the reason for better security.
+              (format t "Reconnection id ~A not found. Closing the connection.~%" id)
+              (websocket-driver:close-connection connection)) ; Don't send the reason for better security.
             (t
-             (setf id (random-hex-string))
-             (setf (gethash connection *connections*) id)
-             (setf (gethash id *connection-ids*) connection)
-             (setf (gethash id *connection-data*)
-                   (make-hash-table* :test #'equal))
-             (setf (gethash "connection-id" (get-connection-data id)) id)
-             (format t "New connection id - ~A - ~A~%" id connection)
-             (websocket-driver:send connection
-                                    (format nil "clog['connection_id']='~A'" id))
-             (bordeaux-threads:make-thread
-              (lambda ()
-                (if *break-on-error*
-                    (funcall *on-connect-handler* id)
-                    (handler-case
-                        (funcall *on-connect-handler* id)
-                      (t (c)
-                        (format t "Condition caught connection ~A - ~A.~&" id c)
-                        (values 0 c)))))
-              :name (format nil "CLOG connection ~A"
-                            id))))
+              (setf id (random-hex-string))
+              (setf (gethash connection *connections*) id)
+              (setf (gethash id *connection-ids*) connection)
+              (setf (gethash id *connection-data*)
+                    (make-hash-table* :test #'equal))
+              (setf (gethash "connection-id" (get-connection-data id)) id)
+              (format t "New connection id - ~A - ~A~%" id connection)
+              (websocket-driver:send connection
+                                     (format nil "clog['connection_id']='~A'" id))
+              (bordeaux-threads:make-thread
+                (lambda ()
+                  (if *break-on-error*
+                      (funcall *on-connect-handler* id)
+                      (handler-case
+                          (funcall *on-connect-handler* id)
+                        (t (c)
+                          (format t "Condition caught connection ~A - ~A.~&" id c)
+                          (values 0 c)))))
+                :name (format nil "CLOG connection ~A"
+                              id))))
     (t (c)
       (format t "Condition caught in handle-new-connection - ~A.~&" c)
       (values 0 c))))
@@ -162,6 +166,14 @@
 
 (defun handle-close-connection (connection)
   "Close websocket CONNECTION. (Private)"
+  (when *verbose-output*
+    (format t "Connection close request ~A.~%"
+            connection))
+ (when *reconnect-delay*
+   (when *verbose-output*
+     (format t "Connection close request ~A delayed ~A for reconnects.~%"
+             connection *reconnect-delay*))
+   (sleep *reconnect-delay*))
   (handler-case
       (let ((id (gethash connection *connections*)))
         (when id
@@ -203,9 +215,9 @@
                                  (t (c)
                                    (format t "Condition caught in clog-server :message - ~A.~&" c)
                                    (values 0 c)))))
-	(websocket-driver:on :error ws
-			     (lambda (msg)
-			       (format t "Websocket error - ~A~&" msg)))
+        (websocket-driver:on :error ws
+                             (lambda (msg)
+                               (format t "Websocket error - ~A~&" msg)))
         (websocket-driver:on :close ws
                              (lambda (&key code reason)
                                (declare (ignore code reason))

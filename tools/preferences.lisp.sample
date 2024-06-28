@@ -84,14 +84,17 @@
 (setf *editor-delay-on-eval-file* 60)
 
 ;; Server Settings
-;; When true turns off debug hooks
+;; when true turns off debug hooks
 (setf clog-connection:*disable-clog-debugging* nil)
-;; Verbose server output
+;; verbose server output
 (setf clog-connection:*verbose-output* nil)
-;; Run a browser-gc on every ping
+;; run a browser-gc on every ping
 (setf clog-connection:*browser-gc-on-ping* nil)
-;; Allow invoking debugger
+;; allow invoking debugger
 (setf clog-connection:*break-on-error* t)
+;; time to delay for possible reconnect, such as after sleep or
+;; long network latenacies.
+(setf clog-connection:*reconnect-delay* 3)
 
 ;; CLOG Builder REPL
 (setf *clog-repl-use-console* t)
