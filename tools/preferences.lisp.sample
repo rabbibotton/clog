@@ -94,7 +94,7 @@
 (setf clog-connection:*break-on-error* t)
 ;; time to delay for possible reconnect, such as after sleep or
 ;; long network latenacies.
-(setf clog-connection:*reconnect-delay* 3)
+(setf clog-connection:*reconnect-delay* 7)
 
 ;; CLOG Builder REPL
 (setf *clog-repl-use-console* t)

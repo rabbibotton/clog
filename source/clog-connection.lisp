@@ -88,7 +88,7 @@ script."
 (defvar *browser-gc-on-ping* nil "Run a browser-gc on every ping (default nil)")
 (defvar *break-on-error* t   "Allow invoking debugger (default t)")
 (defvar *disable-clog-debugging* nil "When true turns off debug hooks (default nil)")
-(defvar *reconnect-delay* 3 "Time to delay in seconds for possible reconnect (default 3)")
+(defvar *reconnect-delay* 7 "Time to delay in seconds for possible reconnect (default 7)")
 
 (defvar *on-connect-handler* nil "New connection event handler.")
 
