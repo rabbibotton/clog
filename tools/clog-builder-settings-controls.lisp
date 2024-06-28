@@ -145,7 +145,6 @@
                  (set-geometry dd :width "100%")
                  (setf (value dd) v)
                  (set-on-change dd (lambda (obj)
-                                     (declare (ignore obj))
                                      (when (equalp (value dd) "static")
                                        (setf (top control) "")
                                        (setf (left control) ""))
@@ -158,7 +157,7 @@
                                      (on-populate-control-properties-win obj)))
                  nil)))))
 
-(defparameter *props-with-height*
+(defparameter *props-width-height*
   `((:name "width"
      :setup ,(lambda (control td1 td2)
                (declare (ignore control td1))
@@ -352,8 +351,7 @@
     (:name "html contents"
      :setup ,(lambda (control td1 td2)
                (declare (ignore td1))
-               (let ((app (connection-data-item td1 "builder-app-data"))
-                     (d1  (create-text-area td2 :value (escape-string (attribute control "data-original-html") :html t))))
+               (let ((d1  (create-text-area td2 :value (escape-string (attribute control "data-original-html") :html t))))
                  (set-on-change d1 (lambda (obj)
                                      (declare (ignore obj))
                                      (setf (attribute control "data-original-html") (value d1))
@@ -435,6 +433,8 @@
    :style "flex-wrap")
   (:name "flex-flow"
    :style "flex-flow")
+  (:name "justify-items"
+   :style "justify-items")
   (:name "justify-content"
    :style "justify-content")
   (:name "align-items"
@@ -443,7 +443,9 @@
    :style "align-content")))
 
 (defparameter *props-flex-item*
-`((:name "flex-grow"
+`((:name "order"
+   :style "order")
+  (:name "flex-grow"
    :style "flex-grow")
   (:name "flex-shrink"
    :style "flex-shrink")
@@ -451,31 +453,69 @@
    :style "flex-basis")
   (:name "align-self"
    :style "align-self")
-  (:name "order"
-   :style "order")))
+  (:name "justify-self"
+   :style "justify-self")))
+
+(defparameter *props-grid*
+  `((:name "grid-template"
+     :style "grid-template")
+    (:name "grid-template-rows"
+     :style "grid-template-rows")
+    (:name "grid-template-columns"
+     :style "grid-template-columns")
+    (:name "grid-template-areas"
+     :style "grid-template-areas")
+    (:name "grid-column-gap"
+     :style "column-gap")
+    (:name "grid-row-gap"
+     :style "row-gap")
+    (:name "grid-auto-columns"
+     :style "grid-auto-columns")
+    (:name "grid-auto-rows"
+     :style "grid-auto-rows")
+    (:name "grid-auto-flow"
+     :style "grid-auto-flow")
+    (:name "justify-items"
+     :style "justify-items")
+    (:name "justify-content"
+     :style "justify-content")
+    (:name "align-items"
+     :style "align-items")
+    (:name "align-content"
+    :style "align-content")))
+
+(defparameter *props-grid-item*
+  `((:name "grid-column"
+     :style "grid-column")
+    (:name "grid-row"
+     :style "grid-row")
+    (:name "grid-area"
+     :style "grid-area")))
 
 (defparameter *props-base*
   `(,@*props-location*
-    ,@*props-with-height*
+    ,@*props-width-height*
     ,@*props-css*
     ,@*props-colors*
     ,@*props-display*
     ,@*props-flex-item*
+    ,@*props-grid-item*
     ,@*props-nav*))
 
 (defparameter *props-element*
   `(,@*props-location*
-    ,@*props-with-height*
+    ,@*props-width-height*
     ,@*props-text*
     ,@*props-css*
     ,@*props-colors*
     ,@*props-display*
     ,@*props-flex-item*
+    ,@*props-grid-item*
     ,@*props-nav*))
 
 (defparameter *props-form-element*
   `(,@*props-location*
-    ,@*props-with-height*
+    ,@*props-width-height*
     (:name "type"
      :setup ,(lambda (control td1 td2)
                (declare (ignore td1))
@@ -511,6 +551,7 @@
     ,@*props-colors*
     ,@*props-display*
     ,@*props-flex-item*
+    ,@*props-grid-item*
     ,@*props-nav*))
 
 (defparameter *props-w3css*
@@ -961,6 +1002,19 @@
      :create-type    nil
      :events         nil
      :properties     nil)
+   `(:name           "grid"
+     :description    "Grid Container"
+     :clog-type      clog:clog-div
+     :create         clog:create-div
+     :create-type    :element
+     :create-content ""
+     :setup          ,(lambda (control content control-record)
+                        (declare (ignore content  control-record))
+                        (set-geometry control :width 200 :height 200)
+                        (setf (display control) :grid))
+     :events         (,@*events-element*)
+     :properties     (,@*props-grid*
+                      ,@*props-element*))
    `(:name           "flex-row"
      :description    "Row Align"
      :clog-type      clog:clog-div
@@ -1079,7 +1133,9 @@
      :create-type    :element
      :create-content "div"
      :events         (,@*events-element*)
-     :properties     (,@*props-element*))
+     :properties     (,@*props-element*
+                      ,@*props-flex*
+                      ,@*props-grid*))
    `(:name           "textarea"
      :description    "Text Area"
      :clog-type      clog:clog-text-area
