@@ -57,6 +57,8 @@ create-div's"
 (defun fill-button-clicked (panel)
   "Template fill botton clicked"
   (let* ((app (connection-data-item panel "builder-app-data"))
+         (*default-title-class*      *builder-title-class*)
+         (*default-border-class*     *builder-border-class*)
          (tmpl-rec  (find-if (lambda (x)
                                (equal (getf x :code)
                                       (value (template-box panel))))
@@ -72,7 +74,9 @@ create-div's"
      (win panel) "Enter new system name:"
      (lambda (sys-name)
        (cond (sys-name
-              (let* ((pwin (create-gui-window panel :title "Local Project Directory"
+              (let* ((*default-title-class*      *builder-title-class*)
+                     (*default-border-class*     *builder-border-class*)
+                     (pwin (create-gui-window panel :title "Local Project Directory"
                                               :width 500 :height 250))
                      (prjs (create-project-dir (window-content pwin))))
                 (window-center pwin)
