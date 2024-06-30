@@ -518,13 +518,13 @@ not a temporarily attached one when using select-control."
            (menu     (create-gui-menu-bar (top-panel box) :main-menu nil))
            (m-file   (create-gui-menu-drop-down menu :content "File"))
            (m-load   (create-gui-menu-item m-file :content "load"))
+           (m-reload (create-gui-menu-item m-file :content "reload"))
            (m-save   (create-gui-menu-item m-file :content "save (cmd/ctrl-s)"))
            (m-saveas (create-gui-menu-item m-file :content "save as.."))
            (m-reopnp (create-gui-menu-item m-file :content "save, close and reopen as panel"))
            (m-reopn  (create-gui-menu-item m-file :content "save, close and popup this panel"))
            (m-reopnb (create-gui-menu-item m-file :content "save, close and popup this panel custom boot file"))
            (m-reopnh (create-gui-menu-item m-file :content "save, close and popup this panel no css"))
-           (m-reopns (create-gui-menu-item m-file :content "save, close and reopen as text source"))
            (m-edit   (create-gui-menu-drop-down menu :content "Edit"))
            ;;(m-undo   (create-gui-menu-item m-edit :content "undo"))
            ;;(m-redo   (create-gui-menu-item m-edit :content "redo"))
@@ -537,12 +537,16 @@ not a temporarily attached one when using select-control."
            (m-rndras (create-gui-menu-item m-lisp :content "render form to lisp as..."))
            (m-eval   (create-gui-menu-item m-lisp :content "evaluate"))
            (m-test   (create-gui-menu-item m-lisp :content "evaluate and test"))
-           (m-events (create-gui-menu-drop-down menu :content "controls"))
+           (m-events (create-gui-menu-drop-down menu :content "Controls"))
            (tmp1     (create-gui-menu-item m-events :content "show control properties"  :on-click 'on-show-control-properties-win))
            (tmp2     (create-gui-menu-item m-events :content "show controls window"     :on-click 'on-show-control-list-win))
            (tmp3     (create-gui-menu-item m-events :content "show CLOG events"         :on-click 'on-show-control-events-win))
            (tmp4     (create-gui-menu-item m-events :content "show JavaScript events"   :on-click 'on-show-control-js-events-win))
            (tmp5     (create-gui-menu-item m-events :content "show ParenScript events"  :on-click 'on-show-control-ps-events-win))
+           (m-view   (create-gui-menu-drop-down menu :content "View"))
+           (m-vsrc   (create-gui-menu-item m-view :content "save and open as clog source"))
+           (m-html   (create-gui-menu-item m-view :content "view HTML"))
+           (m-htmlq  (create-gui-menu-item m-view :content "view as quoted HTML"))
            (m-help   (create-gui-menu-drop-down menu :content "Help"))
            (m-helpk  (create-gui-menu-item m-help :content "quick start"))
            (tool-bar  (create-div (top-panel box) :class *builder-title-class*))
@@ -847,6 +851,10 @@ not a temporarily attached one when using select-control."
                                          (open-file-name fname))))))
         (when open-file
           (open-file-name open-file))
+        (set-on-click m-reload (lambda (obj)
+                                 (declare (ignore obj))
+                                 (unless (equal file-name "")
+                                   (open-file-name file-name))))
         (set-on-click btn-load #'load-file)
         (set-on-click m-load #'load-file))
       (labels ((do-save (obj fname data)
@@ -885,6 +893,7 @@ not a temporarily attached one when using select-control."
                                                (when fname
                                                  (setf file-name fname)
                                                  (do-save obj fname data)))
+                                             :time-out 600
                                              :initial-filename file-name))
                        (t
                          (if (eql last-date (file-write-date file-name))
@@ -945,6 +954,40 @@ not a temporarily attached one when using select-control."
                               (save obj data)))
         (set-on-click m-save (lambda (obj)
                                (save obj nil)))
+        (set-on-click m-vsrc (lambda (obj)
+                               (when is-dirty
+                                 (save obj nil))
+                               (on-open-file obj :open-file file-name)))
+        (set-on-click m-html (lambda (obj)
+                               (on-open-file obj :text
+                                                   (js-query content
+                                                             (format nil
+                                                                     "var z=~a.clone();~
+    z.find('*').each(function(){~
+      var m=$(this).attr('data-clog-name');
+      if($(this).attr('data-clog-composite-control') == 't'){$(this).text('')}~
+      if($(this).attr('data-clog-composite-control') == 'b'){$(this).html($(this).attr('data-original-html'))}~
+      for(n in $(this).get(0).dataset){delete $(this).get(0).dataset[n]}~
+      if(m){$(this).attr('data-clog-name', m);}~
+    });~
+    z.html()"
+                                                                      (jquery content))))))
+        (set-on-click m-htmlq (lambda (obj)
+                                (on-open-file obj :text
+                                              (ppcre:regex-replace-all "\""
+                                                   (js-query content
+                                                             (format nil
+                                                                     "var z=~a.clone();~
+    z.find('*').each(function(){~
+      var m=$(this).attr('data-clog-name');
+      if($(this).attr('data-clog-composite-control') == 't'){$(this).text('')}~
+      if($(this).attr('data-clog-composite-control') == 'b'){$(this).html($(this).attr('data-original-html'))}~
+      for(n in $(this).get(0).dataset){delete $(this).get(0).dataset[n]}~
+      if(m){$(this).attr('data-clog-name', m);}~
+    });~
+    z.html()"
+                                                                      (jquery content)))
+                                                                       "\\\""))))
         (set-on-click m-saveas (lambda (obj)
                                  (save obj nil :save-as t)))
         (set-on-click m-reopn (lambda (obj)
@@ -957,11 +1000,6 @@ not a temporarily attached one when using select-control."
                                    (save obj nil))
                                  (window-close win)
                                  (on-new-builder-panel obj :open-file file-name :open-ext :custom)))
-        (set-on-click m-reopns (lambda (obj)
-                                 (when is-dirty
-                                   (save obj nil))
-                                 (window-close win)
-                                 (on-open-file obj :open-file file-name)))
         (set-on-click m-reopnb (lambda (obj)
                                  (input-dialog obj "Boot file Name?"
                                                (lambda (file)
