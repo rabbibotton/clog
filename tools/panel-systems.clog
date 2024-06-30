@@ -1,14 +1,51 @@
-<data id="I3920366784" data-in-package="clog-tools" data-custom-slots="" data-clog-next-id="21" data-clog-title="asdf-systems"></data><label for="CLOGB38680930412" data-clog-type="label" data-clog-for="loaded-systems" data-clog-name="sys-label" style="box-sizing: content-box; position: absolute; left: 10px; top: 8px;">Loaded Systems:</label><select data-clog-type="listbox" size="4" data-clog-name="loaded-systems" style="box-sizing: content-box; position: absolute; left: 10px; top: 38px; width: 239.716px; height: 261.341px;" data-on-change="(asdf-browser-populate panel)" data-on-create="(asdf-browser-reset panel)"></select><label for="CLOGB38680988074" data-clog-type="label" data-clog-for="deps" data-clog-name="deps-label" style="box-sizing: content-box; position: absolute; left: 265px; top: 8px; width: 281.814px; height: 22.5px;" class="">Depends On: (double click to switch)</label><select data-clog-type="listbox" size="4" data-clog-name="deps" style="box-sizing: content-box; position: absolute; left: 265px; top: 39.9858px; width: 310.361px; height: 76.3494px;" data-on-double-click="(setf (text-value (loaded-systems panel))
+<data id="I3928758297" data-in-package="clog-tools" data-custom-slots="" data-clog-next-id="23" data-clog-title="asdf-systems"></data>
+<div id="CLOG97061" data-clog-type="grid" data-clog-name="sysgrid" style="display: grid; box-sizing: content-box; position: absolute; grid-template-areas: &quot;l1 l2&quot; &quot;d1 d2&quot; &quot;d1 l3&quot; &quot;d1 d3&quot; &quot;l4 l5&quot; &quot;lo lo&quot; &quot;ba ba&quot;; gap: 5px; grid-area: ba; inset: 5px; grid-auto-columns: auto;">
+  <label for="CLOG97059" data-clog-type="label" data-clog-for="loaded-systems" data-clog-name="sys-label" style="box-sizing: content-box; position: static; grid-area: l1;" id="CLOG97060">Loaded Systems:
+  </label>
+  <select data-clog-type="listbox" size="4" data-clog-name="loaded-systems" style="box-sizing: content-box; position: static; grid-area: d1;" data-on-change="(asdf-browser-populate panel)" data-on-create="(asdf-browser-reset panel)" id="CLOG97059">
+  </select>
+  <label for="CLOG97057" data-clog-type="label" data-clog-for="deps" data-clog-name="deps-label" style="box-sizing: content-box; position: static; width: 281.814px; height: 22.5px; grid-area: l2;" class="" id="CLOG97058">Depends On: (double click to switch)
+  </label>
+  <select data-clog-type="listbox" size="4" data-clog-name="deps" style="box-sizing: content-box; position: static; height: 76.3494px; grid-area: d2;" data-on-double-click="(setf (text-value (loaded-systems panel))
       (text-value target))
-(asdf-browser-populate panel)"></select><label for="" data-clog-type="label" data-clog-for="" data-clog-name="files-label" style="box-sizing: content-box; position: absolute; left: 265px; top: 124px; width: 236.104px; height: 21.4986px;">Files: (double click to launch)</label><select data-clog-type="listbox" size="4" data-clog-name="files" style="box-sizing: content-box; position: absolute; left: 265px; top: 151px; width: 311.562px; height: 146.932px;" data-on-double-click="(asdf-files-double-click panel target)"></select><input type="TEXT" value="" data-clog-type="input" data-clog-name="source-file" style="box-sizing: content-box; position: absolute; left: 10px; top: 332px; width: 560.727px; height: 22.5px;" data-on-double-click="(on-open-file panel :open-file (text-value target))"><div data-clog-type="div" data-clog-name="button-panel" style="box-sizing: content-box; position: absolute; left: 1.0015px; top: 368.991px; width: 572.898px; height: 32.4844px;"><button data-clog-type="button" data-clog-name="reset-list-button" style="box-sizing: content-box; position: absolute; left: 10px; top: 0px; width: 85px; height: 22px;" data-on-click="(asdf-browser-reset panel)">Reset List</button><button data-clog-type="button" data-clog-name="load-new-button" style="box-sizing: content-box; position: absolute; left: 127px; top: 0px; width: 85px; height: 22px;" class="" data-on-click="(clog-gui:input-dialog panel &quot;Load New System:&quot;
+      (asdf-browser-populate panel)" id="CLOG97057">
+  </select>
+  <label for="" data-clog-type="label" data-clog-for="" data-clog-name="files-label" style="box-sizing: content-box; position: static; width: 236.104px; height: 21.4986px; grid-area: l3;" id="CLOG97056">Files: (double click to launch)
+  </label>
+  <select data-clog-type="listbox" size="4" data-clog-name="files" style="box-sizing: content-box; position: static; grid-area: d3;" data-on-double-click="(asdf-files-double-click panel target)" id="CLOG97055">
+  </select>
+  <label for="" data-clog-type="label" data-clog-for="" data-clog-name="asd-label" style="box-sizing: content-box; position: static;" id="CLOG97054">ASD Project: (double click to edit)
+  </label>
+  <div id="CLOG97053" data-clog-type="grid" data-clog-name="check-grid" style="width: 309.987px; height: 9.9905px; display: grid; box-sizing: content-box; position: static; left: 503.996px; top: 208px; grid-template-areas: &quot;c1 l1 c2 l2&quot;; grid-area: l5;">
+    <input type="CHECKBOX" value="" data-clog-type="checkbox" data-clog-name="ext-open-source" style="box-sizing: content-box; position: static;" id="CLOG97052">
+      <label for="CLOG97052" data-clog-type="label" data-clog-for="ext-open-source" data-clog-name="ext-open-source-label" style="box-sizing: content-box; position: static;" id="CLOG97051">open external
+      </label>
+      <input type="CHECKBOX" value="" data-clog-type="checkbox" data-clog-name="pop-open-clog" style="box-sizing: content-box; position: static;" id="CLOG97050">
+	<label for="CLOG97049" data-clog-type="label" data-clog-for="pop-open-clog-label" data-clog-name="pop-open-clog-label" style="box-sizing: content-box; position: static;" id="CLOG97049">popup panels
+	</label>
+  </div>
+  <input type="TEXT" value="" data-clog-type="input" data-clog-name="source-file" style="box-sizing: content-box; position: static; grid-area: lo; left: 0px; right: 0px;" data-on-double-click="(on-open-file panel :open-file (text-value target))" id="CLOG97048">
+    <div data-clog-type="div" data-clog-name="button-panel" style="box-sizing: content-box; position: static; width: 100%; height: 32.4844px; right: 90.0758px; grid-area: ba; display: grid; grid-auto-flow: column; justify-items: normal; column-gap: 5px;" id="CLOG97047">
+      <button data-clog-type="button" data-clog-name="reset-list-button" style="box-sizing: content-box; position: static;" data-on-click="(asdf-browser-reset panel)" id="CLOG97046">Reset List
+      </button>
+      <button data-clog-type="button" data-clog-name="load-new-button" style="box-sizing: content-box; position: static;" class="" data-on-click="(clog-gui:input-dialog panel &quot;Load New System:&quot;
                        (lambda (fname)
                          (projects-load fname)
                          (asdf-browser-reset panel)
                          (setf (text-value (loaded-systems panel)) fname)
                          (asdf-browser-populate panel))
                        :title &quot;Quickload&quot;)
-">Load New</button><button data-clog-type="button" data-clog-name="reload-button" style="box-sizing: content-box; position: absolute; left: 243px; top: 0px; width: 85px; height: 22px;" data-on-click="(let ((fname (text-value (loaded-systems panel))))
+		       " id="CLOG97045">Load New
+      </button>
+      <button data-clog-type="button" data-clog-name="reload-button" style="box-sizing: content-box; position: static;" data-on-click="(let ((fname (text-value (loaded-systems panel))))
   (projects-load fname)
   (setf (text-value (loaded-systems panel)) fname)
   (asdf-browser-populate panel))
-">Reload</button><button data-clog-type="button" data-clog-name="remove-button" style="box-sizing: content-box; position: absolute; left: 360px; top: 0px; width: 85px; height: 22px;" data-on-click="">Unload</button><button data-clog-type="button" data-clog-name="dir-button" style="box-sizing: content-box; position: absolute; left: 477px; top: 0px; width: 85px;" data-on-click="(on-dir-tree panel :dir (asdf:system-source-directory (text-value (loaded-systems panel))))">View Dir</button></div><label for="" data-clog-type="label" data-clog-for="" data-clog-name="asd-label" style="box-sizing: content-box; position: absolute; left: 10px; top: 304.996px;">ASD Project: (double click to edit)</label><input type="CHECKBOX" value="" data-clog-type="checkbox" data-clog-name="ext-open-source" style="box-sizing: content-box; position: absolute; left: 292px; top: 308px;"><label for="CLOGB392036561317" data-clog-type="label" data-clog-for="ext-open-source" data-clog-name="ext-open-source-label" style="box-sizing: content-box; position: absolute; left: 310px; top: 302px;">open external</label><input type="CHECKBOX" value="" data-clog-type="checkbox" data-clog-name="pop-open-clog" style="box-sizing: content-box; position: absolute; left: 426px; top: 308px;"><label for="undefined" data-clog-type="label" data-clog-for="pop-open-clog-label" data-clog-name="pop-open-clog-label" style="box-sizing: content-box; position: absolute; left: 445px; top: 302px;">popup panels</label>
+  " id="CLOG97044">Reload
+      </button>
+      <button data-clog-type="button" data-clog-name="remove-button" style="box-sizing: content-box; position: static;" data-on-click="" id="CLOG97043">Unload
+      </button>
+      <button data-clog-type="button" data-clog-name="dir-button" style="box-sizing: content-box; position: static;" data-on-click="(on-dir-tree panel :dir (asdf:system-source-directory (text-value (loaded-systems panel))))" id="CLOG97042">View Dir
+      </button>
+    </div>
+</div>
