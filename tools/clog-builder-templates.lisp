@@ -95,8 +95,11 @@ create-div's"
                                           (template-copy sys-name www-dir filename :panel (window-content (win panel))))
                                         (asdf:clear-source-registry)
                                         (when (project-win app)
-                                          (clog-gui:window-close (project-win app)))
-                                        (on-show-project panel :project sys-name)
+                                          (window-close (project-win app)))
+                                         (on-show-project panel :project sys-name)
+                                        (when (project-tree-win app)
+                                          (window-close (project-tree-win app))
+                                          (on-project-tree panel))
                                         (create-div (window-content (win panel)) :content "<hr><b>done.</b>"))))
                                 (t
                                  (window-close (win panel)))))))))

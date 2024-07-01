@@ -27,6 +27,14 @@
                             (set-on-window-move win (lambda (obj)
                                                       (setf (width obj) (width obj))
                                                       (setf (height obj) (height obj))))))))))))))
+(defun update-static-root (app)
+  (setf *static-root*
+        (merge-pathnames (if (equal (current-project app) "clog")
+                             "./static-root/"
+                             "./www/")
+                         (format nil "~A" (asdf:system-source-directory (current-project app)))))
+  (when (static-root-display app)
+    (setf (text-value (static-root-display app)) (format nil "static-root: ~A" *static-root*))))
 
 (defun on-project-tree (obj &key project)
   (let ((app (connection-data-item obj "builder-app-data")))
@@ -86,13 +94,7 @@
             (lambda (obj)
               (let* ((*default-title-class*      *builder-title-class*)
                      (*default-border-class*     *builder-border-class*))
-                (setf *static-root*
-                      (merge-pathnames (if (equal (current-project app) "clog")
-                                           "./static-root/"
-                                           "./www/")
-                                       (format nil "~A" (asdf:system-source-directory (current-project app)))))
-                (when (static-root-display app)
-                  (setf (text-value (static-root-display app)) (format nil "static-root: ~A" *static-root*)))
+                (update-static-root app)
                 (input-dialog obj "Run form:"
                               (lambda (result)
                                 (when result
@@ -236,7 +238,9 @@
                      (setf (text-value load-btn) "working")
                      (setf (background-color load-btn) :yellow)
                      (handler-case
-                         (projects-load (format nil "~A/tools" sel))
+			 (progn
+                           (projects-load (format nil "~A/tools" sel))
+                           (update-static-root app))
                        (error ()
                               (projects-load sel)))
                               (setf (text-value load-btn) "loaded")

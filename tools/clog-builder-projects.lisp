@@ -81,15 +81,7 @@
   (let ((app (connection-data-item panel "builder-app-data"))
         (val (text-value (entry-point panel))))
     (unless (equal val "")
-      (setf *static-root*
-            (merge-pathnames (if (equal (current-project app) "clog")
-                                 "./static-root/"
-                                 "./www/")
-                             (format nil "~A" (asdf:system-source-directory (current-project app)))))
-      (when (static-root-display app)
-        (setf (text-value (static-root-display app)) (format nil "static-root: ~A" *static-root*)))
-      (alert-toast panel "Static Root Set"
-                   *static-root* :color-class "w3-yellow")
+      (update-static-root app)
       (setf clog:*clog-debug*
         (lambda (event data)
           (with-clog-debugger (panel
@@ -99,7 +91,9 @@
       (capture-eval (format nil "(~A)" val) :clog-obj panel
                                             :capture-console nil
                                             :capture-result nil
-                                            :eval-in-package "clog-user"))))
+                                            :eval-in-package "clog-user")
+      (alert-toast panel "Static Root Set"
+                   *static-root* :color-class "w3-yellow" :time-out 3))))
 
 (defun projects-entry-point-change (panel)
   (let* ((sys         (text-value (project-list panel)))
@@ -212,22 +206,19 @@
                         (add-select-option (designtime-list panel) path name)))
                     (dolist (n (asdf:system-depends-on sys))
                       (add-select-option (design-deps panel) n n))
-                    (cond ((member "clog" (asdf:system-defsystem-depends-on sys) :test #'equal)
-                            (setf (disabledp (runtime-add-lisp panel)) nil)
-                            (setf (disabledp (runtime-delete panel)) nil)
-                            (setf (disabledp (designtime-add-lisp panel)) nil)
-                            (setf (disabledp (designtime-add-clog panel)) nil)
-                            (setf (disabledp (designtime-delete panel)) nil)
-                            (setf (disabledp (runtime-add-dep panel)) nil)
-                            (setf (disabledp (runtime-del-dep panel)) nil)
-                            (setf (disabledp (design-add-dep panel)) nil)
-                            (setf (disabledp (design-del-dep panel)) nil)
-                            (setf (disabledp (design-plugin panel)) nil)
-                            (setf (disabledp (entry-point panel)) nil)
-                            (setf (disabledp (run-button panel)) nil))
-                          (t
-                            (alert-toast panel "Warning" "Missing :defsystem-depends-on (:clog)"
-                                         :color-class "w3-yellow" :time-out 1))))
+                    (when (member "clog" (asdf:system-defsystem-depends-on sys) :test #'equal)
+                      (setf (disabledp (runtime-add-lisp panel)) nil)
+                      (setf (disabledp (runtime-delete panel)) nil)
+                      (setf (disabledp (designtime-add-lisp panel)) nil)
+                      (setf (disabledp (designtime-add-clog panel)) nil)
+                      (setf (disabledp (designtime-delete panel)) nil)
+                      (setf (disabledp (runtime-add-dep panel)) nil)
+                      (setf (disabledp (runtime-del-dep panel)) nil)
+                      (setf (disabledp (design-add-dep panel)) nil)
+                      (setf (disabledp (design-del-dep panel)) nil)
+                      (setf (disabledp (design-plugin panel)) nil)
+                      (setf (disabledp (entry-point panel)) nil)
+                      (setf (disabledp (run-button panel)) nil)))
                 (t (c)
                   (declare (ignore c))
                   (add-select-option (designtime-list panel) "" "Missing /tools")
@@ -236,7 +227,9 @@
               (flet ((load-proj (answer)
                        (cond (answer
                                (handler-case
-                                   (projects-load (format nil "~A/tools" sel))
+                                   (progn
+                                     (projects-load (format nil "~A/tools" sel))
+                                     (update-static-root app))
                                  (error ()
                                    (projects-load sel)))
                                (window-focus (parent (parent panel)))
