@@ -33,6 +33,10 @@ clog-builder window.")
      :accessor stdin
      :initform nil
      :documentation "The standard-input for this instance")
+   (static-root-display
+     :accessor static-root-display
+     :initform nil
+     :documentation "Display area for static-root")
    (copy-buf
      :accessor copy-buf
      :initform nil
@@ -389,11 +393,12 @@ clog-builder window.")
     (when safe
       (with-clog-debugger (body :standard-output (stdout app))
                           (when *builder-window-show-static-root-class*
-                            (setf (z-index (create-panel body :positioning :fixed
-                                                         :bottom 0 :right 0
-                                                         :class *builder-window-show-static-root-class*
-                                                         :content (format nil "static-root: ~A" clog:*static-root*)))
-                                  -9999))
+                            (setf (static-root-display app)
+                                  (create-panel body :positioning :fixed
+                                                :bottom 0 :right 0
+                                                :class *builder-window-show-static-root-class*
+                                                :content (format nil "static-root: ~A" *static-root*)))
+                            (setf (z-index (static-root-display app)) -9999))
                           (let* ((menu  (create-gui-menu-bar body))
                                  (icon  (create-gui-menu-icon menu :image-url img-clog-icon
                                                               :on-click  #'on-help-about-builder))

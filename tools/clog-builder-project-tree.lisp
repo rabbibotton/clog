@@ -91,6 +91,8 @@
                                            "./static-root/"
                                            "./www/")
                                        (format nil "~A" (asdf:system-source-directory (current-project app)))))
+                (when (static-root-display app)
+                  (setf (text-value (static-root-display app)) (format nil "static-root: ~A" *static-root*)))
                 (input-dialog obj "Run form:"
                               (lambda (result)
                                 (when result

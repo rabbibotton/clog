@@ -86,6 +86,8 @@
                                  "./static-root/"
                                  "./www/")
                              (format nil "~A" (asdf:system-source-directory (current-project app)))))
+      (when (static-root-display app)
+        (setf (text-value (static-root-display app)) (format nil "static-root: ~A" *static-root*)))
       (alert-toast panel "Static Root Set"
                    *static-root* :color-class "w3-yellow")
       (setf clog:*clog-debug*
