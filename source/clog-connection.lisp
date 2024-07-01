@@ -41,7 +41,6 @@ script."
   (*reconnect-delay*        variable)
   (*static-root*            variable)
   (*clog-port*              variable)
-  (*plugin-paths*           variable)
 
   (initialize             function)
   (random-port            function)
