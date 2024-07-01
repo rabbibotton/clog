@@ -10,7 +10,7 @@
   :description "CLOG - The Common Lisp Omnificent GUI"
   :author "David Botton <david@botton.com>"
   :license  "BSD"
-  :version "1.9.0"
+  :version "2.2"
   :serial t
   :depends-on (#:clack #:websocket-driver #:alexandria #:hunchentoot #:cl-ppcre
                        #:bordeaux-threads #:trivial-open-browser #:parse-float #:quri

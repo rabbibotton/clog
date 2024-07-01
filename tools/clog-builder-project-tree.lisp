@@ -86,6 +86,11 @@
             (lambda (obj)
               (let* ((*default-title-class*      *builder-title-class*)
                      (*default-border-class*     *builder-border-class*))
+                (setf *static-root*
+                      (merge-pathnames (if (equal (current-project app) "clog")
+                                           "./static-root/"
+                                           "./www/")
+                                       (format nil "~A" (asdf:system-source-directory (current-project app)))))
                 (input-dialog obj "Run form:"
                               (lambda (result)
                                 (when result
@@ -100,7 +105,9 @@
                                                 :capture-console nil
                                                 :capture-result  nil
                                                 :eval-in-package "clog-user")))
-                                :default-value entry-point))))
+                                :default-value entry-point)
+                (alert-toast obj "Static Root Set"
+                             *static-root* :color-class "w3-yellow" :time-out 3))))
           (labels ((project-tree-dir-select (node dir)
                      (let ((filter (equalp (text-value filter-btn)
                                            "filter")))

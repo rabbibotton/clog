@@ -2,6 +2,8 @@
 
 (defun on-open-repl-console (obj repl)
   (let* ((win (on-open-file obj :title "CLOG REPL Console"
+                            :top (+ (menu-bar-height obj) 485)
+                            :left (+ *builder-left-panel-size* 5)
                             :is-console t
                             :closer-html "&#10752;"
                             :editor-use-console-for-evals t)))
@@ -18,6 +20,8 @@
          (*default-title-class*      *builder-title-class*)
          (*default-border-class*     *builder-border-class*)
          (win (create-gui-window obj :title "CLOG Builder REPL"
+                                 :top (menu-bar-height obj)
+                                 :left (+ *builder-left-panel-size* 5)
                                  :has-pinner t
                                  :keep-on-top t
                                  :width 700 :height 480

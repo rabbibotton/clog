@@ -509,7 +509,9 @@ not a temporarily attached one when using select-control."
            (*default-title-class*      *builder-title-class*)
            (*default-border-class*     *builder-border-class*)
            ext-panel
-           (win (create-gui-window obj :top 40 :left (+ *builder-left-panel-size* 5)
+           (win (create-gui-window obj
+                                   :top (menu-bar-height obj)
+                                   :left (+ *builder-left-panel-size* 5)
                                    :width 645 :height 430
                                    :client-movement *client-side-movement*))
            (box (create-panel-box-layout (window-content win)

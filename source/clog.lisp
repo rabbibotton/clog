@@ -17,6 +17,8 @@
 (mgl-pax:define-package :clog
   (:documentation "CLOG - The Common List Omnificent GUI")
   (:import-from :clog-connection
+                :*clog-port*
+                :*static-root*
                 #:make-hash-table*
                 #:escape-string
                 #:generate-id

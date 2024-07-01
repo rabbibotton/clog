@@ -34,11 +34,13 @@ script."
 
   "CLOG system startup and shutdown"
 
-  (*verbose-output* variable)
-  (*browser-gc-on-ping* variable)
-  (*break-on-error* variable)
+  (*verbose-output*         variable)
+  (*browser-gc-on-ping*     variable)
+  (*break-on-error*         variable)
   (*disable-clog-debugging* variable)
-  (*reconnect-delay* variable)
+  (*reconnect-delay*        variable)
+  (*static-root*            variable)
+  (*clog-port*              variable)
 
   (initialize             function)
   (random-port            function)
@@ -89,6 +91,8 @@ script."
 (defvar *break-on-error* t   "Allow invoking debugger (default t)")
 (defvar *disable-clog-debugging* nil "When true turns off debug hooks (default nil)")
 (defvar *reconnect-delay* 7 "Time to delay in seconds for possible reconnect (default 7)")
+(defparameter *static-root* nil "Contains the static-root setting after initialization.")
+(defparameter *clog-port* 8080 "Port this instance of clog was started on")
 
 (defvar *on-connect-handler* nil "New connection event handler.")
 

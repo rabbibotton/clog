@@ -17,13 +17,13 @@
 (defvar *client-handler* nil "Clack 'handler' for socket traffic")
 
 (defvar *long-poll-first* nil
-  "Dynamic variable indicating to use html output instead of
+                          "Dynamic variable indicating to use html output instead of
    websocket for output at start if connection.")
 (defvar *extended-long-poll* nil
-  "Dynamic variable indicating to extend long polling beyond
+                             "Dynamic variable indicating to extend long polling beyond
    extablishing websocket for output.")
 (defvar *long-poll-url* nil
-  "Dynamic variable indicating the url path used.")
+                        "Dynamic variable indicating the url path used.")
 
 (defparameter *compiled-boot-js*
   (with-open-file (stream (merge-pathnames #P"static-files/js/boot.js"
@@ -50,13 +50,13 @@
                 (setf (gethash id *connection-ids*) connection)
                 (handler-case
                     (websocket-driver:close-connection old
-                      "Aborting this old connection since receiving a reconnection request.")
+                                                       "Aborting this old connection since receiving a reconnection request.")
                   (t (c)
-                     (when *verbose-output*
-                       (format t "Failed to close the old connection when establishing reconnection. ~
+                    (when *verbose-output*
+                      (format t "Failed to close the old connection when establishing reconnection. ~
                                   This can be normal: The old connection could not work for the client, ~
                                 so the client is requesting to reconnect.~%Condition - ~A.~&"
-                               c))))))
+                              c))))))
             (id
               (format t "Reconnection id ~A not found. Closing the connection.~%" id)
               (websocket-driver:close-connection connection)) ; Don't send the reason for better security.
@@ -95,67 +95,67 @@
       (let ((connection-id (gethash connection *connections*))
             (ml (ppcre:split ":" message :limit 2)))
         (cond ((null connection-id)
-               ;; a zombie connection
-               (when *verbose-output*
-                 (format t "A zombie connection ~A. CLOG doesn't remember its connection-id. Closing it.~%"
-                         connection))
-               (websocket-driver:close-connection connection)) ; don't send the reason for better security
+                ;; a zombie connection
+                (when *verbose-output*
+                  (format t "A zombie connection ~A. CLOG doesn't remember its connection-id. Closing it.~%"
+                          connection))
+                (websocket-driver:close-connection connection)) ; don't send the reason for better security
               ((equal (first ml) "0")
-               ;; a ping
-               (when *browser-gc-on-ping*
-                 ;; run browser gc
-                 (execute connection-id
-                        "Object.entries(clog).forEach(function(c,i,a)
+                ;; a ping
+                (when *browser-gc-on-ping*
+                  ;; run browser gc
+                  (execute connection-id
+                           "Object.entries(clog).forEach(function(c,i,a)
                              {if ((c[1] !== null) && (typeof c[1] === 'object') && (c[1].nodeType===1))
                              {if (c[1].isConnected===false) {$(clog['body']).trigger('gc', c[0])}}})"))
-               (when *verbose-output*
-                 (format t "Connection ~A    Ping~%" connection-id)
-                 (execute connection-id "null")))
+                (when *verbose-output*
+                  (format t "Connection ~A    Ping~%" connection-id)
+                  (execute connection-id "null")))
               ((equal (first ml) "E")
-               ;; an event
-               (let* ((em (ppcre:split " " (second ml) :limit 2))
-                      (event-id (first em))
-                      (data (second em)))
-                 (when *verbose-output*
-                   (format t "Connection ~A    Hook = ~A    Data = ~A~%"
-                           connection-id event-id data))
-                 (bordeaux-threads:make-thread
-                  (lambda ()
-                    (if *break-on-error*
-                        (let* ((event-hash (get-connection-data connection-id))
-                               (event      (when event-hash
-                                             (gethash event-id event-hash))))
-                          (when event
-                            (let* ((debug-hook (gethash "clog-debug" event-hash)))
-                              (if (and debug-hook (not *disable-clog-debugging*))
-                                  (funcall debug-hook event data)
-                                  (funcall event data)))))
-                        (handler-case
-                            (let* ((event-hash (get-connection-data connection-id))
-                                   (event      (when event-hash
-                                                 (gethash event-id
-                                                          event-hash))))
-                              (when event
-                                (funcall event data)))
-                          (t (c)
-                            (format t "Condition caught in handle-message for event - ~A.~&" c)
-                            (values 0 c)))))
-                  :name (format nil "CLOG event handler ~A"
-                                event-id))))
+                ;; an event
+                (let* ((em (ppcre:split " " (second ml) :limit 2))
+                       (event-id (first em))
+                       (data (second em)))
+                  (when *verbose-output*
+                    (format t "Connection ~A    Hook = ~A    Data = ~A~%"
+                            connection-id event-id data))
+                  (bordeaux-threads:make-thread
+                    (lambda ()
+                      (if *break-on-error*
+                          (let* ((event-hash (get-connection-data connection-id))
+                                 (event      (when event-hash
+                                               (gethash event-id event-hash))))
+                            (when event
+                              (let* ((debug-hook (gethash "clog-debug" event-hash)))
+                                (if (and debug-hook (not *disable-clog-debugging*))
+                                    (funcall debug-hook event data)
+                                    (funcall event data)))))
+                          (handler-case
+                              (let* ((event-hash (get-connection-data connection-id))
+                                     (event      (when event-hash
+                                                   (gethash event-id
+                                                            event-hash))))
+                                (when event
+                                  (funcall event data)))
+                            (t (c)
+                              (format t "Condition caught in handle-message for event - ~A.~&" c)
+                              (values 0 c)))))
+                    :name (format nil "CLOG event handler ~A"
+                                  event-id))))
               (t
-               ;; a JavaScript execution result
-               (let ((server-query-id (first ml))
-                     (browser-returned-answer (second ml)))
-                 (when *verbose-output*
-                   (format t "Connection ~A    ~A = ~A    ~A = ~A~%"
-                           connection-id
-                           'server-query-id
-                           server-query-id
-                           'browser-returned-answer
-                           browser-returned-answer))
-                 (setf (gethash (parse-integer server-query-id) *queries*) browser-returned-answer)
-                 (bordeaux-threads:signal-semaphore
-                  (gethash (parse-integer server-query-id) *queries-sems*))))))
+                ;; a JavaScript execution result
+                (let ((server-query-id (first ml))
+                      (browser-returned-answer (second ml)))
+                  (when *verbose-output*
+                    (format t "Connection ~A    ~A = ~A    ~A = ~A~%"
+                            connection-id
+                            'server-query-id
+                            server-query-id
+                            'browser-returned-answer
+                            browser-returned-answer))
+                  (setf (gethash (parse-integer server-query-id) *queries*) browser-returned-answer)
+                  (bordeaux-threads:signal-semaphore
+                    (gethash (parse-integer server-query-id) *queries-sems*))))))
     (t (c)
       (format t "Condition caught in handle-message - ~A.~&" c)
       (values 0 c))))
@@ -169,11 +169,11 @@
   (when *verbose-output*
     (format t "Connection close request ~A.~%"
             connection))
- (when *reconnect-delay*
-   (when *verbose-output*
-     (format t "Connection close request ~A delayed ~A for reconnects.~%"
-             connection *reconnect-delay*))
-   (sleep *reconnect-delay*))
+  (when *reconnect-delay*
+    (when *verbose-output*
+      (format t "Connection close request ~A delayed ~A for reconnects.~%"
+              connection *reconnect-delay*))
+    (sleep *reconnect-delay*))
   (handler-case
       (let ((id (gethash connection *connections*)))
         (when id
@@ -231,7 +231,7 @@
           (handler-case
               (websocket-driver:start-connection ws)
             (t (c)
-               (format t "Condition caught in websocket-driver:start-connection - ~A.~&" c)))))
+              (format t "Condition caught in websocket-driver:start-connection - ~A.~&" c)))))
     (t (c)
       (format t "Condition caught in clog-server start-up - ~A.~&" c)
       (values '(400 nil) c))))
@@ -242,20 +242,20 @@
 
 (defun initialize (on-connect-handler
                    &key
-                     (host             "0.0.0.0")
-                     (port             8080)
-                     (server           :hunchentoot)
-                     (lack-middleware-list nil)
-                     (extended-routing nil)
-                     (long-poll-first  nil)
-                     (boot-file        "/boot.html")
-                     (boot-function    nil)
-                     (static-boot-html nil)
-                     (static-boot-js   nil)
-                     (static-root      #P"./static-files/")
-                     (ssl              nil)
-                     (ssl-key-file     nil)
-                     (ssl-cert-file    nil))
+                   (host                 "0.0.0.0")
+                   (port                 8080)
+                   (server               :hunchentoot)
+                   (lack-middleware-list nil)
+                   (extended-routing     nil)
+                   (long-poll-first      nil)
+                   (boot-file            "/boot.html")
+                   (boot-function        nil)
+                   (static-boot-html     nil)
+                   (static-boot-js       nil)
+                   (static-root          #P"./static-files/")
+                   (ssl                  nil)
+                   (ssl-key-file         nil)
+                   (ssl-cert-file        nil))
   "Initialize CLOG on a socket using HOST and PORT to serve BOOT-FILE as the
 default route for '/' to establish web-socket connections and static files
 located at STATIC-ROOT. The webserver used with CLACK can be chosen with
@@ -279,130 +279,125 @@ the contents sent to the brower."
   (set-on-connect on-connect-handler)
   (when boot-file
     (set-clog-path "/" boot-file))
+  (setf *static-root* static-root)
+  (setf *clog-port* port)
   (setf *app*
         (lack:builder
-         (lambda (app)
-           (lambda (env)
-             ;; if not static-boot-js use internal compiled boot.js
-             (if (and (eq static-boot-js nil)
-                      (equalp (getf env :path-info) "/js/boot.js"))
-                 `(200 (:content-type "text/javascript")
-                       (,*compiled-boot-js*))
-                 (funcall app env))))
-         (lambda (app)
-           (lambda (env)
-             ;; Special handling of "clog paths"
-             (let* ((url-path  (getf env :path-info))
-                    (clog-path (gethash url-path *url-to-boot-file*)))
-               (unless clog-path
-                 (when extended-routing
-                   (maphash (lambda (k v)
-                              (unless (equal k "/")
-                                (when (ppcre:scan (format nil "^~A/" k)
-                                                  url-path)
-                                  (setf clog-path v))))
-                            *url-to-boot-file*)))
-               (cond (clog-path
-                      (let ((file (uiop:subpathname static-root clog-path)))
-                        (with-open-file (stream file :direction :input
-                                                     :if-does-not-exist nil)
-                          (let ((page-data (if stream
-                                               (make-string (file-length stream))
-                                               (if static-boot-html
-                                                   (cond ((eq static-boot-html t)
-                                                          "")
-                                                         ((eq static-boot-html :error)
-                                                          (error (format nil "Can not open boot file - ~A"
-                                                                         file)))
-                                                         (t
-                                                          static-boot-html))
-                                                   (compiled-boot-html nil nil))))
-                                (post-data nil))
-                            (when stream
-                              (read-sequence page-data stream))
-                            (when boot-function
-                              (setf page-data (funcall boot-function
-                                                       url-path
-                                                       page-data)))
-                            (when (search "multipart/form-data;"
-                                          (getf env :content-type))
-                              (let ((id  (random-hex-string))
-                                    (req (lack.request:make-request env)))
-                                (setf (gethash id *connection-data*)
-                                      (lack.request:request-body-parameters req))
-                                (setf post-data id)))
-                            (when (equal (getf env :content-type)
-                                         "application/x-www-form-urlencoded")
-                              (setf post-data (cond ((eq (class-name (class-of (getf env :raw-body)))
-                                                         'circular-streams:circular-input-stream)
-                                                     (let ((array-buffer (make-array (getf env :content-length)
-                                                                                     :adjustable t
-                                                                                     :fill-pointer t)))
-                                                       (read-sequence array-buffer (getf env :raw-body))
-                                                       (flex:octets-to-string array-buffer)))
-                                                    (t
-                                                     (let ((string-buffer (make-string (getf env :content-length))))
-                                                       (read-sequence string-buffer (getf env :raw-body))
-                                                       string-buffer)))))
-                            (cond (long-poll-first
-                                   (let ((id (random-hex-string)))
-                                     (setf (gethash id *connection-data*) (make-hash-table* :test #'equal))
-                                     (setf (gethash "connection-id" (get-connection-data id)) id)
-                                     (format t "New html connection id - ~A~%" id)
-                                     (lambda (responder)
-                                       (let* ((writer               (funcall responder '(200 (:content-type "text/html"))))
-                                              (stream               (lack.util.writer-stream:make-writer-stream writer))
-                                              (*long-poll-url*      url-path)
-                                              (*long-poll-first*    stream)
-                                              (*extended-long-poll* (if (eq long-poll-first t)
-                                                                        :extend
-                                                                        long-poll-first)))
-                                         (write-sequence page-data stream)
-                                         (write-sequence
-                                          (format nil "<script>clog['connection_id']='~A';Open_ws();</script>" id)
-                                          stream)
-                                         (when post-data
-                                           (write-sequence
-                                            (format nil "<script>clog['post-data']='~A'</script>"
-                                                    post-data)
-                                            stream))
-                                         (if *break-on-error*
-                                             (funcall *on-connect-handler* id)
-                                             (handler-case
-                                                 (funcall *on-connect-handler* id)
-                                               (t (c)
-                                                 (format t "Condition caught connection ~A - ~A.~&" id c)
-                                                 (values 0 c))))
-                                         (when *long-poll-first*
-                                           (setf *long-poll-first* nil)
-                                           (handler-case
-                                               (finish-output stream)
-                                             (t (c)
-                                               (format t "Condition caught finish-output ~A - ~A.~&" id c)
-                                               (values 0 c))))
-                                         (format t "HTML connection closed - ~A~%" id)))))
-                                  (t
-                                   (lambda (responder)
-                                     (let* ((writer (funcall responder '(200 (:content-type "text/html"))))
-                                            (stream (lack.util.writer-stream:make-writer-stream writer)))
-                                       (write-sequence page-data stream)
-                                       (when post-data
-                                         (write-sequence
-                                          (format nil "<script>clog['post-data']='~A'</script>"
-                                                  post-data)
-                                          stream))
-                                       (finish-output stream)))))))))
-                     ;; Pass the handling on to next rule
-                     (t (funcall app env))))))
-         (:static :path (lambda (path)
-                          ;; Request is static path if not the websocket connection.
-                          ;; Websocket url is /clog
-                          (cond ((ppcre:scan "^(?:/clog$)" path) nil)
-                                (t path)))
-                  :root static-root)
-         ;; Handle Websocket connection
-         (lambda (env)
-           (clog-server env))))
+          (lambda (app)
+            (lambda (env)
+              ;; Special handling of "clog paths"
+              (let* ((url-path  (getf env :path-info))
+                     (clog-path (gethash url-path *url-to-boot-file*)))
+                (unless clog-path
+                  (when extended-routing
+                    (maphash (lambda (k v)
+                               (unless (equal k "/")
+                                 (when (ppcre:scan (format nil "^~A/" k)
+                                                   url-path)
+                                   (setf clog-path v))))
+                             *url-to-boot-file*)))
+                (cond (clog-path
+                        (let ((file (uiop:subpathname static-root clog-path)))
+                          (with-open-file (stream file :direction :input
+                                                  :if-does-not-exist nil)
+                            (let ((page-data (if stream
+                                                 (make-string (file-length stream))
+                                                 (if static-boot-html
+                                                     (cond ((eq static-boot-html t)
+                                                             "")
+                                                           ((eq static-boot-html :error)
+                                                             (error (format nil "Can not open boot file - ~A"
+                                                                            file)))
+                                                           (t
+                                                             static-boot-html))
+                                                     (compiled-boot-html nil nil))))
+                                  (post-data nil))
+                              (when stream
+                                (read-sequence page-data stream))
+                              (when boot-function
+                                (setf page-data (funcall boot-function
+                                                         url-path
+                                                         page-data)))
+                              (when (search "multipart/form-data;"
+                                            (getf env :content-type))
+                                (let ((id  (random-hex-string))
+                                      (req (lack.request:make-request env)))
+                                  (setf (gethash id *connection-data*)
+                                        (lack.request:request-body-parameters req))
+                                  (setf post-data id)))
+                              (when (equal (getf env :content-type)
+                                           "application/x-www-form-urlencoded")
+                                (setf post-data (cond ((eq (class-name (class-of (getf env :raw-body)))
+                                                           'circular-streams:circular-input-stream)
+                                                        (let ((array-buffer (make-array (getf env :content-length)
+                                                                                        :adjustable t
+                                                                                        :fill-pointer t)))
+                                                          (read-sequence array-buffer (getf env :raw-body))
+                                                          (flex:octets-to-string array-buffer)))
+                                                      (t
+                                                        (let ((string-buffer (make-string (getf env :content-length))))
+                                                          (read-sequence string-buffer (getf env :raw-body))
+                                                          string-buffer)))))
+                              (cond (long-poll-first
+                                      (let ((id (random-hex-string)))
+                                        (setf (gethash id *connection-data*) (make-hash-table* :test #'equal))
+                                        (setf (gethash "connection-id" (get-connection-data id)) id)
+                                        (format t "New html connection id - ~A~%" id)
+                                        (lambda (responder)
+                                          (let* ((writer               (funcall responder '(200 (:content-type "text/html"))))
+                                                 (stream               (lack.util.writer-stream:make-writer-stream writer))
+                                                 (*long-poll-url*      url-path)
+                                                 (*long-poll-first*    stream)
+                                                 (*extended-long-poll* (if (eq long-poll-first t)
+                                                                           :extend
+                                                                           long-poll-first)))
+                                            (write-sequence page-data stream)
+                                            (write-sequence
+                                              (format nil "<script>clog['connection_id']='~A';Open_ws();</script>" id)
+                                              stream)
+                                            (when post-data
+                                              (write-sequence
+                                                (format nil "<script>clog['post-data']='~A'</script>"
+                                                        post-data)
+                                                stream))
+                                            (if *break-on-error*
+                                                (funcall *on-connect-handler* id)
+                                                (handler-case
+                                                    (funcall *on-connect-handler* id)
+                                                  (t (c)
+                                                    (format t "Condition caught connection ~A - ~A.~&" id c)
+                                                    (values 0 c))))
+                                            (when *long-poll-first*
+                                              (setf *long-poll-first* nil)
+                                              (handler-case
+                                                  (finish-output stream)
+                                                (t (c)
+                                                  (format t "Condition caught finish-output ~A - ~A.~&" id c)
+                                                  (values 0 c))))
+                                            (format t "HTML connection closed - ~A~%" id)))))
+                                    (t
+                                      (lambda (responder)
+                                        (let* ((writer (funcall responder '(200 (:content-type "text/html"))))
+                                               (stream (lack.util.writer-stream:make-writer-stream writer)))
+                                          (write-sequence page-data stream)
+                                          (when post-data
+                                            (write-sequence
+                                              (format nil "<script>clog['post-data']='~A'</script>"
+                                                      post-data)
+                                              stream))
+                                          (finish-output stream)))))))))
+                      ;; Pass the handling on to next rule
+                      (t (funcall app env))))))
+          (lambda (env)
+            (let* ((path (getf env :path-info)))
+              (cond ((and (eq static-boot-js nil)
+                          (equalp path "/js/boot.js"))
+                     `(200 (:content-type "text/javascript")
+                       (,*compiled-boot-js*)))
+                    ((ppcre:scan "^(?:/clog$)" path)
+                     (clog-server env))
+                    (t
+                      (lack/middleware/static::call-app-file *static-root* env)))))))
   ;; Wrap lack middlewares
   (setf *app* (reduce #'funcall
                       lack-middleware-list
@@ -475,15 +470,15 @@ DEFAULT-ANSWER."
     (finish-output *long-poll-first*)
     (loop
       for n from 1 to 10 do
-        (let ((con (get-connection connection-id)))
-          (when con
-            (unless (or (eq *extended-long-poll* :extend)
-                        (> (decf *extended-long-poll*) 0))
-              (format t "Closing long-poll for ~A~%" connection-id)
-              (setf *long-poll-first* nil))
-            (return))
-          (format t "Awaiting websocket connection for ~A~%" connection-id)
-          (sleep .1))))
+      (let ((con (get-connection connection-id)))
+        (when con
+          (unless (or (eq *extended-long-poll* :extend)
+                      (> (decf *extended-long-poll*) 0))
+            (format t "Closing long-poll for ~A~%" connection-id)
+            (setf *long-poll-first* nil))
+          (return))
+        (format t "Awaiting websocket connection for ~A~%" connection-id)
+        (sleep .1))))
   (let ((uid (generate-id)))
     (prep-query uid (when default-answer (format nil "~A" default-answer)))
     (execute connection-id
@@ -500,7 +495,7 @@ DEFAULT-ANSWER."
   (declare (ignore path content))
   "Returns a compiled version version of boot.html. The compiled boot.html
 uses the jQuery CDN instead of the static js files."
-"<!doctype HTML>
+  "<!doctype HTML>
 <HTML>
    <HEAD>
       <meta http-equiv='Cache-Control' content='no-cache, no-store, must-revalidate' />

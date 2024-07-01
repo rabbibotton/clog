@@ -20,19 +20,8 @@
   "Set a debug hook that is called for every event with (event data)
 that must be (funcall event data).")
 
-(defvar *overide-static-root* nil
-  "Override the static-root settings. This is not normally a good idea, but if
-trying to run the tutorials or demos and unable to have your local directory
-the same as the clog directy this overides the relative paths used in them.")
-
-(defvar *static-root* nil
-  "Contains the static-root setting after initialization.")
-
 (defvar *extended-routing* nil
   "If true extended routing is done.")
-
-(defparameter *clog-port* 8080
-  "Port this instance of clog was started on")
 
 ;;;;;;;;;;;;;;;;
 ;; initialize ;;
@@ -134,11 +123,8 @@ number is chosen."
     (setf *clog-running* t)
     (when (or (eql port 0) (eq port nil))
       (setf port (clog-connection:random-port)))
-    (setf *clog-port* port)
-    (setf *static-root* (truename (or *overide-static-root*
-                                      static-root)))
     (apply #'clog-connection:initialize
-           (append (list #'on-connect :static-root *static-root* :port *clog-port*)
+           (append (list #'on-connect :static-root static-root :port port)
                    rest))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;

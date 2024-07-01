@@ -81,6 +81,13 @@
   (let ((app (connection-data-item panel "builder-app-data"))
         (val (text-value (entry-point panel))))
     (unless (equal val "")
+      (setf *static-root*
+            (merge-pathnames (if (equal (current-project app) "clog")
+                                 "./static-root/"
+                                 "./www/")
+                             (format nil "~A" (asdf:system-source-directory (current-project app)))))
+      (alert-toast panel "Static Root Set"
+                   *static-root* :color-class "w3-yellow")
       (setf clog:*clog-debug*
         (lambda (event data)
           (with-clog-debugger (panel
