@@ -41,6 +41,7 @@ script."
   (*reconnect-delay*        variable)
   (*static-root*            variable)
   (*clog-port*              variable)
+  (*plugin-paths*           variable)
 
   (initialize             function)
   (random-port            function)
@@ -49,6 +50,7 @@ script."
   (set-clog-path          function)
   (get-connection-data    function)
   (delete-connection-data function)
+  (add-plugin-path        function)
 
   "CLOG system utilities"
 
@@ -93,6 +95,8 @@ script."
 (defvar *reconnect-delay* 7 "Time to delay in seconds for possible reconnect (default 7)")
 (defparameter *static-root* nil "Contains the static-root setting after initialization.")
 (defparameter *clog-port* 8080 "Port this instance of clog was started on")
+(defvar *plugin-paths* (make-hash-table* :test #'equalp) "Path regex -> static-root")
+
 
 (defvar *on-connect-handler* nil "New connection event handler.")
 

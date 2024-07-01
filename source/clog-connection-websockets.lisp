@@ -396,6 +396,8 @@ the contents sent to the brower."
                        (,*compiled-boot-js*)))
                     ((ppcre:scan "^(?:/clog$)" path)
                      (clog-server env))
+                    ((plugin-path path)
+                     (lack/middleware/static::call-app-file (plugin-path path) env))
                     (t
                       (lack/middleware/static::call-app-file *static-root* env)))))))
   ;; Wrap lack middlewares
@@ -425,6 +427,19 @@ the contents sent to the brower."
                                                  "compiled version"))
   (format t "Boot file for path / : ~A~%"    boot-file)
   *client-handler*)
+
+(defun add-plugin-path (regex static-path)
+  "When a path to the webserver matches REGEX resolve the static file using
+STATIC-PATH"
+  (setf (gethash regex *plugin-paths*) static-path))
+
+(defun plugin-path (path)
+  (block ret-static-path
+      (maphash (lambda (k v)
+                 (when (ppcre:scan k path)
+                   (return-from ret-static-path v)))
+               *plugin-paths*)
+    nil))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; shutdown-connection ;;
