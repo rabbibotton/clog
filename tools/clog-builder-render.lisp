@@ -108,7 +108,7 @@
       for(n in $(this).get(0).dataset){delete $(this).get(0).dataset[n]}~
       if(m){$(this).attr('data-clog-name', m);}~
     });~
-    z.html()"
+    html_beautify (z.html(),{'wrap_line_length': '80'})"
                                                                       (jquery content)))
                                                     "\\\"")
                           cname

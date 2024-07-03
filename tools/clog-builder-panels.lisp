@@ -46,7 +46,7 @@
                    if($(this).attr('data-clog-composite-control') == 't'){$(this).text('')}~
                    if($(this).attr('id') !== undefined && ~
                      $(this).attr('id').substring(0,5)=='CLOGB'){$(this).removeAttr('id')}});~
-                 z.html()"
+                 html_beautify (z.html(),{'wrap_line_length':'80'})"
                                      (jquery content))))
         (destroy data))
       (maphash
@@ -546,7 +546,8 @@ not a temporarily attached one when using select-control."
            (tmp4     (create-gui-menu-item m-events :content "show JavaScript events"   :on-click 'on-show-control-js-events-win))
            (tmp5     (create-gui-menu-item m-events :content "show ParenScript events"  :on-click 'on-show-control-ps-events-win))
            (m-view   (create-gui-menu-drop-down menu :content "View"))
-           (m-vsrc   (create-gui-menu-item m-view :content "save and open as clog source"))
+           (m-vsrc   (create-gui-menu-item m-view :content "save and open clog source"))
+           (m-vsrcl  (create-gui-menu-item m-view :content "save, render and open lisp source"))
            (m-html   (create-gui-menu-item m-view :content "view HTML"))
            (m-htmlq  (create-gui-menu-item m-view :content "view as quoted HTML"))
            (m-help   (create-gui-menu-drop-down menu :content "Help"))
@@ -739,7 +740,7 @@ not a temporarily attached one when using select-control."
          if($(this).attr('data-clog-composite-control') == 't'){$(this).text('')}~
          if($(this).attr('id') !== undefined && ~
            $(this).attr('id').substring(0,5)=='CLOGB'){$(this).removeAttr('id')}});~
-       z.html()"
+       html_beautify (z.html(),{'wrap_line_length': '80'})"
                                            (jquery (current-control app)))))
                    (system-clipboard-write obj (copy-buf app))
                    (let ((c (create-text-area (window-content (copy-history-win app))
@@ -859,7 +860,7 @@ not a temporarily attached one when using select-control."
                                    (open-file-name file-name))))
         (set-on-click btn-load #'load-file)
         (set-on-click m-load #'load-file))
-      (labels ((do-save (obj fname data)
+      (labels ((do-save (obj fname data &key render)
                  (declare (ignore data))
                  (setf file-name fname)
                  (setf render-file-name (format nil "~A~A.lisp"
@@ -868,7 +869,7 @@ not a temporarily attached one when using select-control."
                  (add-class btn-save "w3-animate-top")
                  (save-panel fname content panel-id (bottom-panel box))
                  (setf last-date (file-write-date fname))
-                 (when (checkedp cbox)
+                 (when (or (checkedp cbox) render)
                    (add-class btn-rndr "w3-animate-top")
                    (write-file (render-clog-code content (bottom-panel box))
                                render-file-name :clog-obj obj)
@@ -881,7 +882,7 @@ not a temporarily attached one when using select-control."
                          (window-close win))
                        (t
                          (setf is-dirty nil))))
-               (save (obj data &key save-as)
+               (save (obj data &key save-as render)
                  (cond ((or (equal file-name "")
                             save-as
                             (getf data :shift-key))
@@ -894,12 +895,12 @@ not a temporarily attached one when using select-control."
                                                (window-focus win)
                                                (when fname
                                                  (setf file-name fname)
-                                                 (do-save obj fname data)))
+                                                 (do-save obj fname data :render render)))
                                              :time-out 600
                                              :initial-filename file-name))
                        (t
                          (if (eql last-date (file-write-date file-name))
-                             (do-save obj file-name data)
+                             (do-save obj file-name data :render render)
                              (confirm-dialog obj "Panel changed on file system. Save?"
                                              (lambda (result)
                                                (when result
@@ -960,9 +961,18 @@ not a temporarily attached one when using select-control."
                                (when is-dirty
                                  (save obj nil))
                                (on-open-file obj :open-file file-name)))
-        (set-on-click m-html (lambda (obj)
-                               (on-open-file obj :text
-                                                   (js-query content
+        (set-on-click m-vsrcl (lambda (obj)
+                                (save obj nil :render t)
+                                (on-open-file obj :open-file render-file-name)))
+        (flet ((render-html ()
+                 (let (result)
+                   (maphash
+                     (lambda (html-id control)
+                       (declare (ignore html-id))
+                       (place-inside-bottom-of (bottom-panel box)
+                                               (get-placer control)))
+                     (get-control-list app panel-id))
+                   (setf result (js-query content
                                                              (format nil
                                                                      "var z=~a.clone();~
     z.find('*').each(function(){~
@@ -972,24 +982,22 @@ not a temporarily attached one when using select-control."
       for(n in $(this).get(0).dataset){delete $(this).get(0).dataset[n]}~
       if(m){$(this).attr('data-clog-name', m);}~
     });~
-    z.html()"
-                                                                      (jquery content))))))
-        (set-on-click m-htmlq (lambda (obj)
-                                (on-open-file obj :text
-                                              (ppcre:regex-replace-all "\""
-                                                   (js-query content
-                                                             (format nil
-                                                                     "var z=~a.clone();~
-    z.find('*').each(function(){~
-      var m=$(this).attr('data-clog-name');
-      if($(this).attr('data-clog-composite-control') == 't'){$(this).text('')}~
-      if($(this).attr('data-clog-composite-control') == 'b'){$(this).html($(this).attr('data-original-html'))}~
-      for(n in $(this).get(0).dataset){delete $(this).get(0).dataset[n]}~
-      if(m){$(this).attr('data-clog-name', m);}~
-    });~
-    z.html()"
-                                                                      (jquery content)))
-                                                                       "\\\""))))
+    html_beautify (z.html(),{'wrap_line_length':       '80',
+                             'extra_liners':           'div,form,input,button,select,textarea,ol,ul,table,style,datalist'})"
+                                                                     (jquery content))))
+                   (maphash
+                     (lambda (html-id control)
+                       (declare (ignore html-id))
+                       (place-after control (get-placer control)))
+                     (get-control-list app panel-id))
+                   result)))
+          (set-on-click m-html (lambda (obj)
+                                 (on-open-file obj :text (render-html))))
+          (set-on-click m-htmlq (lambda (obj)
+                                  (on-open-file obj :text
+                                                (ppcre:regex-replace-all "\""
+                                                                         (render-html)
+                                                                         "\\\"")))))
         (set-on-click m-saveas (lambda (obj)
                                  (save obj nil :save-as t)))
         (set-on-click m-reopn (lambda (obj)

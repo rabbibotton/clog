@@ -123,6 +123,7 @@
              (m-paste  (create-gui-menu-item m-edit :content "paste (cmd/ctrl-v)"))
              (m-cut    (create-gui-menu-item m-edit :content "cut (cmd/ctrl-x)"))
              (m-del    (create-gui-menu-item m-edit :content "delete (del)"))
+             (m-ppqs   (create-gui-menu-item m-edit :content "quote quotes selection"))
              (m-lisp   (create-gui-menu-drop-down menu :content "Lisp"))
              (m-efrm   (create-gui-menu-item m-lisp :content "evaluate form (cmd/alt-[)"))
              (m-esel   (create-gui-menu-item m-lisp :content "evaluate selection"))
@@ -518,6 +519,14 @@
                                    (with-input-from-string (n (clog-ace:selected-text ace))
                                      (let ((*standard-output* s))
                                        (indentify:indentify n))))
+                                 (js-execute ace (format nil "~A.insert('~A',true)"
+                                                         (clog-ace::js-ace ace)
+                                                         (escape-string r)))
+                                 (set-is-dirty t))))
+        (set-on-click m-ppqs (lambda (obj)
+                               (declare (ignore obj))
+                               (let ((r (clog-ace:selected-text ace)))
+                                 (setf r (ppcre:regex-replace-all "\"" r "\\\""))
                                  (js-execute ace (format nil "~A.insert('~A',true)"
                                                          (clog-ace::js-ace ace)
                                                          (escape-string r)))
