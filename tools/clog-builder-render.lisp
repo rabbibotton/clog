@@ -29,8 +29,8 @@
                    (unless (equal dct "undefined")
                      (setf control (get-from-control-list app panel-id (html-id control)))
                      (when control
-                       (let ((vname (attribute control "data-clog-name"))
-                             (control-record (control-info (attribute control "data-clog-type"))))
+                       (let* ((vname (attribute control "data-clog-name"))
+                              (control-record (control-info (attribute control "data-clog-type"))))
                          (unless (and (>= (length vname) 5)
                                       (equalp (subseq vname 0 5) "none-"))
                            ;; Add to members of the panel's class for each control
@@ -45,7 +45,9 @@
                                             \(attach-as-child clog-obj \"~A\" :clog-type \'~A\ :new-id t)\)~%"
                                          vname
                                          (html-id control)
-                                         (format nil "~S" (getf control-record :clog-type)))
+                                         (if (eq (getf control-record :create-type) :custom-panel)
+                                             (format nil "~A" (attribute control "data-clog-custom-type"))
+                                             (format nil "~S" (getf control-record :clog-type))))
                                  vars)
                            ;; On instance of class, set handers defined for each control
                            (dolist (event (getf control-record :events))

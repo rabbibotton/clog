@@ -83,7 +83,20 @@
                                     (funcall (getf control-record :create) parent
                                              custom-query
                                              :html-id uid))
-                                  ((eq create-type :paste)
+                                  ((eq create-type :custom-panel)
+                                    (let* ((c (funcall (eval (read-from-string (format nil "'~A" custom-query)))
+                                                      parent
+                                                      :html-id uid)))
+                                      (setf control-type-name "div")
+                                      c))
+                                  ((eq create-type :custom-control)
+                                    (let* ((c (funcall (eval (read-from-string (format nil "'~A" custom-query)))
+                                                      parent
+                                                      :html-id uid)))
+                                      (setf (attribute c "data-clog-composite-control") "t")
+                                      (setf (attribute c "data-clog-custom-create") custom-query)
+                                      c))
+                                   ((eq create-type :paste)
                                     (let ((c (create-child parent custom-query
                                                            :html-id uid)))
                                       (setf control-type-name (attribute c "data-clog-type"))
@@ -133,24 +146,42 @@
               (input-dialog win "Enter html (must have an outer element):"
                             (lambda (custom-query)
                               (when custom-query
-                                (do-drop-new-control
+                                (when (do-drop-new-control
                                   app content data
                                   :win win
-                                  :custom-query custom-query)))
+                                  :custom-query custom-query)
+                                  (incf-next-id content))))
                             :width 500
                             :height 300
                             :rows 5
                             :size 40
                             :title "Custom HTML Control"
                             :default-value (getf control-record :create-content)))
+            ((or (eq control-type-name :custom-panel)
+                 (eq control-type-name :custom-control))
+              (input-dialog win "Enter panel create function name:"
+                            (lambda (custom-query)
+                              (when custom-query
+                                (when (do-drop-new-control
+                                  app content data
+                                  :win win
+                                  :custom-query custom-query)
+                                  (incf-next-id content))))
+                            :width 500
+                            :height 300
+                            :rows 5
+                            :size 40
+                            :title "Custom Control"
+                            :default-value (getf control-record :create-content)))
             ((eq control-type-name :custom-block)
               (input-dialog win "Enter html to create control:"
                             (lambda (custom-query)
                               (when custom-query
-                                (do-drop-new-control
+                                (when (do-drop-new-control
                                   app content data
                                   :win win
-                                  :custom-query custom-query)))
+                                  :custom-query custom-query)
+                                  (incf-next-id content))))
                             :width 500
                             :height 300
                             :rows 5

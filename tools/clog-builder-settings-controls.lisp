@@ -972,6 +972,33 @@
      :create-content "<div></div>"
      :events         (,@*events-element*)
      :properties     (,@*props-element*))
+   `(:name           "copy-panel"
+     :description    "Copy Panel Layout"
+     :create-type    :custom-panel
+     :create-content "panel-package::create-panel-name"
+     :events         (,@*events-element*)
+     :properties     (,@*props-element*
+                      ,@*props-flex*
+                      ,@*props-grid*))
+   `(:name           "custom-control"
+     :description    "Panel as control"
+     :clog-type      clog:clog-div
+     :create-type    :custom-control
+     :create-content "panel-package::create-panel-name"
+     :on-setup       ,(lambda (control control-record)
+                        (declare (ignore control-record))
+                        (format nil "(~A target)"
+                                (attribute control "data-clog-custom-create")))
+     :on-load        ,(lambda (control control-record)
+                        (declare (ignore control-record))
+                        (funcall (eval (read-from-string 
+                                         (format nil "'~A"
+                                                 (attribute control "data-clog-custom-create"))))
+                                 control))
+     :events         (,@*events-element*)
+     :properties     (,@*props-element*
+                      ,@*props-flex*
+                      ,@*props-grid*))
    `(:name           "block"
      :description    "Custom HTML Block"
      :clog-type      clog:clog-div
