@@ -148,7 +148,8 @@ nil. Resizable only works if overflow is set to :SCROLL"))
 ;; envelope-panel ;;
 ;;;;;;;;;;;;;;;;;;;;
 
-(defgeneric envelope-panel (clog-element panel width height &key units)
+(defgeneric envelope-panel (clog-element panel width height
+                            &key class style units)
   (:documentation "Create a panel of WIDTH and HEIGHT with :relative
 positioning to envelope PANEL. This allows any type of clog-panel (including
 those created by CLOG Builder, to be positioned within DISPLAY :flex or
@@ -156,9 +157,11 @@ those created by CLOG Builder, to be positioned within DISPLAY :flex or
 Returns envelope-panel"))
 
 (defmethod envelope-panel ((obj clog-element) (panel clog-element)
-                           width height &key (units :px))
-  (let ((e (create-div obj :style (format nil "position:relative;width:~A~A;height:~A~A"
-                                          width units height units))))
+                           width height
+                           &key (units :px) class (style ""))
+  (let ((e (create-div obj :class class
+                       :style (format nil "position:relative;width:~A~A;height:~A~A;~A"
+                                          width units height units style))))
     (place-inside-top-of e panel)
     e))
 
