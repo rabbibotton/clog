@@ -382,9 +382,9 @@ clog-builder window.")
                           (make-instance 'console-in-stream :clog-obj body)))
     (clog-gui-initialize body :use-clog-debugger t :standard-output (stdout app))
     (add-class body *builder-window-desktop-class*)
-    (load-script (html-document body) "/js/beautify.js" :load-only-once t)
-    (load-script (html-document body) "/js/beautify-css.js" :load-only-once t)
-    (load-script (html-document body) "/js/beautify-html.js" :load-only-once t)
+    (load-script (html-document body) "/builder-js/beautify.js" :load-only-once t)
+    (load-script (html-document body) "/builder-js/beautify-css.js" :load-only-once t)
+    (load-script (html-document body) "/builder-js/beautify-html.js" :load-only-once t)
     (when *password-protect*
       (input-dialog body "Enter password:" (lambda (result)
                                              (unless (equal result (if (functionp *password-protect*)
@@ -634,6 +634,9 @@ clog-builder window.")
         (format nil "~A/preferences.lisp"
                 (merge-pathnames "tools"
                                  (asdf:system-source-directory :clog))))
+  (clog-connection:add-plugin-path "^/builder-js/"
+                                   (merge-pathnames "./static-files/"
+                                                    (asdf:system-source-directory :clog)))
   (load *preferances-file*
         :if-does-not-exist nil
         :verbose t)
