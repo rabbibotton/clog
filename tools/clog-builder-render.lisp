@@ -89,9 +89,9 @@
                           "\(in-package :~A)
 \(defclass ~A \(clog:clog-panel\)
   \(~{~A~}\)\)
-\(defun create-~A \(clog-obj &key \(hidden nil\) \(class nil\) \(html-id nil\) \(auto-place t\)\)
+\(defun create-~A \(clog-obj &key hidden class style html-id \(auto-place t\)\)
   \(let \(\(panel \(change-class \(clog:create-div clog-obj :content \"~A\"
-         :hidden hidden :class class :html-id html-id :auto-place auto-place\) \'~A\)\)\)
+         :hidden hidden :class class :style style :html-id html-id :auto-place auto-place\) \'~A\)\)\)
 ~{~A~}~{~A~}~{~A~}    panel\)\)~%"
                           (string-downcase package)
                           cname     ;;defclass
