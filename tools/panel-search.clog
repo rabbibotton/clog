@@ -1,21 +1,24 @@
-<data id="I3929109423" data-in-package="clog-tools" data-custom-slots=""
+<data id="I3929110633" data-in-package="clog-tools" data-custom-slots=""
     data-clog-next-id="6" data-clog-title="panel-search"></data>
-<div data-clog-type="grid" data-clog-name="result-grid"
-    style="display: grid; box-sizing: content-box; position: absolute; inset: 5px; grid-template: &quot;a a&quot; 1fr &quot;d d&quot; 28px &quot;b c&quot; 28px / 1fr 80px; gap: 5px;"
-    class=""><select data-clog-type="listbox" size="4"
-        data-clog-name="result-box"
-        style="box-sizing: content-box; position: static; grid-area: a;"
-        class="w3-small" tabindex="2"></select><input type="TEXT" value=""
-        data-clog-type="input" data-clog-name="dir-input"
-        style="box-sizing: content-box; position: static; grid-area: d;"
-        data-on-change="(panel-search-dir-change panel target)"
-        placeholder="directory to search" tabindex="3"><input type="TEXT"
-        value="" data-clog-type="input" data-clog-name="grep-input"
-        style="box-sizing: content-box; position: static; left: 50px; top: 8px; grid-area: b;"
-        placeholder="search regex" tabindex="4"><button data-clog-type="button"
-        data-clog-name="search-button"
-        style="box-sizing: content-box; position: static; height: 22px; grid-area: c;"
-        data-on-click="(panel-search-on-click panel target)" class=""
-        data-on-create="(setf (attribute target &quot;autofocus&quot;) &quot;true&quot;)
-(focus target)" tabindex="1">Search</button>
-</div>
+<form action="#" onsubmit="return false;" data-clog-name="search-form"
+    data-clog-type="form">
+    <div data-clog-type="grid" data-clog-name="result-grid"
+        style="display: grid; box-sizing: content-box; position: absolute; inset: 5px; grid-template: &quot;a a&quot; 1fr &quot;d d&quot; 28px &quot;b c&quot; 28px / 1fr 80px; gap: 5px;"
+        class=""><select data-clog-type="listbox" size="4"
+            data-clog-name="result-box"
+            style="box-sizing: content-box; position: static; grid-area: a;"
+            class="w3-small" tabindex="2"></select><input type="TEXT" value=""
+            data-clog-type="input" data-clog-name="dir-input"
+            style="box-sizing: content-box; position: static; grid-area: d;"
+            data-on-change="(panel-search-dir-change panel target)"
+            placeholder="directory to search" tabindex="3"><input type="TEXT"
+            value="" data-clog-type="input" data-clog-name="grep-input"
+            style="box-sizing: content-box; position: static; left: 50px; top: 8px; grid-area: b;"
+            placeholder="search regex" tabindex="4" data-on-create="(setf (attribute target &quot;autofocus&quot;) &quot;true&quot;)
+(focus target)"><input type="submit" value="Search" data-clog-type="input"
+            data-clog-name="search-button"
+            style="box-sizing: content-box; position: static; height: 22px; grid-area: c;"
+            data-on-click="(panel-search-on-click panel target)" class=""
+            tabindex="1">
+    </div>
+</form>
