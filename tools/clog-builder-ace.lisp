@@ -85,7 +85,8 @@
                         (clog-ace::js-ace editor)
                         (jquery editor)))
     ;; setup adjust tab key
-    (js-execute editor
+    (when (current-editor-is-lisp app)
+      (js-execute editor
                 (format nil
                         "~A.commands.addCommand({
     name: 'adjust-tabs',
@@ -119,7 +120,7 @@
                         (if *editor-use-tab-as-tabbify*
                             "Ctrl-t|Tab"
                             "Ctrl-t")
-                        (jquery editor)))
+                        (jquery editor))))
     (set-on-event-with-data editor "clog-adjust-tabs"
                             (lambda (obj data)
                               (declare (ignore obj))
