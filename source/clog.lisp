@@ -214,10 +214,11 @@ embedded in a native template application.)"
   "CLOG-Element - Class for CLOG Elements"
   (clog-element class)
 
-  "CLOG-Element - Low Level Creation"
-  (create-element  generic-function)
-  (create-child    generic-function)
-  (attach-as-child generic-function)
+  "CLOG-Element - Low Level"
+  (create-element   generic-function)
+  (create-child     generic-function)
+  (attach-as-child  generic-function)
+  (destroy-children generic-function)
 
   "CLOG-Element - DOM Placement"
   (place-after                 generic-function)

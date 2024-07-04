@@ -14,7 +14,8 @@
     (error (condition)
       (if clog-obj
           (alert-toast clog-obj "File Error" (format nil "Error: ~A" condition))
-          (format t "Error: ~A" condition)))))
+          (format t "Error: ~A" condition))
+      nil)))
 
 (defun write-file (string outfile &key clog-obj (action-if-exists :rename))
   "Write local file named OUTFILE"
@@ -68,6 +69,7 @@
                      (title-class *builder-title-class*)
                      lisp-package
                      regex
+                     show-find
                      is-console
                      left top
                      (editor-use-console-for-evals *editor-use-console-for-evals*)
@@ -82,8 +84,11 @@
           (close-window pop)
           (window-focus win)))
       (when regex
+        (focus (window-param win))
         (js-execute win (format nil "~A.find('~A',{caseSensitive:false,regExp:true})"
                                 (clog-ace::js-ace (window-param win)) regex)))
+      (when show-find
+        (clog-ace:execute-command (window-param win) "find"))
       win)
     (unless win
       (let* ((app (connection-data-item obj "builder-app-data"))
@@ -307,7 +312,9 @@
                                  (t
                                    (setf lisp-file nil)
                                    (setf (current-editor-is-lisp app) nil)
-                                   (setf (clog-ace:mode ace) (clog-ace:get-mode-from-extension ace fname))))
+                                   (if (equalp (pathname-type fname) "clog")
+                                       (setf (clog-ace:mode ace) "ace/mode/html")
+                                       (setf (clog-ace:mode ace) (clog-ace:get-mode-from-extension ace fname)))))
                            (setf (clog-ace:text-value ace) c)))
                      (error (condition)
                        (unless text
@@ -325,8 +332,11 @@
                      (not (equalp open-file "")))
             (open-file-name open-file))
           (when regex
+            (focus ace)
             (js-execute obj (format nil "~A.find('~A',{caseSensitive:false,regExp:true})"
                                     (clog-ace::js-ace ace) regex)))
+          (when show-find
+            (clog-ace:execute-command ace "find"))
           (set-on-click btn-load (lambda (obj) (load-file obj)))
           (set-on-click m-load (lambda (obj) (load-file obj)))
           (set-on-click m-revert (lambda (obj)

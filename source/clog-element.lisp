@@ -158,6 +158,18 @@ after attachment is changed to one unique to this session."))
     (setf (parent child) obj)
     child))
 
+;;;;;;;;;;;;;;;;;;;;;;
+;; destroy-children ;;
+;;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric destroy-children (clog-element)
+  (:documentation "Destroy all children in DOM contained with in CLOG-ELEMENT
+and run a BROWSER-GC"))
+
+(defmethod destroy-children ((obj clog-element))
+  (setf (inner-html obj) "")
+  (browser-gc obj))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; General Properties - clog-element
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -463,7 +475,8 @@ html of an element. This will remove any Elements within Element from the DOM.
 If those elements were created in CLOG they are still available and can be
 placed in the DOM again using the placement methods. However if they were
 created through html writes or otherwise not assigned an ID by CLOG, they are
-lost forever."))
+lost forever. If BROWSER-GC is called at any point, the elements will be
+destroyed from the browser and placement methods will no longer have an affect."))
 
 (defmethod inner-html ((obj clog-element))
   (jquery-query obj "html()"))
