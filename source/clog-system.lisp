@@ -14,8 +14,6 @@
 (defvar *url-to-on-new-window* (make-hash-table* :test 'equalp)
   "URL to on-new-window handlers (private)")
 
-(defvar *clog-running* nil "If clog running.")
-
 (defvar *clog-debug* nil
   "Set a debug hook that is called for every event with (event data)
 that must be (funcall event data).")
@@ -119,8 +117,8 @@ number is chosen."
   (setf *extended-routing* extended-routing)
   (when on-new-window-handler
     (set-on-new-window on-new-window-handler :path "/" :boot-file boot-file))
-  (unless *clog-running*
-    (setf *clog-running* t)
+  (unless clog-connection:*clog-running*
+    (setf clog-connection:*clog-running* t)
     (when (or (eql port 0) (eq port nil))
       (setf port (clog-connection:random-port)))
     (apply #'clog-connection:initialize
@@ -148,7 +146,7 @@ BOOT-FILE will be used. If BOOT-FILE is nil path is removed."
 ;;;;;;;;;;;;;;;;;;
 
 (defun is-running-p ()
-  *clog-running*)
+  clog-connection:*clog-running*)
 
 ;;;;;;;;;;;;;;
 ;; shutdown ;;
@@ -156,10 +154,9 @@ BOOT-FILE will be used. If BOOT-FILE is nil path is removed."
 
 (defun shutdown ()
   "Shutdown CLOG."
-  (when *clog-running*
+  (when clog-connection:*clog-running*
     (clrhash *url-to-on-new-window*)
-    (clog-connection:shutdown-clog)
-    (setf *clog-running* nil)))
+    (clog-connection:shutdown-clog)))
 
 ;;;;;;;;;;;;;;;;
 ;; debug-mode ;;

@@ -169,7 +169,7 @@
   (when *verbose-output*
     (format t "Connection close request ~A.~%"
             connection))
-  (when *reconnect-delay*
+  (when (and *clog-running* *reconnect-delay*)
     (when *verbose-output*
       (format t "Connection close request ~A delayed ~A for reconnects.~%"
               connection *reconnect-delay*))

@@ -41,6 +41,7 @@ script."
   (*reconnect-delay*        variable)
   (*static-root*            variable)
   (*clog-port*              variable)
+  (*clog-running*           variable)
 
   (initialize             function)
   (random-port            function)
@@ -95,7 +96,7 @@ script."
 (defparameter *static-root* nil "Contains the static-root setting after initialization.")
 (defparameter *clog-port* 8080 "Port this instance of clog was started on")
 (defvar *plugin-paths* (make-hash-table* :test #'equalp) "Path regex -> static-root")
-
+(defvar *clog-running* nil "CLOG initialized and running.")
 
 (defvar *on-connect-handler* nil "New connection event handler.")
 
@@ -212,6 +213,7 @@ the default answer. (Private)"
 
 (defun shutdown-clog ()
   "Shutdown CLOG."
+  (setf *clog-running* nil)
   (shutdown-connection)
   (clrhash *connection-data*)
   (clrhash *connections*)
