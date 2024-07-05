@@ -6,8 +6,8 @@
          (*default-border-class*     *builder-border-class*)
          (win (create-gui-window obj :title (format nil "Search in ~A"
                                                     dir)
-                                     :width 600 :height 400
-                                     :client-movement *client-side-movement*))
+                                 :width 600 :height 400
+                                 :client-movement *client-side-movement*))
          (panel (create-panel-search (window-content win))))
     (setf (text-value (dir-input panel)) dir)))
 
@@ -19,23 +19,26 @@
   (declare (ignore target))
   (destroy-children (result-box panel))
   (let* ((subdirs (checkedp (subdir-check panel)))
+         (nregex  (text-value (name-regex-input panel)))
+         (sn      (ppcre:create-scanner nregex :case-insensitive-mode t))
          (regex   (text-value (grep-input panel)))
          (s       (ppcre:create-scanner regex :case-insensitive-mode t)))
     (labels ((do-search (dir prefix)
                (dolist (item (uiop:directory-files dir))
-                 (let* ((fname (format nil "~A" item))
-                        (c     (read-file fname :report-errors nil)))
-                   (when (and c
-                              (ppcre:scan s c))
-                     (let ((li (create-option (result-box panel)
-                                              :content (format nil "~A~A" prefix (file-namestring item)))))
-                       (flet ((do-select ()
-                                (on-open-file panel :open-file fname
-                                              :show-find t
-                                              :regex regex)))
-                         (set-on-double-click li (lambda (obj)
-                                                   (declare (ignore obj))
-                                                   (do-select))))))))
+                 (let ((fname (format nil "~A" item)))
+                   (when (ppcre:scan sn fname)
+                     (let ((c (read-file fname :report-errors nil)))
+                       (when (and c
+                                  (ppcre:scan s c))
+                         (let ((li (create-option (result-box panel)
+                                                  :content (format nil "~A~A" prefix (file-namestring item)))))
+                           (flet ((do-select ()
+                                    (on-open-file panel :open-file fname
+                                                  :show-find t
+                                                  :regex regex)))
+                             (set-on-double-click li (lambda (obj)
+                                                       (declare (ignore obj))
+                                                       (do-select))))))))))
                (when subdirs
                  (dolist (item (uiop:subdirectories dir))
                    (do-search item (format nil "~A~A/" prefix (first (last (pathname-directory item)))))))))
