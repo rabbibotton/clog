@@ -1023,9 +1023,9 @@ not a temporarily attached one when using select-control."
                      (get-control-list app panel-id))
                    result)))
           (set-on-click m-html (lambda (obj)
-                                 (on-open-file obj :text (render-html))))
+                                 (on-open-file obj :force-mode "ace/mode/html" :text (render-html))))
           (set-on-click m-htmlq (lambda (obj)
-                                  (on-open-file obj :text
+                                  (on-open-file obj :force-mode "ace/mode/html" :text
                                                 (ppcre:regex-replace-all "\""
                                                                          (render-html)
                                                                          "\\\"")))))
