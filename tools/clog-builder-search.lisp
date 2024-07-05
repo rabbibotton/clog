@@ -24,7 +24,7 @@
     (labels ((do-search (dir prefix)
                (dolist (item (uiop:directory-files dir))
                  (let* ((fname (format nil "~A" item))
-                        (c     (read-file fname)))
+                        (c     (read-file fname :report-errors nil)))
                    (when (and c
                               (ppcre:scan s c))
                      (let ((li (create-option (result-box panel)

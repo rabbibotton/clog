@@ -2,7 +2,7 @@
 
 ;; Local file utilities
 
-(defun read-file (infile &key clog-obj if-does-not-exist)
+(defun read-file (infile &key clog-obj (report-errors t) if-does-not-exist)
   "Read local file named INFILE"
   (handler-case
       (with-open-file (instream infile :direction :input :if-does-not-exist if-does-not-exist)
@@ -12,9 +12,10 @@
                  (pos    (read-sequence string instream)))
             (subseq string 0 pos))))
     (error (condition)
-      (if clog-obj
-          (alert-toast clog-obj "File Error" (format nil "Error: ~A" condition))
-          (format t "Error: ~A" condition))
+      (when report-errors
+        (if clog-obj
+            (alert-toast clog-obj "File Error" (format nil "Error: ~A" condition))
+            (format t "Error: ~A" condition)))
       nil)))
 
 (defun write-file (string outfile &key clog-obj (action-if-exists :rename))
