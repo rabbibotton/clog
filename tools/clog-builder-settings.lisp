@@ -82,7 +82,7 @@
 (defparameter *builder-pallete-class* "w3-light-grey w3-small")
 (defparameter *builder-event-list-class* "w3-light-grey w3-small")
 (defparameter *builder-panel-class* "w3-white w3-sans-serif w3-medium")
-(defparameter *builder-menu-search-class* "w3-right w3-gray w3-bar-item")
+(defparameter *builder-menu-search-class* "w3-border w3-light-grey w3-bar-item")
 
 ;; Menus
 (defparameter *builder-menu-bar-class* "w3-bar w3-round w3-small w3-blue-grey w3-card-4")

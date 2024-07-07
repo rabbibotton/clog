@@ -71,6 +71,39 @@
                               (declare (ignore obj))
                               (when (current-editor-is-lisp app)
                                 (on-new-sys-browser editor :search data))))
+    ;; find symbol in file search
+    (js-execute editor
+                (format nil
+                        "~A.commands.addCommand({
+    name: 'find-definition',
+    bindKey: {win: 'Alt-,',  mac: 'Command-,'},
+    exec: function(editor) {
+        var row = editor.selection.getCursor().row;
+        var column = editor.selection.getCursor().column;
+        var c;
+        while (column > 0) {
+          c=editor.session.getTextRange(new ace.Range(row, column-1, row, column));
+          if (c=='(' || c==' ') { break; }
+          column--;
+        }
+        var s=column;
+        while (column < 200) {
+          c=editor.session.getTextRange(new ace.Range(row, column, row, column+1));
+          if (c==')' || c==' ') { break; }
+          column++;
+        }
+        c = editor.session.getTextRange(new ace.Range(row, s, row, column));
+        ~A.trigger('clog-search', c);
+    },
+    readOnly: true,
+});"
+                        (clog-ace::js-ace editor)
+                        (jquery editor)))
+    (set-on-event-with-data editor "clog-search"
+                            (lambda (obj data)
+                              (declare (ignore obj))
+                              (when (current-editor-is-lisp app)
+                                (on-file-search editor :search data))))
     ;; setup save key
     (js-execute editor
                 (format nil

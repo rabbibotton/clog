@@ -120,7 +120,7 @@
 (setf *builder-pallete-class* "w3-light-grey w3-small")
 (setf *builder-event-list-class* "w3-light-grey w3-small")
 (setf *builder-panel-class* "w3-white w3-sans-serif w3-medium")
-(setf *builder-menu-search-class* "w3-right w3-gray w3-bar-item")
+(setf *builder-menu-search-class* "w3-light-grey w3-bar-item")
 
 ;; Menus
 (setf *builder-menu-bar-class* "w3-bar w3-round w3-small w3-blue-grey w3-card-4")

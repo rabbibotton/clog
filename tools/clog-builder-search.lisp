@@ -1,13 +1,11 @@
 (in-package :clog-tools)
 
-(defun on-file-search (obj &key (dir ""))
+(defun on-file-search (obj &key dir search doc-maximize)
   "Open file search"
   (let* ((app (connection-data-item obj "builder-app-data"))
          (*default-title-class*      *builder-title-class*)
          (*default-border-class*     *builder-border-class*)
-         (win (create-gui-window obj :title (format nil "Search in ~A"
-                                                    dir)
-                                 :top (+ (menu-bar-height obj) 20)
+         (win (create-gui-window obj :top (+ (menu-bar-height obj) 20)
                                  :left 20
                                  :width 1040 :height 600
                                  :client-movement *client-side-movement*))
@@ -17,6 +15,8 @@
                               (clog-ace:resize (preview-ace panel))))
     (setf (current-editor-is-lisp app) "clog-user")
     (setup-lisp-ace (preview-ace panel) nil)
+    (setf (text-value (preview-ace panel))
+          ";; After search, double click file name to open / single click to preview")
     (set-on-window-focus win
                          (lambda (obj)
                            (declare (ignore obj))
@@ -39,7 +39,18 @@
                                                                   (clog-ace::js-ace (preview-ace panel)) regex))
                                           (clog-ace:execute-command (preview-ace panel) "find"))
                                         (focus (result-box panel))))
-    (setf (text-value (dir-input panel)) dir)))
+    (unless dir
+      (setf dir (if (and (current-project-dir app)
+                         (not (equal (current-project-dir app) "")))
+                    (current-project-dir app)
+                    (uiop:getcwd))))
+    (setf (text-value (dir-input panel)) dir)
+    (panel-search-dir-change panel (dir-input panel))
+    (when doc-maximize
+      (window-maximize win))
+    (when search
+      (setf (text-value (grep-input panel)) search)
+      (panel-search-on-click panel nil))))
 
 (defun panel-search-dir-change (panel target)
   (setf (window-title (parent (parent panel)))

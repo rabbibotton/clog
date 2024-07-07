@@ -273,6 +273,7 @@
                                         (setf (advisory-title load-btn) "Click to load")
                                         (setf (background-color load-btn) :tomato)
                                         (setf (current-project app) sel)
+                                        (setf (current-project-dir app) root)
                                         (create-clog-tree tree
                                                           :fill-function (lambda (obj)
                                                                            (project-tree-dir-select obj dir))

@@ -411,6 +411,7 @@ clog-builder window.")
                                  (opts  (create-gui-menu-drop-down menu :content "Options"))
                                  (win   (create-gui-menu-drop-down menu :content "Window"))
                                  (help  (create-gui-menu-drop-down menu :content "Help"))
+                                 search
                                  sysbrw)
                             (declare (ignore icon))
                             ;; Menu -> File
@@ -558,10 +559,19 @@ clog-builder window.")
                             (create-gui-menu-item help  :content "About CLOG Builder"   :on-click #'on-help-about-builder)
                             (create-gui-menu-window-select menu)
                             (create-gui-menu-full-screen menu)
-                            (setf sysbrw (create-form-element menu :search :class *builder-menu-search-class*))
+                            (setf search  (create-gui-menu-drop-down menu :content
+                                                                     "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                                     &#x1F441;" :right-align t))
+                            (setf sysbrw (create-form-element search :search :class *builder-menu-search-class*))
                             (setf (place-holder sysbrw) "system browse.. (alt-.)")
                             (set-on-change sysbrw (lambda (obj)
                                                     (on-new-sys-browser obj :search (text-value obj) :doc-maximize t)
+                                                    (setf (text-value obj) "")))
+                            (setf sysbrw (create-form-element search :search :class *builder-menu-search-class*))
+                            (setf (place-holder sysbrw) "regex search.. (alt-,)")
+                            (set-on-change sysbrw (lambda (obj)
+                                                    (on-file-search obj :search (text-value obj) :doc-maximize t)
                                                     (setf (text-value obj) ""))))
                           (on-show-copy-history-win body)
                           (cond

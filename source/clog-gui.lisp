@@ -694,8 +694,11 @@ clog-body. If main-menu add as main menu bar."))
 (defmethod create-gui-menu-drop-down ((obj clog-gui-menu-bar)
                   &key (content "")
                     (class *menu-bar-drop-down-class*)
+                    (right-align nil)
                     (html-id nil))
-  (let* ((hover  (create-div obj :class "w3-dropdown-hover"))
+  (let* ((hover  (create-div obj :class (if right-align
+                                            "w3-right w3-dropdown-hover"
+                                            "w3-dropdown-hover")))
          (button (create-button hover :class "w3-button" :content content))
          (div    (create-div hover :class class :html-id html-id)))
     (declare (ignore button))
