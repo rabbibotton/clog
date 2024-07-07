@@ -2,13 +2,43 @@
 
 (defun on-file-search (obj &key (dir ""))
   "Open file search"
-  (let* ((*default-title-class*      *builder-title-class*)
+  (let* ((app (connection-data-item obj "builder-app-data"))
+         (*default-title-class*      *builder-title-class*)
          (*default-border-class*     *builder-border-class*)
          (win (create-gui-window obj :title (format nil "Search in ~A"
                                                     dir)
-                                 :width 600 :height 400
+                                 :top (+ (menu-bar-height obj) 20)
+                                 :left 20
+                                 :width 1040 :height 600
                                  :client-movement *client-side-movement*))
          (panel (create-panel-search (window-content win))))
+    (set-on-window-size win (lambda (obj)
+                              (declare (ignore obj))
+                              (clog-ace:resize (preview-ace panel))))
+    (setf (current-editor-is-lisp app) "clog-user")
+    (setup-lisp-ace (preview-ace panel) nil)
+    (set-on-window-focus win
+                         (lambda (obj)
+                           (declare (ignore obj))
+                           (setf (current-editor-is-lisp app) "clog-user")))
+    (set-on-input (result-box panel) (lambda (obj)
+                                        (let* ((fname (text-value obj))
+                                               (regex   (text-value (grep-input panel)))
+                                               (c     (read-file fname :report-errors nil)))
+                                          (cond ((or (equalp (pathname-type fname) "lisp")
+                                                     (equalp (pathname-type fname) "asd"))
+                                                  (setf (clog-ace:mode (preview-ace panel)) "ace/mode/lisp"))
+                                                (t
+                                                  (if (equalp (pathname-type fname) "clog")
+                                                      (setf (clog-ace:mode (preview-ace panel)) "ace/mode/html")
+                                                      (setf (clog-ace:mode (preview-ace panel))
+                                                            (clog-ace:get-mode-from-extension (preview-ace panel) fname)))))
+                                          (setf (text-value (preview-ace panel)) c)
+                                          (clog-ace:resize (preview-ace panel))
+                                          (js-execute obj (format nil "~A.find('~A',{caseSensitive:false,regExp:true})"
+                                                                  (clog-ace::js-ace (preview-ace panel)) regex))
+                                          (clog-ace:execute-command (preview-ace panel) "find"))
+                                        (focus (result-box panel))))
     (setf (text-value (dir-input panel)) dir)))
 
 (defun panel-search-dir-change (panel target)
@@ -31,14 +61,13 @@
                        (when (and c
                                   (ppcre:scan s c))
                          (let ((li (create-option (result-box panel)
-                                                  :content (format nil "~A~A" prefix (file-namestring item)))))
-                           (flet ((do-select ()
-                                    (on-open-file panel :open-file fname
-                                                  :show-find t
-                                                  :regex regex)))
-                             (set-on-double-click li (lambda (obj)
-                                                       (declare (ignore obj))
-                                                       (do-select))))))))))
+                                                  :content (format nil "~A~A" prefix (file-namestring item))
+                                                  :value fname)))
+                           (set-on-double-click li (lambda (obj)
+                                                     (declare (ignore obj))
+                                                     (on-open-file panel :open-file fname
+                                                                   :show-find t
+                                                                   :regex regex)))))))))
                (when subdirs
                  (dolist (item (uiop:subdirectories dir))
                    (do-search item (format nil "~A~A/" prefix (first (last (pathname-directory item)))))))))
