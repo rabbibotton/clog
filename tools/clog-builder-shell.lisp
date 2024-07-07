@@ -7,8 +7,10 @@
          (win (create-gui-window obj :title (format nil "OS Pseudo Shell - ~A - ~A"
                                                     (uiop:operating-system)
                                                     (uiop:hostname))
-                                     :width 600 :height 400
-                                     :client-movement *client-side-movement*)))
+                                 :top (menu-bar-height obj)
+                                 :left (+ *builder-left-panel-size* 5)
+                                 :width 600 :height 400
+                                 :client-movement *client-side-movement*)))
     (set-on-click (create-span (window-icon-area win)
                                :content (format nil "~A&nbsp;" (code-char #x26F6))
                                :auto-place :top)

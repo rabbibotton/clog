@@ -54,6 +54,11 @@ builder do:
 (clog-tools:clog-builder :project :qtest)
 ```
 
+To update your local quicklisp use (ql:update-all-dist) or in CLOG Builder
+Options -> Update CLOG Builder
+
+If you used qlot and or added directly to the qlfile use (qlot:update :name-of-system)
+
 To make things easier create a file say - ql and chmod 775
 ```
 sbcl --eval "(ql:quickload :qlot)" \
