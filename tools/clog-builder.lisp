@@ -562,14 +562,15 @@ clog-builder window.")
                             (setf search  (create-gui-menu-drop-down menu :content
                                                                      "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                                                      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                                                      &#x1F441;" :right-align t))
-                            (setf sysbrw (create-form-element search :search :class *builder-menu-search-class*))
-                            (setf (place-holder sysbrw) "system browse.. (alt-.)")
+                            (setf sysbrw (create-form-element search :search :class *builder-menu-search-class* :size 35))
+                            (setf (place-holder sysbrw) "system browse.. (alt-period)")
                             (set-on-change sysbrw (lambda (obj)
                                                     (on-new-sys-browser obj :search (text-value obj) :doc-maximize t)
                                                     (setf (text-value obj) "")))
                             (setf sysbrw (create-form-element search :search :class *builder-menu-search-class*))
-                            (setf (place-holder sysbrw) "regex search.. (alt-,)")
+                            (setf (place-holder sysbrw) "regex search.. (alt-comma)")
                             (set-on-change sysbrw (lambda (obj)
                                                     (on-file-search obj :search (text-value obj) :doc-maximize t)
                                                     (setf (text-value obj) ""))))
