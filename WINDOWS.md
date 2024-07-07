@@ -6,6 +6,7 @@
 1. Download and install rho-emacs:
 
    https://gchristensen.github.io/rho-emacs/
+   
    https://github.com/GChristensen/rho-emacs/releases
 
    When installing choose C:\Users\yourname for the "home folder"
@@ -89,5 +90,13 @@ sbcl --eval '(ql:quickload :clog/tools)' --eval '(clog-tools:clog-builder)'
    Run Slime - M-x slime
 
 
-   [Learn about CLOG](README.md)
-   [Learn Common-Lisp](LEARN.md)
+
+NOTES for Windows:
+
+I have a zip with the needed DLLs should it come up - https://rabbibotton.github.io/clog/clogframe.zip
+and clograme.exe for use with clog/clogframe
+
+
+[Learn about CLOG](README.md)
+   
+[Learn Common-Lisp](LEARN.md)
