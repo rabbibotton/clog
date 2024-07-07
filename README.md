@@ -74,8 +74,7 @@ You can also run frame.bat to produce a version of builder that does not use
 the browser.
 
 CLOG v1 is in QuickLisp (ql:quickload :clog), therefore one should
-add the UltraLisp distribution to use CLOG v2
-(alternatively use git or https://github.com/ocicl/ocicl)
+add the UltraLisp distribution to use CLOG v2 (alternatively use git)
 
 To add UltraLisp to QuickLisp:
 
