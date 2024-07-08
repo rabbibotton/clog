@@ -2,6 +2,8 @@
 
 ;; Add directories to use custom directoires for storing projects
 ;; (pushnew #P"/path/of/projects" ql:*local-project-directories* :test #'equalp)
+;; For non-quicklisp based systems
+;; (pushnew #P"/path/of/projects" asdf:*central-registry* :test #'equalp)
 
 ;; Preferences loaded on next call to clog-tools:clog-builder or [Eval All]
 
@@ -61,7 +63,6 @@
 (setf *editor-theme* "ace/theme/iplastic")
 ;; Best Dark Theme for Lisp
 ;;(setf *editor-theme* "ace/theme/terminal")
-(setf *editor-mode* "ace/mode/lisp")
 ;;(setf *editor-keybinding* "ace/keyboard/emacs")
 (setf *editor-keybinding* "ace/keyboard/ace")
 (setf *editor-tab-size* 2)

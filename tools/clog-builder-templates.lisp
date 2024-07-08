@@ -11,7 +11,7 @@
       (dolist (d dlist)
         (walk-files-and-directories d process))))
 
-(defun template-copy (sys-name start-dir filename &key panel)
+(defun template-copy (sys-name start-dir filename &key panel (base-dir t))
   "Copy START-DIR to FILENAME processing .lt files as cl-template files,
 if PANEL each copy produces a <b>source</b> to destination added as
 create-div's"
@@ -21,9 +21,10 @@ create-div's"
      (let* ((tmpl-ext "lt")
             (src-file (format nil "~A~A"
                               path file))
-            (out-dir  (format nil "~A/~A/~A"
-                              filename
-                              sys-name
+            (out-dir  (format nil "~A/~A"
+                              (if base-dir
+                                  (format nil "~A/~A" filename sys-name)
+                                  filename)
                               (subseq (format nil "~A" path)
                                       (length start-dir))))
             (out-file (format nil "~A~A"
@@ -51,6 +52,25 @@ create-div's"
                 (create-div panel
                             :content (format nil "<b>~A</b> -> ~A"
                                              src-file out-file)))))))))
+
+(defun fill-template (code dir fname)
+  (let* ((tmpl-rec  (find-if (lambda (x)
+                               (equal (getf x :code) code))
+                             *supported-templates*))
+         (start-dir (format nil "~A~A"
+                            (asdf:system-source-directory :clog)
+                            (getf tmpl-rec :loc)))
+         (www-dir   (format nil "~A~A"
+                            (asdf:system-source-directory :clog)
+                            (getf tmpl-rec :www))))
+    (format t "Template copy ~A with www ~A to ~A~%"
+            start-dir
+            www-dir
+            dir)
+    (template-copy fname start-dir dir :base-dir nil)
+    (when (getf tmpl-rec :www)
+      (template-copy fname www-dir dir :base-dir nil))
+    (asdf:clear-source-registry)))
 
 ;; Handle panel-clog-templates events
 

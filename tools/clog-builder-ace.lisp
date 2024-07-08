@@ -329,7 +329,6 @@ var endRange = ~:*~A.session.doc.indexToPosition(endIndex);
                                   (setf (text status) (string-downcase r)))))))))))
     (clog-ace:set-auto-completion editor t)
     (setf (clog-ace:theme editor) *editor-theme*)
-    (setf (clog-ace:mode editor) *editor-mode*)
     (setf (clog-ace:tab-size editor) *editor-tab-size*)
     (js-execute editor
                 (format nil "~A.setKeyboardHandler('~A')"

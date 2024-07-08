@@ -25,12 +25,12 @@
 
 (defun projects-list-local-systems ()
   (if *no-quicklisp*
-      (list *start-project*)
+      (last (pathname-directory (uiop:getcwd)))
       (funcall (read-from-string "ql:list-local-systems"))))
 
 (defun projects-local-directories ()
   (if *no-quicklisp*
-      nil
+      (symbol-value (read-from-string "asdf:*central-registry*"))
       (symbol-value (read-from-string "ql:*local-project-directories*"))))
 
 (defun projects-setup (panel)

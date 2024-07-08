@@ -593,8 +593,6 @@ clog-builder window.")
                                   (setf (title (html-document body)) (file-namestring open-file)))
                               (on-open-file body :open-file open-file :maximized t))
                             (t
-                              (when *start-project*
-                                (projects-load *start-project*))
                               (on-project-tree body :project *start-project*)
                               (when *start-dir*
                                 (handler-case
@@ -634,7 +632,8 @@ clog-builder window.")
     (open-browser :url (format nil "http://127.0.0.1:~A~A" clog:*clog-port* open-url))))
 
 (defun clog-builder (&key (host "0.0.0.0") (port 8080) (start-browser t)
-                     app project dir static-root system clogframe no-quicklisp)
+                     app project dir static-root system clogframe
+                     (new-template "ncp") no-quicklisp)
   "Start clog-builder.
   :PROJECT     - load ASDF Project, start its static root and set as current
   :DIR         - Start with directory tree set to dir
@@ -644,6 +643,7 @@ clog-builder window.")
                    and it will be batch rerendered and shutdown after.
   :STATIC-ROOT - set static-root dir manually.
   :SYSTEM      - Use projects's asdf system's static root."
+  (declare (ignorable new-template))
   (setf *preferances-file*
         (format nil "~A/preferences.lisp"
                 (merge-pathnames "tools"
@@ -654,13 +654,23 @@ clog-builder window.")
   (load *preferances-file*
         :if-does-not-exist nil
         :verbose t)
+  (setf *start-dir* nil)
+  #-quicklisp
+  (progn
+    (setf no-quicklisp t)
+    (unless project
+      (setf project (car (last (pathname-directory (uiop:getcwd))))))
+    (let ((fname (format nil "~A~A.asd" (uiop:getcwd) project)))
+      (format t "Starting non-quicklisp dir based system - ~A~%" project)
+      (unless (uiop:file-exists-p fname)
+        (format t "New System - Creating Project ~A~%" fname)
+        (fill-template new-template (uiop:getcwd) project))))
   (when no-quicklisp
     (setf *no-quicklisp* (or project no-quicklisp)))
-  (setf *start-project* nil)
-  (setf *start-dir* nil)
   (if project
       (progn
         (setf *start-project* (string-downcase (format nil "~A" project)))
+        (projects-load *start-project*)
         (setf static-root (merge-pathnames "./www/" (format nil "~A" (asdf:system-source-directory project)))))
       (setf *start-project* nil))
   (when dir
@@ -704,11 +714,11 @@ clog-builder window.")
     (format t "~%If browser does not start go to http://127.0.0.1:~A/builder~%~%" port)
     (open-browser :url (format nil "http://127.0.0.1:~A/builder" port))))
 
-#+windows
+#+(and windows quicklisp)
 (in-package #:quicklisp-client)
 
 ;; patch, if-exists of :rename-and-delete does not work well on windows
-#+windows
+#+(and windows quicklisp)
 (defun make-system-index (pathname)
   "Create a system index file for all system files under
 PATHNAME. Current format is one native namestring per line."

@@ -117,13 +117,15 @@ number is chosen."
   (setf *extended-routing* extended-routing)
   (when on-new-window-handler
     (set-on-new-window on-new-window-handler :path "/" :boot-file boot-file))
-  (unless clog-connection:*clog-running*
-    (setf clog-connection:*clog-running* t)
-    (when (or (eql port 0) (eq port nil))
-      (setf port (clog-connection:random-port)))
-    (apply #'clog-connection:initialize
-           (append (list #'on-connect :static-root static-root :port port)
-                   rest))))
+  (if clog-connection:*clog-running*
+      (setf clog-connection:*static-root* static-root)
+      (progn
+        (setf clog-connection:*clog-running* t)
+        (when (or (eql port 0) (eq port nil))
+          (setf port (clog-connection:random-port)))
+        (apply #'clog-connection:initialize
+               (append (list #'on-connect :static-root static-root :port port)
+                       rest)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;
 ;; set-on-new-window ;;
