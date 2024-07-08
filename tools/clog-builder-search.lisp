@@ -10,6 +10,12 @@
                                  :width 1040 :height 600
                                  :client-movement *client-side-movement*))
          (panel (create-panel-search (window-content win))))
+    (set-on-click (create-span (window-icon-area win)
+                               :content "-&nbsp;"
+                               :auto-place :top)
+                  (lambda (obj)
+                    (declare (ignore obj))
+                    (setf (hiddenp win) t)))
     (set-on-window-size win (lambda (obj)
                               (declare (ignore obj))
                               (clog-ace:resize (preview-ace panel))))

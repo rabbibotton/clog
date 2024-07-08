@@ -24,10 +24,14 @@
   (funcall (read-from-string "asdf:load-system") fname))
 
 (defun projects-list-local-systems ()
-  (funcall (read-from-string "ql:list-local-systems")))
+  (if *no-quicklisp*
+      (list *start-project*)
+      (funcall (read-from-string "ql:list-local-systems"))))
 
 (defun projects-local-directories ()
-  (symbol-value (read-from-string "ql:*local-project-directories*")))
+  (if *no-quicklisp*
+      nil
+      (symbol-value (read-from-string "ql:*local-project-directories*"))))
 
 (defun projects-setup (panel)
   (let* ((app (connection-data-item panel "builder-app-data")))
@@ -35,10 +39,11 @@
       (setf (checkedp (open-ext panel)) t))
     (when *open-panels-as-popups*
       (setf (checkedp (pop-panel panel)) t))
-    (when (uiop:directory-exists-p #P"~/common-lisp/")
-      (pushnew #P"~/common-lisp/"
-               (symbol-value (read-from-string "ql:*local-project-directories*"))
-               :test #'equalp))
+    (unless *no-quicklisp*
+      (when (uiop:directory-exists-p #P"~/common-lisp/")
+        (pushnew #P"~/common-lisp/"
+                 (symbol-value (read-from-string "ql:*local-project-directories*"))
+                 :test #'equalp)))
     (add-select-option (project-list panel) "None" "None")
     (dolist (n (sort (projects-list-local-systems) #'string-lessp))
       (add-select-option (project-list panel) n n))
@@ -123,7 +128,7 @@
           (let ((name      (format nil "~A" (asdf:component-relative-pathname n)))
                 (file-name (asdf:component-pathname n)))
             (when (and (> (length name) 5)
-                       (equal (subseq name (- (length name) 5)) ".clog"))
+                       (equalp (subseq name (- (length name) 5)) ".clog"))
               (let* ((win              (create-gui-window panel :top 40 :left 225
                                                                 :width 645 :height 430))
                      (box              (create-panel-box-layout (window-content win)
@@ -180,7 +185,7 @@
                                     nil
                                     sel))
     (when (current-project app)
-      (cond ((member sel already :test #'equal)
+      (cond ((member sel already :test #'equalp)
               (let ((fs (asdf:find-system sel)))
                 ;; entry point
                 (setf (text-value (entry-point panel))
@@ -206,7 +211,7 @@
                         (add-select-option (designtime-list panel) path name)))
                     (dolist (n (asdf:system-depends-on sys))
                       (add-select-option (design-deps panel) n n))
-                    (when (member "clog" (asdf:system-defsystem-depends-on sys) :test #'equal)
+                    (when (member "clog" (asdf:system-defsystem-depends-on sys) :test #'equalp)
                       (setf (disabledp (runtime-add-lisp panel)) nil)
                       (setf (disabledp (runtime-delete panel)) nil)
                       (setf (disabledp (designtime-add-lisp panel)) nil)
@@ -372,7 +377,7 @@
           (when (equalp (format nil "~A" (second line)) system)
             (let (new-comp)
               (dolist (n (getf line :components))
-                (unless (and (equal (first n) ftype)
+                (unless (and (equalp (first n) ftype)
                              (equalp (second n) file))
                   (push n new-comp)))
               (setf (getf line :components) (reverse new-comp))))
@@ -398,7 +403,7 @@
                    (path (asdf:component-pathname n)))
                (add-select-option list path name))))
           ((and (> (length item) 5)
-                (equal (subseq item (- (length item) 5)) ".clog"))
+                (equalp (subseq item (- (length item) 5)) ".clog"))
            (if (checkedp (open-ext panel))
                (on-new-builder-panel-ext target :open-file item :open-ext (checkedp (pop-panel panel)))
                (on-new-builder-panel target :open-file item :open-ext (checkedp (pop-panel panel)))))

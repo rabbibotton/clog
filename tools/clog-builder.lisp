@@ -19,6 +19,7 @@ clog-builder window.")
 (defparameter *start-project* nil "Set the project to start with")
 (defparameter *start-dir* nil "Set the directory the dir win should start with")
 (defparameter *client-side-movement* nil "Use javascript for window movement")
+(defparameter *no-quicklisp* nil "Do not use quicklisp")
 
 (defvar *scope* nil "The last evaluated scope object")
 
@@ -499,7 +500,8 @@ clog-builder window.")
                                                                            "This window will be used for future default debug alerts."
                                                                            :color-class "w3-green"
                                                                            :time-out 2)))
-                            (create-gui-menu-item opts :content "Update CLOG Builder"       :on-click 'on-update-clog)
+                            (unless *no-quicklisp*
+                              (create-gui-menu-item opts :content "Update CLOG Builder"       :on-click 'on-update-clog))
                             ;; Menu -> Windows
                             (create-gui-menu-item win   :content "Maximize"           :on-click
                                                   (lambda (obj)
@@ -632,7 +634,7 @@ clog-builder window.")
     (open-browser :url (format nil "http://127.0.0.1:~A~A" clog:*clog-port* open-url))))
 
 (defun clog-builder (&key (host "0.0.0.0") (port 8080) (start-browser t)
-                     app project dir static-root system clogframe)
+                     app project dir static-root system clogframe no-quicklisp)
   "Start clog-builder.
   :PROJECT     - load ASDF Project, start its static root and set as current
   :DIR         - Start with directory tree set to dir
@@ -652,6 +654,8 @@ clog-builder window.")
   (load *preferances-file*
         :if-does-not-exist nil
         :verbose t)
+  (when no-quicklisp
+    (setf *no-quicklisp* (or project no-quicklisp)))
   (setf *start-project* nil)
   (setf *start-dir* nil)
   (if project

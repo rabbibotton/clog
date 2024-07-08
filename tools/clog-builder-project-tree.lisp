@@ -3,7 +3,7 @@
 (defun project-tree-select (panel item &key method)
   (unless (equal item "")
     (cond ((and (> (length item) 5)
-                (equal (subseq item (- (length item) 5)) ".clog"))
+                (equalp (subseq item (- (length item) 5)) ".clog"))
             (if (or (eq method :tab)
                  (and (not (eq method :here)) *open-external*))
                 (on-new-builder-panel-ext panel :open-file item) ;; need ext for both
@@ -29,7 +29,7 @@
                                                       (setf (height obj) (height obj))))))))))))))
 (defun update-static-root (app)
   (setf *static-root*
-        (merge-pathnames (if (equal (current-project app) "clog")
+        (merge-pathnames (if (equalp (current-project app) "clog")
                              "./static-root/"
                              "./www/")
                          (format nil "~A" (asdf:system-source-directory (current-project app)))))
@@ -38,10 +38,11 @@
 
 (defun on-project-tree (obj &key project)
   (let ((app (connection-data-item obj "builder-app-data")))
-    (when (uiop:directory-exists-p #P"~/common-lisp/")
-      (pushnew #P"~/common-lisp/"
-               (symbol-value (read-from-string "ql:*local-project-directories*"))
-               :test #'equalp))
+    (unless *no-quicklisp*
+      (when (uiop:directory-exists-p #P"~/common-lisp/")
+        (pushnew #P"~/common-lisp/"
+                 (symbol-value (read-from-string "ql:*local-project-directories*"))
+                 :test #'equalp)))
     (when project
       (setf (current-project app) project))
     (if (project-tree-win app)
@@ -266,8 +267,9 @@
                               (setf (text-value load-btn) "working")
                               (setf (background-color load-btn) :yellow)
                               (setf (advisory-title load-btn) "")
-                              (let* ((root (quicklisp:where-is-system sel))
-                                     (dir  (directory-namestring (uiop:truename* root))))
+                              (let* ((system (asdf:find-system sel nil))
+                                     (root   (when system (asdf:system-source-directory system)))
+                                     (dir    (directory-namestring (uiop:truename* root))))
                                 (cond (root
                                         (setf (text-value load-btn) "not loaded")
                                         (setf (advisory-title load-btn) "Click to load")
@@ -347,7 +349,7 @@
                                         (setf (background-color load-btn) :load-np))))))))
                    (fill-projects ()
                      (setf (text projects) "")
-                     (dolist (n (sort (quicklisp:list-local-systems) #'string-lessp))
+                     (dolist (n (sort (projects-list-local-systems) #'string-lessp))
                        (add-select-option projects n n :selected (equalp n (current-project app)))
                        (when (equalp n (current-project app))
                          (on-change (current-project app))))
