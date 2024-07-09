@@ -71,7 +71,7 @@
                (:file "clog-docs")))
 
 (asdf:defsystem #:clog/tools
-  :depends-on (#:clog #:clog-ace #:clog-terminal #:s-base64 #:swank #:cl-indentify
+  :depends-on (#:clog #:clog-ace #:clog-terminal #:s-base64 #:cl-indentify
                #:definitions #:parenscript #:trivial-main-thread)
   :pathname "tools/"
   :components (;; clog-db-admin app
