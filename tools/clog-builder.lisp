@@ -298,7 +298,9 @@ clog-builder window.")
                                         :text c))))))))
 
 (defun on-opts-edit (body)
-  (let ((pref (read-file (format nil "~A.sample" *preferances-file*))))
+  (let ((pref (read-file (format nil "~A/preferences.lisp.sample"
+                                 (merge-pathnames "tools"
+                                                  (asdf:system-source-directory :clog))))))
     (unless pref
       (setf pref ";; No sample preferances file found"))
     (on-open-file body :open-file *preferances-file*
@@ -644,17 +646,6 @@ clog-builder window.")
   :STATIC-ROOT - set static-root dir manually.
   :SYSTEM      - Use projects's asdf system's static root."
   (declare (ignorable new-template))
-  (setf *preferances-file*
-        (format nil "~A/preferences.lisp"
-                (merge-pathnames "tools"
-                                 (asdf:system-source-directory :clog))))
-  (clog-connection:add-plugin-path "^/builder-js/"
-                                   (merge-pathnames "./static-files/"
-                                                    (asdf:system-source-directory :clog)))
-  (load *preferances-file*
-        :if-does-not-exist nil
-        :verbose t)
-  (setf *start-dir* nil)
   #-quicklisp
   (progn
     (setf no-quicklisp t)
@@ -665,6 +656,20 @@ clog-builder window.")
       (unless (uiop:file-exists-p fname)
         (format t "New System - Creating Project ~A~%" fname)
         (fill-template new-template (uiop:getcwd) project))))
+  (setf *preferances-file*
+        (if project
+            (format nil "~Apreferences.lisp"
+                    (asdf:system-source-directory project))
+            (format nil "~A/preferences.lisp"
+                    (merge-pathnames "tools"
+                                     (asdf:system-source-directory :clog)))))
+  (clog-connection:add-plugin-path "^/builder-js/"
+                                   (merge-pathnames "./static-files/"
+                                                    (asdf:system-source-directory :clog)))
+  (load *preferances-file*
+        :if-does-not-exist nil
+        :verbose t)
+  (setf *start-dir* nil)
   (when no-quicklisp
     (setf *no-quicklisp* (or project no-quicklisp)))
   (if project
