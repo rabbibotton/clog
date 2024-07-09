@@ -41,8 +41,8 @@
                                                             (clog-ace:get-mode-from-extension (preview-ace panel) fname)))))
                                           (setf (text-value (preview-ace panel)) c)
                                           (clog-ace:resize (preview-ace panel))
-                                          (js-execute obj (format nil "~A.find('~A',{caseSensitive:false,regExp:true})"
-                                                                  (clog-ace::js-ace (preview-ace panel)) regex))
+                                          (js-execute obj (format nil "~A.find({regExp:true,needle:'~A',caseSensitive:false})"
+                                                                  (clog-ace::js-ace (preview-ace panel)) (escape-string regex)))
                                           (clog-ace:execute-command (preview-ace panel) "find"))
                                         (focus (result-box panel))))
     (unless dir
