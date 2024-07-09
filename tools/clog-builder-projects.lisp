@@ -25,13 +25,23 @@
 
 (defun projects-list-local-systems ()
   (if *no-quicklisp*
-      (last (pathname-directory (uiop:getcwd)))
+      (alexandria:flatten
+        (append
+          (mapcar (lambda (dir)
+                    (mapcar (lambda (item)
+                              (let ((sys (first (last (pathname-directory item)))))
+                                (when (uiop:file-exists-p
+                                        (format nil "~A~A.asd"
+                                                item sys))
+                                  (pushnew item asdf:*central-registry* :test #'equalp)
+                                  sys)))
+                            (uiop:subdirectories dir)))
+                  (projects-local-directories))
+          (list *start-project*)))
       (funcall (read-from-string "ql:list-local-systems"))))
 
 (defun projects-local-directories ()
-  (if *no-quicklisp*
-      (symbol-value (read-from-string "asdf:*central-registry*"))
-      (symbol-value (read-from-string "ql:*local-project-directories*"))))
+      (symbol-value (read-from-string "ql:*local-project-directories*")))
 
 (defun projects-setup (panel)
   (let* ((app (connection-data-item panel "builder-app-data")))

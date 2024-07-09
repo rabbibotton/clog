@@ -719,6 +719,14 @@ clog-builder window.")
     (format t "~%If browser does not start go to http://127.0.0.1:~A/builder~%~%" port)
     (open-browser :url (format nil "http://127.0.0.1:~A/builder" port))))
 
+#-quicklisp
+(defpackage #:ql
+  (:use #:cl)
+  (:export :*local-project-directories*))
+
+#-quicklisp
+(defvar ql:*local-project-directories* (list (uiop:getcwd)))
+
 #+(and windows quicklisp)
 (in-package #:quicklisp-client)
 
