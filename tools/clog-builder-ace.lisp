@@ -184,7 +184,17 @@
                             (lambda (obj data)
                               (declare (ignore obj))
                               (when (current-editor-is-lisp app)
+                                (setf data (ppcre:regex-replace-all "\\" data "\\\\"))
+                                (setf data (ppcre:regex-replace-all "\\*" data "\\*"))
+                                (setf data (ppcre:regex-replace-all "\\(" data "\\("))
+                                (setf data (ppcre:regex-replace-all "\\)" data "\\)"))
+                                (setf data (ppcre:regex-replace-all "\\[" data "\\["))
+                                (setf data (ppcre:regex-replace-all "\\]" data "\\]"))
+                                (setf data (ppcre:regex-replace-all "\\^" data "\\^"))
+                                (setf data (ppcre:regex-replace-all "\\$" data "\\$"))
+                                (setf data (ppcre:regex-replace-all "\\%" data "\\%"))
                                 (on-file-search editor :search data))))
+    ;; system browse symbol
     (js-execute editor
                 (format nil
                         "~A.commands.addCommand({
@@ -200,7 +210,6 @@
                         (jquery editor)))
     (set-on-event-with-data editor "clog-eval-form"
                             (lambda (obj data)
-                              (declare (ignore obj))
                               (let ((p  (parse-integer data :junk-allowed t))
                                     (tv (text-value editor))
                                     (pk "CLOG-USER")
@@ -307,21 +316,22 @@ var endRange = ~:*~A.session.doc.indexToPosition(endIndex);
                        (unless (equal s "")
                          (with-input-from-string (i s)
                            (ignore-errors
-                            (let* ((pac                       (if (or (eq (current-editor-is-lisp app) t)
-                                                                      (eq (current-editor-is-lisp app) nil))
-                                                                  "CLOG-USER"
-                                                                  (string-upcase (current-editor-is-lisp app))))
+                            (let* (;(pac                       (if (or (eq (current-editor-is-lisp app) t)
+                                   ;                                   (eq (current-editor-is-lisp app) nil))
+                                   ;                               "CLOG-USER"
+                                   (pac                           (string-upcase (or (current-editor-is-lisp app)
+                                                                                      package)))
                                    (m                         (read i))
-                                   (*PACKAGE*                 (find-package pac))
-                                   (SWANK::*buffer-package*   (find-package pac))
-                                   (SWANK::*buffer-readtable* *readtable*)
+                                   ;(*PACKAGE*                 (find-package pac))
+                                   ;(SWANK::*buffer-package*   (find-package pac))
+                                   ;(SWANK::*buffer-readtable* *readtable*)
                                    (ms                        (format nil "~A" m))
                                    r)
-                              (ignore-errors
-                               (setf r (swank::autodoc `(,ms swank::%CURSOR-MARKER%))))
-                              (if r
-                                  (setf r (car r))
-                                  (setf r (swank:operator-arglist ms package)))
+                              ;(ignore-errors
+                               ;(setf r (swank::autodoc `(,ms swank::%CURSOR-MARKER%))))
+                              ;(if r
+                                  ;(setf r (car r))
+                                  (setf r (swank:operator-arglist ms pac)) ;)
                               (when status
                                 (setf (advisory-title status) (documentation (find-symbol ms) 'function)))
                               (when r
