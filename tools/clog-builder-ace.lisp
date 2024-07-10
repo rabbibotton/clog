@@ -22,19 +22,19 @@
                                                 (l (car (swank:simple-completions prefix s))))
                                            (when (current-control app)
                                              (let ((n (get-control-list app p)))
-					       (when n
-						 (maphash (lambda (k v)
+                                               (when n
+                                                 (maphash (lambda (k v)
                                                             (declare (ignore k))
                                                             (let ((name (attribute v "data-clog-name")))
                                                               (push `(:caption ,name :value ,(format nil "(~A panel)" name)
-                                                                      :meta "control")
+                                                                               :meta "control")
                                                                     l)))
                                                           n)
-						 (push '(:caption "target" :value "target"
-							 :meta "builder")
+                                                 (push '(:caption "target" :value "target"
+                                                         :meta "builder")
                                                        l)
-						 (push '(:caption "panel" :value "panel"
-							 :meta "builder")
+                                                 (push '(:caption "panel" :value "panel"
+                                                         :meta "builder")
                                                        l))))
                                            l)))
                                      :meta "swank"))

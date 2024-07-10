@@ -14,11 +14,10 @@
                (content (window-content win))
                status)
           (set-geometry win :top "" :bottom 0)
-          (setf (current-editor-is-lisp app) t)
           (set-on-window-focus win
                                (lambda (obj)
                                  (declare (ignore obj))
-                                 (setf (current-editor-is-lisp app) "CLOG-USER")))
+                                 (setf (current-editor-is-lisp app) t))) ; when t looks up panels package
           (setf (control-events-win app) win)
           (setf (events-list app) (create-select content :name "clog-events" :class *builder-event-list-class*))
           (setf (positioning (events-list app)) :absolute)
@@ -171,6 +170,7 @@
         (setf (inner-html elist) "")
         (remove-attribute elist "data-current-event")
         (setf (text-value (event-editor app)) "")
+        (browser-gc obj)
         (setf (clog-ace:read-only-p (event-editor app)) t)
         (when control
           (let ((info (control-info (attribute control "data-clog-type"))))
@@ -243,6 +243,7 @@
       (setf (inner-html elist) "")
       (remove-attribute elist "data-current-js-event")
       (setf (text-value (event-js-editor app)) "")
+      (browser-gc obj)
       (setf (clog-ace:read-only-p (event-js-editor app)) t)
       (when control
         (let ((info (control-info (attribute control "data-clog-type"))))
@@ -313,6 +314,7 @@
       (setf (inner-html elist) "")
       (remove-attribute elist "data-current-ps-event")
       (setf (text-value (event-ps-editor app)) "")
+      (browser-gc obj)
       (setf (clog-ace:read-only-p (event-ps-editor app)) t)
       (when control
         (let ((info (control-info (attribute control "data-clog-type"))))
