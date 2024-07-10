@@ -18,7 +18,7 @@
           (set-on-window-focus win
                                (lambda (obj)
                                  (declare (ignore obj))
-                                 (setf (current-editor-is-lisp app) t)))
+                                 (setf (current-editor-is-lisp app) "CLOG-USER")))
           (setf (control-events-win app) win)
           (setf (events-list app) (create-select content :name "clog-events" :class *builder-event-list-class*))
           (setf (positioning (events-list app)) :absolute)
@@ -40,6 +40,8 @@
           (setf (positioning status) :absolute)
           (setf (width status) "")
           (set-geometry status :height 20 :left 5 :right 5 :bottom 5)
+          (setf (clog-ace:mode (event-editor app)) "ace/mode/lisp")
+          (setf (current-editor-is-lisp app) "CLOG-USER")
           (setup-lisp-ace (event-editor app) status :package "CLOG-USER")
           (set-on-window-size-done win (lambda (obj)
                                          (declare (ignore obj))

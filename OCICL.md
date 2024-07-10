@@ -6,28 +6,24 @@ and existing project to an ocicl based one. To add dependecies you just
 add them to your asd file and will be downloaded as needed. A simple
 run of "ocicl latest" updates your project dependecies.
 
-Once installed either in an empty dir or existing project do:
+Once installed either in an empty new project dir or existing project do:
+(Do not call your project clog, creates asdf circular dependecies.)
 
 ```
 ocicl setup > init
 ocicl install clog
-sbcl --userinit init
 ```
 
-Then in SBCL
+Then start to dev with the CLOG Builder:
 
 ```
-(asdf:load-system :clog/tools)
-(clog-tools:clog-builder)
+sbcl --userinit init --eval "(asdf:load-system :clog/tools)" --eval "(clog-tools:clog-builder :port 0 :app t)"
 ```
+(or replace ecl for sbcl)
 
-NOTE: With OCICL the model of dev changes where each system is its own world
-      so the only project in the Builder will be the one in the directory you
-      start in.
 
-================================================================================
-                               I N S T A L L
-================================================================================
+I N S T A L L
+=============
 
 These are directions for getting started from scratch:
 
