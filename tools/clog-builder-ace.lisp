@@ -17,7 +17,7 @@
                                                        (if (current-control app)
                                                            (string-upcase (attribute (attach-as-child (current-control app) p)
                                                                                      "data-in-package"))
-                                                           "CLOG-USER")
+                                                           package)
                                                        (current-editor-is-lisp app)))
                                                 (l (car (swank:simple-completions prefix s))))
                                            (when (current-control app)
@@ -210,11 +210,18 @@
                         (jquery editor)))
     (set-on-event-with-data editor "clog-eval-form"
                             (lambda (obj data)
-                              (let ((p  (parse-integer data :junk-allowed t))
-                                    (tv (text-value editor))
-                                    (pk "CLOG-USER")
-                                    (lf nil)
-                                    (cp 0))
+                              (let* ((p  (parse-integer data :junk-allowed t))
+                                     (tv (text-value editor))
+                                     (pl (when (current-control app)
+                                           (attribute (get-placer (current-control app)) "data-panel-id")))
+                                     (pk (if (eq (current-editor-is-lisp app) t)
+                                             (if (current-control app)
+                                                 (string-upcase (attribute (attach-as-child (current-control app) pl)
+                                                                           "data-in-package"))
+                                                 package)
+                                             (current-editor-is-lisp app)))
+                                     (lf nil)
+                                     (cp 0))
                                 (loop
                                   (setf (values lf cp) (read-from-string tv nil nil :start cp))
                                   (unless lf (return nil))
@@ -316,27 +323,23 @@ var endRange = ~:*~A.session.doc.indexToPosition(endIndex);
                        (unless (equal s "")
                          (with-input-from-string (i s)
                            (ignore-errors
-                            (let* (;(pac                       (if (or (eq (current-editor-is-lisp app) t)
-                                   ;                                   (eq (current-editor-is-lisp app) nil))
-                                   ;                               "CLOG-USER"
-                                   (pac                           (string-upcase (or (current-editor-is-lisp app)
-                                                                                      package)))
-                                   (m                         (read i))
-                                   ;(*PACKAGE*                 (find-package pac))
-                                   ;(SWANK::*buffer-package*   (find-package pac))
-                                   ;(SWANK::*buffer-readtable* *readtable*)
-                                   (ms                        (format nil "~A" m))
-                                   r)
-                              ;(ignore-errors
-                               ;(setf r (swank::autodoc `(,ms swank::%CURSOR-MARKER%))))
-                              ;(if r
-                                  ;(setf r (car r))
-                                  (setf r (swank:operator-arglist ms pac)) ;)
-                              (when status
-                                (setf (advisory-title status) (documentation (find-symbol ms) 'function)))
-                              (when r
-                                (when status
-                                  (setf (text status) (string-downcase r)))))))))))
+                             (let* ((p (when (current-control app)
+                                                     (attribute (get-placer (current-control app)) "data-panel-id")))
+                                    (pac (if (eq (current-editor-is-lisp app) t)
+                                             (if (current-control app)
+                                                 (string-upcase (attribute (attach-as-child (current-control app) p)
+                                                                           "data-in-package"))
+                                                 package)
+                                             (current-editor-is-lisp app)))
+                                    (m                         (read i))
+                                    (ms                        (format nil "~A" m))
+                                    r)
+                               (setf r (swank:operator-arglist ms pac))
+                               (when status
+                                 (setf (advisory-title status) (documentation (find-symbol ms) 'function)))
+                               (when r
+                                 (when status
+                                   (setf (text status) (string-downcase r)))))))))))
     (clog-ace:set-auto-completion editor t)
     (setf (clog-ace:theme editor) *editor-theme*)
     (setf (clog-ace:tab-size editor) *editor-tab-size*)
