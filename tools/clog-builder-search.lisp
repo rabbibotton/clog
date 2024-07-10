@@ -23,6 +23,7 @@
     (setup-lisp-ace (preview-ace panel) nil)
     (setf (text-value (preview-ace panel))
           ";; After search, double click file name to open / single click to preview")
+    (setf (read-only-p (preview-ace panel)) t)
     (set-on-window-focus win
                          (lambda (obj)
                            (declare (ignore obj))
