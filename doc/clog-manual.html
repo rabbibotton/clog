@@ -311,17 +311,17 @@ sent to the brower, this allows adding content for search engine optimization,
 see tutorial 12 for an example. If port is nil or 0 a random available port
 number is chosen.</p></li>
 </ul>
-<p><a id="x-28CLOG-3A-2ASTATIC-ROOT-2A-20VARIABLE-29"></a>
-<a id="CLOG:*STATIC-ROOT*%20VARIABLE"></a></p>
+<p><a id="x-28CLOG-CONNECTION-3A-2ASTATIC-ROOT-2A-20VARIABLE-29"></a>
+<a id="CLOG-CONNECTION:*STATIC-ROOT*%20VARIABLE"></a></p>
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[variable]</span> <span class="reference-object"><a href="#CLOG:*STATIC-ROOT*%20VARIABLE" >*STATIC-ROOT*</a></span></span> <span class="locative-args">NIL</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[variable]</span> <span class="reference-object"><a href="#CLOG-CONNECTION:*STATIC-ROOT*%20VARIABLE" >*STATIC-ROOT*</a></span></span> <span class="locative-args">NIL</span></span></p>
 
 <p>Contains the static-root setting after initialization.</p></li>
 </ul>
-<p><a id="x-28CLOG-3A-2ACLOG-PORT-2A-20VARIABLE-29"></a>
-<a id="CLOG:*CLOG-PORT*%20VARIABLE"></a></p>
+<p><a id="x-28CLOG-CONNECTION-3A-2ACLOG-PORT-2A-20VARIABLE-29"></a>
+<a id="CLOG-CONNECTION:*CLOG-PORT*%20VARIABLE"></a></p>
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[variable]</span> <span class="reference-object"><a href="#CLOG:*CLOG-PORT*%20VARIABLE" >*CLOG-PORT*</a></span></span> <span class="locative-args">8080</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[variable]</span> <span class="reference-object"><a href="#CLOG-CONNECTION:*CLOG-PORT*%20VARIABLE" >*CLOG-PORT*</a></span></span> <span class="locative-args">8080</span></span></p>
 
 <p>Port this instance of clog was started on</p></li>
 </ul>
@@ -373,7 +373,7 @@ static file matching the requested path <code>ON-NEW-WINDOW-HANDLER</code> and
 <p><a id="x-28CLOG-3AOPEN-BROWSER-20FUNCTION-29"></a>
 <a id="CLOG:OPEN-BROWSER%20FUNCTION"></a></p>
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#CLOG:OPEN-BROWSER%20FUNCTION" >OPEN-BROWSER</a></span></span> <span class="locative-args">&amp;KEY (URL (<a href="http://www.lispworks.com/documentation/HyperSpec/Body/f_format.htm" title="FORMAT (MGL-PAX:CLHS FUNCTION)"><code>FORMAT</code></a> <code>NIL</code> &quot;http://127.0.0.1:~A&quot; <a href="#CLOG:*CLOG-PORT*%20VARIABLE" title="CLOG:*CLOG-PORT* VARIABLE"><code>*CLOG-PORT*</code></a>))</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#CLOG:OPEN-BROWSER%20FUNCTION" >OPEN-BROWSER</a></span></span> <span class="locative-args">&amp;KEY (URL (<a href="http://www.lispworks.com/documentation/HyperSpec/Body/f_format.htm" title="FORMAT (MGL-PAX:CLHS FUNCTION)"><code>FORMAT</code></a> <code>NIL</code> &quot;http://127.0.0.1:~A&quot; <a href="#CLOG-CONNECTION:*CLOG-PORT*%20VARIABLE" title="CLOG-CONNECTION:*CLOG-PORT* VARIABLE"><code>*CLOG-PORT*</code></a>))</span></span></p>
 
 <p>Launch on os a web browser on local machine to <code>URL</code>. See <a href="#CLOG:OPEN-WINDOW%20GENERIC-FUNCTION" title="CLOG:OPEN-WINDOW GENERIC-FUNCTION"><code>OPEN-WINDOW</code></a>
 for openning windows on remote machines.</p></li>
@@ -598,7 +598,8 @@ parent if was set or nil. This is not per se the parent in the DOM.</p></li>
 <li><p><span class=reference-bullet><span class=reference><span class="locative-type">[variable]</span> <span class="reference-object"><a href="#CLOG:*STORE-NEW-OBJECTS*%20VARIABLE" >*STORE-NEW-OBJECTS*</a></span></span> <span class="locative-args">NIL</span></span></p>
 
 <p>Dynamic variable that when true every create-* or attach-* will also
-create a connection-data-item keyed by the html-id</p></li>
+create a connection-data-item keyed by the html-id. Any object stored
+will not be garbage collected on the browser side or lisp side.</p></li>
 </ul>
 <p><a id="x-28CLOG-3ACONNECTION-DATA-20GENERIC-FUNCTION-29"></a>
 <a id="CLOG:CONNECTION-DATA%20GENERIC-FUNCTION"></a></p>
@@ -1186,7 +1187,7 @@ is nil unbind the event.</p></li>
 <p>CLOG Element Objects is the base class for all html
 element objects.</p></li>
 </ul>
-<p>CLOG-Element - Low Level Creation</p>
+<p>CLOG-Element - Low Level</p>
 <p><a id="x-28CLOG-3ACREATE-ELEMENT-20GENERIC-FUNCTION-29"></a>
 <a id="CLOG:CREATE-ELEMENT%20GENERIC-FUNCTION"></a></p>
 <ul>
@@ -1203,8 +1204,8 @@ possible tag and keywords.</p></li>
 <p>Create a new <a href="#CLOG:CLOG-ELEMENT%20CLASS" title="CLOG:CLOG-ELEMENT CLASS"><code>CLOG-ELEMENT</code></a> or sub-type of <code>CLOG-TYPE</code> from <code>HTML</code>
 as child of <code>CLOG-OBJ</code> and if <code>:AUTO-PLACE</code> (default t) place-inside-bottom-of
 <code>CLOG-OBJ</code>, you can also set auto-place to :bottom or :top. If <code>HTML-ID</code> is nil one
-will be generated. If auto-place is nil, note that if browser-gc is called
-or clog-connect:*browser-gc-on-ping* is t the browser side will be destroyed.</p></li>
+will be generated. If auto-place is nil the object is stored in the connection-data
+and not subject to browser-gc requests.</p></li>
 </ul>
 <p><a id="x-28CLOG-3AATTACH-AS-CHILD-20GENERIC-FUNCTION-29"></a>
 <a id="CLOG:ATTACH-AS-CHILD%20GENERIC-FUNCTION"></a></p>
@@ -1215,6 +1216,14 @@ or clog-connect:*browser-gc-on-ping* is t the browser side will be destroyed.</p
 attach an existing element with <code>HTML-ID</code>. The <code>HTML-ID</code> must be unique and
 must be in DOM, ie placed or auto-placed. If new-id is true the <code>HTML-ID</code>
 after attachment is changed to one unique to this session.</p></li>
+</ul>
+<p><a id="x-28CLOG-3ADESTROY-CHILDREN-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG:DESTROY-CHILDREN%20GENERIC-FUNCTION"></a></p>
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:DESTROY-CHILDREN%20GENERIC-FUNCTION" >DESTROY-CHILDREN</a></span></span> <span class="locative-args">CLOG-ELEMENT</span></span></p>
+
+<p>Destroy all children in DOM contained with in <code>CLOG-ELEMENT</code>
+and run a <a href="#CLOG:BROWSER-GC%20GENERIC-FUNCTION" title="CLOG:BROWSER-GC GENERIC-FUNCTION"><code>BROWSER-GC</code></a></p></li>
 </ul>
 <p>CLOG-Element - DOM Placement</p>
 <p><a id="x-28CLOG-3APLACE-AFTER-20GENERIC-FUNCTION-29"></a>
@@ -1384,7 +1393,8 @@ html of an element. This will remove any Elements within Element from the DOM.
 If those elements were created in CLOG they are still available and can be
 placed in the DOM again using the placement methods. However if they were
 created through html writes or otherwise not assigned an ID by CLOG, they are
-lost forever.</p></li>
+lost forever. If <a href="#CLOG:BROWSER-GC%20GENERIC-FUNCTION" title="CLOG:BROWSER-GC GENERIC-FUNCTION"><code>BROWSER-GC</code></a> is called at any point, the elements will be
+destroyed from the browser and placement methods will no longer have an affect.</p></li>
 </ul>
 <p><a id="x-28CLOG-3AOUTER-HTML-20GENERIC-FUNCTION-29"></a>
 <a id="CLOG:OUTER-HTML%20GENERIC-FUNCTION"></a></p>
@@ -1662,9 +1672,15 @@ flex         - Turn this item in to a flexbox container. The flexbox
                :space-around  ( -   -   - )
                :space-evenly  ( - - - )
 
+For info on using grids see:
+https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_grid_layout
+
 grid         - Turn this item in to a grid container block level. The grid
                properties to adjust for container are:
 
+                  Tip - 1 1 1 1 = repeat(4,1fr) also minmax()
+
+                  grid-template
                   grid-template-columns
                   grid-template-rows
                   grid-template-areas
@@ -1680,10 +1696,15 @@ grid         - Turn this item in to a grid container block level. The grid
 
                 The properties to adjust for grid items is:
 
+                  Tip - 1 / 4 means from 1 to 4
+
+                  grid-column
                   grid-column-start
                   grid-column-end
+                  grid-row
                   grid-row-start
                   grid-row-end
+                  grid-area
                   align-self
                   justify-self
 
@@ -1737,6 +1758,13 @@ flex-basis (default :auto = use width or height) for <code>CLOG-ELEMENT</code></
 <li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:FLEX-DIRECTION%20GENERIC-FUNCTION" >FLEX-DIRECTION</a></span></span> <span class="locative-args">CLOG-ELEMENT</span></span></p>
 
 <p>Get/Setf direction of flexbox packing.</p></li>
+</ul>
+<p><a id="x-28CLOG-3AGRID-TEMPLATE-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG:GRID-TEMPLATE%20GENERIC-FUNCTION"></a></p>
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:GRID-TEMPLATE%20GENERIC-FUNCTION" >GRID-TEMPLATE</a></span></span> <span class="locative-args">CLOG-ELEMENT</span></span></p>
+
+<p>Get/Setf grid-template.</p></li>
 </ul>
 <p><a id="x-28CLOG-3AGRID-TEMPLATE-COLUMNS-20GENERIC-FUNCTION-29"></a>
 <a id="CLOG:GRID-TEMPLATE-COLUMNS%20GENERIC-FUNCTION"></a></p>
@@ -1794,6 +1822,13 @@ flex-basis (default :auto = use width or height) for <code>CLOG-ELEMENT</code></
 
 <p>Get/Setf grid-auto-flow.</p></li>
 </ul>
+<p><a id="x-28CLOG-3AGRID-COLUMN-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG:GRID-COLUMN%20GENERIC-FUNCTION"></a></p>
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:GRID-COLUMN%20GENERIC-FUNCTION" >GRID-COLUMN</a></span></span> <span class="locative-args">CLOG-ELEMENT</span></span></p>
+
+<p>Get/Setf grid-column.</p></li>
+</ul>
 <p><a id="x-28CLOG-3AGRID-COLUMN-START-20GENERIC-FUNCTION-29"></a>
 <a id="CLOG:GRID-COLUMN-START%20GENERIC-FUNCTION"></a></p>
 <ul>
@@ -1808,6 +1843,13 @@ flex-basis (default :auto = use width or height) for <code>CLOG-ELEMENT</code></
 
 <p>Get/Setf grid-column-end.</p></li>
 </ul>
+<p><a id="x-28CLOG-3AGRID-ROW-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG:GRID-ROW%20GENERIC-FUNCTION"></a></p>
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:GRID-ROW%20GENERIC-FUNCTION" >GRID-ROW</a></span></span> <span class="locative-args">CLOG-ELEMENT</span></span></p>
+
+<p>Get/Setf grid-row.</p></li>
+</ul>
 <p><a id="x-28CLOG-3AGRID-ROW-START-20GENERIC-FUNCTION-29"></a>
 <a id="CLOG:GRID-ROW-START%20GENERIC-FUNCTION"></a></p>
 <ul>
@@ -1821,6 +1863,16 @@ flex-basis (default :auto = use width or height) for <code>CLOG-ELEMENT</code></
 <li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:GRID-ROW-END%20GENERIC-FUNCTION" >GRID-ROW-END</a></span></span> <span class="locative-args">CLOG-ELEMENT</span></span></p>
 
 <p>Get/Setf grid-row-end.</p></li>
+</ul>
+<p><a id="x-28CLOG-3AGRID-AREA-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG:GRID-AREA%20GENERIC-FUNCTION"></a></p>
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:GRID-AREA%20GENERIC-FUNCTION" >GRID-AREA</a></span></span> <span class="locative-args">CLOG-ELEMENT</span></span></p>
+
+<p>Get/Setf grid-area named or as
+grid-row-start / grid-column-start / grid-row-end / grid-column-end</p>
+
+<p>e.g. 1 / 1 / 4 / 2</p></li>
 </ul>
 <p><a id="x-28CLOG-3AALIGN-ITEMS-TYPE-20TYPE-29"></a>
 <a id="CLOG:ALIGN-ITEMS-TYPE%20TYPE"></a></p>
@@ -2007,16 +2059,16 @@ parent in the DOM.</p></li>
 <p><a id="x-28CLOG-3ALEFT-20GENERIC-FUNCTION-29"></a>
 <a id="CLOG:LEFT%20GENERIC-FUNCTION"></a></p>
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:LEFT%20GENERIC-FUNCTION" >LEFT</a></span></span> <span class="locative-args">CLOG-WINDOW</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:LEFT%20GENERIC-FUNCTION" >LEFT</a></span></span> <span class="locative-args">CLOG-ELEMENT</span></span></p>
 
-<p>Get/Setf browser x position.</p></li>
+<p>Get/Setf left (defaults to us :px units).</p></li>
 </ul>
 <p><a id="x-28CLOG-3ATOP-20GENERIC-FUNCTION-29"></a>
 <a id="CLOG:TOP%20GENERIC-FUNCTION"></a></p>
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:TOP%20GENERIC-FUNCTION" >TOP</a></span></span> <span class="locative-args">CLOG-WINDOW</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:TOP%20GENERIC-FUNCTION" >TOP</a></span></span> <span class="locative-args">CLOG-ELEMENT</span></span></p>
 
-<p>Get/Setf browser y postion.</p></li>
+<p>Get/Setf top (defaults to use :px units).</p></li>
 </ul>
 <p><a id="x-28CLOG-3ARIGHT-20GENERIC-FUNCTION-29"></a>
 <a id="CLOG:RIGHT%20GENERIC-FUNCTION"></a></p>
@@ -2077,30 +2129,32 @@ parent in the DOM.</p></li>
 <p><a id="x-28CLOG-3AINNER-HEIGHT-20GENERIC-FUNCTION-29"></a>
 <a id="CLOG:INNER-HEIGHT%20GENERIC-FUNCTION"></a></p>
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:INNER-HEIGHT%20GENERIC-FUNCTION" >INNER-HEIGHT</a></span></span> <span class="locative-args">CLOG-WINDOW</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:INNER-HEIGHT%20GENERIC-FUNCTION" >INNER-HEIGHT</a></span></span> <span class="locative-args">CLOG-ELEMENT</span></span></p>
 
-<p>Get/Setf inner height of browser window.</p></li>
+<p>Get/Setf inner-height. Includes padding but not border.</p></li>
 </ul>
 <p><a id="x-28CLOG-3AINNER-WIDTH-20GENERIC-FUNCTION-29"></a>
 <a id="CLOG:INNER-WIDTH%20GENERIC-FUNCTION"></a></p>
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:INNER-WIDTH%20GENERIC-FUNCTION" >INNER-WIDTH</a></span></span> <span class="locative-args">CLOG-WINDOW</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:INNER-WIDTH%20GENERIC-FUNCTION" >INNER-WIDTH</a></span></span> <span class="locative-args">CLOG-ELEMENT</span></span></p>
 
-<p>Get/Setf inner width of browser window.</p></li>
+<p>Get/Setf inner-width. Includes padding but not border.</p></li>
 </ul>
 <p><a id="x-28CLOG-3AOUTER-HEIGHT-20GENERIC-FUNCTION-29"></a>
 <a id="CLOG:OUTER-HEIGHT%20GENERIC-FUNCTION"></a></p>
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:OUTER-HEIGHT%20GENERIC-FUNCTION" >OUTER-HEIGHT</a></span></span> <span class="locative-args">CLOG-WINDOW</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:OUTER-HEIGHT%20GENERIC-FUNCTION" >OUTER-HEIGHT</a></span></span> <span class="locative-args">CLOG-ELEMENT</span></span></p>
 
-<p>Get/Setf outer height of browser window.</p></li>
+<p>Get outer-height. Includes padding and border but not
+margin.</p></li>
 </ul>
 <p><a id="x-28CLOG-3AOUTER-WIDTH-20GENERIC-FUNCTION-29"></a>
 <a id="CLOG:OUTER-WIDTH%20GENERIC-FUNCTION"></a></p>
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:OUTER-WIDTH%20GENERIC-FUNCTION" >OUTER-WIDTH</a></span></span> <span class="locative-args">CLOG-WINDOW</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:OUTER-WIDTH%20GENERIC-FUNCTION" >OUTER-WIDTH</a></span></span> <span class="locative-args">CLOG-ELEMENT</span></span></p>
 
-<p>Get/Setf outer width of browser window.</p></li>
+<p>Get outer-width. Includes padding and border
+but not margin.</p></li>
 </ul>
 <p><a id="x-28CLOG-3AOUTER-HEIGHT-TO-MARGIN-20GENERIC-FUNCTION-29"></a>
 <a id="CLOG:OUTER-HEIGHT-TO-MARGIN%20GENERIC-FUNCTION"></a></p>
@@ -2418,7 +2472,8 @@ is set to :table-cell or for labels on form elements.</p></li>
 <ul>
 <li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:REMOVE-FROM-DOM%20GENERIC-FUNCTION" >REMOVE-FROM-DOM</a></span></span> <span class="locative-args">CLOG-ELEMENT</span></span></p>
 
-<p>Remove CLOG-Element from the DOM.</p></li>
+<p>Remove CLOG-Element from the DOM. If object
+is not stored in connection-data will become subject to browser-gc requests.</p></li>
 </ul>
 <p><a id="x-28CLOG-3AREMOVE-FROM-CLOG-20GENERIC-FUNCTION-29"></a>
 <a id="CLOG:REMOVE-FROM-CLOG%20GENERIC-FUNCTION"></a></p>
@@ -2440,12 +2495,11 @@ on browser.</p></li>
 <ul>
 <li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:BROWSER-GC%20GENERIC-FUNCTION" >BROWSER-GC</a></span></span> <span class="locative-args">CLOG-ELEMENT</span></span></p>
 
-<p>Remove any clog cache items on browser not in DOM.
+<p>Finalize any clog cache items on browser not in DOM.
 If clog-connect:*browser-gc-on-ping* is set this is done during websocket pings.
-Care should be taken as any clog-element not placed in the DOM will be deleted
-on the browser side (for examle :auto-place nil set and not later placed.)
 The main use is when clearing out large amounts of DOM objects not using CLOG
-destroy.</p></li>
+destroy. Any object stored in the connection-data will not be garbage collected
+on the browser or Lisp side until <a href="#CLOG:DESTROY%20GENERIC-FUNCTION" title="CLOG:DESTROY GENERIC-FUNCTION"><code>DESTROY</code></a>.</p></li>
 </ul>
 <p><a id="x-28CLOG-3ACLICK-20GENERIC-FUNCTION-29"></a>
 <a id="CLOG:CLICK%20GENERIC-FUNCTION"></a></p>
@@ -2495,7 +2549,7 @@ used for DOM tree walking or other throw away purposes.</p></li>
 <p><a id="x-28CLOG-3AFIRST-CHILD-20GENERIC-FUNCTION-29"></a>
 <a id="CLOG:FIRST-CHILD%20GENERIC-FUNCTION"></a></p>
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:FIRST-CHILD%20GENERIC-FUNCTION" >FIRST-CHILD</a></span></span> <span class="locative-args">CLOG-ELEMENT</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:FIRST-CHILD%20GENERIC-FUNCTION" >FIRST-CHILD</a></span></span> <span class="locative-args">CLOG-ELEMENT &amp;KEY NO-ATTACH</span></span></p>
 
 <p>Traverse to first child element. If Child does not have an
 html id than Element_Type will have an ID of undefined and therefore attached
@@ -2504,7 +2558,7 @@ to no actual <code>HTML</code> element.</p></li>
 <p><a id="x-28CLOG-3APREVIOUS-SIBLING-20GENERIC-FUNCTION-29"></a>
 <a id="CLOG:PREVIOUS-SIBLING%20GENERIC-FUNCTION"></a></p>
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:PREVIOUS-SIBLING%20GENERIC-FUNCTION" >PREVIOUS-SIBLING</a></span></span> <span class="locative-args">CLOG-ELEMENT</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:PREVIOUS-SIBLING%20GENERIC-FUNCTION" >PREVIOUS-SIBLING</a></span></span> <span class="locative-args">CLOG-ELEMENT &amp;KEY NO-ATTACH</span></span></p>
 
 <p>Traverse to previous sibling element.
 If Child does not have an html id than Element_Type will have an ID of
@@ -2513,11 +2567,21 @@ undefined and therefore attached to no actual <code>HTML</code> elemen.</p></li>
 <p><a id="x-28CLOG-3ANEXT-SIBLING-20GENERIC-FUNCTION-29"></a>
 <a id="CLOG:NEXT-SIBLING%20GENERIC-FUNCTION"></a></p>
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:NEXT-SIBLING%20GENERIC-FUNCTION" >NEXT-SIBLING</a></span></span> <span class="locative-args">CLOG-ELEMENT</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:NEXT-SIBLING%20GENERIC-FUNCTION" >NEXT-SIBLING</a></span></span> <span class="locative-args">CLOG-ELEMENT &amp;KEY NO-ATTACH</span></span></p>
 
 <p>Traverse to next sibling element. If Child does not have an
 html id than Element_Type will have an ID of undefined and therefore attached
 to no actual <code>HTML</code> element.</p></li>
+</ul>
+<p><a id="x-28CLOG-3ALIST-OF-CHILDREN-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG:LIST-OF-CHILDREN%20GENERIC-FUNCTION"></a></p>
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:LIST-OF-CHILDREN%20GENERIC-FUNCTION" >LIST-OF-CHILDREN</a></span></span> <span class="locative-args">CLOG-ELEMENT &amp;KEY NO-ATTACH</span></span></p>
+
+<p>Returns a list of child clog-element objects. If no-attach
+is t they are only functional if there previously was an attach or was created
+by CLOG, i.e. if just walking the DOM of existing clog-objects these are
+like pointers.</p></li>
 </ul>
 <p><a id="x-28CLOG-3A-40CLOG-ELEMENT-COMMON-20MGL-PAX-3ASECTION-29"></a>
 <a id="CLOG:@CLOG-ELEMENT-COMMON%20MGL-PAX:SECTION"></a></p>
@@ -3750,6 +3814,17 @@ is set to nil.</p></li>
 
 <p>CLOG Panel Box Layout Objects.</p></li>
 </ul>
+<p><a id="x-28CLOG-3AENVELOPE-PANEL-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG:ENVELOPE-PANEL%20GENERIC-FUNCTION"></a></p>
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:ENVELOPE-PANEL%20GENERIC-FUNCTION" >ENVELOPE-PANEL</a></span></span> <span class="locative-args">CLOG-ELEMENT PANEL WIDTH HEIGHT &amp;KEY CLASS STYLE UNITS</span></span></p>
+
+<p>Create a panel of <code>WIDTH</code> and <code>HEIGHT</code> with :relative
+positioning to envelope <code>PANEL</code>. This allows any type of clog-panel (including
+those created by CLOG Builder, to be positioned within <a href="#CLOG:DISPLAY%20GENERIC-FUNCTION" title="CLOG:DISPLAY GENERIC-FUNCTION"><code>DISPLAY</code></a> :flex or
+:grid layouts or otherwise treat the panel as an inline object.
+Returns envelope-panel</p></li>
+</ul>
 <p><a id="x-28CLOG-3ACENTER-CHILDREN-20GENERIC-FUNCTION-29"></a>
 <a id="CLOG:CENTER-CHILDREN%20GENERIC-FUNCTION"></a></p>
 <ul>
@@ -3757,13 +3832,15 @@ is set to nil.</p></li>
 
 <p>Align children of <code>CLOG-ELEMENT</code> <code>VERTICAL</code> (default t)
 and/or <code>HORIZONTAL</code> (default t). This will set the <a href="#CLOG:DISPLAY%20GENERIC-FUNCTION" title="CLOG:DISPLAY GENERIC-FUNCTION"><code>DISPLAY</code></a> property of
-<code>CLOG-ELEMENT</code> to <code>:FLEX</code>. Note: if children of clog-element are using
-:absolute positioning they will not flow with flex and will not be
-centered. Using :relative wrapped in div with :static positioning will
-work. For example in CLOG Builder the panel is created in a static
-positioning panel, if all the contents are positioning in a div
-aboslute and that div is relative the expected bahvior of a centered
-panel will happen.</p></li>
+<code>CLOG-ELEMENT</code> to <code>:FLEX</code>.</p>
+
+<p>Note: if children of <code>CLOG-ELEMENT</code> are using :absolute positioning they will
+not flow with flex and will not be centered. Instead use :relative positioning.</p>
+
+<p>Note: to use with CLOG Buider Panels - use <a href="#CLOG:ENVELOPE-PANEL%20GENERIC-FUNCTION" title="CLOG:ENVELOPE-PANEL GENERIC-FUNCTION"><code>ENVELOPE-PANEL</code></a> or in the builder
+create a div at top:0 left:0 and size the div to be the boundaries of your panel
+to be centered, then set the positioning on the panel to :relative.
+Add all controls as child of that div.</p></li>
 </ul>
 <p><a id="x-28CLOG-3ACREATE-PANEL-BOX-LAYOUT-20FUNCTION-29"></a>
 <a id="CLOG:CREATE-PANEL-BOX-LAYOUT%20FUNCTION"></a></p>
@@ -6656,7 +6733,7 @@ clog-body. If main-menu add as main menu bar.</p></li>
 <p><a id="x-28CLOG-GUI-3ACREATE-GUI-MENU-DROP-DOWN-20GENERIC-FUNCTION-29"></a>
 <a id="CLOG-GUI:CREATE-GUI-MENU-DROP-DOWN%20GENERIC-FUNCTION"></a></p>
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-GUI:CREATE-GUI-MENU-DROP-DOWN%20GENERIC-FUNCTION" >CREATE-GUI-MENU-DROP-DOWN</a></span></span> <span class="locative-args">CLOG-GUI-MENU-BAR &amp;KEY CONTENT CLASS HTML-ID</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG-GUI:CREATE-GUI-MENU-DROP-DOWN%20GENERIC-FUNCTION" >CREATE-GUI-MENU-DROP-DOWN</a></span></span> <span class="locative-args">CLOG-GUI-MENU-BAR &amp;KEY CONTENT CLASS HTML-ID RIGHT-ALIGN</span></span></p>
 
 <p>Attached a menu bar drop-down to a <code>CLOG-GUI-MENU-BAR</code></p></li>
 </ul>
@@ -8065,30 +8142,32 @@ no redirection of browser takes place. <code>REWRITE-URL</code> must be same dom
 <p><a id="x-28CLOG-3AINNER-HEIGHT-20GENERIC-FUNCTION-29"></a>
 <a id="CLOG:INNER-HEIGHT%20GENERIC-FUNCTION"></a></p>
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:INNER-HEIGHT%20GENERIC-FUNCTION" >INNER-HEIGHT</a></span></span> <span class="locative-args">CLOG-WINDOW</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:INNER-HEIGHT%20GENERIC-FUNCTION" >INNER-HEIGHT</a></span></span> <span class="locative-args">CLOG-ELEMENT</span></span></p>
 
-<p>Get/Setf inner height of browser window.</p></li>
+<p>Get/Setf inner-height. Includes padding but not border.</p></li>
 </ul>
 <p><a id="x-28CLOG-3AINNER-WIDTH-20GENERIC-FUNCTION-29"></a>
 <a id="CLOG:INNER-WIDTH%20GENERIC-FUNCTION"></a></p>
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:INNER-WIDTH%20GENERIC-FUNCTION" >INNER-WIDTH</a></span></span> <span class="locative-args">CLOG-WINDOW</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:INNER-WIDTH%20GENERIC-FUNCTION" >INNER-WIDTH</a></span></span> <span class="locative-args">CLOG-ELEMENT</span></span></p>
 
-<p>Get/Setf inner width of browser window.</p></li>
+<p>Get/Setf inner-width. Includes padding but not border.</p></li>
 </ul>
 <p><a id="x-28CLOG-3AOUTER-HEIGHT-20GENERIC-FUNCTION-29"></a>
 <a id="CLOG:OUTER-HEIGHT%20GENERIC-FUNCTION"></a></p>
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:OUTER-HEIGHT%20GENERIC-FUNCTION" >OUTER-HEIGHT</a></span></span> <span class="locative-args">CLOG-WINDOW</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:OUTER-HEIGHT%20GENERIC-FUNCTION" >OUTER-HEIGHT</a></span></span> <span class="locative-args">CLOG-ELEMENT</span></span></p>
 
-<p>Get/Setf outer height of browser window.</p></li>
+<p>Get outer-height. Includes padding and border but not
+margin.</p></li>
 </ul>
 <p><a id="x-28CLOG-3AOUTER-WIDTH-20GENERIC-FUNCTION-29"></a>
 <a id="CLOG:OUTER-WIDTH%20GENERIC-FUNCTION"></a></p>
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:OUTER-WIDTH%20GENERIC-FUNCTION" >OUTER-WIDTH</a></span></span> <span class="locative-args">CLOG-WINDOW</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:OUTER-WIDTH%20GENERIC-FUNCTION" >OUTER-WIDTH</a></span></span> <span class="locative-args">CLOG-ELEMENT</span></span></p>
 
-<p>Get/Setf outer width of browser window.</p></li>
+<p>Get outer-width. Includes padding and border
+but not margin.</p></li>
 </ul>
 <p><a id="x-28CLOG-3AX-OFFSET-20GENERIC-FUNCTION-29"></a>
 <a id="CLOG:X-OFFSET%20GENERIC-FUNCTION"></a></p>
@@ -8107,16 +8186,16 @@ no redirection of browser takes place. <code>REWRITE-URL</code> must be same dom
 <p><a id="x-28CLOG-3ALEFT-20GENERIC-FUNCTION-29"></a>
 <a id="CLOG:LEFT%20GENERIC-FUNCTION"></a></p>
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:LEFT%20GENERIC-FUNCTION" >LEFT</a></span></span> <span class="locative-args">CLOG-WINDOW</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:LEFT%20GENERIC-FUNCTION" >LEFT</a></span></span> <span class="locative-args">CLOG-ELEMENT</span></span></p>
 
-<p>Get/Setf browser x position.</p></li>
+<p>Get/Setf left (defaults to us :px units).</p></li>
 </ul>
 <p><a id="x-28CLOG-3ATOP-20GENERIC-FUNCTION-29"></a>
 <a id="CLOG:TOP%20GENERIC-FUNCTION"></a></p>
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:TOP%20GENERIC-FUNCTION" >TOP</a></span></span> <span class="locative-args">CLOG-WINDOW</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:TOP%20GENERIC-FUNCTION" >TOP</a></span></span> <span class="locative-args">CLOG-ELEMENT</span></span></p>
 
-<p>Get/Setf browser y postion.</p></li>
+<p>Get/Setf top (defaults to use :px units).</p></li>
 </ul>
 <p><a id="x-28CLOG-3APIXEL-RATIO-20GENERIC-FUNCTION-29"></a>
 <a id="CLOG:PIXEL-RATIO%20GENERIC-FUNCTION"></a></p>
