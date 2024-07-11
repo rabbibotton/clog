@@ -66,6 +66,10 @@ clog-builder window.")
      :accessor properties-list
      :initform nil
      :documentation "Property list in properties window")
+   (regex-prop
+     :accessor regex-prop
+     :initform ""
+     :documentation "regex for property list")
    (current-project
      :accessor current-project
      :initform *start-project*
