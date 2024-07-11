@@ -5,7 +5,7 @@
     (cond ((and (> (length item) 5)
                 (equalp (subseq item (- (length item) 5)) ".clog"))
             (if (or (eq method :tab)
-                 (and (not (eq method :here)) *open-external*))
+                 (and (not (eq method :here)) (or *open-external* *open-external-panels-always* )))
                 (on-new-builder-panel-ext panel :open-file item) ;; need ext for both
                 (on-new-builder-panel panel :open-file item)))
           (t

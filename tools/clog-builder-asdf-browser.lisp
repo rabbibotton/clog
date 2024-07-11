@@ -7,7 +7,7 @@
                                      :width 592 :height 435
                                      :client-movement *client-side-movement*))
          (panel (create-asdf-systems (window-content win))))
-    (when *open-external*
+    (when (or *open-external* *open-external-panels-always*)
       (setf (checkedp (ext-open-source panel)) t))
     (when *open-panels-as-popups*
       (setf (checkedp (pop-open-clog panel)) t))

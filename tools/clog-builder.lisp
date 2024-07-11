@@ -439,7 +439,7 @@ clog-builder window.")
                                                           (on-open-file obj))))
                               (create-gui-menu-item file  :content "New CLOG Panel Editor"                   :on-click
                                                     (lambda (obj)
-                                                      (if *open-external*
+                                                      (if (or *open-external* *open-external-panels-always*)
                                                           (on-new-builder-panel-ext obj)
                                                           (on-new-builder-panel obj))))
                               (create-gui-menu-item file  :content "New CLOG Panel Popup Editor"             :on-click 'on-new-builder-page)
@@ -706,6 +706,7 @@ clog-builder window.")
     (setf *open-external-source-in-popup* nil)
     (setf *open-panels-as-popups* nil)
     (setf *open-external-panels-in-popup* nil)
+    (setf *open-external-panels-always* nil)
     (setf *open-external* nil)
     (handler-case
         (uiop:run-program (list "./clogframe"

@@ -1072,13 +1072,13 @@ not a temporarily attached one when using select-control."
 
 (defun on-new-builder-page (obj)
   "Open new page"
-  (if *open-external*
+  (if (or *open-external* *open-external-panels-always*)
       (on-new-builder-panel-ext obj :open-ext t)
       (on-new-builder-panel obj :open-ext t)))
 
 (defun on-new-builder-basic-page (obj)
   "Menu item to open new basic HTML page"
-  (if *open-external*
+  (if (or *open-external* *open-external-panels-always*)
       (on-new-builder-panel-ext obj :open-ext :custom)
       (on-new-builder-panel obj :open-ext :custom)))
 
@@ -1086,7 +1086,7 @@ not a temporarily attached one when using select-control."
   (input-dialog obj "Boot file Name?"
                 (lambda (file)
                   (when file
-                    (if *open-external*
+                    (if (or *open-external* *open-external-panels-always*)
                         (on-new-builder-panel-ext obj :open-ext file)
                         (on-new-builder-panel obj :open-ext file))))))
 

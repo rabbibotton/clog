@@ -15,6 +15,8 @@
 (defparameter *password-protect* nil)
 ;; Open panels and files in new browser tabs by default
 (defparameter *open-external* nil)
+;; Force panels to open in new browser tabs
+(defparameter *open-external-panels-always* nil)
 ;; Use clog-popup and extend desktop to popups
 (defparameter *open-external-using-clog-popups* t)
 ;; Open files in browser popups instead of tabs if browser allows
