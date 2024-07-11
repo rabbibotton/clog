@@ -28,7 +28,8 @@ sbcl --userinit init --eval "(setf asdf:*compile-file-failure-behaviour* :warn)"
 
 and after first run can use run-ocicl.bat
 ```
-
+Note for Windows: unzip https://rabbibotton.github.io/clog/clogframe.zip for
+                  needed dlls in directory
 
 I N S T A L L
 =============
@@ -112,7 +113,8 @@ ocicl install clog
 ```
 
 Note for Windows: unzip https://rabbibotton.github.io/clog/clogframe.zip for
-                  needed dlls in directory
+                  needed dlls in directory. You may also need to add to sbcl
+                  --eval "(setf asdf:*compile-file-failure-behaviour* :warn)"
                   
 to use sbcl any time in your own ocicl world use:
 ```
@@ -127,5 +129,5 @@ and to start the builder in sbcl:
 ```
 
 If this is the new project a .asd file, first .lisp file and www directory
-will be created as well.
+will be created as well. For windows run-ocicl.bat also created.
 
