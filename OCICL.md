@@ -21,6 +21,14 @@ sbcl --userinit init --eval "(asdf:load-system :clog/tools)" --eval "(clog-tools
 ```
 (or replace ecl for sbcl)
 
+On Windows:
+
+```
+sbcl --userinit init --eval "(setf asdf:*compile-file-failure-behaviour* :warn)" --eval "(asdf:load-system :clog/tools)" --eval "(clog-tools:clog-builder :port 0 :app t)"
+
+and after first run can use run-ocicl.bat
+```
+
 
 I N S T A L L
 =============
