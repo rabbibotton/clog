@@ -11,9 +11,10 @@
                                      :keep-on-top t
                                      :width 400))
              (content (window-content win))
-             (control-list (create-table content)))
+             (control-list (create-table content :style "width:100%;")))
         (add-class content *builder-pallete-class*)
         (set-on-window-close win (lambda (obj)
+                                   (declare (ignore obj))
                                    (setf (control-properties-win app) nil)))
         (set-on-window-move win (lambda (obj)
                                   (setf (height obj) (height obj))))
@@ -53,9 +54,11 @@
                 (setf (inner-html table) "")
                 (browser-gc obj)
                 (let* ((tr (create-table-row table))
-                       (td (create-table-column tr :column-span 2))
+                       (td (create-table-column tr
+                                                :column-span 2))
                        (rx (create-form-element td :input
                                                 :value (regex-prop app)
+                                                :style "width:100%;"
                                                 :placeholder "regex search properties")))
                   (set-on-change rx (lambda (i)
                                       (setf (regex-prop app) (text-value i))
