@@ -87,8 +87,8 @@
           (window-focus win)))
       (when regex
         (focus (window-param win))
-        (js-execute win (format nil "~A.find('~A',{caseSensitive:false,regExp:true})"
-                                (clog-ace::js-ace (window-param win)) regex)))
+        (js-execute obj (format nil "~A.find({regExp:true,needle:'~A',caseSensitive:false})"
+                                (clog-ace::js-ace (window-param win)) (escape-string regex))))
       (when show-find
         (clog-ace:execute-command (window-param win) "find"))
       win)
