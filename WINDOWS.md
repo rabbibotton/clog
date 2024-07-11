@@ -3,6 +3,8 @@
 (For a simple "one step" non-emacs install see:
    https://github.com/rabbibotton/clog-win64-ez/releases)
 
+also see [Install and Using OCICL on all platforms](OCICL.md)
+
 1. Download and install rho-emacs:
 
    https://gchristensen.github.io/rho-emacs/
@@ -88,7 +90,6 @@ sbcl --eval '(ql:quickload :clog/tools)' --eval '(clog-tools:clog-builder)'
    /c/Program\ Files/rho-emacs/rho
 ```
    Run Slime - M-x slime
-
 
 
 NOTES for Windows:

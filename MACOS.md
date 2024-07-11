@@ -3,6 +3,8 @@
 (If you do not want emacs skip steps 1,2,6, and 7 and just use the
  CLOG Builder)
 
+also see [Install and Using OCICL on all platforms](OCICL.md)
+
 1. Install Emacs for Mac OS from - https://emacsformacosx.com/
 
 2. [optional] Add Emacs to your system's path by creating a

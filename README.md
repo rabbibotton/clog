@@ -19,7 +19,7 @@ embedded in a native application.)
 
 - [CLOG - Reference Manual](https://rabbibotton.github.io/clog/clog-manual.html)
 
-STATUS: CLOG and CLOG Builder 2.2 released. CLOG API Stable 4 years
+STATUS: CLOG and CLOG Builder 2.3 released. CLOG API Stable 4 years
 
 The CLOG Builder is in 100% portable Common Lisp using the CLOG Framework.
 
@@ -27,13 +27,15 @@ CLOG tech was invented (first in Ada) and has been running in commercial
 production code and productss since 2013 and in Common Lisp since 2022. CLOG
 is used in commerical products, websites, and other opensource projects.
 
-CLOG is being actively extended, however the core API is stable and proven,
-the CLOG Builder is rich in features and is a full featured IDE for Common Lisp
-and web development and includes a GUI Builder for the CLOG Framework.
+CLOG is being actively extended, the core API is stable and proven,
+the CLOG Builder is rich in features and is a full featured general purpose
+IDE for Common Lisp and web development (including support for working on
+JavaScript, HTML and more) and includes a GUI Builder for the CLOG Framework.
 
 Check the github discussion boards for the latest on the project and support.
 
 Consider sponsoring work on CLOG at https://github.com/sponsors/rabbibotton
+it really does help!
 
 Some potential applications for CLOG:
 
@@ -58,20 +60,32 @@ CLOG is developed with ECL, CCL and SBCL, it is tested fairly
 regulary on Linux, Windows, Android, Rasperry Pi, and Mac. It
 is also know to work with the commercial Common Lisps as well.
 
-To install Common Lisp and CLOG:
+CLOG works with QuickLisp and with OCICL distribution for builds.
+
+To install Common Lisp with QuikLisp:
 
 * [Install Common-Lisp for MacOS](MACOS.md)
 * [Install Common-Lisp for Linux](LINUX.md)
 * [Install Common-Lisp For Android (Termux)](ANDROID-TERMUX.md)
 * [Install Common-Lisp for Win64](WINDOWS.md)
 
-For **Windows** users there is an easy install for full CL and CLOG -
-https://github.com/rabbibotton/clog-win64-ez/releases
-Unzip, double click setup.bat and then drag the resulting builder.exe to your
-application bar or double click. Update regularly by running update.bat
-If you change directories you need to run make.bat or update.bat
-You can also run frame.bat to produce a version of builder that does not use
-the browser.
+For more advanced users:
+
+* [Install and Using OCICL on all platforms](OCICL.md)
+
+For those new to Common Lisp or just want to quickly try CLOG use ther
+simple _EZ_ standalone versions:
+
+* https://github.com/rabbibotton/clog-win64-ez/releases
+* https://github.com/rabbibotton/clog-linux-ez
+* https://github.com/rabbibotton/clog-linux-arm-ez
+* https://github.com/rabbibotton/clog-mac-ez
+
+Unzip, double click setup.bat or ./setup
+Run builder.exe or ./builder
+Update (almost daily :) use update.bat or ./update
+
+As QuickLisp most frequently used - here are instructions:
 
 CLOG v1 is in QuickLisp (ql:quickload :clog), therefore one should
 add the UltraLisp distribution to use CLOG v2 (alternatively use git)
@@ -91,43 +105,23 @@ You still need to update often the UltraLisp and QuickLisp distros with:
 If using the CLOG Builder Options -> Update CLOG Builder will do this for you.
 
 
-To get started load CLOG and then can load and run the builder:
+Q U I C K   S T A R T
+=====================
+
+
+1) To get started load CLOG and then can load and run the builder:
 
 ```
-(ql:quickload :clog/tools)
-(clog-tools:clog-builder)
+sbcl --eval "(ql:quickload :clog/tools)" --eval "(clog-tools:clog-builder)"
+```
+or if using OCICL see [Install and Using OCICL on all platforms](OCICL.md)
+or if using emacs M-x slime then (ql:quickload :clog/tools)(clog-tools:clog-builder)
+
+
+2) In a REPL in the builder Tools -> CLOG Builder REPL
+(can _also_ do all in the slime/sly REPL in emacs)
 
 ```
-
-You can also just run from the command line run-builder or run-builder.bat
-
-To use the git versions CLOG, place git clone into ~/common-lisp or
-a findable source directory, i.e.
-[ ``(push #P"path/to/dir/of/projects" ql:*local-project-directories*)`` ]
-
-For git (you also need the clog builder plugins clog-ace and clog-terminal
-for the builder or use the UltraLisp versions):
-
-```
-cd ~/common-lisp
-git clone https://github.com/rabbibotton/clog.git
-git clone https://github.com/rabbibotton/clog-ace.git
-git clone https://github.com/rabbibotton/clog-terminal.git
-```
-
-Update git clones with:
-
-```
-git pull
-```
-
-
-1. Start emacs then M-x slime (or just run sbcl at the command line or use the
-   CLOG Buider REPL Tools -> CLOG Builder Repl)
-2. In the REPL, run:
-
-```
-CL-USER> (ql:quickload :clog) ; if not already loaded
 CL-USER> (clog:run-tutorial 1)
 ```
 
@@ -146,17 +140,13 @@ To see where the source, tutorial and demo files are:
 CL-USER> (clog:clog-install-dir)
 ```
 
+Also in CLOG Builder use HELP -> Tutorials Dir
+
+
 You can the run the demos with:
 
 ```
 CL-USER> (clog:run-demo 1)
-```
-
-The CLOG Builder tool can be run with:
-
-```
-CL-USER> (ql:quickload :clog/tools)
-CL-USER> (clog-tools:clog-builder)
 ```
 
 You can also open a "clog-repl" browser window to play
@@ -172,7 +162,7 @@ CLOG-USER> (create-div *body* :content "Hello World!")
 The clog-repl URL is http://127.0.0.1:8080/repl ``*body*`` will always refer
 to the last access of that URL.
 
-To open a browser with the CLOG manual (or in the builder it is under Help):
+To open the CLOG manual (or in the builder it is under Help):
 
 ```
 CL-USER> (clog:open-manual)

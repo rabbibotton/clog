@@ -1,6 +1,8 @@
 ## Installing Common Lisp + CLOG Builder on Linux (all platforms)
 
-(For emacs based Linux install - https://lisp-lang.org/learn/getting-started/)
+For emacs based Linux install - https://lisp-lang.org/learn/getting-started/)
+
+Also see another alternative [Install and Using OCICL on all platforms](OCICL.md)
 
 1. Install sbcl, sqlite and openssh (modify for your OS)
 
