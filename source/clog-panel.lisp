@@ -150,11 +150,11 @@ nil. Resizable only works if overflow is set to :SCROLL"))
 
 (defgeneric envelope-panel (clog-element panel width height
                             &key class style units)
-  (:documentation "Create a panel of WIDTH and HEIGHT with :relative
-positioning to envelope PANEL. This allows any type of clog-panel (including
-those created by CLOG Builder, to be positioned within DISPLAY :flex or
-:grid layouts or otherwise treat the panel as an inline object.
-Returns envelope-panel"))
+  (:documentation "Create a envelope of WIDTH and HEIGHT with :relative
+positioning to envelope PANEL. The envelope is a child of CLOG-ELEMENT.
+This allows any type of clog-panel (including those created by CLOG Builder,
+to be positioned within a DISPLAY :flex or :grid layout or otherwise treat the
+panel as an inline object. Returns the new envelope of PANEL"))
 
 (defmethod envelope-panel ((obj clog-element) (panel clog-element)
                            width height
@@ -164,6 +164,21 @@ Returns envelope-panel"))
                                           width units height units style))))
     (place-inside-top-of e panel)
     e))
+
+;;;;;;;;;;;;;;;;;;;;
+;; envelope-panel ;;
+;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric envelope-panel* (panel width height
+                             &key class style units)
+  (:documentation "Like envelope panel, but usses the panels parent as the
+parent of the envelope. Returns the new envelope of PANEL"))
+
+(defmethod envelope-panel* ((panel clog-element)
+                            width height
+                            &key (units :px) class (style ""))
+  (envelope-panel (parent panel) panel width height
+                  :units units :class class :style style))
 
 ;;;;;;;;;;;;;;;;;;;;;
 ;; center-children ;;

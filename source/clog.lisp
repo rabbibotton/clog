@@ -650,6 +650,7 @@ embedded in a native template application.)"
   "CLOG-Panel-Box-Layout"
   (clog-panel-box-layout   class)
   (envelope-panel          generic-function)
+  (envelope-panel*         generic-function)
   (center-children         generic-function)
   (create-panel-box-layout function)
   (center-panel            generic-function)

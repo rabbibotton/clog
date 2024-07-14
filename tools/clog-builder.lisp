@@ -679,8 +679,12 @@ clog-builder window.")
   (if project
       (progn
         (setf *start-project* (string-downcase (format nil "~A" project)))
-        (projects-load *start-project*)
-        (setf static-root (merge-pathnames "./www/" (format nil "~A" (asdf:system-source-directory project)))))
+        (handler-case
+            (progn
+              (projects-load (format nil "~A/tools" *start-project*))
+              (setf static-root (merge-pathnames "./www/" (format nil "~A" (asdf:system-source-directory project)))))
+          (error ()
+            (projects-load *start-project*))))
       (setf *start-project* nil))
   (when dir
     (setf *start-dir* dir))

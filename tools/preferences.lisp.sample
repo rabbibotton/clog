@@ -5,7 +5,7 @@
 ;; (pushnew #P"/path/of/projects" ql:*local-project-directories* :test #'equalp)
 ;;
 ;; System to be available but not listed:
-;; (pushnew #P"/path/to/a/projects" asdf:*central-registry* :test #'equalp)
+;; (pushnew #P"/path/to/a/project" asdf:*central-registry* :test #'equalp)
 
 ;; Preferences loaded on next call to clog-tools:clog-builder or [Eval All]
 

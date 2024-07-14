@@ -7,17 +7,21 @@ add them to your asd file and will be downloaded as needed. A simple
 run of "ocicl latest" updates your project dependecies.
 
 Once installed either in an empty new project dir or existing project do:
-(Do not call your project clog, creates asdf circular dependecies.)
+(Do not call your project clog, that creates an asdf circular dependecy.)
 
 ```
 ocicl setup > init
 ocicl install clog
 ```
+Note for Windows: unzip https://rabbibotton.github.io/clog/clogframe.zip for
+                  needed dlls in directory
 
 Then start to dev with the CLOG Builder:
 
 ```
 sbcl --userinit init --eval "(asdf:load-system :clog/tools)" --eval "(clog-tools:clog-builder :port 0 :app t)"
+
+and after first run can use "bash run-ocicl" (or chmod 775 run-oicl to make the batch file executable)
 ```
 (or replace ecl for sbcl)
 
@@ -26,10 +30,14 @@ On Windows:
 ```
 sbcl --userinit init --eval "(setf asdf:*compile-file-failure-behaviour* :warn)" --eval "(asdf:load-system :clog/tools)" --eval "(clog-tools:clog-builder :port 0 :app t)"
 
-and after first run can use run-ocicl.bat
+and after first run can use "run-ocicl.bat"
 ```
-Note for Windows: unzip https://rabbibotton.github.io/clog/clogframe.zip for
-                  needed dlls in directory
+
+Update ocicl *frequenlty* with:
+
+```
+ocicl latest
+```
 
 I N S T A L L
 =============
@@ -73,7 +81,7 @@ Create a dir for example projects and cd to it then do:
 git clone https://github.com/ocicl/ocicl.git
 ```
 
-the cd in to ocicl and run:
+the cd in to ocicl and run to create ocicl in ~/.local/bin:
 
 ```
 sbcl --load setup.lisp
@@ -111,12 +119,13 @@ cd to projects/ctest
 ocicl setup > init
 ocicl install clog
 ```
+Note: run frequenlty oclicl latest to get the latest version of clog
 
 Note for Windows: unzip https://rabbibotton.github.io/clog/clogframe.zip for
-                  needed dlls in directory. You may also need to add to sbcl
+                  needed dlls in directory. You will also need to add to sbcl
                   --eval "(setf asdf:*compile-file-failure-behaviour* :warn)"
-                  
-to use sbcl any time in your own ocicl world use:
+
+To use sbcl any time in your own ocicl world use:
 ```
 sbcl --userinit init
 ```
@@ -128,6 +137,13 @@ and to start the builder in sbcl:
 (clog-tools:clog-builder)
 ```
 
-If this is the new project a .asd file, first .lisp file and www directory
-will be created as well. For windows run-ocicl.bat also created.
+If this is the new project an .asd file, first .lisp file and www directory
+will be created as well. Batch files that will use your asd files to load
+plugins are also configured run-ocicl.bat / run-ocicl and run-ql.bat / run-ql
+are also created.
 
+Update ocicl frequenlty with:
+
+```
+ocicl latest
+```

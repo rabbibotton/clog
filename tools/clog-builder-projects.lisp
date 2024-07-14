@@ -276,17 +276,19 @@
   (projects-load sys))
 
 (defun projects-add-plugin (panel sys)
-  (input-dialog panel (format nil "Enter plugin name (without /tools), ~
-                       plugin will be added to the runtime and designtime:")
-                (lambda (result)
-                  (when result
-                    (let* ((s (format nil "~A/tools" sys)))
-                      (add-dep-to-defsystem s (format nil "~A/tools" result))
-                      (projects-load s))
-                    (add-dep-to-defsystem sys result)
-                    (projects-load sys)
-                    (projects-populate panel)))
-                :height 250))
+  (let ((*default-title-class*      *builder-title-class*)
+        (*default-border-class*     *builder-border-class*))
+    (input-dialog panel (format nil "Enter plugin name (without /tools), ~
+                                     plugin will be added to the runtime and designtime:")
+                  (lambda (result)
+                    (when result
+                      (let* ((s (format nil "~A/tools" sys)))
+                        (add-dep-to-defsystem s (format nil "~A/tools" result))
+                        (projects-load s))
+                      (add-dep-to-defsystem sys result)
+                      (projects-load sys)
+                      (projects-populate panel)))
+                  :height 250)))
 
 (defun add-dep-to-defsystem (sys file)
   (let ((fname    (asdf:system-source-file (asdf:find-system sys)))
@@ -324,42 +326,46 @@
           (pprint n s))))))
 
 (defun projects-add-lisp (panel sys)
-  (Input-dialog panel "Enter lisp component name (with out .lisp):"
-                (lambda (result)
-                  (when result
-                    (let ((path (asdf:component-pathname
-                                 (asdf:find-system sys))))
-                      (write-file "" (format nil "~A~A.lisp"
-                                             path result)
-                                  :action-if-exists nil)
-                      (add-file-to-defsystem sys result :file)
-                      (projects-load sys)
-                      (projects-populate panel))))
-                :height 230)
-  (projects-load sys))
+  (let ((*default-title-class*      *builder-title-class*)
+        (*default-border-class*     *builder-border-class*))
+    (Input-dialog panel "Enter lisp component name (with out .lisp):"
+                  (lambda (result)
+                    (when result
+                      (let ((path (asdf:component-pathname
+                                    (asdf:find-system sys))))
+                        (write-file "" (format nil "~A~A.lisp"
+                                               path result)
+                                    :action-if-exists nil)
+                        (add-file-to-defsystem sys result :file)
+                        (projects-load sys)
+                        (projects-populate panel))))
+                  :height 230)
+    (projects-load sys)))
 
 (defun projects-add-clog (panel sys)
-  (input-dialog panel (format nil "Enter clog component name (with out .clog), ~
-                       a lisp component will also be created in the runtime system:")
-                (lambda (result)
-                  (when result
-                    (let* ((s (format nil "~A/tools" sys))
-                           (path (asdf:component-pathname
-                                  (asdf:find-system s))))
-                      (write-file "" (format nil "~A~A.clog"
-                                             path result)
-                                  :action-if-exists nil)
-                      (add-file-to-defsystem s result :clog-file)
-                      (projects-load s))
-                    (let ((path (asdf:component-pathname
-                                 (asdf:find-system sys))))
-                      (write-file "" (format nil "~A~A.lisp"
-                                             path result)
-                                  :action-if-exists nil)
-                      (add-file-to-defsystem sys result :file)
-                      (projects-load sys)
-                      (projects-populate panel))))
-                :height 250))
+  (let ((*default-title-class*      *builder-title-class*)
+        (*default-border-class*     *builder-border-class*))
+    (input-dialog panel (format nil "Enter clog component name (with out .clog), ~
+                                     a lisp component will also be created in the runtime system:")
+                  (lambda (result)
+                    (when result
+                      (let* ((s (format nil "~A/tools" sys))
+                             (path (asdf:component-pathname
+                                     (asdf:find-system s))))
+                        (write-file "" (format nil "~A~A.clog"
+                                               path result)
+                                    :action-if-exists nil)
+                        (add-file-to-defsystem s result :clog-file)
+                        (projects-load s))
+                      (let ((path (asdf:component-pathname
+                                    (asdf:find-system sys))))
+                        (write-file "" (format nil "~A~A.lisp"
+                                               path result)
+                                    :action-if-exists nil)
+                        (add-file-to-defsystem sys result :file)
+                        (projects-load sys)
+                        (projects-populate panel))))
+                  :height 250)))
 
 (defun add-file-to-defsystem (system file ftype)
   (let ((fname    (asdf:system-source-file (asdf:find-system system)))
