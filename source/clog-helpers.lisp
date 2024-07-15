@@ -110,7 +110,7 @@ set (logging to browser console) in the default debug.html boot-file.
 clog-web and clog-gui are initialized and if use-clog-debugger it set to
 true it is initialized and this repl window used as default clog debug display
 and debugger display for clog events."
-  (unless *clog-running*
+  (unless clog-connection:*clog-running*
     (initialize nil :boot-file boot-file :port port))
   (set-on-new-window (lambda (body)
                        (debug-mode body)

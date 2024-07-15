@@ -44,6 +44,15 @@ See macro with-connection-cache.")
   (:documentation "CLOG objects (clog-obj) encapsulate the connection between
 lisp and an HTML DOM element."))
 
+;;;;;;;;;;;;;;;;;;
+;; print-object ;;
+;;;;;;;;;;;;;;;;;;
+
+(defmethod print-object ((obj clog-obj) stream)
+      (print-unreadable-object (obj stream :type t)
+        (with-slots (connection-id html-id) obj
+          (format stream "connection-id: ~a html-id: ~a" connection-id html-id))))
+
 ;;;;;;;;;;;;;;;;;;;
 ;; create-parent ;;
 ;;;;;;;;;;;;;;;;;;;
