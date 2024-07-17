@@ -2416,43 +2416,51 @@
    '(:name    "Centered Panel Project"
      :code    "nbp"
      :type    :system
+     :common  "templates/common/"
      :www     "templates/www/"
      :loc     "templates/projects/clog-panel/")
    '(:name    "Full browser Panel Project"
      :code    "nfp"
      :type    :system
+     :common  "templates/common/"
      :www     "templates/www/"
      :loc     "templates/projects/full-screen/")
    '(:name    "CLOG-GUI MDI Panel Project"
      :code    "nmp"
      :type    :system
+     :common  "templates/common/"
      :www     "templates/www/"
      :loc     "templates/projects/clog-gui-panel/")
    '(:name    "CLOG-GUI SDI Panel Project"
      :code    "nsp"
      :type    :system
+     :common  "templates/common/"
      :www     "templates/www/"
      :loc     "templates/projects/clog-gui-sdi/")
    '(:name    "CLOG - General Projects"
      :code    :group)
-   '(:name    "Basic HTML Project"
+   '(:name    "Basic Project"
      :code    "ncp"
      :type    :system
+     :common  "templates/common/"
      :www     "templates/www/"
      :loc     "templates/projects/clog/")
    '(:name    "CLOG-GUI Project"
      :code    "ncgp"
      :type    :system
+     :common  "templates/common/"
      :www     "templates/www/"
      :loc     "templates/projects/clog-gui/")
    '(:name    "CLOG-WEB Project"
      :code    "ncwp"
      :type    :system
+     :common  "templates/common/"
      :www     "templates/www/"
      :loc     "templates/projects/clog-web/")
    '(:name    "CLOG-WEB-SITE Project"
      :code    "ncws"
      :type    :system
+     :common  "templates/common/"
      :www     "templates/www/"
      :loc     "templates/projects/clog-web-site/")
    '(:name    "CLOG/CLOG Builder - Extension Projects"
@@ -2460,6 +2468,7 @@
    '(:name    "CLOG/CLOG Builder Plugin Project"
      :code    "ncplug"
      :type    :system
+     :common  "templates/common/"
      :www     "templates/www/"
      :loc     "templates/projects/clog-plugin/")
    '(:name    "General Common Lisp Applications"
@@ -2467,4 +2476,5 @@
    '(:name    "Console Application"
      :code    "nca"
      :type    :system
+     :common  "templates/common/"
      :loc     "templates/projects/console/")))

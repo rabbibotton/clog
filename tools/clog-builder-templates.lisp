@@ -54,19 +54,20 @@ create-div's"
                                              src-file out-file)))))))))
 
 (defun fill-template (code dir fname)
-  (let* ((tmpl-rec  (find-if (lambda (x)
-                               (equal (getf x :code) code))
-                             *supported-templates*))
-         (start-dir (format nil "~A~A"
-                            (asdf:system-source-directory :clog)
-                            (getf tmpl-rec :loc)))
-         (www-dir   (format nil "~A~A"
-                            (asdf:system-source-directory :clog)
-                            (getf tmpl-rec :www))))
-    (format t "Template copy ~A with www ~A to ~A~%"
-            start-dir
-            www-dir
-            dir)
+  (let* ((tmpl-rec   (find-if (lambda (x)
+                                (equal (getf x :code) code))
+                              *supported-templates*))
+         (start-dir  (format nil "~A~A"
+                             (asdf:system-source-directory :clog)
+                             (getf tmpl-rec :loc)))
+         (common-dir (format nil "~A~A"
+                             (asdf:system-source-directory :clog)
+                             (getf tmpl-rec :common)))
+         (www-dir    (format nil "~A~A"
+                             (asdf:system-source-directory :clog)
+                             (getf tmpl-rec :www))))
+    (when (getf tmpl-rec :common)
+      (template-copy fname common-dir dir :base-dir nil))
     (template-copy fname start-dir dir :base-dir nil)
     (when (getf tmpl-rec :www)
       (template-copy fname www-dir dir :base-dir nil))
@@ -86,6 +87,9 @@ create-div's"
          (start-dir (format nil "~A~A"
                             (asdf:system-source-directory :clog)
                             (getf tmpl-rec :loc)))
+         (common-dir (format nil "~A~A"
+                             (asdf:system-source-directory :clog)
+                             (getf tmpl-rec :common)))
          (www-dir   (format nil "~A~A"
                             (asdf:system-source-directory :clog)
                             (getf tmpl-rec :www))))
@@ -109,18 +113,20 @@ create-div's"
                                         (clog-gui:alert-toast (win panel) "Cancel" "Canceled - Project directory exists")
                                         (window-close (win panel)))
                                        (t
-                                        (template-copy sys-name start-dir filename :panel (window-content (win panel)))
-                                        (when (getf tmpl-rec :www)
-                                          (template-copy sys-name www-dir filename :panel (window-content (win panel))))
-                                        (asdf:clear-source-registry)
-                                        (when (project-win app)
-                                          (window-close (project-win app)))
+                                         (when (getf tmpl-rec :common)
+                                           (template-copy sys-name common-dir filename :panel (window-content (win panel))))
+                                         (template-copy sys-name start-dir filename :panel (window-content (win panel)))
+                                         (when (getf tmpl-rec :www)
+                                           (template-copy sys-name www-dir filename :panel (window-content (win panel))))
+                                         (asdf:clear-source-registry)
+                                         (when (project-win app)
+                                           (window-close (project-win app)))
                                          (on-show-project panel :project sys-name)
-                                        (when (project-tree-win app)
-                                          (window-close (project-tree-win app))
-                                          (on-project-tree panel))
-                                        (create-div (window-content (win panel)) :content "<hr><b>done.</b>"))))
+                                         (when (project-tree-win app)
+                                           (window-close (project-tree-win app))
+                                           (on-project-tree panel))
+                                         (create-div (window-content (win panel)) :content "<hr><b>done.</b>"))))
                                 (t
-                                 (window-close (win panel)))))))))
+                                  (window-close (win panel)))))))))
              (t
-              (window-close (win panel))))))))
+               (window-close (win panel))))))))

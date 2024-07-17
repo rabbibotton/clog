@@ -1,5 +1,8 @@
 OCICL is a complete secure alternative to a QuickLisp CLOG install
 
+Note: New project temlates contain setup-ocicl and run-ocicl for builder
+      so only need to install OCICL.
+
 OCICL loads dependencies with your project. Once setup the command line
 tool ocicl is used to prepare a directory for a new project or to convert
 and existing project to an ocicl based one. To add dependecies you just
