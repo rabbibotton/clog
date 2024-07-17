@@ -1,1 +1,1 @@
-sbcl --eval "(ql:quickload :<%= (@ sys-name) %>/tools)" --eval "(clog-tools:clog-builder :project :<%= (@ sys-name) %> :port 0 :app t)"
+sbcl --eval "(pushnew (uiop:getcwd) ql:*local-project-directories* :test #'equalp)" --eval "(ql:quickload :<%= (@ sys-name) %>/tools)" --eval "(clog-tools:clog-builder :project :<%= (@ sys-name) %> :port 0 :app t)"

@@ -90,8 +90,7 @@ create-div's"
                             (asdf:system-source-directory :clog)
                             (getf tmpl-rec :www))))
     (setf (hiddenp (win panel)) t)
-    (input-dialog
-     (win panel) "Enter new system name:"
+    (input-dialog (win panel) "Enter new system name:"
      (lambda (sys-name)
        (cond (sys-name
               (let* ((*default-title-class*      *builder-title-class*)
