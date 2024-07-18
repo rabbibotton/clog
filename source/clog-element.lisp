@@ -526,13 +526,13 @@ If 0 element in tab index. If >0 sets order in tab index.
 Normally index follows normal sequence of elements."))
 
 (defmethod tab-index ((obj clog-element))
-  (property obj "tabindex"))
+  (attribute obj "tabindex"))
 
 (defgeneric (setf tab-index) (value clog-element)
   (:documentation "Set tab-index VALUE for CLOG-ELEMENT"))
 
 (defmethod (setf tab-index) (value (obj clog-element))
-  (setf (property obj "tabindex") value))
+  (setf (attribute obj "tabindex") value))
 
 ;;;;;;;;;;
 ;; text ;;

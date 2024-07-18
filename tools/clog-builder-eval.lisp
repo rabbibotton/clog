@@ -2,19 +2,20 @@
 
 (defun on-open-console (obj)
   (let ((app (connection-data-item obj "builder-app-data")))
-    (if (console-win app)
-        (progn
-          (setf (hiddenp (console-win app)) nil)
-          (window-focus (console-win app)))
-        (let* ((win (on-open-file obj :title "CLOG Builder Console"
-                                      :left 305 :top (menu-bar-height obj)
-                                      :is-console t
-                                      :editor-use-console-for-evals t)))
-          (setf (clog-ace:mode (window-param win)) "ace/mode/plain_text")
-          (set-on-window-can-close win (lambda (obj)
-                                         (setf (hiddenp obj) t)
-                                         nil))
-          (setf (console-win app) win)))))
+    (when app
+      (if (console-win app)
+          (progn
+            (setf (hiddenp (console-win app)) nil)
+            (window-focus (console-win app)))
+          (let* ((win (on-open-file obj :title "CLOG Builder Console"
+                                    :left 305 :top (menu-bar-height obj)
+                                    :is-console t
+                                    :editor-use-console-for-evals t)))
+            (setf (clog-ace:mode (window-param win)) "ace/mode/plain_text")
+            (set-on-window-can-close win (lambda (obj)
+                                           (setf (hiddenp obj) t)
+                                           nil))
+            (setf (console-win app) win))))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;
 ;; console-out-stream ;;

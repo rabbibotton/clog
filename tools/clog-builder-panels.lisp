@@ -29,8 +29,8 @@
         (get-control-list app panel-id))
       (let ((data
               (create-child content "<data />"
+                            :auto-place :top
                             :html-id (format nil "I~A" (get-universal-time)))))
-        (place-inside-top-of content data)
         (setf (attribute data "data-in-package")
               (attribute content "data-in-package"))
         (setf (attribute data "data-custom-slots")
@@ -192,7 +192,8 @@
               (do-drop-new-control app content data :win win))))))
 
 (defun do-drop-new-control (app content data &key win custom-query)
-  "Create new control dropped at event DATA on CONTENT of WIN)"
+  "Create new control dropped at event DATA on CONTENT of WIN,
+return t on success"
   ;; create control
   (let* ((control-record    (control-info (value (select-tool app))))
          (control-type-name (getf control-record :name))
@@ -247,7 +248,7 @@
         (touch-y  0)
         (placer   (create-div control
                               :class "placer"
-                              :style "position:absolute;box-sizing:content-box;tabindex:0"
+                              :style "position:absolute;box-sizing:content-box;"
                               :html-id (format nil "p-~A" (html-id control)))))
     (add-to-control-list app panel-id control)
     (setf (attribute placer "data-panel-id") panel-id)
@@ -256,12 +257,12 @@
                   :left (position-left control)
                   :width (client-width control)
                   :height (client-height control))
-    (place-after control placer)
     (jquery-execute placer (format nil "draggable({snap:'.placer',snapMode:'inner',cursor:'crosshair'})~
                                         .resizable({alsoResize:'#~A',autoHide:true})"
                                    (html-id control)))
     ;; setup placer events
     (setf (tab-index placer) "-1") ; must have a tab-index to accept keyboard input
+    (place-after control placer)
     (set-on-key-down placer
                      (lambda (obj data)
                        (declare (ignore obj))
@@ -303,7 +304,8 @@
     (set-on-touch-start placer (lambda (obj data)
                                  (declare (ignore obj))
                                  (setf touch-x (getf data :X))
-                                 (setf touch-y (getf data :Y))))
+                                 (setf touch-y (getf data :Y)))
+                        :cancel-event t)
     (set-on-touch-move placer (lambda (obj data)
                                 (declare (ignore obj))
                                 (set-geometry control :top (+ (position-top control)
@@ -311,7 +313,8 @@
                                               :left (+ (position-left control)
                                                        (- (getf data :x) touch-x)))
                                 (setf touch-x (getf data :X))
-                                (setf touch-y (getf data :Y))))
+                                (setf touch-y (getf data :Y)))
+                       :cancel-event t)
     (set-on-touch-end placer (lambda (obj data)
                                (declare (ignore obj data))
                                (set-geometry placer :units ""
@@ -319,7 +322,8 @@
                                              :left (left control))
                                (select-control control)
                                (jquery-execute placer "trigger('clog-builder-snap-shot')")
-                               (set-properties-after-geomentry-change control)))
+                               (set-properties-after-geomentry-change control))
+                      :cancel-event t)
     (set-on-mouse-up placer (lambda (obj data)
                               (declare (ignore obj data))
                               (set-geometry control :units ""
@@ -330,7 +334,8 @@
                                             :left (left control))
                               (select-control control)
                               (jquery-execute placer "trigger('clog-builder-snap-shot')")
-                              (set-properties-after-geomentry-change control)))
+                              (set-properties-after-geomentry-change control))
+                     :cancel-event t)
     (set-on-mouse-down placer
                        (lambda (obj data)
                          (declare (ignore obj))
@@ -369,7 +374,8 @@
                                (lambda (obj data)
                                  (declare (ignore obj data))
                                  (setf (hiddenp placer) t)
-                                 (on-populate-control-list-win content :win win)))
+                                 (on-populate-control-list-win content :win win))
+                               :cancel-event t)
     (set-on-event placer "resize"
                   (lambda (obj)
                     (set-properties-after-geomentry-change obj)))
@@ -414,12 +420,13 @@ manipulation of the control's location and size."
   (when control
     (clog::make-clog-element (clog::connection-id control)
                              (format nil "p-~A" (html-id control))
-                             :clog-type 'clog-element)))
+                             :clog-type 'clog::clog-element)))
 
 (defun deselect-current-control (app)
   "Remove selection on current control and remove visual ques on its placer."
   (when (current-control app)
-    (set-border (get-placer (current-control app)) (unit "px" 0) :none :blue)
+    (let ((placer (get-placer (current-control app))))
+      (set-border placer (unit "px" 0) :none :blue))
     (setf (current-control app) nil)))
 
 (defun delete-current-control (app panel-id html-id)
@@ -444,6 +451,7 @@ not a temporarily attached one when using select-control."
                     :height (client-height control))
       (setf (current-control app) control)
       (set-border placer (unit "px" 2) :solid :blue)
+      (focus placer)
       (on-populate-control-properties-win control))))
 
 (defun add-sub-controls (parent content &key win paste)
@@ -649,6 +657,9 @@ not a temporarily attached one when using select-control."
                                                     :specs "width=640,height=480"))
                                  (open-clog-popup obj :specs "width=640,height=480"))
           (when pop
+            (load-script (html-document (connection-body pop)) "/builder-js/beautify.js" :load-only-once t)
+            (load-script (html-document (connection-body pop)) "/builder-js/beautify-css.js" :load-only-once t)
+            (load-script (html-document (connection-body pop)) "/builder-js/beautify-html.js" :load-only-once t)
             (let ((msg (create-button content :content "Panel is external. Click to bring to front.")))
               (set-geometry msg :units "%" :height 100 :width 100)
               (set-on-click content

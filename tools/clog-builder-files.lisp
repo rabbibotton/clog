@@ -84,13 +84,13 @@
       (let ((pop (connection-data-item obj "clog-popup")))
         (when pop
           (close-window pop)
-          (window-focus win)))
-      (when regex
-        (focus (window-param win))
-        (js-execute obj (format nil "~A.find({regExp:true,needle:'~A',caseSensitive:false})"
-                                (clog-ace::js-ace (window-param win)) (escape-string regex))))
-      (when show-find
-        (clog-ace:execute-command (window-param win) "find"))
+          (window-focus win))
+        (when regex
+          (focus (window-param win))
+          (js-execute obj (format nil "~A.find({regExp:true,needle:'~A',caseSensitive:false})"
+                                  (clog-ace::js-ace (window-param win)) (escape-string regex))))
+        (when show-find
+          (clog-ace:execute-command (window-param win) "find")))
       win)
     (unless win
       (let* ((app (connection-data-item obj "builder-app-data"))
