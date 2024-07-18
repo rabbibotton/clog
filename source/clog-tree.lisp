@@ -38,6 +38,7 @@ on the tree-root or other clog-tree's."))
                                                  (on-context-menu nil)
                                                  (fill-function nil)
                                                  (visible t)
+                                                 (style "cursor:default;")
                                                  (class nil)
                                                  (html-id nil)
                                                  (auto-place t))
@@ -45,6 +46,7 @@ on the tree-root or other clog-tree's."))
 icon. When FILL-FUNCTION, when clog-tree is visible the FILL-FUNCTION is called
 and when not visible (such as clicked to close) the children are destroyed."
   (let* ((new-obj (create-div obj :content (format nil "~A&nbsp;" node-html)
+                              :style style
                               :class class
                               :html-id html-id
                               :auto-place auto-place))
@@ -80,7 +82,7 @@ and when not visible (such as clicked to close) the children are destroyed."
                     :cancel-event t)) ; prevent event bubble up tree
     new-obj))
 
-(defmethod toggle-tree (clog-tree)
+(defgeneric toggle-tree (clog-tree)
   (:documentation "Toggle state of tree node"))
 
 (defmethod toggle-tree ((obj clog-tree))
@@ -100,15 +102,17 @@ and when not visible (such as clicked to close) the children are destroyed."
                                                       (node-html "&#128196;") ; file icon
                                                       (on-click nil)
                                                       (on-context-menu nil)
+                                                      (style "cursor:default;")
                                                       (class nil)
                                                       (html-id nil)
                                                       (auto-place t))
    "Creates a clog-tree-item node labeled CONTENT with INDENT-LEVEL using NODE-HTML
 icon. If INDENT-LEVEL is nil get parent's INDENT-LEVEL from obj if is a clog-tree."
   (let* ((new-obj (create-div obj :content (format nil "~A&nbsp;" node-html)
-                               :class class
-                               :html-id html-id
-                               :auto-place auto-place))
+                              :style style
+                              :class class
+                              :html-id html-id
+                              :auto-place auto-place))
          (header  (create-span new-obj :content content)))
     (change-class new-obj 'clog-tree-item)
     (setf (content new-obj) header)
