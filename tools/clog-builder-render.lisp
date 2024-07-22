@@ -2,6 +2,50 @@
 
 ;; Code rendering utlities
 
+(defun pprint-as-html (content)
+  (js-query content (format nil "html_beautify ('~A',{'wrap_line_length':'80',~
+     'extra_liners':'div,form,input,button,select,textarea,ol,ul,table,style,datalist'})"
+                            (escape-string (remove-clog-attributes (inner-html content))))))
+
+(defun remove-clog-attributes (html)
+  (let ((root (plump:parse html)))
+    (html-remove-attributes root '("data-clog-type"
+                                   "data-original-html"
+                                   "data-clog-composite-control"
+                                   "data-clog-custom-create"))
+    (with-output-to-string (str)
+      (plump:serialize root str))))
+
+(defun html-remove-attributes (root attrs)
+  (let ((v (plump:child-elements root)))
+    (dotimes (n (length v))
+      (if (equalp (plump:tag-name (aref v n)) "data")
+          (plump:remove-child (aref v n))
+          (progn
+            (when (plump:child-elements (aref v n))
+              (let ((composite (plump:attribute (aref v n) "data-clog-composite-control")))
+                (if composite
+                    (progn
+                      (if (equalp composite "b")
+                          (let* ((new-html     (plump:parse (plump:attribute (aref v n) "data-original-html")))
+                                 (new-children (plump:child-elements new-html)))
+                            (plump:clear (aref v n))
+                            (dotimes (cn (length new-children))
+                              (plump:append-child (aref v n) (aref new-children cn))))
+                          (plump:clear (aref v n))))
+                    (html-remove-attributes (aref v n) attrs))))
+            (maphash (lambda (k v)
+                       (declare (ignore v))
+                       (unless (ppcre:scan "^data-clog-name" k)
+                         (when (ppcre:scan "^data-clog-" k)
+                           (pushnew k attrs :test 'equalp)))
+                       (when (ppcre:scan "^data-on-" k)
+                         (pushnew k attrs :test 'equalp)))
+                     (plump:attributes (aref v n)))
+            (mapcar (lambda (attr)
+                      (plump:remove-attribute (aref v n) attr))
+                    attrs))))))
+
 (defun render-clog-code (content hide-loc)
   "Render panel to clog code and add to window"
   (let* ((app      (connection-data-item content "builder-app-data"))
@@ -100,19 +144,8 @@
                           cmembers
                           cname     ;;defun
                           (ppcre:regex-replace-all "\""
-                                                   (js-query content
-                                                             (format nil
-                                                                      "var z=~a.clone();~
-    z.find('*').each(function(){~
-      var m=$(this).attr('data-clog-name');
-      if($(this).attr('data-clog-composite-control') == 't'){$(this).text('')}~
-      if($(this).attr('data-clog-composite-control') == 'b'){$(this).html($(this).attr('data-original-html'))}~
-      for(n in $(this).get(0).dataset){delete $(this).get(0).dataset[n]}~
-      if(m){$(this).attr('data-clog-name', m);}~
-    });~
-    html_beautify (z.html(),{'wrap_line_length': '80'})"
-                                                                      (jquery content)))
-                                                    "\\\"")
+                                                   (pprint-as-html content)
+                                                   "\\\"")
                           cname
                           vars
                           (reverse creates)   ; Insure that on-setup/on-create follow order in tree

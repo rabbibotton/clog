@@ -72,7 +72,7 @@
 
 (asdf:defsystem #:clog/tools
   :depends-on (#:clog #:clog-ace #:clog-terminal #:s-base64 #:cl-indentify
-               #:definitions #:parenscript #:trivial-main-thread #:swank)
+               #:definitions #:parenscript #:trivial-main-thread #:plump #:swank)
   :pathname "tools/"
   :components (;; clog-db-admin app
                (:file "clog-db-admin")

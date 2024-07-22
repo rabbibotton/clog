@@ -443,7 +443,7 @@ clog-builder window.")
                                                           (on-new-builder-panel-ext obj)
                                                           (on-new-builder-panel obj))))
                               (create-gui-menu-item file  :content "New CLOG Panel Popup Editor"             :on-click 'on-new-builder-page)
-                              (create-gui-menu-item file  :content "New HTML Panel Popup Editor"             :on-click 'on-new-builder-basic-page)
+                              (create-gui-menu-item file  :content "New No-CSS Panel External Editor"        :on-click 'on-new-builder-basic-page)
                               (create-gui-menu-item file  :content "New Custom Boot Panel External Editor"   :on-click 'on-new-builder-custom-page)
                               (create-gui-menu-item file  :content "New CLOG Builder Window"                 :on-click
                                                     (lambda (obj)

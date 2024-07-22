@@ -46,7 +46,7 @@
                    if($(this).attr('data-clog-composite-control') == 't'){$(this).text('')}~
                    if($(this).attr('id') !== undefined && ~
                      $(this).attr('id').substring(0,5)=='CLOGB'){$(this).removeAttr('id')}});~
-                 html_beautify (z.html(),{'wrap_line_length':'80'})"
+                 z.html();"
                                      (jquery content))))
         (destroy data))
       (maphash
@@ -143,7 +143,7 @@
     (let* ((control-record    (control-info (value (select-tool app))))
            (control-type-name (getf control-record :create-type)))
       (cond ((eq control-type-name :custom-query)
-              (input-dialog win "Enter html (must have an outer element):"
+              (input-dialog win "Enter html (must have one outer element):"
                             (lambda (custom-query)
                               (when custom-query
                                 (when (do-drop-new-control
@@ -174,7 +174,7 @@
                             :title "Custom Control"
                             :default-value (getf control-record :create-content)))
             ((eq control-type-name :custom-block)
-              (input-dialog win "Enter html to create control:"
+              (input-dialog win "Enter inner html of block:"
                             (lambda (custom-query)
                               (when custom-query
                                 (when (do-drop-new-control
@@ -1014,19 +1014,7 @@ not a temporarily attached one when using select-control."
                        (place-inside-bottom-of (bottom-panel box)
                                                (get-placer control)))
                      (get-control-list app panel-id))
-                   (setf result (js-query content
-                                                             (format nil
-                                                                     "var z=~a.clone();~
-    z.find('*').each(function(){~
-      var m=$(this).attr('data-clog-name');
-      if($(this).attr('data-clog-composite-control') == 't'){$(this).text('')}~
-      if($(this).attr('data-clog-composite-control') == 'b'){$(this).html($(this).attr('data-original-html'))}~
-      for(n in $(this).get(0).dataset){delete $(this).get(0).dataset[n]}~
-      if(m){$(this).attr('data-clog-name', m);}~
-    });~
-    html_beautify (z.html(),{'wrap_line_length':       '80',
-                             'extra_liners':           'div,form,input,button,select,textarea,ol,ul,table,style,datalist'})"
-                                                                     (jquery content))))
+                   (setf result (pprint-as-html content))
                    (maphash
                      (lambda (html-id control)
                        (declare (ignore html-id))

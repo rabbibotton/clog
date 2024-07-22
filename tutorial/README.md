@@ -1,5 +1,14 @@
 To run a tutorial load clog:
 
+If using the builder open a CLOG Builder REPL and type:
+
+```
+> (clog:run-tutorial 1)
+```
+
+If using another REPL load CLOG:
+
+
 ```
 CL-USER> (ql:quickload :clog)
 To load "clog":
