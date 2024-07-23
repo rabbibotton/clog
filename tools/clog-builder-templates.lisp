@@ -73,6 +73,26 @@ create-div's"
       (template-copy fname www-dir dir :base-dir nil))
     (asdf:clear-source-registry)))
 
+(defun add-template-dir (panel target)
+  (declare (ignore target))
+  (let ((*default-title-class*      *builder-title-class*)
+        (*default-border-class*     *builder-border-class*))
+    (input-dialog panel "Add Project Directory"
+                  (lambda (result)
+                    (when result
+                      (pushnew result
+                               (symbol-value (read-from-string "ql:*local-project-directories*"))
+                               :test #'equalp)
+                      (add-select-option (project-list panel) result result :selected t)
+                      (let ((*default-title-class*      *builder-title-class*)
+                            (*default-border-class*     *builder-border-class*))
+                        (alert-dialog panel (format nil "~A added to ql:*local-project-directories* temporarily.~% ~
+                                                   Use the generated run-ql or run-ocicl scripts in the created project ~%
+                                                   or add to Options -> Edit preferences.lisp to work with your project in ~%
+                                                   future."
+                                                    result)
+                                      :width 500 :height 250)))))))
+
 ;; Handle panel-clog-templates events
 
 (defun fill-button-clicked (panel)
