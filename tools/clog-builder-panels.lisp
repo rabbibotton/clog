@@ -619,6 +619,7 @@ not a temporarily attached one when using select-control."
            (render-file-name "")
            (panel-id  (html-id content)))
       (declare (ignore spacer tmp1 tmp2 tmp3 tmp4 tmp5))
+      (setf (style content "user-select") "none")
       (add-class menu "w3-small")
       (setf (overflow (top-panel box)) :visible) ; let menus leave the top panel
       (add-class (top-panel box) *builder-title-class*)
