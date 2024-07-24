@@ -271,19 +271,19 @@ return t on success"
                              (shift (getf data :shift-key)))
                          (cond ((equal key "ArrowUp")
                                  (if shift
-                                     (set-geometry control :height (1- (height control)))
+                                     (set-geometry control :height (1- (client-height control)))
                                      (set-geometry control :top (1- (position-top control)))))
                                ((equal key "ArrowDown")
                                  (if shift
-                                     (set-geometry control :height (+ (height control) 2))
+                                     (set-geometry control :height (+ (client-height control) 2))
                                      (set-geometry control :top (+ (position-top control) 2))))
                                ((equal key "ArrowRight")
                                  (if shift
-                                     (set-geometry control :width (+ (width control) 2))
+                                     (set-geometry control :width (+ (client-width control) 2))
                                      (set-geometry control :left (+ (position-left control) 2))))
                                ((equal key "ArrowLeft")
                                  (if shift
-                                     (set-geometry control :width (1- (width control)))
+                                     (set-geometry control :width (1- (client-width control)))
                                      (set-geometry control :left (1- (position-left control)))))
                                ((and (equal key "c")
                                      (or meta ctrl))
@@ -377,12 +377,12 @@ return t on success"
                                      (on-populate-control-properties-win content :win win)
                                      (on-populate-control-list-win content :win win))
                                    ((and last
-                                         (or (> (getf data :x) (- (width control) 5))
-                                             (> (getf data :y) (- (height control) 5))))
+                                         (or (> (getf data :x) (- (client-width control) 5))
+                                             (> (getf data :y) (- (client-height control) 5))))
                                      (setf mv-state :size)
                                      (setf (background-color placer) (rgba 0 255 0 0.10))
-                                     (setf last-w (width control))
-                                     (setf last-h (height control))
+                                     (setf last-w (client-width control))
+                                     (setf last-h (client-height control))
                                      (setf touch-x (getf data :screen-x))
                                      (setf touch-y (getf data :screen-y)))
                                    (last
