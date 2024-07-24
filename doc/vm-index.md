@@ -1,11 +1,11 @@
 
 The CLOG Builder Video Manual Series - Index
 
-1. [Introduction to CLOG and the CLOG Builder](vm1.md)
-2. [Installing CLOG and CLOG Builder - QuickLisp](vm2.md)
-3. [Installing CLOG and CLOG Builder - OCICL](vm3.md)
-4. [Getting Started with your First Project](vm4.md)
-5. [Using your Project and using CLOG Plugins](vm5.md)
+1. [Introduction to CLOG and the CLOG Builder](v1.md)
+2. [Installing CLOG and CLOG Builder - QuickLisp](v2.md)
+3. [Installing CLOG and CLOG Builder - OCICL](v3.md)
+4. [Getting Started with your First Project](v4.md)
+5. [Using your Project and using CLOG Plugins](v5.md)
 6. Addind new Lisp files or GUI panels to your project
 7. Runtime vs Design time files and dependencies
 8. Custom ASD files, loading projects from the REPL, loading lisp files
