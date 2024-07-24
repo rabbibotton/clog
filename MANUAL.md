@@ -19,4 +19,4 @@ CLOG Builder Video Manual Index
 * Projects
 
 4. First Project - https://youtu.be/IZqHuYw9jRI
-5. Using Projects and Plugins
+5. Using Projects and Plugins - https://youtu.be/k3V75qWQHNE
