@@ -109,6 +109,7 @@
   (*menu-full-screen-item*    variable)
   (*menu-icon-image-class*    variable)
   (*top-bar-height*           variable)
+  (*default-icon*             variable)
   (*default-title-class*      variable)
   (*default-border-class*     variable))
 

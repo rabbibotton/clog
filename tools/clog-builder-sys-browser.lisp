@@ -103,7 +103,7 @@
 (defun sys-browser-file-name-on-click (panel target)
   (unless (or (equal (text-value target) "")
               (equal (text-value target) "click to open file in source editor"))
-    (on-open-file target :open-file (text-value target) :regex (search-js panel))))
+    (on-open-file target :open-file (text-value target) :show-find t :regex (search-js panel))))
 
 (defun sys-browser-eval-form-button-on-click (panel target)
   (declare (ignore target))
