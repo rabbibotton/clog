@@ -246,6 +246,8 @@ return t on success"
         (panel-id (html-id content))
         (touch-x  0)
         (touch-y  0)
+        (last-w   0)
+        (last-h   0)
         (mv-state :off)
         (placer   (create-div control
                               :class "placer"
@@ -258,9 +260,6 @@ return t on success"
                   :left (position-left control)
                   :width (client-width control)
                   :height (client-height control))
-    (jquery-execute placer (format nil "resizable({alsoResize:'#~A',autoHide:true})"
-                                   (html-id control)))
-    ;; setup placer events
     (setf (tab-index placer) "-1") ; must have a tab-index to accept keyboard input
     (place-after control placer)
     (set-on-key-down placer
@@ -303,30 +302,46 @@ return t on success"
                          (set-properties-after-geomentry-change control))))
     (flet ((mouse-move (obj data)
              (set-geometry control
-                           :top (+ (position-top placer)
+                           :top (+ last-h
                                    (- (getf data :screen-y) touch-y))
-                           :left (+ (position-left placer)
+                           :left (+ last-w
                                     (- (getf data :screen-x) touch-x)))
+             (set-geometry placer :units ""
+                           :top (top control)
+                           :left (left control))
+             (set-properties-after-geomentry-change obj))
+           (mouse-size (obj data)
+             (set-geometry control
+                           :width (+ last-w
+                                     (- (getf data :screen-x) touch-x))
+                           :height (+ last-h
+                                      (- (getf data :screen-y) touch-y)))
+             (set-geometry placer :units ""
+                           :width (client-width control)
+                           :height (client-height control))
              (set-properties-after-geomentry-change obj)))
       (set-on-touch-move placer (lambda (obj data)
                                   (when (eq mv-state :point)
                                     (setf mv-state :touch))
-                                  (mouse-move obj data))
-                        :cancel-event t)
+                                  (when (eq mv-state :touch)
+                                    (mouse-move obj data)))
+                         :cancel-event t)
       (set-on-pointer-move placer (lambda (obj data)
+                                    (when (eq mv-state :size)
+                                      (mouse-size obj data))
                                     (when (eq mv-state :point)
                                       (mouse-move obj data)))
                            :cancel-event t)
+      (set-on-pointer-cancel placer (lambda (obj data)
+                                      (declare (ignore obj data))
+                                      (setf mv-state :off)
+                                      (set-geometry placer :units ""
+                                                    :top (top control)
+                                                    :left (left control))))
       (set-on-pointer-up placer (lambda (obj data)
                                   (declare (ignore obj data))
                                   (setf mv-state :off)
                                   (setf (background-color placer) "")
-                                  (set-geometry placer :units ""
-                                                :top (top control)
-                                                :left (left control))
-                                  (set-geometry control :units ""
-                                                :top (top placer)
-                                                :left (left placer))
                                   (select-control control)
                                   (jquery-execute placer "trigger('clog-builder-snap-shot')")
                                   (set-properties-after-geomentry-change control))
@@ -334,6 +349,7 @@ return t on success"
       (set-on-pointer-down placer
                          (lambda (obj data)
                            (declare (ignore obj))
+                           (setf mv-state :off)
                            (let ((last  (current-control app))
                                  (shift (getf data :shift-key)))
                              (if (and (select-tool app)
@@ -360,31 +376,34 @@ return t on success"
                                      (select-control control)
                                      (on-populate-control-properties-win content :win win)
                                      (on-populate-control-list-win content :win win))
+                                   ((and last
+                                         (or (> (getf data :x) (- (width control) 5))
+                                             (> (getf data :y) (- (height control) 5))))
+                                     (setf mv-state :size)
+                                     (setf (background-color placer) (rgba 0 255 0 0.10))
+                                     (setf last-w (width control))
+                                     (setf last-h (height control))
+                                     (setf touch-x (getf data :screen-x))
+                                     (setf touch-y (getf data :screen-y)))
                                    (last
                                      (setf mv-state :point)
                                      (setf (background-color placer) (rgba 0 0 255 0.10))
+                                     (setf last-w (position-left placer))
+                                     (setf last-h (position-top placer))
                                      (setf touch-x (getf data :screen-x))
                                      (setf touch-y (getf data :screen-y)))
                                    (t
                                      (select-control control)))
                              (when win
                                (window-focus win))))
+                           :cancel-event t
                            :capture-pointer t))
     (set-on-mouse-double-click placer
                                (lambda (obj data)
                                  (declare (ignore obj data))
+                                 (setf mv-state :off)
                                  (setf (hiddenp placer) t)
-                                 (on-populate-control-list-win content :win win)))
-    (set-on-event placer "resize"
-                  (lambda (obj)
-                    (declare (ignore obj))
-                    (setf mv-state :off)
-                    (setf (background-color placer) "")))
-    (set-on-event placer "resizestop"
-                  (lambda (obj)
-                    (set-properties-after-geomentry-change obj)
-                    (jquery-execute placer "trigger('clog-builder-snap-shot')"))
-                  :cancel-event t)))
+                                 (on-populate-control-list-win content :win win)))))
 
 (defun on-populate-loaded-window (content &key win)
   "Setup html imported in to CONTENT for use with Builder"
