@@ -248,7 +248,11 @@
                                  (error ()
                                    (projects-load sel)))
                                (window-focus (parent (parent panel)))
-                               (projects-populate panel))
+                               (projects-populate panel)
+                               (when (project-tree-win app)
+                                 (window-close (project-tree-win app))
+                                 (setf (project-tree-win app) nil)
+                                 (on-project-tree panel)))
                              (t
                                (setf (current-project app) nil)
                                (setf (text-value (project-list panel)) "None")))))
