@@ -1,44 +1,17 @@
-<data id="I3929316054" data-in-package="clog-tools" data-custom-slots=""
-    data-clog-next-id="14" data-clog-title="panel-search"></data>
-<form action="#" onsubmit="return false;" data-clog-name="search-form"
-    data-clog-type="form">
-    <div data-clog-type="grid" data-clog-name="result-grid"
-        style="display: grid; box-sizing: content-box; position: absolute; inset: 5px; gap: 5px; grid-template: &quot;a a a a a p&quot; 1fr &quot;d d d d d p&quot; 28px &quot;b n o l c p&quot; 28px / 1fr 100px 20px 70px 80px 50%;"
-        class=""><select data-clog-type="listbox" size="4"
-            data-clog-name="result-box"
-            style="box-sizing: content-box; position: static; grid-area: a;"
-            class="w3-small" tabindex="1"></select><input type="TEXT" value=""
-            data-clog-type="input" data-clog-name="dir-input"
-            style="box-sizing: content-box; position: static; grid-area: d;"
-            data-on-change="(panel-search-dir-change panel target)"
-            placeholder="directory to search" tabindex="2"><input type="TEXT"
-            value="" data-clog-type="input" data-clog-name="grep-input"
-            style="box-sizing: content-box; position: static; left: 50px; top: 8px; grid-area: b;"
-            placeholder="search regex" tabindex="3" data-on-create="(setf (attribute target &quot;autofocus&quot;) &quot;true&quot;)
+<data id="I3930907543" data-in-package="clog-tools" data-custom-slots="" data-clog-next-id="24" data-clog-title="panel-search"></data>
+<form action="#" onsubmit="return false;" data-clog-name="search-form" data-clog-type="form">
+    <div data-clog-type="grid" data-clog-name="result-grid" style="display: grid; box-sizing: content-box; position: absolute; inset: 5px; gap: 5px; grid-template: &quot;a a a a a p&quot; 1fr &quot;d d d d d r&quot; 28px &quot;b n o l c r&quot; 28px / 1fr 100px 20px 70px 80px 50%;" class=""><select data-clog-type="listbox" size="4" data-clog-name="result-box" style="box-sizing: content-box; position: static; grid-area: a;" class="w3-small" tabindex="1"></select><input type="TEXT" value="" data-clog-type="input" data-clog-name="dir-input" style="box-sizing: content-box; position: static; grid-area: d;" data-on-change="(panel-search-dir-change panel target)" placeholder="directory to search" tabindex="2"><input type="TEXT" value="" data-clog-type="input" data-clog-name="grep-input" style="box-sizing: content-box; position: static; left: 50px; top: 8px; grid-area: b;" placeholder="search regex" tabindex="3" data-on-create="(setf (attribute target &quot;autofocus&quot;) &quot;true&quot;)
 (focus target)">
-        <input type="TEXT" value="(.*\\.lisp$)" data-clog-type="input"
-            data-clog-name="name-regex-input"
-            style="box-sizing: content-box; position: static; left: 43px; top: 11px; grid-area: n;"
-            placeholder="file regex" tabindex="4"><input type="CHECKBOX"
-            value="" data-clog-type="checkbox" data-clog-name="subdir-check"
-            style="box-sizing: content-box; position: static; left: 68px; top: 5px; grid-area: o;"
-            tabindex="5" checked="checked"><label for="CLOGB3929199716"
-            data-clog-type="label" data-clog-for="subdir-check"
-            data-clog-name="subdir-label"
-            style="box-sizing: content-box; position: static; left: 70px; top: 11px; grid-area: l; font: 15px / 22.5px sans-serif; visibility: visible; vertical-align: middle; text-align: center;"
-            class="w3-tiny">subdirectories</label><input type="submit"
-            value="Search" data-clog-type="input" data-clog-name="search-button"
-            style="box-sizing: content-box; position: static; height: 22px; grid-area: c;"
-            class="" tabindex="6"
-            data-on-click="(panel-search-on-click panel target)">
-        <div data-clog-type="div" data-clog-name="preview-div"
-            style="box-sizing: content-box; position: static; left: 81px; top: 5px; grid-area: p;">
-            <div style="border: thin solid black; box-sizing: content-box; position: relative; width: 100%; height: 100%;"
-                class=" ace_editor ace_hidpi ace-xcode"
-                data-clog-type="clog-ace" data-clog-composite-control="t"
-                data-clog-ace-theme="ace/theme/iplastic"
-                data-clog-ace-mode="ace/mode/lisp" data-clog-ace-tab-size="2"
-                data-clog-name="preview-ace"></div>
+        <input type="TEXT" value="(.*\\.lisp$)" data-clog-type="input" data-clog-name="name-regex-input" style="box-sizing: content-box; position: static; left: 43px; top: 11px; grid-area: n;" placeholder="file regex" tabindex="4"><input type="CHECKBOX" value="" data-clog-type="checkbox" data-clog-name="subdir-check" style="box-sizing: content-box; position: static; left: 68px; top: 5px; grid-area: o;" tabindex="5" checked="checked"><label for="CLOGB3929199716" data-clog-type="label" data-clog-for="subdir-check" data-clog-name="subdir-label" style="box-sizing: content-box; position: static; left: 70px; top: 11px; grid-area: l; font: 15px / 22.5px sans-serif; visibility: visible; vertical-align: middle; text-align: center;" class="w3-tiny">subdirectories</label><input type="submit" value="Search" data-clog-type="input" data-clog-name="search-button" style="box-sizing: content-box; position: static; height: 22px; grid-area: c;" class="" tabindex="6" data-on-click="(panel-search-on-click panel target)">
+        <div data-clog-type="grid" data-clog-name="preview-grid" style="display: grid; box-sizing: content-box; position: static; left: 46px; top: 0px; grid-area: p; grid-template-areas: &quot;a&quot; &quot;b&quot;; grid-template-rows: 28px 1fr; row-gap: 5px;"><input type="TEXT" value="" data-clog-type="input" data-clog-name="pac-line" style="box-sizing: content-box; position: static; left: 77px; top: 8px; grid-area: a;"><div data-clog-type="div" data-clog-name="preview-div" style="box-sizing: content-box; position: static; left: 81px; top: 5px; grid-area: b;">
+            <div style="border: thin solid black; box-sizing: content-box; position: relative; width: 100%; height: 100%;" class=" ace_editor ace_hidpi ace-xcode ace-tm" data-clog-type="clog-ace" data-clog-composite-control="t" data-clog-ace-theme="ace/theme/iplastic" data-clog-ace-mode="ace/mode/lisp" data-clog-ace-tab-size="2" data-clog-name="preview-ace"></div>
+        </div></div>
+        <div data-clog-type="grid" data-clog-name="preview-panel" style="display: grid; box-sizing: content-box; position: static; left: 58px; top: 5px; grid-area: r; grid-template-areas: &quot;button&quot; &quot;status&quot;; row-gap: 5px;">
+            <div data-clog-type="grid" data-clog-name="preview-buttons" style="display: grid; box-sizing: content-box; position: static; left: 88px; top: 10px; grid-auto-flow: column; column-gap: 5px;" class="w3-small"><button data-clog-type="button" data-clog-name="eval-form-btn" style="box-sizing: content-box; position: static; left: 93px; top: 7px;">Eval
+                    Form</button><button data-clog-type="button" data-clog-name="eval-sel-btn" style="box-sizing: content-box; position: static; left: 111px; top: 4px;">Eval
+                    Sel</button><button data-clog-type="button" data-clog-name="eval-all-btn" style="box-sizing: content-box; position: static; left: 103px; top: 18px;">Eval
+                    File</button><button data-clog-type="button" data-clog-name="save-btn" style="box-sizing: content-box; position: static; left: 118px; top: 8px;">Save</button>
+            </div><input type="TEXT" value="" data-clog-type="input" data-clog-name="status-bar" style="box-sizing: content-box; position: static; left: 77px; top: 7px;" class="w3-border w3-tiny" readonly="readonly">
         </div>
     </div>
 </form>

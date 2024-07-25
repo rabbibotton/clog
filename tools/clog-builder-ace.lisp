@@ -336,7 +336,7 @@ var endRange = ~:*~A.session.doc.indexToPosition(endIndex);
                              (when r
                                (when status
                                  (setf (advisory-title status) (documentation (read-from-string s) 'function))
-                                 (setf (text status) (string-downcase r))))))))))
+                                 (setf (text-value status) (string-downcase r))))))))))
     (clog-ace:set-auto-completion editor t)
     (setf (clog-ace:theme editor) *editor-theme*)
     (setf (clog-ace:tab-size editor) *editor-tab-size*)
