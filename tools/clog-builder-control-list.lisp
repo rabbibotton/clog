@@ -128,7 +128,9 @@ of controls and double click to select control."
                 (let ((lwin (control-list-win app)))
                   (setf (inner-html lwin) "")
                   (browser-gc content)
-                  (set-on-mouse-click (create-div lwin :content (attribute content "data-clog-name"))
+                  (set-on-mouse-click (create-div lwin
+                                                  :style "cursor:default;"
+                                                  :content (attribute content "data-clog-name"))
                                       (lambda (obj data)
                                         (declare (ignore obj data))
                                         (deselect-current-control app)
