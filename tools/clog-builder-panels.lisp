@@ -555,9 +555,6 @@ not a temporarily attached one when using select-control."
            (*default-border-class*     *builder-border-class*)
            ext-panel
            (win (create-gui-window obj
-                                   :top (menu-bar-height obj)
-                                   :left (+ *builder-left-panel-size* 5)
-                                   :width 645 :height 430
                                    :client-movement *client-side-movement*))
            (box (create-panel-box-layout (window-content win)
                                          :left-width 0 :right-width 0
@@ -623,6 +620,11 @@ not a temporarily attached one when using select-control."
            (render-file-name "")
            (panel-id  (html-id content)))
       (declare (ignore spacer tmp1 tmp2 tmp3 tmp4 tmp5))
+      (set-geometry win
+                    :top (menu-bar-height obj) :bottom 305
+                    :right 405 :left (+ *builder-left-panel-size* 5)
+                    :width "" :height "")
+      (set-geometry win :width (width win) :height (height win) :bottom "" :right "")
       (setf (style content "user-select") "none")
       (add-class menu "w3-small")
       (setf (overflow (top-panel box)) :visible) ; let menus leave the top panel

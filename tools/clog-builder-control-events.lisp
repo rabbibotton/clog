@@ -8,12 +8,14 @@
         (let* ((*default-title-class*      *builder-title-class*)
                (*default-border-class*     *builder-border-class*)
                (win     (create-gui-window obj :title "Control CLOG Events"
-                                               :left (+ *builder-left-panel-size* 5)
-                                               :height 200 :width 645
                                                :has-pinner t :client-movement *client-side-movement*))
                (content (window-content win))
                status)
-          (set-geometry win :top "" :bottom 0)
+          (set-geometry win
+                        :top "" :bottom 5
+                        :right 405 :left (+ *builder-left-panel-size* 5)
+                        :width "" :height 300)
+          (set-geometry win :width (width win) :right "")
           (set-on-window-focus win
                                (lambda (obj)
                                  (declare (ignore obj))
