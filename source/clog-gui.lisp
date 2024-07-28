@@ -2394,9 +2394,9 @@ If time-out return result of on-file-name, cancels dialog if time runs out."
            (caret-at-end ()
              (focus input)
              (js-execute win (format nil "~A.setSelectionRange(~A.value.length,~A.value.length)"
-                                     (clog::script-id input)
-                                     (clog::script-id input)
-                                     (clog::script-id input)))))
+                                     (script-id input)
+                                     (script-id input)
+                                     (script-id input)))))
       (populate-dirs initial-dir)
       (populate-files initial-dir)
       (when initial-filename

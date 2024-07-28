@@ -421,7 +421,7 @@ manipulation of the control's location and size."
   (when control
     (clog::make-clog-element (clog::connection-id control)
                              (format nil "p-~A" (html-id control))
-                             :clog-type 'clog::clog-element)))
+                             :clog-type 'clog:clog-element)))
 
 (defun deselect-current-control (app)
   "Remove selection on current control and remove visual ques on its placer."

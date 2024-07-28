@@ -149,11 +149,7 @@
                                        (setf (top control) "")
                                        (setf (left control) ""))
                                      (setf (positioning control) (value dd))
-                                     (set-geometry (get-placer control)
-                                                   :top (position-top control)
-                                                   :left (position-left control)
-                                                   :width (client-width control)
-                                                   :height (client-height control))
+                                     (adjust-control-placer control)
                                      (on-populate-control-properties-win obj)))
                  nil)))))
 
@@ -548,20 +544,16 @@
                  (set-on-change dd (lambda (obj)
                                    (declare (ignore obj))
                                    (setf (attribute control "type") (value dd))
-                                   (set-geometry (get-placer control)
-                                                 :top (position-top control)
-                                                 :left (position-left control)
-                                                 :width (client-width control)
-                                                 :height (client-height control))))
+                                   (adjust-control-placer control)))
                  nil)))
      (:name "data list"
                        :get ,(lambda (control)
-                               (clog::js-query control (format nil "$('#~A').attr('data-clog-name')"
-                                                               (attribute control "list"))))
+                               (js-query control (format nil "$('#~A').attr('data-clog-name')"
+                                                         (attribute control "list"))))
                        :set ,(lambda (control obj)
                                (setf (attribute control "list")
-                                     (clog::js-query control (format nil "$(\"[data-clog-name='~A']\").attr('id')"
-                                                                     (text obj))))))
+                                     (js-query control (format nil "$(\"[data-clog-name='~A']\").attr('id')"
+                                                               (text obj))))))
     ,@*props-form-values*
     ,@*props-css*
     ,@*props-colors*

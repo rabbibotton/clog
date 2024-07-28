@@ -34,7 +34,7 @@
   "Remove any deleted control from control-list"
   (maphash (lambda (html-id control)
              (when (equalp (js-query control (format nil "$.contains(document.documentElement, ~A)"
-                                                     (clog::script-id control))) "false")
+                                                     (script-id control))) "false")
                (remove-from-control-list app panel-id html-id)))
            (get-control-list app panel-id)))
 

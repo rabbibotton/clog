@@ -102,11 +102,11 @@
                                          :height 400 :width 600
                                          :has-pinner t
                                          :client-movement *client-side-movement*)))
-            (setf clog-user::*body* (window-content win))
+            (setf clog-user:*body* (window-content win))
             (set-on-window-close win
                                  (lambda (obj)
-                                   (when (eq obj clog-user::*body*)
-                                     (setf clog-user::*body* nil))))
+                                   (when (eq obj clog-user:*body*)
+                                     (setf clog-user:*body* nil))))
             (clog-terminal:echo target "Use clog-user:*body* to access the clog-builder-repl window.")))
         (t
           (multiple-value-bind (result new-package first-eval-result)

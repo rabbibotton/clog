@@ -132,7 +132,7 @@ and debugger display for clog events."
 ;; save-body-to-file ;;
 ;;;;;;;;;;;;;;;;;;;;;;;
 
-(defun save-body-to-file (file-name &key (body clog-user::*body*)
+(defun save-body-to-file (file-name &key (body clog-user:*body*)
                                       (if-exists :error)
                                       if-does-not-exist
                                       external-format)
