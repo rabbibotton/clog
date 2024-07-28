@@ -31,15 +31,20 @@ replaced. (Exported)"
                              *supported-controls*)
                   (list r)))))
 
+(defun adjust-control-placer (control)
+  "If changing a property potentialy can change the size of a control function should be called. (Exported)"
+  (let ((placer (get-placer control)))
+    (adjust-placer control placer)))
+
 (defun add-inspector (name func)
-  "Add a custom inspector with NAME and (FUNC object title value clog-obj)"
+  "Add a custom inspector with NAME and (FUNC object title value clog-obj). (Exported)"
   (setf *inspectors* (remove-if (lambda (x)
                                   (equalp name (getf x :name)))
                                 *inspectors*))
   (push (list :name name :func func) *inspectors*))
 
 (defun add-file-extension (name func)
-  "Add a custom file extension with NAME and (FUNC file dir project clog-obj)"
+  "Add a custom file extension with NAME and (FUNC file dir project clog-obj). (Exported)"
   (setf *file-extensions* (remove-if (lambda (x)
                                   (equalp name (getf x :name)))
                                 *file-extensions*))

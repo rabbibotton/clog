@@ -184,7 +184,4 @@
                                        (funcall (fourth item) obj)
                                        (when placer
                                          (jquery-execute placer "trigger('clog-builder-snap-shot')")
-                                         (set-geometry placer :top (position-top control)
-                                                              :left (position-left control)
-                                                              :width (client-width control)
-                                                              :height (client-height control))))))))))))))))
+                                         (adjust-placer control placer)))))))))))))))

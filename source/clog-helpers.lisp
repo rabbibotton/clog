@@ -14,6 +14,7 @@
   (:export :clog-builder
            :clog-open
            :add-supported-controls
+           :adjust-control-placer
            :control-info
            :add-inspector
            :add-file-extension

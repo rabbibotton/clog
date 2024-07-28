@@ -360,6 +360,22 @@
 
 (defparameter *props-text*
   `((:name "text"
+     :setup ,(lambda (control td1 td2)
+               (declare (ignore td1))
+               (setf (advisory-title td2) "double click for external text editor")
+               (set-on-double-click td2 (lambda (obj)
+                                          (let ((*default-title-class*      *builder-title-class*)
+                                                (*default-border-class*     *builder-border-class*))
+                                            (input-dialog obj "Enter text:"
+                                                          (lambda (result)
+                                                            (when result
+                                                              (setf (text-value control) result)
+                                                              (adjust-control-placer control)))
+                                                          :default-value (text-value control)
+                                                          :width 800
+                                                          :height 420
+                                                          :size 80
+                                                          :rows 10)))))
      :get  ,(lambda (control)
               (text-value control))
      :set  ,(lambda (control obj)

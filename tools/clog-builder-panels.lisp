@@ -256,10 +256,7 @@ return t on success"
     (add-to-control-list app panel-id control)
     (setf (attribute placer "data-panel-id") panel-id)
     ;; setup placer
-    (set-geometry placer :top (position-top control)
-                  :left (position-left control)
-                  :width (client-width control)
-                  :height (client-height control))
+    (adjust-placer control placer)
     (setf (tab-index placer) "-1") ; must have a tab-index to accept keyboard input
     (place-after control placer)
     (set-on-key-down placer
@@ -294,10 +291,7 @@ return t on success"
                                ((and (equal key "x")
                                      (or meta ctrl))
                                  (blur placer)))
-                         (set-geometry placer :top (position-top control)
-                                       :left (position-left control)
-                                       :width (client-width control)
-                                       :height (client-height control))
+                         (adjust-placer control placer)
                          (jquery-execute placer "trigger('clog-builder-snap-shot')")
                          (set-properties-after-geomentry-change control))))
     (flet ((mouse-move (obj data)
@@ -365,14 +359,8 @@ return t on success"
                                        (place-inside-bottom-of control1 control2)
                                        (place-after control2 placer2)
                                        (place-after control2 placer2)
-                                       (set-geometry placer1 :top (position-top control1)
-                                                     :left (position-left control1)
-                                                     :width (client-width control1)
-                                                     :height (client-height control1))
-                                       (set-geometry placer2 :top (position-top control2)
-                                                     :left (position-left control2)
-                                                     :width (client-width control2)
-                                                     :height (client-height control2)))
+                                       (adjust-placer control1 placer1)
+                                       (adjust-placer control2 placer2))
                                      (select-control control)
                                      (on-populate-control-properties-win content :win win)
                                      (on-populate-control-list-win content :win win))
@@ -450,6 +438,14 @@ manipulation of the control's location and size."
   (setf (current-control app) nil)
   (remove-deleted-from-control-list app panel-id))
 
+(defun adjust-placer (control placer)
+  "Adjust placer geomatry to fit control"
+  (set-geometry placer
+                :top    (position-top control)
+                :left   (position-left control)
+                :width  (client-width control)
+                :height (client-height control)))
+
 (defun select-control (control)
   "Select CONTROL as the current control and highlight its placer.
 The actual original clog object used for creation must be used and
@@ -458,10 +454,7 @@ not a temporarily attached one when using select-control."
         (placer (get-placer control)))
     (unless (eq control (current-control app))
       (deselect-current-control app)
-      (set-geometry placer :top (position-top control)
-                    :left (position-left control)
-                    :width (client-width control)
-                    :height (client-height control))
+      (adjust-placer control placer)
       (setf (current-control app) control)
       (set-border placer (unit "px" 2) :solid :blue)
       (focus placer)
