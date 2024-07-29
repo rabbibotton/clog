@@ -17,12 +17,13 @@
                                      (set-on-double-click td2 (lambda (obj)
                                                                 (let ((*default-title-class*      *builder-title-class*)
                                                                       (*default-border-class*     *builder-border-class*))
-                                                                  (input-dialog obj "Enter slots:"
+                                                                  (input-dialog obj "Enter slots - for example: (myvar :accessor myvar)"
                                                                                 (lambda (result)
                                                                                   (when result
                                                                                     (setf (attribute control "data-custom-slots") result)
                                                                                     (setf (text td2) result)))
                                                                                 :default-value (attribute control "data-custom-slots")
+                                                                                :spell-check nil
                                                                                 :width 800
                                                                                 :height 420
                                                                                 :size 80

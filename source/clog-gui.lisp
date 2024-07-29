@@ -1921,6 +1921,7 @@ alert-dialog blocks till time-out reached or OK clicked."
                                             (placeholder-value "")
                                             (default-value "")
                                             is-password
+                                            (spell-check t)
                                             (left nil) (top nil)
                                             (width 300) (height 200)
                                             (client-movement nil)
@@ -1986,6 +1987,8 @@ result of on-input."
     (setf (visiblep win) t)
     (when modal
       (window-make-modal win))
+    (unless spell-check
+      (setf (spellcheckp input) nil))
     (focus input)
     (set-on-click cancel (lambda (obj)
                            (declare (ignore obj))
