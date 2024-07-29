@@ -564,7 +564,10 @@ Normally index follows normal sequence of elements."))
 (defgeneric text-value (clog-element)
   (:documentation "Get/Setf the first text node of CLOG-ELEMENT.
 Unlike TEXT this is only the text associated with this <tag>
-Additionally works for forms and can get/setf the values."))
+Additionally works for forms and can get/setf the values. When
+creating a div if you plan on storing and retrieving text start
+with some text or setf text first to insure the text node for the div
+exists."))
 
 (defmethod text-value ((obj clog-element))
   (jquery-query obj (format nil "contents().not(~A.children()).text()"

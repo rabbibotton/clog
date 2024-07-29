@@ -10,6 +10,7 @@
                (win     (create-gui-window obj :title "Control CLOG Events"
                                                :has-pinner t :client-movement *client-side-movement*))
                (content (window-content win))
+               save delete
                status)
           (set-geometry win
                         :top "" :bottom 5
@@ -22,25 +23,43 @@
                                  (setf (current-editor-is-lisp app) t))) ; when t looks up panels package
           (setf (control-events-win app) win)
           (setf (events-list app) (create-select content :name "clog-events" :class *builder-event-list-class*))
+          (setf (size (events-list app)) 5)
           (setf (positioning (events-list app)) :absolute)
-          (set-geometry (events-list app) :top 5 :left 5 :right 5)
+          (set-geometry (events-list app) :top 5 :left 5 :bottom 5 :width 250)
           (setf (event-editor app) (clog-ace:create-clog-ace-element content))
           (setf (clog-ace:read-only-p (event-editor app)) t)
-          (set-on-event (event-editor app) "clog-save-ace"
-                        (lambda (obj)
-                          (declare (ignore obj))
-                          ;; toggle focus to force a save of event
-                          (focus (events-list app))
-                          (focus (event-editor app))))
+          (setf save (create-button content :content "save" :style "position:absolute;" :class "w3-tiny"))
+          (set-geometry save :top 5 :left 260 :width 60 :height 25)
+          (setf delete (create-button content :content "delete" :style "position:absolute;" :class "w3-tiny"))
+          (set-geometry delete :top 5 :left 325 :width 60 :height 25)
+          (setf (event-info app) (create-form-element content :text
+                                                      :value "event info"
+                                                      :style "position:absolute;"
+                                                      :class "w3-tiny w3-border"))
+          (setf (read-only-p (event-info app)) t)
+          (set-geometry (event-info app) :top 5 :left 390 :right 5 :width "" :height 25)
+          (labels ((save-event (obj)
+                     (declare (ignore obj))
+                     (focus (events-list app))
+                     (focus (event-editor app)))
+                   (delete-event (obj)
+                     (declare (ignore obj))
+                     (focus (event-editor app))
+                     (setf (text-value (event-editor app)) "")
+                     (focus (events-list app))
+                     (focus (event-editor app))))
+            (set-on-event (event-editor app) "clog-save-ace" #'save-event)
+            (set-on-click save #'save-event)
+            (set-on-click delete #'delete-event))
           (setf (positioning (event-editor app)) :absolute)
           (setf (width (event-editor app)) "")
           (setf (height (event-editor app)) "")
-          (set-geometry (event-editor app) :top 35 :left 5 :right 5 :bottom 30)
+          (set-geometry (event-editor app) :top 35 :left 260 :right 5 :bottom 30)
           (clog-ace:resize (event-editor app))
-          (setf status (create-div content :class "w3-tiny w3-border"))
+          (setf status (create-form-element content :text :class "w3-tiny w3-border"))
           (setf (positioning status) :absolute)
           (setf (width status) "")
-          (set-geometry status :height 20 :left 5 :right 5 :bottom 5)
+          (set-geometry status :height 20 :left 260 :right 5 :bottom 5)
           (setf (clog-ace:mode (event-editor app)) "ace/mode/lisp")
           (setf (current-editor-is-lisp app) "CLOG-USER")
           (setup-lisp-ace (event-editor app) status :package "CLOG-USER")
@@ -50,6 +69,7 @@
           (set-on-window-close win (lambda (obj)
                                      (declare (ignore obj))
                                      (setf (event-editor app) nil)
+                                     (setf (event-info app) nil)
                                      (setf (events-list app) nil)
                                      (setf (control-events-win app) nil))))))
   (on-populate-control-events-win obj))
@@ -172,6 +192,7 @@
         (setf (inner-html elist) "")
         (remove-attribute elist "data-current-event")
         (setf (text-value (event-editor app)) "")
+        (setf (text-value (event-info app)) "")
         (browser-gc obj)
         (setf (clog-ace:read-only-p (event-editor app)) t)
         (when control
@@ -181,16 +202,22 @@
                        (setf (inner-html elist) "")
                        (add-select-option elist "" "Select Event")
                        (dolist (event (getf info :events))
-                         (let ((attr (format nil "data-~A" (getf event :name))))
-                           (add-select-option elist
-                                              (getf event :name)
-                                              (format nil "~A ~A (panel ~A)"
-                                                      (if (has-attribute control attr)
-                                                          "&#9632;‎ "
-                                                          "&#9633; ")
-                                                      (getf event :name)
-                                                      (getf event :parameters))
-                                              :selected (equal attr current))))
+                         (let* ((attr (format nil "data-~A" (getf event :name)))
+                                (opt  (add-select-option elist
+                                                         (getf event :name)
+                                                         (format nil "~A ~A"
+                                                                 (if (has-attribute control attr)
+                                                                     "&#9632; "
+                                                                     "&#9633; ")
+                                                                 (getf event :name))
+                                                         :selected (equal attr current))))
+                           (set-on-click opt (lambda (obj)
+                                               (declare (ignore obj))
+                                               (setf (text-value (event-editor app)) "")
+                                               (setf (text-value (event-info app))
+                                                     (format nil "~A (panel ~A)"
+                                                             (getf event :name)
+                                                             (getf event :parameters)))))))
                        (set-on-change elist #'on-change))
                      (on-blur (obj)
                        (declare (ignore obj))
@@ -199,25 +226,27 @@
                          (unless (equalp attr "undefined")
                            (let ((opt (select-text elist))
                                  (txt (text-value (event-editor app))))
-                             (setf (char opt 0) #\space)
-                             (setf opt (string-left-trim "#\space" opt))
-                             (cond ((or (equal txt "")
-                                        (equalp txt "undefined"))
-                                    (setf (select-text elist) (format nil "~A ~A" (code-char 9633) opt))
-                                    (remove-attribute control attr))
-                                   (t
-                                    (setf (select-text elist) (format nil "~A ~A" (code-char 9632) opt))
-                                    (setf (attribute control attr) txt))))
+                             (when (equalP (format nil "data-~A" (text-value elist)) attr)
+                               (setf (char opt 0) #\space)
+                               (setf opt (string-left-trim "#\space" opt))
+                               (cond ((or (equal txt "")
+                                          (equalp txt "undefined"))
+                                       (setf (select-text elist) (format nil "~A ~A" (code-char 9633) opt))
+                                       (remove-attribute control attr))
+                                     (t
+                                       (setf (select-text elist) (format nil "~A ~A" (code-char 9632) opt))
+                                       (setf (attribute control attr) txt)))))
                            (jquery-execute (get-placer control) "trigger('clog-builder-snap-shot')")))
                        (set-on-blur (event-editor app) #'on-blur))
                      (on-change (obj)
                        (declare (ignore obj))
                        (set-on-blur (event-editor app) nil)
-                       (let ((event (select-value elist "clog-events")))
+                       (let ((event (text-value elist)))
                          (cond ((equal event "")
                                 (set-on-blur (event-editor app) nil)
                                 (remove-attribute elist "data-current-event")
                                 (setf (text-value (event-editor app)) "")
+                                (setf (text-value (event-info app)) "")
                                 (setf (clog-ace:read-only-p (event-editor app)) t))
                                (t
                                 (setf (clog-ace:read-only-p (event-editor app)) nil)
@@ -260,7 +289,7 @@
                                               (getf event :js-event)
                                               (format nil "~A ~A"
                                                       (if (has-attribute control attr)
-                                                          "&#9632;‎ "
+                                                          "&#9632; "
                                                           "&#9633; ")
                                                       (getf event :js-event))
                                               :selected (equal attr current)))))
@@ -331,7 +360,7 @@
                                               (getf event :js-event)
                                               (format nil "~A ~A"
                                                       (if (has-attribute control attr)
-                                                          "&#9632;‎ "
+                                                          "&#9632; "
                                                           "&#9633; ")
                                                       (getf event :js-event))
                                               :selected (equal attr current)))))

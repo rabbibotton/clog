@@ -1049,7 +1049,7 @@ set to greater than 1 for select to act as a listbox."))
 ;;;;;;;;;;;;;;;;;;;;;;;
 
 (defgeneric add-select-option (clog-select value content &key selected disabled)
-  (:documentation "Add option VALUE to select."))
+  (:documentation "Add option VALUE to select. Returns the option element"))
 
 (defmethod add-select-option ((obj clog-select) value content &key selected disabled)
   (create-child obj (format nil "<option~@[~A~]~@[~A~] value='~A'>~A</option>"
@@ -1057,7 +1057,7 @@ set to greater than 1 for select to act as a listbox."))
                             (when disabled " disabled")
                             (escape-string value :html t)
                             content)
-                :clog-type 'clog-element :auto-place t))
+                :clog-type 'clog-option :auto-place t))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;
 ;; add-select-options ;;

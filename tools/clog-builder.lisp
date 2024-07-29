@@ -97,7 +97,11 @@ clog-builder window.")
    (events-list
      :accessor events-list
      :initform nil
-     :documentation "Event list in events window")
+     :documentation "Events list in events window")
+   (event-info
+     :accessor event-info
+     :initform nil
+     :documentation "Event info in events window")
    (event-editor
      :accessor event-editor
      :initform nil
