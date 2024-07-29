@@ -48,6 +48,14 @@
                      $(this).attr('id').substring(0,5)=='CLOGB'){$(this).removeAttr('id')}});~
                  z.html();"
                                      (jquery content))))
+        (let ((pp (js-query content
+                            (format nil "html_beautify ('~A',{'wrap_line_length':'80',~
+                                        'extra_liners':'div,form,input,button,select,textarea,ol,ul,table,style,datalist'})"
+                            (escape-string snap)))))
+          (if (and pp
+               (not (equal pp "")))
+              (setf snap pp)
+              (format t "html_beautify failure")))
         (destroy data))
       (maphash
         (lambda (html-id control)
