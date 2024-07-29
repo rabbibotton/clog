@@ -1,6 +1,8 @@
 
 The CLOG Builder Video Manual Series - Index
 
+[CLOG - Video Manual Play List](https://www.youtube.com/playlist?list=PLSUeblYuDUiOlX28-v8T__aM-2XO32vR_)
+
 1. [Introduction to CLOG and the CLOG Builder](v1.md)
 2. [Installing CLOG and CLOG Builder - QuickLisp](v2.md)
 3. [Installing CLOG and CLOG Builder - OCICL](v3.md)
