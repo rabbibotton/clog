@@ -11,7 +11,24 @@
          :properties     ((:name "in-package"
                            :attr "data-in-package")
                           (:name "custom slots"
-                           :attr "data-custom-slots")
+                           :setup ,(lambda (control td1 td2)
+                                     (declare (ignore td1))
+                                     (setf (advisory-title td2) "double click for external text editor")
+                                     (set-on-double-click td2 (lambda (obj)
+                                                                (let ((*default-title-class*      *builder-title-class*)
+                                                                      (*default-border-class*     *builder-border-class*))
+                                                                  (input-dialog obj "Enter slots:"
+                                                                                (lambda (result)
+                                                                                  (when result
+                                                                                    (setf (attribute control "data-custom-slots") result)
+                                                                                    (setf (text td2) result)))
+                                                                                :default-value (attribute control "data-custom-slots")
+                                                                                :width 800
+                                                                                :height 420
+                                                                                :size 80
+                                                                                :rows 10)))))
+                           :get  ,(lambda (control) (attribute control "data-custom-slots"))
+                           :set  ,(lambda (control obj) (setf (attribute control "data-custom-slots") (text obj))))
                           (:name "width"
                            :get  ,(lambda (control) (width control))
                            :setup :read-only)
