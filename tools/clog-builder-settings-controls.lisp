@@ -366,7 +366,8 @@
                                                           (lambda (result)
                                                             (when result
                                                               (setf (text-value control) result)
-                                                              (adjust-control-placer control)))
+                                                              (adjust-control-placer control)
+                                                              (setf (text td2) result)))
                                                           :default-value (text-value control)
                                                           :width 800
                                                           :height 420

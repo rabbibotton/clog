@@ -158,6 +158,7 @@
                                           (when (equal (subseq vname 0 1) "(")
                                             (setf vname (format nil "|~A|" vname)))
                                           (setf (attribute control "data-clog-name") vname)
+                                          (on-populate-control-events-win panel)
                                           (on-populate-control-list-win panel :win win)
                                           (when (equal (getf info :name) "clog-data")
                                             (when win
