@@ -2485,5 +2485,4 @@
    '(:name    "Console Application"
      :code    "nca"
      :type    :system
-     :common  "templates/common/"
      :loc     "templates/projects/console/")))
