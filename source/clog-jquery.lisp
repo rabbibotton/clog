@@ -70,3 +70,14 @@ result or DEFAULT-ANSWER on time out."))
 (defmethod jquery-query ((obj clog-obj) method &key (default-answer nil))
   (js-query obj (format nil "~A.~A" (jquery obj) method)
             :default-answer default-answer))
+
+;;;;;;;;;;;;;;;;;;;;
+;; jquery-trigger ;;
+;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric jquery-trigger (clog-obj event)
+(:documentation "Trigger EVENT on CLOG-OBJ. Result is discarded,
+returns CLOG-OBJ."))
+
+(defmethod jquery-trigger ((obj clog-obj) event)
+  (js-execute obj (format nil "~A.trigger('~A')" (jquery obj) event)))

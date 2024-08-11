@@ -413,7 +413,8 @@ embedded in a native template application.)"
   "CLOG-jQuery methods"
   (jquery         generic-function)
   (jquery-execute generic-function)
-  (jquery-query   generic-function))
+  (jquery-query   generic-function)
+  (jquery-trigger generic-function))
 
 (defsection @clog-element-common (:title "Common CLOG Elements")
   "CLOG-A - Class for CLOG Anchors"

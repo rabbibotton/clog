@@ -1052,7 +1052,7 @@
      :properties     (,@*props-grid*
                       ,@*props-element*))
    `(:name           "flex-row"
-     :description    "Row Align"
+     :description    "Flex Row Align Container"
      :clog-type      clog:clog-div
      :create         clog:create-div
      :create-type    :element
@@ -1066,7 +1066,7 @@
      :properties     (,@*props-flex*
                       ,@*props-element*))
    `(:name           "flex-row-rev"
-     :description    "Row Reverse Align"
+     :description    "Flex Row Reverse Align Container"
      :clog-type      clog:clog-div
      :create         clog:create-div
      :create-type    :element
@@ -1080,7 +1080,7 @@
      :properties     (,@*props-flex*
                       ,@*props-element*))
    `(:name           "flex-col"
-     :description    "Column Align"
+     :description    "Flex Column Align Container"
      :clog-type      clog:clog-div
      :create         clog:create-div
      :create-type    :element
@@ -1094,7 +1094,7 @@
      :properties     (,@*props-flex*
                       ,@*props-element*))
    `(:name           "flex-col-rev"
-     :description    "Column Reverse Align"
+     :description    "Flow Column Reverse Align Container"
      :clog-type      clog:clog-div
      :create         clog:create-div
      :create-type    :element
@@ -1108,7 +1108,7 @@
      :properties     (,@*props-flex*
                       ,@*props-element*))
    `(:name           "flex-center"
-     :description    "Center Align"
+     :description    "Flow Center Align Container"
      :clog-type      clog:clog-div
      :create         clog:create-div
      :create-type    :element
