@@ -122,14 +122,17 @@
                                                      (funcall (getf control-record :on-setup)
                                                               control control-record)
                                                      handler)))
-                             (unless (equal resizeh "")
-                               (push (format nil
-                                             "   \(set-on-resize \(window \(connection-body panel\)\)
-                                                                \(lambda \(obj\)
-                                                                  \(declare \(ignore obj\)\)
-                                                                  \(jquery-trigger \(~A panel\) \"resize\"\)\)\)"
-                                             vname)
-                                     creates))
+                            (unless (equal resizeh "")
+                              (push (format nil
+                                            "   \(js-execute panel
+                                                    \(format nil \"new ResizeObserver\(\(\) => {
+                                                        ~~A.trigger\('resize'\);
+                                                    }\).observe\(~~A\)\"
+                                                        \(jquery \(~A panel\)\)
+                                                        \(script-id \(~A panel\)\)\)\)"
+                                            vname
+                                            vname)
+                                    creates))
                              (unless (equal handler "")
                                (push (format nil
                                              "    \(let \(\(target \(~A panel\)\)\) ~
