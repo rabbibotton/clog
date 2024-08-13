@@ -111,28 +111,14 @@
                                                    handler)
                                            events))))))
                            ;; Set on-create (from user in builder) and on-setup (from control-record)
-                           (let ((resizeh (attribute control "data-on-resize"))
-                                 (handler (attribute control "data-on-create")))
+                           (let ((handler (attribute control "data-on-create")))
                              (when (equalp handler "undefined")
                                (setf handler ""))
-                             (when (equalp resizeh "undefined")
-                               (setf resizeh ""))
                              (when (getf control-record :on-setup)
                                (setf handler (format nil "~A~A"
                                                      (funcall (getf control-record :on-setup)
                                                               control control-record)
                                                      handler)))
-                            (unless (equal resizeh "")
-                              (push (format nil
-                                            "   \(js-execute panel
-                                                    \(format nil \"new ResizeObserver\(\(\) => {
-                                                        ~~A.trigger\('resize'\);
-                                                    }\).observe\(~~A\)\"
-                                                        \(jquery \(~A panel\)\)
-                                                        \(script-id \(~A panel\)\)\)\)"
-                                            vname
-                                            vname)
-                                    creates))
                              (unless (equal handler "")
                                (push (format nil
                                              "    \(let \(\(target \(~A panel\)\)\) ~

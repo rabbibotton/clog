@@ -625,11 +625,17 @@ option passed from javascript calling the jQuery custom event mechanism
 (defgeneric set-on-resize (clog-obj on-resize-handler)
   (:documentation "Set the ON-RESIZE-HANDLER for CLOG-OBJ. If ON-RESIZE-HANDLER
 is nil unbind the event. In most modern browser this only works on the clog-window
-object. One can set-on-resize and then re-trigger this event on any clog-obj
-using (jquery-trigger obj \"resize\")."))
+object, unless a ResizeObserver is put in place, so one is installed except for
+clog-window making this event functional."))
 
 (defmethod set-on-resize ((obj clog-obj) handler)
-  (set-on-event obj "resize" handler :cancel-event t))
+  (set-on-event obj "resize" handler :cancel-event t)
+  (unless (typep obj 'clog-window)
+    (js-execute obj (format nil "new ResizeObserver(() => {
+                                  ~A.trigger('resize');
+                                 }).observe(~A)"
+                            (jquery obj)
+                            (script-id obj)))))
 
 ;;;;;;;;;;;;;;;;;;
 ;; set-on-focus ;;

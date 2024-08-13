@@ -212,8 +212,11 @@ return t on success"
                                     (getf control-record :positioning))
                                   (t
                                     :absolute)))
-         (parent            (when (getf data :shift-key)
-                              (current-control app)))
+         (auto-parent       (attribute content "data-clog-auto-parent"))
+         (parent            (if (getf data :shift-key)
+                                (current-control app)
+                                (when auto-parent
+                                  (get-from-control-list app (html-id content) auto-parent))))
          (control           (create-control (if parent
                                                 parent
                                                 content)
