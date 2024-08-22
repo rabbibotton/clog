@@ -100,14 +100,15 @@ embedded in a native template application.)"
   (random-hex-string function)
 
   "CLOG JS utilities"
-  (js-true-p     function)
-  (p-true-js     function)
-  (js-on-p       function)
-  (p-on-js       function)
-  (escape-string function)
-  (lf-to-br      function)
-  (js-to-integer function)
-  (js-to-float   function)
+  (js-true-p        function)
+  (p-true-js        function)
+  (js-on-p          function)
+  (p-on-js          function)
+  (escape-for-html  function)
+  (escape-string    function)
+  (lf-to-br         function)
+  (js-to-integer    function)
+  (js-to-float      function)
 
   "CLOG Color utilities"
   (rgb           function)

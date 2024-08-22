@@ -58,6 +58,19 @@ package."
 ;; Implementation - JS Utilities
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+;;;;;;;;;;;;;;;;;;;;;
+;; escape-for-html ;;
+;;;;;;;;;;;;;;;;;;;;;
+
+(defun escape-for-html (value)
+  "Returns a string where < and > are replaced with html entities. This is
+particularly useful as #<> is used for unprintable objects in Lisp. Value is
+converted with format to a string first."
+  (setf value (format nil "~A" value))
+  (setf value (ppcre:regex-replace-all "<" value "&lt;"))
+  (setf value (ppcre:regex-replace-all ">" value "&gt;"))
+  value)
+
 ;;;;;;;;;;;;;;;
 ;; js-true-p ;;
 ;;;;;;;;;;;;;;;

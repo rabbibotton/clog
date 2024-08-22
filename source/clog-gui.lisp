@@ -310,9 +310,7 @@ symbol before any change is made by dialog."
      (when (validp body)
        (if (and ,time-out (not ,auto-probe))
            (let* ((ovalue ,symbol)
-                  (value (format nil "~A" ovalue)))
-             (setf value (ppcre:regex-replace-all "<" value "&lt;"))
-             (setf value (ppcre:regex-replace-all ">" value "&gt;"))
+                  (value (escape-for-html ovalue)))
              (when ,save-value
                (setf clog-gui:*probe* ovalue))
              (input-dialog body
@@ -334,9 +332,7 @@ symbol before any change is made by dialog."
              (lambda ()
                (loop
                  (let* ((ovalue ,symbol)
-                        (value (format nil "~A" ovalue)))
-                   (setf value (ppcre:regex-replace-all "<" value "&lt;"))
-                   (setf value (ppcre:regex-replace-all ">" value "&gt;"))
+                        (value (escape-for-html ovalue)))
                    (when (eq (input-dialog body
                                            (format nil "Probe result <code>~A</code> - New Value or :q to quit?"
                                                    value)
@@ -2512,37 +2508,32 @@ make-two-way-stream to provide a *query-io* using a clog-gui instead of console)
 
 (defun one-of-dialog (obj intro choices &key (title "Please choose one") (prompt "Choice"))
   "Prompt a dialog box with TITLE and INTRO using list of CHOICES and PROMPT"
-  (flet ((qb (q)
-           (setf q (format nil "~A" q))
-           (setf q (ppcre:regex-replace-all "<" q "&lt;"))
-           (setf q (ppcre:regex-replace-all ">" q "&gt;"))
-           q))
-    (let ((q  (format nil "<pre>~A</pre><p style='text-align:left'>" (qb intro)))
-          (n (length choices)) (i))
-      (do ((c choices (cdr c)) (i 1 (+ i 1)))
-          ((null c))
-        (setf q (format nil "~A~&[~D] ~A~%<br>" q i (qb (car c)))))
-      (do () ((typep i `(integer 1 ,n)))
-        (let ((trc (make-array '(0) :element-type 'base-char
-                                    :fill-pointer 0 :adjustable t)))
-          (with-output-to-string (s trc)
-            (uiop:print-condition-backtrace intro :stream s))
-          (when trc
-            (format t "~%~A~%" trc)))
-        (setf q (format nil "~A~&~A:" q prompt))
-        (setq i (read-from-string (input-dialog obj q (lambda (result)
-                                                        (cond ((or (eq result nil)
-                                                                   (equal result ""))
-                                                               (format nil "~A" n))
-                                                              (t
-                                                               result)))
-                                                :title title
-                                                :placeholder-value (format nil "~A" n)
-                                                :time-out 999
-                                                :modal nil
-                                                :width 640
-                                                :height 480))))
-      (nth (- i 1) choices))))
+  (let ((q  (format nil "<pre>~A</pre><p style='text-align:left'>" (escape-for-html intro)))
+        (n (length choices)) (i))
+    (do ((c choices (cdr c)) (i 1 (+ i 1)))
+        ((null c))
+      (setf q (format nil "~A~&[~D] ~A~%<br>" q i (escape-for-html (car c)))))
+    (do () ((typep i `(integer 1 ,n)))
+      (let ((trc (make-array '(0) :element-type 'base-char
+                             :fill-pointer 0 :adjustable t)))
+        (with-output-to-string (s trc)
+          (uiop:print-condition-backtrace intro :stream s))
+        (when trc
+          (format t "~%~A~%" trc)))
+      (setf q (format nil "~A~&~A:" q prompt))
+      (setq i (read-from-string (input-dialog obj q (lambda (result)
+                                                      (cond ((or (eq result nil)
+                                                                 (equal result ""))
+                                                              (format nil "~A" n))
+                                                            (t
+                                                              result)))
+                                              :title title
+                                              :placeholder-value (format nil "~A" n)
+                                              :time-out 999
+                                              :modal nil
+                                              :width 640
+                                              :height 480))))
+    (nth (- i 1) choices)))
 
 (defparameter *default-icon*
   "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAcCAYAAAAAwr0iAAAAAXNSR0IArs4c6QAAAKZlWElmTU0A
