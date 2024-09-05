@@ -37,10 +37,7 @@ See macro with-connection-cache.")
      :initarg :html-id)
    (parent
      :accessor parent
-     :initform nil)
-   (connection-data-mutex
-     :reader connection-data-mutex
-     :initform (bordeaux-threads:make-lock)))
+     :initform nil))
   (:documentation "CLOG objects (clog-obj) encapsulate the connection between
 lisp and an HTML DOM element."))
 
@@ -74,13 +71,6 @@ parent if was set or nil. This is not per se the parent in the DOM."))
 
 (defgeneric html-id (clog-obj)
   (:documentation "Internal html-id of clog-obj. (Internal)"))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; connection-data-mutex ;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(defgeneric connection-data-mutex (clog-obj)
-  (:documentation "Reader for connection-data thread lock. (Private)"))
 
 ;;;;;;;;;;;;;;;;;;;
 ;; make-clog-obj ;;
@@ -517,9 +507,8 @@ The following default keys are set:
   (:documentation "Set connection-data item-name with value."))
 
 (defmethod (setf connection-data-item) (value (obj clog-obj) item-name)
-  (bordeaux-threads:with-lock-held ((connection-data-mutex obj))
-                                   (ignore-errors
-                                     (setf (gethash item-name (connection-data obj)) value)))
+  (ignore-errors
+    (setf (gethash item-name (connection-data obj)) value))
   value)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -530,9 +519,8 @@ The following default keys are set:
   (:documentation "Remove item-name from connection-data."))
 
 (defmethod remove-connection-data-item ((obj clog-obj) item-name)
-  (bordeaux-threads:with-lock-held ((connection-data-mutex obj))
-                                   (ignore-errors
-                                     (remhash item-name (connection-data obj)))))
+  (ignore-errors
+    (remhash item-name (connection-data obj))))
 
 ;;;;;;;;;;;;;;;;;;;;;
 ;; connection-body ;;
