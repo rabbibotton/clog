@@ -164,7 +164,8 @@ after attachment is changed to one unique to this session."))
 
 (defgeneric destroy-children (clog-element)
   (:documentation "Destroy all children in DOM contained with in CLOG-ELEMENT
-and run a BROWSER-GC"))
+and run a BROWSER-GC. See also clog-connect:*browser-gc-on-ping* if using this
+often."))
 
 (defmethod destroy-children ((obj clog-element))
   (setf (inner-html obj) "")
