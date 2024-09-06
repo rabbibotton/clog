@@ -175,7 +175,7 @@
         (setf (window-param win) ace)
         (add-class menu "w3-small")
         (set-on-click (create-span (window-icon-area win)
-                                   :content (format nil "~A&nbsp;" (code-char #x26F6))
+                                   :content "&rarr;&nbsp;"
                                    :auto-place :top)
                       (lambda (obj)
                         (declare (ignore obj))

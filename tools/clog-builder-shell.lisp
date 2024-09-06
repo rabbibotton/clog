@@ -12,7 +12,7 @@
                                  :width 600 :height 400
                                  :client-movement *client-side-movement*)))
     (set-on-click (create-span (window-icon-area win)
-                               :content (format nil "~A&nbsp;" (code-char #x26F6))
+                               :content "&rarr;&nbsp;"
                                :auto-place :top)
                   (lambda (obj)
                     (declare (ignore obj))

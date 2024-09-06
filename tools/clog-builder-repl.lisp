@@ -34,7 +34,7 @@
                                    (declare (ignore obj))
                                    (clog-ace:resize (playground repl))))
     (set-on-click (create-span (window-icon-area win)
-                               :content (format nil "~A&nbsp;" (code-char #x26F6))
+                               :content "&rarr;&nbsp;"
                                :auto-place :top)
                   (lambda (obj)
                     (declare (ignore obj))

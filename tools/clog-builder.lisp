@@ -575,7 +575,7 @@ clog-builder window.")
                                                                      "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                                                      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                                                      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                                                     &#x1F441;" :right-align t))
+                                                                     &#x2315;" :right-align t))
                             (setf sysbrw (create-form-element search :search :class *builder-menu-search-class* :size 35))
                             (setf (place-holder sysbrw) "system browse.. (alt-period)")
                             (set-on-change sysbrw (lambda (obj)

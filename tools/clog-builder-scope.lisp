@@ -26,7 +26,7 @@ name. If CLOG-BODY not set use *clog-debug-instance*"
     (set-on-window-close win (lambda (obj)
                                (browser-gc obj)))
     (set-on-click (create-span (window-icon-area win)
-                               :content (format nil "~A&nbsp;" (code-char #x26F6))
+                               :content "&rarr;&nbsp;"
                                :auto-place :top)
                   (lambda (obj)
                     (declare (ignore obj))

@@ -31,7 +31,7 @@
       (when doc-maximize
         (doc-max obj))
       (set-on-click (create-span (window-icon-area win)
-                                 :content (format nil "~A&nbsp;" (code-char #x26F6))
+                                 :content "&rarr;&nbsp;"
                                  :auto-place :top)
                     #'doc-max))
     (set-on-click (create-span (window-icon-area win)
