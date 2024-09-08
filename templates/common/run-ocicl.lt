@@ -1,1 +1,1 @@
-sbcl --userinit init --eval "(setf asdf:*compile-file-failure-behaviour* :warn)" --eval "(asdf:load-system :<%= (@ sys-name) %>/tools)" --eval "(clog-tools:clog-builder :port 0 :app t)"
+sbcl --userinit init --eval "(setf asdf:*compile-file-failure-behaviour* :warn)" --eval "(asdf:load-system :<%= (@ sys-name) %>)" --eval "(<%= (@ sys-name) %>:start-app)"

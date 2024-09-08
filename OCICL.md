@@ -23,24 +23,27 @@ Then start to dev with the CLOG Builder:
 
 ```
 sbcl --userinit init --eval "(asdf:load-system :clog/tools)" --eval "(clog-tools:clog-builder :port 0 :app t)"
-
-and after first run can use "bash run-ocicl" (or chmod 775 run-oicl to make the batch file executable)
 ```
+and after first run can use "bash run-ocicl" (or chmod 775 run-oicl to make the batch file executable)
+
 (or replace ecl for sbcl)
 
 On Windows:
 
 ```
 sbcl --userinit init --eval "(setf asdf:*compile-file-failure-behaviour* :warn)" --eval "(asdf:load-system :clog/tools)" --eval "(clog-tools:clog-builder :port 0 :app t)"
-
+```
 and after first run can use "run-ocicl.bat"
+
+
+Update ocicl libraries like CLOG with:
+
+```
+./updat-ocicl
 ```
 
-Update ocicl *frequenlty* with:
-
-```
-ocicl latest
-```
+Only check the systems.cvs file in, on the systems directory. A new check out
+can run the setup-ocicl script to load the libraries again.
 
 I N S T A L L
 =============
