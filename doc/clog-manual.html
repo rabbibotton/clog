@@ -448,6 +448,15 @@ package.</p></li>
 
 <p>Return &quot;on&quot; if <code>VALUE</code> t or return &quot;off&quot;</p></li>
 </ul>
+<p><a id="x-28CLOG-3AESCAPE-FOR-HTML-20FUNCTION-29"></a>
+<a id="CLOG:ESCAPE-FOR-HTML%20FUNCTION"></a></p>
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#CLOG:ESCAPE-FOR-HTML%20FUNCTION" >ESCAPE-FOR-HTML</a></span></span> <span class="locative-args">VALUE</span></span></p>
+
+<p>Returns a string where < and > are replaced with html entities. This is
+particularly useful as #&lt;&gt; is used for unprintable objects in Lisp. Value is
+converted with format to a string first.</p></li>
+</ul>
 <p><a id="x-28CLOG-CONNECTION-3AESCAPE-STRING-20FUNCTION-29"></a>
 <a id="CLOG-CONNECTION:ESCAPE-STRING%20FUNCTION"></a></p>
 <ul>
@@ -757,7 +766,8 @@ option passed from javascript calling the jQuery custom event mechanism
 
 <p>Set the <code>ON-RESIZE-HANDLER</code> for <code>CLOG-OBJ</code>. If <code>ON-RESIZE-HANDLER</code>
 is nil unbind the event. In most modern browser this only works on the clog-window
-object</p></li>
+object, unless a ResizeObserver is put in place, so one is installed except for
+clog-window making this event functional.</p></li>
 </ul>
 <p><a id="x-28CLOG-3ASET-ON-FOCUS-20GENERIC-FUNCTION-29"></a>
 <a id="CLOG:SET-ON-FOCUS%20GENERIC-FUNCTION"></a></p>
@@ -946,7 +956,7 @@ on an on-click event.</p></li>
 <p><a id="x-28CLOG-3ASET-ON-MOUSE-DOUBLE-CLICK-20GENERIC-FUNCTION-29"></a>
 <a id="CLOG:SET-ON-MOUSE-DOUBLE-CLICK%20GENERIC-FUNCTION"></a></p>
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:SET-ON-MOUSE-DOUBLE-CLICK%20GENERIC-FUNCTION" >SET-ON-MOUSE-DOUBLE-CLICK</a></span></span> <span class="locative-args">CLOG-OBJ ON-MOUSE-DOUBLE-CLICK-HANDLER &amp;KEY ONE-TIME</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:SET-ON-MOUSE-DOUBLE-CLICK%20GENERIC-FUNCTION" >SET-ON-MOUSE-DOUBLE-CLICK</a></span></span> <span class="locative-args">CLOG-OBJ ON-MOUSE-DOUBLE-CLICK-HANDLER &amp;KEY ONE-TIME CANCEL-EVENT</span></span></p>
 
 <p>Set the <code>ON-MOUSE-DOUBLE-CLICK-HANDLER</code> for <code>CLOG-OBJ</code>. If
 <code>ON-MOUSE-DOUBLE-CLICK-HANDLER</code> is nil unbind the event. Setting this event will
@@ -955,7 +965,7 @@ replace on an on-double-click event.</p></li>
 <p><a id="x-28CLOG-3ASET-ON-MOUSE-RIGHT-CLICK-20GENERIC-FUNCTION-29"></a>
 <a id="CLOG:SET-ON-MOUSE-RIGHT-CLICK%20GENERIC-FUNCTION"></a></p>
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:SET-ON-MOUSE-RIGHT-CLICK%20GENERIC-FUNCTION" >SET-ON-MOUSE-RIGHT-CLICK</a></span></span> <span class="locative-args">CLOG-OBJ ON-MOUSE-RIGHT-CLICK-HANDLER &amp;KEY ONE-TIME</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:SET-ON-MOUSE-RIGHT-CLICK%20GENERIC-FUNCTION" >SET-ON-MOUSE-RIGHT-CLICK</a></span></span> <span class="locative-args">CLOG-OBJ ON-MOUSE-RIGHT-CLICK-HANDLER &amp;KEY ONE-TIME CANCEL-EVENT</span></span></p>
 
 <p>Set the <code>ON-MOUSE-RIGHT-CLICK-HANDLER</code> for <code>CLOG-OBJ</code>. If
 <code>ON-MOUSE-RIGHT-CLICK-HANDLER</code> is nil unbind the event. Setting this event will
@@ -1137,7 +1147,7 @@ If <code>ON-KEY-DOWN-HANDLER</code> is nil unbind the event.</p></li>
 <p><a id="x-28CLOG-3ASET-ON-KEY-UP-20GENERIC-FUNCTION-29"></a>
 <a id="CLOG:SET-ON-KEY-UP%20GENERIC-FUNCTION"></a></p>
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:SET-ON-KEY-UP%20GENERIC-FUNCTION" >SET-ON-KEY-UP</a></span></span> <span class="locative-args">CLOG-OBJ ON-KEY-UP-HANDLER &amp;KEY ONE-TIME</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:SET-ON-KEY-UP%20GENERIC-FUNCTION" >SET-ON-KEY-UP</a></span></span> <span class="locative-args">CLOG-OBJ ON-KEY-UP-HANDLER &amp;KEY ONE-TIME CANCEL-EVENT</span></span></p>
 
 <p>Set the <code>ON-KEY-UP-HANDLER</code> for <code>CLOG-OBJ</code>. If
 <code>ON-KEY-UP-HANDLER</code> is nil unbind the event.</p></li>
@@ -1223,7 +1233,8 @@ after attachment is changed to one unique to this session.</p></li>
 <li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:DESTROY-CHILDREN%20GENERIC-FUNCTION" >DESTROY-CHILDREN</a></span></span> <span class="locative-args">CLOG-ELEMENT</span></span></p>
 
 <p>Destroy all children in DOM contained with in <code>CLOG-ELEMENT</code>
-and run a <a href="#CLOG:BROWSER-GC%20GENERIC-FUNCTION" title="CLOG:BROWSER-GC GENERIC-FUNCTION"><code>BROWSER-GC</code></a></p></li>
+and run a <a href="#CLOG:BROWSER-GC%20GENERIC-FUNCTION" title="CLOG:BROWSER-GC GENERIC-FUNCTION"><code>BROWSER-GC</code></a>. See also clog-connect:*browser-gc-on-ping* if using this
+often.</p></li>
 </ul>
 <p>CLOG-Element - DOM Placement</p>
 <p><a id="x-28CLOG-3APLACE-AFTER-20GENERIC-FUNCTION-29"></a>
@@ -1441,7 +1452,10 @@ Normally index follows normal sequence of elements.</p></li>
 
 <p>Get/Setf the first text node of <code>CLOG-ELEMENT</code>.
 Unlike <a href="#CLOG:TEXT%20GENERIC-FUNCTION" title="CLOG:TEXT GENERIC-FUNCTION"><code>TEXT</code></a> this is only the text associated with this <tag>
-Additionally works for forms and can get/setf the values.</p></li>
+Additionally works for forms and can get/setf the values. When
+creating a div if you plan on storing and retrieving text start
+with some text or setf text first to insure the text node for the div
+exists.</p></li>
 </ul>
 <p><a id="x-28CLOG-3ATEXT-DIRECTION-TYPE-20TYPE-29"></a>
 <a id="CLOG:TEXT-DIRECTION-TYPE%20TYPE"></a></p>
@@ -3819,11 +3833,19 @@ is set to nil.</p></li>
 <ul>
 <li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:ENVELOPE-PANEL%20GENERIC-FUNCTION" >ENVELOPE-PANEL</a></span></span> <span class="locative-args">CLOG-ELEMENT PANEL WIDTH HEIGHT &amp;KEY CLASS STYLE UNITS</span></span></p>
 
-<p>Create a panel of <code>WIDTH</code> and <code>HEIGHT</code> with :relative
-positioning to envelope <code>PANEL</code>. This allows any type of clog-panel (including
-those created by CLOG Builder, to be positioned within <a href="#CLOG:DISPLAY%20GENERIC-FUNCTION" title="CLOG:DISPLAY GENERIC-FUNCTION"><code>DISPLAY</code></a> :flex or
-:grid layouts or otherwise treat the panel as an inline object.
-Returns envelope-panel</p></li>
+<p>Create a envelope of <code>WIDTH</code> and <code>HEIGHT</code> with :relative
+positioning to envelope <code>PANEL</code>. The envelope is a child of <code>CLOG-ELEMENT</code>.
+This allows any type of clog-panel (including those created by CLOG Builder,
+to be positioned within a <a href="#CLOG:DISPLAY%20GENERIC-FUNCTION" title="CLOG:DISPLAY GENERIC-FUNCTION"><code>DISPLAY</code></a> :flex or :grid layout or otherwise treat the
+panel as an inline object. Returns the new envelope of <code>PANEL</code></p></li>
+</ul>
+<p><a id="x-28CLOG-3AENVELOPE-PANEL-2A-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG:ENVELOPE-PANEL*%20GENERIC-FUNCTION"></a></p>
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:ENVELOPE-PANEL*%20GENERIC-FUNCTION" >ENVELOPE-PANEL*</a></span></span> <span class="locative-args">PANEL WIDTH HEIGHT &amp;KEY CLASS STYLE UNITS</span></span></p>
+
+<p>Like envelope panel, but usses the panels parent as the
+parent of the envelope. Returns the new envelope of <code>PANEL</code></p></li>
 </ul>
 <p><a id="x-28CLOG-3ACENTER-CHILDREN-20GENERIC-FUNCTION-29"></a>
 <a id="CLOG:CENTER-CHILDREN%20GENERIC-FUNCTION"></a></p>
@@ -3906,7 +3928,7 @@ if <code>:HTML-ID</code> &quot;myid&quot; then the <code>HTML-ID</code> for cent
 <p><a id="x-28CLOG-3ACREATE-CLOG-TREE-20GENERIC-FUNCTION-29"></a>
 <a id="CLOG:CREATE-CLOG-TREE%20GENERIC-FUNCTION"></a></p>
 <ul>
-<li><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:CREATE-CLOG-TREE%20GENERIC-FUNCTION" >CREATE-CLOG-TREE</a></span></span> <span class="locative-args">OBJ &amp;KEY CONTENT INDENT-LEVEL NODE-HTML ON-CONTEXT-MENU FILL-FUNCTION VISIBLE CLASS HTML-ID AUTO-PLACE</span></span></li>
+<li><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:CREATE-CLOG-TREE%20GENERIC-FUNCTION" >CREATE-CLOG-TREE</a></span></span> <span class="locative-args">OBJ &amp;KEY CONTENT INDENT-LEVEL NODE-HTML ON-CONTEXT-MENU FILL-FUNCTION VISIBLE STYLE CLASS HTML-ID AUTO-PLACE</span></span></li>
 </ul>
 <p><a id="x-28CLOG-3ATREE-ROOT-20GENERIC-FUNCTION-29"></a>
 <a id="CLOG:TREE-ROOT%20GENERIC-FUNCTION"></a></p>
@@ -3919,7 +3941,9 @@ on the tree-root or other clog-tree's.</p></li>
 <p><a id="x-28CLOG-3ATOGGLE-TREE-20GENERIC-FUNCTION-29"></a>
 <a id="CLOG:TOGGLE-TREE%20GENERIC-FUNCTION"></a></p>
 <ul>
-<li><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:TOGGLE-TREE%20GENERIC-FUNCTION" >TOGGLE-TREE</a></span></span> <span class="locative-args">CLOG-TREE</span></span></li>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:TOGGLE-TREE%20GENERIC-FUNCTION" >TOGGLE-TREE</a></span></span> <span class="locative-args">CLOG-TREE</span></span></p>
+
+<p>Toggle state of tree node</p></li>
 </ul>
 <p><a id="x-28CLOG-3ATOGGLE-STATE-20GENERIC-FUNCTION-29"></a>
 <a id="CLOG:TOGGLE-STATE%20GENERIC-FUNCTION"></a></p>
@@ -3951,7 +3975,7 @@ on the tree-root or other clog-tree's.</p></li>
 <p><a id="x-28CLOG-3ACREATE-CLOG-TREE-ITEM-20GENERIC-FUNCTION-29"></a>
 <a id="CLOG:CREATE-CLOG-TREE-ITEM%20GENERIC-FUNCTION"></a></p>
 <ul>
-<li><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:CREATE-CLOG-TREE-ITEM%20GENERIC-FUNCTION" >CREATE-CLOG-TREE-ITEM</a></span></span> <span class="locative-args">OBJ &amp;KEY CONTENT INDENT-LEVEL NODE-HTML ON-CLICK ON-CONTEXT-MENU CLASS HTML-ID AUTO-PLACE</span></span></li>
+<li><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:CREATE-CLOG-TREE-ITEM%20GENERIC-FUNCTION" >CREATE-CLOG-TREE-ITEM</a></span></span> <span class="locative-args">OBJ &amp;KEY CONTENT INDENT-LEVEL NODE-HTML ON-CLICK ON-CONTEXT-MENU STYLE CLASS HTML-ID AUTO-PLACE</span></span></li>
 </ul>
 <p><a id="x-28CLOG-3ATREE-ITEM-20GENERIC-FUNCTION-29"></a>
 <a id="CLOG:TREE-ITEM%20GENERIC-FUNCTION"></a></p>
@@ -4480,7 +4504,7 @@ or CLOG Data-List objects.</p></li>
 <ul>
 <li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:ADD-SELECT-OPTION%20GENERIC-FUNCTION" >ADD-SELECT-OPTION</a></span></span> <span class="locative-args">CLOG-SELECT VALUE CONTENT &amp;KEY SELECTED DISABLED</span></span></p>
 
-<p>Add option <code>VALUE</code> to select.</p></li>
+<p>Add option <code>VALUE</code> to select. Returns the option element</p></li>
 </ul>
 <p><a id="x-28CLOG-3AADD-SELECT-OPTIONS-20GENERIC-FUNCTION-29"></a>
 <a id="CLOG:ADD-SELECT-OPTIONS%20GENERIC-FUNCTION"></a></p>
@@ -7128,7 +7152,7 @@ alert-dialog blocks till time-out reached or OK clicked.</p></li>
 <p><a id="x-28CLOG-GUI-3AINPUT-DIALOG-20FUNCTION-29"></a>
 <a id="CLOG-GUI:INPUT-DIALOG%20FUNCTION"></a></p>
 <ul>
-<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#CLOG-GUI:INPUT-DIALOG%20FUNCTION" >INPUT-DIALOG</a></span></span> <span class="locative-args">OBJ CONTENT ON-INPUT &amp;KEY (MODAL <code>T</code>) (TIME-OUT <code>NIL</code>) (TITLE &quot;Input&quot;) (SIZE 20) (ROWS 1) (PLACEHOLDER-VALUE &quot;&quot;) (DEFAULT-VALUE &quot;&quot;) IS-PASSWORD (LEFT <code>NIL</code>) (TOP <code>NIL</code>) (WIDTH 300) (HEIGHT 200) (CLIENT-MOVEMENT <code>NIL</code>) (HTML-ID <code>NIL</code>)</span></span></p>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[function]</span> <span class="reference-object"><a href="#CLOG-GUI:INPUT-DIALOG%20FUNCTION" >INPUT-DIALOG</a></span></span> <span class="locative-args">OBJ CONTENT ON-INPUT &amp;KEY (MODAL <code>T</code>) (TIME-OUT <code>NIL</code>) (TITLE &quot;Input&quot;) (SIZE 20) (ROWS 1) (PLACEHOLDER-VALUE &quot;&quot;) (DEFAULT-VALUE &quot;&quot;) IS-PASSWORD (SPELL-CHECK <code>T</code>) (LEFT <code>NIL</code>) (TOP <code>NIL</code>) (WIDTH 300) (HEIGHT 200) (CLIENT-MOVEMENT <code>NIL</code>) (HTML-ID <code>NIL</code>)</span></span></p>
 
 <p>Create an input dialog box with <code>CONTENT</code> centered and an input box.
 Calls on-input with input box contents or nil if canceled. If time-out
@@ -7290,6 +7314,17 @@ symbol before any change is made by dialog.</p></li>
 <li><p><span class=reference-bullet><span class=reference><span class="locative-type">[variable]</span> <span class="reference-object"><a href="#CLOG-GUI:*TOP-BAR-HEIGHT*%20VARIABLE" >*TOP-BAR-HEIGHT*</a></span></span> <span class="locative-args">20</span></span></p>
 
 <p>Overlap on new windows created with top set as nil</p></li>
+</ul>
+<p><a id="x-28CLOG-GUI-3A-2ADEFAULT-ICON-2A-20VARIABLE-29"></a>
+<a id="CLOG-GUI:*DEFAULT-ICON*%20VARIABLE"></a></p>
+<ul>
+<li><span class=reference-bullet><span class=reference><span class="locative-type">[variable]</span> <span class="reference-object"><a href="#CLOG-GUI:*DEFAULT-ICON*%20VARIABLE" >*DEFAULT-ICON*</a></span></span> <span class="locative-args">&quot;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAcCAYAAAAAwr0iAAAAAXNSR0IArs4c6QAAAKZlWElmTU0A
+KgAAAAgABwEGAAMAAAABAAIAAAESAAMAAAABAAEAAAEaAAUAAAABAAAAYgEbAAUAAAABAAAAagEo
+AAMAAAABAAIAAAExAAIAAAAVAAAAcodpAAQAAAABAAAAiAAAAAAAAABIAAAAAQAAAEgAAAABUGl4
+ZWxtYXRvciBQcm8gMi4wLjUAAAACoAIABAAAAAEAAAAgoAMABAAAAAEAAAAcAAAAAMSXmL0AAAAJ
+cEhZcwAACxMAAAsTAQCanBgAAAQRaVRYdFhNTDpjb20uYWRvYmUueG1wAAAAAAA8eDp4bXBtZXRh
+IHhtbG5zOng9ImFkb2JlOm5zOm1ldGEvIiB4OnhtcHRrPSJYTVAgQ29yZSA2LjAuMCI+CiAgIDxy
+ZGY6UkRGIHhtbG5zOnJkZj0iaHR ...</span></span></li>
 </ul>
 <p><a id="x-28CLOG-GUI-3A-2ADEFAULT-TITLE-CLASS-2A-20VARIABLE-29"></a>
 <a id="CLOG-GUI:*DEFAULT-TITLE-CLASS*%20VARIABLE"></a></p>
@@ -8856,6 +8891,14 @@ dicarded, returns <code>CLOG-OBJ</code>.</p></li>
 
 <p>Execute the jQuery <code>METHOD</code> on ANY <code>CLOG-OBJ</code> and return
 result or <code>DEFAULT-ANSWER</code> on time out.</p></li>
+</ul>
+<p><a id="x-28CLOG-3AJQUERY-TRIGGER-20GENERIC-FUNCTION-29"></a>
+<a id="CLOG:JQUERY-TRIGGER%20GENERIC-FUNCTION"></a></p>
+<ul>
+<li><p><span class=reference-bullet><span class=reference><span class="locative-type">[generic-function]</span> <span class="reference-object"><a href="#CLOG:JQUERY-TRIGGER%20GENERIC-FUNCTION" >JQUERY-TRIGGER</a></span></span> <span class="locative-args">CLOG-OBJ EVENT</span></span></p>
+
+<p>Trigger <code>EVENT</code> on <code>CLOG-OBJ</code>. Result is discarded,
+returns <code>CLOG-OBJ</code>.</p></li>
 </ul>
 <p><a id="x-28CLOG-3A-40CLOG-HELPERS-20MGL-PAX-3ASECTION-29"></a>
 <a id="CLOG:@CLOG-HELPERS%20MGL-PAX:SECTION"></a></p>

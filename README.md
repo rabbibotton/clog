@@ -77,9 +77,9 @@ For those new to Common Lisp or just want to quickly try CLOG use ther
 simple _EZ_ standalone versions:
 
 * https://github.com/rabbibotton/clog-win64-ez/releases
-* https://github.com/rabbibotton/clog-linux-ez
-* https://github.com/rabbibotton/clog-linux-arm-ez
-* https://github.com/rabbibotton/clog-mac-ez
+* https://github.com/rabbibotton/clog-linux-ez/releases
+* https://github.com/rabbibotton/clog-linux-arm-ez/releases
+* https://github.com/rabbibotton/clog-mac-ez/releases
 
 Unzip, double click setup.bat or ./setup
 Run builder.exe or ./builder
