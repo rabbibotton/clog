@@ -951,15 +951,14 @@ ON-MOUSE-RIGHT-CLICK-HANDLER is nil unbind the event. Setting this event will
 replace on an on-context-menu event."))
 
 (defmethod set-on-mouse-right-click ((obj clog-obj) handler
-                                     &key one-time cancel-event)
+                                     &key one-time (cancel-event t))
   (set-event obj "contextmenu"
              (when handler
                (lambda (data)
                  (funcall handler obj (parse-mouse-event data))))
              :one-time one-time
              :call-back-script mouse-event-script
-             :cancel-event cancel-event
-             :cancel-event t))
+             :cancel-event cancel-event))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;
 ;; set-on-mouse-enter ;;
