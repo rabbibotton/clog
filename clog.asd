@@ -13,7 +13,7 @@
   :version "2.2"
   :serial t
   :depends-on (#:clack #:websocket-driver #:alexandria #:hunchentoot #:cl-ppcre
-                       #:bordeaux-threads #:trivial-open-browser #:parse-float #:quri
+                       #:bordeaux-threads #:parse-float #:quri
                        #:lack-middleware-static #:lack-request #:lack-util-writer-stream
                        #:trivial-gray-streams #:closer-mop #:mgl-pax #:cl-template #:atomics
                        #:sqlite #:cl-dbi #:cl-pass #-(or mswindows win32 cormanlisp) #:cl-isaac)
