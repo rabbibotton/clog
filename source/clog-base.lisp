@@ -487,7 +487,7 @@ for internal use of clog.
 The following default keys are set:
 \"clog-body\"      clog-body of this connection, see CONNECTION-BODY
 \"clog-path\"      html path used, see CONNECTION-PATH
-\"clog-sync\"      sempaphore used for syncing events, see CONNECTION-SYNC"))
+\"clog-sync\"      mutex used for syncing events, see CONNECTION-SYNC"))
 
 (defmethod connection-data ((obj clog-obj))
   (clog-connection:get-connection-data (connection-id obj)))
