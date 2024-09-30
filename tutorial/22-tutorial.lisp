@@ -142,6 +142,19 @@
                  (alert-dialog obj results))
                :height 550))
 
+(defun on-dlg-prompt (obj)
+  (flet ((make-completion (selection &key (test #'search))
+           (lambda (str)
+             (remove-if-not (alexandria:curry test str) selection))))
+    (let ((options '("white" "red" "orange" "yellow" "green" "blue"
+                     "indigo" "violet" "brown" "black" "grey")))
+      (prompt-dialog obj
+                     (lambda (color) (alert-dialog obj color))
+                     :title "Color Prompt"
+                     :completion (make-completion options)
+                     :validation (lambda (str)
+                                   (find str options :test #'equal))))))
+
 (defun on-toast-alert (obj)
   (alert-toast obj "Stop!" "To get rid of me, click the X. I have no time-out"))
 
@@ -208,6 +221,7 @@
          (tmp   (create-gui-menu-item dlg :content "Alert Dialog Box" :on-click 'on-dlg-alert))
          (tmp   (create-gui-menu-item dlg :content "Input Dialog Box" :on-click 'on-dlg-input))
          (tmp   (create-gui-menu-item dlg :content "Confirm Dialog Box" :on-click 'on-dlg-confirm))
+         (tmp   (create-gui-menu-item dlg :content "Prompt Dialog Box" :on-click 'on-dlg-prompt))
          (tmp   (create-gui-menu-item dlg :content "Form Dialog Box" :on-click 'on-dlg-form))
          (tmp   (create-gui-menu-item dlg :content "Server File Dialog Box" :on-click 'on-dlg-file))
          (tst   (create-gui-menu-drop-down menu :content "Toasts"))
