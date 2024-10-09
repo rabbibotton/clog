@@ -12,7 +12,7 @@
                                          <center><%= (@ sys-name) %></center>
                                          <center><%= (@ sys-name) %></center></div>
                                          <div><p><center>A New App</center>
-                                         <center>(c) 2022 - Some One</center></p></div>"
+                                         <center>(c) - Some One</center></p></div>"
                                    :hidden  t
                                    :width   200
                                    :height  200)))
