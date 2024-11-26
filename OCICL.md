@@ -1,7 +1,7 @@
 OCICL is a complete secure alternative to a QuickLisp CLOG install
 
-Note: New project temlates contain setup-ocicl and run-ocicl for builder
-      so only need to install OCICL.
+Note: New project temlates contain setup-ocicl and edit-ocicl run-ocicl
+      for builder so only need to install OCICL.
 
 OCICL loads dependencies with your project. Once setup the command line
 tool ocicl is used to prepare a directory for a new project or to convert
@@ -24,7 +24,8 @@ Then start to dev with the CLOG Builder:
 ```
 sbcl --userinit init --eval "(asdf:load-system :clog/tools)" --eval "(clog-tools:clog-builder :port 0 :app t)"
 ```
-and after first run can use "bash run-ocicl" (or chmod 775 run-oicl to make the batch file executable)
+and after first run can use "bash edit-ocicl" (or chmod 775 edit-oicl to make the batch file executable) or
+run-ocicl
 
 (or replace ecl for sbcl)
 
@@ -33,13 +34,13 @@ On Windows:
 ```
 sbcl --userinit init --eval "(setf asdf:*compile-file-failure-behaviour* :warn)" --eval "(asdf:load-system :clog/tools)" --eval "(clog-tools:clog-builder :port 0 :app t)"
 ```
-and after first run can use "run-ocicl.bat"
+and after first run can use "edit-ocicl.bat" or "run-ocicl.bat"
 
 
 Update ocicl libraries like CLOG with:
 
 ```
-./updat-ocicl
+./update-ocicl
 ```
 
 Only check the systems.cvs file in, on the systems directory. A new check out
@@ -145,8 +146,8 @@ and to start the builder in sbcl:
 
 If this is the new project an .asd file, first .lisp file and www directory
 will be created as well. Batch files that will use your asd files to load
-plugins are also configured run-ocicl.bat / run-ocicl and run-ql.bat / run-ql
-are also created.
+plugins are also configured edit-ocicl.bat / edit-ocicl run-ocicl.bat / run-ocicl
+and run-ql.bat / run-ql are also created.
 
 Update ocicl frequenlty with:
 
