@@ -2354,6 +2354,16 @@ is not stored in connection-data will become subject to browser-gc requests."))
 (defmethod remove-from-dom ((obj clog-element))
   (jquery-execute obj "remove()"))
 
+;;;;;;;;;;;;;;;;;;;;;
+;; detach-from-dom ;;
+;;;;;;;;;;;;;;;;;;;;;
+
+(defgeneric detach-from-dom (clog-element)
+  (:documentation "Detach CLOG-Element from the DOM."))
+
+(defmethod detach-from-dom ((obj clog-element))
+  (jquery-execute obj "detach()"))
+
 ;;;;;;;;;;;;;;;;;;;;;;
 ;; remove-from-clog ;;
 ;;;;;;;;;;;;;;;;;;;;;;
