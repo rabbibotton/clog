@@ -102,6 +102,6 @@
                       (open-browser))")))
 
 (defun start-tutorial ()
-  "Start turtorial."
+  "Start tutorial."
   (initialize 'on-new-window)
   (open-browser))

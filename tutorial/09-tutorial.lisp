@@ -172,6 +172,6 @@
     (setf (editablep panel3) t))) ; turn panel 3 into an editable area
 
 (defun start-tutorial ()
-  "Start turtorial."
+  "Start tutorial."
   (initialize 'on-new-window)
   (open-browser))

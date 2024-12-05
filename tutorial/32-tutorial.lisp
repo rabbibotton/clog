@@ -42,6 +42,7 @@
   "Setup website menu")
 
 (defun start-tutorial ()
+  "Start tutorial."
   ;; Here we add authorizations for content and editting content, not just
   ;; access to pages.
   (add-authorization '(:guest :member) '(:content-show-comments))

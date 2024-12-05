@@ -52,5 +52,6 @@
     (center-children (bottom-panel console) :horizontal nil)))
 
 (defun start-tutorial ()
+  "Start tutorial."
   (initialize 'on-new-window)
   (open-browser))

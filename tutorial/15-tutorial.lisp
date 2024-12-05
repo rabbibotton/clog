@@ -28,6 +28,6 @@
     (set-on-time-update aud (lambda (obj)(declare (ignore obj))(setf (value alc) (media-position aud))))))
 
 (defun start-tutorial ()
-  "Start turtorial."
+  "Start tutorial."
   (initialize 'on-new-window)
   (open-browser))

@@ -72,7 +72,7 @@
     (declare (ignore l1) (ignore l2) (ignore l3) (ignore l4) (ignore jname))))
 
 (defun start-tutorial ()
-  "Start turtorial."
+  "Start tutorial."
   (initialize 'on-index)
   (set-on-new-window 'on-page2 :path "/page2")
   (open-browser))
