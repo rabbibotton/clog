@@ -79,6 +79,6 @@
       (format t "Lost connection.~%~%~A" c))))
 
 (defun start-tutorial ()
-  "Start turtorial."
+  "Start tutorial."
   (initialize 'on-new-window)
   (open-browser))

@@ -98,7 +98,7 @@
     content))
 
 (defun start-tutorial ()
-  "Start turtorial."
+  "Start tutorial."
   ;; Setup the default route / to on-main
   ;; :boot-function allows us to add or modify our boot-files content
   ;; for search engine optimization. We choose long-polling-first so

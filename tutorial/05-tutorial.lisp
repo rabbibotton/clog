@@ -20,6 +20,6 @@
         (create-section body :h1 :content "I change")))
 
 (defun start-tutorial ()
-  "Start turtorial."
+  "Start tutorial."
   (initialize 'on-new-window)
   (open-browser))

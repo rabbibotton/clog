@@ -33,6 +33,7 @@
   "Setup website menu")
 
 (defun start-tutorial ()
+  "Start tutorial."
   ;; Setup authorizations between roles and actions
   (add-authorization '(:guest) '(:login :signup :main))
   (add-authorization '(:member) '(:logout :main))

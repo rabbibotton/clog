@@ -61,6 +61,7 @@
 
 ;; Start the webserver
 (defun start-tutorial ()
+  "Start tutorial."
   ;; Initialize CLOG and the / url path (since / in our menu could just be nil)
   (initialize 'on-main
               ;; Use long polling technique so pages are crawled by google

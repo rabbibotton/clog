@@ -12,7 +12,6 @@
   (:export start-tutorial))
 
 (in-package :clog-tut-33)
-
 (defun on-new-window (body)
   (setf (title (html-document body)) "Tutorial 33")
   (with-connection-cache (body)
@@ -172,6 +171,6 @@
                              (select-tab p3))))))))
 
 (defun start-tutorial ()
-  "Start turtorial."
+  "Start tutorial."
   (initialize 'on-new-window)
   (open-browser))

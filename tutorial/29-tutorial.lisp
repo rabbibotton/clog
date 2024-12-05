@@ -62,5 +62,6 @@
               (return))))))
 
 (defun start-tutorial ()
+  "Start tutorial."
   (initialize 'on-new-window)
   (open-browser))

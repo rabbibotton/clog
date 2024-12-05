@@ -33,6 +33,6 @@
     (put-image-data cx dat 30 200)))
 
 (defun start-tutorial ()
-  "Start turtorial."
+  "Start tutorial."
   (initialize 'on-new-window)
   (open-browser))
