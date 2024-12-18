@@ -89,11 +89,20 @@
 ;; handle-message ;;
 ;;;;;;;;;;;;;;;;;;;;
 
+(defvar *message-handlers* '()
+  "List of message handling functions.
+Each entry in the list should be a FUNCTION-DESIGNATOR that will receive
+a splitted message and a connection id and should return something
+other than NIL iff it handled the message.")
+
 (defun handle-message (connection message)
   "Handle incoming websocket MESSAGE on CONNECTION. (Private)"
   (handler-case
       (let ((connection-id (gethash connection *connections*))
             (ml (ppcre:split ":" message :limit 2)))
+        (dolist (message-handler *message-handlers*)
+          (when (funcall message-handler ml connection-id)
+            (return-from handle-message)))
         (cond ((null connection-id)
                 ;; a zombie connection
                 (when *verbose-output*
