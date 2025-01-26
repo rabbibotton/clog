@@ -307,12 +307,12 @@ firefox and dialog does not work at all on IE."))
 ;;;;;;;;;;;;;;;;;
 
 (defgeneric show-dialog (clog-dialog &key modal)
-  (:documentation "Close dialog."))
+  (:documentation "Show dialog."))
 
 (defmethod show-dialog ((obj clog-dialog) &key (modal nil))
   (if modal
-      (jquery-execute obj (format nil "showModal()"))
-      (jquery-execute obj (format nil "show()"))))
+      (jquery-execute obj (format nil "get(0).showModal()"))
+      (jquery-execute obj (format nil "get(0).show()"))))
 
 ;;;;;;;;;;;;;;;;;;
 ;; close-dialog ;;
@@ -322,7 +322,7 @@ firefox and dialog does not work at all on IE."))
   (:documentation "Close dialog."))
 
 (defmethod close-dialog ((obj clog-dialog))
-  (jquery-execute obj (format nil "close()")))
+  (jquery-execute obj (format nil "get(0).close()")))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Implementation - clog-hr
