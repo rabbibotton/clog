@@ -96,7 +96,7 @@
     (setf (box-width image) "100%")))
 
 (defun start-tutorial ()
-  "Start turtorial."
+  "Start tutorial."
   ;; We would probably set :host to my IP and :port 80 here if running a live site
   (initialize 'on-new-window)
   ;; In real life, if we openning a browser here it would likely be

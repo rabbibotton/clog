@@ -84,6 +84,6 @@
     (set-on-pointer-down div3 'on-mouse-down :cancel-event t :capture-pointer t)))
 
 (defun start-tutorial ()
-  "Start turtorial."
+  "Start tutorial."
   (initialize 'on-new-window)
   (open-browser))

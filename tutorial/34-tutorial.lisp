@@ -73,6 +73,6 @@ void main() {
     (draw-arrays gl :TRIANGLES 0 3)))
 
 (defun start-tutorial ()
-  "Start turtorial."
+  "Start tutorial."
   (initialize 'on-new-window)
   (open-browser))
