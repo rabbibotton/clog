@@ -45,6 +45,12 @@
                        (lambda (obj data)
                          (declare (ignore obj))
                          (format t "x=~A Y=~A~%" (getf data ':x) (getf data ':y))))
+    (set-on-wheel *last-obj*
+		  (lambda (obj data)
+		    (declare (ignore obj))
+		    (format t "delta-x=~A delta-y=~A~%"
+			    (getf data ':delta-x)
+			    (getf data ':delta-y))))
     (set-on-key-down win
                       (lambda (obj data)
                         (declare (ignore obj))

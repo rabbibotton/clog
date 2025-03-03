@@ -191,6 +191,7 @@ embedded in a native template application.)"
   (set-on-mouse-down         generic-function)
   (set-on-mouse-up           generic-function)
   (set-on-mouse-move         generic-function)
+  (set-on-wheel              generic-function)
   (set-on-pointer-enter      generic-function)
   (set-on-pointer-leave      generic-function)
   (set-on-pointer-over       generic-function)
