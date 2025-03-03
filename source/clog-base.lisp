@@ -347,6 +347,24 @@ result or if time out DEFAULT-ANSWER. see JQUERY-QUERY (Internal)"))
       :meta-key     (js-true-p (nth 6 f))
       :drag-data    (quri:url-decode (or (nth 7 f) "")))))
 
+;;;;;;;;;;;;;;;;;;;;;;;
+;; parse-wheel-event ;;
+;;;;;;;;;;;;;;;;;;;;;;;
+
+(defparameter wheel-event-script
+  "+ e.originalEvent.deltaX + ':' + e.originalEvent.deltaY + ':' + e.originalEvent.deltaZ +
+':' + e.originalEvent.deltaMode"
+  "JavaScript to collect wheel event data from browser.")
+
+(defun parse-wheel-event (data)
+  (let ((f (ppcre:split ":" data)))
+    (list
+     :event-type :wheel
+     :delta-x (js-to-float (nth 0 f))
+     :delta-y (js-to-float (nth 1 f))
+     :delta-z (js-to-float (nth 2 f))
+     :delta-mode (js-to-integer (nth 3 f)))))
+
 ;;;;;;;;;;;;;;;
 ;; set-event ;;
 ;;;;;;;;;;;;;;;
@@ -1061,6 +1079,25 @@ ON-MOUSE-MOVE-HANDLER is nil unbind the event."))
              :one-time one-time
              :cancel-event cancel-event
              :call-back-script mouse-event-script))
+
+;;;;;;;;;;;;;;;;;;
+;; set-on-wheel ;;
+;;;;;;;;;;;;;;;;;;
+
+(defgeneric set-on-wheel (clog-obj on-wheel-handler
+			  &key one-time cancel-event)
+  (:documentation "Set the ON-WHEEL-HANDLER for CLOG-OBJ. If
+ON-WHEEL-HANDLER is nil unbind the event."))
+
+(defmethod set-on-wheel ((obj clog-obj) handler
+			 &key (one-time nil) (cancel-event nil))
+  (set-event obj "wheel"
+	     (when handler
+	       (lambda (data)
+		 (funcall handler obj (parse-wheel-event data))))
+	     :one-time one-time
+	     :cancel-event cancel-event
+	     :call-back-script wheel-event-script))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; set-on-pointer-enter ;;
