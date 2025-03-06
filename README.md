@@ -24,7 +24,7 @@ STATUS: CLOG and CLOG Builder 2.3 released. CLOG API Stable 4 years
 The CLOG Builder is in 100% portable Common Lisp using the CLOG Framework.
 
 CLOG tech was invented (first in Ada) and has been running in commercial
-production code and productss since 2013 and in Common Lisp since 2022. CLOG
+production code and products since 2013 and in Common Lisp since 2022. CLOG
 is used in commerical products, websites, and other opensource projects.
 
 CLOG is being actively extended, the core API is stable and proven,
