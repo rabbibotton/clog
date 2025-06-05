@@ -6,16 +6,16 @@ L    E    AAAAA R  R N   NN     C    L    O   O G   G
 LLLL EEEE A   A R  R N    N     CCCC LLLL OOOOO GGGGG
 ```
 
-COMMON-LISP "Instant Common Lisp"
+COMMON LISP "Instant Common Lisp"
 
 * [Instant Common-Lisp](https://docs.google.com/presentation/d/1dDfk7PnsW2Vvjky1G7kVIHJHwLwQw7V73taJp0zBlEY)
 
-COMMON-LISP "The Tutorial" Series
+Install COMMON LISP
 
-* [Install Common-Lisp for MacOS](MACOS.md)
-* [Install Common-Lisp for Win64](WINDOWS.md)
-* [Install Common-Lisp for Linux](LINUX.md)
-* [Install Common-Lisp For Android (Termux)](ANDROID-TERMUX.md)
+* [Install Common Lisp for MacOS](MACOS.md)
+* [Install Common Lisp for Win64](WINDOWS.md)
+* [Install Common Lisp for Linux](LINUX.md)
+* [Install Common Lisp For Android (Termux)](ANDROID-TERMUX.md)
 
 For **Windows** users there is an easy install for full CL environment using
 the CLOG Builder
@@ -24,6 +24,8 @@ Unzip, double click make.bat and then drag the resulting builder.exe to your
 application bar or double click. Update regularly by running update.bat
 If you change directories you need to run make.bat or update.bat
 
+
+COMMON LISP "The Tutorial" Series
 
 "The Tutorial"'s goal is to get you writing real Lisp programs, quickly
 (like in a day not weeks or years) and to give you the all important
