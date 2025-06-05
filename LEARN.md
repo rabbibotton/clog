@@ -6,6 +6,10 @@ L    E    AAAAA R  R N   NN     C    L    O   O G   G
 LLLL EEEE A   A R  R N    N     CCCC LLLL OOOOO GGGGG
 ```
 
+COMMON-LISP "Instant Common Lisp"
+
+* [Instant Common-Lisp](https://docs.google.com/presentation/d/1dDfk7PnsW2Vvjky1G7kVIHJHwLwQw7V73taJp0zBlEY)
+
 COMMON-LISP "The Tutorial" Series
 
 * [Install Common-Lisp for MacOS](MACOS.md)
