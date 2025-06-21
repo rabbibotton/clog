@@ -196,7 +196,8 @@ if one is present and login fails."
 
 (defun make-token ()
   "Create a unique token used to associate a browser with a user"
-  (get-universal-time))
+  (crypto:byte-array-to-hex-string
+   (crypto:random-data 16)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;
 ;; create-base-table ;;
