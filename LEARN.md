@@ -6,9 +6,10 @@ L    E    AAAAA R  R N   NN     C    L    O   O G   G
 LLLL EEEE A   A R  R N    N     CCCC LLLL OOOOO GGGGG
 ```
 
-COMMON LISP "Instant Common Lisp"
+COMMON LISP "Instant Common Lisp" - Watch these 2 first
 
 * [Instant Common-Lisp](https://docs.google.com/presentation/d/1dDfk7PnsW2Vvjky1G7kVIHJHwLwQw7V73taJp0zBlEY)
+* [Instant Install Lisp+IDE+CLOG](https://docs.google.com/presentation/d/16egmnPGA88RVOl0zhurxw6uLnA86v-lBe_SHZA7CWOg)
 
 Install COMMON LISP
 
