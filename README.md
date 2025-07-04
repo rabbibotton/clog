@@ -171,10 +171,10 @@ CL-USER> (clog:open-manual)
 Work your way through the tutorials. You will see how quick and easy it is
 to be a CLOGer.
 
-F i r s t  C L O G  A p p
-=========================
+F i r s t   C L O G   A p p
+===========================
 
-1. Smallest CLOG App - in a REPL
+** 1 Smallest CLOG App - in a REPL
 
 ```lisp
 (ql:quickload :clog)
@@ -185,7 +185,7 @@ F i r s t  C L O G  A p p
 Open browser to http://127.0.0.1:8080/ 
 Or launch with (open-browser)
 
-2. Minimal CLOG App - Quick Lisp
+** 2 Minimal CLOG App - Quick Lisp
 
 (in common-lisp or another asdf reachable location)
 
@@ -225,7 +225,7 @@ Create the agui.lisp file
   (open-browser))
 ```
 
-2. Minimal CLOG App - OCICL - Best Method
+** 3 Minimal CLOG App - OCICL - Best Method
 
 To install ocicl -
 
@@ -247,8 +247,8 @@ Run bash run-ocicl or run-ocicl.bat on Windows
 
 Edit helloworld.lisp with bash edit-ocicl or edit-ocicl.bat
 
-M o r e  I n f o
-================
+M o r e   I n f o
+=================
 
 ![Image of clog-builder](https://rabbibotton.github.io/images/clog-builder.png)
 ![Image of clog-builder-web](https://rabbibotton.github.io/images/cb-web.png)
