@@ -171,6 +171,85 @@ CL-USER> (clog:open-manual)
 Work your way through the tutorials. You will see how quick and easy it is
 to be a CLOGer.
 
+F i r s t  C L O G  A p p
+=========================
+
+1. Smallest CLOG App - in a REPL
+
+```lisp
+(ql:quickload :clog)
+(in-package :clog-user)
+(initialize (lambda (body) (create-div body :content "Hello World")))
+```
+
+Open browser to http://127.0.0.1:8080/ 
+Or launch with (open-browser)
+
+2. Minimal CLOG App - Quick Lisp
+
+(in common-lisp or another asdf reachable location)
+
+```
+cd ~/common-lisp
+mkdir agui
+cd agui
+```
+
+Create a project file agui.asd
+
+```lisp
+(asdf:defsystem #:agui
+  :description "Hello World"
+  :author "some@one.com"
+  :license  "BSD"
+  :version "0.0.0"
+  :serial t
+  :depends-on (#:clog)
+  :components ((:file "agui")))
+```
+
+Create the agui.lisp file
+
+```lisp
+(defpackage #:agui
+  (:use #:cl #:clog)
+  (:export start-app))
+
+(in-package :agui)
+
+(defun on-new-window (body)
+  (create-div body :content "Hello World"))
+
+(defun start-app ()
+  (initialize 'on-new-window)
+  (open-browser))
+```
+
+2. Minimal CLOG App - OCICL - Best Method
+
+To install ocicl -
+
+https://docs.google.com/presentation/d/16egmnPGA88RVOl0zhurxw6uLnA86v-lBe_SHZA7CWOg
+
+Can be anywhere on your system any OS
+
+```
+mkdkir helloworld
+cd helloworld
+ocicl setup > init
+ocicl install clog
+```
+
+(If on Windows you will need the open source dlls in any project dir:
+  https://rabbibotton.github.io/clog/clogframe.zip )
+
+Run bash run-ocicl or run-ocicl.bat on Windows
+
+Edit helloworld.lisp with bash edit-ocicl or edit-ocicl.bat
+
+M o r e  I n f o
+================
+
 ![Image of clog-builder](https://rabbibotton.github.io/images/clog-builder.png)
 ![Image of clog-builder-web](https://rabbibotton.github.io/images/cb-web.png)
 ![Image of demo1](https://rabbibotton.github.io/images/clog-demo1.png)
