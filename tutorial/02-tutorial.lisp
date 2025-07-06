@@ -36,6 +36,6 @@
                         (scroll-to (window body) 0 (height body))))))))
 
 (defun start-tutorial ()
-  "Start turtorial."
+  "Start tutorial."
   (initialize 'on-new-window)
   (open-browser))
