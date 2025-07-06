@@ -97,7 +97,7 @@
     (create-web-code main :content
                      ";; This is a code block<br>
                       (defun start-tutorial ()<br>
-                      \"Start turtorial.\"<br>
+                      \"Start tutorial.\"<br>
                       (initialize 'on-new-window)<br>
                       (open-browser))")))
 
