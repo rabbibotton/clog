@@ -31,6 +31,6 @@
 ;;; But... notice what happens once syncing is on the next event doesn't hit until
 ;;; SLEEP returns.
 (defun start-tutorial ()
-  "Start turtorial."
+  "Start tutorial."
   (initialize 'on-new-window)
   (open-browser))

@@ -34,7 +34,7 @@
 ;;; exist, take a look through the CLOG manual or the file clog-element.lisp
 
 (defun start-tutorial ()   ; Define the function called start-tutorial
-  "Start turtorial."       ; Optional docstring to describe function
+  "Start tutorial."       ; Optional docstring to describe function
 
   ;; Initialize the CLOG system
   (initialize #'on-new-window)
