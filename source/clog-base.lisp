@@ -219,6 +219,14 @@ result or if time out DEFAULT-ANSWER. see JQUERY-QUERY (Internal)"))
 ;; The use of offsetLeft and offsetTop is to correct the X and Y
 ;; to the actual X,Y of the target.
 
+(defparameter mouse-event-script-for-window
+  "+ e.clientX + ':' +
+     e.clientY + ':' +
+     e.screenX + ':' + e.screenY + ':' + e.which + ':' + e.altKey + ':' +
+     e.ctrlKey + ':' + e.shiftKey + ':' + e.metaKey + ':' +
+     e.clientX + ':' + e.clientY + ':' + e.pageX + ':' + e.pageY"
+  "JavaScript to collect mouse event data from browser.")
+
 (defun parse-mouse-event (data)
   (let ((f (ppcre:split ":" data)))
     (list
@@ -943,7 +951,9 @@ on an on-click event."))
                  (funcall handler obj (parse-mouse-event data))))
              :one-time one-time
              :cancel-event cancel-event
-             :call-back-script mouse-event-script))
+             :call-back-script (if (typep obj 'clog-window)
+                                   mouse-event-script-for-window
+                                   mouse-event-script)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; set-on-mouse-double-click ;;
@@ -962,7 +972,9 @@ replace on an on-double-click event."))
                  (funcall handler obj (parse-mouse-event data))))
              :one-time one-time
              :cancel-event cancel-event
-             :call-back-script mouse-event-script))
+             :call-back-script (if (typep obj 'clog-window)
+                                   mouse-event-script-for-window
+                                   mouse-event-script)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; set-on-mouse-right-click ;;
@@ -981,7 +993,9 @@ replace on an on-context-menu event."))
                (lambda (data)
                  (funcall handler obj (parse-mouse-event data))))
              :one-time one-time
-             :call-back-script mouse-event-script
+             :call-back-script (if (typep obj 'clog-window)
+                                   mouse-event-script-for-window
+                                   mouse-event-script)
              :cancel-event cancel-event))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;
@@ -1046,7 +1060,9 @@ does not bubble."))
                  (funcall handler obj (parse-mouse-event data))))
              :one-time one-time
              :cancel-event cancel-event
-             :call-back-script mouse-event-script))
+             :call-back-script (if (typep obj 'clog-window)
+                                   mouse-event-script-for-window
+                                   mouse-event-script)))
 
 ;;;;;;;;;;;;;;;;;;;;;
 ;; set-on-mouse-up ;;
@@ -1065,7 +1081,9 @@ ON-MOUSE-UP-HANDLER is nil unbind the event."))
                  (funcall handler obj (parse-mouse-event data))))
              :one-time one-time
              :cancel-event cancel-event
-             :call-back-script mouse-event-script))
+             :call-back-script (if (typep obj 'clog-window)
+                                   mouse-event-script-for-window
+                                   mouse-event-script)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;
 ;; set-on-mouse-move ;;
@@ -1084,7 +1102,9 @@ ON-MOUSE-MOVE-HANDLER is nil unbind the event."))
                  (funcall handler obj (parse-mouse-event data))))
              :one-time one-time
              :cancel-event cancel-event
-             :call-back-script mouse-event-script))
+             :call-back-script (if (typep obj 'clog-window)
+                                   mouse-event-script-for-window
+                                   mouse-event-script)))
 
 ;;;;;;;;;;;;;;;;;;
 ;; set-on-wheel ;;
