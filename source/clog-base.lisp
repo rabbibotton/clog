@@ -147,9 +147,15 @@ flushed with FLUSH-CONNECTION-CACHE or a query is made."
 (defun flush-connection-cache (clog-obj)
   "Flush connection cache if on CLOG-OBJ is located on."
   (when *connection-cache*
-    (dolist (script (reverse *connection-cache*))
-      (unless (eq script :cache)
-        (clog-connection:execute (connection-id clog-obj) script)))
+    (let ((big (make-string-output-stream)))
+      (write-string "(function(){" big)
+      (dolist (script (reverse *connection-cache*))
+        (unless (eq script :cache)
+          (write-string script big)
+          (write-char #\; big)))
+      (write-string "})()" big)
+      (clog-connection:execute (connection-id clog-obj)
+                               (get-output-stream-string big)))
     (setf *connection-cache* (list :cache))))
 
 ;;;;;;;;;;;;;
