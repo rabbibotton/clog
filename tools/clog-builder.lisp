@@ -1,6 +1,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; CLOG Builder - UI Design tool for CLOG                                ;;;;
-;;;; (c) 2020-2024 David Botton                                            ;;;;
+;;;; (c) 2020-2025 David Botton                                            ;;;;
 ;;;; License BSD 3 Clause                                                  ;;;;
 ;;;;                                                                       ;;;;
 ;;;; clog-buider.lisp                                                      ;;;;

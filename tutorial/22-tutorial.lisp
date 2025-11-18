@@ -174,7 +174,7 @@
                                          <center>CLOG</center>
                                          <center>The Common Lisp Omnificent GUI</center></div>
                                          <div><p><center>Tutorial 22</center>
-                                         <center>(c) 2024 - David Botton</center></p></div>"
+                                         <center>(c) 2025 - David Botton</center></p></div>"
                                    :hidden  t
                                    :width   200
                                    :height  215)))
