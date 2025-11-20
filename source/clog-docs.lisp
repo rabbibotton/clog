@@ -303,6 +303,13 @@ Events in clog-base
      :ctrl-key     t or nil if ctrl-key held down
      :shift-key    t or nil if shift-key held down
      :meta-key     t or nil if meta-key held down
+     
+     :event-type  :wheel
+     :delta-x     change in x float
+     :delta-y     change in y float
+     :delta-z     change in z float
+     :delta-mode  unit of measure used for delta values
+                  0 - pixel  1 - line  2 - page
 
      :event-type   :pointer
      :x            x relative to the target

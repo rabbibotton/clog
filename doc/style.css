@@ -39,7 +39,6 @@
 
 body {
   font-family: var(--font-family);
-  font-feature-settings: var(--font-feature-settings);
   margin: auto;
   background-color: #faf9f6;
   color: #333;
@@ -74,7 +73,6 @@ ul + p, ol + p, dl + p {
 
 h1 {
   font-family: var(--font-family-heading);
-  font-feature-settings: var(--font-feature-settings-heading);
   font-weight: normal;
   text-transform: uppercase;
   letter-spacing: 0.18em;
@@ -185,16 +183,30 @@ ul, ol, dl {
   margin: 0;
 }
 
-a {
-  /* text-decoration: none; */
-  /* color: #0233c8; */
+a, a .mjx-math * {
   color: #333;
+  text-decoration: underline;
   text-decoration-thickness: 0.04em;
   text-underline-offset: 0.1em;
 }
 
-a:hover {
+h1 a .mjx-math *,
+h2 a .mjx-math *,
+h3 a .mjx-math *,
+h4 a .mjx-math *,
+h5 a .mjx-math *,
+h6 a .mjx-math * {
+  text-decoration: none;
+}
+
+a:hover, a:hover .mjx-math * {
   text-decoration: underline;
+}
+
+/* MathJax subscripts, accents, etc */
+a .mjx-sub *, a:hover .mjx-sub *,
+a .mjx-over *, a:hover .mjx-over * {
+  text-decoration: none;
 }
 
 img {
@@ -215,11 +227,13 @@ img {
   /* background-color: #EEEEEE; */
 }
 
-.locative-type a {
-  text-decoration: none;
-  border-bottom: 0;
+.locative-type {
   font-weight: bold;
   color: #444;
+}
+
+.locative-type a {
+  text-decoration: none;
 }
 
 .reference-object {
@@ -234,7 +248,7 @@ img {
   font-size: 98%;
 }
 
-.reference-object a {
+.reference-object a, .reference-object a * {
   text-decoration: none;
   border-bottom: none;
 }
@@ -244,7 +258,8 @@ img {
 }
 
 .locative-args code {
-  font-family: sans-serif;
+  font-family: var(--font-family);
+  font-size: 1rem;
 }
 
 .navigation a {
@@ -301,24 +316,24 @@ img {
 
 /* Syntax highlighting with Colorize */
 
-.symbol { color : #770055; background-color : transparent; border: 0px; margin: 0px;}
-a.symbol:link { color : #229955; background-color : transparent; text-decoration: none; border: 0px; margin: 0px; }
-a.symbol:active { color : #229955; background-color : transparent; text-decoration: none; border: 0px; margin: 0px; }
-a.symbol:visited { color : #229955; background-color : transparent; text-decoration: none; border: 0px; margin: 0px; }
-a.symbol:hover { color : #229955; background-color : transparent; text-decoration: none; border: 0px; margin: 0px; }
-.special { color : #FF5000; background-color : inherit; }
-.keyword { color : #770000; background-color : inherit; }
-.comment { color : #007777; background-color : inherit; }
-.string { color : #777777; background-color : inherit; }
-.atom { color : #314F4F; background-color : inherit; }
-.macro { color : #FF5000; background-color : inherit; }
-.variable { color : #36648B; background-color : inherit; }
-.function { color : #8B4789; background-color : inherit; }
-.attribute { color : #FF5000; background-color : inherit; }
-.character { color : #0055AA; background-color : inherit; }
-.syntaxerror { color : #FF0000; background-color : inherit; }
-.diff-deleted { color : #5F2121; background-color : inherit; }
-.diff-added { color : #215F21; background-color : inherit; }
+.symbol { color: #770055; font-style: normal; background-color: transparent; border: 0px; margin: 0px;}
+a.symbol:link { color: #229955; background-color: transparent; text-decoration: none; border: 0px; margin: 0px; }
+a.symbol:active { color: #229955; background-color: transparent; text-decoration: none; border: 0px; margin: 0px; }
+a.symbol:visited { color: #229955; background-color: transparent; text-decoration: none; border: 0px; margin: 0px; }
+a.symbol:hover { color: #229955; background-color: transparent; text-decoration: none; border: 0px; margin: 0px; }
+.special { color: #FF5000; background-color: inherit; }
+.keyword { color: #770000; background-color: inherit; }
+.comment { color: #007777; background-color: inherit; }
+.string { color: #777777; background-color: inherit; }
+.atom { color: #314F4F; background-color: inherit; }
+.macro { color: #FF5000; background-color: inherit; }
+.variable { color: #36648B; background-color: inherit; }
+.function { color: #8B4789; background-color: inherit; }
+.attribute { color: #FF5000; background-color: inherit; }
+.character { color: #0055AA; background-color: inherit; }
+.syntaxerror { color: #FF0000; background-color: inherit; }
+.diff-deleted { color: #5F2121; background-color: inherit; }
+.diff-added { color: #215F21; background-color: inherit; }
 
 /* Disable rainbow nesting on hover */
 
@@ -368,7 +383,8 @@ a.symbol:hover { color : #229955; background-color : transparent; text-decoratio
   line-height: 1.0;
 }
 
-#toc a {
+#toc a,
+#toc a * {
   text-decoration: none;
   border-bottom: none;
 }
@@ -406,13 +422,18 @@ a.symbol:hover { color : #229955; background-color : transparent; text-decoratio
   box-shadow: inset -5px 0px 10px -5px #000;
 }
 
-#page-toc a {
+#page-toc a,
+#page-toc a * {
   color: #fff;
 }
 
 .menu-block {
   padding-left: 10px;
   margin-bottom: 1em;
+}
+
+#link-to-home {
+  padding-left: 0;
 }
 
 .menu-block-title {
@@ -431,4 +452,8 @@ a.symbol:hover { color : #229955; background-color : transparent; text-decoratio
 #toc-footer a {
   font-size: 80%;
   color: #777777;
+}
+
+#paxToDocument, #paxToApropos {
+  min-width: 17em;
 }
