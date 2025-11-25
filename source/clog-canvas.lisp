@@ -9,6 +9,9 @@
 
 ;;; Canvas and 2d Context, for 3d WebGL2 context see clog-webgl.lisp
 
+;;; NOTE: When passing floats always use single floats or strings with
+;;;       the double float values.
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Implementation - clog-canvas
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
