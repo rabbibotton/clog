@@ -693,8 +693,8 @@ the File form element type.
 
 (defmethod (setf checkedp) (value (obj clog-form-element))
   (if value
-      (setf (attribute obj "checked") "true")
-      (remove-attribute obj "checked")))
+      (setf (property obj "checked") "true")
+      (setf (property obj "checked") "")))
 
 ;;;;;;;;;;;;;;;;
 ;; input-mode ;;
