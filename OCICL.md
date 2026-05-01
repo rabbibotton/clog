@@ -10,7 +10,7 @@ add them to your asd file and will be downloaded as needed. A simple
 run of "ocicl latest" updates your project dependecies.
 
 Once installed either in an empty new project dir or existing project do:
-(Do not call your project clog, that creates an asdf circular dependecy.)
+(Do not call your project clog, that creates an asdf circular dependency.)
 
 ```
 ocicl setup > init

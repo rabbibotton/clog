@@ -23,7 +23,7 @@ Create a file call qlfile with:
 dist http://dist.ultralisp.org/
 ```
 
-(I am using the REPL method for maximum compatability, if you alredy know
+(I am using the REPL method for maximum compatibility, if you already know
 qlot you can use the command line tool if you have installed it.)
 
 run sbcl and type:
