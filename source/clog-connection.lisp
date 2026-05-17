@@ -106,13 +106,6 @@ script."
 
 (defvar *new-id* '(0) "Last issued connection or script IDs")
 
-#-(or mswindows windows win32 cormanlisp) ; isaac hasn't supported these platforms
-(defparameter *isaac-ctx*
-  (isaac:init-self-seed :count 5
-                        :is64 #+:X86-64 t #-:X86-64 nil)
-  "A ISAAC::ISAAC-CTX. Or, a ISAAC::ISAAC64-CTX on X86-64. It will be used to
-generate random hex strings for connection IDs")
-
 (defvar *queries*        (make-hash-table*) "Query ID to Answers")
 (defvar *queries-sems*   (make-hash-table*) "Query ID to semiphores")
 (defvar *query-time-out* 3
@@ -134,13 +127,8 @@ generate random hex strings for connection IDs")
 
 (defun random-hex-string ()
   "Generate cryptographic grade random ids for use in connections."
-  #+(or mswindows windows win32 cormanlisp) ; isaac hasn't supported these platforms. Use ironclad instead.
   (ironclad:byte-array-to-hex-string
-    (ironclad:random-data 16))
-  #-(or mswindows windows win32 cormanlisp) ; isaac hasn't supported these platforms
-  (format nil "~(~32,'0x~)" (#+:X86-64 isaac:rand-bits-64
-                             #-:X86-64 isaac:rand-bits
-                             *isaac-ctx* 128)))
+    (ironclad:random-data 16)))
 
 ;;;;;;;;;;;;;;;;;;;;
 ;; get-connection ;;
