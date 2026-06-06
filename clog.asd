@@ -16,7 +16,7 @@
                        #:bordeaux-threads #:parse-float #:quri #:clack-handler-hunchentoot
                        #:lack-middleware-static #:lack-request #:lack-util-writer-stream
                        #:trivial-gray-streams #:closer-mop #:mgl-pax #:cl-template #:atomics
-                       #:sqlite #:cl-dbi #:cl-pass #-(or mswindows win32 cormanlisp) #:cl-isaac)
+                       #:sqlite #:cl-dbi #:cl-pass #:ironclad)
   :components ((:module "static-files"
                 :components ((:static-file "js/boot.js")))
                (:module "source"
