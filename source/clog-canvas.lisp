@@ -525,7 +525,7 @@ https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/global
   (execute obj (format nil "drawImage(~A,~A,~A~A)"
                        (script-id clog-obj) dx dy
                        (if dwidth
-                           (format nil "~A,~A" dwidth dheight)
+                           (format nil ",~A,~A" dwidth dheight)
                            ""))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;
